@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Model.Types;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Model
 {
@@ -12,8 +9,9 @@ namespace Model
 
         public AdminDbContext(string cs) => this.cs = cs;
 
-        public DbSet<Student> Students { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<AssignmentActivity> AssignmentActivities { get; set; }
@@ -27,9 +25,9 @@ namespace Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Student>().HasData(new Student { Id = 1, FullName = "Alie Algol" });
-            modelBuilder.Entity<Student>().HasData(new Student { Id = 2, FullName = "Forrest Fortran" });
-            modelBuilder.Entity<Student>().HasData(new Student { Id = 3, FullName = "James Java" });
+            modelBuilder.Entity<User>().HasData(new User { Id = 1, FriendlyName = "Alie Algol" });
+            modelBuilder.Entity<User>().HasData(new User { Id = 2, FriendlyName = "Forrest Fortran" });
+            modelBuilder.Entity<User>().HasData(new User { Id = 3, FriendlyName = "James Java" });
         }
        
             public void Delete() => Database.EnsureDeleted();

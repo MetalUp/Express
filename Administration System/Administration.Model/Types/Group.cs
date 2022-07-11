@@ -8,7 +8,6 @@
             Id = cloneFrom.Id;
             GroupName = cloneFrom.GroupName;
             Description = cloneFrom.Description;
-            Teacher = cloneFrom.Teacher;
             Students = cloneFrom.Students;
         }
 
@@ -19,11 +18,9 @@
 
         public string Description { get; init; }
 
-        public virtual Teacher Teacher {get; init;}
+        public virtual Organisation Organisation { get; init; }
 
-        public virtual ICollection<Student> Students { get; init; } = new List<Student>();
-
-        public virtual ICollection<Teacher> Teachers { get; init; } = new List<Teacher>();
+        public virtual ICollection<User> Students { get; init; } = new List<User>();
 
         public override string ToString() => GroupName;
     }

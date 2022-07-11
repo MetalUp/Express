@@ -8,11 +8,11 @@ namespace Model.Types
         public Assignment(Assignment cloneFrom) { 
         Id = cloneFrom.Id;
             Task = cloneFrom.Task;
-            Student = cloneFrom.Student;
+            AssignedTo = cloneFrom.AssignedTo;
             AssignedBy  = cloneFrom.AssignedBy;
             DueBy = cloneFrom.DueBy;
             Status = cloneFrom.Status;
-            MarksGained = cloneFrom.MarksGained;
+            MarksAwarded = cloneFrom.MarksAwarded;
             Status = cloneFrom.Status;
         }
         [Hidden]
@@ -20,15 +20,17 @@ namespace Model.Types
 
         public virtual Task Task { get; init; }
 
-        public virtual Student Student { get; init; }
+        public virtual User AssignedTo { get; init; }
 
-        public virtual Teacher AssignedBy { get; init; }
+        public virtual Group Group { get; init; } // optional, to allow retrieval of tasks assigned to groups without showing all individuals
+
+        public virtual User AssignedBy { get; init; }
 
         public DateTime DueBy { get; init; }
 
         public Activity Status {get; init; }
 
-        public int MarksGained { get; init; }
+        public int MarksAwarded { get; init; }
 
         public override string ToString() => $"{Task}";
     }

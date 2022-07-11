@@ -4,23 +4,24 @@ using Model.Types;
 
 namespace Model.Functions
 {
-    [Named("Students")]
-    public static class Student_MenuFunctions
+    [Named("Users")]
+    public static class User_MenuFunctions
     {
-        public static (Student, IContext) CreateNewStudent(string fullName, IContext context)
+        public static (User, IContext) CreateNewUser(string friendlyName, IContext context)
         {
-            var s = new Student { FullName = fullName };
+            var s = new User { FriendlyName = friendlyName };
             return (s, context.WithNew(s));
         }       
 
-        public static IQueryable<Student> AllStudents(IContext context) =>
-            context.Instances<Student>();
+        public static IQueryable<User> AllUsers(IContext context) =>
+            context.Instances<User>();
 
-        public static IQueryable<Student> FindStudentByName(string name, IContext context) =>
-            context.Instances<Student>().Where(c => c.FullName.ToUpper().Contains(name.ToUpper()));
+        public static IQueryable<User> FindByFriendlyName(string friendlyName,  IContext context) =>
+            context.Instances<User>().Where(c => c.FriendlyName.ToUpper().Contains(friendlyName.ToUpper()));
 
-        public static Student FindStudentById(int id, IContext context) =>
-    context.Instances<Student>().FirstOrDefault(c => c.Id == id);
+        public static User FindByUserName(string userName, IContext context) =>
+    context.Instances<User>().FirstOrDefault(c => c.UserName.ToUpper() == userName.ToUpper());
+
 
     }
 
