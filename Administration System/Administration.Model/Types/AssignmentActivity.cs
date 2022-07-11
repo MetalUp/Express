@@ -2,6 +2,9 @@
 {
     public class AssignmentActivity
     {
+        public AssignmentActivity() { }
+
+
         [Hidden]
         public  int Id { get; init; }
 

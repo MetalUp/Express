@@ -18,12 +18,20 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
+        [Hidden]
+        public int GTaskId { get; init; }
         public virtual Task Task { get; init; }
 
+        [Hidden]
+        public int AssignedToId { get; init; }
         public virtual User AssignedTo { get; init; }
 
+        [Hidden]
+        public int GroupId { get; init; } 
         public virtual Group Group { get; init; } // optional, to allow retrieval of tasks assigned to groups without showing all individuals
 
+        [Hidden]
+        public int AssignedById { get; init; }
         public virtual User AssignedBy { get; init; }
 
         public DateTime DueBy { get; init; }
