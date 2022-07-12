@@ -1,14 +1,14 @@
 import { defaultRegExp, validateExpressionWithRegex } from "./language-helpers";
 
-export function wrapCSharp(code : string) {
+export function wrapCSharpEXpression(expression : string) {
     return `
     class Hello {
         static void Main(string[] args) {
-           System.Console.WriteLine(${code});
+           System.Console.WriteLine(${expression});
        }
     }`;
 }
 
-export function validateCSharpExpression(code : string) {
-    return validateExpressionWithRegex(code, defaultRegExp);
+export function validateCSharpExpression(expression : string) {
+    return validateExpressionWithRegex(expression, defaultRegExp);
 }

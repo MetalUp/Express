@@ -1,14 +1,14 @@
 import { defaultRegExp, validateExpressionWithRegex } from "./language-helpers";
 
-export function wrapJava(code : string) {
+export function wrapJavaEXpression(expression : string) {
     return `
     class prog {
         public static void main(String[] args) {
-            System.out.println(${code}); 
+            System.out.println(${expression}); 
         }
     }`;
 }
 
-export function validateJavaExpression(code : string) {
-    return validateExpressionWithRegex(code, defaultRegExp);
+export function validateJavaExpression(expression : string) {
+    return validateExpressionWithRegex(expression, defaultRegExp);
 }

@@ -1,14 +1,14 @@
 import { defaultRegExp, validateExpressionWithRegex } from "./language-helpers";
 
-export function wrapVBNet(code : string) {
+export function wrapVBNetExpression(expression : string) {
     return `
     Module Hello  
     Sub Main()  
-        System.Console.WriteLine(${code})
+        System.Console.WriteLine(${expression})
     End Sub  
     End Module`;
 }
 
-export function validateVBNetExpression(code : string) {
-    return validateExpressionWithRegex(code, defaultRegExp);
+export function validateVBNetExpression(expression : string) {
+    return validateExpressionWithRegex(expression, defaultRegExp);
 }

@@ -1,9 +1,9 @@
 import { defaultRegExp, validateExpressionWithRegex } from "./language-helpers";
 
-export function wrapPython3(code : string) {
-    return `print (${code})`;
+export function wrapPython3Expression(expression : string) {
+    return `print (${expression})`;
 }
 
-export function validatePython3Expression(code : string) {
-    return validateExpressionWithRegex(code, defaultRegExp);
+export function validatePython3Expression(expression : string) {
+    return validateExpressionWithRegex(expression, defaultRegExp);
 }
