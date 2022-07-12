@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
 import { RunResult } from './run-result';
-import { wrap } from './csharp-helpers';
+import { wrap } from './language-helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ export class JobeServerService {
   // this is temporary - remove unsupported languages from jobe server
   supportedLanguages = ['csharp', 'java', 'python3', 'vbnet'];
 
-  errorResult : RunResult = {
+  emptyResult : RunResult = {
     run_id : '',
     outcome : 0,
     cmpinfo : '', 
@@ -37,7 +36,7 @@ export class JobeServerService {
   }
 
   run(language : string, code : string){
-      return this.http.post<RunResult>(`${this.path}/runs`, this.body(language, code), this.httpOptions).pipe(catchError(() => of<RunResult>(this.errorResult)));
+      return this.http.post<RunResult>(`${this.path}/runs`, this.body(language, code), this.httpOptions).pipe(catchError(() => of<RunResult>(this.emptyResult)));
   }
 
   get(){

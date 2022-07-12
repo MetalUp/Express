@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { validateExpression } from '../csharp-helpers';
+import { validateExpression } from '../language-helpers';
 import { JobeServerService } from '../jobe-server.service';
 import { getResultOutcome, RunResult } from '../run-result';
 
@@ -11,7 +11,7 @@ import { getResultOutcome, RunResult } from '../run-result';
 export class ExpressionEvaluationComponent implements OnInit {
 
   constructor(private jobeServer: JobeServerService) {
-    this.result = jobeServer.errorResult;
+    this.result = jobeServer.emptyResult;
   }
 
   ngOnInit(): void {
@@ -33,6 +33,7 @@ export class ExpressionEvaluationComponent implements OnInit {
   }
 
   onEnter() {
+    this.result = this.jobeServer.emptyResult;
     this.validation = '';
     if (validateExpression(this.selectedLanguage, this.expression)) {
       this.jobeServer.run(this.selectedLanguage, this.expression).subscribe(o => this.result = o);
