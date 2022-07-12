@@ -27,6 +27,7 @@ namespace Model.Types
         public virtual User AssignedTo { get; init; }
 
         [Hidden]
+        public int GroupId { get; init; }
         public virtual Group Group { get; init; } // optional, to allow retrieval of tasks assigned to groups without showing all individuals
 
         [Hidden]
