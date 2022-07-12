@@ -15,7 +15,7 @@ export class ExpressionEvaluationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.jobeServer.get().subscribe(o => this.languages = o.filter(i => this.jobeServer.supportedLanguages.includes(i[0])));
+    this.jobeServer.get_languages().subscribe(o => this.languages = o.filter(i => this.jobeServer.supportedLanguages.includes(i[0])));
   }
 
   expression: string = '';
@@ -36,7 +36,7 @@ export class ExpressionEvaluationComponent implements OnInit {
     this.result = this.jobeServer.emptyResult;
     this.validation = '';
     if (validateExpression(this.selectedLanguage, this.expression)) {
-      this.jobeServer.run(this.selectedLanguage, this.expression).subscribe(o => this.result = o);
+      this.jobeServer.submit_run(this.selectedLanguage, this.expression).subscribe(o => this.result = o);
     }
     else {
       this.validation = `${this.expression} is not an expression`;
