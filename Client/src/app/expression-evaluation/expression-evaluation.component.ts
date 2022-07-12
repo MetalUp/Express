@@ -9,27 +9,21 @@ import { getResultOutcome, RunResult } from '../run-result';
 })
 export class ExpressionEvaluationComponent implements OnInit {
 
-  constructor(private jobeServer : JobeServerService) { }
+  constructor(private jobeServer : JobeServerService) {
+    this.result = jobeServer.errorResult;
+   }
 
   ngOnInit(): void {
-    this.jobeServer.get().subscribe(o => this.languages = o)
-  }
-
-  emptyResult : RunResult = {
-    run_id : '',
-    outcome : 0,
-    cmpinfo : '', 
-    stdout : '',
-    stderr : ''
+    this.jobeServer.get().subscribe(o => this.languages = o.filter(i => this.jobeServer.supportedLanguages.includes(i[0])));
   }
 
   expression: string = '';
 
-  result: RunResult = this.emptyResult;
+  result: RunResult;
 
   languages: Array<[string, string]> = [];
 
-  selectedLanguage : string = 'c';
+  selectedLanguage : string = 'csharp';
 
   mapOutcome(outcome: number) {
     return getResultOutcome(outcome);

@@ -12,6 +12,13 @@ export class JobeServerService {
 
   constructor(private http: HttpClient) { }
 
+  private ip = "http://20.82.150.165";
+  private path = `${this.ip}/jobe/index.php/restapi`;
+
+
+  // this is temporary - remove unsupported languages from jobe server
+  supportedLanguages = ['csharp', 'java', 'python3', 'vbnet'];
+
   errorResult : RunResult = {
     run_id : '',
     outcome : 0,
@@ -30,11 +37,11 @@ export class JobeServerService {
   }
 
   run(language : string, code : string){
-      return this.http.post<RunResult>("http://20.82.150.165/jobe/index.php/restapi/runs", this.body(language, code), this.httpOptions).pipe(catchError(() => of<RunResult>(this.errorResult)));
+      return this.http.post<RunResult>(`${this.path}/runs`, this.body(language, code), this.httpOptions).pipe(catchError(() => of<RunResult>(this.errorResult)));
   }
 
   get(){
-    return this.http.get<Array<[string, string]>>("http://20.82.150.165/jobe/index.php/restapi/languages", this.httpOptions).pipe(catchError(() => of<Array<[string, string]>>([])));
+    return this.http.get<Array<[string, string]>>(`${this.path}/languages`, this.httpOptions).pipe(catchError(() => of<Array<[string, string]>>([])));
   }
 
 }
