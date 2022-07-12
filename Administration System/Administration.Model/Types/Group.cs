@@ -18,6 +18,7 @@
 
         public string Description { get; init; }
 
+        public int OrganisationId { get; init; }
         public virtual Organisation Organisation { get; init; }
 
         public virtual ICollection<User> Students { get; init; } = new List<User>();

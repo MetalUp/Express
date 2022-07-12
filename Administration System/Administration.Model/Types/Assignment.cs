@@ -19,7 +19,7 @@ namespace Model.Types
         public int Id { get; init; }
 
         [Hidden]
-        public int GTaskId { get; init; }
+        public int TaskId { get; init; }
         public virtual Task Task { get; init; }
 
         [Hidden]

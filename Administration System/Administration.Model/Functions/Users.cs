@@ -22,7 +22,8 @@ namespace Model.Functions
         public static User FindByUserName(string userName, IContext context) =>
     context.Instances<User>().FirstOrDefault(c => c.UserName.ToUpper() == userName.ToUpper());
 
-
+        public static User LoggedOnUser(IContext context) =>
+            context.Instances<User>().Single(u => u.Id == 3); //TODO: This is mocked out while there is no log on. Will actually find user by the username of the Principal (obtained from the context)
     }
 
 }

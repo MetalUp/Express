@@ -20,8 +20,10 @@
 
         public virtual string ToUser { get; init; } //Email address
 
+        public int FromUserId { get; init; }
         public virtual User FromUser { get; init; }
 
+        public  int ToJoinId { get; init; }
         public virtual Organisation ToJoin { get; init; }
 
         public Role AsRole { get; init; }
