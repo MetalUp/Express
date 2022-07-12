@@ -1,5 +1,6 @@
 ﻿namespace Model.Types
 {
+    [Bounded]
     public class Organisation
     {
         public Organisation() { }

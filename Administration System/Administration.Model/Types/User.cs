@@ -21,13 +21,12 @@
 
         public Role Role { get; init; }
 
+        [Hidden]
         public int OrganisationId { get; init; }
         public virtual Organisation Organisation { get; init; }
 
-
         [Hidden]
         public string Password { get; init; }
-
 
         public override string ToString() => FriendlyName;
     }

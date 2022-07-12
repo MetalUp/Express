@@ -6,6 +6,7 @@
         public static IQueryable<Assignment> AllAssignments(IContext context) =>
             context.Instances<Assignment>();
 
+        #region FindAssigments
         public static IQueryable<Assignment> FindAssigments(Group toGroup, bool nowDue, bool current, IContext context)
         {
             int gId = toGroup.Id;
@@ -15,11 +16,10 @@
                    select a;
         }
 
-        //Find assignments to group, with filtering by status and/or dates, ordered by s
-        //Find all assignments due by group, but listed individually
-        //Find all tasks overdue, optionally by group
+        public static IList<Group> Choices0FindAssignments(IContext context) => Group_MenuFunctions.MyGroups(context);
+        #endregion
     }
-
+    
     public static class Assignment_Functions
     {
         public static IContext MarkNotCompleted(this Assignment a, string teacherNote, IContext context) =>

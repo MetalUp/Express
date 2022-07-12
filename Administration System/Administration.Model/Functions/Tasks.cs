@@ -15,13 +15,20 @@ namespace Model.Functions
 
     public static class Task_Functions
     {
-        public static IContext AssignTaskToGroup(this Task task, Group group, DateTime dueBy, User assignedBy, IContext context) =>
-         group.Students.Aggregate(context, (c, s) => c.WithNew(NewAssignment(task, s, dueBy, assignedBy)));
+        #region AssignTaskToGroup
+        public static IContext AssignTaskToGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
+         group.Students.Aggregate(context, (c, s) => c.WithNew(NewAssignment(task, s, dueBy, User_MenuFunctions.Me(context))));
+
+        public static IList<Group> Choices1AssignTaskToGroup(IContext context) =>
+            Group_MenuFunctions.MyGroups(context);
+
+
+        #endregion
 
         //Need autocomplete for group & default for assignedBy
 
-        public static IContext AssignTaskToStudent(this Task task, User student, DateTime dueBy, User assignedBy, IContext context) =>
-                context.WithNew(NewAssignment(task, student, dueBy, assignedBy));
+        public static IContext AssignTaskToStudent(this Task task, User student, DateTime dueBy, IContext context) =>
+                context.WithNew(NewAssignment(task, student, dueBy, User_MenuFunctions.Me(context)));
 
         //Need autocomplete for student & default for assignedBy
         private static Assignment NewAssignment(Task task, User student, DateTime dueBy, User assignedBy)
