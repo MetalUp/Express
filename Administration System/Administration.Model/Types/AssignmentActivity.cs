@@ -8,6 +8,7 @@
         [Hidden]
         public  int Id { get; init; }
 
+        public int AssigmentId { get; init; }
         public virtual Assignment Assignment { get; init; }
 
         public DateTime TimeStamp { get; init; }
@@ -21,6 +22,6 @@
 
     public enum Activity
     {
-        Assigned, Started, Unsuccessful_Code_Submission, Successful_Code_Submission, Completed, NotCompleted
+        Assigned, Started, Unsuccessful_Code_Submission, UsedHint, Successful_Code_Submission, Completed, NotCompleted
     }
 }

@@ -21,6 +21,7 @@
 
         public Role Role { get; init; }
 
+        public int OrganisationId { get; init; }
         public virtual Organisation Organisation { get; init; }
 
 
