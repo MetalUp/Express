@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { JobeServerService } from '../jobe-server.service';
-import { RunResult } from '../run-result';
-import { LanguageResult } from '../language-result';
+import { getResultOutcome, RunResult } from '../run-result';
 
 @Component({
   selector: 'app-expression-evaluation',
@@ -31,6 +30,10 @@ export class ExpressionEvaluationComponent implements OnInit {
   languages: Array<[string, string]> = [];
 
   selectedLanguage : string = 'c';
+
+  mapOutcome(outcome: number) {
+    return getResultOutcome(outcome);
+  }
 
   onEnter() {
     this.jobeServer.run(this.selectedLanguage, this.expression).subscribe(o => this.result = o)
