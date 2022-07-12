@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { validateExpression } from '../csharp-helpers';
 import { JobeServerService } from '../jobe-server.service';
 import { getResultOutcome, RunResult } from '../run-result';
 
@@ -19,6 +20,8 @@ export class ExpressionEvaluationComponent implements OnInit {
 
   expression: string = '';
 
+  validation: string = ''
+
   result: RunResult;
 
   languages: Array<[string, string]> = [];
@@ -30,6 +33,12 @@ export class ExpressionEvaluationComponent implements OnInit {
   }
 
   onEnter() {
-    this.jobeServer.run(this.selectedLanguage, this.expression).subscribe(o => this.result = o)
+    this.validation = '';
+    if (validateExpression(this.selectedLanguage, this.expression)) {
+      this.jobeServer.run(this.selectedLanguage, this.expression).subscribe(o => this.result = o);
+    }
+    else {
+      this.validation = `${this.expression} is not an expression`;
+    }
   }
 }
