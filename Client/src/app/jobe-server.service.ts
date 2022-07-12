@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { RunResult } from './run-result';
+import { wrap } from './csharp-helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,6 @@ export class JobeServerService {
 
   private ip = "http://20.82.150.165";
   private path = `${this.ip}/jobe/index.php/restapi`;
-
 
   // this is temporary - remove unsupported languages from jobe server
   supportedLanguages = ['csharp', 'java', 'python3', 'vbnet'];
@@ -33,7 +33,7 @@ export class JobeServerService {
 
   body(language : string, code : string) {
     //return {"run_spec": {"language_id": "c", "sourcefilename": "test.c", "sourcecode": "\n#include <stdio.h>\n\nint main() {\n    printf(\"Hello world\\n\");\n}\n"}};
-    return {"run_spec": {"language_id": language,  "sourcecode": code}};
+    return {"run_spec": {"language_id": language,  "sourcecode": wrap(language, code)}};
   }
 
   run(language : string, code : string){
