@@ -1,4 +1,4 @@
-import { defaultRegExp, filterCmpinfoWithRegex, validateExpressionWithRegex } from "./language-helpers";
+import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex } from "./language-helpers";
 
 export function wrapJavaEXpression(expression : string) {
     return `
@@ -17,4 +17,9 @@ const cmpInfoRegex = /error.*/
 
 export function filterJavaCmpinfo(cmpinfo : string) {
     return filterCmpinfoWithRegex(cmpinfo, cmpInfoRegex);
+}
+
+export function findJavaFunctions(expression : string) {
+    const fMatch = /([a-z]\w*\s*)\(/g;
+    return findFunctionsWithRegex(expression, fMatch);
 }

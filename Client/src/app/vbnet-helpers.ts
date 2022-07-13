@@ -1,4 +1,4 @@
-import { defaultRegExp, filterCmpinfoWithRegex, validateExpressionWithRegex } from "./language-helpers";
+import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex } from "./language-helpers";
 
 export function wrapVBNetExpression(expression : string) {
     return `
@@ -17,4 +17,9 @@ const cmpInfoRegex = /VBNC.*/
 
 export function filterVBNetCmpinfo(cmpinfo : string) {
     return filterCmpinfoWithRegex(cmpinfo, cmpInfoRegex);
+}
+
+export function findVBNetFunctions(expression : string) {
+    const fMatch = /([A-Z]\w*\s*)\(/g;
+    return findFunctionsWithRegex(expression, fMatch);
 }

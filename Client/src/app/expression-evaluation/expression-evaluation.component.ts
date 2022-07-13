@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { filterCmpinfo, validateExpression } from '../language-helpers';
+import { filterCmpinfo, validateExpression, wrapExpression } from '../language-helpers';
 import { JobeServerService } from '../jobe-server.service';
 import { getResultOutcome, RunResult } from '../run-result';
 
@@ -20,7 +20,7 @@ export class ExpressionEvaluationComponent implements OnInit {
 
   expression: string = '';
 
-  whitelist: string = '';
+  whiteListFunctions: string = '';
 
   validation: string = ''
 
@@ -40,12 +40,11 @@ export class ExpressionEvaluationComponent implements OnInit {
 
   onEnter() {
     this.result = this.jobeServer.emptyResult;
-    this.validation = '';
-    if (validateExpression(this.selectedLanguage, this.expression)) {
-      this.jobeServer.submit_run(this.selectedLanguage, this.expression).subscribe(o => this.result = o);
-    }
-    else {
-      this.validation = `${this.expression} is not an expression`;
+    const whiteList = this.whiteListFunctions.split(",").map(s => s.trim());
+    this.validation = validateExpression(this.selectedLanguage, this.expression, whiteList);
+    if (!this.validation) {
+      const code = wrapExpression(this.selectedLanguage, this.expression);
+      this.jobeServer.submit_run(this.selectedLanguage, code).subscribe(rr => this.result = rr);
     }
   }
 }

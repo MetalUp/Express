@@ -5,6 +5,7 @@
 
 <span>expression: </span><input id="expression" [(ngModel)]="expression"/><br>
 <div *ngIf="validation"><span class="result">{{validation}}</span><br></div>
+<span>whitelist functions: </span><input id="expression" [(ngModel)]="whiteListFunctions"/><br>
 <span>run_id: </span><span class="result">{{result.run_id}}</span><br>
 <span>outcome: </span><span class="result">{{mapOutcome(result.outcome)}}</span><br>
 <span>cmpinfo: </span><span class="result">{{result.cmpinfo}}</span><br>
