@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { filterCmpinfo, validateExpression, wrapExpression } from '../language-helpers';
 import { JobeServerService } from '../jobe-server.service';
+import { TestRunnerService } from '../test-runner.service';
 import { getResultOutcome, RunResult } from '../run-result';
 
 @Component({
@@ -10,7 +11,7 @@ import { getResultOutcome, RunResult } from '../run-result';
 })
 export class ExpressionEvaluationComponent implements OnInit {
 
-  constructor(private jobeServer: JobeServerService) {
+  constructor(private jobeServer: JobeServerService, private testRunner : TestRunnerService) {
     this.result = jobeServer.emptyResult;
   }
 
@@ -38,13 +39,20 @@ export class ExpressionEvaluationComponent implements OnInit {
     return getResultOutcome(outcome);
   }
 
+  test() {
+    // if (this.result.stdout) {
+    //   const b = this.testRunner.test(this.result.stdout);
+    //   this.validation = b.toString();
+    // }
+  }
+
   onEnter() {
     this.result = this.jobeServer.emptyResult;
     const whiteList = this.whiteListFunctions.split(",").map(s => s.trim());
     this.validation = validateExpression(this.selectedLanguage, this.expression, whiteList);
     if (!this.validation) {
       const code = wrapExpression(this.selectedLanguage, this.expression);
-      this.jobeServer.submit_run(this.selectedLanguage, code).subscribe(rr => this.result = rr);
-    }
+      this.jobeServer.submit_run(this.selectedLanguage, code).subscribe(rr => {this.result = rr; this.test();});
+    }    
   }
 }
