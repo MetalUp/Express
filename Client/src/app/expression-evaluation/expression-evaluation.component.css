@@ -1,0 +1,38 @@
+div.pane {
+    position: absolute;
+    width:50%;
+    height: 50%;
+    border: 2px solid blue;
+}
+
+div.textinput {
+    display: flex;
+    position: relative;
+    left: 0;
+    right: 0;
+    width:99%; 
+    height: 90%;
+    border: none;
+    background-color: transparent;
+    resize: none;
+    outline: none;
+}
+
+
+textarea.expression {
+    display: inline-block;
+    background-color: transparent;
+    resize: none;
+    outline: none;
+    border:none;
+}
+
+button.clear {
+    position: relative;
+    top : 0;
+    left : 0;
+}
+
+span {
+    display: inline-block;
+}

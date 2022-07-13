@@ -1,0 +1,15 @@
+<span>languages: </span>
+<select [(ngModel)]="selectedLanguage">
+    <option *ngFor="let language of languages" [ngValue]="language[0]">{{language[0]}}</option>
+</select><br>
+
+<span>expression: </span><input id="expression" [(ngModel)]="expression"/><br>
+<div *ngIf="validation"><span class="result">{{validation}}</span><br></div>
+<span>whitelist functions: </span><input id="expression" [(ngModel)]="whiteListFunctions"/><br>
+<span>run_id: </span><span class="result">{{result.run_id}}</span><br>
+<span>outcome: </span><span class="result">{{mapOutcome(result.outcome)}}</span><br>
+<span>cmpinfo: </span><span class="result">{{result.cmpinfo}}</span><br>
+<span>stdout: </span><span class="result">{{result.stdout}}</span><br>
+<span>stderr: </span><span class="result">{{result.stderr}}</span><br>
+<span>filtered cmpinfo: </span><span class="result">{{filteredCmpinfo()}}</span><br>
+<button type="button" (click)="onEnter()">Enter</button>
