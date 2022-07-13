@@ -1,4 +1,4 @@
-import { defaultRegExp, validateExpressionWithRegex } from "./language-helpers";
+import { defaultRegExp, filterCmpinfoWithRegex, validateExpressionWithRegex } from "./language-helpers";
 
 export function wrapJavaEXpression(expression : string) {
     return `
@@ -11,4 +11,10 @@ export function wrapJavaEXpression(expression : string) {
 
 export function validateJavaExpression(expression : string) {
     return validateExpressionWithRegex(expression, defaultRegExp);
+}
+
+const cmpInfoRegex = /error.*/
+
+export function filterJavaCmpinfo(cmpinfo : string) {
+    return filterCmpinfoWithRegex(cmpinfo, cmpInfoRegex);
 }

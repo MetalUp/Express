@@ -1,4 +1,4 @@
-import { defaultRegExp, validateExpressionWithRegex } from "./language-helpers";
+import { defaultRegExp, filterCmpinfoWithRegex, validateExpressionWithRegex } from "./language-helpers";
 
 export function wrapCSharpEXpression(expression : string) {
     return `
@@ -11,4 +11,10 @@ export function wrapCSharpEXpression(expression : string) {
 
 export function validateCSharpExpression(expression : string) {
     return validateExpressionWithRegex(expression, defaultRegExp);
+}
+
+const cmpInfoRegex = /CS.*/
+
+export function filterCSharpCmpinfo(cmpinfo : string) {
+    return filterCmpinfoWithRegex(cmpinfo, cmpInfoRegex);
 }

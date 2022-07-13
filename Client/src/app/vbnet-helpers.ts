@@ -1,4 +1,4 @@
-import { defaultRegExp, validateExpressionWithRegex } from "./language-helpers";
+import { defaultRegExp, filterCmpinfoWithRegex, validateExpressionWithRegex } from "./language-helpers";
 
 export function wrapVBNetExpression(expression : string) {
     return `
@@ -11,4 +11,10 @@ export function wrapVBNetExpression(expression : string) {
 
 export function validateVBNetExpression(expression : string) {
     return validateExpressionWithRegex(expression, defaultRegExp);
+}
+
+const cmpInfoRegex = /VBNC.*/
+
+export function filterVBNetCmpinfo(cmpinfo : string) {
+    return filterCmpinfoWithRegex(cmpinfo, cmpInfoRegex);
 }

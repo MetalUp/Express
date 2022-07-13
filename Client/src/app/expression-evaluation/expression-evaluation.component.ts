@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { validateExpression } from '../language-helpers';
+import { filterCmpinfo, validateExpression } from '../language-helpers';
 import { JobeServerService } from '../jobe-server.service';
 import { getResultOutcome, RunResult } from '../run-result';
 
@@ -20,6 +20,8 @@ export class ExpressionEvaluationComponent implements OnInit {
 
   expression: string = '';
 
+  whitelist: string = '';
+
   validation: string = ''
 
   result: RunResult;
@@ -27,6 +29,10 @@ export class ExpressionEvaluationComponent implements OnInit {
   languages: Array<[string, string]> = [];
 
   selectedLanguage: string = 'csharp';
+
+  filteredCmpinfo() {
+     return this.result.cmpinfo ? filterCmpinfo(this.selectedLanguage, this.result.cmpinfo) : '';
+  }
 
   mapOutcome(outcome: number) {
     return getResultOutcome(outcome);
