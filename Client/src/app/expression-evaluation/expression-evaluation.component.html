@@ -1,10 +1,30 @@
-<div class="pane">
-    <button class="clear" type="button" (click)="onClear()">Clear</button>
-    <div *ngIf="previousExpressions.length > 0">
-        <div *ngFor="let e of previousExpressions">
-            <p>{{e[0]}}</p>
-            <p>{{e[1]}}</p>
+<div class="ile">
+    <div class="info">
+        <div class="title">Selected Language</div>
+        <div class="data">{{selectedLanguage}}</div>
+    </div>
+    <div class="pane">
+        <div class="pane-header">Expression evaluation</div>
+        <div class="pane-body">
+            <div *ngIf="previousExpressions.length > 0">
+                <div *ngFor="let e of previousExpressions">
+                    <div>{{e[0]}}</div>
+                    <div>{{e[1]}}</div>
+                </div>
+            </div>
+            <div class="textinput">
+                <span class="input">></span>
+                <textarea class="expression"
+                    [(ngModel)]="expression" 
+                    (keyup.enter)="onEnter()"
+                    (keyup)="onKey($event)">
+                </textarea>
+            </div>
+            <button class="clear" type="button" (click)="onClear()">Clear</button>
         </div>
     </div>
-    <div class="textinput"><span>></span><textarea class="expression"  [(ngModel)]="expression" (keyup.enter)="onEnter()"></textarea></div>
+    <div class="pane">
+        <div class="pane-header">Feedback</div>
+        <p>{{filteredCmpinfo()}}</p>
+    </div>
 </div>

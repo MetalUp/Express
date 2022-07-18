@@ -19,6 +19,8 @@ export class ExpressionEvaluationComponent implements OnInit {
     this.jobeServer.get_languages().subscribe(o => this.languages = o.filter(i => this.jobeServer.supportedLanguages.includes(i[0])));
   }
 
+  previousExpressionIndex = 0;
+
   previousExpressions: [string, string][] = [];
 
   expression: string = '';
@@ -51,12 +53,43 @@ export class ExpressionEvaluationComponent implements OnInit {
         this.result = rr;
         this.previousExpressions.push([this.expression, this.result.stdout]);
         this.expression = '';
+        this.previousExpressionIndex = this.previousExpressions.length;
       });
     }    
   }
 
   onClear() {
     this.previousExpressions = [];
+    this.previousExpressionIndex = 0;
     this.result = this.jobeServer.emptyResult;
+  }
+
+  onKey(event : KeyboardEvent) {
+    if (event.key === "ArrowUp"){
+      event.preventDefault();
+      event.stopPropagation();
+      this.onUp();
+    }
+    if (event.key === "ArrowDown"){
+      event.preventDefault();
+      event.stopPropagation();
+      this.onDown();
+    }
+  }
+
+  onUp() {
+    this.previousExpressionIndex = this.previousExpressionIndex <= 0 ? 0 : this.previousExpressionIndex - 1;
+    this.expression = this.previousExpressions[this.previousExpressionIndex][0].trim();
+  }
+
+  onDown() {
+    if (this.previousExpressionIndex >= this.previousExpressions.length - 1) {
+      this.previousExpressionIndex = this.previousExpressions.length;
+      this.expression = '';
+    }
+    else {
+      this.previousExpressionIndex = this.previousExpressionIndex + 1;
+      this.expression = this.previousExpressions[this.previousExpressionIndex][0].trim();
+    }
   }
 }
