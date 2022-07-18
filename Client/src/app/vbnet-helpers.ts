@@ -2,6 +2,9 @@ import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validate
 
 export function wrapVBNetExpression(expression : string) {
     return `
+    Imports System
+    Imports System.Linq
+    
     Module Hello  
     Sub Main()  
         System.Console.WriteLine(${expression})

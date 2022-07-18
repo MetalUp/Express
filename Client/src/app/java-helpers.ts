@@ -2,6 +2,8 @@ import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validate
 
 export function wrapJavaExpression(expression : string) {
     return `
+    import java.util.*;
+    
     class prog {
         public static void main(String[] args) {
             System.out.println(${expression}); 

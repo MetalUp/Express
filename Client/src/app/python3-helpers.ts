@@ -1,7 +1,10 @@
 import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex } from "./language-helpers";
 
 export function wrapPython3Expression(expression : string) {
-    return `print (${expression})`;
+    return `
+    from math import *
+    
+    print (${expression})`;
 }
 
 export function validatePython3Expression(expression : string) {

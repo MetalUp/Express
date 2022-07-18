@@ -2,6 +2,9 @@ import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validate
 
 export function wrapCSharpExpression(expression : string) {
     return `
+    using System;
+    using System.Linq;
+    
     class Hello {
         static void Main(string[] args) {
            System.Console.WriteLine(${expression});
