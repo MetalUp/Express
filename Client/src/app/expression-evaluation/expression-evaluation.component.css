@@ -87,3 +87,7 @@ textarea.expression {
     border:none;
     width: 100%;
 }
+
+.expression {
+    font-family: monospace;
+}
