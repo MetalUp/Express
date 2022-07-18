@@ -73,7 +73,7 @@ export class ExpressionEvaluationComponent implements OnInit {
       display += `>${e[0]}\n`;
       display += `${e[1]}\n`;
     }
-    return display;
+    return display.trim();
   }
 
   onEnter() {
