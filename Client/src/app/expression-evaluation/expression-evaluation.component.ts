@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { filterCmpinfo, validateExpression, wrapExpression } from '../language-helpers';
 import { JobeServerService } from '../jobe-server.service';
 import { getResultOutcome, RunResult } from '../run-result';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-expression-evaluation',
@@ -10,13 +11,30 @@ import { getResultOutcome, RunResult } from '../run-result';
 })
 export class ExpressionEvaluationComponent implements OnInit {
 
-  constructor(private jobeServer: JobeServerService) {
+  constructor(private jobeServer: JobeServerService, private route: ActivatedRoute) {
     this.result = jobeServer.emptyResult;
   }
 
   ngOnInit(): void {
-    this.jobeServer.get_languages().subscribe(o => this.languages = o.filter(i => this.jobeServer.supportedLanguages.includes(i[0])));
+    this.jobeServer.get_languages().subscribe(o => {
+      this.languages = o.filter(i => this.jobeServer.supportedLanguages.includes(i[0]));
+      this.checkLanguage()
+    });
+    this.route.queryParams.subscribe(params => {
+      this.selectedLanguage = params['language'];
+      this.checkLanguage()
+    });
   }
+
+  private checkLanguage() {
+    if (this.selectedLanguage && this.languages.length > 0) {
+      // check language is supported if not default
+      if (!this.languages.map(l => l[0]).includes(this.selectedLanguage)) {
+        this.selectedLanguage = this.languages[0][0];
+      }
+    }
+  }
+
 
   previousExpressionIndex = 0;
 
