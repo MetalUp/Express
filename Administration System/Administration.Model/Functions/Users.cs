@@ -1,13 +1,11 @@
 ﻿
-using System.Linq;
-using Model.Types;
 
 namespace Model.Functions
 {
     [Named("Users")]
     public static class User_MenuFunctions
     {
-        public static IQueryable<User> AllUsers(IContext context) =>
+        public static IQueryable<User> AllUsers(IContext context) => 
            context.Instances<User>();
 
         public static (User, IContext) CreateNewUser(string friendlyName, IContext context)

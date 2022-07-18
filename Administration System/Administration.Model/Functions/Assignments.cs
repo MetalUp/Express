@@ -6,18 +6,28 @@
         public static IQueryable<Assignment> AllAssignments(IContext context) =>
             context.Instances<Assignment>();
 
-        #region FindAssigments
-        public static IQueryable<Assignment> FindAssigments(Group toGroup, bool nowDue, bool current, IContext context)
+        public static IQueryable<Assignment> CurrentAssigments(IContext context)
         {
-            int gId = toGroup.Id;
-            var today = context.Today();
-            return from a in context.Instances<Assignment>()
-                   where a.GroupId == gId && (!nowDue || a.DueBy < today) && (!current || a.DueBy >= today)
-                   select a;
+            throw new NotImplementedException();
+
         }
 
-        public static IList<Group> Choices0FindAssignments(IContext context) => Group_MenuFunctions.MyGroups(context);
+        public static IQueryable<Assignment> AssigmentsNowDue(IContext context)
+        {
+            throw new NotImplementedException();
+
+        }
+
+        #region Assignments for Student
+        public static IQueryable<Assignment> AssignmentsForStudent(this User student, [Optionally] DateTime fromDate, [Optionally] DateTime toDate, IContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public static bool HideAssignmentsForStudent(this User student) //? Can we do this based on state of contributee?
+
         #endregion
+
     }
     
     public static class Assignment_Functions

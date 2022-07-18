@@ -37,7 +37,6 @@ namespace Model.Functions
             {
                 Task = task,
                 AssignedTo = student,
-                Group = null,
                 AssignedById = assignedBy.Id,
                 DueBy = dueBy,
                 Status = Activity.Assigned

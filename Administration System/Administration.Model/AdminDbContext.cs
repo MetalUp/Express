@@ -62,9 +62,9 @@ namespace Model
             modelBuilder.Entity<Task>().HasData(new Task { Id = 3, Title = "Task3" });
 
             //Assignments
-            modelBuilder.Entity<Assignment>().HasData(new Assignment { Id = 1, TaskId = 1, GroupId = 1, AssignedToId = 1, AssignedById = 3, DueBy = DateTime.Today.AddDays(-1) });
-            modelBuilder.Entity<Assignment>().HasData(new Assignment { Id = 2, TaskId = 1, GroupId = 1, AssignedToId = 2, AssignedById = 3, DueBy = DateTime.Today.AddDays(-1) });
-            modelBuilder.Entity<Assignment>().HasData(new Assignment { Id = 3, TaskId = 1, GroupId = 1, AssignedToId = 3, AssignedById = 3, DueBy = DateTime.Today.AddDays(-1) });
+            modelBuilder.Entity<Assignment>().HasData(new Assignment { Id = 1, TaskId = 1, AssignedToId = 1, AssignedById = 3, DueBy = DateTime.Today.AddDays(-1) });
+            modelBuilder.Entity<Assignment>().HasData(new Assignment { Id = 2, TaskId = 1, AssignedToId = 2, AssignedById = 3, DueBy = DateTime.Today.AddDays(-1) });
+            modelBuilder.Entity<Assignment>().HasData(new Assignment { Id = 3, TaskId = 1, AssignedToId = 3, AssignedById = 3, DueBy = DateTime.Today.AddDays(-1) });
 
         }
 
