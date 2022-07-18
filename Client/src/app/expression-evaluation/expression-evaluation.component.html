@@ -9,7 +9,7 @@
             <textarea class="previous-expressions" *ngIf="!!previousExpressions.length" [rows]="previousExpressions.length * 2 || 1">{{editorDisplay}}</textarea>
             <div class="expression">
                 <span class="expression">></span>
-                <textarea class="expression" rows="2" [(ngModel)]="expression" (keyup.enter)="onEnter()" (keyup)="onKey($event)"></textarea>
+                <textarea class="expression" rows="2" [(ngModel)]="expression" (keyup.enter)="onEnter()" (keyup)="onKey($event)" spellcheck="false"></textarea>
             </div>
             <button class="clear" type="button" (click)="onClear()">Clear</button>
         </div>
