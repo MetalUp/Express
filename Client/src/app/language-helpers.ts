@@ -1,5 +1,5 @@
-import { filterCSharpCmpinfo, findCSharpFunctions, validateCSharpExpression, wrapCSharpEXpression as wrapCSharpExpression } from "./csharp-helpers";
-import { filterJavaCmpinfo, findJavaFunctions, validateJavaExpression, wrapJavaEXpression as wrapJavaExpression } from "./java-helpers";
+import { filterCSharpCmpinfo, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression as wrapCSharpExpression } from "./csharp-helpers";
+import { filterJavaCmpinfo, findJavaFunctions, validateJavaExpression, wrapJavaExpression as wrapJavaExpression } from "./java-helpers";
 import { filterPython3Cmpinfo, findPython3Functions, validatePython3Expression, wrapPython3Expression } from "./python3-helpers";
 import { filterVBNetCmpinfo, findVBNetFunctions, validateVBNetExpression, wrapVBNetExpression } from "./vbnet-helpers";
 
@@ -17,10 +17,10 @@ export function wrapExpression(language: string, expression: string) {
 export function validateExpression(language: string, expression: string, whiteListFunctions: string[]) {
 
     // validate all the functions
-    const invalidFunctions = findFunctions(language, expression).filter(f => !whiteListFunctions.includes(f));
-    if (invalidFunctions.length > 0) {
-        return "may not use function(s): " + invalidFunctions.join(", ");
-    }
+    // const invalidFunctions = findFunctions(language, expression).filter(f => !whiteListFunctions.includes(f));
+    // if (invalidFunctions.length > 0) {
+    //     return "may not use function(s): " + invalidFunctions.join(", ");
+    // }
 
     switch (language) {
         case 'csharp': return validateCSharpExpression(expression);

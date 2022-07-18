@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { filterCmpinfo, validateExpression, wrapExpression } from '../language-helpers';
 import { JobeServerService } from '../jobe-server.service';
-import { TestRunnerService } from '../test-runner.service';
 import { getResultOutcome, RunResult } from '../run-result';
 
 @Component({
@@ -27,7 +26,7 @@ export class ExpressionEvaluationComponent implements OnInit {
 
   whiteListFunctions: string = '';
 
-  validation: string = ''
+  validationFail: string = ''
 
   result: RunResult;
 
@@ -36,26 +35,45 @@ export class ExpressionEvaluationComponent implements OnInit {
   selectedLanguage: string = 'csharp';
 
   filteredCmpinfo() {
-     return this.result.cmpinfo ? filterCmpinfo(this.selectedLanguage, this.result.cmpinfo) : '';
+    if (this.validationFail) {
+      return this.validationFail;
+    }
+
+    return this.result.cmpinfo
+      ? filterCmpinfo(this.selectedLanguage, this.result.cmpinfo)
+      : this.result.stderr;
   }
 
   mapOutcome(outcome: number) {
     return getResultOutcome(outcome);
   }
 
+  get editorDisplay() {
+    let display = "";
+
+    for (const e of this.previousExpressions) {
+      display += `>${e[0]}\n`;
+      display += `${e[1]}\n`;
+    }
+    return display;
+  }
+
   onEnter() {
-    this.result = this.jobeServer.emptyResult;
-    const whiteList = this.whiteListFunctions.split(",").map(s => s.trim());
-    this.validation = validateExpression(this.selectedLanguage, this.expression.trim(), whiteList);
-    if (!this.validation) {
-      const code = wrapExpression(this.selectedLanguage, this.expression);
-      this.jobeServer.submit_run(this.selectedLanguage, code).subscribe(rr => {
-        this.result = rr;
-        this.previousExpressions.push([this.expression, this.result.stdout]);
-        this.expression = '';
-        this.previousExpressionIndex = this.previousExpressions.length;
-      });
-    }    
+    this.expression = this.expression.trim();
+    if (this.expression != ``) {
+      this.result = this.jobeServer.emptyResult;
+      const whiteList = this.whiteListFunctions.split(",").map(s => s.trim());
+      this.validationFail = validateExpression(this.selectedLanguage, this.expression, whiteList);
+      if (!this.validationFail) {
+        const code = wrapExpression(this.selectedLanguage, this.expression);
+        this.jobeServer.submit_run(this.selectedLanguage, code).subscribe(rr => {
+          this.result = rr;
+          this.previousExpressions.push([this.expression, this.result.stdout.trim()]);
+          this.expression = '';
+          this.previousExpressionIndex = this.previousExpressions.length;
+        });
+      }
+    }
   }
 
   onClear() {
@@ -64,15 +82,11 @@ export class ExpressionEvaluationComponent implements OnInit {
     this.result = this.jobeServer.emptyResult;
   }
 
-  onKey(event : KeyboardEvent) {
-    if (event.key === "ArrowUp"){
-      event.preventDefault();
-      event.stopPropagation();
+  onKey(event: KeyboardEvent) {
+    if (event.key === "ArrowUp") {
       this.onUp();
     }
-    if (event.key === "ArrowDown"){
-      event.preventDefault();
-      event.stopPropagation();
+    if (event.key === "ArrowDown") {
       this.onDown();
     }
   }

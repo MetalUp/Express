@@ -1,6 +1,6 @@
 import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex } from "./language-helpers";
 
-export function wrapCSharpEXpression(expression : string) {
+export function wrapCSharpExpression(expression : string) {
     return `
     class Hello {
         static void Main(string[] args) {

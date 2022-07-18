@@ -6,19 +6,10 @@
     <div class="pane">
         <div class="pane-header">Expression evaluation</div>
         <div class="pane-body">
-            <div *ngIf="previousExpressions.length > 0">
-                <div *ngFor="let e of previousExpressions">
-                    <div>{{e[0]}}</div>
-                    <div>{{e[1]}}</div>
-                </div>
-            </div>
-            <div class="textinput">
-                <span class="input">></span>
-                <textarea class="expression"
-                    [(ngModel)]="expression" 
-                    (keyup.enter)="onEnter()"
-                    (keyup)="onKey($event)">
-                </textarea>
+            <div class="previous-expressions">{{editorDisplay}}</div>
+            <div class="expression">
+                <span class="expression">></span>
+                <input class="expression" [(ngModel)]="expression" (keyup.enter)="onEnter()" (keyup)="onKey($event)"/>
             </div>
             <button class="clear" type="button" (click)="onClear()">Clear</button>
         </div>

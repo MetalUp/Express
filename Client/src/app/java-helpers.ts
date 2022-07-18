@@ -1,6 +1,6 @@
 import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex } from "./language-helpers";
 
-export function wrapJavaEXpression(expression : string) {
+export function wrapJavaExpression(expression : string) {
     return `
     class prog {
         public static void main(String[] args) {
