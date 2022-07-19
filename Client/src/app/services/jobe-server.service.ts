@@ -12,7 +12,7 @@ export class JobeServerService {
   constructor(private http: HttpClient) { }
 
   private ip = "http://20.82.150.165";
-  private path = `${this.ip}/jobe/index.php/restapi`;
+  path = `${this.ip}/jobe/index.php/restapi`;
 
   emptyResult: RunResult = {
     run_id: '',
