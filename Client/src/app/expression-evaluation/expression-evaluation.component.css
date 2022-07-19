@@ -1,90 +1,116 @@
-div {
-    resize: none;
-    position: relative;
-}
-
 div.ile {
     display: flex;
-    position: absolute;
+    flex-flow: row;
+    justify-content: space-evenly;
+    height : 800px;
+    width: 1500px;
+}
+
+div.column {
+    display: flex;
     flex-flow: column;
-    width:100%;
-    height: 100%;
+    justify-content: space-evenly;
+    flex-shrink: 1;
+    flex-grow: 1;
+    flex-basis: 50%;
 }
 
 div.info {
     display: flex;
-    flex-flow: row;
-    position: relative;
-    width:50%;
+    flex-flow: row;   
+    margin-left: 2px;
+    margin-right: 2px;
+    border: 2px solid blue;
 }
 
 div.title {
     position: relative;
     background-color: blue;
     color: white;
-    width:25%;
+    width: 50%;
+    padding-left: 5px;
 }
 
 div.data {
-    align-self: center;
-    width:25%;
+    width: 50%;
+    padding-left: 5px;
 }
 
 div.pane {
     display: flex;
     flex-flow: column;
-    position: relative;
+    justify-content: space-between;
     border: 2px solid blue;
-    width:50%;
-    height: 50%;
-    padding: 1px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 45%;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 
 div.pane-header {
     background-color: blue;
     color: white;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 5%;
+    padding-left: 5px;
 }
 
 div.pane-body {
     display: flex;
     flex-flow: column;
-    width:100%; 
-    height: 100%;
+    flex-shrink: 1;
+    flex-grow: 0;
+    flex-basis: 90%;
+    justify-content: flex-start;
+    overflow: hidden;
 }
 
 textarea.previous-expressions {
     background-color: transparent;
     outline: none;
-    border:none;
-    resize:none;
+    border: none;
+    resize: none;
     width: 99%;
+    max-height: 250px;
     overflow-x: hidden;
     overflow-y: auto;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: max-content;
 }
 
 button.clear {
-    align-self:flex-end;
-    width:10%;
-    height: 5%;
-    background-color:aqua;
+    width: 10%;
+    background-color: aqua;
     outline: none;
     border: none;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 5%;
+    align-self: flex-end;
+    margin-bottom: 5px;
+    margin-right: 5px;
 }
 
 div.expression {
-    display:flex;
+    display: flex;
     flex-flow: row;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: 5%;
 }
 
 span.expression {
-    align-self:flex-start;
+    align-self: flex-start;
 }
 
 textarea.expression {
     background-color: transparent;
     resize: none;
     outline: none;
-    border:none;
+    border: none;
     width: 100%;
 }
 
