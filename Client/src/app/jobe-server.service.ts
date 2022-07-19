@@ -14,9 +14,6 @@ export class JobeServerService {
   private ip = "http://20.82.150.165";
   private path = `${this.ip}/jobe/index.php/restapi`;
 
-  // this is temporary - remove unsupported languages from jobe server
-  supportedLanguages = ['csharp', 'java', 'python3', 'vbnet'];
-
   emptyResult: RunResult = {
     run_id: '',
     outcome: 0,

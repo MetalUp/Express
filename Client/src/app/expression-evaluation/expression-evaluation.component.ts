@@ -16,8 +16,8 @@ export class ExpressionEvaluationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.jobeServer.get_languages().subscribe(o => {
-      this.languages = o.filter(i => this.jobeServer.supportedLanguages.includes(i[0]));
+    this.jobeServer.get_languages().subscribe(supportedLanguages => {
+      this.languages = supportedLanguages;
       this.checkLanguage()
     });
     this.route.queryParams.subscribe(params => {
@@ -28,9 +28,9 @@ export class ExpressionEvaluationComponent implements OnInit {
 
   private checkLanguage() {
     if (this.selectedLanguage && this.languages.length > 0) {
-      // check language is supported if not default
+      // check language is supported if not leave empty
       if (!this.languages.map(l => l[0]).includes(this.selectedLanguage)) {
-        this.selectedLanguage = this.languages[0][0];
+        this.selectedLanguage = "";
       }
     }
   }

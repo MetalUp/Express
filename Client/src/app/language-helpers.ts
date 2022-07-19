@@ -1,6 +1,6 @@
 import { filterCSharpCmpinfo, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression as wrapCSharpExpression } from "./csharp-helpers";
 import { filterJavaCmpinfo, findJavaFunctions, validateJavaExpression, wrapJavaExpression as wrapJavaExpression } from "./java-helpers";
-import { filterPython3Cmpinfo, findPython3Functions, validatePython3Expression, wrapPython3Expression } from "./python3-helpers";
+import { filterPythonCmpinfo, findPythonFunctions, validatePythonExpression, wrapPythonExpression } from "./python-helpers";
 import { filterVBNetCmpinfo, findVBNetFunctions, validateVBNetExpression, wrapVBNetExpression } from "./vbnet-helpers";
 
 
@@ -8,7 +8,7 @@ export function wrapExpression(language: string, expression: string) {
     switch (language) {
         case 'csharp': return wrapCSharpExpression(expression);
         case 'java': return wrapJavaExpression(expression);
-        case 'python3': return wrapPython3Expression(expression);
+        case 'python': return wrapPythonExpression(expression);
         case 'vbnet': return wrapVBNetExpression(expression);
         default: return expression;
     }
@@ -25,7 +25,7 @@ export function validateExpression(language: string, expression: string, whiteLi
     switch (language) {
         case 'csharp': return validateCSharpExpression(expression);
         case 'java': return validateJavaExpression(expression);
-        case 'python3': return validatePython3Expression(expression);
+        case 'python': return validatePythonExpression(expression);
         case 'vbnet': return validateVBNetExpression(expression);
         default: return 'unknown language';
     }
@@ -35,7 +35,7 @@ export function filterCmpinfo(language: string, cmpinfo: string) {
     switch (language) {
         case 'csharp': return filterCSharpCmpinfo(cmpinfo);
         case 'java': return filterJavaCmpinfo(cmpinfo);
-        case 'python3': return filterPython3Cmpinfo(cmpinfo);
+        case 'python': return filterPythonCmpinfo(cmpinfo);
         case 'vbnet': return filterVBNetCmpinfo(cmpinfo);
         default: return cmpinfo;
     }
@@ -45,7 +45,7 @@ function findFunctions(language: string, expression: string) {
     switch (language) {
         case 'csharp': return findCSharpFunctions(expression);
         case 'java': return findJavaFunctions(expression);
-        case 'python3': return findPython3Functions(expression);
+        case 'python': return findPythonFunctions(expression);
         case 'vbnet': return findVBNetFunctions(expression);
         default: return [];
     }
