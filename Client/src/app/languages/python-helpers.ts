@@ -3,7 +3,18 @@ import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validate
 export function wrapPythonExpression(expression : string) {
     return `
 from math import *
-print (${expression})`;
+
+def display(x):
+  if isinstance(x, str):
+    return x
+  else:
+    try:
+         return list(iter(x))
+    except TypeError:
+         return x
+
+print (display(${expression}))
+`;
 }
 
 export function validatePythonExpression(expression : string) {
