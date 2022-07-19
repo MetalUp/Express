@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { filterCmpinfo, validateExpression, wrapExpression } from '../language-helpers';
-import { JobeServerService } from '../jobe-server.service';
-import { getResultOutcome, RunResult } from '../run-result';
+import { filterCmpinfo, validateExpression, wrapExpression } from '../languages/language-helpers';
+import { JobeServerService } from '../services/jobe-server.service';
+import { getResultOutcome, RunResult } from '../services/run-result';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
