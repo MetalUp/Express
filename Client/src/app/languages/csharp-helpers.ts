@@ -18,7 +18,7 @@ export function wrapCSharpExpression(expression : string) {
 
             if (obj is string)
             {
-                return $@"""{obj}""";
+                return $"{obj}";
             }
 
             if (obj is IEnumerable)
