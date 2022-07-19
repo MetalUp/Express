@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { RunResult } from './run-result';
+import { RunResult, EmptyRunResult } from './run-result';
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +14,6 @@ export class JobeServerService {
   private ip = "http://20.82.150.165";
   path = `${this.ip}/jobe/index.php/restapi`;
 
-  emptyResult: RunResult = {
-    run_id: '',
-    outcome: 0,
-    cmpinfo: '',
-    stdout: '',
-    stderr: ''
-  }
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json; charset-utf-8' })
@@ -31,7 +24,7 @@ export class JobeServerService {
   }
 
   submit_run(language: string, code: string) {
-    return this.http.post<RunResult>(`${this.path}/runs`, this.run_spec(language, code), this.httpOptions).pipe(catchError(() => of<RunResult>(this.emptyResult)));
+    return this.http.post<RunResult>(`${this.path}/runs`, this.run_spec(language, code), this.httpOptions).pipe(catchError(() => of<RunResult>(EmptyRunResult)));
   }
 
   get_languages() {

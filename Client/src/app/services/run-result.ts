@@ -6,6 +6,14 @@ export interface RunResult {
     stderr: string
 }
 
+export const EmptyRunResult = {
+    run_id: '',
+    outcome: 0,
+    cmpinfo: '',
+    stdout: '',
+    stderr: ''
+}
+
 export function getResultOutcome(outcome: number) {
     switch (outcome) {
         case 11: return 'Compilation error. The cmpinfo field should offer further explanation'

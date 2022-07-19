@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { JobeServerService } from './jobe-server.service';
-import { RunResult } from './run-result';
+import { EmptyRunResult, RunResult } from './run-result';
 import { of, throwError } from 'rxjs';
 
 describe('JobeServerService', () => {
@@ -42,7 +42,7 @@ describe('JobeServerService', () => {
   it('should call post on /runs and return an empty result on error', () => {
     httpClientSpy.post.and.returnValue(throwError(() => { status: 404 }));
 
-    service.submit_run("stub language", "stub code").subscribe(o => expect(o).toEqual(service.emptyResult));
+    service.submit_run("stub language", "stub code").subscribe(o => expect(o).toEqual(EmptyRunResult));
 
     expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
       Object(testRunSpec),

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { filterCmpinfo, validateExpression, wrapExpression } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
-import { getResultOutcome, RunResult } from '../services/run-result';
+import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -12,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ExpressionEvaluationComponent implements OnInit {
 
   constructor(private jobeServer: JobeServerService, private route: ActivatedRoute) {
-    this.result = jobeServer.emptyResult;
+    this.result = EmptyRunResult;
   }
 
   ngOnInit(): void {
@@ -35,14 +35,11 @@ export class ExpressionEvaluationComponent implements OnInit {
     }
   }
 
-
   previousExpressionIndex = 0;
 
   previousExpressions: [string, string][] = [];
 
   expression: string = '';
-
-  whiteListFunctions: string = '';
 
   validationFail: string = ''
 
@@ -50,7 +47,7 @@ export class ExpressionEvaluationComponent implements OnInit {
 
   languages: Array<[string, string]> = [];
 
-  selectedLanguage: string = 'csharp';
+  selectedLanguage: string = '';
 
   filteredCmpinfo() {
     if (this.validationFail) {
@@ -79,9 +76,8 @@ export class ExpressionEvaluationComponent implements OnInit {
   onEnter() {
     this.expression = this.expression.trim();
     if (this.expression != ``) {
-      this.result = this.jobeServer.emptyResult;
-      const whiteList = this.whiteListFunctions.split(",").map(s => s.trim());
-      this.validationFail = validateExpression(this.selectedLanguage, this.expression, whiteList);
+      this.result = EmptyRunResult;
+      this.validationFail = validateExpression(this.selectedLanguage, this.expression, []);
       if (!this.validationFail) {
         const code = wrapExpression(this.selectedLanguage, this.expression);
         this.jobeServer.submit_run(this.selectedLanguage, code).subscribe(rr => {
@@ -97,7 +93,7 @@ export class ExpressionEvaluationComponent implements OnInit {
   onClear() {
     this.previousExpressions = [];
     this.previousExpressionIndex = 0;
-    this.result = this.jobeServer.emptyResult;
+    this.result = EmptyRunResult;
   }
 
   onKey(event: KeyboardEvent) {
