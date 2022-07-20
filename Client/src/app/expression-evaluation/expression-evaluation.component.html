@@ -19,7 +19,17 @@
                 <div class="half-pane">
                     <div class="expression live">
                         <span class="expression">&#187;&nbsp;</span>
-                        <textarea placeholder="(cursor-up to retrieve previous expressions)" class="expression" rows="10" [(ngModel)]="expression"  (keydown)="onEnterKey($event)"  (keyup.enter)="onEnter()" (keyup)="onKey($event)" spellcheck="false"></textarea>
+                        <textarea 
+                            placeholder="(cursor-up to retrieve previous expressions)" 
+                            class="expression"
+                            rows="10"
+                            [(ngModel)]="expression" 
+                            (keydown)="onEnterKey($event)"
+                            (keyup.enter)="onEnter()"
+                            (keyup)="onKey($event)" 
+                            spellcheck="false"
+                            autofocus="autofocus">
+                        </textarea>
                     </div>
                 </div>
             </div>
