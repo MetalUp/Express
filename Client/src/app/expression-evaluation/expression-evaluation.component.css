@@ -108,3 +108,7 @@ textarea.expression {
 .expression {
     font-family: monospace;
 }
+
+.half-pane.previous {
+    background-color: #dce8f5;
+}
