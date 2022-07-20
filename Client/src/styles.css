@@ -1,4 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-    font-family: sans-serif;
+    font-family: 'Segoe UI', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
+
 }
+
+::placeholder {
+    color: #D9D9D9;
+  }

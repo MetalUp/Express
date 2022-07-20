@@ -21,12 +21,12 @@ div.info {
     flex-flow: row;   
     margin-left: 2px;
     margin-right: 2px;
-    border: 2px solid blue;
+    border: 2px solid #4472C4;
 }
 
 div.title {
     position: relative;
-    background-color: blue;
+    background-color: #4472C4;
     color: white;
     width: 50%;
     padding-left: 5px;
@@ -41,7 +41,7 @@ div.pane {
     display: flex;
     flex-flow: column;
     justify-content: space-between;
-    border: 2px solid blue;
+    border: 2px solid #4472C4;
     flex-shrink: 0;
     flex-grow: 0;
     flex-basis: 45%;
@@ -50,7 +50,7 @@ div.pane {
 }
 
 div.pane-header {
-    background-color: blue;
+    background-color: #4472C4;
     color: white;
     flex-shrink: 0;
     flex-grow: 0;
@@ -110,5 +110,5 @@ textarea.expression {
 }
 
 .half-pane.previous {
-    background-color: #dce8f5;
+    background-color: #DAE3F3;
 }
