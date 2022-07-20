@@ -112,3 +112,7 @@ div.space {
     flex-grow: 0;
     flex-basis: 90%;
 }
+
+.half-pane.previous {
+    background-color: #dce8f5;
+}
