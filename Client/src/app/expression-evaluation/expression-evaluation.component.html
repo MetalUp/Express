@@ -21,20 +21,18 @@
             <div class="pane-body">
                 <div class="half-pane">
                     <div class="expression">
-                        <span  *ngIf="previousExpression" class="expression">></span>
-                        <textarea rows="1" class="expression">{{previousExpression}}</textarea>
+                        <span *ngIf="previousExpression" class="expression">&#187;&nbsp;</span>
+                        <textarea rows = "2" class="expression">{{previousExpression}}</textarea>
                     </div>
                     <div class="expression">
-                        <textarea class="expression">{{previousExpressionResult}}</textarea>
+                        <textarea  rows="8" class="expression">{{previousExpressionResult}}</textarea>
                     </div>
-                    <div class="space"></div>
                 </div>
                 <div class="half-pane">
                     <div class="expression">
-                        <span class="expression">></span>
+                        <span class="expression">&#187;&nbsp;</span>
                         <textarea class="expression" rows="2" [(ngModel)]="expression" (keyup.enter)="onEnter()" (keyup)="onKey($event)" spellcheck="false"></textarea>
                     </div>
-                    <div class="space"></div>
                 </div>
             </div>
         </div>

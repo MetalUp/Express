@@ -10,8 +10,9 @@ div.column {
     display: flex;
     flex-flow: column;
     justify-content: space-evenly;
-    flex-shrink: 1;
-    flex-grow: 1;
+    align-content: space-around;
+    flex-shrink: 0;
+    flex-grow: 0;
     flex-basis: 50%;
 }
 
@@ -60,7 +61,7 @@ div.pane-header {
 div.pane-body {
     display: flex;
     flex-flow: column;
-    flex-shrink: 1;
+    flex-shrink: 0;
     flex-grow: 0;
     flex-basis: 95%;
     justify-content: flex-start;
@@ -70,26 +71,28 @@ div.pane-body {
 div.half-pane {
     display: flex;
     flex-flow: column;
+    justify-content: flex-start;
     flex-shrink: 0;
     flex-grow: 0;
     flex-basis: 50%;
+    overflow: hidden;
 }
 
 span.expression {
     flex-shrink: 0;
     flex-grow: 0;
     flex-basis: min-content;
-    padding-left: 2px;
-    padding-top: 2px;
 }
 
 div.expression {
-    display: flex;
+    display: inline-flex;
     flex-flow: row;
     justify-items: flex-start;
     flex-shrink: 0;
-    flex-grow: 1;
-    flex-basis: auto;
+    flex-grow: 0;
+    flex-basis: max-context;
+    overflow-wrap: break-word;
+    overflow-y: auto;
 }
 
 textarea.expression {
@@ -100,15 +103,8 @@ textarea.expression {
     flex-shrink: 0;
     flex-grow: 1;
     flex-basis: max-content;
-    padding-left: 0px;
 }
 
-.expression, .previous-expressions {
+.expression {
     font-family: monospace;
-}
-
-div.space {
-    flex-shrink: 10;
-    flex-grow: 0;
-    flex-basis: 90%;
 }
