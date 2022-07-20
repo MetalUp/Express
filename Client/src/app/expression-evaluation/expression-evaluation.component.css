@@ -79,6 +79,8 @@ span.expression {
     flex-shrink: 0;
     flex-grow: 0;
     flex-basis: min-content;
+    padding-left: 2px;
+    padding-top: 2px;
 }
 
 div.expression {
@@ -98,9 +100,10 @@ textarea.expression {
     flex-shrink: 0;
     flex-grow: 1;
     flex-basis: max-content;
+    padding-left: 0px;
 }
 
-.expression {
+.expression, .previous-expressions {
     font-family: monospace;
 }
 
