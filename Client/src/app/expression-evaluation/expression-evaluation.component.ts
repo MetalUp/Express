@@ -76,7 +76,7 @@ export class ExpressionEvaluationComponent implements OnInit {
   }
 
   get previousExpressionResult() {
-    return this.getPrevious(1);
+    return this.getPrevious(1) || this.filteredCmpinfo();
   }
 
   onEnter() {
