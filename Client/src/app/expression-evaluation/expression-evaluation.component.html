@@ -21,7 +21,7 @@
             <div class="pane-body">
                 <textarea class="previous-expressions" *ngIf="!!previousExpressions.length" [rows]="previousExpressions.length * 2 || 1">{{editorDisplay}}</textarea>
                 <div class="expression">
-                    <span class="expression">&#187;</span>
+                    <span class="expression">&#187;&nbsp;</span>
                     <textarea class="expression" rows="2" [(ngModel)]="expression" (keyup.enter)="onEnter()" (keyup)="onKey($event)" spellcheck="false"></textarea>
                 </div>
             </div>

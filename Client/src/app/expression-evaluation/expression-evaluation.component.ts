@@ -67,7 +67,7 @@ export class ExpressionEvaluationComponent implements OnInit {
     let display = "";
 
     for (const e of this.previousExpressions) {
-      display += `»${e[0]}\n`;
+      display += `» ${e[0]}\n`;
       display += `${e[1]}\n`;
     }
     return display.trim();
