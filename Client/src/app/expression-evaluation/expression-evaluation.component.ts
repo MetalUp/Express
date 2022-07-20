@@ -96,11 +96,12 @@ export class ExpressionEvaluationComponent implements OnInit {
     }
   }
 
-  onClear() {
-    this.previousExpressions = [];
-    this.previousExpressionIndex = 0;
-    this.result = EmptyRunResult;
+  onEnterKey(event: KeyboardEvent) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
   }
+
 
   onKey(event: KeyboardEvent) {
     if (event.key === "ArrowUp") {
