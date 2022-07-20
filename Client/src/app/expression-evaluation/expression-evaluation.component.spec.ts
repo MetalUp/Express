@@ -5,15 +5,16 @@ import { ExpressionEvaluationComponent } from './expression-evaluation.component
 import { of } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 
+
 describe('ExpressionEvaluationComponent', () => {
   let component: ExpressionEvaluationComponent;
   let fixture: ComponentFixture<ExpressionEvaluationComponent>;
-  let mockJobeServerService : jasmine.SpyObj<JobeServerService>;
+  let mockJobeServerService: jasmine.SpyObj<JobeServerService>;
   let mockActivatedRoute: jasmine.SpyObj<ActivatedRoute>;
 
   beforeEach(async () => {
     mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages']);
-    mockActivatedRoute = jasmine.createSpyObj('ActivatedRoute', [], {'queryParams' : of<Params>(new HttpParams() )  });
+    mockActivatedRoute = jasmine.createSpyObj('ActivatedRoute', [], { 'queryParams': of<Params>(new HttpParams()) });
     mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["1", "2"]]));
 
     await TestBed.configureTestingModule({
@@ -36,8 +37,18 @@ describe('ExpressionEvaluationComponent', () => {
   });
 
   it('should create', () => {
-    
-    
     expect(component).toBeTruthy();
   });
+
+  // it('should setup selected language', () => {
+  //   mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["language1", "language2"]]));
+  //   const testParam = new HttpParams();
+  //   testParam.append("language", "language1");
+  //   (Object.getOwnPropertyDescriptor(mockActivatedRoute, "queryParams")?.get as any).and.returnValue(of<Params>(testParam));
+
+  //   component.ngOnInit();
+
+  //   expect(component.selectedLanguage).toEqual("language1");
+  // });
+
 });

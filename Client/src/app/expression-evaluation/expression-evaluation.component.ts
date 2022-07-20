@@ -63,14 +63,20 @@ export class ExpressionEvaluationComponent implements OnInit {
     return getResultOutcome(outcome);
   }
 
-  get editorDisplay() {
-    let display = "";
-
-    for (const e of this.previousExpressions) {
-      display += `>${e[0]}\n`;
-      display += `${e[1]}\n`;
+  private getPrevious(i : number) {
+    if (this.previousExpressions.length > 0) {
+      const lastItem = this.previousExpressions[this.previousExpressions.length -1];
+      return `${lastItem[i]}`;
     }
-    return display.trim();
+    return '';
+  }
+
+  get previousExpression() {
+    return this.getPrevious(0);
+  }
+
+  get previousExpressionResult() {
+    return this.getPrevious(1);
   }
 
   onEnter() {

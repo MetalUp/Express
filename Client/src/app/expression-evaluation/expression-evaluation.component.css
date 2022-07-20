@@ -62,48 +62,32 @@ div.pane-body {
     flex-flow: column;
     flex-shrink: 1;
     flex-grow: 0;
-    flex-basis: 90%;
+    flex-basis: 95%;
     justify-content: flex-start;
     overflow: hidden;
 }
 
-textarea.previous-expressions {
-    background-color: transparent;
-    outline: none;
-    border: none;
-    resize: none;
-    width: 99%;
-    max-height: 250px;
-    overflow-x: hidden;
-    overflow-y: auto;
+div.half-pane {
+    display: flex;
+    flex-flow: column;
     flex-shrink: 0;
     flex-grow: 0;
-    flex-basis: max-content;
+    flex-basis: 50%;
 }
 
-button.clear {
-    width: 10%;
-    background-color: aqua;
-    outline: none;
-    border: none;
+span.expression {
     flex-shrink: 0;
     flex-grow: 0;
-    flex-basis: 5%;
-    align-self: flex-end;
-    margin-bottom: 5px;
-    margin-right: 5px;
+    flex-basis: content;
 }
 
 div.expression {
     display: flex;
     flex-flow: row;
+    justify-items: flex-start;
     flex-shrink: 0;
-    flex-grow: 0;
-    flex-basis: 5%;
-}
-
-span.expression {
-    align-self: flex-start;
+    flex-grow: 1;
+    flex-basis: content;
 }
 
 textarea.expression {
@@ -111,7 +95,7 @@ textarea.expression {
     resize: none;
     outline: none;
     border: none;
-    width: 100%;
+    flex-basis: content;
 }
 
 .expression {

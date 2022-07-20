@@ -19,13 +19,22 @@
         <div class="pane">
             <div class="pane-header">Expression evaluation</div>
             <div class="pane-body">
-                <textarea class="previous-expressions" *ngIf="!!previousExpressions.length" [rows]="previousExpressions.length * 2 || 1">{{editorDisplay}}</textarea>
-                <div class="expression">
-                    <span class="expression">></span>
-                    <textarea class="expression" rows="2" [(ngModel)]="expression" (keyup.enter)="onEnter()" (keyup)="onKey($event)" spellcheck="false"></textarea>
+                <div class="half-pane">
+                    <div class="expression">
+                        <span  *ngIf="previousExpression" class="expression">></span>
+                        <textarea class="expression">{{previousExpression}}</textarea>
+                    </div>
+                    <div class="expression">
+                        <textarea class="expression">{{previousExpressionResult}}</textarea>
+                    </div>
+                </div>
+                <div class="half-pane">
+                    <div class="expression">
+                        <span class="expression">></span>
+                        <textarea class="expression" rows="2" [(ngModel)]="expression" (keyup.enter)="onEnter()" (keyup)="onKey($event)" spellcheck="false"></textarea>
+                    </div>
                 </div>
             </div>
-            <button class="clear" type="button" (click)="onClear()">Clear</button>
         </div>
         <div class="pane">
             <div class="pane-header">Feedback</div>
