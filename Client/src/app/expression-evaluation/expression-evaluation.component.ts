@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { filterCmpinfo, validateExpression, wrapExpression } from '../languages/language-helpers';
+import { filterCmpinfo, filterStderr, validateExpression, wrapExpression } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
 import { ActivatedRoute } from '@angular/router';
@@ -56,7 +56,7 @@ export class ExpressionEvaluationComponent implements OnInit {
 
     return this.result.cmpinfo
       ? filterCmpinfo(this.selectedLanguage, this.result.cmpinfo)
-      : this.result.stderr;
+      : filterStderr(this.selectedLanguage, this.result.stderr);
   }
 
   mapOutcome(outcome: number) {

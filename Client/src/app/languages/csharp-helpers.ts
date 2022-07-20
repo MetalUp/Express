@@ -1,4 +1,4 @@
-import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex } from "./language-helpers";
+import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex, filterStderrWithRegex } from "./language-helpers";
 
 export function wrapCSharpExpression(expression : string) {
     return `
@@ -41,11 +41,18 @@ export function validateCSharpExpression(expression : string) {
     return validateExpressionWithRegex(expression, defaultRegExp);
 }
 
-const cmpInfoRegex = /CS.*/
+const cmpinfoRegex = /CS.*/
 
 export function filterCSharpCmpinfo(cmpinfo : string) {
-    return filterCmpinfoWithRegex(cmpinfo, cmpInfoRegex);
+    return filterCmpinfoWithRegex(cmpinfo, cmpinfoRegex);
 }
+
+const stderrRegex = /\w+Exception/
+
+export function filterCSharpStderr(stderr : string) {
+    return filterStderrWithRegex(stderr, stderrRegex);
+}
+
 
 export function findCSharpFunctions(expression : string) {
     const fMatch = /([A-Z]\w*\s*)\(/g;

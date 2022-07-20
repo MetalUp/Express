@@ -1,5 +1,5 @@
-import { filterCSharpCmpinfo, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression as wrapCSharpExpression } from "./csharp-helpers";
-import { filterPythonCmpinfo, findPythonFunctions, validatePythonExpression, wrapPythonExpression } from "./python-helpers";
+import { filterCSharpCmpinfo, filterCSharpStderr, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression as wrapCSharpExpression } from "./csharp-helpers";
+import { filterPythonCmpinfo, filterPythonStderr, findPythonFunctions, validatePythonExpression, wrapPythonExpression } from "./python-helpers";
 
 
 export function wrapExpression(language: string, expression: string) {
@@ -33,6 +33,14 @@ export function filterCmpinfo(language: string, cmpinfo: string) {
     }
 }
 
+export function filterStderr(language: string, stderr: string) {
+    switch (language) {
+        case 'csharp': return filterCSharpStderr(stderr);
+        case 'python': return filterPythonStderr(stderr);
+        default: return stderr;
+    }
+}
+
 function findFunctions(language: string, expression: string) {
     switch (language) {
         case 'csharp': return findCSharpFunctions(expression);
@@ -50,6 +58,11 @@ export function validateExpressionWithRegex(expression: string, re: RegExp) {
 export function filterCmpinfoWithRegex(cmpinfo: string, re: RegExp) {
     var m = re.exec(cmpinfo);
     return m ? m[0] : cmpinfo;
+}
+
+export function filterStderrWithRegex(stderr: string, re: RegExp) {
+    var m = re.exec(stderr);
+    return m ? m[0] : stderr;
 }
 
 export function findFunctionsWithRegex(expression : string, re: RegExp) {
