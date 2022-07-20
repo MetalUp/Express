@@ -5,18 +5,6 @@
             <div class="data"></div>
         </div>
         <div class="pane">
-            <div class="pane-header">Placeholder</div>
-        </div>
-        <div class="pane">
-            <div class="pane-header">Placeholder</div>
-        </div>
-    </div>
-    <div class="column" >
-        <div class="info">
-            <div class="title">Selected Language</div>
-            <div class="data">{{selectedLanguage}}</div>
-        </div>
-        <div class="pane">
             <div class="pane-header">Expression evaluation</div>
             <div class="pane-body">
                 <div class="half-pane previous">
@@ -29,12 +17,24 @@
                     </div>
                 </div>
                 <div class="half-pane">
-                    <div class="expression">
+                    <div class="expression live">
                         <span class="expression">&#187;&nbsp;</span>
-                        <textarea placeholder="(cursor-up to retrieve previous expressions)" class="expression" rows="2" [(ngModel)]="expression"  (keydown)="onEnterKey($event)"  (keyup.enter)="onEnter()" (keyup)="onKey($event)" spellcheck="false"></textarea>
+                        <textarea placeholder="(cursor-up to retrieve previous expressions)" class="expression" rows="10" [(ngModel)]="expression"  (keydown)="onEnterKey($event)"  (keyup.enter)="onEnter()" (keyup)="onKey($event)" spellcheck="false"></textarea>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="pane">
+            <div class="pane-header">Placeholder</div>
+        </div>
+    </div>
+    <div class="column" >
+        <div class="info">
+            <div class="title">Selected Language</div>
+            <div class="data">{{selectedLanguage}}</div>
+        </div>
+        <div class="pane">
+            <div class="pane-header">Placeholder</div>
         </div>
         <div class="pane">
             <div class="pane-header">Feedback</div>
