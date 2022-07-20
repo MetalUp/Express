@@ -114,6 +114,15 @@ textarea.expression {
     width: 100%;
 }
 
-.expression {
+.expression, .previous-expressions {
     font-family: monospace;
+}
+
+span.expression {
+    padding-left: 2px;
+    padding-top: 2px;
+}
+
+textarea.expression {
+    padding-left: 0px;
 }
