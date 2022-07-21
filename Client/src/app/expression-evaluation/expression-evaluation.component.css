@@ -68,7 +68,7 @@ div.pane-body {
     overflow: hidden;
 }
 
-div.half-pane {
+.half-pane {
     display: flex;
     flex-flow: column;
     justify-content: flex-start;
@@ -78,13 +78,11 @@ div.half-pane {
     overflow: hidden;
 }
 
-span.expression {
-    flex-shrink: 0;
-    flex-grow: 0;
-    flex-basis: min-content;
+.previous {
+    background-color: #DAE3F3;
 }
 
-div.expression {
+.expression, .result  {
     display: inline-flex;
     flex-flow: row;
     justify-items: flex-start;
@@ -93,9 +91,16 @@ div.expression {
     flex-basis: max-context;
     overflow-wrap: break-word;
     overflow-y: auto;
+    font-family: monospace;
 }
 
-textarea.expression {
+span {
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex-basis: min-content;
+}
+
+textarea {
     background-color: transparent;
     resize: none;
     outline: none;
@@ -105,10 +110,3 @@ textarea.expression {
     flex-basis: max-content;
 }
 
-.expression {
-    font-family: monospace;
-}
-
-.half-pane.previous {
-    background-color: #DAE3F3;
-}
