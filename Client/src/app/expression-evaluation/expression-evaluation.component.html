@@ -1,7 +1,8 @@
+<div class="masthead">MetalUp.Express</div>
 <div class="ile">
-    <div class="column" >
+    <div class="column left" >
         <div class="info">
-            <div class="title">Placeholder</div>
+            <div class="title">User</div>
             <div class="data"></div>
         </div>
         <div class="pane">
@@ -9,7 +10,7 @@
             <div class="pane-body">
                 <div class="half-pane previous">
                     <div class="expression">
-                        <span class="prompt" *ngIf="previousExpression">&#187;&nbsp;</span>
+                        <span *ngIf="previousExpression">&#187;&nbsp;</span>
                         <textarea readonly rows="2">{{previousExpression}}</textarea>
                     </div>
                     <div class="result">
@@ -18,7 +19,7 @@
                 </div>
                 <div class="half-pane">
                     <div class="expression">
-                        <span class="prompt">&#187;&nbsp;</span>
+                        <span>&#187;&nbsp;</span>
                         <textarea 
                             placeholder="(cursor up/down to retrieve previous expressions)" 
                             rows="10"
@@ -34,19 +35,19 @@
             </div>
         </div>
         <div class="pane">
-            <div class="pane-header">Placeholder</div>
+            <div class="pane-header">Function definition</div>
         </div>
     </div>
-    <div class="column" >
+    <div class="column right" >
         <div class="info">
-            <div class="title">Selected Language</div>
+            <div class="title">Programming Language</div>
             <div class="data">{{selectedLanguage}}</div>
         </div>
         <div class="pane">
             <div class="pane-header">Placeholder</div>
         </div>
         <div class="pane">
-            <div class="pane-header">Feedback</div>
+            <div class="pane-header">Placeholder</div>
         </div>
     </div>  
 </div>
