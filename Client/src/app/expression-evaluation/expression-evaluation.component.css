@@ -26,6 +26,10 @@ div.pane-body {
     font-family: monospace;
 }
 
+span::before {
+   content: '\00BB ';
+}
+
 span {
     flex-shrink: 0;
     flex-grow: 0;
