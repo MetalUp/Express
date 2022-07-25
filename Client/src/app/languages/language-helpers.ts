@@ -1,11 +1,19 @@
-import { filterCSharpCmpinfo, filterCSharpStderr, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression as wrapCSharpExpression } from "./csharp-helpers";
-import { filterPythonCmpinfo, filterPythonStderr, findPythonFunctions, validatePythonExpression, wrapPythonExpression } from "./python-helpers";
+import { filterCSharpCmpinfo, filterCSharpStderr, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression, wrapCSharpFunctions } from "./csharp-helpers";
+import { filterPythonCmpinfo, filterPythonStderr, findPythonFunctions, validatePythonExpression, wrapPythonExpression, wrapPythonFunctions } from "./python-helpers";
 
 
 export function wrapExpression(language: string, expression: string) {
     switch (language) {
         case 'csharp': return wrapCSharpExpression(expression);
         case 'python': return wrapPythonExpression(expression);
+        default: return expression;
+    }
+}
+
+export function wrapFunctions(language: string, expression: string) {
+    switch (language) {
+        case 'csharp': return wrapCSharpFunctions(expression);
+        case 'python': return wrapPythonFunctions(expression);
         default: return expression;
     }
 }

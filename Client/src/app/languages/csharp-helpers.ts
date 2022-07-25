@@ -37,6 +37,10 @@ export function wrapCSharpExpression(expression : string) {
     }`;
 }
 
+export function wrapCSharpFunctions(functions : string) {
+    return functions;
+}
+
 export function validateCSharpExpression(expression : string) {
     return validateExpressionWithRegex(expression, defaultRegExp);
 }

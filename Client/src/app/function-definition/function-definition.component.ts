@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { wrapExpression } from '../languages/language-helpers';
+import { Component } from '@angular/core';
+import { wrapFunctions } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { EmptyRunResult, RunResult } from '../services/run-result';
 
@@ -35,7 +35,7 @@ export class FunctionDefinitionComponent {
   onSubmit() {
     this.compiledOK = false;
     this.pendingSubmit = false;
-    const code = wrapExpression(this.jobeServer.selectedLanguage, this.functionDefinitions);
+    const code = wrapFunctions(this.jobeServer.selectedLanguage, this.functionDefinitions);
     this.jobeServer.submit_run(code).subscribe(rr => {
       this.result = rr;
       this.compiledOK = !(this.result.cmpinfo || this.result.stderr);

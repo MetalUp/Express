@@ -17,6 +17,10 @@ print (display(${expression}))
 `;
 }
 
+export function wrapPythonFunctions(functions : string) {
+    return functions;
+}
+
 export function validatePythonExpression(expression : string) {
     return validateExpressionWithRegex(expression, defaultRegExp);
 }
