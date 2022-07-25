@@ -22,7 +22,8 @@ describe('JobeServerService', () => {
     TestBed.configureTestingModule({});
     //service = TestBed.inject(JobeServerService);
     service = new JobeServerService(httpClientSpy);
-    testRunSpec = service.run_spec('stub language', 'stub code');
+    service.selectedLanguage = 'stub language';
+    testRunSpec = service.run_spec('stub code');
   });
 
   it('should be created', () => {
@@ -31,8 +32,8 @@ describe('JobeServerService', () => {
 
   it('should call post on /runs', () => {
     httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));
-
-    service.submit_run("stub language", "stub code").subscribe(o => expect(o).toEqual(testRunResult));
+    service.selectedLanguage = 'stub language';
+    service.submit_run("stub code").subscribe(o => expect(o).toEqual(testRunResult));
 
     expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
       Object(testRunSpec),
@@ -42,7 +43,8 @@ describe('JobeServerService', () => {
   it('should call post on /runs and return an empty result on error', () => {
     httpClientSpy.post.and.returnValue(throwError(() => { status: 404 }));
 
-    service.submit_run("stub language", "stub code").subscribe(o => expect(o).toEqual(EmptyRunResult));
+    service.selectedLanguage = 'stub language';
+    service.submit_run("stub code").subscribe(o => expect(o).toEqual(EmptyRunResult));
 
     expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
       Object(testRunSpec),

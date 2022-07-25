@@ -65,7 +65,7 @@ export class ExpressionEvaluationComponent {
       this.validationFail = validateExpression(this.selectedLanguage, this.expression, []);
       if (!this.validationFail) {
         const code = wrapExpression(this.selectedLanguage, this.expression);
-        this.jobeServer.submit_run(this.selectedLanguage, code).subscribe(rr => {
+        this.jobeServer.submit_run(code).subscribe(rr => {
           this.result = rr;
           this.previousExpressions.push([this.expression, this.result.stdout.trim()]);
           this.expression = '';

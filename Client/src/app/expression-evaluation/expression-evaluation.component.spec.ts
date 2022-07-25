@@ -132,7 +132,7 @@ describe('ExpressionEvaluationComponent', () => {
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
-    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith('csharp', wrapped);
+    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.expression).toBe('');
     expect(component.previousExpression).toBe('test');
@@ -147,7 +147,7 @@ describe('ExpressionEvaluationComponent', () => {
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
-    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith('csharp', wrapped);
+    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.expression).toBe('');
     expect(component.previousExpression).toBe('test');
@@ -162,7 +162,7 @@ describe('ExpressionEvaluationComponent', () => {
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
-    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith('csharp', wrapped);
+    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.expression).toBe('');
     expect(component.previousExpression).toBe('test');
