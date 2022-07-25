@@ -81,7 +81,7 @@ export class ExpressionEvaluationComponent implements OnInit {
 
   onEnter() {
     this.expression = this.expression.trim();
-    if (this.expression != ``) {
+    if (this.expression != "") {
       this.result = EmptyRunResult;
       this.validationFail = validateExpression(this.selectedLanguage, this.expression, []);
       if (!this.validationFail) {

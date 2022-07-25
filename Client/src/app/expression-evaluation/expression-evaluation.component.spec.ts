@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { JobeServerService } from '../services/jobe-server.service';
 import { ExpressionEvaluationComponent } from './expression-evaluation.component';
 import { of } from 'rxjs';
-import { RunResult } from '../services/run-result';
+import { EmptyRunResult, RunResult } from '../services/run-result';
 import { wrapExpression } from '../languages/language-helpers';
 
 describe('ExpressionEvaluationComponent', () => {
@@ -100,9 +100,9 @@ describe('ExpressionEvaluationComponent', () => {
   });
 
   it('should show the most recent previous expression', () => {
-    
     component.previousExpressions = [];
     component.previousExpressionIndex = component.previousExpression.length;
+    component.result = EmptyRunResult;
 
     expect(component.previousExpression).toEqual('');
     expect(component.previousExpressionResult).toEqual('');
@@ -121,22 +121,22 @@ describe('ExpressionEvaluationComponent', () => {
     expect(component.previousExpression).toEqual('');
     expect(component.previousExpressionResult).toEqual('');
 
-    component.result.stderr = 'errFail';
+    component.result = testRunResultErr;
 
     expect(component.previousExpression).toEqual('');
-    expect(component.previousExpressionResult).toEqual('errFail');
+    expect(component.previousExpressionResult).toEqual('run error');
 
-    component.result.cmpinfo = 'cmpFail';
+    component.result = testRunResultCmp;
 
     expect(component.previousExpression).toEqual('');
-    expect(component.previousExpressionResult).toEqual('cmpFail');
+    expect(component.previousExpressionResult).toEqual('compiler error');
 
     component.validationFail = "validFail"
 
     expect(component.previousExpression).toEqual('');
     expect(component.previousExpressionResult).toEqual('validFail');
     
-
+    component.result = EmptyRunResult;
   });
 
   it('should submit code on enter and show result', () => {
@@ -189,6 +189,7 @@ describe('ExpressionEvaluationComponent', () => {
 
 
   it('should ignore code if unrecognised language', () => {
+    component.result = EmptyRunResult;
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.expression = 'test';
@@ -198,6 +199,10 @@ describe('ExpressionEvaluationComponent', () => {
   });
 
   it('should ignore empty expressions', () => {
+    component.result = EmptyRunResult;
+    component.previousExpressions = [];
+    component.previousExpressionIndex = component.previousExpression.length;
+
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.expression = '';
