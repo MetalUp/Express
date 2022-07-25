@@ -17,6 +17,7 @@ div.pane {
     margin-left: 2px;
     margin-right: 2px;
     margin-bottom: 2px;
+    height: 98%;
 }
 
 div.pane-header {
