@@ -67,5 +67,5 @@ export function filterStderrWithRegex(stderr: string, re: RegExp) {
 
 export function findFunctionsWithRegex(expression : string, re: RegExp) {
     var m = expression.match(re) || [];
-    return m.map(f => f.replace("(", "").trim());
+    return m.map(f => f.replace("(", '').trim());
 }

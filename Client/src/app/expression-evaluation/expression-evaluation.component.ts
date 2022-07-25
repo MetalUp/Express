@@ -30,14 +30,14 @@ export class ExpressionEvaluationComponent implements OnInit {
     if (this.selectedLanguage && this.languages.length > 0) {
       // check language is supported if not leave empty
       if (!this.languages.map(l => l[0]).includes(this.selectedLanguage)) {
-        this.selectedLanguage = "";
+        this.selectedLanguage = '';
       }
     }
   }
 
   previousExpressionIndex = 0;
 
-  previousExpressions: [string, string][] = [];
+  previousExpressions: [expr: string, result: string][] = [];
 
   expression: string = '';
 

@@ -3,6 +3,8 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { JobeServerService } from '../services/jobe-server.service';
 import { ExpressionEvaluationComponent } from './expression-evaluation.component';
 import { of } from 'rxjs';
+import { RunResult } from '../services/run-result';
+import { wrapExpression } from '../languages/language-helpers';
 
 describe('ExpressionEvaluationComponent', () => {
   let component: ExpressionEvaluationComponent;
@@ -10,6 +12,31 @@ describe('ExpressionEvaluationComponent', () => {
   let mockJobeServerService: jasmine.SpyObj<JobeServerService>;
 
   let testParams : any  = {};
+
+  let testRunResultOK: RunResult = {
+    run_id: 'a',
+    outcome: 66,
+    cmpinfo: '',
+    stdout: 'expression result',
+    stderr: ''
+  }
+
+  let testRunResultCmp: RunResult = {
+    run_id: 'a',
+    outcome: 66,
+    cmpinfo: 'compiler error',
+    stdout: '',
+    stderr: ''
+  }
+
+  let testRunResultErr: RunResult = {
+    run_id: 'a',
+    outcome: 66,
+    cmpinfo: '',
+    stdout: '',
+    stderr: 'run error'
+  }
+
 
   beforeEach(async () => {
     mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages']);
@@ -54,24 +81,129 @@ describe('ExpressionEvaluationComponent', () => {
     component.previousExpressions = [['e1', 'r1'], ['e2', 'r2'], ['e3', 'r3']];
     component.previousExpressionIndex = component.previousExpression.length;
 
-    component.onUp();
+    component.onKey(<any>{key :'ArrowUp'});
     expect(component.expression).toEqual("e2");
-    component.onUp();
+    component.onKey(<any>{key :'ArrowUp'});
     expect(component.expression).toEqual("e1");
-    component.onUp();
+    component.onKey(<any>{key :'ArrowUp'});
     expect(component.expression).toEqual("e1");
-    component.onDown();
+    component.onKey(<any>{key :'ArrowDown'});
     expect(component.expression).toEqual("e2");
-    component.onDown();
+    component.onKey(<any>{key :'ArrowDown'});
     expect(component.expression).toEqual("e3");
-    component.onDown();
-    expect(component.expression).toEqual("");
-    component.onDown();
-    expect(component.expression).toEqual("");
-    component.onUp();
+    component.onKey(<any>{key :'ArrowDown'});
+    expect(component.expression).toEqual('');
+    component.onKey(<any>{key :'ArrowDown'});
+    expect(component.expression).toEqual('');
+    component.onKey(<any>{key :'ArrowUp'});
     expect(component.expression).toEqual("e3");
   });
 
+  it('should show the most recent previous expression', () => {
+    
+    component.previousExpressions = [];
+    component.previousExpressionIndex = component.previousExpression.length;
 
+    expect(component.previousExpression).toEqual('');
+    expect(component.previousExpressionResult).toEqual('');
+    
+    component.previousExpressions = [['e1', 'r1'], ['e2', 'r2'], ['e3', 'r3']];
+    component.previousExpressionIndex = component.previousExpression.length;
+
+    expect(component.previousExpression).toEqual("e3");
+    expect(component.previousExpressionResult).toEqual("r3");
+    
+  });
+
+  it('should show error if no result', () => {
+    component.result.stderr = component.result.cmpinfo =  component.validationFail = '';
+
+    expect(component.previousExpression).toEqual('');
+    expect(component.previousExpressionResult).toEqual('');
+
+    component.result.stderr = 'errFail';
+
+    expect(component.previousExpression).toEqual('');
+    expect(component.previousExpressionResult).toEqual('errFail');
+
+    component.result.cmpinfo = 'cmpFail';
+
+    expect(component.previousExpression).toEqual('');
+    expect(component.previousExpressionResult).toEqual('cmpFail');
+
+    component.validationFail = "validFail"
+
+    expect(component.previousExpression).toEqual('');
+    expect(component.previousExpressionResult).toEqual('validFail');
+    
+
+  });
+
+  it('should submit code on enter and show result', () => {
+    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+
+    component.expression = 'test';
+    component.selectedLanguage = 'csharp'
+    const wrapped = wrapExpression(component.selectedLanguage, component.expression);
+
+    component.onEnter();
+    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith('csharp', wrapped);
+
+    expect(component.expression).toBe('');
+    expect(component.previousExpression).toBe('test');
+    expect(component.previousExpressionResult).toBe('expression result')
+
+  });
+
+  it('should submit code on enter and show compiler error', () => {
+    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultCmp));
+
+    component.expression = 'test';
+    component.selectedLanguage = 'csharp'
+    const wrapped = wrapExpression(component.selectedLanguage, component.expression);
+
+    component.onEnter();
+    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith('csharp', wrapped);
+
+    expect(component.expression).toBe('');
+    expect(component.previousExpression).toBe('test');
+    expect(component.previousExpressionResult).toBe('compiler error')
+
+  });
+
+  it('should submit code on enter and show runtime error', () => {
+    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultErr));
+
+    component.expression = 'test';
+    component.selectedLanguage = 'csharp'
+    const wrapped = wrapExpression(component.selectedLanguage, component.expression);
+
+    component.onEnter();
+    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith('csharp', wrapped);
+
+    expect(component.expression).toBe('');
+    expect(component.previousExpression).toBe('test');
+    expect(component.previousExpressionResult).toBe('run error')
+
+  });
+
+
+  it('should ignore code if unrecognised language', () => {
+    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+
+    component.expression = 'test';
+    component.onEnter();
+    expect(mockJobeServerService.submit_run).not.toHaveBeenCalled();
+    expect(component.previousExpressionResult).toBe('unknown language');
+  });
+
+  it('should ignore empty expressions', () => {
+    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+
+    component.expression = '';
+    component.onEnter();
+    expect(mockJobeServerService.submit_run).not.toHaveBeenCalled();
+    expect(component.previousExpressionResult).toBe('');
+  });
 
 });
