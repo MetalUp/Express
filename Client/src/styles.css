@@ -45,3 +45,8 @@ div.data {
     width: 50%;
     padding-left: 5px;
 }
+
+span.prompt::before {
+    content: '\00BB ';
+ }
+ 

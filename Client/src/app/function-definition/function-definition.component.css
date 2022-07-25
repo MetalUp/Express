@@ -27,3 +27,10 @@ div.pane-body {
 .uncompiled {
     border: 2px solid red;
 }
+
+.function-definition  {
+    display: inline-flex;
+    flex-flow: row;
+    justify-items: flex-start;
+    font-family: monospace;
+}

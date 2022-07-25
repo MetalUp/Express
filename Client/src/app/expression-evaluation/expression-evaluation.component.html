@@ -3,7 +3,7 @@
     <div class="pane-body">
         <div class="half-pane previous">
             <div class="expression">
-                <span *ngIf="previousExpression"></span>
+                <span class="prompt" *ngIf="previousExpression"></span>
                 <textarea readonly rows="2">{{previousExpression}}</textarea>
             </div>
             <div class="result">
@@ -12,7 +12,7 @@
         </div>
         <div class="half-pane">
             <div class="expression">
-                <span></span>
+                <span class="prompt"></span>
                 <textarea placeholder="(cursor up/down to retrieve previous expressions)" rows="10"
                     [(ngModel)]="expression" (keydown)="onEnterKey($event)" (keyup.enter)="onEnter()"
                     (keyup)="onKey($event)" spellcheck="false" autofocus="autofocus">

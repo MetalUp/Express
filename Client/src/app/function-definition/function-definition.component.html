@@ -1,7 +1,9 @@
 <div class="pane" [ngClass]="pendingSubmit ? 'uncompiled' : ''">
     <div class="pane-header">Function definition</div>
     <div class="pane-body">
-        <textarea [(ngModel)]="functionDefinitions"  rows = 10 (ngModelChange)="modelChanged()"  spellcheck="false"></textarea>
+        <div class="function-definition">
+            <span class="prompt"></span><textarea [(ngModel)]="functionDefinitions"  rows = 10 (ngModelChange)="modelChanged()"  spellcheck="false"></textarea>
+        </div>
         <div>{{currentStatus}}</div>
         <button [disabled]="!pendingSubmit" (click)="onSubmit()">Submit</button>
     </div>
