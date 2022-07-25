@@ -2,37 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { filterCmpinfo, filterStderr, validateExpression, wrapExpression } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-expression-evaluation',
   templateUrl: './expression-evaluation.component.html',
   styleUrls: ['./expression-evaluation.component.css']
 })
-export class ExpressionEvaluationComponent implements OnInit {
+export class ExpressionEvaluationComponent {
 
-  constructor(private jobeServer: JobeServerService, private route: ActivatedRoute) {
+  constructor(private jobeServer: JobeServerService) {
     this.result = EmptyRunResult;
-  }
-
-  ngOnInit(): void {
-    this.jobeServer.get_languages().subscribe(supportedLanguages => {
-      this.languages = supportedLanguages;
-      this.checkLanguage()
-    });
-    this.route.queryParams.subscribe(params => {
-      this.selectedLanguage = params['language'];
-      this.checkLanguage()
-    });
-  }
-
-  private checkLanguage() {
-    if (this.selectedLanguage && this.languages.length > 0) {
-      // check language is supported if not leave empty
-      if (!this.languages.map(l => l[0]).includes(this.selectedLanguage)) {
-        this.selectedLanguage = '';
-      }
-    }
   }
 
   previousExpressionIndex = 0;
@@ -45,9 +24,9 @@ export class ExpressionEvaluationComponent implements OnInit {
 
   result: RunResult;
 
-  languages: Array<[string, string]> = [];
-
-  selectedLanguage: string = '';
+  get selectedLanguage() {
+    return this.jobeServer.selectedLanguage;
+  }
 
   filteredCmpinfo() {
     if (this.validationFail) {

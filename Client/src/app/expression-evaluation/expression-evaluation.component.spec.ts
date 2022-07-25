@@ -39,7 +39,7 @@ describe('ExpressionEvaluationComponent', () => {
 
 
   beforeEach(async () => {
-    mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages']);
+    mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages'], {"selectedLanguage":"csharp"});
     mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["1", "2"]]));
 
     await TestBed.configureTestingModule({
@@ -66,16 +66,6 @@ describe('ExpressionEvaluationComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should setup selected language', () => {
-    mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["language1", "language2"]]));
-    testParams['language'] =  'language1';
-   
-    component.ngOnInit();
-
-    expect(component.selectedLanguage).toEqual("language1");
-  });
-
 
   it('should retrieve previous expressions', () => {
     component.previousExpressions = [['e1', 'r1'], ['e2', 'r2'], ['e3', 'r3']];
@@ -139,7 +129,6 @@ describe('ExpressionEvaluationComponent', () => {
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.expression = 'test';
-    component.selectedLanguage = 'csharp'
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
@@ -155,7 +144,6 @@ describe('ExpressionEvaluationComponent', () => {
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultCmp));
 
     component.expression = 'test';
-    component.selectedLanguage = 'csharp'
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
@@ -171,7 +159,6 @@ describe('ExpressionEvaluationComponent', () => {
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultErr));
 
     component.expression = 'test';
-    component.selectedLanguage = 'csharp'
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
@@ -186,6 +173,8 @@ describe('ExpressionEvaluationComponent', () => {
 
   it('should ignore code if unrecognised language', () => {
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+
+    (Object.getOwnPropertyDescriptor(mockJobeServerService, "selectedLanguage") as any).get.and.returnValue('');
 
     component.expression = 'test';
     component.onEnter();

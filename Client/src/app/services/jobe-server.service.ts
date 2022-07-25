@@ -14,6 +14,7 @@ export class JobeServerService {
   private ip = "http://20.82.150.165";
   path = `${this.ip}/jobe/index.php/restapi`;
 
+  selectedLanguage : string = '';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json; charset-utf-8' })

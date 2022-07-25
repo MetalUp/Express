@@ -13,7 +13,9 @@ export class SelectedLanguageComponent implements OnInit {
 
   languages: Array<[string, string]> = [];
 
-  selectedLanguage: string = '';
+  get selectedLanguage() {
+    return this.jobeServer.selectedLanguage;
+  }
 
   ngOnInit(): void {
     this.jobeServer.get_languages().subscribe(supportedLanguages => {
@@ -21,7 +23,7 @@ export class SelectedLanguageComponent implements OnInit {
       this.checkLanguage()
     });
     this.route.queryParams.subscribe(params => {
-      this.selectedLanguage = params['language'];
+      this.jobeServer.selectedLanguage = params['language'];
       this.checkLanguage()
     });
   }
@@ -30,7 +32,7 @@ export class SelectedLanguageComponent implements OnInit {
     if (this.selectedLanguage && this.languages.length > 0) {
       // check language is supported if not leave empty
       if (!this.languages.map(l => l[0]).includes(this.selectedLanguage)) {
-        this.selectedLanguage = '';
+        this.jobeServer.selectedLanguage = '';
       }
     }
   }
