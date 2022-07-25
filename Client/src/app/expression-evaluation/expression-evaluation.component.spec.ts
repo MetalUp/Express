@@ -100,9 +100,6 @@ describe('ExpressionEvaluationComponent', () => {
   });
 
   it('should show the most recent previous expression', () => {
-    component.previousExpressions = [];
-    component.previousExpressionIndex = component.previousExpression.length;
-    component.result = EmptyRunResult;
 
     expect(component.previousExpression).toEqual('');
     expect(component.previousExpressionResult).toEqual('');
@@ -116,8 +113,7 @@ describe('ExpressionEvaluationComponent', () => {
   });
 
   it('should show error if no result', () => {
-    component.result.stderr = component.result.cmpinfo =  component.validationFail = '';
-
+   
     expect(component.previousExpression).toEqual('');
     expect(component.previousExpressionResult).toEqual('');
 
@@ -189,7 +185,6 @@ describe('ExpressionEvaluationComponent', () => {
 
 
   it('should ignore code if unrecognised language', () => {
-    component.result = EmptyRunResult;
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.expression = 'test';
@@ -199,10 +194,7 @@ describe('ExpressionEvaluationComponent', () => {
   });
 
   it('should ignore empty expressions', () => {
-    component.result = EmptyRunResult;
-    component.previousExpressions = [];
-    component.previousExpressionIndex = component.previousExpression.length;
-
+   
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.expression = '';
