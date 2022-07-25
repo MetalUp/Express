@@ -7,3 +7,41 @@ body {
 ::placeholder {
     color: #D9D9D9;
   }
+
+div.pane {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: .1fr 1fr;
+
+    border: 2px solid #4472C4;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+}
+
+div.pane-header {
+    background-color: #4472C4;
+    color: white;
+    padding-left: 5px;
+}
+
+div.info {
+    display: flex;
+    flex-flow: row;   
+    margin-left: 2px;
+    margin-right: 2px;
+    border: 2px solid #4472C4;
+}
+
+div.title {
+    position: relative;
+    background-color: #4472C4;
+    color: white;
+    width: 50%;
+    padding-left: 5px;
+}
+
+div.data {
+    width: 50%;
+    padding-left: 5px;
+}
