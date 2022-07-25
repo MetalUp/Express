@@ -6,13 +6,8 @@ export function wrapCSharpExpression(expression : string) {
     using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
-    using static UserDefinedFunctions;
-    
-    static class UserDefinedFunctions {
-        ${FunctionPlaceholder}
-    }
 
-    class Hello {
+    class MainWrapper {
 
         private static string Display(object obj)
         {
@@ -35,10 +30,11 @@ export function wrapCSharpExpression(expression : string) {
             return obj.ToString();
         }
 
-
         static void Main(string[] args) {
            System.Console.WriteLine(Display(${(expression)}));
-       }
+        }
+
+       ${FunctionPlaceholder}
     }`;
 }
 
