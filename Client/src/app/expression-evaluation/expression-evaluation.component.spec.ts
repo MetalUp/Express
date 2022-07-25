@@ -3,18 +3,16 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { JobeServerService } from '../services/jobe-server.service';
 import { ExpressionEvaluationComponent } from './expression-evaluation.component';
 import { of } from 'rxjs';
-import { HttpParams } from '@angular/common/http';
-
 
 describe('ExpressionEvaluationComponent', () => {
   let component: ExpressionEvaluationComponent;
   let fixture: ComponentFixture<ExpressionEvaluationComponent>;
   let mockJobeServerService: jasmine.SpyObj<JobeServerService>;
-  let mockActivatedRoute: jasmine.SpyObj<ActivatedRoute>;
+
+  let testParams : any  = {};
 
   beforeEach(async () => {
     mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages']);
-    mockActivatedRoute = jasmine.createSpyObj('ActivatedRoute', [], { 'queryParams': of<Params>(new HttpParams()) });
     mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["1", "2"]]));
 
     await TestBed.configureTestingModule({
@@ -26,7 +24,9 @@ describe('ExpressionEvaluationComponent', () => {
         },
         {
           provide: ActivatedRoute,
-          useValue: mockActivatedRoute
+          useValue: {
+            queryParams: of<Params>(testParams)
+          },
         }
       ]
     }).compileComponents();
@@ -40,15 +40,38 @@ describe('ExpressionEvaluationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should setup selected language', () => {
-  //   mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["language1", "language2"]]));
-  //   const testParam = new HttpParams();
-  //   testParam.append("language", "language1");
-  //   (Object.getOwnPropertyDescriptor(mockActivatedRoute, "queryParams")?.get as any).and.returnValue(of<Params>(testParam));
+  it('should setup selected language', () => {
+    mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["language1", "language2"]]));
+    testParams['language'] =  'language1';
+   
+    component.ngOnInit();
 
-  //   component.ngOnInit();
+    expect(component.selectedLanguage).toEqual("language1");
+  });
 
-  //   expect(component.selectedLanguage).toEqual("language1");
-  // });
+
+  it('should retrieve previous expressions', () => {
+    component.previousExpressions = [['e1', 'r1'], ['e2', 'r2'], ['e3', 'r3']];
+    component.previousExpressionIndex = component.previousExpression.length;
+
+    component.onUp();
+    expect(component.expression).toEqual("e2");
+    component.onUp();
+    expect(component.expression).toEqual("e1");
+    component.onUp();
+    expect(component.expression).toEqual("e1");
+    component.onDown();
+    expect(component.expression).toEqual("e2");
+    component.onDown();
+    expect(component.expression).toEqual("e3");
+    component.onDown();
+    expect(component.expression).toEqual("");
+    component.onDown();
+    expect(component.expression).toEqual("");
+    component.onUp();
+    expect(component.expression).toEqual("e3");
+  });
+
+
 
 });
