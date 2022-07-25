@@ -1,0 +1,20 @@
+div.info {
+    display: flex;
+    flex-flow: row;   
+    margin-left: 2px;
+    margin-right: 2px;
+    border: 2px solid #4472C4;
+}
+
+div.title {
+    position: relative;
+    background-color: #4472C4;
+    color: white;
+    width: 50%;
+    padding-left: 5px;
+}
+
+div.data {
+    width: 50%;
+    padding-left: 5px;
+}

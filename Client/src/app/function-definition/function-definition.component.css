@@ -1,0 +1,21 @@
+div.pane {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: .1fr .9fr;
+
+    border: 2px solid #4472C4;
+ 
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+div.pane-header {
+    background-color: #4472C4;
+    color: white;
+   
+    padding-left: 5px;
+}
+
+div.pane-body {
+    overflow: hidden;
+}
