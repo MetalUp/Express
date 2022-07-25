@@ -1,4 +1,4 @@
-import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex, filterStderrWithRegex } from "./language-helpers";
+import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex, filterStderrWithRegex, FunctionPlaceholder } from "./language-helpers";
 
 export function wrapCSharpExpression(expression : string) {
     return `
@@ -6,7 +6,12 @@ export function wrapCSharpExpression(expression : string) {
     using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
+    using static UserDefinedFunctions;
     
+    static class UserDefinedFunctions {
+        ${FunctionPlaceholder}
+    }
+
     class Hello {
 
         private static string Display(object obj)
@@ -38,7 +43,20 @@ export function wrapCSharpExpression(expression : string) {
 }
 
 export function wrapCSharpFunctions(functions : string) {
-    return functions;
+    return `
+    using System;
+    using System.Linq;
+    using System.Collections;
+    using System.Collections.Generic;
+    
+    class MainWrapper{
+        static void Main(string[] args) {}
+    }
+
+    static class UserDefinedFunctions {
+        ${functions}
+    }
+    `;
 }
 
 export function validateCSharpExpression(expression : string) {
