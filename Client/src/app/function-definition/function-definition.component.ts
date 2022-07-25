@@ -27,6 +27,7 @@ export class FunctionDefinitionComponent {
   }
 
   modelChanged() {
+    this.compiledOK = false;
     this.result = EmptyRunResult;
     this.pendingSubmit = !!this.functionDefinitions;
     this.jobeServer.functionDefinitions = '';

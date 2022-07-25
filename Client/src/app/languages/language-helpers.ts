@@ -1,6 +1,7 @@
 import { filterCSharpCmpinfo, filterCSharpStderr, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression, wrapCSharpFunctions } from "./csharp-helpers";
 import { filterPythonCmpinfo, filterPythonStderr, findPythonFunctions, validatePythonExpression, wrapPythonExpression, wrapPythonFunctions } from "./python-helpers";
 
+export const FunctionPlaceholder = "<<FunctionsPlaceholder>>";
 
 export function wrapExpression(language: string, expression: string) {
     switch (language) {

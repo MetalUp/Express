@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RunResult, EmptyRunResult } from './run-result';
+import { FunctionPlaceholder } from '../languages/language-helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class JobeServerService {
   };
 
   run_spec(code: string) {
+    code = code.replace(FunctionPlaceholder, this.functionDefinitions);
     return { "run_spec": { "language_id": this.selectedLanguage, "sourcecode": code } };
   }
 

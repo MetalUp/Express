@@ -1,8 +1,10 @@
-import { defaultRegExp, filterCmpinfoWithRegex, filterStderrWithRegex, findFunctionsWithRegex, validateExpressionWithRegex } from "./language-helpers";
+import { defaultRegExp, filterCmpinfoWithRegex, filterStderrWithRegex, findFunctionsWithRegex, FunctionPlaceholder, validateExpressionWithRegex } from "./language-helpers";
 
 export function wrapPythonExpression(expression : string) {
     return `
 from math import *
+
+${FunctionPlaceholder}
 
 def display(x):
   if isinstance(x, str):
