@@ -21,7 +21,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/rules.csv"
+              "src/csharp-rules.csv",
+              "src/python-rules.csv"
             ],
             "styles": [
               "src/styles.css"
@@ -89,7 +90,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/rules.csv"
+              "src/csharp-rules.csv",
+              "src/python-rules.csv"
             ],
             "styles": [
               "src/styles.css"
