@@ -1,4 +1,4 @@
-import { defaultRegExp, filterCmpinfoWithRegex, findFunctionsWithRegex, validateExpressionWithRegex, filterStderrWithRegex, FunctionPlaceholder } from "./language-helpers";
+import {  FunctionPlaceholder } from "./language-helpers";
 
 export function wrapCSharpExpression(expression : string) {
     return `
@@ -53,14 +53,4 @@ export function wrapCSharpFunctions(functions : string) {
         ${functions}
     }
     `;
-}
-
-export function validateCSharpExpression(expression : string) {
-    return validateExpressionWithRegex(expression, defaultRegExp);
-}
-
-
-export function findCSharpFunctions(expression : string) {
-    const fMatch = /([A-Z]\w*\s*)\(/g;
-    return findFunctionsWithRegex(expression, fMatch);
 }

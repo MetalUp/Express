@@ -1,4 +1,4 @@
-import { defaultRegExp, filterCmpinfoWithRegex, filterStderrWithRegex, findFunctionsWithRegex, FunctionPlaceholder, validateExpressionWithRegex } from "./language-helpers";
+import { FunctionPlaceholder } from "./language-helpers";
 
 export function wrapPythonExpression(expression : string) {
     return `
@@ -21,13 +21,4 @@ print (display(${expression}))
 
 export function wrapPythonFunctions(functions : string) {
     return functions;
-}
-
-export function validatePythonExpression(expression : string) {
-    return validateExpressionWithRegex(expression, defaultRegExp);
-}
-
-export function findPythonFunctions(expression : string) {
-    const fMatch = /([A-Za-z]\w*\s*)\(/g;
-    return findFunctionsWithRegex(expression, fMatch);
 }

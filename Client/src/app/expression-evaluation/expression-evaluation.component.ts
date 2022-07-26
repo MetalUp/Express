@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { validateExpression, wrapExpression } from '../languages/language-helpers';
+import { wrapExpression } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { Applicability, ErrorType, RulesService } from '../services/rules.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
@@ -72,7 +72,7 @@ export class ExpressionEvaluationComponent {
     this.expression = this.expression.trim();
     if (this.expression != "") {
       this.result = EmptyRunResult;
-      this.validationFail = validateExpression(this.selectedLanguage, this.expression, []) ||
+      this.validationFail = this.rulesService.parse(this.selectedLanguage, Applicability.expressions,this.expression) ||
                             this.rulesService.validate(this.selectedLanguage, Applicability.expressions, this.expression);
       if (!this.validationFail) {
         this.submitting = true;

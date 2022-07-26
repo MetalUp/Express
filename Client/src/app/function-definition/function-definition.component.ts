@@ -38,14 +38,15 @@ export class FunctionDefinitionComponent {
     this.validationFail = '';
     this.compiledOK = false;
     this.result = EmptyRunResult;
-    this.pendingSubmit = !!this.functionDefinitions;
+    this.pendingSubmit = !!(this.functionDefinitions.trim());
     this.jobeServer.clearFunctionDefinitions();
   }
 
   onSubmit() {
     this.compiledOK = false;
     this.pendingSubmit = false;
-    this.validationFail = this.rulesService.validate(this.jobeServer.selectedLanguage, Applicability.expressions, this.functionDefinitions);
+    this.validationFail = this.rulesService.parse(this.jobeServer.selectedLanguage, Applicability.expressions, this.functionDefinitions) ||
+                          this.rulesService.validate(this.jobeServer.selectedLanguage, Applicability.expressions, this.functionDefinitions);
 
     if (!this.validationFail) {
       this.submitting = true;

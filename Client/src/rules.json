@@ -9,6 +9,18 @@
             "stderr": "\\s\\w*Error:.*"
         }
     },
+    "ParsingRules": {
+        "csharp": {
+            "both": [],
+            "expressions": [],
+            "functions":[]
+        },
+        "python": {
+            "both": [],
+            "expressions": [],
+            "functions":[]
+        }
+    },
     "ValidationRules": {
         "csharp": {
             "both": [
