@@ -2,7 +2,7 @@
     <div class="pane-header">Function definition</div>
     <div class="pane-body">
         <div class="function-definition">
-            <span class="prompt"></span><textarea [(ngModel)]="functionDefinitions"  rows = 10 (ngModelChange)="modelChanged()"  spellcheck="false"></textarea>
+            <textarea [(ngModel)]="functionDefinitions"  rows = 10 (ngModelChange)="modelChanged()"  spellcheck="false"></textarea>
         </div>
         <div>{{currentStatus}}</div>
         <button [disabled]="!pendingSubmit" (click)="onSubmit()">Submit</button>

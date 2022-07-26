@@ -17,7 +17,16 @@ export class JobeServerService {
 
   selectedLanguage: string = '';
 
-  functionDefinitions: string = '';
+  private functionDefinitions: string = '';
+
+  // easier to test functions
+  setFunctionDefinitions(functionDefinitions : string) {
+    this.functionDefinitions = functionDefinitions;
+  }
+
+  clearFunctionDefinitions() {
+    this.functionDefinitions = '';
+  }
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json; charset-utf-8' })

@@ -30,7 +30,7 @@ export class FunctionDefinitionComponent {
     this.compiledOK = false;
     this.result = EmptyRunResult;
     this.pendingSubmit = !!this.functionDefinitions;
-    this.jobeServer.functionDefinitions = '';
+    this.jobeServer.clearFunctionDefinitions();
   }
 
   onSubmit() {
@@ -41,7 +41,7 @@ export class FunctionDefinitionComponent {
       this.result = rr;
       this.compiledOK = !(this.result.cmpinfo || this.result.stderr);
       if (this.compiledOK) {
-        this.jobeServer.functionDefinitions = this.functionDefinitions;
+        this.jobeServer.setFunctionDefinitions(this.functionDefinitions);
       }
     });
   }
