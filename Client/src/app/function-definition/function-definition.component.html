@@ -1,6 +1,6 @@
 <div class="pane" [ngClass]="pendingSubmit ? 'uncompiled' : ''">
     <div class="pane-header">Function definition</div>
-    <div class="pane-body">
+    <div class="pane-body" [ngClass]="submitting ? 'in-progress' : ''">
         <div class="function-definition">
             <textarea [(ngModel)]="functionDefinitions"  rows = 10 (ngModelChange)="modelChanged()"  spellcheck="false"></textarea>
         </div>

@@ -22,6 +22,8 @@ export class FunctionDefinitionComponent {
 
   pendingSubmit = false;
 
+  submitting = false;
+
   get currentStatus() {
     return  filterCmpinfo(this.jobeServer.selectedLanguage, this.result.cmpinfo) ||
             filterStderr(this.jobeServer.selectedLanguage, this.result.stderr) ||
@@ -36,6 +38,7 @@ export class FunctionDefinitionComponent {
   }
 
   onSubmit() {
+    this.submitting = true;
     this.compiledOK = false;
     this.pendingSubmit = false;
     const code = wrapFunctions(this.jobeServer.selectedLanguage, this.functionDefinitions);
@@ -45,6 +48,7 @@ export class FunctionDefinitionComponent {
       if (this.compiledOK) {
         this.jobeServer.setFunctionDefinitions(this.functionDefinitions);
       }
+      this.submitting = false;
     });
   }
 }

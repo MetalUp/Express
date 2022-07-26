@@ -14,6 +14,8 @@ export class ExpressionEvaluationComponent {
     this.result = EmptyRunResult;
   }
 
+  submitting = false;
+
   previousExpressionIndex = 0;
 
   previousExpressions: [expr: string, result: string][] = [];
@@ -64,12 +66,14 @@ export class ExpressionEvaluationComponent {
       this.result = EmptyRunResult;
       this.validationFail = validateExpression(this.selectedLanguage, this.expression, []);
       if (!this.validationFail) {
+        this.submitting = true;
         const code = wrapExpression(this.selectedLanguage, this.expression);
         this.jobeServer.submit_run(code).subscribe(rr => {
           this.result = rr;
           this.previousExpressions.push([this.expression, this.result.stdout.trim()]);
           this.expression = '';
           this.previousExpressionIndex = this.previousExpressions.length;
+          this.submitting = false;
         });
       }
     }
