@@ -14,6 +14,30 @@ export const EmptyRunResult = {
     stderr: ''
 }
 
+export function errorRunResult(err : any) {
+    const eResult = {
+        run_id: '',
+        outcome: 0,
+        cmpinfo: '',
+        stdout: '',
+        stderr: ''
+    };
+
+    if (err.message) {
+        eResult.stderr = err.message;
+    }
+    else {
+        eResult.stderr = 'Unknown server error';
+    }
+
+    if (err.status && (err.status < 11 || err.status > 21)) {
+        eResult.outcome = err.status;
+    }
+
+    return eResult;
+}
+
+
 export function getResultOutcome(outcome: number) {
     switch (outcome) {
         case 11: return 'Compilation error. The cmpinfo field should offer further explanation'

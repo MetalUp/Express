@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { RunResult, EmptyRunResult } from './run-result';
+import { RunResult, EmptyRunResult, errorRunResult } from './run-result';
 import { FunctionPlaceholder } from '../languages/language-helpers';
 
 @Injectable({
@@ -38,7 +38,7 @@ export class JobeServerService {
   }
 
   submit_run(code: string) {
-    return this.http.post<RunResult>(`${this.path}/runs`, this.run_spec(code), this.httpOptions).pipe(catchError(() => of<RunResult>(EmptyRunResult)));
+    return this.http.post<RunResult>(`${this.path}/runs`, this.run_spec(code), this.httpOptions).pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
   }
 
   get_languages() {
