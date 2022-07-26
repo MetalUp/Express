@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { filterCmpinfo, filterStderr, wrapFunctions } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
+import { Applicability, RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../services/run-result';
 
 @Component({
@@ -10,7 +11,7 @@ import { EmptyRunResult, RunResult } from '../services/run-result';
 })
 export class FunctionDefinitionComponent {
 
-  constructor(private jobeServer: JobeServerService) {
+  constructor(private jobeServer: JobeServerService, private rulesService: RulesService) {
     this.result = EmptyRunResult;
   }
 
@@ -24,13 +25,17 @@ export class FunctionDefinitionComponent {
 
   submitting = false;
 
+  validationFail : string = '';
+
   get currentStatus() {
-    return  filterCmpinfo(this.jobeServer.selectedLanguage, this.result.cmpinfo) ||
+    return  this.validationFail ||
+            filterCmpinfo(this.jobeServer.selectedLanguage, this.result.cmpinfo) ||
             filterStderr(this.jobeServer.selectedLanguage, this.result.stderr) ||
             (this.compiledOK ? 'Compiled OK' : ''); 
   }
 
   modelChanged() {
+    this.validationFail = '';
     this.compiledOK = false;
     this.result = EmptyRunResult;
     this.pendingSubmit = !!this.functionDefinitions;
@@ -38,17 +43,21 @@ export class FunctionDefinitionComponent {
   }
 
   onSubmit() {
-    this.submitting = true;
     this.compiledOK = false;
     this.pendingSubmit = false;
-    const code = wrapFunctions(this.jobeServer.selectedLanguage, this.functionDefinitions);
-    this.jobeServer.submit_run(code).subscribe(rr => {
-      this.result = rr;
-      this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
-      if (this.compiledOK) {
-        this.jobeServer.setFunctionDefinitions(this.functionDefinitions);
-      }
-      this.submitting = false;
-    });
+    this.validationFail = this.rulesService.validate(this.jobeServer.selectedLanguage, Applicability.expressions, this.functionDefinitions);
+
+    if (!this.validationFail) {
+      this.submitting = true;
+      const code = wrapFunctions(this.jobeServer.selectedLanguage, this.functionDefinitions);
+      this.jobeServer.submit_run(code).subscribe(rr => {
+        this.result = rr;
+        this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
+        if (this.compiledOK) {
+          this.jobeServer.setFunctionDefinitions(this.functionDefinitions);
+        }
+        this.submitting = false;
+      });
+    }
   }
 }

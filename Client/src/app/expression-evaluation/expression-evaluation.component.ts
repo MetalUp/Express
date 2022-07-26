@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { filterCmpinfo, filterStderr, validateExpression, wrapExpression } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
+import { RulesService, Applicability } from '../services/rules.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
 
 @Component({
@@ -10,7 +11,7 @@ import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-res
 })
 export class ExpressionEvaluationComponent {
 
-  constructor(private jobeServer: JobeServerService) {
+  constructor(private jobeServer: JobeServerService, private rulesService: RulesService) {
     this.result = EmptyRunResult;
   }
 
@@ -64,7 +65,7 @@ export class ExpressionEvaluationComponent {
     this.expression = this.expression.trim();
     if (this.expression != "") {
       this.result = EmptyRunResult;
-      this.validationFail = validateExpression(this.selectedLanguage, this.expression, []);
+      this.validationFail = this.rulesService.validate(this.selectedLanguage, Applicability.expressions, this.expression);
       if (!this.validationFail) {
         this.submitting = true;
         const code = wrapExpression(this.selectedLanguage, this.expression);
@@ -84,7 +85,6 @@ export class ExpressionEvaluationComponent {
       event.preventDefault();
     }
   }
-
 
   onKey(event: KeyboardEvent) {
     if (event.key === "ArrowUp") {

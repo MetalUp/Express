@@ -5,14 +5,10 @@ export function rulesFactory(rules: RulesService) {
   return () => rules.load();
 }
 
-enum Applicability {
+export enum Applicability {
   both = 'both',
   expressions = 'expressions',
   functions = 'functions'
-}
-
-function isApplicability(s: string) : s is Applicability {
-  return Object.values(Applicability).includes(s as Applicability);
 }
 
 interface IRulesBlock {
@@ -35,7 +31,7 @@ export class RulesService {
 
   private rules: IRules = {};
 
-  public getRules(language: string, applicability: Applicability) {
+  getRules(language: string, applicability: Applicability) {
 
     const rulesForLanguage = this.rules[language] as IRulesBlock || [];
 
@@ -44,6 +40,24 @@ export class RulesService {
 
     return applicableRules.concat(applicableBothRules);
   }
+
+  private validateRule(toValidate: string, rule : [re: string, msg: string]) {
+    const re = new RegExp(rule[0]);
+    const m =  toValidate.match(re) || [];
+    return m.length > 0 ? rule[1].replace("{match}", m[0]) : '';
+  }
+
+  public validate(language: string, applicability: Applicability, toValidate: string){
+    const rules = this.getRules(language, applicability);
+
+    for(const rule of rules) {
+      const msg = this.validateRule(toValidate, rule);
+      if (msg){
+        return msg;
+      }  
+    }
+    return '';
+  } 
 
   load() {
 
