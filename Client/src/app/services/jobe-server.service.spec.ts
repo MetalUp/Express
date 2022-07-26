@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { JobeServerService } from './jobe-server.service';
 import { EmptyRunResult, RunResult } from './run-result';
 import { of, throwError } from 'rxjs';
+import { FunctionPlaceholder } from '../languages/language-helpers';
 
 describe('JobeServerService', () => {
   let service: JobeServerService;
@@ -39,6 +40,33 @@ describe('JobeServerService', () => {
       Object(testRunSpec),
       jasmine.any(Object));
   });
+
+  it('should call post on /runs including any function definitions', () => {
+    httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));
+    service.selectedLanguage = 'stub language';
+    service.setFunctionDefinitions('test definitions ');
+
+    service.submit_run(`${FunctionPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+
+    testRunSpec.run_spec.sourcecode = 'test definitions stub code';
+
+    expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
+      Object(testRunSpec),
+      jasmine.any(Object));
+  });
+
+  it('should call post on /runs excluding empty function definitions', () => {
+    httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));
+    service.selectedLanguage = 'stub language';
+    service.clearFunctionDefinitions();
+
+    service.submit_run(`${FunctionPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+
+    expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
+      Object(testRunSpec),
+      jasmine.any(Object));
+  });
+
 
   it('should call post on /runs and return an empty result on error', () => {
     httpClientSpy.post.and.returnValue(throwError(() => { status: 404 }));
