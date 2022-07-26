@@ -11,14 +11,33 @@ export enum Applicability {
   functions = 'functions'
 }
 
-interface IRulesBlock {
+export enum ErrorType {
+  cmpinfo = 'cmpinfo',
+  stderr = 'stderr'
+}
+
+interface IValidationRulesBlock {
     both: [string, string][],
     expressions: [string, string][],
     functions: [string, string][]
 }
 
+interface IFilterRulesBlock {
+  cmpinfo: string,
+  stderr: string
+}
+
 interface IRules {
-   [key:string] : IRulesBlock
+   "FilterRules" : IFilterRules,
+   "ValidationRules": IValidationRules
+}
+
+interface IFilterRules {
+  [key:string] : IFilterRulesBlock
+}
+
+interface IValidationRules {
+  [key:string] : IValidationRulesBlock
 }
 
 
@@ -29,11 +48,11 @@ export class RulesService {
 
   constructor(private http: HttpClient) { }
 
-  private rules: IRules = {};
+  private rules: IRules = {"FilterRules" : {}, ValidationRules: {}};
 
   getRules(language: string, applicability: Applicability) {
 
-    const rulesForLanguage = this.rules[language] as IRulesBlock || [];
+    const rulesForLanguage = this.rules.ValidationRules[language] as IValidationRulesBlock || [];
 
     const applicableRules = rulesForLanguage[applicability] || [];
     const applicableBothRules = rulesForLanguage[Applicability.both] || [];
@@ -57,6 +76,16 @@ export class RulesService {
       }  
     }
     return '';
+  } 
+
+  public filter(language: string, errorType: ErrorType, toFilter: string){
+    if (toFilter) {
+      const rule = this.rules.FilterRules[language][errorType];
+      const re = new RegExp(rule);
+      const m = re.exec(toFilter);
+      return m ? m[0] : toFilter;
+    }
+    return toFilter;
   } 
 
   load() {

@@ -1,5 +1,5 @@
-import { filterCSharpCmpinfo, filterCSharpStderr, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression, wrapCSharpFunctions } from "./csharp-helpers";
-import { filterPythonCmpinfo, filterPythonStderr, findPythonFunctions, validatePythonExpression, wrapPythonExpression, wrapPythonFunctions } from "./python-helpers";
+import {  findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression, wrapCSharpFunctions } from "./csharp-helpers";
+import {  findPythonFunctions, validatePythonExpression, wrapPythonExpression, wrapPythonFunctions } from "./python-helpers";
 
 export const FunctionPlaceholder = "<<FunctionsPlaceholder>>";
 
@@ -31,22 +31,6 @@ export function validateExpression(language: string, expression: string, whiteLi
         case 'csharp': return validateCSharpExpression(expression);
         case 'python': return validatePythonExpression(expression);
         default: return 'unknown language';
-    }
-}
-
-export function filterCmpinfo(language: string, cmpinfo: string) {
-    switch (language) {
-        case 'csharp': return filterCSharpCmpinfo(cmpinfo);
-        case 'python': return filterPythonCmpinfo(cmpinfo);
-        default: return cmpinfo;
-    }
-}
-
-export function filterStderr(language: string, stderr: string) {
-    switch (language) {
-        case 'csharp': return filterCSharpStderr(stderr);
-        case 'python': return filterPythonStderr(stderr);
-        default: return stderr;
     }
 }
 

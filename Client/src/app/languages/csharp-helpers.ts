@@ -59,18 +59,6 @@ export function validateCSharpExpression(expression : string) {
     return validateExpressionWithRegex(expression, defaultRegExp);
 }
 
-const cmpinfoRegex = /CS.*/
-
-export function filterCSharpCmpinfo(cmpinfo : string) {
-    return filterCmpinfoWithRegex(cmpinfo, cmpinfoRegex);
-}
-
-const stderrRegex = /\w+Exception/
-
-export function filterCSharpStderr(stderr : string) {
-    return filterStderrWithRegex(stderr, stderrRegex);
-}
-
 
 export function findCSharpFunctions(expression : string) {
     const fMatch = /([A-Z]\w*\s*)\(/g;

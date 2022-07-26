@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { filterCmpinfo, filterStderr, validateExpression, wrapExpression } from '../languages/language-helpers';
+import { validateExpression, wrapExpression } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
-import { RulesService, Applicability } from '../services/rules.service';
+import { Applicability, ErrorType, RulesService } from '../services/rules.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
 
 @Component({
@@ -37,8 +37,8 @@ export class ExpressionEvaluationComponent {
     }
 
     return this.result.cmpinfo
-      ? filterCmpinfo(this.selectedLanguage, this.result.cmpinfo)
-      : filterStderr(this.selectedLanguage, this.result.stderr);
+      ? this.rulesService.filter(this.selectedLanguage, ErrorType.cmpinfo,  this.result.cmpinfo)
+      : this.rulesService.filter(this.selectedLanguage, ErrorType.stderr, this.result.stderr);
   }
 
   mapOutcome(outcome: number) {
@@ -61,21 +61,30 @@ export class ExpressionEvaluationComponent {
     return this.getPrevious(1) || this.filteredCmpinfo();
   }
 
+  private pushExpression() {
+    this.previousExpressions.push([this.expression, this.result.stdout.trim()]);
+    this.expression = '';
+    this.previousExpressionIndex = this.previousExpressions.length;
+  }
+
+
   onEnter() {
     this.expression = this.expression.trim();
     if (this.expression != "") {
       this.result = EmptyRunResult;
-      this.validationFail = this.rulesService.validate(this.selectedLanguage, Applicability.expressions, this.expression);
+      this.validationFail = validateExpression(this.selectedLanguage, this.expression, []) ||
+                            this.rulesService.validate(this.selectedLanguage, Applicability.expressions, this.expression);
       if (!this.validationFail) {
         this.submitting = true;
         const code = wrapExpression(this.selectedLanguage, this.expression);
         this.jobeServer.submit_run(code).subscribe(rr => {
           this.result = rr;
-          this.previousExpressions.push([this.expression, this.result.stdout.trim()]);
-          this.expression = '';
-          this.previousExpressionIndex = this.previousExpressions.length;
+          this.pushExpression();
           this.submitting = false;
         });
+      }
+      else {
+        this.pushExpression();
       }
     }
   }

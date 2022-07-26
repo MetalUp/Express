@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { filterCmpinfo, filterStderr, wrapFunctions } from '../languages/language-helpers';
+import { wrapFunctions } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
-import { Applicability, RulesService } from '../services/rules.service';
+import { Applicability, ErrorType, RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../services/run-result';
 
 @Component({
@@ -29,8 +29,8 @@ export class FunctionDefinitionComponent {
 
   get currentStatus() {
     return  this.validationFail ||
-            filterCmpinfo(this.jobeServer.selectedLanguage, this.result.cmpinfo) ||
-            filterStderr(this.jobeServer.selectedLanguage, this.result.stderr) ||
+            this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.cmpinfo, this.result.cmpinfo) ||
+            this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.stderr, this.result.stderr) ||
             (this.compiledOK ? 'Compiled OK' : ''); 
   }
 
