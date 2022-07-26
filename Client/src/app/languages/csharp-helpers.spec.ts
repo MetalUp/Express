@@ -1,4 +1,4 @@
-import { filterCSharpCmpinfo, filterCSharpStderr, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression } from "./csharp-helpers";
+import { filterCSharpCmpinfo, filterCSharpStderr, findCSharpFunctions, validateCSharpExpression, wrapCSharpExpression, wrapCSharpFunctions } from "./csharp-helpers";
 
 describe('CSharp Helpers', () => {
  
@@ -10,8 +10,13 @@ describe('CSharp Helpers', () => {
    
   });
 
-  it('should wrap code', () => {
+  it('should wrap expressions', () => {
     const v = wrapCSharpExpression('test');
+    expect(v).not.toBe('test');
+  });
+
+  it('should wrap functions', () => {
+    const v = wrapCSharpFunctions('test');
     expect(v).not.toBe('test');
   });
 

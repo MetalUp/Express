@@ -1,4 +1,4 @@
-import { filterPythonCmpinfo, filterPythonStderr, findPythonFunctions, validatePythonExpression, wrapPythonExpression } from "./python-helpers";
+import { filterPythonCmpinfo, filterPythonStderr, findPythonFunctions, validatePythonExpression, wrapPythonExpression, wrapPythonFunctions } from "./python-helpers";
 
 describe('Python Helpers', () => {
  
@@ -10,9 +10,14 @@ describe('Python Helpers', () => {
    
   });
 
-  it('should wrap code', () => {
+  it('should wrap expressions', () => {
     const v = wrapPythonExpression('test');
     expect(v).not.toBe('test');
+  });
+
+  it('should not wrap functions', () => {
+    const v = wrapPythonFunctions('test');
+    expect(v).toBe('test');
   });
 
   it('should validate', () => {

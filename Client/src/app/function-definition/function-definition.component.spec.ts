@@ -13,7 +13,7 @@ describe('FunctionDefinitionComponent', () => {
 
   let testRunResultOK: RunResult = {
     run_id: 'a',
-    outcome: 66,
+    outcome: 15,
     cmpinfo: '',
     stdout: 'expression result',
     stderr: ''
@@ -21,7 +21,7 @@ describe('FunctionDefinitionComponent', () => {
 
   let testRunResultCmp: RunResult = {
     run_id: 'a',
-    outcome: 66,
+    outcome: 11,
     cmpinfo: 'compiler error',
     stdout: '',
     stderr: ''
@@ -29,7 +29,7 @@ describe('FunctionDefinitionComponent', () => {
 
   let testRunResultErr: RunResult = {
     run_id: 'a',
-    outcome: 66,
+    outcome: 12,
     cmpinfo: '',
     stdout: '',
     stderr: 'run error'
