@@ -1,9 +1,0 @@
-Console\.,Use of  {match} is not permitted in MetalUp.Express,both
-System\.,Explicit use of the 'System' namespace is unnecessary, and not permitted,both
-\s*var\s,Use of  {match} is not permitted,both
-\w*[^=]=[^=],Assignment statement (single '=') is not permitted. (If you intended to test for equality, use '=='),both
-\susing\s\w*,'using' statements for all permissible functions are automatically provided (behind the scenes). No additional 'using' statements are permitted.,both
-\spublic\s|\sprivate\s|\sprotected\s|\sclass\s|\sabstract\s,Use of {match}  is not permitted,both
-\WArrayList\W,,both
-\Wnew\s*Random\W,Use of the system Random generator,both
-\WDateTime\.,Calling Today or Now on DateTime,both

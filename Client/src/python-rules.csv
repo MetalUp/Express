@@ -1,4 +1,0 @@
-\s*print*\s*\(,Use of  {match} is not permitted,both
-\s*input*\s*\(,Use of  {match} is not permitted,both
-\w*[^=]=[^=],Assignment statement (single '=') is not permitted,both
-\.append,'append' to a List is not permitted as it is a mutating method. Hint: you may use '+' to append a list to a list.,both
