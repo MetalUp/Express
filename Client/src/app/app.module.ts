@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -9,6 +9,7 @@ import { FunctionDefinitionComponent } from './function-definition/function-defi
 import { UserComponent } from './user/user.component';
 import { SelectedLanguageComponent } from './selected-language/selected-language.component';
 import { PlaceholderComponent } from './placeholder/placeholder.component';
+import { rulesFactory, RulesService } from './services/rules.service';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,9 @@ import { PlaceholderComponent } from './placeholder/placeholder.component';
     FormsModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    { provide: APP_INITIALIZER, useFactory: rulesFactory, deps: [RulesService], multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
