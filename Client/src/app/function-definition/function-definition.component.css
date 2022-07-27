@@ -21,7 +21,7 @@ div.pane-body {
     font-family: monospace;
 }
 
-.pane-body > div {
+.pane-body>div {
     width: 100%;
 }
 
@@ -29,7 +29,7 @@ div.pane-body {
     border: 2px solid red;
 }
 
-.function-definition  {
+.function-definition {
     display: inline-flex;
     flex-flow: row;
     justify-items: flex-start;

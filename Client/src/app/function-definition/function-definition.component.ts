@@ -25,13 +25,13 @@ export class FunctionDefinitionComponent {
 
   submitting = false;
 
-  validationFail : string = '';
+  validationFail: string = '';
 
   get currentStatus() {
-    return  this.validationFail ||
-            this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.cmpinfo, this.result.cmpinfo) ||
-            this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.stderr, this.result.stderr) ||
-            (this.compiledOK ? 'Compiled OK' : ''); 
+    return this.validationFail ||
+      this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.cmpinfo, this.result.cmpinfo) ||
+      this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.stderr, this.result.stderr) ||
+      (this.compiledOK ? 'Compiled OK' : '');
   }
 
   modelChanged() {
@@ -46,7 +46,7 @@ export class FunctionDefinitionComponent {
     this.compiledOK = false;
     this.pendingSubmit = false;
     this.validationFail = this.rulesService.parse(this.jobeServer.selectedLanguage, Applicability.functions, this.functionDefinitions) ||
-                          this.rulesService.validate(this.jobeServer.selectedLanguage, Applicability.functions, this.functionDefinitions);
+      this.rulesService.validate(this.jobeServer.selectedLanguage, Applicability.functions, this.functionDefinitions);
 
     if (!this.validationFail) {
       this.submitting = true;
