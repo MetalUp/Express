@@ -45,8 +45,8 @@ export class FunctionDefinitionComponent {
   onSubmit() {
     this.compiledOK = false;
     this.pendingSubmit = false;
-    this.validationFail = this.rulesService.parse(this.jobeServer.selectedLanguage, Applicability.expressions, this.functionDefinitions) ||
-                          this.rulesService.validate(this.jobeServer.selectedLanguage, Applicability.expressions, this.functionDefinitions);
+    this.validationFail = this.rulesService.parse(this.jobeServer.selectedLanguage, Applicability.functions, this.functionDefinitions) ||
+                          this.rulesService.validate(this.jobeServer.selectedLanguage, Applicability.functions, this.functionDefinitions);
 
     if (!this.validationFail) {
       this.submitting = true;
