@@ -13,52 +13,78 @@
         "csharp": {
             "both": [],
             "expressions": [],
-            "functions":[]
+            "functions":[
+                [
+                    "^\\s*static\\s.*",
+                    "Functions must start with the 'static' keyword"
+                ],
+                [
+                    "^.*;\\s*$",
+                        "Functions must end with the symbol ';'"
+                ],
+                [
+                    "^.*\\s=>\\s.*",
+                    "Functions must include the symbol '=>' followed by the expression to be evaluated"
+                ]
+            ]
         },
         "python": {
             "both": [],
             "expressions": [],
-            "functions":[]
+            "functions":[
+                [
+                    "^\\s*def\\s+\\w+\\s*\\(",
+                    "Functions must start with the 'def' keyword followed by the function name and '('"
+                ],
+                [
+                    "^.*:\\s.*(\\n\\s+)?return.*",
+                    "Functions must include the symbol ':' followed by 'return' (may be on the next line if correctly indented) and the expression to be evaluated"
+                ]
+            ]
         }
     },
     "ValidationRules": {
         "csharp": {
             "both": [
                 [
+                    ".*(^|\\s+)return\\s.*",
+                    "Use of the keyword 'return' is not permitted"
+                ],
+                [
+                    ".*(^|\\s+)var\\s.*",
+                    "Use of the keyword 'var' is not permitted"
+                ],
+                [
+                    ".*(^|\\s+)void\\s.*",
+                    "Use of the keyword 'void' is not permitted"
+                ],
+                [
+                    ".*(^|\\s+)(var|using|public|private|protected|class|abstract|readOnly)\\s.*",
+                    "Use of the keyword '{2nd group}' is not permitted"
+                ],
+                [
                     "Console\\.",
-                    "Use of  {match} is not permitted in MetalUp.Express"
+                    "Use of the Console is not permitted"
                 ],
                 [
                     "System\\.",
-                    "Explicit use of the 'System' namespace is unnecessary, and not permitted"
+                    "Explicit use of the System. namespace is not permitted"
                 ],
                 [
-                    "\\s*var\\s",
-                    "Use of  {match} is not permitted"
-                ],
-                [
-                    "\\w*[^=]=[^=]",
-                    "Assignment statement (single '=') is not permitted. (If you intended to test for equality, use '==')"
-                ],
-                [
-                    "\\susing\\s\\w*",
-                    "'using' statements for all permissible functions are automatically provided (behind the scenes). No additional 'using' statements are permitted."
-                ],
-                [
-                    "\\spublic\\s|\\sprivate\\s|\\sprotected\\s|\\sclass\\s|\\sabstract\\s",
-                    "Use of {match}  is not permitted"
+                    "\\w*[^=]=[^(=|>)]\\w*",
+                    "Assignment, such as {match}, is not permitted. (To test for equality, use '==')"
                 ],
                 [
                     "\\WArrayList\\W",
-                    ""
+                    "Use of {match} is not permitted"
                 ],
                 [
                     "\\Wnew\\s*Random\\W",
-                    "Use of the system Random generator"
+                    "Use of {match} is not permitted"
                 ],
                 [
-                    "\\WDateTime\\.",
-                    "Calling Today or Now on DateTime"
+                    "\\W*DateTime\\.Today|\\W*DateTime\\.Now",
+                    "Use of {match} is not permitted"
                 ]
             ],
             "expressions": [],
@@ -68,11 +94,11 @@
             "both": [
                 [
                     "\\s*print*\\s*\\(",
-                    "Use of  {match} is not permitted"
+                    "Use of {match} is not permitted"
                 ],
                 [
                     "\\s*input*\\s*\\(",
-                    "Use of  {match} is not permitted"
+                    "Use of {match} is not permitted"
                 ],
                 [
                     "\\w*[^=]=[^=]",
