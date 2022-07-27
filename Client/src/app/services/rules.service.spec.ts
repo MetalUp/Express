@@ -71,10 +71,36 @@ describe('RulesService', () => {
     expect(validated).toEqual("Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')");
   });
 
-  //Python parsing
+  //Python parsing - fails
   it('should parse python expression - not beginning with def', () => {
     const parsed = service.parse(language.python, Applicability.functions, "Foo() : return 3");
     expect(parsed).toEqual("Functions must start with the 'def' keyword followed by the function name and '('");
+  });
+
+  it('should parse python expression - no colon', () => {
+    const parsed = service.parse(language.python, Applicability.functions, "def Foo() return 3");
+    expect(parsed).toEqual("Functions must include the symbol ':' followed by 'return' (may be on the next line if correctly indented) and the expression to be evaluated");
+  });
+
+  it('should parse python expression - no return', () => {
+    const parsed = service.parse(language.python, Applicability.functions, "def Foo() : 3");
+    expect(parsed).toEqual("Functions must include the symbol ':' followed by 'return' (may be on the next line if correctly indented) and the expression to be evaluated");
+  });
+
+  it('should parse python expression - no indentation on newline', () => {
+    const parsed = service.parse(language.python, Applicability.functions, "def Foo() :\\nreturn 3");
+    expect(parsed).toEqual("Functions must include the symbol ':' followed by 'return' (may be on the next line if correctly indented) and the expression to be evaluated");
+  });
+
+   //Python parsing - passes
+  it('should parse python expression - simple case', () => {
+    const parsed = service.parse(language.python, Applicability.functions, "def Foo() : return 3");
+    expect(parsed).toEqual("");
+  });
+
+  it('should parse python expression - with line breaks', () => {
+      const parsed = service.parse(language.python, Applicability.functions, "def Foo() :\n return 3");
+      expect(parsed).toEqual("");
   });
 
 });
