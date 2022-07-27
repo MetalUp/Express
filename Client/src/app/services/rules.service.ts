@@ -27,7 +27,7 @@ interface IFilterRulesBlock {
   stderr: string
 }
 
-const MsgPrefix = "Messages."; 
+const MsgPrefix = "Messages.";
 
 export interface IRules {
   "Messages": IMessages,
@@ -83,23 +83,44 @@ export class RulesService {
     return toformat;
   }
 
-  private getMessage(origMessage : string) {
-    return origMessage.startsWith(MsgPrefix) ? this.rules.Messages[origMessage.replace(MsgPrefix, '') ] || origMessage : origMessage;
+  private getMessage(origMessage: string) {
+    return origMessage.startsWith(MsgPrefix) ? this.rules.Messages[origMessage.replace(MsgPrefix, '')] || origMessage : origMessage;
   }
 
+  private handleError(e: unknown, regex: string) {
+    if (e instanceof SyntaxError) {
+      console.warn(e.message);
+    }
+    else {
+      console.warn(`Uknown error with regex ${regex}`);
+    }
+    return '';
+  }
+
+
   private validateRule(rs: RulesService, toValidate: string, rule: [re: string, msg: string]) {
-    const re = new RegExp(rule[0]);
-    const m = toValidate.match(re) || [];
-    return m.length > 0 ? rs.format(rs.getMessage(rule[1]), m) : '';
+    try {
+      const re = new RegExp(rule[0]);
+      const m = toValidate.match(re) || [];
+      return m.length > 0 ? rs.format(rs.getMessage(rule[1]), m) : '';
+    }
+    catch (e) {
+      return rs.handleError(e, rule[0]);
+    }
   }
 
   private parseRule(rs: RulesService, toParse: string, rule: [re: string, msg: string]) {
-    const re = new RegExp(rule[0]);
-    const m = toParse.match(re) || [];
-    return m.length === 0 ? rs.getMessage(rule[1]) : '';
+    try {
+      const re = new RegExp(rule[0]);
+      const m = toParse.match(re) || [];
+      return m.length === 0 ? rs.getMessage(rule[1]) : '';
+    }
+    catch (e) {
+      return rs.handleError(e, rule[0]);
+    }
   }
 
-  private handle(rules: [string, string][], toHandle: string, handler: (rs: RulesService, a:string, b:[string, string]) => string) {
+  private handle(rules: [string, string][], toHandle: string, handler: (rs: RulesService, a: string, b: [string, string]) => string) {
     for (const rule of rules) {
       const msg = handler(this, toHandle, rule);
       if (msg) {

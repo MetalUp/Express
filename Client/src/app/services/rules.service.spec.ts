@@ -17,7 +17,7 @@ describe('RulesService', () => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
     TestBed.configureTestingModule({});
     service = new RulesService(httpClientSpy);
-    service.rules = rules as IRules;
+    service.rules = rules as unknown as IRules;
   });
 
   it('should be created', () => {
