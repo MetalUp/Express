@@ -87,8 +87,7 @@
         "python": {
             "both": [
                 [
-                    "\\s+(print|input)\\s*\\(",
-                    "Use of {1} is not permitted]",
+                    "\\s+(print|input)\\s*",
                     "Messages.NotPermitted"
                 ],
                 [
