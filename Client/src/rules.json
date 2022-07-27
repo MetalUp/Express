@@ -82,7 +82,7 @@
             "functions": [
                 [                  
                     [
-                        "\\WDateTime\\.(Today|Now)\\W",
+                        "\\s+DateTime\\.(Today|Now)",
                         "Messages.Message3"
                     ]
                 ]
@@ -99,14 +99,14 @@
                     ".Messages.Message5"
                 ],
                 [
-                    "(\\.(append|clear|extend|insert|pop|reverse|sort)\\s*\\(",
+                    "\\.(append|clear|extend|insert|pop|reverse|sort)\\s*\\(",
                     "Messages.Message4"
                 ]
             ],
             "expressions": [],
             "functions": [
                 [
-                    "\\Wdatetime\\.(today|now)\\W",
+                    "\\s(date\\.today|datetime\\.today|datetime\\.now)",
                     "Messages.Message3"
                 ]
             ]
