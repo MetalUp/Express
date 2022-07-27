@@ -5,11 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './placeholder.component.html',
   styleUrls: ['./placeholder.component.css']
 })
-export class PlaceholderComponent implements OnInit {
+export class PlaceholderComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }
