@@ -67,7 +67,6 @@ export class ExpressionEvaluationComponent {
     this.previousExpressionIndex = this.previousExpressions.length;
   }
 
-
   onEnter() {
     this.expression = this.expression.trim();
     if (this.expression !== "") {
