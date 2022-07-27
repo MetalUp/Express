@@ -1,4 +1,7 @@
 {
+    "Messages": {
+        "Message1" : "Use of the keyword '{2}' is not permitted"
+    },
     "FilterRules": {
         "csharp": {
             "cmpinfo": "CS.*",
@@ -20,7 +23,7 @@
                 ],
                 [
                     "^.*;\\s*$",
-                        "Functions must end with the symbol ';'"
+                    "Functions must end with the symbol ';'"
                 ],
                 [
                     "^.*\\s=>\\s.*",
@@ -48,19 +51,19 @@
             "both": [
                 [
                     ".*(^|\\s+)(return)\\s.*",
-                    "Use of the keyword '{2}' is not permitted"
+                    "Messages.Message1"
                 ],
                 [
                     ".*(^|\\s+)(var)\\s.*",
-                    "Use of the keyword '{2}' is not permitted"
+                    "Messages.Message1"
                 ],
                 [
                     ".*(^|\\s+)(void)\\s.*",
-                    "Use of the keyword '{2}' is not permitted"
+                    "Messages.Message1"
                 ],
                 [
                     ".*(^|\\s+)(var|using|public|private|protected|class|abstract|readOnly)\\s.*",
-                    "Use of the keyword '{2}' is not permitted"
+                    "Messages.Message1"
                 ],
                 [
                     "Console\\.",
