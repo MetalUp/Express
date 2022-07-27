@@ -27,7 +27,7 @@ interface IFilterRulesBlock {
   stderr: string
 }
 
-interface IRules {
+export interface IRules {
    "FilterRules" : IFilterRules,
    "ParsingRules" : IValidationRules,
    "ValidationRules": IValidationRules

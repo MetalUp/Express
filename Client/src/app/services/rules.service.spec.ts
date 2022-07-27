@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { Applicability, ErrorType, RulesService } from './rules.service';
+import { Applicability, ErrorType, IRules, RulesService } from './rules.service';
 import rules from '../../rules.json';
 
 describe('RulesService', () => {
@@ -12,9 +12,7 @@ describe('RulesService', () => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
     TestBed.configureTestingModule({});
     service = new RulesService(httpClientSpy);
-
-    service.rules = rules as any;
-  
+    service.rules = rules as IRules;
   });
 
   it('should be created', () => {
