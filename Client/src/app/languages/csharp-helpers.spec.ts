@@ -1,13 +1,9 @@
 import { wrapCSharpExpression, wrapCSharpFunctions } from "./csharp-helpers";
 
 describe('CSharp Helpers', () => {
- 
-
-  // placeholders really
-
 
   beforeEach(async () => {
-   
+
   });
 
   it('should wrap expressions', () => {
@@ -19,5 +15,4 @@ describe('CSharp Helpers', () => {
     const v = wrapCSharpFunctions('test');
     expect(v).not.toBe('test');
   });
-  
 });

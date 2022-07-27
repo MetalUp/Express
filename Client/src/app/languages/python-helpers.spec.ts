@@ -1,13 +1,9 @@
 import { wrapPythonExpression, wrapPythonFunctions } from "./python-helpers";
 
 describe('Python Helpers', () => {
- 
-
-  // placeholders really
-
 
   beforeEach(async () => {
-   
+
   });
 
   it('should wrap expressions', () => {

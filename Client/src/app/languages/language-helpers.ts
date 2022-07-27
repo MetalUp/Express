@@ -1,5 +1,5 @@
-import {  wrapCSharpExpression, wrapCSharpFunctions } from "./csharp-helpers";
-import {  wrapPythonExpression, wrapPythonFunctions } from "./python-helpers";
+import { wrapCSharpExpression, wrapCSharpFunctions } from "./csharp-helpers";
+import { wrapPythonExpression, wrapPythonFunctions } from "./python-helpers";
 
 export const FunctionPlaceholder = "<<FunctionsPlaceholder>>";
 
