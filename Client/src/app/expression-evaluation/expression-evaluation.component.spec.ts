@@ -38,14 +38,14 @@ describe('ExpressionEvaluationComponent', () => {
 
 
   beforeEach(async () => {
-    mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages'], {"selectedLanguage":"csharp"});
+    mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages'], { "selectedLanguage": "csharp" });
     mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["1", "2"]]));
     mockRulesService = jasmine.createSpyObj('RulesService', ['filter', 'validate', 'parse']);
 
     mockRulesService.parse.and.returnValue('');
     mockRulesService.validate.and.returnValue('');
     mockRulesService.filter.and.callFake((_l, _e, tf) => tf);
-   
+
     await TestBed.configureTestingModule({
       declarations: [ExpressionEvaluationComponent],
       providers: [
@@ -73,21 +73,21 @@ describe('ExpressionEvaluationComponent', () => {
     component.previousExpressions = [['e1', 'r1'], ['e2', 'r2'], ['e3', 'r3']];
     component.previousExpressionIndex = component.previousExpression.length;
 
-    component.onKey(<any>{key :'ArrowUp'});
+    component.onKey(<any>{ key: 'ArrowUp' });
     expect(component.expression).toEqual("e2");
-    component.onKey(<any>{key :'ArrowUp'});
+    component.onKey(<any>{ key: 'ArrowUp' });
     expect(component.expression).toEqual("e1");
-    component.onKey(<any>{key :'ArrowUp'});
+    component.onKey(<any>{ key: 'ArrowUp' });
     expect(component.expression).toEqual("e1");
-    component.onKey(<any>{key :'ArrowDown'});
+    component.onKey(<any>{ key: 'ArrowDown' });
     expect(component.expression).toEqual("e2");
-    component.onKey(<any>{key :'ArrowDown'});
+    component.onKey(<any>{ key: 'ArrowDown' });
     expect(component.expression).toEqual("e3");
-    component.onKey(<any>{key :'ArrowDown'});
+    component.onKey(<any>{ key: 'ArrowDown' });
     expect(component.expression).toEqual('');
-    component.onKey(<any>{key :'ArrowDown'});
+    component.onKey(<any>{ key: 'ArrowDown' });
     expect(component.expression).toEqual('');
-    component.onKey(<any>{key :'ArrowUp'});
+    component.onKey(<any>{ key: 'ArrowUp' });
     expect(component.expression).toEqual("e3");
   });
 
@@ -95,17 +95,17 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.previousExpression).toEqual('');
     expect(component.previousExpressionResult).toEqual('');
-    
+
     component.previousExpressions = [['e1', 'r1'], ['e2', 'r2'], ['e3', 'r3']];
     component.previousExpressionIndex = component.previousExpression.length;
 
     expect(component.previousExpression).toEqual("e3");
     expect(component.previousExpressionResult).toEqual("r3");
-    
+
   });
 
   it('should show error if no result', () => {
-  
+
     expect(component.previousExpression).toEqual('');
     expect(component.previousExpressionResult).toEqual('');
 
@@ -123,13 +123,13 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.previousExpression).toEqual('');
     expect(component.previousExpressionResult).toEqual('validFail');
-    
+
     component.result = EmptyRunResult;
   });
 
   it('should submit code on enter and show result', () => {
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    
+
     component.expression = 'test';
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
@@ -159,7 +159,7 @@ describe('ExpressionEvaluationComponent', () => {
 
   it('should submit code on enter and show runtime error', () => {
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultErr));
-  
+
     component.expression = 'test';
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
@@ -173,7 +173,7 @@ describe('ExpressionEvaluationComponent', () => {
   });
 
   it('should ignore empty expressions', () => {
-   
+
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.expression = '';
@@ -183,7 +183,7 @@ describe('ExpressionEvaluationComponent', () => {
   });
 
   it('should call parse and validate on enter', () => {
-   
+
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.expression = 'test';
@@ -199,12 +199,12 @@ describe('ExpressionEvaluationComponent', () => {
   });
 
   it('should not submit on parse error', () => {
-   
+
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
     mockRulesService.parse.and.returnValue("parse fail");
 
     component.expression = 'test';
-    
+
     component.onEnter();
     expect(mockRulesService.parse).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
     expect(mockRulesService.validate).not.toHaveBeenCalled();
@@ -217,12 +217,12 @@ describe('ExpressionEvaluationComponent', () => {
 
 
   it('should not submit on validate error', () => {
-   
+
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
     mockRulesService.validate.and.returnValue("validate fail");
 
     component.expression = 'test';
-    
+
     component.onEnter();
     expect(mockRulesService.parse).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
     expect(mockRulesService.validate).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");

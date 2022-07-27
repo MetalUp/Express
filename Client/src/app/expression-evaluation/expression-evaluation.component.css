@@ -14,7 +14,8 @@ div.pane-body {
     background-color: #DAE3F3;
 }
 
-.expression, .result  {
+.expression,
+.result {
     display: inline-flex;
     flex-flow: row;
     justify-items: flex-start;
@@ -35,4 +36,3 @@ textarea {
     flex-grow: 1;
     flex-basis: max-content;
 }
-

@@ -37,7 +37,7 @@ export class ExpressionEvaluationComponent {
     }
 
     return this.result.cmpinfo
-      ? this.rulesService.filter(this.selectedLanguage, ErrorType.cmpinfo,  this.result.cmpinfo)
+      ? this.rulesService.filter(this.selectedLanguage, ErrorType.cmpinfo, this.result.cmpinfo)
       : this.rulesService.filter(this.selectedLanguage, ErrorType.stderr, this.result.stderr);
   }
 
@@ -45,9 +45,9 @@ export class ExpressionEvaluationComponent {
     return getResultOutcome(outcome);
   }
 
-  private getPrevious(i : number) {
+  private getPrevious(i: number) {
     if (this.previousExpressions.length > 0) {
-      const lastItem = this.previousExpressions[this.previousExpressions.length -1];
+      const lastItem = this.previousExpressions[this.previousExpressions.length - 1];
       return `${lastItem[i]}`;
     }
     return '';
@@ -71,8 +71,8 @@ export class ExpressionEvaluationComponent {
     this.expression = this.expression.trim();
     if (this.expression !== "") {
       this.result = EmptyRunResult;
-      this.validationFail = this.rulesService.parse(this.selectedLanguage, Applicability.expressions,this.expression) ||
-                            this.rulesService.validate(this.selectedLanguage, Applicability.expressions, this.expression);
+      this.validationFail = this.rulesService.parse(this.selectedLanguage, Applicability.expressions, this.expression) ||
+        this.rulesService.validate(this.selectedLanguage, Applicability.expressions, this.expression);
       if (!this.validationFail) {
         this.submitting = true;
         const code = wrapExpression(this.selectedLanguage, this.expression);
