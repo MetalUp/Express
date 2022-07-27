@@ -44,7 +44,7 @@ describe('RulesService', () => {
     expect(filtered).toEqual(' Error: something else')
   });
 
-  //C# expressions
+  //C# expressions - fails
   it('should validate csharp expression - System', () => {
     const validated = service.validate(language.csharp, Applicability.expressions, "System.");
     expect(validated).toEqual("Use of 'System' is not permitted");
@@ -55,7 +55,61 @@ describe('RulesService', () => {
     expect(validated).toEqual("Use of 'Console' is not permitted");
   });
 
-  //Python expressions
+  it('should validate csharp expression - keyword', () => {
+    const validated = service.validate(language.csharp, Applicability.expressions, "something private something");
+    expect(validated).toEqual("Use of the keyword 'private' is not permitted");
+  });
+
+  it('should validate csharp expression - ArrayList', () => {
+    const validated = service.validate(language.csharp, Applicability.expressions, "something ArrayList something");
+    expect(validated).toEqual("Use of ArrayList is not permitted. Use a typed list such as List<int>");
+  });
+
+  it('should validate csharp expression - assignment', () => {
+    const validated = service.validate(language.csharp, Applicability.expressions, "something a = 3 something");
+    expect(validated).toEqual("Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')");
+  });
+
+  it('should validate csharp expression - mutating method', () => {
+    const validated = service.validate(language.csharp, Applicability.expressions, " myList.Add(3)");
+    expect(validated).toEqual("Use of 'Add', or any other method that mutates a List is not permitted");
+  });
+
+   //C# expressions - passes
+
+  it('should validate csharp expression - simple expression', () => {
+    const validated = service.validate(language.csharp, Applicability.expressions, " (3 + 4)*5");
+    expect(validated).toEqual("");
+  });
+
+  //C# functions - fails
+  it('should parse csharp function - not static', () => {
+    const validated = service.parse(language.csharp, Applicability.functions, "int Sq(int x) => x*x;");
+    expect(validated).toEqual("Functions must start with the 'static' keyword");
+  });
+
+  it('should parse csharp function - no semi-colon', () => {
+    const validated = service.parse(language.csharp, Applicability.functions, "static int Sq(int x) => x*x");
+    expect(validated).toEqual("Functions must end with the symbol ';'");
+  });
+
+  it('should parse csharp function - no fat arrow', () => {
+    const validated = service.parse(language.csharp, Applicability.functions, "static int Sq(int x) return x*x");
+    expect(validated).toEqual("Functions must include the symbol '=>' followed by the expression to be evaluated");
+  });
+
+  it('should parse csharp function - braces', () => {
+    const validated = service.parse(language.csharp, Applicability.functions, "static int Sq(int x) => \\{x*x\\};");
+    expect(validated).toEqual("Functions may not include curly braces '{' or '{'");
+  });
+
+  //C# functions - passes
+  it('should parse csharp function - simple function', () => {
+    const validated = service.parse(language.csharp, Applicability.functions, "static int Sq(int x) => x*x;");
+    expect(validated).toEqual("");
+  });
+
+  //Python expressions - fails
   it('should validate python expression - print', () => {
     const validated = service.validate(language.python, Applicability.expressions, "something print (3) something");
     expect(validated).toEqual("Use of 'print' is not permitted");
@@ -69,6 +123,17 @@ describe('RulesService', () => {
   it('should validate python expression - assignment', () => {
     const validated = service.validate(language.python, Applicability.expressions, "something a = 3 something");
     expect(validated).toEqual("Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')");
+  });
+
+  it('should validate python expression - mutating method', () => {
+    const validated = service.validate(language.python, Applicability.expressions, "something list.reverse() something");
+    expect(validated).toEqual("Use of 'reverse', or any other method that mutates a List is not permitted");
+  });
+
+  //Python expressions - passes
+  it('should validate python expression - simple expression', () => {
+    const validated = service.validate(language.python, Applicability.expressions, "(3+4)*5");
+    expect(validated).toEqual("");
   });
 
   //Python parsing - fails
