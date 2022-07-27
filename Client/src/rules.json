@@ -1,6 +1,10 @@
 {
     "Messages": {
-        "Message1" : "Use of the keyword '{2}' is not permitted"
+        "Message1" : "Use of the keyword '{2}' is not permitted",
+        "Message2" : "Use of the '{1}' is not permitted",
+        "Message3" : "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter",
+        "Message4" : "Use of '{1}', or any other method that mutates a List is not permitted",
+        "Message5" : "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
     },
     "FilterRules": {
         "csharp": {
@@ -50,70 +54,62 @@
         "csharp": {
             "both": [
                 [
-                    ".*(^|\\s+)(return)\\s.*",
+                    ".*(^|\\s+)(return|var|void|using|public|private|protected|class|abstract|readOnly)\\s.*",
                     "Messages.Message1"
                 ],
                 [
-                    ".*(^|\\s+)(var)\\s.*",
-                    "Messages.Message1"
-                ],
-                [
-                    ".*(^|\\s+)(void)\\s.*",
-                    "Messages.Message1"
-                ],
-                [
-                    ".*(^|\\s+)(var|using|public|private|protected|class|abstract|readOnly)\\s.*",
-                    "Messages.Message1"
-                ],
-                [
-                    "Console\\.",
-                    "Use of the Console is not permitted"
+                    "(Console\\.)",
+                    "Messages.Message2"
                 ],
                 [
                     "System\\.",
-                    "Explicit use of the System. namespace is not permitted"
+                    "Messages.Message2"
                 ],
                 [
                     "\\w*[^=]=[^(=|>)]\\w*",
-                    "Assignment, such as {match}, is not permitted. (To test for equality, use '==')"
+                    ".Messages.Message5"
                 ],
                 [
-                    "\\WArrayList\\W",
-                    "Use of {match} is not permitted"
+                    "\\W(ArrayList)\\W",
+                    "Use of ArrayList is not permitted. Use a typed list such as List<int>"
                 ],
                 [
-                    "\\Wnew\\s*Random\\W",
-                    "Use of {match} is not permitted"
-                ],
-                [
-                    "\\W*DateTime\\.Today|\\W*DateTime\\.Now",
-                    "Use of {match} is not permitted"
+                    "\\.(Add|AddRange|Clear|RemoveAll|RemoveAt|RemoveRange)\\s*\\(",
+                    "Messages.Message4"
                 ]
             ],
             "expressions": [],
-            "functions": []
+            "functions": [
+                [                  
+                    [
+                        "\\WDateTime\\.(Today|Now)\\W",
+                        "Messages.Message3"
+                    ]
+                ]
+            ]
         },
         "python": {
             "both": [
                 [
-                    "\\s*print*\\s*\\(",
-                    "Use of {match} is not permitted"
-                ],
-                [
-                    "\\s*input*\\s*\\(",
-                    "Use of {match} is not permitted"
+                    "\\s+(print|input)\\s*\\(",
+                    "Use of {1} is not permitted"
                 ],
                 [
                     "\\w*[^=]=[^=]",
-                    "Assignment statement (single '=') is not permitted"
+                    ".Messages.Message5"
                 ],
                 [
-                    "\\.append",
-                    "'append' to a List is not permitted as it is a mutating method. Hint: you may use '+' to append a list to a list."
+                    "(\\.(append|clear|extend|insert|pop|reverse|sort)\\s*\\(",
+                    "Messages.Message4"
                 ]
             ],
             "expressions": [],
-            "functions": []
+            "functions": [
+                [
+                    "\\Wdatetime\\.(today|now)\\W",
+                    "Messages.Message3"
+                ]
+            ]
         }
     }
 }
