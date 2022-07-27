@@ -70,7 +70,7 @@ export class ExpressionEvaluationComponent {
 
   onEnter() {
     this.expression = this.expression.trim();
-    if (this.expression != "") {
+    if (this.expression !== "") {
       this.result = EmptyRunResult;
       this.validationFail = this.rulesService.parse(this.selectedLanguage, Applicability.expressions,this.expression) ||
                             this.rulesService.validate(this.selectedLanguage, Applicability.expressions, this.expression);

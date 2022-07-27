@@ -5,11 +5,13 @@ import { RunResult } from '../services/run-result';
 import { of } from 'rxjs';
 
 import { FunctionDefinitionComponent } from './function-definition.component';
+import { RulesService } from '../services/rules.service';
 
 describe('FunctionDefinitionComponent', () => {
   let component: FunctionDefinitionComponent;
   let fixture: ComponentFixture<FunctionDefinitionComponent>;
   let mockJobeServerService: jasmine.SpyObj<JobeServerService>;
+  let mockRulesService: jasmine.SpyObj<RulesService>;
 
   let testRunResultOK: RunResult = {
     run_id: 'a',
@@ -38,6 +40,7 @@ describe('FunctionDefinitionComponent', () => {
 
   beforeEach(async () => {
     mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'clearFunctionDefinitions', 'setFunctionDefinitions'], {"selectedLanguage":"csharp"});
+    mockRulesService = jasmine.createSpyObj('RulesService', ['filter', 'validate', 'parse']);
 
     await TestBed.configureTestingModule({
       declarations: [ FunctionDefinitionComponent ],
@@ -45,6 +48,10 @@ describe('FunctionDefinitionComponent', () => {
         {
           provide: JobeServerService,
           useValue: mockJobeServerService
+        },
+        {
+          provide: RulesService,
+          useValue: mockRulesService
         }
       ]
     })
@@ -61,6 +68,8 @@ describe('FunctionDefinitionComponent', () => {
 
 
   it('should submit code for compile OK', () => {
+    mockRulesService.parse.and.returnValue('');
+    mockRulesService.validate.and.returnValue('');
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.functionDefinitions = 'test';
@@ -78,6 +87,9 @@ describe('FunctionDefinitionComponent', () => {
   });
 
   it('should submit code for compile Fail', () => {
+    mockRulesService.parse.and.returnValue('');
+    mockRulesService.validate.and.returnValue('');
+    mockRulesService.filter.and.returnValue('compiler error');
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultCmp));
 
     component.functionDefinitions = 'test';
@@ -95,6 +107,9 @@ describe('FunctionDefinitionComponent', () => {
   });
 
   it('should submit code for compile Error', () => {
+    mockRulesService.parse.and.returnValue('');
+    mockRulesService.validate.and.returnValue('');
+    mockRulesService.filter.and.returnValue('run error');
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultErr));
 
     component.functionDefinitions = 'test';
