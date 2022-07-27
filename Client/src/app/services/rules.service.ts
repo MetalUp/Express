@@ -27,7 +27,7 @@ interface IFilterRulesBlock {
   stderr: string
 }
 
-interface IRules {
+export interface IRules {
    "FilterRules" : IFilterRules,
    "ParsingRules" : IValidationRules,
    "ValidationRules": IValidationRules
@@ -49,7 +49,7 @@ export class RulesService {
 
   constructor(private http: HttpClient) { }
 
-  private rules: IRules = {"FilterRules" : {}, ParsingRules: {}, ValidationRules: {}};
+  rules: IRules = {"FilterRules" : {}, ParsingRules: {}, ValidationRules: {}};
 
   getRules(applicability: Applicability, rulesForLanguage: IValidationRulesBlock) {
     const applicableRules = rulesForLanguage[applicability] || [];

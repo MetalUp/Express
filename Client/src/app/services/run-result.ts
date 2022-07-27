@@ -23,14 +23,14 @@ export function errorRunResult(err : any) {
         stderr: ''
     };
 
-    if (err.message) {
+    if (err?.message) {
         eResult.stderr = err.message;
     }
     else {
         eResult.stderr = 'Unknown server error';
     }
 
-    if (err.status && (err.status < 11 || err.status > 21)) {
+    if (err?.status && (err.status < 11 || err.status > 21)) {
         eResult.outcome = err.status;
     }
 
