@@ -17,9 +17,9 @@ export enum ErrorType {
 }
 
 interface IValidationRulesBlock {
-    both: [string, string][],
-    expressions: [string, string][],
-    functions: [string, string][]
+  both: [string, string][],
+  expressions: [string, string][],
+  functions: [string, string][]
 }
 
 interface IFilterRulesBlock {
@@ -27,18 +27,25 @@ interface IFilterRulesBlock {
   stderr: string
 }
 
+const MsgPrefix = "Messages."; 
+
 export interface IRules {
-   "FilterRules" : IFilterRules,
-   "ParsingRules" : IValidationRules,
-   "ValidationRules": IValidationRules
+  "Messages": IMessages,
+  "FilterRules": IFilterRules,
+  "ParsingRules": IValidationRules,
+  "ValidationRules": IValidationRules
 }
 
 interface IFilterRules {
-  [key:string] : IFilterRulesBlock
+  [key: string]: IFilterRulesBlock
 }
 
 interface IValidationRules {
-  [key:string] : IValidationRulesBlock
+  [key: string]: IValidationRulesBlock
+}
+
+interface IMessages {
+  [key: string]: string
 }
 
 
@@ -49,72 +56,70 @@ export class RulesService {
 
   constructor(private http: HttpClient) { }
 
-  rules: IRules = {"FilterRules" : {}, ParsingRules: {}, ValidationRules: {}};
+  rules: IRules = { "Messages": {}, "FilterRules": {}, ParsingRules: {}, ValidationRules: {} };
 
-  getRules(applicability: Applicability, rulesForLanguage: IValidationRulesBlock) {
+  private getRules(applicability: Applicability, rulesForLanguage: IValidationRulesBlock) {
     const applicableRules = rulesForLanguage[applicability] || [];
     const applicableBothRules = rulesForLanguage[Applicability.both] || [];
     return applicableRules.concat(applicableBothRules);
   }
 
-  getValidationRules(language: string, applicability: Applicability) {
+  private getValidationRules(language: string, applicability: Applicability) {
     const rulesForLanguage = this.rules.ValidationRules[language] as IValidationRulesBlock || [];
     return this.getRules(applicability, rulesForLanguage);
   }
 
-  getParsingRules(language: string, applicability: Applicability) {
+  private getParsingRules(language: string, applicability: Applicability) {
     const rulesForLanguage = this.rules.ParsingRules[language] as IValidationRulesBlock || [];
     return this.getRules(applicability, rulesForLanguage);
   }
 
-  private format(toformat : string, groups: RegExpMatchArray) {
-    
+  private format(toformat: string, groups: RegExpMatchArray) {
     let i = 0;
     for (const replaceWith of groups) {
-      const ph = `{${i++}}`; 
+      const ph = `{${i++}}`;
       toformat = toformat.replace(ph, replaceWith);
     }
     return toformat;
   }
 
-  private validateRule(toValidate: string, rule : [re: string, msg: string]) {
-    const re = new RegExp(rule[0]);
-    const m =  toValidate.match(re) || [];
-    return m.length > 0 ?  this.format(rule[1], m) : '';
+  private getMessage(origMessage : string) {
+    return origMessage.startsWith(MsgPrefix) ? this.rules.Messages[origMessage.replace(MsgPrefix, '') ] || origMessage : origMessage;
   }
 
-  private parseRule(toParse: string, rule : [re: string, msg: string]) {
+  private validateRule(rs: RulesService, toValidate: string, rule: [re: string, msg: string]) {
     const re = new RegExp(rule[0]);
-    const m =  toParse.match(re) || [];
-    return m.length === 0 ? rule[1] : '';
+    const m = toValidate.match(re) || [];
+    return m.length > 0 ? rs.format(rs.getMessage(rule[1]), m) : '';
   }
 
-  public validate(language: string, applicability: Applicability, toValidate: string){
+  private parseRule(rs: RulesService, toParse: string, rule: [re: string, msg: string]) {
+    const re = new RegExp(rule[0]);
+    const m = toParse.match(re) || [];
+    return m.length === 0 ? rs.getMessage(rule[1]) : '';
+  }
+
+  private handle(rules: [string, string][], toHandle: string, handler: (rs: RulesService, a:string, b:[string, string]) => string) {
+    for (const rule of rules) {
+      const msg = handler(this, toHandle, rule);
+      if (msg) {
+        return msg;
+      }
+    }
+    return '';
+  }
+
+  public validate(language: string, applicability: Applicability, toValidate: string) {
     const rules = this.getValidationRules(language, applicability);
+    return this.handle(rules, toValidate, this.validateRule);
+  }
 
-    for(const rule of rules) {
-      const msg = this.validateRule(toValidate, rule);
-      if (msg){
-        return msg;
-      }  
-    }
-    return '';
-  } 
-
-  public parse(language: string, applicability: Applicability, toParse: string){
+  public parse(language: string, applicability: Applicability, toParse: string) {
     const rules = this.getParsingRules(language, applicability);
+    return this.handle(rules, toParse, this.parseRule);
+  }
 
-    for(const rule of rules) {
-      const msg = this.parseRule(toParse, rule);
-      if (msg){
-        return msg;
-      }  
-    }
-    return '';
-  } 
-
-
-  public filter(language: string, errorType: ErrorType, toFilter: string){
+  public filter(language: string, errorType: ErrorType, toFilter: string) {
     if (toFilter) {
       const rule = this.rules.FilterRules[language][errorType];
       const re = new RegExp(rule);
@@ -122,7 +127,7 @@ export class RulesService {
       return m ? m[0] : toFilter;
     }
     return toFilter;
-  } 
+  }
 
   load() {
 

@@ -1,4 +1,11 @@
 {
+    "Messages": {
+        "Message1" : "Use of the keyword '{2}' is not permitted",
+        "Message2" : "Use of the '{1}' is not permitted",
+        "Message3" : "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter",
+        "Message4" : "Use of '{1}', or any other method that mutates a List is not permitted",
+        "Message5" : "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
+    },
     "FilterRules": {
         "csharp": {
             "cmpinfo": "CS.*",
@@ -20,7 +27,7 @@
                 ],
                 [
                     "^.*;\\s*$",
-                        "Functions must end with the symbol ';'"
+                    "Functions must end with the symbol ';'"
                 ],
                 [
                     "^.*\\s=>\\s.*",
@@ -48,19 +55,19 @@
             "both": [
                 [
                     ".*(^|\\s+)(return|var|void|using|public|private|protected|class|abstract|readOnly)\\s.*",
-                    "Use of the keyword '{2}' is not permitted"
+                    "Messages.Message1"
                 ],
                 [
-                    "Console\\.",
-                    "Use of the Console is not permitted"
+                    "(Console\\.)",
+                    "Messages.Message2"
                 ],
                 [
                     "System\\.",
-                    "Explicit use of the 'System.' namespace is not permitted"
+                    "Messages.Message2"
                 ],
                 [
                     "\\w*[^=]=[^(=|>)]\\w*",
-                    "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
+                    ".Messages.Message5"
                 ],
                 [
                     "\\W(ArrayList)\\W",
@@ -68,7 +75,7 @@
                 ],
                 [
                     "\\.(Add|AddRange|Clear|RemoveAll|RemoveAt|RemoveRange)\\s*\\(",
-                    "Use of .{1}, or any other 'void' method that mutates a List, is not permitted. Use methods that return a new list instead"
+                    "Messages.Message4"
                 ]
             ],
             "expressions": [],
@@ -76,7 +83,7 @@
                 [                  
                     [
                         "\\WDateTime\\.(Today|Now)\\W",
-                        "Use of  {1} is not permitted here, as this would make the function dependent on a variable not passed in as a parameter"
+                        "Messages.Message3"
                     ]
                 ]
             ]
@@ -89,18 +96,18 @@
                 ],
                 [
                     "\\w*[^=]=[^=]",
-                    "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
+                    ".Messages.Message5"
                 ],
                 [
                     "(\\.(append|clear|extend|insert|pop|reverse|sort)\\s*\\(",
-                    "Use of {1}, or any other method that mutates a List is not permitted"
+                    "Messages.Message4"
                 ]
             ],
             "expressions": [],
             "functions": [
                 [
                     "\\Wdatetime\\.(today|now)\\W",
-                    "Use of 'datetime.{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter"
+                    "Messages.Message3"
                 ]
             ]
         }
