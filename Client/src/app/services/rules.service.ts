@@ -67,10 +67,20 @@ export class RulesService {
     return this.getRules(applicability, rulesForLanguage);
   }
 
+  private format(toformat : string, groups: RegExpMatchArray) {
+    
+    let i = 0;
+    for (const replaceWith of groups) {
+      const ph = `{${i++}}`; 
+      toformat = toformat.replace(ph, replaceWith);
+    }
+    return toformat;
+  }
+
   private validateRule(toValidate: string, rule : [re: string, msg: string]) {
     const re = new RegExp(rule[0]);
     const m =  toValidate.match(re) || [];
-    return m.length > 0 ? rule[1].replace("{match}", m[0]) : '';
+    return m.length > 0 ?  this.format(rule[1], m) : '';
   }
 
   private parseRule(toParse: string, rule : [re: string, msg: string]) {
