@@ -47,19 +47,7 @@
         "csharp": {
             "both": [
                 [
-                    ".*(^|\\s+)(return)\\s.*",
-                    "Use of the keyword '{2}' is not permitted"
-                ],
-                [
-                    ".*(^|\\s+)(var)\\s.*",
-                    "Use of the keyword '{2}' is not permitted"
-                ],
-                [
-                    ".*(^|\\s+)(void)\\s.*",
-                    "Use of the keyword '{2}' is not permitted"
-                ],
-                [
-                    ".*(^|\\s+)(var|using|public|private|protected|class|abstract|readOnly)\\s.*",
+                    ".*(^|\\s+)(return|var|void|using|public|private|protected|class|abstract|readOnly)\\s.*",
                     "Use of the keyword '{2}' is not permitted"
                 ],
                 [
@@ -68,49 +56,53 @@
                 ],
                 [
                     "System\\.",
-                    "Explicit use of the System. namespace is not permitted"
+                    "Explicit use of the 'System.' namespace is not permitted"
                 ],
                 [
                     "\\w*[^=]=[^(=|>)]\\w*",
-                    "Assignment, such as {match}, is not permitted. (To test for equality, use '==')"
+                    "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
                 ],
                 [
-                    "\\WArrayList\\W",
-                    "Use of {match} is not permitted"
+                    "\\W(ArrayList)\\W",
+                    "Use of ArrayList is not permitted. Use a typed list such as List<int>"
                 ],
                 [
-                    "\\Wnew\\s*Random\\W",
-                    "Use of {match} is not permitted"
-                ],
-                [
-                    "\\W*DateTime\\.Today|\\W*DateTime\\.Now",
-                    "Use of {match} is not permitted"
+                    "\\.(Add|AddRange|Clear|RemoveAll|RemoveAt|RemoveRange)\\s*\\(",
+                    "Use of .{1}, or any other 'void' method that mutates a List, is not permitted. Use methods that return a new list instead"
                 ]
             ],
             "expressions": [],
-            "functions": []
+            "functions": [
+                [                  
+                    [
+                        "\\WDateTime\\.(Today|Now)\\W",
+                        "Use of  {1} is not permitted here, as this would make the function dependent on a variable not passed in as a parameter"
+                    ]
+                ]
+            ]
         },
         "python": {
             "both": [
                 [
-                    "\\s*print*\\s*\\(",
-                    "Use of {match} is not permitted"
-                ],
-                [
-                    "\\s*input*\\s*\\(",
-                    "Use of {match} is not permitted"
+                    "\\s+(print|input)\\s*\\(",
+                    "Use of {1} is not permitted"
                 ],
                 [
                     "\\w*[^=]=[^=]",
-                    "Assignment statement (single '=') is not permitted"
+                    "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
                 ],
                 [
-                    "\\.append",
-                    "'append' to a List is not permitted as it is a mutating method. Hint: you may use '+' to append a list to a list."
+                    "(\\.(append|clear|extend|insert|pop|reverse|sort)\\s*\\(",
+                    "Use of {1}, or any other method that mutates a List is not permitted"
                 ]
             ],
             "expressions": [],
-            "functions": []
+            "functions": [
+                [
+                    "\\Wdatetime\\.(today|now)\\W",
+                    "Use of 'datetime.{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter"
+                ]
+            ]
         }
     }
 }
