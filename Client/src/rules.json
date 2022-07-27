@@ -11,9 +11,24 @@
     },
     "ParsingRules": {
         "csharp": {
-            "both": [],
-            "expressions": [],
-            "functions":[]
+            "both": [
+                [
+                    "1",
+                    "match 1"
+                ]
+            ],
+            "expressions": [ 
+                [
+                    "2",
+                    "match 2"
+                ]
+            ],
+            "functions":[
+                [
+                    "2",
+                    "match 2"
+                ]
+            ]
         },
         "python": {
             "both": [],
