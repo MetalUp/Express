@@ -44,17 +44,37 @@ describe('RulesService', () => {
     expect(filtered).toEqual(' Error: something else')
   });
 
-
+  //C# expressions
   it('should validate csharp expression - System', () => {
     const validated = service.validate(language.csharp, Applicability.expressions, "System.");
-    expect(validated).toEqual("Explicit use of the 'System' namespace is unnecessary, and not permitted");
+    expect(validated).toEqual("Use of 'System' is not permitted");
   });
 
   it('should validate csharp expression - Console', () => {
     const validated = service.validate(language.csharp, Applicability.expressions, "Console.");
-    expect(validated).toEqual("Use of  Console. is not permitted in MetalUp.Express");
+    expect(validated).toEqual("Use of 'Console' is not permitted");
   });
 
+  //Python expressions
+  it('should validate python expression - print', () => {
+    const validated = service.validate(language.python, Applicability.expressions, "something print (3) something");
+    expect(validated).toEqual("Use of 'print' is not permitted");
+  });
 
+  it('should validate python expression - input', () => {
+    const validated = service.validate(language.python, Applicability.expressions, "something input something");
+    expect(validated).toEqual("Use of 'input' is not permitted");
+  });
+
+  it('should validate python expression - assignment', () => {
+    const validated = service.validate(language.python, Applicability.expressions, "something a = 3 something");
+    expect(validated).toEqual("Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')");
+  });
+
+  //Python parsing
+  it('should parse python expression - not beginning with def', () => {
+    const parsed = service.parse(language.python, Applicability.functions, "Foo() : return 3");
+    expect(parsed).toEqual("Functions must start with the 'def' keyword followed by the function name and '('");
+  });
 
 });

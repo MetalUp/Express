@@ -1,10 +1,10 @@
 {
     "Messages": {
-        "Message1" : "Use of the keyword '{2}' is not permitted",
-        "Message2" : "Use of the '{1}' is not permitted",
-        "Message3" : "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter",
-        "Message4" : "Use of '{1}', or any other method that mutates a List is not permitted",
-        "Message5" : "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
+        "DisallowedKeyword" : "Use of the keyword '{2}' is not permitted",
+        "NotPermitted" : "Use of '{1}' is not permitted",
+        "ExternalDependency" : "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter",
+        "MutatingMethod" : "Use of '{1}', or any other method that mutates a List is not permitted",
+        "Assignment" : "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
     },
     "FilterRules": {
         "csharp": {
@@ -55,19 +55,15 @@
             "both": [
                 [
                     ".*(^|\\s+)(return|var|void|using|public|private|protected|class|abstract|readOnly)\\s.*",
-                    "Messages.Message1"
+                    "Messages.DisallowedKeyword"
                 ],
                 [
-                    "(Console\\.)",
-                    "Messages.Message2"
-                ],
-                [
-                    "System\\.",
-                    "Messages.Message2"
+                    "(Console|System)\\.",
+                    "Messages.NotPermitted"
                 ],
                 [
                     "\\w*[^=]=[^(=|>)]\\w*",
-                    ".Messages.Message5"
+                    ".Messages.Assignment"
                 ],
                 [
                     "\\W(ArrayList)\\W",
@@ -75,7 +71,7 @@
                 ],
                 [
                     "\\.(Add|AddRange|Clear|RemoveAll|RemoveAt|RemoveRange)\\s*\\(",
-                    "Messages.Message4"
+                    "Messages.MutatingMethod"
                 ]
             ],
             "expressions": [],
@@ -83,7 +79,7 @@
                 [                  
                     [
                         "\\s+DateTime\\.(Today|Now)",
-                        "Messages.Message3"
+                        "Messages.ExternalDependency"
                     ]
                 ]
             ]
@@ -92,15 +88,16 @@
             "both": [
                 [
                     "\\s+(print|input)\\s*\\(",
-                    "Use of {1} is not permitted"
-                ],
-                [
-                    "\\w*[^=]=[^=]",
-                    ".Messages.Message5"
+                    "Use of {1} is not permitted]",
+                    "Messages.NotPermitted"
                 ],
                 [
                     "\\.(append|clear|extend|insert|pop|reverse|sort)\\s*\\(",
-                    "Messages.Message4"
+                    "Messages.MutatingMethod"
+                ],
+                [
+                    "\\w*[^=]=[^(=|>)]\\w*",
+                    "Messages.Assignment"
                 ]
             ],
             "expressions": [],
