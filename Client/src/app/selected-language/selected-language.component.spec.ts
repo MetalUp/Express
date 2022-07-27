@@ -10,7 +10,7 @@ describe('SelectedLanguageComponent', () => {
   let fixture: ComponentFixture<SelectedLanguageComponent>;
   let mockJobeServerService: jasmine.SpyObj<JobeServerService>;
 
-  let testParams : any  = {};
+  let testParams: any = {};
 
   beforeEach(async () => {
     mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages']);
@@ -41,14 +41,13 @@ describe('SelectedLanguageComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  
-   it('should setup selected language', () => {
-     mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["language1", "language2"]]));
-     testParams['language'] =  'language1';
-   
-     component.ngOnInit();
+  it('should setup selected language', () => {
+    mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["language1", "language2"]]));
+    testParams['language'] = 'language1';
 
-     expect(component.selectedLanguage).toEqual("language1");
-   });
+    component.ngOnInit();
+
+    expect(component.selectedLanguage).toEqual("language1");
+  });
 
 });
