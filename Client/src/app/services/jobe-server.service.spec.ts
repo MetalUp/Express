@@ -21,7 +21,6 @@ describe('JobeServerService', () => {
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
     TestBed.configureTestingModule({});
-    //service = TestBed.inject(JobeServerService);
     service = new JobeServerService(httpClientSpy);
     service.selectedLanguage = 'stub language';
     testRunSpec = service.run_spec('stub code');
@@ -70,7 +69,7 @@ describe('JobeServerService', () => {
 
   it('should call post on /runs and return an empty result on error', () => {
     httpClientSpy.post.and.returnValue(throwError(() => { status: 404 }));
-    const unknownError = errorRunResult(null); 
+    const unknownError = errorRunResult(null);
 
     service.selectedLanguage = 'stub language';
     service.submit_run("stub code").subscribe(o => expect(o).toEqual(unknownError));

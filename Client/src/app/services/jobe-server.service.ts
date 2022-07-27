@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { RunResult, EmptyRunResult, errorRunResult } from './run-result';
+import { RunResult, errorRunResult } from './run-result';
 import { FunctionPlaceholder } from '../languages/language-helpers';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class JobeServerService {
   private functionDefinitions: string = '';
 
   // easier to test functions
-  setFunctionDefinitions(functionDefinitions : string) {
+  setFunctionDefinitions(functionDefinitions: string) {
     this.functionDefinitions = functionDefinitions;
   }
 
