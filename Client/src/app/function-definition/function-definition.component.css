@@ -1,9 +1,12 @@
 textarea {
-    width: 99%;
     background-color: transparent;
     resize: none;
     outline: none;
     border: none;
+    height: 100%;
+    width: 100%;
+    padding-bottom: 2px;
+    box-sizing: border-box;
 }
 
 button {
@@ -27,11 +30,4 @@ div.pane-body {
 
 .uncompiled {
     border: 2px solid red;
-}
-
-.function-definition {
-    display: inline-flex;
-    flex-flow: row;
-    justify-items: flex-start;
-    font-family: monospace;
 }
