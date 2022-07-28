@@ -4,14 +4,11 @@ div.pane-body {
     grid-template-rows: 1fr 1fr;
 }
 
-.half-pane {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 2fr;
-}
-
 .previous {
     background-color: #DAE3F3;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content  minmax(max-content, 1fr);
 }
 
 .expression {
@@ -19,6 +16,9 @@ div.pane-body {
     grid-template-columns: 10px 1fr;
     grid-template-rows: 1fr;
     font-family: monospace;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 textarea {
