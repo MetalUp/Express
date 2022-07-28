@@ -28,10 +28,11 @@ div.pane-header {
 div.info {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    height: 25px;
+    grid-template-rows: 21px;
+    box-sizing: border-box;
     margin-left: 2px;
     margin-right: 2px;
+    margin-bottom: 2px;
     border: 2px solid #4472C4;
 }
 
