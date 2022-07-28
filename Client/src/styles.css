@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 body {
     font-family: 'Segoe UI', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
-
 }
 
 ::placeholder {
@@ -11,7 +10,7 @@ body {
 div.pane {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: .1fr 1fr;
+    grid-template-rows: 25px 1fr;
 
     border: 2px solid #4472C4;
     margin-left: 2px;
@@ -27,23 +26,22 @@ div.pane-header {
 }
 
 div.info {
-    display: flex;
-    flex-flow: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    height: 25px;
     margin-left: 2px;
     margin-right: 2px;
     border: 2px solid #4472C4;
 }
 
 div.title {
-    position: relative;
     background-color: #4472C4;
     color: white;
-    width: 50%;
     padding-left: 5px;
 }
 
 div.data {
-    width: 50%;
     padding-left: 5px;
 }
 
