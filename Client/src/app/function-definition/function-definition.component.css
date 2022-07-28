@@ -10,7 +10,8 @@ textarea {
 }
 
 button {
-    margin: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     width: fit-content;
     height: fit-content;
 }
@@ -18,7 +19,7 @@ button {
 div.pane-body {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr .1fr .1fr;
+    grid-template-rows: 1fr min-content min-content;
     justify-items: end;
 }
 
