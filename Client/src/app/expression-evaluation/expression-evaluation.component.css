@@ -14,25 +14,20 @@ div.pane-body {
     background-color: #DAE3F3;
 }
 
-.expression,
-.result {
-    display: inline-flex;
-    flex-flow: row;
-    justify-items: flex-start;
-    flex-shrink: 0;
-    flex-grow: 1;
-    flex-basis: 100%;
-    overflow-wrap: break-word;
-    overflow-y: auto;
+.expression {
+    display: grid;
+    grid-template-columns: 10px 1fr;
+    grid-template-rows: 1fr;
     font-family: monospace;
 }
 
 textarea {
+    display: inline;
     background-color: transparent;
     resize: none;
     outline: none;
     border: none;
-    flex-shrink: 0;
-    flex-grow: 1;
-    flex-basis: max-content;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
