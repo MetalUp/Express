@@ -82,7 +82,16 @@ describe('RulesService', () => {
     expect(validated).toEqual("");
   });
 
+
+
+
   //C# functions - fails
+
+  it('should validate csharp function - braces', () => {
+    const validated = service.validate(language.csharp, Applicability.functions, "static int Sq(int x) => {x*x};");
+    expect(validated).toEqual("Functions may not include curly braces '{' or '}'");
+  });
+
   it('should parse csharp function - not static', () => {
     const validated = service.parse(language.csharp, Applicability.functions, "int Sq(int x) => x*x;");
     expect(validated).toEqual("Functions must start with the 'static' keyword");
@@ -98,10 +107,6 @@ describe('RulesService', () => {
     expect(validated).toEqual("Functions must include the symbol '=>' followed by the expression to be evaluated");
   });
 
-  it('should parse csharp function - braces', () => {
-    const validated = service.parse(language.csharp, Applicability.functions, "static int Sq(int x) => \\{x*x\\};");
-    expect(validated).toEqual("Functions may not include curly braces '{' or '{'");
-  });
 
   //C# functions - passes
   it('should parse csharp function - simple function', () => {

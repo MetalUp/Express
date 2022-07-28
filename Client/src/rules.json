@@ -1,10 +1,10 @@
 {
     "Messages": {
-        "DisallowedKeyword" : "Use of the keyword '{2}' is not permitted",
-        "NotPermitted" : "Use of '{1}' is not permitted",
-        "ExternalDependency" : "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter",
-        "MutatingMethod" : "Use of '{1}', or any other method that mutates a List is not permitted",
-        "Assignment" : "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
+        "DisallowedKeyword": "Use of the keyword '{2}' is not permitted",
+        "NotPermitted": "Use of '{1}' is not permitted",
+        "ExternalDependency": "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter",
+        "MutatingMethod": "Use of '{1}', or any other method that mutates a List is not permitted",
+        "Assignment": "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
     },
     "FilterRules": {
         "csharp": {
@@ -20,7 +20,7 @@
         "csharp": {
             "both": [],
             "expressions": [],
-            "functions":[
+            "functions": [
                 [
                     "^\\s*static\\s.*",
                     "Functions must start with the 'static' keyword"
@@ -32,17 +32,13 @@
                 [
                     "^.*;\\s*$",
                     "Functions must end with the symbol ';'"
-                ],
-                [
-                    "{|}",
-                    "Functions may not include curly braces '{' or '{'"
                 ]
             ]
         },
         "python": {
             "both": [],
             "expressions": [],
-            "functions":[
+            "functions": [
                 [
                     "^\\s*def\\s+\\w+\\s*\\(",
                     "Functions must start with the 'def' keyword followed by the function name and '('"
@@ -80,11 +76,13 @@
             ],
             "expressions": [],
             "functions": [
-                [                  
-                    [
-                        "\\s+DateTime\\.(Today|Now)",
-                        "Messages.ExternalDependency"
-                    ]
+                [
+                    "\\s+DateTime\\.(Today|Now)",
+                    "Messages.ExternalDependency"
+                ],
+                [
+                    "{|}",
+                    "Functions may not include curly braces '{' or '}'"
                 ]
             ]
         },
