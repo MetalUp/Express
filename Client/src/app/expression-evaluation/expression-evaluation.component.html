@@ -4,16 +4,16 @@
         <div class="half-pane previous">
             <div class="expression code" *ngIf="previousExpression">
                 <span class="prompt" ></span>
-                <textarea readonly rows="2">{{previousExpression}}</textarea>
+                <textarea readonly>{{previousExpression}}</textarea>
             </div>
             <div class="result">
-                <textarea readonly rows="8">{{previousExpressionResult}}</textarea>
+                <textarea readonly>{{previousExpressionResult}}</textarea>
             </div>
         </div>
         <div class="half-pane">
             <div class="expression code">
                 <span class="prompt"></span>
-                <textarea placeholder="(cursor up/down to retrieve previous expressions)" rows="10"
+                <textarea placeholder="(cursor up/down to retrieve previous expressions)"
                     [(ngModel)]="expression" (keydown)="onEnterKey($event)" (keyup.enter)="onEnter()"
                     (keyup)="onKey($event)" spellcheck="false" autofocus="autofocus"></textarea>
             </div>
