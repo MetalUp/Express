@@ -1,6 +1,6 @@
 .masthead {
     font-size: 24pt;
-    color:  #4472C4;;
+    color: var(--header-color);
 }
 
 div.ile {

@@ -1,24 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --border-color:  #4472C4;
+    --uncompiled-border-color:  red;
+    --header-color:  #4472C4;
+    --header-text-color: white;
+    --previous-expression-color:  #DAE3F3;
+    --placeholder-color:  #D9D9D9;
+}
+
 body {
     font-family: 'Segoe UI', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
 }
 
 ::placeholder {
-    color: #D9D9D9;
+    color: var(--placeholder-color);
+}
+
+textarea {
+    display: inline;
+    background-color: transparent;
+    resize: none;
+    outline: none;
+    border: none;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 div.pane {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 25px minmax(min-content, 1fr);
-    border: 2px solid #4472C4;
+    border: 2px solid var(--border-color);
     margin: 2px;
     height: 98%;
 }
 
 div.pane-header {
-    background-color: #4472C4;
-    color: white;
+    background-color: var(--header-color);
+    color: var(--header-text-color);
     padding-left: 5px;
 }
 
@@ -27,16 +47,8 @@ div.info {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 21px;
     box-sizing: border-box;
-    margin-left: 2px;
-    margin-right: 2px;
-    margin-bottom: 2px;
-    border: 2px solid #4472C4;
-}
-
-div.title {
-    background-color: #4472C4;
-    color: white;
-    padding-left: 5px;
+    border: 2px solid var(--border-color);
+    margin: 2px;
 }
 
 div.data {

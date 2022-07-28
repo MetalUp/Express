@@ -1,14 +1,3 @@
-textarea {
-    background-color: transparent;
-    resize: none;
-    outline: none;
-    border: none;
-    height: 100%;
-    width: 100%;
-    padding-bottom: 2px;
-    box-sizing: border-box;
-}
-
 button {
     margin-right: 10px;
     margin-bottom: 10px;
@@ -23,10 +12,10 @@ div.pane-body {
     justify-items: end;
 }
 
-.pane-body>div {
+div.function-definition {
     width: 100%;
 }
 
 .uncompiled {
-    border: 2px solid red;
+    border: 2px solid var(--uncompiled-border-color);
 }

@@ -4,28 +4,17 @@ div.pane-body {
     grid-template-rows: 1fr 1fr;
 }
 
-.previous {
-    background-color: #DAE3F3;
+div.previous {
+    background-color: var(--previous-expression-color);
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: min-content  minmax(max-content, 1fr);
 }
 
-.expression {
+div.expression {
     display: grid;
     grid-template-columns: 10px 1fr;
     grid-template-rows: 1fr;
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-textarea {
-    display: inline;
-    background-color: transparent;
-    resize: none;
-    outline: none;
-    border: none;
     height: 100%;
     width: 100%;
     box-sizing: border-box;
