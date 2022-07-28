@@ -10,12 +10,9 @@ body {
 div.pane {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 25px 1fr;
-
+    grid-template-rows: 25px minmax(min-content, 1fr);
     border: 2px solid #4472C4;
-    margin-left: 2px;
-    margin-right: 2px;
-    margin-bottom: 2px;
+    margin: 2px;
     height: 98%;
 }
 
@@ -52,4 +49,8 @@ span.prompt::before {
 
 .in-progress * {
     cursor: progress;
+}
+
+.code {
+    font-family: monospace;
 }
