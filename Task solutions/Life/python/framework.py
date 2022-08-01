@@ -5,15 +5,14 @@ def display(x):
     return str(x)
   else:
     try:
-         return list(iter(x))
+         return str(list(iter(x)))
     except TypeError:
          return str(x)
 
 def test_function(function_name, expected, actual, arguments):
-    argString = display(arguments)
+    argString = display(arguments).strip("[]")
     if display(actual) != display(expected):
-        print(f"Test Failed calling function {function_name}");
-        if len(arguments) > 0: print(f" with arguments: {argString}");
+        print(f"Test Failed calling function {function_name}({argString})");
         print(f"Expected: {display(expected)}  Actual: {display(actual)}");
         raise TestException
 
