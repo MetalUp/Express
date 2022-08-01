@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 export interface ITask {
   language: string;
   title: string;
+  taskHtmlFile: string;
 }
 
 @Injectable({
@@ -31,5 +33,14 @@ export class TaskService {
       task.subscribe(t => this.updateLanguage(t, taskId));
       return task;
     });
+  }
+
+  getHtml(task : ITask) {
+    const options = {
+      withCredentials: true,
+      responseType: 'text' as const
+    }
+
+    return this.http.get(`content/${task.taskHtmlFile}`, options);  
   }
 }

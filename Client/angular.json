@@ -22,7 +22,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/rules.json",
-              "src/content/task.json"
+              "src/content"
             ],
             "styles": [
               "src/styles.css"
@@ -91,7 +91,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/rules.json",
-              "src/content/task.json"
+              "src/content"
             ],
             "styles": [
               "src/styles.css"

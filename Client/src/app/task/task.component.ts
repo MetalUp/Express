@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ITask, TaskService } from '../services/task.service';
 
@@ -11,7 +12,9 @@ export class TaskComponent implements OnInit {
 
   taskId: string = ''
 
-  currentTask: ITask = { language: '', title: '' };
+  currentTask: ITask = { language: '', title: '', taskHtmlFile: '' };
+
+  innerHtml = '';
 
   constructor(private route: ActivatedRoute, private taskService: TaskService) { }
 
@@ -19,7 +22,10 @@ export class TaskComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.taskId = params['task'];
       if (this.taskId) {
-        this.taskService.load(this.taskId).subscribe(task => this.currentTask = task)
+        this.taskService.load(this.taskId).subscribe(task => {
+          this.currentTask = task;
+          this.taskService.getHtml(this.currentTask).subscribe(h => this.innerHtml = h);
+        })
       }
     });
   }
