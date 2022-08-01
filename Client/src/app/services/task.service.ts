@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmptyTask, ITask } from './task';
-import { Observable, of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

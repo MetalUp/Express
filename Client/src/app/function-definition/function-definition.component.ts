@@ -21,6 +21,7 @@ export class FunctionDefinitionComponent {
       this.skeleton = t.SkeletonCode || '';
       if (this.skeleton) {
         this.functionDefinitions = this.skeleton;
+        this.modelChanged();
       }
     })
   }
@@ -36,6 +37,10 @@ export class FunctionDefinitionComponent {
   submitting = false;
 
   skeleton = '';
+
+  get skeletonUnchanged() { 
+    return this.functionDefinitions === this.skeleton;
+  };
 
   validationFail: string = '';
 
@@ -56,6 +61,7 @@ export class FunctionDefinitionComponent {
 
   onReset() {
     this.functionDefinitions = this.skeleton;
+    this.modelChanged();
   }
 
   onSubmit() {
