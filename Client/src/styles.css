@@ -32,7 +32,6 @@ div.pane {
     grid-template-columns: 1fr;
     grid-template-rows: 25px minmax(min-content, 1fr);
     border: 2px solid var(--border-color);
-    margin: 2px;
     height: 98%;
 }
 
@@ -48,7 +47,6 @@ div.info {
     grid-template-rows: 21px;
     box-sizing: border-box;
     border: 2px solid var(--border-color);
-    margin: 2px;
 }
 
 div.data {

@@ -7,5 +7,6 @@ div.ile {
     height : 95vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: .1fr .1fr minmax(min-content, 1fr) minmax(min-content, 1fr);
+    grid-template-rows: min-content min-content minmax(min-content, 1fr) minmax(min-content, 1fr);
+    grid-gap: 5px 5px;
 }
