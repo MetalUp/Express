@@ -3,4 +3,7 @@ div.pane-body {
     grid-template-columns: 1fr;
     grid-template-rows:  minmax(100px, .5fr);
     overflow: auto;
+    font-size: 11pt;
 }
+
+
