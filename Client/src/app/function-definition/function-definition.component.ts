@@ -18,6 +18,7 @@ export class FunctionDefinitionComponent {
     taskService: TaskService) {
 
     taskService.currentSubjectTask.subscribe(t => {
+      this.canPaste = !!t.PasteFunction;
       this.skeleton = t.SkeletonCode || '';
       if (this.skeleton) {
         this.functionDefinitions = this.skeleton;
@@ -38,6 +39,8 @@ export class FunctionDefinitionComponent {
 
   skeleton = '';
 
+  private canPaste = false;
+
   get skeletonUnchanged() { 
     return this.functionDefinitions === this.skeleton;
   };
@@ -57,6 +60,12 @@ export class FunctionDefinitionComponent {
     this.result = EmptyRunResult;
     this.pendingSubmit = !!(this.functionDefinitions.trim());
     this.jobeServer.clearFunctionDefinitions();
+  }
+  
+  onPaste(event: ClipboardEvent) {
+    if(!this.canPaste) { 
+      event.preventDefault();
+    }
   }
 
   onReset() {

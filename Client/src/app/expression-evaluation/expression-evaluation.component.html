@@ -14,6 +14,7 @@
             <div class="expression code">
                 <span class="prompt"></span>
                 <textarea placeholder="(cursor up/down to retrieve previous expressions)"
+                    (paste)="onPaste($event)"
                     [(ngModel)]="expression" (keydown)="onEnterKey($event)" (keyup.enter)="onEnter()"
                     (keyup)="onKey($event)" spellcheck="false" autofocus="autofocus"></textarea>
             </div>

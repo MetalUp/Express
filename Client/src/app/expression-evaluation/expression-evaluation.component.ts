@@ -4,6 +4,7 @@ import { JobeServerService } from '../services/jobe-server.service';
 import { Applicability, ErrorType } from '../services/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-expression-evaluation',
@@ -12,8 +13,10 @@ import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-res
 })
 export class ExpressionEvaluationComponent {
 
-  constructor(private jobeServer: JobeServerService, private rulesService: RulesService) {
-    this.result = EmptyRunResult;
+  constructor(private jobeServer: JobeServerService, private rulesService: RulesService, taskService: TaskService) {
+    taskService.currentSubjectTask.subscribe(t => {
+      this.canPaste = !!t.PasteExpression;
+    })
   }
 
   submitting = false;
@@ -26,7 +29,9 @@ export class ExpressionEvaluationComponent {
 
   validationFail: string = ''
 
-  result: RunResult;
+  result: RunResult = EmptyRunResult;
+
+  private canPaste = false;
 
   get selectedLanguage() {
     return this.jobeServer.selectedLanguage;
@@ -85,6 +90,12 @@ export class ExpressionEvaluationComponent {
       else {
         this.pushExpression();
       }
+    }
+  }
+
+  onPaste(event: ClipboardEvent) {
+    if(!this.canPaste) { 
+      event.preventDefault();
     }
   }
 
