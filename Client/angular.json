@@ -21,7 +21,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/rules.json"
+              "src/rules.json",
+              "src/content/task.json"
             ],
             "styles": [
               "src/styles.css"
@@ -89,7 +90,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/rules.json"
+              "src/rules.json",
+              "src/content/task.json"
             ],
             "styles": [
               "src/styles.css"

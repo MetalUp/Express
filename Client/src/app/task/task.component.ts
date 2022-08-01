@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-task',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TaskComponent implements OnInit {
 
-  constructor() { }
+  taskId: string = ''
+
+  constructor(private route: ActivatedRoute, private task: TaskService) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.taskId = params['task'];
+      this.task.load(this.taskId);
+    });
   }
-
 }
