@@ -41,8 +41,8 @@ describe('FunctionDefinitionComponent', () => {
   beforeEach(async () => {
     mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'clearFunctionDefinitions', 'setFunctionDefinitions'], { "selectedLanguage": "csharp" });
     mockRulesService = jasmine.createSpyObj('RulesService', ['filter', 'validate', 'parse']);
-    mockRulesService.parse.and.returnValue('');
-    mockRulesService.validate.and.returnValue('');
+    mockRulesService.mustMatch.and.returnValue('');
+    mockRulesService.mustNotContain.and.returnValue('');
     mockRulesService.filter.and.callFake((_l, _e, tf) => tf);
 
     await TestBed.configureTestingModule({
@@ -152,8 +152,8 @@ describe('FunctionDefinitionComponent', () => {
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(mockRulesService.parse).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(mockRulesService.validate).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(mockRulesService.mustMatch).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(mockRulesService.mustNotContain).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
     expect(mockJobeServerService.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.compiledOK).toBe(true);
@@ -166,13 +166,13 @@ describe('FunctionDefinitionComponent', () => {
   it('should not submit on parse error', () => {
 
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    mockRulesService.parse.and.returnValue("parse fail");
+    mockRulesService.mustMatch.and.returnValue("parse fail");
 
     component.functionDefinitions = 'test';
 
     component.onSubmit();
-    expect(mockRulesService.parse).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(mockRulesService.validate).not.toHaveBeenCalled();
+    expect(mockRulesService.mustMatch).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(mockRulesService.mustNotContain).not.toHaveBeenCalled();
     expect(mockJobeServerService.submit_run).not.toHaveBeenCalled();
 
     expect(component.compiledOK).toBe(false);
@@ -186,13 +186,13 @@ describe('FunctionDefinitionComponent', () => {
   it('should not submit on validate error', () => {
 
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    mockRulesService.validate.and.returnValue("validate fail");
+    mockRulesService.mustNotContain.and.returnValue("validate fail");
 
     component.functionDefinitions = 'test';
 
     component.onSubmit();
-    expect(mockRulesService.parse).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(mockRulesService.validate).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(mockRulesService.mustMatch).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(mockRulesService.mustNotContain).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
     expect(mockJobeServerService.submit_run).not.toHaveBeenCalled();
 
     expect(component.compiledOK).toBe(false);

@@ -72,8 +72,7 @@ export class ExpressionEvaluationComponent {
     this.expression = this.expression.trim();
     if (this.expression !== "") {
       this.result = EmptyRunResult;
-      this.validationFail = this.rulesService.parse(this.selectedLanguage, Applicability.expressions, this.expression) ||
-        this.rulesService.validate(this.selectedLanguage, Applicability.expressions, this.expression);
+      this.validationFail = this.rulesService.checkRules(this.selectedLanguage, Applicability.expressions, this.expression);
       if (!this.validationFail) {
         this.submitting = true;
         const code = wrapExpression(this.selectedLanguage, this.expression);

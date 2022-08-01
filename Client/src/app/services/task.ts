@@ -5,7 +5,11 @@ export interface ITask {
     title: string;
     description: string;
     CodeMustMatch?: ICodeRulesBlock,
-    CodeMustNotContain?: ICodeRulesBlock
+    CodeMustNotContain?: ICodeRulesBlock,
+    wrappingCode?: string,
+    skeletonCode?: string;
+    pasteExpression?: boolean,
+    pasteFunction?: boolean
 }
 
 export const EmptyTask = {

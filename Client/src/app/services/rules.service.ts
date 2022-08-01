@@ -21,12 +21,12 @@ export class RulesService {
     return applicableRules.concat(applicableBothRules);
   }
 
-  private getValidationRules(language: string, applicability: Applicability) {
+  private getMustNotContainRules(language: string, applicability: Applicability) {
     const rulesForLanguage = this.rules.CodeMustNotContain[language] as ICodeRulesBlock || [];
     return this.getRules(applicability, rulesForLanguage);
   }
 
-  private getParsingRules(language: string, applicability: Applicability) {
+  private getMustMatchRules(language: string, applicability: Applicability) {
     const rulesForLanguage = this.rules.CodeMustMatch[language] as ICodeRulesBlock || [];
     return this.getRules(applicability, rulesForLanguage);
   }
@@ -55,7 +55,7 @@ export class RulesService {
   }
 
 
-  private validateRule(rs: RulesService, toValidate: string, rule: [re: string, msg: string]) {
+  private mustNotContainRule(rs: RulesService, toValidate: string, rule: [re: string, msg: string]) {
     try {
       const re = new RegExp(rule[0]);
       const m = toValidate.match(re) || [];
@@ -66,7 +66,7 @@ export class RulesService {
     }
   }
 
-  private parseRule(rs: RulesService, toParse: string, rule: [re: string, msg: string]) {
+  private mustMatchRule(rs: RulesService, toParse: string, rule: [re: string, msg: string]) {
     try {
       const re = new RegExp(rule[0]);
       const m = toParse.match(re) || [];
@@ -87,14 +87,19 @@ export class RulesService {
     return '';
   }
 
-  public validate(language: string, applicability: Applicability, toValidate: string) {
-    const rules = this.getValidationRules(language, applicability);
-    return this.handle(rules, toValidate, this.validateRule);
+  public mustNotContain(language: string, applicability: Applicability, toCheck: string) {
+    const rules = this.getMustNotContainRules(language, applicability);
+    return this.handle(rules, toCheck, this.mustNotContainRule);
   }
 
-  public parse(language: string, applicability: Applicability, toParse: string) {
-    const rules = this.getParsingRules(language, applicability);
-    return this.handle(rules, toParse, this.parseRule);
+  public mustMatch(language: string, applicability: Applicability, toCheck: string) {
+    const rules = this.getMustMatchRules(language, applicability);
+    return this.handle(rules, toCheck, this.mustMatchRule);
+  }
+
+  public checkRules(language: string, applicability: Applicability, toCheck: string) {
+    return this.mustMatch(language, applicability, toCheck) ||
+           this.mustNotContain(language, applicability, toCheck);
   }
 
   public filter(language: string, errorType: ErrorType, toFilter: string) {

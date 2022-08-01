@@ -42,8 +42,8 @@ describe('ExpressionEvaluationComponent', () => {
     mockJobeServerService.get_languages.and.returnValue(of<[string, string][]>([["1", "2"]]));
     mockRulesService = jasmine.createSpyObj('RulesService', ['filter', 'validate', 'parse']);
 
-    mockRulesService.parse.and.returnValue('');
-    mockRulesService.validate.and.returnValue('');
+    mockRulesService.mustMatch.and.returnValue('');
+    mockRulesService.mustNotContain.and.returnValue('');
     mockRulesService.filter.and.callFake((_l, _e, tf) => tf);
 
     await TestBed.configureTestingModule({
@@ -190,8 +190,8 @@ describe('ExpressionEvaluationComponent', () => {
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
-    expect(mockRulesService.parse).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
-    expect(mockRulesService.validate).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
+    expect(mockRulesService.mustMatch).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
+    expect(mockRulesService.mustNotContain).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
     expect(mockJobeServerService.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.expression).toBe('');
@@ -201,13 +201,13 @@ describe('ExpressionEvaluationComponent', () => {
   it('should not submit on parse error', () => {
 
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    mockRulesService.parse.and.returnValue("parse fail");
+    mockRulesService.mustMatch.and.returnValue("parse fail");
 
     component.expression = 'test';
 
     component.onEnter();
-    expect(mockRulesService.parse).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
-    expect(mockRulesService.validate).not.toHaveBeenCalled();
+    expect(mockRulesService.mustMatch).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
+    expect(mockRulesService.mustNotContain).not.toHaveBeenCalled();
     expect(mockJobeServerService.submit_run).not.toHaveBeenCalled();
 
     expect(component.expression).toBe('');
@@ -219,13 +219,13 @@ describe('ExpressionEvaluationComponent', () => {
   it('should not submit on validate error', () => {
 
     mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    mockRulesService.validate.and.returnValue("validate fail");
+    mockRulesService.mustNotContain.and.returnValue("validate fail");
 
     component.expression = 'test';
 
     component.onEnter();
-    expect(mockRulesService.parse).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
-    expect(mockRulesService.validate).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
+    expect(mockRulesService.mustMatch).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
+    expect(mockRulesService.mustNotContain).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
     expect(mockJobeServerService.submit_run).not.toHaveBeenCalled();
 
     expect(component.expression).toBe('');
