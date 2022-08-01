@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { Applicability, ErrorType, IRules, RulesService } from './rules.service';
+import { RulesService } from './rules.service';
 import rules from '../../rules.json';
+import { IRules, ErrorType, Applicability } from './rules';
 
 describe('RulesService', () => {
   let service: RulesService;

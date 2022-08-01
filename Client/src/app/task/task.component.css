@@ -1,0 +1,6 @@
+div.pane-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows:  minmax(100px, .5fr);
+    overflow: auto;
+}

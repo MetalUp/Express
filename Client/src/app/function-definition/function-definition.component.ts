@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { wrapFunctions } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
-import { Applicability, ErrorType, RulesService } from '../services/rules.service';
+import { Applicability, ErrorType } from '../services/rules';
+import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../services/run-result';
 
 @Component({

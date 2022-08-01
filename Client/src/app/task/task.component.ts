@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { ITask, TaskService } from '../services/task.service';
+import { EmptyTask, ITask } from '../services/task';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-task',
@@ -12,7 +12,7 @@ export class TaskComponent implements OnInit {
 
   taskId: string = ''
 
-  currentTask: ITask = { language: '', title: '', taskHtmlFile: '' };
+  currentTask: ITask = EmptyTask;
 
   innerHtml = '';
 

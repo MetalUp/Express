@@ -1,53 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Applicability, ErrorType, IRules, ICodeRulesBlock, MsgPrefix } from './rules';
 
 export function rulesFactory(rules: RulesService) {
   return () => rules.load();
 }
-
-export enum Applicability {
-  both = 'both',
-  expressions = 'expressions',
-  functions = 'functions'
-}
-
-export enum ErrorType {
-  cmpinfo = 'cmpinfo',
-  stderr = 'stderr'
-}
-
-interface IValidationRulesBlock {
-  both: [string, string][],
-  expressions: [string, string][],
-  functions: [string, string][]
-}
-
-interface IFilterRulesBlock {
-  cmpinfo: string,
-  stderr: string
-}
-
-const MsgPrefix = "Messages.";
-
-export interface IRules {
-  "Messages": IMessages,
-  "ServerResponseMessageFilters": IFilterRules,
-  "CodeMustMatch": IValidationRules,
-  "CodeMustNotContain": IValidationRules
-}
-
-interface IFilterRules {
-  [key: string]: IFilterRulesBlock
-}
-
-interface IValidationRules {
-  [key: string]: IValidationRulesBlock
-}
-
-interface IMessages {
-  [key: string]: string
-}
-
 
 @Injectable({
   providedIn: 'root'
@@ -58,19 +15,19 @@ export class RulesService {
 
   rules: IRules = { "Messages": {}, "ServerResponseMessageFilters": {}, CodeMustMatch: {}, CodeMustNotContain: {} };
 
-  private getRules(applicability: Applicability, rulesForLanguage: IValidationRulesBlock) {
+  private getRules(applicability: Applicability, rulesForLanguage: ICodeRulesBlock) {
     const applicableRules = rulesForLanguage[applicability] || [];
     const applicableBothRules = rulesForLanguage[Applicability.both] || [];
     return applicableRules.concat(applicableBothRules);
   }
 
   private getValidationRules(language: string, applicability: Applicability) {
-    const rulesForLanguage = this.rules.CodeMustNotContain[language] as IValidationRulesBlock || [];
+    const rulesForLanguage = this.rules.CodeMustNotContain[language] as ICodeRulesBlock || [];
     return this.getRules(applicability, rulesForLanguage);
   }
 
   private getParsingRules(language: string, applicability: Applicability) {
-    const rulesForLanguage = this.rules.CodeMustMatch[language] as IValidationRulesBlock || [];
+    const rulesForLanguage = this.rules.CodeMustMatch[language] as ICodeRulesBlock || [];
     return this.getRules(applicability, rulesForLanguage);
   }
 
