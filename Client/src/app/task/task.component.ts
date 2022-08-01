@@ -16,7 +16,9 @@ export class TaskComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.taskId = params['task'];
-      this.task.load(this.taskId);
+      if (this.taskId) {
+        this.task.load(this.taskId);
+      }
     });
   }
 }

@@ -24,8 +24,11 @@ export class TaskService {
 
     this.http.get<ITask>(`content/${taskId}.json`, options).subscribe(task => {
         this.task = task;
-        const url = this.router.createUrlTree([{"language": task.language}]);
-        this.router.navigateByUrl(url);
+        const params = {
+          "language": task.language,
+          "task": taskId
+        }
+        this.router.navigate(['/'], { queryParams: params });
       }
     );
   }
