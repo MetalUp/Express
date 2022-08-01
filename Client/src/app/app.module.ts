@@ -10,6 +10,7 @@ import { UserComponent } from './user/user.component';
 import { SelectedLanguageComponent } from './selected-language/selected-language.component';
 import { PlaceholderComponent } from './placeholder/placeholder.component';
 import { rulesFactory, RulesService } from './services/rules.service';
+import { TaskComponent } from './task/task.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { rulesFactory, RulesService } from './services/rules.service';
     FunctionDefinitionComponent,
     UserComponent,
     SelectedLanguageComponent,
-    PlaceholderComponent
+    PlaceholderComponent,
+    TaskComponent
   ],
   imports: [
     BrowserModule,
