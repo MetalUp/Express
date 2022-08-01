@@ -26,8 +26,7 @@ namespace Framework
             var argString = arguments.Aggregate("", (s, a) => s + Display(a) + ", ").TrimEnd(' ', ',');
             if (Display(actual) != Display(expected))
             {
-                Console.WriteLine($"Test Failed calling function {functionName}({argString})");
-                Console.WriteLine($"Expected: {Display(expected)}  Actual: {Display(actual)}");
+                Console.WriteLine($"Test failed calling function {functionName}({argString}) Expected: {Display(expected)}  Actual: {Display(actual)}");
                 throw new TestException();
             }
         }
@@ -36,8 +35,7 @@ namespace Framework
         {
             if (actual != true)
             {
-                Console.WriteLine($"Test Failed calling function {functionName}");
-                Console.WriteLine(message);
+                Console.WriteLine($"Test failed calling function {functionName} {message}");
                 throw new TestException();
             }
         }
