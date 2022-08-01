@@ -30,6 +30,10 @@ namespace ConsoleApp3
 
         static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);
 
+        //static bool WillLive(bool currentlyAlive, int liveNeighbours) => 
+        //    (currentlyAlive && liveNeighbours > 1 && liveNeighbours < 4) | (!currentlyAlive && liveNeighbours == 3);
+
+
         static bool NextCellValue(List<bool> grid, int c) => WillLive(grid[c], LiveNeighbourCount(grid, c));
 
         static List<bool> NextGeneration(List<bool> grid) => Enumerable.Range(0, size).Select(n => NextCellValue(grid, n)).ToList();

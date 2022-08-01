@@ -14,6 +14,10 @@ def liveNeighbourCount(grid, cellNo) : return len(list(filter(lambda relPos: gri
 
 def willLive(currentlyAlive, liveNeighbours) : return (liveNeighbours > 1 and liveNeighbours < 4) if currentlyAlive else liveNeighbours == 3
 
+def willLive(currentlyAlive, liveNeighbours) : 
+    return (currentlyAlive and liveNeighbours > 1 and liveNeighbours < 4) \
+            or (not currentlyAlive and liveNeighbours == 3) 
+
 def nextCellValue(grid, c) : return willLive(grid[c], liveNeighbourCount(grid, c));
 
 def nextGeneration(grid) : return list(map(lambda n : nextCellValue(grid, n), range(0, size)))
