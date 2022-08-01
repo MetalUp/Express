@@ -2,6 +2,7 @@ import { wrapCSharpExpression, wrapCSharpFunctions } from "./csharp-helpers";
 import { wrapPythonExpression, wrapPythonFunctions } from "./python-helpers";
 
 export const FunctionPlaceholder = "<<FunctionsPlaceholder>>";
+export const TaskCodePlaceholder = "<<TaskCodePlaceholder>>";
 
 export function wrapExpression(language: string, expression: string) {
     switch (language) {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Applicability, ErrorType, IRules, ICodeRulesBlock, MsgPrefix } from './rules';
+import { Applicability, ErrorType, IRules, ICodeRulesBlock, MsgPrefix, EmptyCodeRulesBlock, IMessages } from './rules';
+import { TaskService } from './task.service';
 
 export function rulesFactory(rules: RulesService) {
   return () => rules.load();
@@ -11,9 +12,10 @@ export function rulesFactory(rules: RulesService) {
 })
 export class RulesService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private taskService: TaskService) { }
 
   rules: IRules = { "Messages": {}, "ServerResponseMessageFilters": {}, CodeMustMatch: {}, CodeMustNotContain: {} };
+
 
   private getRules(applicability: Applicability, rulesForLanguage: ICodeRulesBlock) {
     const applicableRules = rulesForLanguage[applicability] || [];
@@ -22,13 +24,15 @@ export class RulesService {
   }
 
   private getMustNotContainRules(language: string, applicability: Applicability) {
-    const rulesForLanguage = this.rules.CodeMustNotContain[language] as ICodeRulesBlock || [];
-    return this.getRules(applicability, rulesForLanguage);
+    const rulesForLanguage = this.rules.CodeMustNotContain[language] || EmptyCodeRulesBlock;
+    const taskRules = this.taskService.currentTask.CodeMustNotContain || EmptyCodeRulesBlock;
+    return this.getRules(applicability, rulesForLanguage).concat(this.getRules(applicability, taskRules));
   }
 
   private getMustMatchRules(language: string, applicability: Applicability) {
-    const rulesForLanguage = this.rules.CodeMustMatch[language] as ICodeRulesBlock || [];
-    return this.getRules(applicability, rulesForLanguage);
+    const rulesForLanguage = this.rules.CodeMustMatch[language] || EmptyCodeRulesBlock;
+    const taskRules = this.taskService.currentTask.CodeMustMatch || EmptyCodeRulesBlock;
+    return this.getRules(applicability, rulesForLanguage).concat(this.getRules(applicability, taskRules));
   }
 
   private format(toformat: string, groups: RegExpMatchArray) {
@@ -40,8 +44,14 @@ export class RulesService {
     return toformat;
   }
 
+  private get taskMessages() {
+    return this.taskService.currentTask.Messages as IMessages || [];
+  }
+
   private getMessage(origMessage: string) {
-    return origMessage.startsWith(MsgPrefix) ? this.rules.Messages[origMessage.replace(MsgPrefix, '')] || origMessage : origMessage;
+    return origMessage.startsWith(MsgPrefix)
+      ? this.rules.Messages[origMessage.replace(MsgPrefix, '')] || this.taskMessages[origMessage.replace(MsgPrefix, '')] || origMessage
+      : origMessage;
   }
 
   private handleError(e: unknown, regex: string) {

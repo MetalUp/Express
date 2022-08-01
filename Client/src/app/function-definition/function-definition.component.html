@@ -6,6 +6,9 @@
                 spellcheck="false"></textarea>
         </div>
         <textarea readonly>{{currentStatus}}</textarea>
-        <button [disabled]="!pendingSubmit" (click)="onSubmit()">Submit</button>
+        <div class="button-bar">
+            <button *ngIf="!!skeleton" (click)="onReset()">Reset</button>
+            <button [disabled]="!pendingSubmit" (click)="onSubmit()">Submit</button>
+        </div>
     </div>
 </div>

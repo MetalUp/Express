@@ -1,4 +1,4 @@
-import {  FunctionPlaceholder } from "./language-helpers";
+import {  FunctionPlaceholder, TaskCodePlaceholder } from "./language-helpers";
 
 export function wrapCSharpExpression(expression : string) {
     return `
@@ -8,6 +8,7 @@ export function wrapCSharpExpression(expression : string) {
     using System.Linq;
 
     class MainWrapper {
+        ${TaskCodePlaceholder}
 
         private static string Display(object obj)
         {
@@ -73,8 +74,11 @@ export function wrapCSharpFunctions(functions : string) {
     using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
+
     
     class MainWrapper{
+        ${TaskCodePlaceholder}
+
         static void Main(string[] args) {}
     }
 

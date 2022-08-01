@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { JobeServerService } from './jobe-server.service';
-import { EmptyRunResult, errorRunResult, RunResult } from './run-result';
+import { errorRunResult, RunResult } from './run-result';
 import { of, throwError } from 'rxjs';
 import { FunctionPlaceholder } from '../languages/language-helpers';
+import { TaskService } from './task.service';
 
 describe('JobeServerService', () => {
   let service: JobeServerService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
+  let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let testRunSpec: { "run_spec": { "language_id": string, "sourcecode": string } };
   let testlanguages: [string, string][] = [["l1", "v1"]];
   let testRunResult: RunResult = {
@@ -20,8 +22,10 @@ describe('JobeServerService', () => {
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
+    taskServiceSpy = jasmine.createSpyObj('TaskService', []);
+
     TestBed.configureTestingModule({});
-    service = new JobeServerService(httpClientSpy);
+    service = new JobeServerService(httpClientSpy, taskServiceSpy);
     service.selectedLanguage = 'stub language';
     testRunSpec = service.run_spec('stub code');
   });

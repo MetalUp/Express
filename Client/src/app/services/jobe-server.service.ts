@@ -3,14 +3,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RunResult, errorRunResult } from './run-result';
-import { FunctionPlaceholder } from '../languages/language-helpers';
+import { FunctionPlaceholder, TaskCodePlaceholder } from '../languages/language-helpers';
+import { TaskService } from './task.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class JobeServerService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private taskService: TaskService) { }
 
   private ip = "http://20.82.150.165";
   path = `${this.ip}/jobe/index.php/restapi`;
@@ -33,7 +34,8 @@ export class JobeServerService {
   };
 
   run_spec(code: string) {
-    code = code.replace(FunctionPlaceholder, this.functionDefinitions);
+    code = code.replace(FunctionPlaceholder, this.functionDefinitions)
+               .replace(TaskCodePlaceholder, this.taskService.currentTask.WrappingCode || '');
     return { "run_spec": { "language_id": this.selectedLanguage, "sourcecode": code } };
   }
 

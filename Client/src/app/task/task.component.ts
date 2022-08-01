@@ -10,23 +10,17 @@ import { TaskService } from '../services/task.service';
 })
 export class TaskComponent implements OnInit {
 
-  taskId: string = ''
-
   currentTask: ITask = EmptyTask;
 
   innerHtml = '';
 
-  constructor(private route: ActivatedRoute, private taskService: TaskService) { }
+  constructor(private taskService: TaskService) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.taskId = params['task'];
-      if (this.taskId) {
-        this.taskService.load(this.taskId).subscribe(task => {
-          this.currentTask = task;
-          this.taskService.getHtml(this.currentTask).subscribe(h => this.innerHtml = h);
-        })
-      }
-    });
+
+    this.taskService.currentSubjectTask.subscribe(task => {
+      this.currentTask = task;
+      this.taskService.getHtml(this.currentTask).subscribe(h => this.innerHtml = h);
+    })
   }
 }
