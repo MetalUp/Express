@@ -13,7 +13,7 @@ export interface ITask {
   providedIn: 'root'
 })
 export class TaskService {
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   private updateLanguage(task: ITask, taskId: string) {
     const params = {

@@ -31,9 +31,9 @@ const MsgPrefix = "Messages.";
 
 export interface IRules {
   "Messages": IMessages,
-  "FilterRules": IFilterRules,
-  "ParsingRules": IValidationRules,
-  "ValidationRules": IValidationRules
+  "ServerResponseMessageFilters": IFilterRules,
+  "CodeMustMatch": IValidationRules,
+  "CodeMustNotContain": IValidationRules
 }
 
 interface IFilterRules {
@@ -56,7 +56,7 @@ export class RulesService {
 
   constructor(private http: HttpClient) { }
 
-  rules: IRules = { "Messages": {}, "FilterRules": {}, ParsingRules: {}, ValidationRules: {} };
+  rules: IRules = { "Messages": {}, "ServerResponseMessageFilters": {}, CodeMustMatch: {}, CodeMustNotContain: {} };
 
   private getRules(applicability: Applicability, rulesForLanguage: IValidationRulesBlock) {
     const applicableRules = rulesForLanguage[applicability] || [];
@@ -65,12 +65,12 @@ export class RulesService {
   }
 
   private getValidationRules(language: string, applicability: Applicability) {
-    const rulesForLanguage = this.rules.ValidationRules[language] as IValidationRulesBlock || [];
+    const rulesForLanguage = this.rules.CodeMustNotContain[language] as IValidationRulesBlock || [];
     return this.getRules(applicability, rulesForLanguage);
   }
 
   private getParsingRules(language: string, applicability: Applicability) {
-    const rulesForLanguage = this.rules.ParsingRules[language] as IValidationRulesBlock || [];
+    const rulesForLanguage = this.rules.CodeMustMatch[language] as IValidationRulesBlock || [];
     return this.getRules(applicability, rulesForLanguage);
   }
 
@@ -142,7 +142,7 @@ export class RulesService {
 
   public filter(language: string, errorType: ErrorType, toFilter: string) {
     if (toFilter) {
-      const rule = this.rules.FilterRules[language][errorType];
+      const rule = this.rules.ServerResponseMessageFilters[language][errorType];
       const re = new RegExp(rule);
       const m = re.exec(toFilter);
       return m ? m[0] : toFilter;

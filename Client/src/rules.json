@@ -6,7 +6,7 @@
         "MutatingMethod": "Use of '{1}', or any other method that mutates a List is not permitted",
         "Assignment": "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
     },
-    "FilterRules": {
+    "ServerResponseMessageFilters": {
         "csharp": {
             "cmpinfo": "CS.*",
             "stderr": "\\w+Exception"
@@ -16,7 +16,7 @@
             "stderr": "\\s\\w*Error:.*"
         }
     },
-    "ParsingRules": {
+    "CodeMustMatch": {
         "csharp": {
             "both": [],
             "expressions": [],
@@ -50,7 +50,7 @@
             ]
         }
     },
-    "ValidationRules": {
+    "CodeMustNotContain": {
         "csharp": {
             "both": [
                 [
