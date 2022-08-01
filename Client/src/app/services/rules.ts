@@ -40,3 +40,9 @@ export enum Applicability {
   export interface IMessages {
     [key: string]: string
   }
+
+  export const EmptyCodeRulesBlock = {
+    both: [],
+    expressions: [],
+    functions: []
+  }

@@ -1,19 +1,20 @@
-import { ICodeRulesBlock } from "./rules";
+import { ICodeRulesBlock, IMessages } from "./rules";
 
 export interface ITask {
-    language: string;
-    title: string;
-    description: string;
+    Language: string;
+    Title: string;
+    Description: string;
+    Messages?: IMessages,
     CodeMustMatch?: ICodeRulesBlock,
     CodeMustNotContain?: ICodeRulesBlock,
-    wrappingCode?: string,
-    skeletonCode?: string;
-    pasteExpression?: boolean,
-    pasteFunction?: boolean
+    WrappingCode?: string,
+    SkeletonCode?: string;
+    PasteExpression?: boolean,
+    PasteFunction?: boolean
 }
 
 export const EmptyTask = {
-    language: '',
-    title: '',
-    description: ''
+    Language: '',
+    Title: '',
+    Description: ''
 }

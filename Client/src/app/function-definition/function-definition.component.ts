@@ -4,6 +4,7 @@ import { JobeServerService } from '../services/jobe-server.service';
 import { Applicability, ErrorType } from '../services/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../services/run-result';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-function-definition',
@@ -12,11 +13,20 @@ import { EmptyRunResult, RunResult } from '../services/run-result';
 })
 export class FunctionDefinitionComponent {
 
-  constructor(private jobeServer: JobeServerService, private rulesService: RulesService) {
-    this.result = EmptyRunResult;
+  constructor(private jobeServer: JobeServerService,
+    private rulesService: RulesService,
+    taskService: TaskService) {
+
+    taskService.currentSubjectTask.subscribe(t => {
+      this.skeleton = t.SkeletonCode || '';
+      if (this.skeleton) {
+        this.functionDefinitions = this.skeleton;
+        this.modelChanged();
+      }
+    })
   }
 
-  result: RunResult;
+  result: RunResult = EmptyRunResult;
 
   compiledOK = false;
 
@@ -25,6 +35,12 @@ export class FunctionDefinitionComponent {
   pendingSubmit = false;
 
   submitting = false;
+
+  skeleton = '';
+
+  get skeletonUnchanged() { 
+    return this.functionDefinitions === this.skeleton;
+  };
 
   validationFail: string = '';
 
@@ -41,6 +57,11 @@ export class FunctionDefinitionComponent {
     this.result = EmptyRunResult;
     this.pendingSubmit = !!(this.functionDefinitions.trim());
     this.jobeServer.clearFunctionDefinitions();
+  }
+
+  onReset() {
+    this.functionDefinitions = this.skeleton;
+    this.modelChanged();
   }
 
   onSubmit() {

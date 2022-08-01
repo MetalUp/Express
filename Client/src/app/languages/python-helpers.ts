@@ -1,9 +1,11 @@
-import { FunctionPlaceholder } from "./language-helpers";
+import { FunctionPlaceholder, TaskCodePlaceholder } from "./language-helpers";
 
 export function wrapPythonExpression(expression : string) {
     return `
 from math import *
 from datetime import date, datetime
+
+${TaskCodePlaceholder}
 
 ${FunctionPlaceholder}
 
@@ -21,5 +23,9 @@ print (display(${expression}))
 }
 
 export function wrapPythonFunctions(functions : string) {
-    return functions;
+    return `
+${TaskCodePlaceholder}
+
+${functions}
+`;
 }

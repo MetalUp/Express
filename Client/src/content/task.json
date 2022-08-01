@@ -1,5 +1,12 @@
 {
-    "language": "csharp",
-    "title": "test task",
-    "description": "task.html"
+    "Language": "csharp",
+    "Title": "test task",
+    "Description": "task.html",
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "WrappingCode": "",
+    "SkeletonCode": "static int Double(int x) => x * x;",
+    "PasteExpression": false,
+    "PasteFunction": false
 }
