@@ -9,8 +9,6 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonApplication1", "Pytho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework", "..\Framework\csharp\Framework.csproj", "{24BE06DA-67D1-45A0-B357-6471CC78A73D}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonApplication2", "..\Framework\python\PythonApplication2\PythonApplication2.pyproj", "{87F20306-92AE-47A5-B8C0-25903C59388E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +25,6 @@ Global
 		{24BE06DA-67D1-45A0-B357-6471CC78A73D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24BE06DA-67D1-45A0-B357-6471CC78A73D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24BE06DA-67D1-45A0-B357-6471CC78A73D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87F20306-92AE-47A5-B8C0-25903C59388E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87F20306-92AE-47A5-B8C0-25903C59388E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
