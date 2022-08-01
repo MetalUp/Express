@@ -3,9 +3,9 @@ import {  FunctionPlaceholder } from "./language-helpers";
 export function wrapCSharpExpression(expression : string) {
     return `
     using System;
-    using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
 
     class MainWrapper {
 
