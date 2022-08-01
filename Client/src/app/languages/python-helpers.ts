@@ -11,12 +11,12 @@ ${FunctionPlaceholder}
 
 def display(x):
   if isinstance(x, str):
-    return x
+    return str(x)
   else:
     try:
          return list(iter(x))
     except TypeError:
-         return x
+         return str(x)
 
 print (display(${expression}))
 `;

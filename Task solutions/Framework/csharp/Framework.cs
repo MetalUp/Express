@@ -9,14 +9,9 @@ namespace Framework
     {
         public static string Display(object obj)
         {
-            if (obj == null)
-            {
-                return null;
-            }
-            if (obj is string)
-            {
-                return $"{obj}";
-            }
+            if (obj == null)  return null;
+            if (obj is string) return $"{obj}";
+            if (obj is Boolean) return (Boolean) obj ? "true" : "false";
             if (obj is IEnumerable)
             {
                 var display = ((IEnumerable)obj).Cast<object>().Select(o => Display(o));

@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using static Framework.Framework;
 
-namespace ConsoleApp3
+
+namespace CSharp
 {
     static class Life
     {
@@ -20,7 +21,7 @@ namespace ConsoleApp3
         #region Student code
 
         // Defines the *relative* positions of each of the eight neighbours to any given cell
-        static List<int> RelativeNeighbourPositions() => new List<int> { -w - 1, -w, w + 1, -1, +1, w - 1, w, w + 1 };
+        static List<int> RelativeNeighbourPositions() => new List<int> { -w - 1, -w, -w + 1, -1, +1, w - 1, w, w + 1 };
 
         // Effectively wraps the grid vertically so that top row and bottom row are neighbours
         static int KeepWithinGrid(int i) => i >= size ? i - size : i < 0 ? i + size : i;
@@ -38,8 +39,27 @@ namespace ConsoleApp3
         static List<bool> NextGeneration(List<bool> grid) => Enumerable.Range(0, size).Select(n => NextCellValue(grid, n)).ToList();
         #endregion
 
-        #region Testing
+        #region App
+        public static  void RunApp()
+        {
+            //Initialise grid with approx 33% randomly-selected live cells
+            var grid = Enumerable.Range(0, size).Select(n => rand.Next(0, 3) > 1).ToList();
 
+            while (true)
+            {
+                Console.Clear();
+                for (int i = 0; i < size; i++)
+                {
+                    Console.Write(grid[i] ? "* " : "  ");
+                    if (i % w == 0) Console.WriteLine(); //New line whenever a full row has been written
+                }
+                grid = NextGeneration(grid);
+                Thread.Sleep(500); //Delay 100 milliseconds to slow the refresh rate
+            }
+        }
+        #endregion
+
+        #region Tests
         public static void RunTests_KeepWithinGrid()
         {
             string fn = "KeepWithinGrid";
@@ -57,21 +77,22 @@ namespace ConsoleApp3
                 test(-1, 399);
                 test(-20, 380);
             }
-            catch (TestException) {} //Any other exception thrown at runtime will be uncaught and handled by server
+            catch (TestException) { } //Any other exception thrown at runtime will be uncaught and handled by server
             AllTestsPassed(fn);
         }
 
         public static void RunTests_RelativeNeighbourPositions()
         {
             string fn = "RelativeNeighbourPositions";
-            void test(bool result, string message) {
+            void test(bool result, string message)
+            {
                 AssertTrue(fn, result, message);
             }
             try
             {
                 var n = RelativeNeighbourPositions();
                 test(n.Count == 8, $"Returned list should contain 8 elements, currently has {n.Count}");
-                foreach (int val in new List<int> { -w - 1, -w, w + 1, -1, +1, w - 1, w, w + 1 })
+                foreach (int val in new List<int> { -w - 1, -w, -w + 1, -1, +1, w - 1, w, w + 1 })
                 {
                     test(n.Contains(val), $"Returned list is missing the value: {val}");
                 }
@@ -85,17 +106,17 @@ namespace ConsoleApp3
             string fn = "LiveNeighbourCount";
             void test(int p1, int expected)
             {
-                TestFunction(fn, expected, LiveNeighbourCount(testGrid, p1), p1);
+                TestFunction(fn, expected, LiveNeighbourCount(testGrid, p1),"testGrid", p1);
             }
             try
             {
-                test(0, 5);
+                test(0, 4);
                 test(19, 4);
-                test(30, 1);
+                test(30, 2);
                 test(44, 3);
                 test(59, 4);
-                test(60, 4);
-                test(399, 5);
+                test(60, 3);
+                test(399, 4);
             }
             catch (TestException) { } //Any other exception thrown at runtime will be uncaught and handled by server
             AllTestsPassed(fn);
@@ -145,10 +166,10 @@ namespace ConsoleApp3
             {
                 test(0, false);
                 test(19, false);
-                test(30, false);
+                test(30, true);
                 test(44, true);
                 test(59, false);
-                test(60, false);
+                test(60, true);
                 test(399, false);
             }
             catch (TestException) { } //Any other exception thrown at runtime will be uncaught and handled by server
@@ -158,33 +179,13 @@ namespace ConsoleApp3
         public static void RunTests_NextGeneration()
         {
             string fn = "NextGeneration";
-            List<bool> nextGen = new List<bool> { false, false, false, true, true, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, false, false, false, false, true, false, false, true, true, false, false, true, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, true, false, true, false, true, true, true, false, false, true, true, true, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, true, false, true, true, true, true, false, false, false, true, false, true, false, false, false, true, false, false, false, false, false, false, false, true, false, false, true, false, false, false, true, false, false, true, true, true, false, false, true, false, true, true, true, true, true, false, true, false, false, false, false, false, false, true, false, false, false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, false, false, true, false, true, false, true, false, false, false, false, false, false, true, false, false, true, true, false, false, false, false, true, false, true, false, false, true, false, false, true, true, false, true, false, true, false, true, false, false, true, false, false, true, true, false, false, false, false, true, false, true, false, true, false, false, false, true, false, true, true, true, false, false, false, true, false, false, true, false, false, true, false, false, false, false, false, false, false, false, true, false, true, false, false, false, true, true, true, false, false, false, false, false, false, false, false, false, true, false, true, true, false, false, false, false, true, true, true, false, true, false, true, true, true, true, false, false, true, false, false, true, true, false, true, false, true, false, false, false, true, true, true, true, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false, true, false, false, false, true, true, false, false, false, true, false, false, false, true, false, true, true, true, false, false, true, true, true, true, true, false, false, false, false, false, true, false, false, false, false, false, true, true, true, false, false, false, false, false, false, true, true, true, false, true, false, false, true, false, true, false, true, false, false, false, true, false, true, false, true, false, false, false, true, false, true, false };
+            List<bool> nextGen = new List<bool> { false, true, false, true, true, true, true, false, true, false, true, true, true, false, false, false, true, true, false, false, false, false, false, false, true, false, true, false, false, false, true, false, false, false, false, false, false, true, false, false, false, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, true, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, false, false, true, false, true, true, true, false, false, true, true, true, true, true, false, false, false, false, false, false, false, true, true, false, false, false, true, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, true, true, false, true, true, false, false, true, true, true, true, false, false, false, true, true, true, true, false, false, true, false, true, false, true, false, true, false, false, false, false, false, false, false, true, true, true, true, true, false, true, false, true, false, true, true, false, true, false, true, false, true, true, false, false, false, true, false, true, false, false, false, true, false, false, false, false, true, false, true, false, false, true, false, false, false, true, false, true, false, true, true, false, true, false, false, true, true, false, true, false, false, false, false, false, false, true, false, true, true, false, false, true, false, false, true, true, false, true, true, false, false, false, true, false, false, true, true, false, false, false, true, false, false, false, false, false, true, false, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, false, true, false, false, true, false, true, false, true, true, false, true, false, true, true, false, false, false, false, true, false, true, true, true, false, false, true, true, false, false, false, true, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true, true, true, false, false, false, true, false, false, false, true, false, false, false, false, false, false, true, false, true, false, false, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, true, true, false, false, false, true, false, true, false, true, false, false, false, true, true, true, false };
             try
             {
                 TestFunction(fn, nextGen, NextGeneration(testGrid), "testGrid");
             }
             catch (TestException) { } //Any other exception thrown at runtime will be uncaught and handled by server
             AllTestsPassed(fn);
-        }
-        #endregion
-
-        #region App
-        public static  void RunApp()
-        {
-            //Initialise grid with approx 33% randomly-selected live cells
-            var grid = Enumerable.Range(0, size).Select(n => rand.Next(0, 3) > 1).ToList();
-
-            while (true)
-            {
-                Console.Clear();
-                for (int i = 0; i < size; i++)
-                {
-                    Console.Write(grid[i] ? "* " : "  ");
-                    if (i % w == 0) Console.WriteLine(); //New line whenever a full row has been written
-                }
-                grid = NextGeneration(grid);
-                Thread.Sleep(500); //Delay 100 milliseconds to slow the refresh rate
-            }
         }
         #endregion
     }

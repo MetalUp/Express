@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>3753dc14-23ed-4476-8129-0eddccce66f4</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>PythonApplication1.py</StartupFile>
+    <StartupFile>app.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,7 +21,17 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="PythonApplication1.py" />
+    <Compile Include="app.py" />
+    <Compile Include="framework.py" />
+    <Compile Include="life.py" />
+    <Compile Include="tests.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Framework\python\PythonApplication2\PythonApplication2.pyproj">
+      <Name>PythonApplication2</Name>
+      <Project>{87f20306-92ae-47a5-b8c0-25903c59388e}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

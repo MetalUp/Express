@@ -1,4 +1,4 @@
-﻿using ConsoleApp3;
+﻿using CSharp;
 
 Life.RunTests_RelativeNeighbourPositions();
 Life.RunTests_KeepWithinGrid();
