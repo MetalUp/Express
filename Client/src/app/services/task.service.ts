@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EmptyTask, ITask } from './task';
+import { ITask } from './task';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -17,17 +17,12 @@ export class TaskService {
     });
    }
 
-  get currentSubjectTask() {
-    return this._currentSubjectTask;
-  }
-
   get currentTask() {
-    return this._currentTask;
+    return this.currentTaskAsSubject;
   }
 
-  private _currentSubjectTask = new Subject<ITask>() 
-  private _currentTask : ITask = EmptyTask; 
-
+  private currentTaskAsSubject = new Subject<ITask>() 
+  
   private updateLanguage(task: ITask, taskId: string) {
     const params = {
       "language": task.Language,
@@ -36,7 +31,7 @@ export class TaskService {
     this.router.navigate(['/'], { queryParams: params });
   }
 
-  load(taskId: string ) {
+  private load(taskId: string ) {
     const options = {
       withCredentials: true,
     }
@@ -44,8 +39,7 @@ export class TaskService {
     return this.http.get<ITask>(`content/${taskId}.json`, options).pipe(task => {
       task.subscribe(t => {
         this.updateLanguage(t, taskId);
-        this._currentSubjectTask.next(t);
-        this._currentTask = t;
+        this.currentTaskAsSubject.next(t);
       });
       return task;
     });

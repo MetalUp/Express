@@ -11,7 +11,11 @@ import { TaskService } from './task.service';
 })
 export class JobeServerService {
 
-  constructor(private http: HttpClient, private taskService: TaskService) { }
+  constructor(private http: HttpClient, taskService: TaskService) {
+    taskService.currentTask.subscribe(t => {
+      this.taskWrappingCode = t.WrappingCode || '';
+    })
+  }
 
   private ip = "http://20.82.150.165";
   path = `${this.ip}/jobe/index.php/restapi`;
@@ -19,6 +23,7 @@ export class JobeServerService {
   selectedLanguage: string = '';
 
   private functionDefinitions: string = '';
+  private taskWrappingCode: string = '';
 
   // easier to test functions
   setFunctionDefinitions(functionDefinitions: string) {
@@ -35,7 +40,7 @@ export class JobeServerService {
 
   run_spec(code: string) {
     code = code.replace(FunctionPlaceholder, this.functionDefinitions)
-               .replace(TaskCodePlaceholder, this.taskService.currentTask.WrappingCode || '');
+      .replace(TaskCodePlaceholder, this.taskWrappingCode);
     return { "run_spec": { "language_id": this.selectedLanguage, "sourcecode": code } };
   }
 

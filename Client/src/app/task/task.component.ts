@@ -18,7 +18,7 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.taskService.currentSubjectTask.subscribe(task => {
+    this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
       this.taskService.getHtml(this.currentTask).subscribe(h => this.innerHtml = h);
     })

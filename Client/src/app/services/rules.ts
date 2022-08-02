@@ -28,6 +28,12 @@ export enum Applicability {
     "CodeMustMatch": ICodeRules,
     "CodeMustNotContain": ICodeRules
   }
+
+  export interface ITaskRules {
+    "Messages": IMessages,
+    "CodeMustMatch": ICodeRulesBlock,
+    "CodeMustNotContain": ICodeRulesBlock
+  }
   
   export interface IServerResponseMessageFilters {
     [key: string]: IFilterRulesBlock
@@ -41,7 +47,7 @@ export enum Applicability {
     [key: string]: string
   }
 
-  export const EmptyCodeRulesBlock = {
+  export const EmptyCodeRulesBlock : ICodeRulesBlock = {
     both: [],
     expressions: [],
     functions: []

@@ -2,16 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { JobeServerService } from './jobe-server.service';
 import { errorRunResult, RunResult } from './run-result';
-import { of, throwError } from 'rxjs';
-import { FunctionPlaceholder } from '../languages/language-helpers';
+import { of, Subject, throwError } from 'rxjs';
+import { FunctionPlaceholder, TaskCodePlaceholder } from '../languages/language-helpers';
 import { TaskService } from './task.service';
-import { EmptyTask } from './task';
+import { ITask } from './task';
 
 describe('JobeServerService', () => {
   let service: JobeServerService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let mockTaskService;
+  let taskSubject = new Subject<ITask>();
 
   let testRunSpec: { "run_spec": { "language_id": string, "sourcecode": string } };
   let testlanguages: [string, string][] = [["l1", "v1"]];
@@ -25,11 +25,10 @@ describe('JobeServerService', () => {
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
-    //taskServiceSpy = jasmine.createSpyObj('TaskService', []);
-    mockTaskService = {currentTask: EmptyTask  };
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
 
     TestBed.configureTestingModule({});
-    service = new JobeServerService(httpClientSpy, mockTaskService as TaskService);
+    service = new JobeServerService(httpClientSpy, taskServiceSpy);
     service.selectedLanguage = 'stub language';
     testRunSpec = service.run_spec('stub code');
   });
@@ -74,6 +73,34 @@ describe('JobeServerService', () => {
       jasmine.any(Object));
   });
 
+  it('should call post on /runs including any task wrapping code', () => {
+    httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));
+    taskSubject.next({ WrappingCode: "additional task code " } as ITask);
+
+    service.selectedLanguage = 'stub language';
+    service.setFunctionDefinitions('test definitions ');
+
+    service.submit_run(`${FunctionPlaceholder}${TaskCodePlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+
+    testRunSpec.run_spec.sourcecode = 'test definitions additional task code stub code';
+
+    expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
+      Object(testRunSpec),
+      jasmine.any(Object));
+  });
+
+  it('should call post on /runs excluding empty task wrapping code', () => {
+    httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));
+    service.selectedLanguage = 'stub language';
+    service.clearFunctionDefinitions();
+
+    service.submit_run(`${FunctionPlaceholder}${TaskCodePlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+
+    expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
+      Object(testRunSpec),
+      jasmine.any(Object));
+  });
+
 
   it('should call post on /runs and return an empty result on error', () => {
     httpClientSpy.post.and.returnValue(throwError(() => { status: 404 }));
@@ -86,7 +113,6 @@ describe('JobeServerService', () => {
       Object(testRunSpec),
       jasmine.any(Object));
   });
-
 
   it('should call get on /languages', () => {
     httpClientSpy.get.and.returnValue(of<[string, string][]>(testlanguages));

@@ -50,7 +50,7 @@ describe('ExpressionEvaluationComponent', () => {
     rulesServiceSpy.checkRules.and.returnValue('');
     rulesServiceSpy.filter.and.callFake((_l, _e, tf) => tf);
 
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentSubjectTask: taskSubject });
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
 
     await TestBed.configureTestingModule({
       declarations: [ExpressionEvaluationComponent],
