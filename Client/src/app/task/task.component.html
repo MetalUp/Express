@@ -1,7 +1,17 @@
-<div class="pane">
-    <div class="pane-header">Task: {{currentTask.Title}}</div>
-    <div class="pane-body">
-        <div class="task" [innerHtml]="innerHtml"></div>
+<div class="pane-group">
+    <div class="pane">
+        <div class="pane-header">Task: {{currentTask.Title}}</div>
+        <div class="pane-body">
+            <div class="task" [innerHtml]="innerHtml"></div>
+            <div class="button-bar">
+                <button (click)="onHint()">Hint 1</button>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="innerHintHtml" class="pane">
+        <div class="pane-header">Hint</div>
+        <div class="pane-body">
+            <div class="hint" [innerHtml]="innerHintHtml"></div>
+        </div>
     </div>
 </div>
-

@@ -4,6 +4,7 @@ export interface ITask {
     Language: string;
     Title: string;
     Description: string;
+    Hints: string[];
     Messages?: IMessages,
     CodeMustMatch?: ICodeRulesBlock,
     CodeMustNotContain?: ICodeRulesBlock,
@@ -16,5 +17,6 @@ export interface ITask {
 export const EmptyTask = {
     Language: '',
     Title: '',
-    Description: ''
+    Description: '',
+    Hints: []
 }

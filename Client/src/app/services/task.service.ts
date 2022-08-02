@@ -42,12 +42,12 @@ export class TaskService {
     });
   }
 
-  getHtml(task: ITask) {
+  getHtml(fileName: string) {
     const options = {
       withCredentials: true,
       responseType: 'text' as const
     }
 
-    return this.http.get(`content/${task.Description}`, options);
+    return this.http.get(`content/${fileName}`, options);
   }
 }

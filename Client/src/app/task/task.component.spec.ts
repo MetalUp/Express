@@ -40,7 +40,7 @@ describe('TaskComponent', () => {
     const testTask = { Description: 'testfile.html' } as unknown as ITask;
     taskSubject.next(testTask);
 
-    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith(testTask);
+    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('testfile.html');
     expect(component.currentTask).toEqual(testTask);
     expect(component.innerHtml).toEqual('test html');
   });

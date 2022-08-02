@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { FunctionDefinitionComponent } from './function-definition/function-definition.component';
 import { UserComponent } from './user/user.component';
 import { SelectedLanguageComponent } from './selected-language/selected-language.component';
-import { PlaceholderComponent } from './placeholder/placeholder.component';
 import { rulesFactory, RulesService } from './services/rules.service';
 import { TaskComponent } from './task/task.component';
 
@@ -19,7 +18,6 @@ import { TaskComponent } from './task/task.component';
     FunctionDefinitionComponent,
     UserComponent,
     SelectedLanguageComponent,
-    PlaceholderComponent,
     TaskComponent
   ],
   imports: [
