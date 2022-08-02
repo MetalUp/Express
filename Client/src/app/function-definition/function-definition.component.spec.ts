@@ -16,6 +16,7 @@ describe('FunctionDefinitionComponent', () => {
   let jobeServerServiceSpy: jasmine.SpyObj<JobeServerService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
+  let taskSubject = new Subject<ITask>();
 
   let testRunResultOK: RunResult = {
     run_id: 'a',
@@ -44,12 +45,12 @@ describe('FunctionDefinitionComponent', () => {
 
   beforeEach(async () => {
     jobeServerServiceSpy = jasmine.createSpyObj('JobeServerService', ['submit_run', 'clearFunctionDefinitions', 'setFunctionDefinitions'], { "selectedLanguage": "csharp" });
-    
+
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
     rulesServiceSpy.checkRules.and.returnValue('');
     rulesServiceSpy.filter.and.callFake((_l, _e, tf) => tf);
 
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], {currentSubjectTask: new Subject<ITask>() });
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentSubjectTask: taskSubject });
 
     await TestBed.configureTestingModule({
       declarations: [FunctionDefinitionComponent],
@@ -128,9 +129,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.pendingSubmit).toBe(false);
 
     expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
-
   });
-
 
   it('should clear code when changed', () => {
     component.functionDefinitions = 'test';
@@ -154,7 +153,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(jobeServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
   });
 
-  it('should call parse and validate on enter', () => {
+  it('should call checkRules on enter', () => {
 
     jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
@@ -172,10 +171,10 @@ describe('FunctionDefinitionComponent', () => {
     expect(jobeServerServiceSpy.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
   });
 
-  it('should not submit on parse error', () => {
+  it('should not submit on checkRules error', () => {
 
     jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    rulesServiceSpy.checkRules.and.returnValue("parse fail");
+    rulesServiceSpy.checkRules.and.returnValue("rules fail");
 
     component.functionDefinitions = 'test';
 
@@ -184,29 +183,72 @@ describe('FunctionDefinitionComponent', () => {
     expect(jobeServerServiceSpy.submit_run).not.toHaveBeenCalled();
 
     expect(component.compiledOK).toBe(false);
-    expect(component.currentStatus).toBe('parse fail');
+    expect(component.currentStatus).toBe('rules fail');
     expect(component.pendingSubmit).toBe(false);
 
     expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
   });
 
 
-  it('should not submit on validate error', () => {
+  it('should disable paste by default', () => {
 
-    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    rulesServiceSpy.checkRules.and.returnValue("validate fail");
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
 
-    component.functionDefinitions = 'test';
-
-    component.onSubmit();
-    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(jobeServerServiceSpy.submit_run).not.toHaveBeenCalled();
-
-    expect(component.compiledOK).toBe(false);
-    expect(component.currentStatus).toBe('validate fail');
-    expect(component.pendingSubmit).toBe(false);
-
-    expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).toHaveBeenCalled();
   });
 
+  it('should enable paste from task', () => {
+
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    taskSubject.next({ PasteFunction: true } as ITask);
+
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).not.toHaveBeenCalled();
+  });
+
+  it('should disable paste from task', () => {
+
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    taskSubject.next({ PasteFunction: false } as ITask);
+
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).toHaveBeenCalled();
+  });
+
+  it('should show no code by default and disable Reset button', () => {
+
+    expect(component.functionDefinitions).toEqual('');
+    expect(component.skeleton).toEqual('');
+  });
+
+  it('should show skeleton code from task and enable Reset button', () => {
+
+    taskSubject.next({ SkeletonCode: 'demo skeleton code' } as ITask);
+
+    expect(component.functionDefinitions).toEqual('demo skeleton code');
+    expect(component.skeleton).toEqual('demo skeleton code');
+    expect(component.skeletonUnchanged).toBe(true);
+  });
+
+  it('should reset skeleton code on reset button', () => {
+
+    taskSubject.next({ SkeletonCode: 'demo skeleton code' } as ITask);
+
+    expect(component.functionDefinitions).toEqual('demo skeleton code');
+    expect(component.skeleton).toEqual('demo skeleton code');
+    expect(component.skeletonUnchanged).toBe(true);
+
+    component.functionDefinitions = 'updated code';
+
+    expect(component.functionDefinitions).toEqual('updated code');
+    expect(component.skeleton).toEqual('demo skeleton code');
+    expect(component.skeletonUnchanged).toBe(false);
+
+    component.onReset();
+
+    expect(component.functionDefinitions).toEqual('demo skeleton code');
+    expect(component.skeleton).toEqual('demo skeleton code');
+    expect(component.skeletonUnchanged).toBe(true);
+  });
 });
