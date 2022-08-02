@@ -40,7 +40,7 @@ describe('TaskService', () => {
 
   it('should get the html file for the task', () => {
 
-    service.getHtml({ Description: 'testHtmlFile.html' } as unknown as ITask);
+    service.getHtml('testHtmlFile.html');
 
     const parms = { withCredentials: true, responseType: 'text' as const };
 

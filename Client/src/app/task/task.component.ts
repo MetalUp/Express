@@ -14,14 +14,29 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   innerHtml = '';
 
+  get innerHintHtml() {
+    return this.currentHint;
+  }
+
+  private currentHint = '';
+
   constructor(private taskService: TaskService) { }
 
   private sub?: Subscription;
 
+  onHint() {
+    const hint = this.currentTask.Hints[0];
+
+    if (hint) {
+      this.taskService.getHtml(hint).subscribe(h => this.currentHint = h);
+    }
+  }
+
+
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.taskService.getHtml(this.currentTask).subscribe(h => this.innerHtml = h);
+      this.taskService.getHtml(this.currentTask.Description).subscribe(h => this.innerHtml = h);
     })
   }
 

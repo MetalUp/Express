@@ -1,14 +1,4 @@
-.button-bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    direction: rtl;
-}
 
-button {
-    margin-right: 10px;
-    margin-bottom: 10px;
-}
 
 
 div.pane-body {
