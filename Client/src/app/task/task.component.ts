@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmptyTask, ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.css']
 })
-export class TaskComponent implements OnInit {
+export class TaskComponent implements OnInit, OnDestroy {
 
   currentTask: ITask = EmptyTask;
 
@@ -16,11 +16,18 @@ export class TaskComponent implements OnInit {
 
   constructor(private taskService: TaskService) { }
 
-  ngOnInit(): void {
+  private sub?: Subscription;
 
-    this.taskService.currentTask.subscribe(task => {
+  ngOnInit(): void {
+    this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
       this.taskService.getHtml(this.currentTask).subscribe(h => this.innerHtml = h);
     })
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 }

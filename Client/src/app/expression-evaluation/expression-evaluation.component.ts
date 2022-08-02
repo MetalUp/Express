@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { wrapExpression } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { Applicability, ErrorType } from '../services/rules';
@@ -11,12 +12,12 @@ import { TaskService } from '../services/task.service';
   templateUrl: './expression-evaluation.component.html',
   styleUrls: ['./expression-evaluation.component.css']
 })
-export class ExpressionEvaluationComponent {
+export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
-  constructor(private jobeServer: JobeServerService, private rulesService: RulesService, taskService: TaskService) {
-    taskService.currentTask.subscribe(t => {
-      this.canPaste = !!t.PasteExpression;
-    })
+  constructor(
+    private jobeServer: JobeServerService,
+    private rulesService: RulesService,
+    private taskService: TaskService) {
   }
 
   submitting = false;
@@ -127,6 +128,20 @@ export class ExpressionEvaluationComponent {
     else {
       this.previousExpressionIndex = this.previousExpressionIndex + 1;
       this.expression = this.previousExpressions[this.previousExpressionIndex][0].trim();
+    }
+  }
+
+  private sub?: Subscription;
+
+  ngOnInit(): void {
+    this.sub = this.taskService.currentTask.subscribe(t => {
+      this.canPaste = !!t.PasteExpression;
+    })
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
   }
 }

@@ -1,31 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { wrapFunctions } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { Applicability, ErrorType } from '../services/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../services/run-result';
 import { TaskService } from '../services/task.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-function-definition',
   templateUrl: './function-definition.component.html',
   styleUrls: ['./function-definition.component.css']
 })
-export class FunctionDefinitionComponent {
+export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   constructor(
     private jobeServer: JobeServerService,
     private rulesService: RulesService,
-    taskService: TaskService) {
-
-    taskService.currentTask.subscribe(t => {
-      this.canPaste = !!t.PasteFunction;
-      this.skeleton = t.SkeletonCode || '';
-      if (this.skeleton) {
-        this.functionDefinitions = this.skeleton;
-        this.modelChanged();
-      }
-    })
+    private taskService: TaskService) {
   }
 
   result: RunResult = EmptyRunResult;
@@ -89,6 +81,25 @@ export class FunctionDefinitionComponent {
         }
         this.submitting = false;
       });
+    }
+  }
+
+  private sub?: Subscription;
+
+  ngOnInit(): void {
+    this.sub = this.taskService.currentTask.subscribe(t => {
+      this.canPaste = !!t.PasteFunction;
+      this.skeleton = t.SkeletonCode || '';
+      if (this.skeleton) {
+        this.functionDefinitions = this.skeleton;
+        this.modelChanged();
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
   }
 }
