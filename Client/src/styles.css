@@ -65,6 +65,11 @@ span.prompt::before {
     font-family: monospace;
 }
 
+.field {
+    font-family: monospace;
+    color: grey;
+}
+
 .python .csharp {
     display:none;
 }
@@ -74,6 +79,7 @@ span.prompt::before {
 }
 
 code {
+    font-family: monospace;
     font-size: 11pt;
     color:cornflowerblue;
 }
