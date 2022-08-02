@@ -13,8 +13,8 @@
         <div class="pane-body">
             <div class="hint" [innerHtml]="innerHintHtml"></div>
             <div class="button-bar">
-                <button [disabled]="!hasPreviousHint()" (click)="onPreviousHint()">Previous</button>
                 <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
+                <button [disabled]="!hasPreviousHint()" (click)="onPreviousHint()">Previous</button>
             </div>
         </div>
     </div>
