@@ -1,12 +1,28 @@
 {
     "Language": "csharp",
-    "Title": "Conway's Game of Life - Part I",
+    "Title": "Conway's Game of Life - Part 1",
     "Description": "life_1.html",
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
     "WrappingCode": "",
-    "SkeletonCode": "static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);",
+    "SkeletonCode": "",
     "PasteExpression": false,
-    "PasteFunction": false
+    "PasteFunction": false,
+    "Tests": "public static void RunTests_NeighbourCells()
+    {
+        string fn = nameof(NeighbourCells);
+        void test(int cell, List<int> expected)
+        {
+            var n = NeighbourCells(cell);
+            var fail = $"Test failed calling function {fn}({cell}).";
+            AssertTrue(fn, cell.ToString(), n.Count == 8,   fail + $" Expected: 8 elements Actual: {n.Count}");
+            foreach (int val in expected)
+            {
+                AssertTrue(fn, cell.ToString(), n.Contains(val), fail + $" List does not contain: {val}");
+            }
+        }
+        test(30, new List<int> { 9, 10, 11, 29, 31, 49, 50, 51 });
+        AllTestsPassed(fn);
+    }"
 }

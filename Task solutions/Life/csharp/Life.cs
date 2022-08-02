@@ -10,23 +10,22 @@ namespace CSharp
     static class Life
     {
         #region Data definitions and other hidden task-specific code
-        const int size = 400; //Total number of cells in grid
-        const int w = 20; //Number of cells horizontally
-
         static Random rand = new Random();
         static List<bool> testGrid = new List<bool> { false, true, false, true, false, false, true, true, true, false, false, true, true, false, true, true, false, false, true, true, true, true, true, true, false, false, true, false, true, true, true, false, true, true, true, true, false, true, false, true, false, false, true, true, false, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, true, false, false, true, false, false, true, false, false, true, true, false, false, false, true, true, false, false, true, true, false, true, true, true, true, false, false, false, false, false, false, false, false, true, true, false, true, false, false, true, true, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, false, true, false, false, true, true, false, true, false, true, true, false, false, false, false, false, true, false, false, true, false, true, false, true, false, true, false, true, false, false, true, false, true, false, true, false, false, true, false, false, true, true, false, true, false, false, true, false, true, false, true, true, false, false, false, false, true, false, false, true, false, false, false, false, true, false, false, false, true, false, true, false, true, false, false, false, false, false, true, true, false, true, true, false, false, false, false, false, true, false, false, true, true, true, false, false, false, true, false, true, false, false, true, true, false, true, false, true, false, true, false, false, true, false, true, false, true, false, true, false, false, false, true, false, false, false, true, false, true, false, true, false, false, true, false, false, false, false, false, false, false, false, false, false, true, true, true, false, false, true, false, true, false, false, true, false, true, false, true, false, false, false, false, false, true, false, true, false, false, false, false, true, true, false, false, true, true, false, true, true, false, true, true, false, true, false, false, true, false, true, false, false, true, false, true, true, false, false, false, false, false, true, true, false, false, false, true, true, true, false, false, false, true, true, false, true, true, true, false, false, false, true, false, true, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, true, true, false, true, false, false, true, true, false, false, true, true, true, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, true, false, false, false, true, false };
+
+
 
         #endregion
 
         #region Student code
 
-        // Defines the *relative* positions of each of the eight neighbours to any given cell
-        static List<int> RelativeNeighbourPositions() => new List<int> { -w - 1, -w, -w + 1, -1, +1, w - 1, w, w + 1 };
-
+        static List<int> NeighbourCells(int c) => new List<int> { c-21, c-20, c-19, c-1, c+1, c+19, c+20, c+21 };
+        static List<int> AdjustedNeighbourCells(int c) =>NeighbourCells(c).Select(x => KeepWithinBounds(x)).ToList();
+        
         // Effectively wraps the grid vertically so that top row and bottom row are neighbours
-        static int KeepWithinBounds(int i) => i >= size ? i - size : i < 0 ? i + size : i;
+        static int KeepWithinBounds(int i) => i >= 400 ? i - 400 : i < 0 ? i + 400 : i;
 
-        static int LiveNeighbourCount(List<bool> grid, int cellNo) => RelativeNeighbourPositions().Count(relPos => grid[KeepWithinBounds(cellNo + relPos)] is true);
+        static int LiveNeighbours(List<bool> grid, int c) =>AdjustedNeighbourCells(c).Count(i => grid[i] is true);
 
         static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);
 
@@ -34,24 +33,24 @@ namespace CSharp
         //    (currentlyAlive && liveNeighbours > 1 && liveNeighbours < 4) | (!currentlyAlive && liveNeighbours == 3);
 
 
-        static bool NextCellValue(List<bool> grid, int c) => WillLive(grid[c], LiveNeighbourCount(grid, c));
+        static bool NextCellValue(List<bool> grid, int c) => WillLive(grid[c], LiveNeighbours(grid, c));
 
-        static List<bool> NextGeneration(List<bool> grid) => Enumerable.Range(0, size).Select(n => NextCellValue(grid, n)).ToList();
+        static List<bool> NextGeneration(List<bool> grid) => Enumerable.Range(0, 400).Select(n => NextCellValue(grid, n)).ToList();
         #endregion
 
         #region App
         public static void RunApp()
         {
             //Initialise grid with approx 33% randomly-selected live cells
-            var grid = Enumerable.Range(0, size).Select(n => rand.Next(0, 3) > 1).ToList();
+            var grid = Enumerable.Range(0, 400).Select(n => rand.Next(0, 3) > 1).ToList();
 
             while (true)
             {
                 Console.Clear();
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < 400; i++)
                 {
                     Console.Write(grid[i] ? "* " : "  ");
-                    if (i % w == 0) Console.WriteLine(); //New line whenever a full row has been written
+                    if (i % 20 == 0) Console.WriteLine(); //New line whenever a full row has been written
                 }
                 grid = NextGeneration(grid);
                 Thread.Sleep(500); //Delay 100 milliseconds to slow the refresh rate
@@ -60,9 +59,28 @@ namespace CSharp
         #endregion
 
         #region Tests
-        public static void RunTests_KeepWithinGrid()
+
+
+        public static void RunTests_NeighbourCells()
         {
-            string fn = "KeepWithinGrid";
+            string fn = nameof(NeighbourCells);
+            void test(int cell, List<int> expected)
+            {
+                var n = NeighbourCells(cell);
+                var msg = fail +$"{fn}({cell}).";
+                AssertTrue(fn, cell.ToString(), n.Count == 8,   msg + $" Expected: 8 elements Actual: {n.Count}");
+                foreach (int val in expected)
+                {
+                    AssertTrue(fn, cell.ToString(), n.Contains(val), msg + $" List does not contain: {val}");
+                }
+            }
+            test(30, new List<int> { 9, 10, 11, 29, 31, 49, 50, 51 });
+            AllTestsPassed(fn);
+        }
+
+        public static void RunTests_KeepWithinBounds()
+        {
+            string fn = nameof(KeepWithinBounds);
             void test(int p1, int expected)
             {
                 TestFunction(fn, expected, KeepWithinBounds(p1), p1);
@@ -77,19 +95,22 @@ namespace CSharp
             AllTestsPassed(fn);
         }
 
-        public static void RunTests_RelativeNeighbourPositions()
+        public static void RunTests_AdjustedNeighbourCells()
         {
-            string fn = "RelativeNeighbourPositions";
-            void test(bool result, string message)
+            string fn = nameof(AdjustedNeighbourCells);
+            void test(int cell, List<int> expected)
             {
-                AssertTrue(fn, result, message);
+                var n = AdjustedNeighbourCells(cell);
+                AssertTrue(fn, cell.ToString(), n.Count == 8, $" Expected: 8 elements Actual: {n.Count}");
+                foreach (int val in expected)
+                {
+                    AssertTrue(fn, cell.ToString(), n.Contains(val),$"List does not contain: {val}");
+                }
             }
-            var n = RelativeNeighbourPositions();
-            test(n.Count == 8, $"Returned list should contain 8 elements, currently has {n.Count}");
-            foreach (int val in new List<int> { -w - 1, -w, -w + 1, -1, +1, w - 1, w, w + 1 })
-            {
-                test(n.Contains(val), $"Returned list is missing the value: {val}");
-            }
+            test(399, new List<int> { 378, 379, 380, 398, 0, 18, 19, 20 });
+            test(380, new List<int> { 359, 360, 361, 379, 381, 399, 0,1 });
+            test(0, new List<int> { 379, 380, 381, 399, 1, 19, 20, 21 });
+            test(19, new List<int> { 398, 399, 0, 18, 20, 38, 39, 40 });
             AllTestsPassed(fn);
         }
 
@@ -98,7 +119,7 @@ namespace CSharp
             string fn = "LiveNeighbourCount";
             void test(int p1, int expected)
             {
-                TestFunction(fn, expected, LiveNeighbourCount(testGrid, p1), "testGrid", p1);
+                TestFunction(fn, expected, LiveNeighbours(testGrid, p1), "testGrid", p1);
             }
             test(0, 4);
             test(19, 4);

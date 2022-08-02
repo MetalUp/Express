@@ -1,7 +1,8 @@
 ﻿using CSharp;
 
-Life.RunTests_RelativeNeighbourPositions();
-Life.RunTests_KeepWithinGrid();
+Life.RunTests_NeighbourCells();
+Life.RunTests_KeepWithinBounds();
+Life.RunTests_AdjustedNeighbourCells();
 Life.RunTests_LiveNeighbourCount();
 Life.RunTests_WillLive();
 Life.RunTests_NextCellValue();
