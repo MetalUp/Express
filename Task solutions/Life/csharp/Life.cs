@@ -24,9 +24,9 @@ namespace CSharp
         static List<int> RelativeNeighbourPositions() => new List<int> { -w - 1, -w, -w + 1, -1, +1, w - 1, w, w + 1 };
 
         // Effectively wraps the grid vertically so that top row and bottom row are neighbours
-        static int KeepWithinGrid(int i) => i >= size ? i - size : i < 0 ? i + size : i;
+        static int KeepWithinBounds(int i) => i >= size ? i - size : i < 0 ? i + size : i;
 
-        static int LiveNeighbourCount(List<bool> grid, int cellNo) => RelativeNeighbourPositions().Count(relPos => grid[KeepWithinGrid(cellNo + relPos)] is true);
+        static int LiveNeighbourCount(List<bool> grid, int cellNo) => RelativeNeighbourPositions().Count(relPos => grid[KeepWithinBounds(cellNo + relPos)] is true);
 
         static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);
 
@@ -65,7 +65,7 @@ namespace CSharp
             string fn = "KeepWithinGrid";
             void test(int p1, int expected)
             {
-                TestFunction(fn, expected, KeepWithinGrid(p1), p1);
+                TestFunction(fn, expected, KeepWithinBounds(p1), p1);
             }
             test(399, 399);
             test(400, 0);
