@@ -26,20 +26,22 @@ def run_tests_will_live() :
     all_tests_passed(fn)
 
 
-def run_tests_relative_neighbour_positions() :
-    fn = "relative_neighbour_positions"
-    def test(result, message) :
-        assert_true(fn, result, message)
-    n = relative_neighbour_positions;
-    test(len(n) == 8, f"Returned list should contain 8 elements, currently has {len(n)}")
-    for val in [-w - 1, -w, -w + 1, -1, +1, w - 1, w, w + 1 ] :
-        test(val in n, f"Returned list is missing the value: {val}")
+def run_tests_neighbour_cells() :
+    fn = "neighbour_cells"
+    def test(cell, expected) :
+        n = neighbour_cells(cell)
+        msg = fail +f"{fn}({cell})."
+        assert_true(fn, cell, len(n) == 8, msg + f" Expected: 8 elements Actual: {len(n)}")
+        for val in expected :
+            assert_true(fn, cell, val in n, msg + f" List does not contain: {val}")
+        
+    test(30, [ 9, 10, 11, 29, 31, 49, 50, 51 ])
     all_tests_passed(fn)
 
-def run_tests_keep_within_grid() :
-    fn = keep_within_grid.__name__
+def run_tests_keep_within_bounds() :
+    fn = keep_within_bounds.__name__
     def test(p1, expected):
-        test_function(fn, expected, keep_within_grid(p1), [p1])
+        test_function(fn, expected, keep_within_bounds(p1), [p1])
     test(399, 399)
     test(400, 0)
     test(401, 1)
@@ -49,10 +51,25 @@ def run_tests_keep_within_grid() :
     test(-20, 380)
     all_tests_passed(fn)
 
-def run_tests_live_neighbour_count() :
-    fn = live_neighbour_count.__name__
+def run_tests_adjusted_neighbour_cells() :
+    fn = adjusted_neighbour_cells.__name__
+    def test(cell, expected) :
+        n = adjusted_neighbour_cells(cell)
+        msg = fail +f"{fn}({cell})."
+        assert_true(fn, cell, len(n) == 8, msg + f" Expected: 8 elements Actual: {len(n)}")
+        for val in expected :
+            assert_true(fn, cell, val in n, msg + f" List does not contain: {val}")
+        
+    test(399, [ 378, 379, 380, 398, 0, 18, 19, 20]);
+    test(380, [ 359, 360, 361, 379, 381, 399, 0,1]);
+    test(0, [ 379, 380, 381, 399, 1, 19, 20, 21]);
+    test(19, [ 398, 399, 0, 18, 20, 38, 39, 40]);
+    all_tests_passed(fn)
+
+def run_tests_live_neighbours() :
+    fn = live_neighbours.__name__
     def test(p1, expected) :
-        test_function(fn, expected, live_neighbour_count(testGrid, p1), [p1])
+        test_function(fn, expected, live_neighbours(testGrid, p1), [p1])
     test(0, 4)
     test(19, 4)
     test(30, 2)

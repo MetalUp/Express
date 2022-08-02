@@ -20,22 +20,24 @@ namespace Framework
             return obj.ToString();
         }
 
+        public static string fail = "Test failed calling ";
 
-        public static void TestFunction(string functionName, object expected, object actual, params object[] arguments)
+        public static string ArgString(params object[] arguments) => arguments.Aggregate("", (s, a) => s + Display(a) + ", ").TrimEnd(' ', ',');
+
+        public static void TestFunction(string functionName, object expected, object actual, params object[] args)
         {
-            var argString = arguments.Aggregate("", (s, a) => s + Display(a) + ", ").TrimEnd(' ', ',');
             if (Display(actual) != Display(expected))
             {
-                Console.WriteLine($"Test failed calling function {functionName}({argString}) Expected: {Display(expected)}  Actual: {Display(actual)}");
+                Console.WriteLine(fail + $"{functionName}({ArgString(args)}) Expected: {Display(expected)}  Actual: {Display(actual)}");
                 throw new TestException();
             }
         }
 
-        public static void AssertTrue(string functionName, bool actual, string message)
+        public static void AssertTrue(string functionName, string args, bool actual, string message)
         {
             if (actual != true)
             {
-                Console.WriteLine($"Test failed calling function {functionName} {message}");
+                Console.WriteLine(fail +$"{functionName}({ArgString(args)}) {message}");
                 throw new TestException();
             }
         }

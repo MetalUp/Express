@@ -9,16 +9,18 @@ def display(x):
     except TypeError:
          return str(x)
 
-def test_function(function_name, expected, actual, arguments):
-    argString = display(arguments).strip("[]")
+fail = "Test failed calling "
+
+def arg_string(arguments) : return display(arguments).strip("[]")
+
+def test_function(function_name, expected, actual, args):
     if display(actual) != display(expected):
-        print(f"Test failed calling function {function_name}({argString}) Expected: {display(expected)}  Actual: {display(actual)}");
+        print(fail + f"{function_name}({arg_string(args)}) Expected: {display(expected)}  Actual: {display(actual)}");
         raise TestException
 
-
-def assert_true(function_name, actual, message) :
+def assert_true(function_name, args, actual, message) :
     if actual is not True :
-        print(f"Test failed calling function {function_name} {message}")
+        print(fail + f"{function_name}({arg_string(args)}) {message}")
         raise TestException
 
 

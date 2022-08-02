@@ -14,13 +14,11 @@ def run_app(grid):
         time.sleep(0.5)
         os.system('cls') # 'clear' on Linux; 'cls' on Windows
 
-
-
 #run_app(grid)
-
+run_tests_neighbour_cells()
+run_tests_keep_within_bounds()
+run_tests_adjusted_neighbour_cells()
+run_tests_live_neighbours()
 run_tests_will_live()
-run_tests_relative_neighbour_positions()
-run_tests_keep_within_grid()
-run_tests_live_neighbour_count()
 run_tests_next_cell_value()
 run_tests_next_generation()
