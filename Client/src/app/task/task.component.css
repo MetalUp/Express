@@ -5,6 +5,7 @@ div.pane-body {
     overflow: auto;
     font-size: 11pt;
     justify-items: end;
+    padding: 5px;
 }
 
 .task, .hint {

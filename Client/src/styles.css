@@ -49,9 +49,7 @@ div.info {
     border: 2px solid var(--border-color);
 }
 
-div.pane-body {
-    padding: 5px;
-}
+
 
 div.data {
     padding-left: 5px;
