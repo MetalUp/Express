@@ -1,10 +1,6 @@
 ﻿public static void RunTests_WillLive()
 {
     string fn = "WillLive";
-    void test(bool currentlyAlive, int liveNeighbours, bool expected)
-    {
-        TestFunction(fn, expected, WillLive(currentlyAlive, liveNeighbours), currentlyAlive, liveNeighbours);
-    }
     try
     {
         test(false, 0, false);
@@ -29,4 +25,9 @@
     }
     catch (TestException) { } //Any other exception thrown at runtime will be uncaught and handled by server
     AllTestsPassed(fn);
+}
+
+private static void test(bool currentlyAlive, int liveNeighbours, bool expected)
+{
+    TestFunction(fn, expected, WillLive(currentlyAlive, liveNeighbours), currentlyAlive, liveNeighbours);
 }

@@ -1,0 +1,12 @@
+{
+    "Language": "python",
+    "Title": "Conway's Game of Life - Part I",
+    "Description": "life_1.html",
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "WrappingCode": "",
+    "SkeletonCode": "def will_live(alive, neighbours) : return (alive and neighbours > 1 and neighbours < 4) or (not alive and neighbours == 3) ",
+    "PasteExpression": false,
+    "PasteFunction": false
+}

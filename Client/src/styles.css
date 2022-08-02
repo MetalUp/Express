@@ -64,3 +64,16 @@ span.prompt::before {
 .code {
     font-family: monospace;
 }
+
+.python .csharp {
+    display:none;
+}
+
+.csharp .python {
+    display:none;
+}
+
+code {
+    font-size: 11pt;
+    color:cornflowerblue;
+}
