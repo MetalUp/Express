@@ -15,6 +15,7 @@ describe('ExpressionEvaluationComponent', () => {
   let jobeServerServiceSpy: jasmine.SpyObj<JobeServerService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
+  let taskSubject = new Subject<ITask>();
 
   let testRunResultOK: RunResult = {
     run_id: 'a',
@@ -44,13 +45,13 @@ describe('ExpressionEvaluationComponent', () => {
   beforeEach(async () => {
     jobeServerServiceSpy = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages'], { "selectedLanguage": "csharp" });
     jobeServerServiceSpy.get_languages.and.returnValue(of<[string, string][]>([["1", "2"]]));
-    
+
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
     rulesServiceSpy.checkRules.and.returnValue('');
     rulesServiceSpy.filter.and.callFake((_l, _e, tf) => tf);
 
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], {currentSubjectTask: new Subject<ITask>});
-    
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentSubjectTask: taskSubject });
+
     await TestBed.configureTestingModule({
       declarations: [ExpressionEvaluationComponent],
       providers: [
@@ -163,7 +164,6 @@ describe('ExpressionEvaluationComponent', () => {
     expect(component.expression).toBe('');
     expect(component.previousExpression).toBe('test');
     expect(component.previousExpressionResult).toBe('compiler error')
-
   });
 
   it('should submit code on enter and show runtime error', () => {
@@ -178,7 +178,6 @@ describe('ExpressionEvaluationComponent', () => {
     expect(component.expression).toBe('');
     expect(component.previousExpression).toBe('test');
     expect(component.previousExpressionResult).toBe('run error')
-
   });
 
   it('should ignore empty expressions', () => {
@@ -191,7 +190,7 @@ describe('ExpressionEvaluationComponent', () => {
     expect(component.previousExpressionResult).toBe('');
   });
 
-  it('should call parse and validate on enter', () => {
+  it('should call checkRules on enter', () => {
 
     jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
@@ -206,10 +205,10 @@ describe('ExpressionEvaluationComponent', () => {
     expect(component.previousExpression).toBe('test');
   });
 
-  it('should not submit on parse error', () => {
+  it('should not submit on checkRules error', () => {
 
     jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    rulesServiceSpy.checkRules.and.returnValue("parse fail");
+    rulesServiceSpy.checkRules.and.returnValue("rules fail");
 
     component.expression = 'test';
 
@@ -219,23 +218,32 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('parse fail')
+    expect(component.previousExpressionResult).toBe('rules fail')
   });
 
+  it('should disable paste by default', () => {
 
-  it('should not submit on validate error', () => {
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
 
-    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    rulesServiceSpy.checkRules.and.returnValue("validate fail");
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).toHaveBeenCalled();
+  });
 
-    component.expression = 'test';
+  it('should enable paste from task', () => {
 
-    component.onEnter();
-    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
-    expect(jobeServerServiceSpy.submit_run).not.toHaveBeenCalled();
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    taskSubject.next({ PasteExpression: true } as ITask);
 
-    expect(component.expression).toBe('');
-    expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('validate fail')
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).not.toHaveBeenCalled();
+  });
+
+  it('should disable paste from task', () => {
+
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    taskSubject.next({ PasteExpression: false } as ITask);
+
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).toHaveBeenCalled();
   });
 });

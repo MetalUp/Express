@@ -94,7 +94,7 @@ export class ExpressionEvaluationComponent {
   }
 
   onPaste(event: ClipboardEvent) {
-    if(!this.canPaste) { 
+    if (!this.canPaste) {
       event.preventDefault();
     }
   }
