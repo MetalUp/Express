@@ -36,5 +36,4 @@ export class SelectedLanguageComponent implements OnInit {
       }
     }
   }
-
 }
