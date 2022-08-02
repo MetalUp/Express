@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Applicability, ErrorType, IRules, ICodeRulesBlock, MsgPrefix, EmptyCodeRulesBlock, IMessages } from './rules';
+import { Applicability, ErrorType, IRules, ICodeRulesBlock, MsgPrefix, EmptyCodeRulesBlock, ITaskRules } from './rules';
 import { TaskService } from './task.service';
 
 export function rulesFactory(rules: RulesService) {
@@ -12,10 +12,16 @@ export function rulesFactory(rules: RulesService) {
 })
 export class RulesService {
 
-  constructor(private http: HttpClient, private taskService: TaskService) { }
+  constructor(private http: HttpClient, taskService: TaskService) {
+    taskService.currentTask.subscribe(t => {
+      this.taskRules.Messages = t.Messages || {};
+      this.taskRules.CodeMustMatch = t.CodeMustMatch || EmptyCodeRulesBlock;
+      this.taskRules.CodeMustNotContain = t.CodeMustNotContain || EmptyCodeRulesBlock;
+    })
+  }
 
   rules: IRules = { "Messages": {}, "ServerResponseMessageFilters": {}, CodeMustMatch: {}, CodeMustNotContain: {} };
-
+  taskRules : ITaskRules  = {"Messages": {}, CodeMustMatch: EmptyCodeRulesBlock, CodeMustNotContain: EmptyCodeRulesBlock};
 
   private getRules(applicability: Applicability, rulesForLanguage: ICodeRulesBlock) {
     const applicableRules = rulesForLanguage[applicability] || [];
@@ -25,13 +31,13 @@ export class RulesService {
 
   private getMustNotContainRules(language: string, applicability: Applicability) {
     const rulesForLanguage = this.rules.CodeMustNotContain[language] || EmptyCodeRulesBlock;
-    const taskRules = this.taskService.currentTask.CodeMustNotContain || EmptyCodeRulesBlock;
+    const taskRules = this.taskRules.CodeMustNotContain || EmptyCodeRulesBlock;
     return this.getRules(applicability, rulesForLanguage).concat(this.getRules(applicability, taskRules));
   }
 
   private getMustMatchRules(language: string, applicability: Applicability) {
     const rulesForLanguage = this.rules.CodeMustMatch[language] || EmptyCodeRulesBlock;
-    const taskRules = this.taskService.currentTask.CodeMustMatch || EmptyCodeRulesBlock;
+    const taskRules = this.taskRules.CodeMustMatch || EmptyCodeRulesBlock;
     return this.getRules(applicability, rulesForLanguage).concat(this.getRules(applicability, taskRules));
   }
 
@@ -45,7 +51,7 @@ export class RulesService {
   }
 
   private get taskMessages() {
-    return this.taskService.currentTask.Messages as IMessages || [];
+    return this.taskRules.Messages;
   }
 
   private getMessage(origMessage: string) {

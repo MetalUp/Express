@@ -1,30 +1,30 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { RulesService } from './rules.service';
-import rules from '../../rules.json';
 import { IRules, ErrorType, Applicability } from './rules';
 import { TaskService } from './task.service';
-import { EmptyTask } from './task';
+import { ITask } from './task';
+import { Subject } from 'rxjs';
+
+import rules from '../../rules.json';
 
 describe('RulesService', () => {
   let service: RulesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let mockTaskService;
-
+  let taskSubject = new Subject<ITask>();
+  
   enum language {
     csharp = 'csharp',
     python = 'python'
   }
 
-
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load']);
-    mockTaskService = { currentTask: EmptyTask };
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], {currentTask : taskSubject});
 
     TestBed.configureTestingModule({});
-    service = new RulesService(httpClientSpy, mockTaskService as TaskService);
+    service = new RulesService(httpClientSpy, taskServiceSpy);
     service.rules = rules as unknown as IRules;
   });
 
@@ -89,9 +89,6 @@ describe('RulesService', () => {
     const validated = service.mustNotContain(language.csharp, Applicability.expressions, " (3 + 4)*5");
     expect(validated).toEqual("");
   });
-
-
-
 
   //C# functions - fails
 

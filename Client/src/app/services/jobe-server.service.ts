@@ -12,7 +12,7 @@ import { TaskService } from './task.service';
 export class JobeServerService {
 
   constructor(private http: HttpClient, taskService: TaskService) {
-    taskService.currentSubjectTask.subscribe(t => {
+    taskService.currentTask.subscribe(t => {
       this.taskWrappingCode = t.WrappingCode || '';
     })
   }

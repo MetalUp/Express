@@ -18,7 +18,7 @@ export class FunctionDefinitionComponent {
     private rulesService: RulesService,
     taskService: TaskService) {
 
-    taskService.currentSubjectTask.subscribe(t => {
+    taskService.currentTask.subscribe(t => {
       this.canPaste = !!t.PasteFunction;
       this.skeleton = t.SkeletonCode || '';
       if (this.skeleton) {

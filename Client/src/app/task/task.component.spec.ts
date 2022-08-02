@@ -11,7 +11,7 @@ describe('TaskComponent', () => {
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
  
   beforeEach(async () => {
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml'], {currentSubjectTask : new Subject<Task>()}   );
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml'], {currentTask : new Subject<Task>()}   );
 
     await TestBed.configureTestingModule({
       declarations: [TaskComponent],

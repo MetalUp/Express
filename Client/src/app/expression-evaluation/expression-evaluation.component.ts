@@ -14,7 +14,7 @@ import { TaskService } from '../services/task.service';
 export class ExpressionEvaluationComponent {
 
   constructor(private jobeServer: JobeServerService, private rulesService: RulesService, taskService: TaskService) {
-    taskService.currentSubjectTask.subscribe(t => {
+    taskService.currentTask.subscribe(t => {
       this.canPaste = !!t.PasteExpression;
     })
   }

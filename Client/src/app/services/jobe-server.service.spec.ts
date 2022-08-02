@@ -25,7 +25,7 @@ describe('JobeServerService', () => {
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentSubjectTask: taskSubject });
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
 
     TestBed.configureTestingModule({});
     service = new JobeServerService(httpClientSpy, taskServiceSpy);
