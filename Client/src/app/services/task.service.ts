@@ -8,21 +8,21 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class TaskService {
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {
-    this.route.queryParams.subscribe(params => {
+  constructor(private http: HttpClient, private router: Router, route: ActivatedRoute) {
+    route.queryParams.subscribe(params => {
       const taskId = params['task'];
       if (taskId) {
         this.load(taskId);
       }
     });
-   }
+  }
 
   get currentTask() {
     return this.currentTaskAsSubject;
   }
 
-  private currentTaskAsSubject = new Subject<ITask>() 
-  
+  private currentTaskAsSubject = new Subject<ITask>()
+
   private updateLanguage(task: ITask, taskId: string) {
     const params = {
       "language": task.Language,
@@ -31,26 +31,23 @@ export class TaskService {
     this.router.navigate(['/'], { queryParams: params });
   }
 
-  private load(taskId: string ) {
+  private load(taskId: string) {
     const options = {
       withCredentials: true,
     }
 
-    return this.http.get<ITask>(`content/${taskId}.json`, options).pipe(task => {
-      task.subscribe(t => {
-        this.updateLanguage(t, taskId);
-        this.currentTaskAsSubject.next(t);
-      });
-      return task;
+    this.http.get<ITask>(`content/${taskId}.json`, options).subscribe(t => {
+      this.updateLanguage(t, taskId);
+      this.currentTaskAsSubject.next(t);
     });
   }
 
-  getHtml(task : ITask) {
+  getHtml(task: ITask) {
     const options = {
       withCredentials: true,
       responseType: 'text' as const
     }
 
-    return this.http.get(`content/${task.Description}`, options);  
+    return this.http.get(`content/${task.Description}`, options);
   }
 }

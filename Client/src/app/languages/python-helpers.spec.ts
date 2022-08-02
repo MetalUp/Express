@@ -11,7 +11,7 @@ describe('Python Helpers', () => {
     expect(v).not.toBe('test');
   });
 
-  it('should not wrap functions', () => {
+  it('should wrap functions', () => {
     const v = wrapPythonFunctions('test');
     expect(v).not.toBe('test');
   });

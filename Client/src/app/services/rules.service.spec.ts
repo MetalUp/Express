@@ -39,9 +39,6 @@ const taskRules : ITaskRules = {
   }
 }
 
-
-
-
 describe('RulesService', () => {
   let service: RulesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
