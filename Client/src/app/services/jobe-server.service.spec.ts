@@ -5,11 +5,14 @@ import { errorRunResult, RunResult } from './run-result';
 import { of, throwError } from 'rxjs';
 import { FunctionPlaceholder } from '../languages/language-helpers';
 import { TaskService } from './task.service';
+import { EmptyTask } from './task';
 
 describe('JobeServerService', () => {
   let service: JobeServerService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
+  let mockTaskService;
+
   let testRunSpec: { "run_spec": { "language_id": string, "sourcecode": string } };
   let testlanguages: [string, string][] = [["l1", "v1"]];
   let testRunResult: RunResult = {
@@ -22,10 +25,11 @@ describe('JobeServerService', () => {
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
-    taskServiceSpy = jasmine.createSpyObj('TaskService', []);
+    //taskServiceSpy = jasmine.createSpyObj('TaskService', []);
+    mockTaskService = {currentTask: EmptyTask  };
 
     TestBed.configureTestingModule({});
-    service = new JobeServerService(httpClientSpy, taskServiceSpy);
+    service = new JobeServerService(httpClientSpy, mockTaskService as TaskService);
     service.selectedLanguage = 'stub language';
     testRunSpec = service.run_spec('stub code');
   });

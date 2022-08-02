@@ -13,6 +13,6 @@ describe('Python Helpers', () => {
 
   it('should not wrap functions', () => {
     const v = wrapPythonFunctions('test');
-    expect(v).toBe('test');
+    expect(v).not.toBe('test');
   });
 });

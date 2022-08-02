@@ -2,16 +2,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { wrapFunctions } from '../languages/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { RunResult } from '../services/run-result';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 
 import { FunctionDefinitionComponent } from './function-definition.component';
-import { Applicability, RulesService } from '../services/rules.service';
+import { RulesService } from '../services/rules.service';
+import { Applicability } from '../services/rules';
+import { TaskService } from '../services/task.service';
+import { ITask } from '../services/task';
 
 describe('FunctionDefinitionComponent', () => {
   let component: FunctionDefinitionComponent;
   let fixture: ComponentFixture<FunctionDefinitionComponent>;
-  let mockJobeServerService: jasmine.SpyObj<JobeServerService>;
-  let mockRulesService: jasmine.SpyObj<RulesService>;
+  let jobeServerServiceSpy: jasmine.SpyObj<JobeServerService>;
+  let rulesServiceSpy: jasmine.SpyObj<RulesService>;
+  let taskServiceSpy: jasmine.SpyObj<TaskService>;
 
   let testRunResultOK: RunResult = {
     run_id: 'a',
@@ -39,22 +43,28 @@ describe('FunctionDefinitionComponent', () => {
 
 
   beforeEach(async () => {
-    mockJobeServerService = jasmine.createSpyObj('JobeServerService', ['submit_run', 'clearFunctionDefinitions', 'setFunctionDefinitions'], { "selectedLanguage": "csharp" });
-    mockRulesService = jasmine.createSpyObj('RulesService', ['filter', 'validate', 'parse']);
-    mockRulesService.mustMatch.and.returnValue('');
-    mockRulesService.mustNotContain.and.returnValue('');
-    mockRulesService.filter.and.callFake((_l, _e, tf) => tf);
+    jobeServerServiceSpy = jasmine.createSpyObj('JobeServerService', ['submit_run', 'clearFunctionDefinitions', 'setFunctionDefinitions'], { "selectedLanguage": "csharp" });
+    
+    rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
+    rulesServiceSpy.checkRules.and.returnValue('');
+    rulesServiceSpy.filter.and.callFake((_l, _e, tf) => tf);
+
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], {currentSubjectTask: new Subject<ITask>() });
 
     await TestBed.configureTestingModule({
       declarations: [FunctionDefinitionComponent],
       providers: [
         {
           provide: JobeServerService,
-          useValue: mockJobeServerService
+          useValue: jobeServerServiceSpy
         },
         {
           provide: RulesService,
-          useValue: mockRulesService
+          useValue: rulesServiceSpy
+        },
+        {
+          provide: TaskService,
+          useValue: taskServiceSpy
         }
       ]
     })
@@ -71,53 +81,53 @@ describe('FunctionDefinitionComponent', () => {
 
 
   it('should submit code for compile OK', () => {
-    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.functionDefinitions = 'test';
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.compiledOK).toBe(true);
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(mockJobeServerService.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
+    expect(jobeServerServiceSpy.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
 
   });
 
   it('should submit code for compile Fail', () => {
-    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultCmp));
+    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultCmp));
 
     component.functionDefinitions = 'test';
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('compiler error');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(mockJobeServerService.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
 
   });
 
   it('should submit code for compile Error', () => {
-    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultErr));
+    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultErr));
 
     component.functionDefinitions = 'test';
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('run error');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(mockJobeServerService.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
 
   });
 
@@ -130,7 +140,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('');
     expect(component.pendingSubmit).toBe(true);
 
-    expect(mockJobeServerService.clearFunctionDefinitions).toHaveBeenCalled();
+    expect(jobeServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
   });
 
   it('should not allow empty code to be submitted', () => {
@@ -141,65 +151,62 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(mockJobeServerService.clearFunctionDefinitions).toHaveBeenCalled();
+    expect(jobeServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
   });
 
   it('should call parse and validate on enter', () => {
 
-    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.functionDefinitions = 'test';
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(mockRulesService.mustMatch).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(mockRulesService.mustNotContain).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(mockJobeServerService.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.compiledOK).toBe(true);
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(mockJobeServerService.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
+    expect(jobeServerServiceSpy.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
   });
 
   it('should not submit on parse error', () => {
 
-    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    mockRulesService.mustMatch.and.returnValue("parse fail");
+    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+    rulesServiceSpy.checkRules.and.returnValue("parse fail");
 
     component.functionDefinitions = 'test';
 
     component.onSubmit();
-    expect(mockRulesService.mustMatch).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(mockRulesService.mustNotContain).not.toHaveBeenCalled();
-    expect(mockJobeServerService.submit_run).not.toHaveBeenCalled();
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(jobeServerServiceSpy.submit_run).not.toHaveBeenCalled();
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('parse fail');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(mockJobeServerService.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
   });
 
 
   it('should not submit on validate error', () => {
 
-    mockJobeServerService.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-    mockRulesService.mustNotContain.and.returnValue("validate fail");
+    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+    rulesServiceSpy.checkRules.and.returnValue("validate fail");
 
     component.functionDefinitions = 'test';
 
     component.onSubmit();
-    expect(mockRulesService.mustMatch).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(mockRulesService.mustNotContain).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(mockJobeServerService.submit_run).not.toHaveBeenCalled();
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(jobeServerServiceSpy.submit_run).not.toHaveBeenCalled();
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('validate fail');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(mockJobeServerService.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
   });
 
 });

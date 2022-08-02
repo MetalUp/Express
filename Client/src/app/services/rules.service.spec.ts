@@ -3,12 +3,16 @@ import { TestBed } from '@angular/core/testing';
 import { RulesService } from './rules.service';
 import rules from '../../rules.json';
 import { IRules, ErrorType, Applicability } from './rules';
+import { TaskService } from './task.service';
+import { EmptyTask } from './task';
 
 describe('RulesService', () => {
   let service: RulesService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
- 
-  enum language{
+  let taskServiceSpy: jasmine.SpyObj<TaskService>;
+  let mockTaskService;
+
+  enum language {
     csharp = 'csharp',
     python = 'python'
   }
@@ -16,8 +20,11 @@ describe('RulesService', () => {
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load']);
+    mockTaskService = { currentTask: EmptyTask };
+
     TestBed.configureTestingModule({});
-    service = new RulesService(httpClientSpy);
+    service = new RulesService(httpClientSpy, mockTaskService as TaskService);
     service.rules = rules as unknown as IRules;
   });
 
@@ -29,7 +36,7 @@ describe('RulesService', () => {
     const filtered = service.filter(language.csharp, ErrorType.cmpinfo, "something CSXXXX something else");
     expect(filtered).toEqual('CSXXXX something else')
   });
- 
+
   it('should filter csharp stderr', () => {
     const filtered = service.filter(language.csharp, ErrorType.stderr, "something NullException something else");
     expect(filtered).toEqual('NullException')
@@ -39,7 +46,7 @@ describe('RulesService', () => {
     const filtered = service.filter(language.python, ErrorType.cmpinfo, "something Error: something else");
     expect(filtered).toEqual(' Error: something else')
   });
- 
+
   it('should filter python stderr', () => {
     const filtered = service.filter(language.python, ErrorType.stderr, "something Error: something else");
     expect(filtered).toEqual(' Error: something else')
@@ -76,7 +83,7 @@ describe('RulesService', () => {
     expect(validated).toEqual("Use of 'Add', or any other method that mutates a List is not permitted");
   });
 
-   //C# expressions - passes
+  //C# expressions - passes
 
   it('should validate csharp expression - simple expression', () => {
     const validated = service.mustNotContain(language.csharp, Applicability.expressions, " (3 + 4)*5");
@@ -163,15 +170,15 @@ describe('RulesService', () => {
     expect(parsed).toEqual("Functions must include the symbol ':' followed by 'return' (may be on the next line if correctly indented) and the expression to be evaluated");
   });
 
-   //Python parsing - passes
+  //Python parsing - passes
   it('should parse python expression - simple case', () => {
     const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() : return 3");
     expect(parsed).toEqual("");
   });
 
   it('should parse python expression - with line breaks', () => {
-      const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() :\n return 3");
-      expect(parsed).toEqual("");
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() :\n return 3");
+    expect(parsed).toEqual("");
   });
 
 });

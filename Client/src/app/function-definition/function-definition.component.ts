@@ -13,7 +13,8 @@ import { TaskService } from '../services/task.service';
 })
 export class FunctionDefinitionComponent {
 
-  constructor(private jobeServer: JobeServerService,
+  constructor(
+    private jobeServer: JobeServerService,
     private rulesService: RulesService,
     taskService: TaskService) {
 

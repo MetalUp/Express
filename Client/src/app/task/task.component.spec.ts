@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Params } from '@angular/router';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
+import { ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
 
 import { TaskComponent } from './task.component';
@@ -8,22 +8,17 @@ import { TaskComponent } from './task.component';
 describe('TaskComponent', () => {
   let component: TaskComponent;
   let fixture: ComponentFixture<TaskComponent>;
-  let mockTaskService: jasmine.SpyObj<TaskService>;
-  let testParams: any = {};
-
+  let taskServiceSpy: jasmine.SpyObj<TaskService>;
+ 
   beforeEach(async () => {
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml'], {currentSubjectTask : new Subject<Task>()}   );
+
     await TestBed.configureTestingModule({
       declarations: [TaskComponent],
       providers: [
         {
           provide: TaskService,
-          useValue: mockTaskService
-        },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            queryParams: of<Params>(testParams)
-          },
+          useValue: taskServiceSpy
         }
       ]
     }).compileComponents();

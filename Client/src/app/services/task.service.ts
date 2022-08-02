@@ -17,8 +17,16 @@ export class TaskService {
     });
    }
 
-  currentSubjectTask = new Subject<ITask>() 
-  currentTask : ITask = EmptyTask; 
+  get currentSubjectTask() {
+    return this._currentSubjectTask;
+  }
+
+  get currentTask() {
+    return this._currentTask;
+  }
+
+  private _currentSubjectTask = new Subject<ITask>() 
+  private _currentTask : ITask = EmptyTask; 
 
   private updateLanguage(task: ITask, taskId: string) {
     const params = {
@@ -36,8 +44,8 @@ export class TaskService {
     return this.http.get<ITask>(`content/${taskId}.json`, options).pipe(task => {
       task.subscribe(t => {
         this.updateLanguage(t, taskId);
-        this.currentSubjectTask.next(t);
-        this.currentTask = t;
+        this._currentSubjectTask.next(t);
+        this._currentTask = t;
       });
       return task;
     });
