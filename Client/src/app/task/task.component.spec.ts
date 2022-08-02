@@ -9,9 +9,10 @@ describe('TaskComponent', () => {
   let component: TaskComponent;
   let fixture: ComponentFixture<TaskComponent>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
+  let taskSubject = new Subject<ITask>();
  
   beforeEach(async () => {
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml'], {currentTask : new Subject<Task>()}   );
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml'], {currentTask : taskSubject}   );
 
     await TestBed.configureTestingModule({
       declarations: [TaskComponent],
@@ -31,4 +32,19 @@ describe('TaskComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should get the html file', () => {
+    
+    taskServiceSpy.getHtml.and.returnValue(of('test html'));
+
+    component.ngOnInit();
+
+    const testTask = {Description : 'testfile.html'} as unknown as ITask;
+    taskSubject.next(testTask);
+
+    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith(testTask);
+    expect(component.currentTask).toEqual(testTask);
+    expect(component.innerHtml).toEqual('test html');
+  });
+
 });
