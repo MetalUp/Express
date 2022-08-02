@@ -116,7 +116,7 @@ namespace CSharp
 
         public static void RunTests_LiveNeighbourCount()
         {
-            string fn = "LiveNeighbourCount";
+            string fn = nameof(LiveNeighbours);
             void test(int p1, int expected)
             {
                 TestFunction(fn, expected, LiveNeighbours(testGrid, p1), "testGrid", p1);
@@ -133,10 +133,10 @@ namespace CSharp
 
         public static void RunTests_WillLive()
         {
-            string fn = "WillLive";
-            void test(bool currentlyAlive, int liveNeighbours, bool expected)
+            string fn = nameof(WillLive);
+            void test(bool alive, int neighbours, bool expected)
             {
-                TestFunction(fn, expected, WillLive(currentlyAlive, liveNeighbours), currentlyAlive, liveNeighbours);
+                TestFunction(fn, expected, WillLive(alive, neighbours), alive, neighbours);
             }
             test(false, 0, false);
             test(false, 1, false);
@@ -161,7 +161,7 @@ namespace CSharp
 
         public static void RunTests_NextCellValue()
         {
-            string fn = "NextCellValue";
+            string fn = nameof(NextCellValue);
             void test(int c, bool expected)
             {
                 TestFunction(fn, expected, NextCellValue(testGrid, c), "testGrid", c);
@@ -178,7 +178,7 @@ namespace CSharp
 
         public static void RunTests_NextGeneration()
         {
-            string fn = "NextGeneration";
+            string fn = nameof(NextGeneration);
             List<bool> nextGen = new List<bool> { false, true, false, true, true, true, true, false, true, false, true, true, true, false, false, false, true, true, false, false, false, false, false, false, true, false, true, false, false, false, true, false, false, false, false, false, false, true, false, false, false, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, true, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, false, false, true, false, true, true, true, false, false, true, true, true, true, true, false, false, false, false, false, false, false, true, true, false, false, false, true, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, true, true, false, true, true, false, false, true, true, true, true, false, false, false, true, true, true, true, false, false, true, false, true, false, true, false, true, false, false, false, false, false, false, false, true, true, true, true, true, false, true, false, true, false, true, true, false, true, false, true, false, true, true, false, false, false, true, false, true, false, false, false, true, false, false, false, false, true, false, true, false, false, true, false, false, false, true, false, true, false, true, true, false, true, false, false, true, true, false, true, false, false, false, false, false, false, true, false, true, true, false, false, true, false, false, true, true, false, true, true, false, false, false, true, false, false, true, true, false, false, false, true, false, false, false, false, false, true, false, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, false, true, false, false, true, false, true, false, true, true, false, true, false, true, true, false, false, false, false, true, false, true, true, true, false, false, true, true, false, false, false, true, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true, true, true, false, false, false, true, false, false, false, true, false, false, false, false, false, false, true, false, true, false, false, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, true, true, false, false, false, true, false, true, false, true, false, false, false, true, true, true, false };
             TestFunction(fn, nextGen, NextGeneration(testGrid), "testGrid");
             AllTestsPassed(fn);

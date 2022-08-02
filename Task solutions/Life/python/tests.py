@@ -27,7 +27,7 @@ def run_tests_will_live() :
 
 
 def run_tests_neighbour_cells() :
-    fn = "neighbour_cells"
+    fn = neighbour_cells.__name__
     def test(cell, expected) :
         n = neighbour_cells(cell)
         msg = fail +f"{fn}({cell})."

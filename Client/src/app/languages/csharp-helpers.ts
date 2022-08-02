@@ -28,35 +28,6 @@ export function wrapCSharpExpression(expression : string) {
         }
 
        ${FunctionPlaceholder}
-
-       static void TestFunction(string functionName, object expected, object actual, params object[] arguments)
-       {
-           var argString = arguments.Aggregate("", (s, a) => s + Display(a) + ", ").TrimEnd(' ', ',');
-           if (Display(actual) != Display(expected))
-           {
-               Console.WriteLine($"Test Failed calling function {functionName}");
-               if (arguments.Length > 0) Console.WriteLine($"with arguments: {argString}");
-               Console.WriteLine($"Expected: {Display(expected)}  Actual: {Display(actual)}");
-               throw new TestException();
-           }
-       }
-
-       static void AssertTrue(string functionName, bool actual, string message)
-       {
-           if (actual != true)
-           {
-               Console.WriteLine($"Test Failed calling function {functionName}");
-               Console.WriteLine(message);
-               throw new TestException();
-           }
-       }
-
-       static void AllTestsPassed(string function)
-       {
-           Console.WriteLine($"All tests passed on function: {function}");
-       }
-
-       class TestException : Exception { }
     }`;
 }
 
