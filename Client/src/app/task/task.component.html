@@ -4,7 +4,7 @@
         <div class="pane-body">
             <div class="task" [innerHtml]="innerHtml"></div>
             <div class="button-bar">
-                <button (click)="onHint()">Hint 1</button>
+                <button  [disabled]="!hasHint()" (click)="onFirstHint()">Hint 1</button>
             </div>
         </div>
     </div>
@@ -12,6 +12,10 @@
         <div class="pane-header">Hint</div>
         <div class="pane-body">
             <div class="hint" [innerHtml]="innerHintHtml"></div>
+            <div class="button-bar">
+                <button [disabled]="!hasPreviousHint()" (click)="onPreviousHint()">Previous</button>
+                <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
+            </div>
         </div>
     </div>
 </div>

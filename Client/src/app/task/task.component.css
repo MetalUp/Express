@@ -4,7 +4,13 @@ div.pane-body {
     grid-template-rows:  minmax(100px, max-content) min-content;
     overflow: auto;
     font-size: 11pt;
+    justify-items: end;
 }
+
+.task, .hint {
+    width: 100%;
+}
+
 
 div.pane-group {
     display: grid;

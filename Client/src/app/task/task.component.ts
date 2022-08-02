@@ -24,12 +24,41 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   private sub?: Subscription;
 
+  private hintIndex = 0;
+
+  hasHint() {
+    return this.hintIndex < this.currentTask.Hints.length;
+  }
+
+  hasNextHint() {
+    return this.hintIndex + 1 < this.currentTask.Hints.length;
+  }
+
+  hasPreviousHint() {
+    return this.hintIndex - 1 >= 0;
+  }
+
   onHint() {
-    const hint = this.currentTask.Hints[0];
+    const hint = this.currentTask.Hints[this.hintIndex];
 
     if (hint) {
       this.taskService.getHtml(hint).subscribe(h => this.currentHint = h);
     }
+  }
+
+  onFirstHint() {
+    this.hintIndex = 0;
+    return this.onHint();
+  }
+
+  onPreviousHint() {
+    this.hintIndex--;
+    return this.onHint();
+  }
+
+  onNextHint() {
+    this.hintIndex++;
+    return this.onHint();
   }
 
 

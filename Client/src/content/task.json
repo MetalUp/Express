@@ -2,7 +2,7 @@
     "Language": "csharp",
     "Title": "test task",
     "Description": "task.html",
-    "Hints": ["hint1.html"],
+    "Hints": ["hint1.html", "hint1.html"],
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
