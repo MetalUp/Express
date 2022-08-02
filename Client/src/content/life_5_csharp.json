@@ -1,0 +1,12 @@
+{
+    "Language": "csharp",
+    "Title": "Conway's Game of Life - Part I",
+    "Description": "life_1.html",
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "WrappingCode": "",
+    "SkeletonCode": "static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);",
+    "PasteExpression": false,
+    "PasteFunction": false
+}

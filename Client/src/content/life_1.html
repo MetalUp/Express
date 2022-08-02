@@ -1,20 +1,27 @@
 <div>
-<p>When developing an application using the <i>functions first</i> approach, it is possible to work top down, or bottom up. 
-    We are going to take the latter approach: we shall start by writing a small, key, function that we know will be required somewhere in the application
-     and then build a richer function that makes use of it, and so-on until we have completed the core functionality.</p>
-     <p>Your first task is to define a function – named <code class="csharp">WillLive</code><code class="python">will_live</code> – that determines whether a single cell will be alive in the next ‘generation’.</p>
-        <p>The rules of, Life state that:</p>
-        <ul>
-<li>Any live cell with two or three live neighbours survives.</li>
-<li>Any dead cell with three live neighbours becomes a live cell.</li>
-<li>All other live cells die in the next generation. Similarly, all other dead cells stay dead.</li>
-        </ul>
-<p>These rules can be evaluated from two input values, which should be defined as parameters for <code class="csharp">WillLive</code><code class="python">will_live</code>, in the order given here:</p>
-<ol>
-<li>A Boolean parameter – named <code>alive</code> – specifying whether the cell itself is currently alive (true) or not (false)</li>
-<li>An integer parameter – named <code>neighbours</code> – specifying the number of neighbouring cells (out of a maximum of 8) that are <i>currently alive</i>.</li>
-</ol>
+<p>This task has pre-defined a list named <code">grid1</code> containing 400 random Boolean values. 
+        Type <code">grid</code> now into the <em>Expression</em> pane and view the returned list.
+You will also see that the list has also been rendered in the <em>Graphics</em> pane as small squares 
+(black for <code class="csharp">true</code><code class="python">True</code> - meaning 'live') 'wrapped' to a width of 20 cells. 
+<code>grid[0]</code> will thus retrieve the top-left value and <code>grid[399]</code> the bottom-right.<p>
 
-<p><code class="csharp">WillLive</code><code class="python">will_live</code> should return a Boolean value: true if the cell will be alive in the next generation, false if it will be dead.</p> 
-<p>Your task is to implement this function, returning a single expression that embodies all three of the rules above.</p>
+<p>In Life we will need to know about the 'neighbours of a cell'. Including the diagonals, a cell has eight immediate neighbours.</p>
+
+</p>Your task is to write a function named <code class="csharp">NeighbourCells</code><code class="python">neighbour_cells</code>
+that takes in an integer value named <code>c</code> representing the cell number and returns a list of eight integers representing the cell numbers of
+its eight neighbours. For example, knowing that the width of the grid is 20:</p>
+
+        <ul>
+        <li>The neighbour to the <i>right</i> of <code>c</code> is <code>c+1</code></li>
+        <li>The neighbour <i>above</i> of <code>c</code> is <code>c-20</code></li>
+        <li>You'll need to work out the values for the other <i>six</i> neighbours and return them all as a list. 
+        (The ordering within the list is not important, but you should specify them in some sensible order that makes it easy to read.)</li>
+        </ul>
+
+        <p>his algorithm will work for most of the cells, including those at the left and right edges of the grid (which wrap around),
+        but if we apply it to cells in the top or bottom rows, some of the values returned values will be outside the range 0-399.
+        That's OK for now - we'll deal with it in the next task.</p>
+
+        <p>Meantime, write the function and run the tests.</p>
+</p>
 </div>
