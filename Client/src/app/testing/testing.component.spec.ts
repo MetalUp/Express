@@ -235,7 +235,6 @@ describe('TestingComponent', () => {
     component.testedOk = true;
     component.currentErrorMessage = 'message';
     component.result = testRunResultTestOutcome;
-    component.result.outcome = 15;
 
     expect(component.canRunTests()).toEqual(false);
     expect(component.testedOk).toBe(false);

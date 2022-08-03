@@ -75,7 +75,7 @@ describe('JobeServerService', () => {
 
   it('should call post on /runs including any task wrapping code', () => {
     httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));
-    taskSubject.next({ WrappingCode: "additional task code " } as ITask);
+    taskSubject.next({ ReadyMadeFunctions: "additional task code " } as ITask);
 
     service.selectedLanguage = 'stub language';
     service.setFunctionDefinitions('test definitions ');
