@@ -3,7 +3,7 @@ import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { JobeServerService } from '../services/jobe-server.service';
-import { EmptyRunResult, RunResult } from '../services/run-result';
+import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
 import { wrapTests } from '../languages/language-helpers';
 import { RulesService } from '../services/rules.service';
 import { ErrorType } from '../services/rules';
@@ -76,6 +76,10 @@ export class TestingComponent implements OnInit, OnDestroy {
       // compile error
       this.currentResultMessage = "Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint."
       this.currentErrorMessage = '';
+    }
+    else {
+      this.currentResultMessage = '';
+      this.currentErrorMessage = getResultOutcome(result.outcome);
     }
   }
 
