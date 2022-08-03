@@ -23,7 +23,11 @@ export class TestingComponent implements OnInit, OnDestroy {
   }
 
   message() {
-    if (this.result.outcome === 0){
+    if (this.result.outcome === 0 || !this.canRunTests()){
+      this.result = EmptyRunResult;
+      if (this.canRunTests()) {
+        return 'Tests not yet run on current function definition.';
+      }
       return 'This task defines automated tests. These may only be run once Function definition code has been submitted and successfully compiles.';
     }
     return '';
