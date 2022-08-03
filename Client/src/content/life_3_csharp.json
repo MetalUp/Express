@@ -1,12 +1,15 @@
 {
     "Language": "csharp",
     "Title": "Conway's Game of Life - Part I",
-    "Description": "life_1.html",
+    "Description": "life_3.html",
+    "Hints": ["life_3_hint1.html","life_3_hint2.html","life_3_hint3.html"],
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
-    "WrappingCode": "",
-    "SkeletonCode": "static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);",
+    "WrappingCode": "static List<int> NeighbourCells(int c) => new List<int> { c-21, c-20, c-19, c-1, c+1, c+19, c+20, c+21 };\nstatic int KeepWithinBounds(int i) => i >= 400 ? i - 400 : i < 0 ? i + 400 : i;",
+    "SkeletonCode": "",
     "PasteExpression": false,
-    "PasteFunction": false
+    "PasteFunction": true,
+    "Tests": "life_3_tests.cs",
+    "NextTask": "life_4_csharp.json"
 }
