@@ -6,7 +6,7 @@
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
     "ReadyMadeFunctions": "",
-    "SkeletonCode": "static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);",
+    "SkeletonCode": "",
     "PasteExpression": false,
     "PasteFunction": false
 }

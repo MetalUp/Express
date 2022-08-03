@@ -17,12 +17,14 @@ namespace CSharp
         #region Student code
 
         static List<int> NeighbourCells(int c) => new List<int> { c - 21, c - 20, c - 19, c - 1, c + 1, c + 19, c + 20, c + 21 };
-        static List<int> AdjustedNeighbourCells(int c) => NeighbourCells(c).Select(x => KeepWithinBounds(x)).ToList();
 
         // Effectively wraps the grid vertically so that top row and bottom row are neighbours
         static int KeepWithinBounds(int i) => i >= 400 ? i - 400 : i < 0 ? i + 400 : i;
 
-        static int LiveNeighbours(List<bool> grid, int c) => AdjustedNeighbourCells(c).Count(i => grid[i] is true);
+        static List<int> AdjustedNeighbourCells(int c) => NeighbourCells(c).Select(x => KeepWithinBounds(x)).ToList();
+
+        //static int LiveNeighbours(List<bool> grid, int c) => AdjustedNeighbourCells(c).Count(i => grid[i] == true);
+        static int LiveNeighbours(List<bool> grid, int c) => AdjustedNeighbourCells(c).Where(i => grid[i] == true).Count();
 
         static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);
 
