@@ -60,12 +60,8 @@ namespace CSharp
 
         public static void RunTests_NeighbourCells()
         {
-            try
-            {
                 TestNeighbourCells(30, new List<int> { 9, 10, 11, 29, 31, 49, 50, 51 });
                 AllTestsPassed();
-            }
-            catch (TestFailure) { }
         }
 
         private static void TestNeighbourCells(int cell, List<int> expected)
