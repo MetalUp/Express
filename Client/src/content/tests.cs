@@ -7,5 +7,5 @@ static void RunTests()
         AssertTrue(fn, "", n == output, $" Expected: {output} Actual: {n}");
    };
    test(3, 9);
-   AllTestsPassed(fn);
+   AllTestsPassed();
 }

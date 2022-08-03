@@ -5,4 +5,4 @@ def RunTests() :
         assert_true(fn, "", n == out, f" Expected: {out}  Actual: {n}")
       
     test(3, 9)
-    all_tests_passed(fn)
+    all_tests_passed()

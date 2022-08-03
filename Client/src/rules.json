@@ -81,8 +81,8 @@
                     "Messages.ExternalDependency"
                 ],
                 [
-                    "{|}",
-                    "Functions may not include curly braces '{' or '}'"
+                    "=>\\s*{",
+                    "Function implementation may not start with curly brace '{'"
                 ]
             ]
         },
