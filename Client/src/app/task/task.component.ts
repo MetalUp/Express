@@ -26,7 +26,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   private sub?: Subscription;
 
   hasNextTask() {
-    return this.currentTask.NextTask;
+    return !!this.currentTask.NextTask;
   }
 
   onNextTask() {

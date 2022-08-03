@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ITask } from './task';
 import { Subject } from 'rxjs';
+import { first } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class TaskService {
       withCredentials: true,
     }
 
-    this.http.get<ITask>(`content/${taskId}.json`, options).subscribe(t => {
+    this.http.get<ITask>(`content/${taskId}.json`, options).pipe(first()).subscribe(t => {
       this.updateLanguage(t, taskId);
       this.currentTaskAsSubject.next(t);
     });

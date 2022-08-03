@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TaskService } from './task.service';
 import { of, Subject } from 'rxjs';
 import { ITask } from './task';
+import { first } from 'rxjs';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -28,7 +29,7 @@ describe('TaskService', () => {
   });
 
   it('should get the task and update language', () => {
-    service.currentTask.subscribe(t =>
+    service.currentTask.pipe(first()).subscribe(t =>
       expect(t.Language).toEqual('testlanguage')
     );
 
@@ -47,4 +48,14 @@ describe('TaskService', () => {
     expect(httpClientSpy.get).toHaveBeenCalledWith('content/testHtmlFile.html', parms as any);
   });
 
+  it('should goto a new task and update language', () => {
+    service.currentTask.pipe(first()).subscribe(t =>
+      expect(t.Language).toEqual('testlanguage')
+    );
+
+    service.gotoTask('newTask.json');
+
+    expect(httpClientSpy.get).toHaveBeenCalledWith('content/newTask.json', { withCredentials: true });
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/'], { queryParams: { language: 'testlanguage', task: 'newTask' } });
+  });
 });
