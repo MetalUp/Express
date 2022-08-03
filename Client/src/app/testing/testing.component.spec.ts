@@ -6,7 +6,7 @@ import { of, Subject } from 'rxjs';
 import { TestingComponent } from './testing.component';
 import { JobeServerService } from '../services/jobe-server.service';
 import { RulesService } from '../services/rules.service';
-import { RunResult } from '../services/run-result';
+import { EmptyRunResult, RunResult } from '../services/run-result';
 import { wrapTests } from '../languages/language-helpers';
 
 let testRunResultTestPass: RunResult = {
@@ -85,6 +85,7 @@ describe('TestingComponent', () => {
     fixture = TestBed.createComponent(TestingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    component.result = EmptyRunResult;
   });
 
   it('should create', () => {
@@ -200,4 +201,45 @@ describe('TestingComponent', () => {
     expect(component.message()).toEqual('');
     expect(component.testedOk).toEqual(false);
   });
+
+  it('should allow testing when jobe server has test functions', () => {
+    
+    jobeServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    component.testedOk = true;
+    component.currentErrorMessage = 'message';
+    component.result = EmptyRunResult;
+
+    expect(component.canRunTests()).toEqual(true);
+    expect(component.testedOk).toBe(true);
+    expect(component.currentErrorMessage).toEqual('message');
+    expect(component.result.outcome).toBe(0);
+  });
+
+  it('should not allow testing when jobe server has no test functions', () => {
+    
+    jobeServerServiceSpy.hasFunctionDefinitions.and.returnValue(false);
+
+    component.testedOk = true;
+    component.currentErrorMessage = 'message';
+    component.result = EmptyRunResult;
+
+    expect(component.canRunTests()).toEqual(false);
+    expect(component.testedOk).toBe(false);
+    expect(component.currentErrorMessage).toEqual('');
+    expect(component.result.outcome).toBe(0);
+  });
+
+  it('should not allow testing when tests run', () => {
+    
+    jobeServerServiceSpy.hasFunctionDefinitions.and.returnValue(false);
+    component.testedOk = true;
+    component.currentErrorMessage = 'message';
+    component.result = testRunResultTestOutcome;
+
+    expect(component.canRunTests()).toEqual(false);
+    expect(component.testedOk).toBe(false);
+    expect(component.currentErrorMessage).toEqual('');
+    expect(component.result.outcome).toBe(0);
+  });
+
 });

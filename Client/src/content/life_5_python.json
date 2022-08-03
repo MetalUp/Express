@@ -5,7 +5,7 @@
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
-    "WrappingCode": "",
+    "ReadyMadeFunctions": "",
     "SkeletonCode": "def will_live(alive, neighbours) : return (alive and neighbours > 1 and neighbours < 4) or (not alive and neighbours == 3) ",
     "PasteExpression": false,
     "PasteFunction": false

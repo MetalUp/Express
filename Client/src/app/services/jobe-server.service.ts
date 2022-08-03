@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RunResult, errorRunResult } from './run-result';
-import { FunctionPlaceholder, TaskCodePlaceholder } from '../languages/language-helpers';
+import { FunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../languages/language-helpers';
 import { TaskService } from './task.service';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class JobeServerService {
 
   constructor(private http: HttpClient, taskService: TaskService) {
     taskService.currentTask.subscribe(t => {
-      this.taskWrappingCode = t.WrappingCode || '';
+      this.readyMadeFunctions = t.ReadyMadeFunctions || '';
     })
   }
 
@@ -23,7 +23,7 @@ export class JobeServerService {
   selectedLanguage: string = '';
 
   private functionDefinitions: string = '';
-  private taskWrappingCode: string = '';
+  private readyMadeFunctions: string = '';
 
   // easier to test functions
   setFunctionDefinitions(functionDefinitions: string) {
@@ -44,7 +44,7 @@ export class JobeServerService {
 
   run_spec(code: string) {
     code = code.replace(FunctionPlaceholder, this.functionDefinitions)
-      .replace(TaskCodePlaceholder, this.taskWrappingCode);
+      .replace(ReadyMadeFunctionsPlaceholder, this.readyMadeFunctions);
     return { "run_spec": { "language_id": this.selectedLanguage, "sourcecode": code } };
   }
 

@@ -5,7 +5,7 @@
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
-    "WrappingCode": "",
+    "ReadyMadeFunctions": "",
     "SkeletonCode": "static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);",
     "PasteExpression": false,
     "PasteFunction": false
