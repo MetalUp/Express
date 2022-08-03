@@ -65,7 +65,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.taskService.getHtml(this.currentTask.Description).subscribe(h => this.taskHtml = h);
+      this.taskService.getHtml(this.currentTask.Description).pipe(first()).subscribe(h => this.taskHtml = h);
     })
   }
 

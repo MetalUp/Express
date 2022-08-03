@@ -6,6 +6,7 @@ import { Applicability, ErrorType } from '../services/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
 import { TaskService } from '../services/task.service';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-expression-evaluation',
@@ -82,7 +83,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
       if (!this.validationFail) {
         this.submitting = true;
         const code = wrapExpression(this.selectedLanguage, this.expression);
-        this.jobeServer.submit_run(code).subscribe(rr => {
+        this.jobeServer.submit_run(code).pipe(first()).subscribe(rr => {
           this.result = rr;
           this.pushExpression();
           this.submitting = false;

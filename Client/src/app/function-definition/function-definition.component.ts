@@ -6,6 +6,7 @@ import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../services/run-result';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-function-definition',
@@ -73,7 +74,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     if (!this.validationFail) {
       this.submitting = true;
       const code = wrapFunctions(this.jobeServer.selectedLanguage, this.functionDefinitions);
-      this.jobeServer.submit_run(code).subscribe(rr => {
+      this.jobeServer.submit_run(code).pipe(first()).subscribe(rr => {
         this.result = rr;
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {
