@@ -8,14 +8,16 @@
             </div>
         </div>
     </div>
-    <div *ngIf="hintHtml" class="pane">
-        <div class="pane-header">Hint: {{hintIndex + 1}}</div>
-        <div class="pane-body">
-            <div class="hint" [innerHtml]="hintHtml"></div>
-            <div class="button-bar">
-                <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
-                <button [disabled]="!hasPreviousHint()" (click)="onPreviousHint()">Previous</button>
+    <ng-container *ngIf="hintHtml">
+        <div class="pane">
+            <div class="pane-header">Hint: {{hintIndex + 1}}</div>
+            <div class="pane-body">
+                <div class="hint" [innerHtml]="hintHtml"></div>
+                <div class="button-bar">
+                    <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
+                    <button [disabled]="!hasPreviousHint()" (click)="onPreviousHint()">Previous</button>
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 </div>
