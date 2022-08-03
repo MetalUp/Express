@@ -14,7 +14,7 @@ describe('TestingComponent', () => {
   let taskSubject = new Subject<ITask>();
 
   beforeEach(async () => {
-    jobeServerServiceSpy = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages'], { "selectedLanguage": "csharp" });
+    jobeServerServiceSpy = jasmine.createSpyObj('JobeServerService', ['hasFunctionDefinitions'], { "selectedLanguage": "csharp" });
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml'], { currentTask: taskSubject });
 
     await TestBed.configureTestingModule({
@@ -38,5 +38,28 @@ describe('TestingComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should get the test code file', () => {
+
+    taskServiceSpy.getHtml.and.returnValue(of('test code'));
+
+    const testTask = { Tests: 'testfile.cs' } as unknown as ITask;
+    taskSubject.next(testTask);
+
+    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('testfile.cs');
+    expect(component.tests).toEqual('test code');
+  });
+
+  it('should disable run tests until code compiled', () => {
+
+    jobeServerServiceSpy.hasFunctionDefinitions.and.returnValue(false);
+    expect(component.canRunTests()).toEqual(false);
+  });
+
+  it('should enable run tests when code compiled', () => {
+
+    jobeServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    expect(component.canRunTests()).toEqual(true);
   });
 });

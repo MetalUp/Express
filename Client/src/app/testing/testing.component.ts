@@ -50,7 +50,6 @@ export class TestingComponent implements OnInit, OnDestroy {
     return '';
   }
 
-
   tests = ''
 
   canRunTests() {
