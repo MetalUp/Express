@@ -6,10 +6,10 @@
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
-    "WrappingCode": "def neighbour_cells(c) : return [ c-21, c-20, c-19, c-1, c+1, c+19, c+20, c+21]\ndef keep_within_bounds(i) : return  i - 400 if i >= 400 else  i + 400 if i < 0 else i",
+    "ReadyMadeFunctions": "def neighbour_cells(c) : return [ c-21, c-20, c-19, c-1, c+1, c+19, c+20, c+21]\ndef keep_within_bounds(i) : return  i - 400 if i >= 400 else  i + 400 if i < 0 else i",
     "SkeletonCode": "",
     "PasteExpression": false,
     "PasteFunction": true,
-    "Tests": "life_3_tests.cs",
+    "Tests": "life_3_tests.py",
     "NextTask": "life_4_csharp.json"
 }
