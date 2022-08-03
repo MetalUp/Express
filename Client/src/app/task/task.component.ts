@@ -24,7 +24,7 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   private sub?: Subscription;
 
-  private hintIndex = 0;
+  hintIndex = 0;
 
   hasHint() {
     return this.hintIndex < this.currentTask.Hints.length;

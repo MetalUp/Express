@@ -9,7 +9,7 @@
         </div>
     </div>
     <div *ngIf="innerHintHtml" class="pane">
-        <div class="pane-header">Hint</div>
+        <div class="pane-header">Hint: {{hintIndex + 1}}</div>
         <div class="pane-body">
             <div class="hint" [innerHtml]="innerHintHtml"></div>
             <div class="button-bar">
