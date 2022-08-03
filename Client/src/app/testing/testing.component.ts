@@ -23,20 +23,33 @@ export class TestingComponent implements OnInit, OnDestroy {
   }
 
   message() {
-    if (this.testedOk) {
-      return 'All tests passed'
+    if (this.result.outcome === 0){
+      return 'This task defines automated tests. These may only be run once Function definition code has been submitted and successfully compiles.';
     }
-
-    if (this.result.stderr) {
-      return this.result.stderr;
-    }
-
-    if (this.result.cmpinfo) {
-      return this.result.cmpinfo;
-    }
-
-    return 'This task defines automated tests. These may only be run once Function definition code has been submitted and successfully compiles.';
+    return '';
   }
+
+  stdout() {
+    if (this.result.outcome !== 0){
+      return `stdout: ${this.result.stdout}`;
+    }
+    return '';
+  }
+
+  cmpinfo() {
+    if (this.result.outcome !== 0){
+      return `cmpinfo: ${this.result.cmpinfo}`;
+    }
+    return '';
+  }
+
+  stderr() {
+    if (this.result.outcome !== 0){
+      return `stderr: ${this.result.stderr} `;
+    }
+    return '';
+  }
+
 
   tests = ''
 
