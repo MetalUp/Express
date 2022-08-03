@@ -3,8 +3,10 @@ import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { JobeServerService } from '../services/jobe-server.service';
-import { EmptyRunResult, RunResult } from '../services/run-result';
+import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
 import { wrapTests } from '../languages/language-helpers';
+import { RulesService } from '../services/rules.service';
+import { ErrorType } from '../services/rules';
 
 @Component({
   selector: 'app-testing',
@@ -15,7 +17,8 @@ export class TestingComponent implements OnInit, OnDestroy {
 
   constructor(
     private jobeServer: JobeServerService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private rulesService: RulesService
   ) { }
 
   hasTests() {
@@ -23,53 +26,68 @@ export class TestingComponent implements OnInit, OnDestroy {
   }
 
   message() {
-    if (this.result.outcome === 0 || !this.canRunTests()){
-      this.result = EmptyRunResult;
-      if (this.canRunTests()) {
-        return 'Tests not yet run on current function definition.';
-      }
+    if (this.canRunTests() && this.result.outcome === 0) {
+      return 'Tests not yet run on current function definition.';
+    }
+    if (this.result.outcome === 0) {  
       return 'This task defines automated tests. These may only be run once Function definition code has been submitted and successfully compiles.';
     }
-    return '';
-  }
-
-  stdout() {
-    if (this.result.outcome !== 0){
-      return `stdout: ${this.result.stdout}`;
-    }
-    return '';
-  }
-
-  cmpinfo() {
-    if (this.result.outcome !== 0){
-      return `cmpinfo: ${this.result.cmpinfo}`;
-    }
-    return '';
-  }
-
-  stderr() {
-    if (this.result.outcome !== 0){
-      return `stderr: ${this.result.stderr} `;
-    }
-    return '';
+    return this.currentResultMessage;
   }
 
   tests = ''
 
   canRunTests() {
-    return this.jobeServer.hasFunctionDefinitions();
+    if (this.jobeServer.hasFunctionDefinitions()){
+      return this.result.outcome === 0;
+    }
+    this.testedOk = false;
+    this.result = EmptyRunResult;
+    this.currentErrorMessage = '';
+    return false;
   }
 
   submitting = false;
   result: RunResult = EmptyRunResult;
   testedOk = false;
+  currentResultMessage = '';
+  currentErrorMessage = ''; 
+
+  private handleResult(result : RunResult) {
+    this.result = result;
+    this.testedOk = !(result.cmpinfo || result.stderr) && result.outcome == 15;
+
+    if (this.testedOk) {
+      // all OK
+      this.currentResultMessage = 'All tests passed.';
+      this.currentErrorMessage = '';
+    }
+    else if (result.stdout && result.stderr) {
+      // expected test fail
+      this.currentResultMessage = result.stdout;
+      this.currentErrorMessage = '';
+    }
+    else if (result.stderr) {
+      // unexpected runtime error
+      this.currentResultMessage = '';
+      this.currentErrorMessage = this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.stderr, result.stderr);
+    }
+    else if (result.cmpinfo) {
+      // compile error
+      this.currentResultMessage = "Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint."
+      this.currentErrorMessage = '';
+    }
+    else {
+      this.currentResultMessage = '';
+      this.currentErrorMessage = getResultOutcome(result.outcome);
+    }
+  }
 
   onRunTests() {
     this.submitting = true;
     const code = wrapTests(this.jobeServer.selectedLanguage, this.tests);
     this.jobeServer.submit_run(code).pipe(first()).subscribe(rr => {
-      this.result = rr;
-      this.testedOk = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
+      this.handleResult(rr);
       this.submitting = false;
     });
   }
