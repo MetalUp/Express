@@ -1,7 +1,7 @@
 import { wrapCSharpExpression, wrapCSharpFunctions, wrapCSharpTests } from "./csharp-helpers";
 import { wrapPythonExpression, wrapPythonFunctions, wrapPythonTests } from "./python-helpers";
 
-export const FunctionPlaceholder = "<<FunctionsPlaceholder>>";
+export const UserDefinedFunctionPlaceholder = "<<UserDefinedFunctionPlaceholder>>";
 export const ReadyMadeFunctionsPlaceholder = "<<ReadyMadeFunctionsPlaceholder>>";
 
 export function wrapExpression(language: string, expression: string) {

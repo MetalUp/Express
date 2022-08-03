@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RunResult, errorRunResult } from './run-result';
-import { FunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../languages/language-helpers';
+import { UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../languages/language-helpers';
 import { TaskService } from './task.service';
 
 @Injectable({
@@ -22,20 +22,20 @@ export class JobeServerService {
 
   selectedLanguage: string = '';
 
-  private functionDefinitions: string = '';
+  private userDefinedFunction: string = '';
   private readyMadeFunctions: string = '';
 
   // easier to test functions
   setFunctionDefinitions(functionDefinitions: string) {
-    this.functionDefinitions = functionDefinitions;
+    this.userDefinedFunction = functionDefinitions;
   }
 
   clearFunctionDefinitions() {
-    this.functionDefinitions = '';
+    this.userDefinedFunction = '';
   }
 
   hasFunctionDefinitions() {
-    return !!this.functionDefinitions;
+    return !!this.userDefinedFunction;
   }
 
   httpOptions = {
@@ -43,8 +43,8 @@ export class JobeServerService {
   };
 
   run_spec(code: string) {
-    code = code.replace(FunctionPlaceholder, this.functionDefinitions)
-      .replace(ReadyMadeFunctionsPlaceholder, this.readyMadeFunctions);
+    code = code.replace(UserDefinedFunctionPlaceholder, this.userDefinedFunction)
+               .replace(ReadyMadeFunctionsPlaceholder, this.readyMadeFunctions);
     return { "run_spec": { "language_id": this.selectedLanguage, "sourcecode": code } };
   }
 

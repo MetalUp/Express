@@ -1,4 +1,4 @@
-import {  FunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from "./language-helpers";
+import {  UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from "./language-helpers";
 
 export function wrapCSharpExpression(expression : string) {
     return `
@@ -10,7 +10,7 @@ export function wrapCSharpExpression(expression : string) {
     class MainWrapper {
         ${ReadyMadeFunctionsPlaceholder}
 
-        ${FunctionPlaceholder}
+        ${UserDefinedFunctionPlaceholder}
 
         private static string Display(object obj)
         {
@@ -31,7 +31,7 @@ export function wrapCSharpExpression(expression : string) {
     }`;
 }
 
-export function wrapCSharpFunctions(functions : string) {
+export function wrapCSharpFunctions(userDefinedFunction : string) {
     return `
     using System;
     using System.Linq;
@@ -42,7 +42,7 @@ export function wrapCSharpFunctions(functions : string) {
     class MainWrapper{
         ${ReadyMadeFunctionsPlaceholder}
 
-        ${functions}
+        ${userDefinedFunction}
 
         static void Main(string[] args) {}
     }
@@ -104,7 +104,7 @@ export function wrapCSharpTests(tests : string) {
 
         ${ReadyMadeFunctionsPlaceholder}
 
-        ${FunctionPlaceholder}
+        ${UserDefinedFunctionPlaceholder}
 
         ${tests}
 
