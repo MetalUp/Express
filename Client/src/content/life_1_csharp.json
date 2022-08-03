@@ -8,8 +8,8 @@
     "CodeMustNotContain": {},
     "WrappingCode": "",
     "SkeletonCode": "",
-    "PasteExpression": false,
-    "PasteFunction": false,
+    "PasteExpression": true,
+    "PasteFunction": true,
     "Tests": "life_1_tests.cs",
     "NextTask": "life_2_csharp.json"
 }

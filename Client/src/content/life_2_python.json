@@ -1,8 +1,7 @@
 {
-    "Language": "csharp",
+    "Language": "python",
     "Title": "Conway's Game of Life - Part 2",
     "Description": "life_2.html",
-    "Hints": ["life_2_hint1.html","life_2_hint2.html","life_2_hint3.html"],
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
@@ -10,6 +9,6 @@
     "SkeletonCode": "",
     "PasteExpression": false,
     "PasteFunction": false,
-    "Tests": "life_2_tests.cs",
-    "NextTask": "life_3_csharp.json"
+    "Tests": "life_2_tests.py",
+    "NextTask": "life_3_python.json"
 }
