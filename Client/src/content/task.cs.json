@@ -1,0 +1,14 @@
+{
+    "Language": "csharp",
+    "Title": "test csharp task",
+    "Description": "task.html",
+    "Hints": ["hint1.html", "hint1.html"],
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "WrappingCode": "",
+    "SkeletonCode": "static int Double(int x) => x * x;",
+    "PasteExpression": false,
+    "PasteFunction": false,
+    "Tests": "tests.cs"
+}

@@ -1,6 +1,6 @@
 {
-    "Language": "csharp",
-    "Title": "test task",
+    "Language": "python",
+    "Title": "test python task",
     "Description": "task.html",
     "Hints": ["hint1.html", "hint1.html"],
     "Messages": [],
