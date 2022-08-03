@@ -42,6 +42,14 @@ export class TaskService {
     });
   }
 
+  gotoTask(task: string){
+    if (task.endsWith(".json")){
+      task = task.replace(".json", "");
+    }
+
+    this.load(task);
+  }
+
   getHtml(fileName: string) {
     const options = {
       withCredentials: true,

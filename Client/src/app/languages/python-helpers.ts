@@ -1,4 +1,4 @@
-import { FunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from "./language-helpers";
+import { UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from "./language-helpers";
 
 export function wrapPythonExpression(expression : string) {
     return `
@@ -7,7 +7,7 @@ from datetime import date, datetime
 
 ${ReadyMadeFunctionsPlaceholder}
 
-${FunctionPlaceholder}
+${UserDefinedFunctionPlaceholder}
 
 def display(x):
   if isinstance(x, str):
@@ -22,11 +22,11 @@ print (display(${expression}))
 `;
 }
 
-export function wrapPythonFunctions(functions : string) {
+export function wrapPythonFunctions(userDefinedFunction : string) {
     return `
 ${ReadyMadeFunctionsPlaceholder}
 
-${functions}
+${userDefinedFunction}
 `;
 }
 
@@ -37,7 +37,7 @@ from datetime import date, datetime
 
 ${ReadyMadeFunctionsPlaceholder}
 
-${FunctionPlaceholder}
+${UserDefinedFunctionPlaceholder}
 
 def display(x):
   if isinstance(x, str):

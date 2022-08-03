@@ -10,5 +10,6 @@
     "PasteExpression": false,
     "PasteFunction": false,
     "Tests": "tests.cs",
-    "ReadyMadeFunctions": "static int Pow(int i) => i * i;"
+    "ReadyMadeFunctions": "static int Pow(int i) => i * i;",
+    "NextTask": "task.py.json"
 }

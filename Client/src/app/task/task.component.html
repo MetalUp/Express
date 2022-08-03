@@ -5,6 +5,7 @@
             <div class="task" [innerHtml]="taskHtml"></div>
             <div class="button-bar">
                 <button  [disabled]="!hasHint()" (click)="onFirstHint()">Hint 1</button>
+                <button  [disabled]="!hasNextTask()" (click)="onNextTask()">Next Task</button>
             </div>
         </div>
     </div>

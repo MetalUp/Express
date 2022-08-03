@@ -25,6 +25,14 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   private sub?: Subscription;
 
+  hasNextTask() {
+    return this.currentTask.NextTask;
+  }
+
+  onNextTask() {
+    this.taskService.gotoTask(this.currentTask.NextTask!);
+  }
+
   hintIndex = 0;
 
   hasHint() {
@@ -65,6 +73,8 @@ export class TaskComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
+      this.currentHint = '';
+      this.hintIndex = 0;
       this.taskService.getHtml(this.currentTask.Description).pipe(first()).subscribe(h => this.taskHtml = h);
     })
   }
