@@ -6,7 +6,7 @@
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
-    "WrappingCode": "",
+    "ReadyMadeFunctions": "",
     "SkeletonCode": "static int Double(int x) => x * x;",
     "PasteExpression": false,
     "PasteFunction": false,

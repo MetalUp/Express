@@ -8,7 +8,7 @@ export interface ITask {
     Messages?: IMessages,
     CodeMustMatch?: ICodeRulesBlock,
     CodeMustNotContain?: ICodeRulesBlock,
-    WrappingCode?: string,
+    ReadyMadeFunctions?: string,
     SkeletonCode?: string;
     PasteExpression?: boolean,
     PasteFunction?: boolean,

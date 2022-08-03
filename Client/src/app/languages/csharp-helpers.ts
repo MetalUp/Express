@@ -1,4 +1,4 @@
-import {  FunctionPlaceholder, TaskCodePlaceholder } from "./language-helpers";
+import {  FunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from "./language-helpers";
 
 export function wrapCSharpExpression(expression : string) {
     return `
@@ -8,7 +8,9 @@ export function wrapCSharpExpression(expression : string) {
     using System.Linq;
 
     class MainWrapper {
-        ${TaskCodePlaceholder}
+        ${ReadyMadeFunctionsPlaceholder}
+
+        ${FunctionPlaceholder}
 
         private static string Display(object obj)
         {
@@ -26,8 +28,6 @@ export function wrapCSharpExpression(expression : string) {
         static void Main(string[] args) {
            System.Console.WriteLine(Display(${(expression)}));
         }
-
-       ${FunctionPlaceholder}
     }`;
 }
 
@@ -40,13 +40,11 @@ export function wrapCSharpFunctions(functions : string) {
 
     
     class MainWrapper{
-        ${TaskCodePlaceholder}
+        ${ReadyMadeFunctionsPlaceholder}
+
+        ${functions}
 
         static void Main(string[] args) {}
-    }
-
-    static class UserDefinedFunctions {
-        ${functions}
     }
     `;
 }
@@ -103,6 +101,8 @@ export function wrapCSharpTests(tests : string) {
             }
             return obj.ToString();
         }
+
+        ${ReadyMadeFunctionsPlaceholder}
 
         ${FunctionPlaceholder}
 

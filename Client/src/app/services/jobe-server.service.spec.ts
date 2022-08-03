@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { JobeServerService } from './jobe-server.service';
 import { errorRunResult, RunResult } from './run-result';
 import { of, Subject, throwError } from 'rxjs';
-import { FunctionPlaceholder, TaskCodePlaceholder } from '../languages/language-helpers';
+import { FunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../languages/language-helpers';
 import { TaskService } from './task.service';
 import { ITask } from './task';
 
@@ -80,7 +80,7 @@ describe('JobeServerService', () => {
     service.selectedLanguage = 'stub language';
     service.setFunctionDefinitions('test definitions ');
 
-    service.submit_run(`${FunctionPlaceholder}${TaskCodePlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+    service.submit_run(`${FunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
 
     testRunSpec.run_spec.sourcecode = 'test definitions additional task code stub code';
 
@@ -94,7 +94,7 @@ describe('JobeServerService', () => {
     service.selectedLanguage = 'stub language';
     service.clearFunctionDefinitions();
 
-    service.submit_run(`${FunctionPlaceholder}${TaskCodePlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+    service.submit_run(`${FunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
 
     expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
       Object(testRunSpec),
