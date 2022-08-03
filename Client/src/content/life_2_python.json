@@ -2,6 +2,7 @@
     "Language": "python",
     "Title": "Conway's Game of Life - Part 2",
     "Description": "life_2.html",
+    "Hints": ["life_2_hint1.html","life_2_hint2.html","life_2_hint3.html"],
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
