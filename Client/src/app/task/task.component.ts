@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmptyTask, ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-task',
@@ -12,9 +13,9 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   currentTask: ITask = EmptyTask;
 
-  innerHtml = '';
+  taskHtml = '';
 
-  get innerHintHtml() {
+  get hintHtml() {
     return this.currentHint;
   }
 
@@ -39,10 +40,10 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   onHint() {
-    const hint = this.currentTask.Hints[this.hintIndex];
+    const hintFileName = this.currentTask.Hints[this.hintIndex];
 
-    if (hint) {
-      this.taskService.getHtml(hint).subscribe(h => this.currentHint = h);
+    if (hintFileName) {
+      this.taskService.getHtml(hintFileName).pipe(first()).subscribe(h => this.currentHint = h);
     }
   }
 
@@ -61,11 +62,10 @@ export class TaskComponent implements OnInit, OnDestroy {
     return this.onHint();
   }
 
-
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.taskService.getHtml(this.currentTask.Description).subscribe(h => this.innerHtml = h);
+      this.taskService.getHtml(this.currentTask.Description).subscribe(h => this.taskHtml = h);
     })
   }
 

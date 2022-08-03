@@ -2,16 +2,16 @@
     <div class="pane">
         <div class="pane-header">Task: {{currentTask.Title}}</div>
         <div class="pane-body">
-            <div class="task" [innerHtml]="innerHtml"></div>
+            <div class="task" [innerHtml]="taskHtml"></div>
             <div class="button-bar">
                 <button  [disabled]="!hasHint()" (click)="onFirstHint()">Hint 1</button>
             </div>
         </div>
     </div>
-    <div *ngIf="innerHintHtml" class="pane">
+    <div *ngIf="hintHtml" class="pane">
         <div class="pane-header">Hint: {{hintIndex + 1}}</div>
         <div class="pane-body">
-            <div class="hint" [innerHtml]="innerHintHtml"></div>
+            <div class="hint" [innerHtml]="hintHtml"></div>
             <div class="button-bar">
                 <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
                 <button [disabled]="!hasPreviousHint()" (click)="onPreviousHint()">Previous</button>
