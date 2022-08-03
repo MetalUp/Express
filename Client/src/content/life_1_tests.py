@@ -1,4 +1,4 @@
-def RunTests() :
+def run_tests() :
     fn = neighbour_cells.__name__
     def test(cell, expected) :
         n = neighbour_cells(cell)

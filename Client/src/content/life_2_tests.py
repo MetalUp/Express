@@ -1,4 +1,4 @@
-def RunTests() :
+def run_tests() :
     fn = keep_within_bounds.__name__
     def test(p1, expected):
         test_function(fn, expected, keep_within_bounds(p1), [p1])

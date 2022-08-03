@@ -71,6 +71,6 @@ class TestFailure(Exception) : pass
  
 ${tests}
 
-RunTests()
+run_tests()
 `;
 }
