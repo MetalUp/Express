@@ -29,3 +29,7 @@ ${TaskCodePlaceholder}
 ${functions}
 `;
 }
+
+export function wrapPythonTests(tests : string) {
+  return tests;
+}
