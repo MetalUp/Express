@@ -125,7 +125,7 @@ describe('RulesService', () => {
 
   it('should mustNotContain csharp function - braces', () => {
     const validated = service.mustNotContain(language.csharp, Applicability.functions, "static int Sq(int x) => {x*x};");
-    expect(validated).toEqual("Functions may not include curly braces '{' or '}'");
+    expect(validated).toEqual("Function implementation may not start with curly brace '{'");
   });
 
   it('should mustMatch csharp function - not static', () => {
