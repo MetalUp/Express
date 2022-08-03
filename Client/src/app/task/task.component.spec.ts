@@ -12,7 +12,7 @@ describe('TaskComponent', () => {
   let taskSubject = new Subject<ITask>();
 
   beforeEach(async () => {
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml'], { currentTask: taskSubject });
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml', 'gotoTask'], { currentTask: taskSubject });
 
     await TestBed.configureTestingModule({
       declarations: [TaskComponent],
@@ -89,8 +89,24 @@ describe('TaskComponent', () => {
     expect(component.hintHtml).toEqual('hint1 html');
     expect(component.hasPreviousHint()).toEqual(false);
     expect(component.hasNextHint()).toEqual(true);
+  });
+
+  it('should disable next task if no next task', () => {
+
+    const testTask = { NextTask: ""} as unknown as ITask;
+    taskSubject.next(testTask);
+
+    expect(component.hasNextTask()).toEqual(false);   
+  });
 
 
+  it('should get the next task', () => {
+
+    const testTask = { NextTask: "nexttask.json"} as unknown as ITask;
+    taskSubject.next(testTask);
+    expect(component.hasNextTask()).toEqual(true);
+    component.onNextTask();
+    expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('nexttask.json');
   });
 
 });
