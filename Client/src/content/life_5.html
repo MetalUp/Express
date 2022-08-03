@@ -1,4 +1,3 @@
-<div>
 <p>The rules of, Life state that:</p>
         <ul>
 <li>Any live cell with two or three live neighbours survives.</li>
@@ -6,17 +5,17 @@
 <li>All other live cells die in the next generation. Similarly, all other dead cells stay dead.</li>
         </ul>
 
-<p>Your task is to define a function – named <code class="csharp">WillLive</code><code class="python">will_live</code> – that determines whether a single cell will be alive in the next ‘generation’.</p>
+<p>Your task is to define a function named <code class="csharp">WillLive</code><code class="python">will_live</code>, that determines whether a single cell will be alive in the next generation.</p>
 
 <p><code class="csharp">WillLive</code><code class="python">will_live</code> should define two parameters in the order given here:</p>
 <ol>
-<li>A Boolean parameter – named <code>alive</code> – specifying whether the cell itself is currently alive (true) or not (false)</li>
-<li>An integer parameter – named <code>neighbours</code> – specifying the number of neighbouring cells (out of a maximum of 8) that are <i>currently alive</i>.</li>
+<li>A Boolean parameter named <code>alive</code> indicating whether the cell itself is currently alive (true) or not (false)</li>
+<li>An integer parameter named <code>neighbours</code> specifying the number of neighbouring cells (out of a maximum of 8) that are <i>currently alive</i>.</li>
 </ol>
 
 <p> These two parameters provide sufficient input to implement all the 'generation' rules stated above.</p>
 
-<p><code class="csharp">WillLive</code><code class="python">will_live</code> should return a Boolean value: true if the cell will be alive in the next generation, false if it will be dead.</p> 
+<p><code class="csharp">WillLive</code><code class="python">will_live</code> should return a Boolean value: <code class="csharp">true</code><code class="python">True</code> only if the cell will be alive in the next generation.</p> 
 
 <p>The function should return a <i>single</i> expression that embodies all three of the rules above.</p>
-</div>
+

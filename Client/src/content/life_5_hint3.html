@@ -2,17 +2,12 @@
 
 <code class="python">def willLive(alive, neighbours) : return (neighbours > 1 and neighbours < 4) if alive else neighbours == 3</code>
 
-<code class="csharp">static bool WillLive(bool alive, int neighbours) => 
-    (alive ? neighbours > 1 && neighbours < 4 : 
-    neighbours == 3);</code>
+<code class="csharp">static bool WillLive(bool alive, int neighbours) => (alive ? neighbours > 1 && neighbours < 4 : neighbours == 3);</code>
 
 <p>Alternatively, using only logical operators:</p>
 
-<code class="python"></code>def willLive(alive, neighbours) : <br>
-    return (alive and neighbours > 1 and neighbours < 4) \<br>            
-            or (not alive and neighbours == 3)</code></4>
+<code class="python">def willLive(alive, neighbours) : return (alive and neighbours > 1 and neighbours < 4) or (not alive and neighbours == 3)</code>
 
-<code class="csharp">static bool WillLive(bool alive, int neighbours) => <br>
-            (alive && neighbours > 1 && neighbours < 4) | (!alive && neighbours == 3);</code>
+<code class="csharp">static bool WillLive(bool alive, int neighbours) => (alive && neighbours > 1 && neighbours < 4) | (!alive && neighbours == 3);</code>
 
-<p>Choose the one you are more comfortable with, re-type the code into the Function Definition pane, submit and run the tests to gain the remaining marks and move onto Part II.</p>
+<p>Choose the one you are more comfortable with, re-type the code into the Function Definition pane, submit and run the tests to gain the remaining marks.</p>

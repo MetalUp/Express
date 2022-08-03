@@ -1,15 +1,11 @@
-<p>Using Ternary operators your code might look like this:</p>
+<p>Using Ternary operators the expression returned by your function might look like this:</p>
 
-<code class="python">def will_live(alive, neighbours) : return (<span class="field">variable</span> > <span class="field">const</span> and <span class="field">variable</span> < <span class="field">const</span>) if <span class="field">variable</span> else <span class="field">variable</span> == <span class="field">const</span></code>
+<code class="python">(<span class="field">variable</span> > <span class="field">const</span> and <span class="field">variable</span> < <span class="field">const</span>) if <span class="field">variable</span> else <span class="field">variable</span> == <span class="field">const</span></code>
+<code class="csharp">(<span class="field">variable</span> ? <span class="field">variable</span> > <span class="field">const</span> && <span class="field">variable</span> < <span class="field">const</span> : <span class="field">variable</span> == <span class="field">const</span>)</code>
 
 <p>Using only logical operators your code might look like this:</p>
-<code class="python">def will_live(alive, neighbours) : return \<br>
-(<span class="field">variable</span> and <span class="field">variable</span> > _ and <span class="field">variable</span> < _) \<br>
-       or (not <span class="field">variable</span> and <span class="field">variable</span> == _)</code>
+<code class="python">(<span class="field">variable</span> and <span class="field">variable</span> > <span class="field">const</span> and <span class="field">variable</span> < <span class="field">const</span>) or (not <span class="field">variable</span> and <span class="field">variable</span> == <span class="field">const</span>)</code>
 
-<p class="python">Note that line continuations - <code>\</code> - have been added here to break up the single expression the terms more clearly. 
-You may format your code like this, or put it all on a single line, without the added line-breaks, 
-letting it wrap automatically in the pane.</p>
+<code class=csharp>(<span class="field">variable</span> && <span class="field">variable</span> > <span class="field">const</span> && <span class="field">variable</span> < <span class="field">const</span>) | (!<span class="field">variable</span> && <span class="field">variable</span> == <span class="field">const</span>);</code>
 
-<code class="csharp">static bool WillLive(bool alive, int neighbours) => <br>
-(<span class="field">variable</span> && <span class="field">variable</span> > <span class="field">const</span> && <span class="field">variable</span> < <span class="field">const</span>) | (!<span class="field">variable</span> && <span class="field">variable</span> == <span class="field">const</span>);</code>
+
