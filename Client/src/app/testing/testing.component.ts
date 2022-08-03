@@ -29,7 +29,7 @@ export class TestingComponent implements OnInit, OnDestroy {
     if (this.canRunTests() && this.result.outcome === 0) {
       return 'Tests not yet run on current function definition.';
     }
-    if (this.result.outcome === 0) {  
+    if (this.result.outcome === 0) {
       return 'This task defines automated tests. These may only be run once Function definition code has been submitted and successfully compiles.';
     }
     return this.currentResultMessage;
@@ -38,7 +38,7 @@ export class TestingComponent implements OnInit, OnDestroy {
   tests = ''
 
   canRunTests() {
-    if (this.jobeServer.hasFunctionDefinitions()){
+    if (this.jobeServer.hasFunctionDefinitions()) {
       return this.result.outcome === 0;
     }
     this.testedOk = false;
@@ -51,9 +51,9 @@ export class TestingComponent implements OnInit, OnDestroy {
   result: RunResult = EmptyRunResult;
   testedOk = false;
   currentResultMessage = '';
-  currentErrorMessage = ''; 
+  currentErrorMessage = '';
 
-  private handleResult(result : RunResult) {
+  private handleResult(result: RunResult) {
     this.result = result;
     this.testedOk = !(result.cmpinfo || result.stderr) && result.outcome == 15;
 
@@ -75,7 +75,7 @@ export class TestingComponent implements OnInit, OnDestroy {
     else if (result.cmpinfo) {
       // compile error
       this.currentResultMessage = "Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint."
-      this.currentErrorMessage = '';
+      this.currentErrorMessage = result.cmpinfo;
     }
     else {
       this.currentResultMessage = '';
