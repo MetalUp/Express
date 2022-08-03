@@ -1,0 +1,16 @@
+{
+    "Language": "python",
+    "Title": "Conway's Game of Life - Part 4",
+    "Description": "life_4.html",
+    "Hints": ["life_4_hint1.html","life_4_hint2.html","life_4_hint3.html"],
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "ReadyMadeFunctions": "def neighbour_cells(c) : return [ c-21, c-20, c-19, c-1, c+1, c+19, c+20, c+21]\ndef keep_within_bounds(i) : return  i - 400 if i >= 400 else  i + 400 if i < 0 else i\ndef adjusted_neighbour_cells(c): return list(map(lambda x :keep_within_bounds(x),neighbour_cells(c)))",
+    "SkeletonCode": "",
+
+    "PasteExpression": false,
+    "PasteFunction": true,
+    "Tests": "life_4_tests.py",
+    "NextTask": "life_5_python.json"
+}

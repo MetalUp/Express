@@ -60,8 +60,8 @@ namespace CSharp
 
         public static void RunTests_NeighbourCells()
         {
-                TestNeighbourCells(30, new List<int> { 9, 10, 11, 29, 31, 49, 50, 51 });
-                AllTestsPassed();
+            TestNeighbourCells(30, new List<int> { 9, 10, 11, 29, 31, 49, 50, 51 });
+            AllTestsPassed();
         }
 
         private static void TestNeighbourCells(int cell, List<int> expected)
@@ -124,18 +124,14 @@ namespace CSharp
 
         public static void RunTests_LiveNeighbourCount()
         {
-            try
-            {
-                testLiveNeighbourCount(0, 4);
-                testLiveNeighbourCount(19, 4);
-                testLiveNeighbourCount(30, 2);
-                testLiveNeighbourCount(44, 3);
-                testLiveNeighbourCount(59, 4);
-                testLiveNeighbourCount(60, 3);
-                testLiveNeighbourCount(399, 4);
-                AllTestsPassed();
-            }
-            catch (TestFailure) { }
+            testLiveNeighbourCount(0, 4);
+            testLiveNeighbourCount(19, 4);
+            testLiveNeighbourCount(30, 2);
+            testLiveNeighbourCount(44, 3);
+            testLiveNeighbourCount(59, 4);
+            testLiveNeighbourCount(60, 3);
+            testLiveNeighbourCount(399, 4);
+            AllTestsPassed();
         }
 
         private static void testLiveNeighbourCount(int p1, int expected)
@@ -145,29 +141,25 @@ namespace CSharp
 
         public static void RunTests_WillLive()
         {
-            try
-            {
-                testWillLive(false, 0, false);
-                testWillLive(false, 1, false);
-                testWillLive(false, 2, false);
-                testWillLive(false, 3, true);
-                testWillLive(false, 4, false);
-                testWillLive(false, 5, false);
-                testWillLive(false, 6, false);
-                testWillLive(false, 7, false);
-                testWillLive(false, 8, false);
-                testWillLive(true, 0, false);
-                testWillLive(true, 1, false);
-                testWillLive(true, 2, true);
-                testWillLive(true, 3, true);
-                testWillLive(true, 4, false);
-                testWillLive(true, 5, false);
-                testWillLive(true, 6, false);
-                testWillLive(true, 7, false);
-                testWillLive(true, 8, false);
-                AllTestsPassed();
-            }
-            catch (TestFailure) { }
+            testWillLive(false, 0, false);
+            testWillLive(false, 1, false);
+            testWillLive(false, 2, false);
+            testWillLive(false, 3, true);
+            testWillLive(false, 4, false);
+            testWillLive(false, 5, false);
+            testWillLive(false, 6, false);
+            testWillLive(false, 7, false);
+            testWillLive(false, 8, false);
+            testWillLive(true, 0, false);
+            testWillLive(true, 1, false);
+            testWillLive(true, 2, true);
+            testWillLive(true, 3, true);
+            testWillLive(true, 4, false);
+            testWillLive(true, 5, false);
+            testWillLive(true, 6, false);
+            testWillLive(true, 7, false);
+            testWillLive(true, 8, false);
+            AllTestsPassed();
         }
 
         private static void testWillLive(bool alive, int neighbours, bool expected)
@@ -177,18 +169,14 @@ namespace CSharp
 
         public static void RunTests_NextCellValue()
         {
-            try
-            {
-                testNextCellValue(0, false);
-                testNextCellValue(19, false);
-                testNextCellValue(30, true);
-                testNextCellValue(44, true);
-                testNextCellValue(59, false);
-                testNextCellValue(60, true);
-                testNextCellValue(399, false);
-                AllTestsPassed();
-            }
-            catch (TestFailure) { }
+            testNextCellValue(0, false);
+            testNextCellValue(19, false);
+            testNextCellValue(30, true);
+            testNextCellValue(44, true);
+            testNextCellValue(59, false);
+            testNextCellValue(60, true);
+            testNextCellValue(399, false);
+            AllTestsPassed();
         }
 
         private static void testNextCellValue(int c, bool expected)
@@ -198,14 +186,10 @@ namespace CSharp
 
         public static void RunTests_NextGeneration()
         {
-            try
-            {
-                string fn = nameof(NextGeneration);
-                List<bool> nextGen = new List<bool> { false, true, false, true, true, true, true, false, true, false, true, true, true, false, false, false, true, true, false, false, false, false, false, false, true, false, true, false, false, false, true, false, false, false, false, false, false, true, false, false, false, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, true, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, false, false, true, false, true, true, true, false, false, true, true, true, true, true, false, false, false, false, false, false, false, true, true, false, false, false, true, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, true, true, false, true, true, false, false, true, true, true, true, false, false, false, true, true, true, true, false, false, true, false, true, false, true, false, true, false, false, false, false, false, false, false, true, true, true, true, true, false, true, false, true, false, true, true, false, true, false, true, false, true, true, false, false, false, true, false, true, false, false, false, true, false, false, false, false, true, false, true, false, false, true, false, false, false, true, false, true, false, true, true, false, true, false, false, true, true, false, true, false, false, false, false, false, false, true, false, true, true, false, false, true, false, false, true, true, false, true, true, false, false, false, true, false, false, true, true, false, false, false, true, false, false, false, false, false, true, false, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, false, true, false, false, true, false, true, false, true, true, false, true, false, true, true, false, false, false, false, true, false, true, true, true, false, false, true, true, false, false, false, true, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true, true, true, false, false, false, true, false, false, false, true, false, false, false, false, false, false, true, false, true, false, false, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, true, true, false, false, false, true, false, true, false, true, false, false, false, true, true, true, false };
-                TestFunction(fn, nextGen, NextGeneration(testGrid), "testGrid");
-                AllTestsPassed();
-            }
-            catch (TestFailure) { }
+            string fn = nameof(NextGeneration);
+            List<bool> nextGen = new List<bool> { false, true, false, true, true, true, true, false, true, false, true, true, true, false, false, false, true, true, false, false, false, false, false, false, true, false, true, false, false, false, true, false, false, false, false, false, false, true, false, false, false, false, false, false, true, false, false, false, true, false, false, false, true, false, false, false, true, true, false, false, true, false, false, false, false, false, false, false, false, true, false, false, false, false, true, false, true, true, true, false, false, true, true, true, true, true, false, false, false, false, false, false, false, true, true, false, false, false, true, false, false, false, false, false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, true, true, false, true, true, false, false, true, true, true, true, false, false, false, true, true, true, true, false, false, true, false, true, false, true, false, true, false, false, false, false, false, false, false, true, true, true, true, true, false, true, false, true, false, true, true, false, true, false, true, false, true, true, false, false, false, true, false, true, false, false, false, true, false, false, false, false, true, false, true, false, false, true, false, false, false, true, false, true, false, true, true, false, true, false, false, true, true, false, true, false, false, false, false, false, false, true, false, true, true, false, false, true, false, false, true, true, false, true, true, false, false, false, true, false, false, true, true, false, false, false, true, false, false, false, false, false, true, false, true, true, true, true, true, false, false, false, false, false, false, false, false, true, true, false, true, false, false, true, false, true, false, true, true, false, true, false, true, true, false, false, false, false, true, false, true, true, true, false, false, true, true, false, false, false, true, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true, true, true, false, false, false, true, false, false, false, true, false, false, false, false, false, false, true, false, true, false, false, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, false, false, false, false, false, true, true, false, false, false, false, false, false, false, true, true, false, false, false, true, false, true, false, true, false, false, false, true, true, true, false };
+            TestFunction(fn, nextGen, NextGeneration(testGrid), "testGrid");
+            AllTestsPassed();
         }
         #endregion
     }
