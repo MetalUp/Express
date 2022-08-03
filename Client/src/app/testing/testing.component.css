@@ -1,0 +1,17 @@
+div.pane-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows:  minmax(min-content, 1fr) min-content;
+    overflow: auto;
+    font-size: 11pt;
+    justify-items: end;
+    padding: 5px;
+}
+
+.message {
+    width: 100%;
+}
+
+button {
+    width: fit-content;
+}

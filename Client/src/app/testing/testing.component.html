@@ -1,11 +1,10 @@
-<ng-container *ngIf="hasTests">
+<ng-container *ngIf="hasTests()">
     <div class="pane">
         <div class="pane-header">Testing</div>
         <div class="pane-body">
-            <div class="hint"></div>
+            <div class="message">{{message}}</div>
             <div class="button-bar">
-                <button>Next</button>
-                <button>Previous</button>
+                <button [disabled]="!canRunTests()" (click)="onRunTests()">Run Tests</button>
             </div>
         </div>
     </div>

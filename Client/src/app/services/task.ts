@@ -11,7 +11,8 @@ export interface ITask {
     WrappingCode?: string,
     SkeletonCode?: string;
     PasteExpression?: boolean,
-    PasteFunction?: boolean
+    PasteFunction?: boolean,
+    Tests?: string 
 }
 
 export const EmptyTask = {

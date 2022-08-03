@@ -34,6 +34,10 @@ export class JobeServerService {
     this.functionDefinitions = '';
   }
 
+  hasFunctionDefinitions() {
+    return !!this.functionDefinitions;
+  }
+
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json; charset-utf-8' })
   };
