@@ -48,7 +48,9 @@ def display(x):
 
 fail = "Test failed calling "
 
-def arg_string(arguments) : return display(arguments).strip("[]")
+def arg_string(arguments) :
+    args = display(arguments)
+    return args[1:len(args)-1]
 
 def test_function(function_name, expected, actual, args):
     if display(actual) != display(expected):

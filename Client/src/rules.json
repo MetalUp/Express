@@ -97,7 +97,7 @@
                     "Messages.MutatingMethod"
                 ],
                 [
-                    "\\w*[^=]=[^(=|>)]\\w*",
+                    "\\w*[^=><]=[^(=|>)]\\w*",
                     "Messages.Assignment"
                 ]
             ],
