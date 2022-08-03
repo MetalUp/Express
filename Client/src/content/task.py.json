@@ -10,5 +10,6 @@
     "SkeletonCode": "def double(x): return x * x;",
     "PasteExpression": false,
     "PasteFunction": false,
-    "Tests": "tests.py"
+    "Tests": "tests.py",
+    "NextTask": "task.cs"
 }

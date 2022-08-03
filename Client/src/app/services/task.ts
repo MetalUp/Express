@@ -12,7 +12,8 @@ export interface ITask {
     SkeletonCode?: string;
     PasteExpression?: boolean,
     PasteFunction?: boolean,
-    Tests?: string 
+    Tests?: string ,
+    NextTask?: string
 }
 
 export const EmptyTask = {
