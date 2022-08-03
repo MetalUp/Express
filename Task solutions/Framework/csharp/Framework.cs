@@ -29,7 +29,7 @@ namespace Framework
             if (Display(actual) != Display(expected))
             {
                 Console.WriteLine(fail + $"{functionName}({ArgString(args)}) Expected: {Display(expected)}  Actual: {Display(actual)}");
-                throw new TestException();
+                throw new TestFailure();
             }
         }
 
@@ -38,16 +38,18 @@ namespace Framework
             if (actual != true)
             {
                 Console.WriteLine(fail +$"{functionName}({ArgString(args)}) {message}");
-                throw new TestException();
+                throw new TestFailure();
             }
         }
 
-        public static void AllTestsPassed(string function)
+        public static string allTestsPassed = "All tests passed.";
+
+        public static void AllTestsPassed()
         {
-            Console.WriteLine($"All tests passed on function: {function}");
+            Console.WriteLine(allTestsPassed);
         }
 
-        public class TestException : Exception { }
+        public class TestFailure : Exception { }
 
     }
 }

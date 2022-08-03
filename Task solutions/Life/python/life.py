@@ -9,7 +9,7 @@ def neighbour_cells(c) : return [ c-21, c-20, c-19, c-1, c+1, c+19, c+20, c+21]
 def adjusted_neighbour_cells(c): return list(map(lambda x :keep_within_bounds(x),neighbour_cells(c)))
 
 # 'Wraps' the grid vertically so that top row and bottom row are neighbours
-def keep_within_bounds(i) : return  i - size if i >= size else  i + size if i < 0 else i
+def keep_within_bounds(i) : return  i - 400 if i >= 400 else  i + 400 if i < 0 else i
 
 def live_neighbours(grid, c) : return len(list(filter(lambda c: grid[c] is True, adjusted_neighbour_cells(c))))
  

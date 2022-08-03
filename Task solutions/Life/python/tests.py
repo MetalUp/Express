@@ -23,7 +23,7 @@ def run_tests_will_live() :
     test(True, 6, False)
     test(True, 7, False)
     test(True, 8, False)
-    all_tests_passed(fn)
+    all_tests_passed()
 
 
 def run_tests_neighbour_cells() :
@@ -36,7 +36,7 @@ def run_tests_neighbour_cells() :
             assert_true(fn, cell, val in n, msg + f" List does not contain: {val}")
         
     test(30, [ 9, 10, 11, 29, 31, 49, 50, 51 ])
-    all_tests_passed(fn)
+    all_tests_passed()
 
 def run_tests_keep_within_bounds() :
     fn = keep_within_bounds.__name__
@@ -49,7 +49,7 @@ def run_tests_keep_within_bounds() :
     test(0, 0)
     test(-1, 399)
     test(-20, 380)
-    all_tests_passed(fn)
+    all_tests_passed()
 
 def run_tests_adjusted_neighbour_cells() :
     fn = adjusted_neighbour_cells.__name__
@@ -64,7 +64,7 @@ def run_tests_adjusted_neighbour_cells() :
     test(380, [ 359, 360, 361, 379, 381, 399, 0,1]);
     test(0, [ 379, 380, 381, 399, 1, 19, 20, 21]);
     test(19, [ 398, 399, 0, 18, 20, 38, 39, 40]);
-    all_tests_passed(fn)
+    all_tests_passed()
 
 def run_tests_live_neighbours() :
     fn = live_neighbours.__name__
@@ -77,7 +77,7 @@ def run_tests_live_neighbours() :
     test(59, 4)
     test(60, 3)
     test(399, 4)
-    all_tests_passed(fn)
+    all_tests_passed()
 
 testGrid = [False, True, False, True, False, False, True, True, True, False, False, True, True, False, True, True, False, False, True, True, True, True, True, True, False, False, True, False, True, True, True, False, True, True, True, True, False, True, False, True, False, False, True, True, False, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, True, False, False, True, False, False, True, True, False, False, False, True, True, False, False, True, True, False, True, True, True, True, False, False, False, False, False, False, False, False, True, True, False, True, False, False, True, True, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, True, False, False, False, True, False, False, True, True, False, True, False, True, True, False, False, False, False, False, True, False, False, True, False, True, False, True, False, True, False, True, False, False, True, False, True, False, True, False, False, True, False, False, True, True, False, True, False, False, True, False, True, False, True, True, False, False, False, False, True, False, False, True, False, False, False, False, True, False, False, False, True, False, True, False, True, False, False, False, False, False, True, True, False, True, True, False, False, False, False, False, True, False, False, True, True, True, False, False, False, True, False, True, False, False, True, True, False, True, False, True, False, True, False, False, True, False, True, False, True, False, True, False, False, False, True, False, False, False, True, False, True, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, True, True, True, False, False, True, False, True, False, False, True, False, True, False, True, False, False, False, False, False, True, False, True, False, False, False, False, True, True, False, False, True, True, False, True, True, False, True, True, False, True, False, False, True, False, True, False, False, True, False, True, True, False, False, False, False, False, True, True, False, False, False, True, True, True, False, False, False, True, True, False, True, True, True, False, False, False, True, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, True, True, False, True, False, False, True, True, False, False, True, True, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, True, False, False, False, True, False]
 
@@ -92,10 +92,10 @@ def run_tests_next_cell_value() :
     test(59, False); #Currently: False,4
     test(60, True); #Currently: True,3
     test(399, False); #Currently: False,4
-    all_tests_passed(fn)
+    all_tests_passed()
 
 def run_tests_next_generation():
     fn = next_generation.__name__
     nextGen = [False, True, False, True, True, True, True, False, True, False, True, True, True, False, False, False, True, True, False, False, False, False, False, False, True, False, True, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, True, False, False, True, False, False, False, False, False, False, False, False, True, False, False, False, False, True, False, True, True, True, False, False, True, True, True, True, True, False, False, False, False, False, False, False, True, True, False, False, False, True, False, False, False, False, False, True, True, False, False, False, False, False, False, False, False, False, False, False, False, False, True, True, False, False, False, False, False, True, True, False, True, True, False, False, True, True, True, True, False, False, False, True, True, True, True, False, False, True, False, True, False, True, False, True, False, False, False, False, False, False, False, True, True, True, True, True, False, True, False, True, False, True, True, False, True, False, True, False, True, True, False, False, False, True, False, True, False, False, False, True, False, False, False, False, True, False, True, False, False, True, False, False, False, True, False, True, False, True, True, False, True, False, False, True, True, False, True, False, False, False, False, False, False, True, False, True, True, False, False, True, False, False, True, True, False, True, True, False, False, False, True, False, False, True, True, False, False, False, True, False, False, False, False, False, True, False, True, True, True, True, True, False, False, False, False, False, False, False, False, True, True, False, True, False, False, True, False, True, False, True, True, False, True, False, True, True, False, False, False, False, True, False, True, True, True, False, False, True, True, False, False, False, True, False, True, True, True, True, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, True, True, True, False, False, False, True, False, False, False, True, False, False, False, False, False, False, True, False, True, False, False, True, True, True, True, True, True, True, True, True, False, True, True, True, True, True, False, False, False, False, False, False, True, True, False, False, False, False, False, False, False, True, True, False, False, False, True, False, True, False, True, False, False, False, True, True, True, False]
     test_function(fn, nextGen, next_generation(testGrid), "testGrid")
-    all_tests_passed(fn)
+    all_tests_passed()
