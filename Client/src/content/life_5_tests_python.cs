@@ -1,0 +1,23 @@
+﻿def run_tests() :
+    fn = will_live.__name__
+    def test(alive,  neighbours, expected):
+       test_function(fn, expected, will_live(alive, neighbours), [alive, neighbours])
+    test(False, 0, False)
+    test(False, 1, False)
+    test(False, 2, False)
+    test(False, 3, True)
+    test(False, 4, False)
+    test(False, 5, False)
+    test(False, 6, False)
+    test(False, 7, False)
+    test(False, 8, False)
+    test(True, 0, False)
+    test(True, 1, False)
+    test(True, 2, True)
+    test(True, 3, True)
+    test(True, 4, False)
+    test(True, 5, False)
+    test(True, 6, False)
+    test(True, 7, False)
+    test(True, 8, False)
+    all_tests_passed()
