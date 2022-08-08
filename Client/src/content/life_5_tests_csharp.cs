@@ -1,33 +1,27 @@
-﻿public static void RunTests_WillLive()
+﻿static void RunTests()
 {
-    string fn = "WillLive";
-    try
-    {
-        test(false, 0, false);
-        test(false, 1, false);
-        test(false, 2, false);
-        test(false, 3, true);
-        test(false, 4, false);
-        test(false, 5, false);
-        test(false, 6, false);
-        test(false, 7, false);
-        test(false, 8, false);
-        test(true, 0, false);
-        test(true, 1, false);
-        test(true, 2, true);
-        test(true, 3, true);
-        test(true, 4, false);
-        test(true, 5, false);
-        test(true, 6, false);
-        test(true, 7, false);
-        test(true, 8, false);
-
-    }
-    catch (TestException) { } //Any other exception thrown at runtime will be uncaught and handled by server
-    AllTestsPassed(fn);
+    testWillLive(false, 0, false);
+    testWillLive(false, 1, false);
+    testWillLive(false, 2, false);
+    testWillLive(false, 3, true);
+    testWillLive(false, 4, false);
+    testWillLive(false, 5, false);
+    testWillLive(false, 6, false);
+    testWillLive(false, 7, false);
+    testWillLive(false, 8, false);
+    testWillLive(true, 0, false);
+    testWillLive(true, 1, false);
+    testWillLive(true, 2, true);
+    testWillLive(true, 3, true);
+    testWillLive(true, 4, false);
+    testWillLive(true, 5, false);
+    testWillLive(true, 6, false);
+    testWillLive(true, 7, false);
+    testWillLive(true, 8, false);
+    AllTestsPassed();
 }
 
-private static void test(bool currentlyAlive, int liveNeighbours, bool expected)
+private static void testWillLive(bool alive, int neighbours, bool expected)
 {
-    TestFunction(fn, expected, WillLive(currentlyAlive, liveNeighbours), currentlyAlive, liveNeighbours);
+    TestFunction(nameof(WillLive), expected, WillLive(alive, neighbours), alive, neighbours);
 }
