@@ -17,7 +17,7 @@ export class JobeServerService {
     })
   }
 
-  private ip = "http://20.82.150.165";
+  private ip = "http://metalup-jobe.northeurope.cloudapp.azure.com";
   path = `${this.ip}/jobe/index.php/restapi`;
 
   selectedLanguage: string = '';
