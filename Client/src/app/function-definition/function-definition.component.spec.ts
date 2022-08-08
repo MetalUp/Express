@@ -9,6 +9,7 @@ import { RulesService } from '../services/rules.service';
 import { Applicability } from '../services/rules';
 import { TaskService } from '../services/task.service';
 import { ITask } from '../services/task';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('FunctionDefinitionComponent', () => {
   let component: FunctionDefinitionComponent;
@@ -54,6 +55,7 @@ describe('FunctionDefinitionComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [FunctionDefinitionComponent],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
           provide: JobeServerService,

@@ -3,6 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { Subject} from 'rxjs'
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AppComponent', () => {
   let testParams = new Subject<Params>();
@@ -15,6 +16,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
           provide: ActivatedRoute,

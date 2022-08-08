@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, Subject } from 'rxjs';
 import { ITask } from '../services/task';
@@ -17,6 +18,7 @@ describe('TaskComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [TaskComponent],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
           provide: TaskService,

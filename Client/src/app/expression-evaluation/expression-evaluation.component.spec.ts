@@ -8,6 +8,7 @@ import { RulesService } from '../services/rules.service';
 import { Applicability } from '../services/rules';
 import { TaskService } from '../services/task.service';
 import { ITask } from '../services/task';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ExpressionEvaluationComponent', () => {
   let component: ExpressionEvaluationComponent;
@@ -54,6 +55,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [ExpressionEvaluationComponent],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
           provide: JobeServerService,

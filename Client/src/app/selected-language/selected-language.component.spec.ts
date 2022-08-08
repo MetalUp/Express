@@ -1,3 +1,4 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Params } from '@angular/router';
 import { of } from 'rxjs';
@@ -16,6 +17,7 @@ describe('SelectedLanguageComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [SelectedLanguageComponent],
+      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
           provide: JobeServerService,
