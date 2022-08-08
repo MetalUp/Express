@@ -13,6 +13,7 @@ describe('TaskComponent', () => {
 
   beforeEach(async () => {
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml', 'gotoTask'], { currentTask: taskSubject });
+    taskServiceSpy.getHtml.and.returnValue(of('test html'));
 
     await TestBed.configureTestingModule({
       declarations: [TaskComponent],
@@ -34,8 +35,6 @@ describe('TaskComponent', () => {
   });
 
   it('should get the task html file', () => {
-
-    taskServiceSpy.getHtml.and.returnValue(of('test html'));
 
     const testTask = { Description: 'testfile.html' } as unknown as ITask;
     taskSubject.next(testTask);
