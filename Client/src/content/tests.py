@@ -1,4 +1,4 @@
-def RunTests() :
+def run_tests() :
     fn = double.__name__
     def test(inp, out) :
         n = double(inp)
