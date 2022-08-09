@@ -64,7 +64,7 @@ export class HintComponent implements OnInit, OnDestroy {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
       this.currentHint = '';
-      this.hintIndex = 0;
+      this.hintIndex = -1;
     })
   }
 
