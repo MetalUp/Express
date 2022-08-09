@@ -46,52 +46,6 @@ describe('TaskComponent', () => {
     expect(component.taskHtml).toEqual('test html');
   });
 
-  it('should get the hint html file', () => {
-
-    taskServiceSpy.getHtml.and.returnValue(of('hint1 html'));
-
-    const testTask = { Hints: ['hint1.html', 'hint2.html']} as unknown as ITask;
-    taskSubject.next(testTask);
-
-    expect(component.hasHint()).toEqual(true);
-
-    component.onFirstHint(); 
-
-    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('hint1.html');
-    expect(component.hintIndex).toEqual(0);
-    expect(component.hintHtml).toEqual('hint1 html');
-    expect(component.hasPreviousHint()).toEqual(false);
-    expect(component.hasNextHint()).toEqual(true);
-
-    taskServiceSpy.getHtml.and.returnValue(of('hint2 html'));
-
-    component.onNextHint(); 
-
-    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('hint2.html');
-    expect(component.hintIndex).toEqual(1);
-    expect(component.hintHtml).toEqual('hint2 html');
-    expect(component.hasPreviousHint()).toEqual(true);
-    expect(component.hasNextHint()).toEqual(false);
-
-    taskServiceSpy.getHtml.and.returnValue(of('hint1 html'));
-
-    component.onPreviousHint(); 
-
-    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('hint1.html');
-    expect(component.hintIndex).toEqual(0);
-    expect(component.hintHtml).toEqual('hint1 html');
-    expect(component.hasPreviousHint()).toEqual(false);
-    expect(component.hasNextHint()).toEqual(true);
-
-    component.onFirstHint(); 
-
-    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('hint1.html');
-    expect(component.hintIndex).toEqual(0);
-    expect(component.hintHtml).toEqual('hint1 html');
-    expect(component.hasPreviousHint()).toEqual(false);
-    expect(component.hasNextHint()).toEqual(true);
-  });
-
   it('should disable next task if no next task', () => {
 
     const testTask = { NextTask: ""} as unknown as ITask;

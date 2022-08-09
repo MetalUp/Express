@@ -13,8 +13,6 @@ export class HintComponent implements OnInit, OnDestroy {
 
   currentTask: ITask = EmptyTask;
 
-  taskHtml = '';
-
   get hintHtml() {
     return this.currentHint;
   }
@@ -24,14 +22,6 @@ export class HintComponent implements OnInit, OnDestroy {
   constructor(private taskService: TaskService) { }
 
   private sub?: Subscription;
-
-  hasNextTask() {
-    return !!this.currentTask.NextTask;
-  }
-
-  onNextTask() {
-    this.taskService.gotoTask(this.currentTask.NextTask!);
-  }
 
   hintIndex = 0;
 
@@ -75,7 +65,6 @@ export class HintComponent implements OnInit, OnDestroy {
       this.currentTask = task;
       this.currentHint = '';
       this.hintIndex = 0;
-      this.taskService.getHtml(this.currentTask.Description).pipe(first()).subscribe(h => this.taskHtml = h);
     })
   }
 
