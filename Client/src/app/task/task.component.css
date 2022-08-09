@@ -21,9 +21,8 @@ div.hint-body {
 div.pane-group {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows:  minmax(10vh, 1fr) min-content;
-    grid-row-gap: 5px;
-    border: 2px transparent;
+    grid-template-rows:  min-content min-content;
+    
 }
 
 button {

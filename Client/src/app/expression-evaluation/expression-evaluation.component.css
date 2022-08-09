@@ -15,7 +15,4 @@ div.expression {
     display: grid;
     grid-template-columns: 10px 1fr;
     grid-template-rows: 1fr;
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
 }
