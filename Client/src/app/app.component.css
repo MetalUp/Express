@@ -18,7 +18,14 @@ div.content {
     gap: 5px 5px;
 }
 
-div.independent-column {
+div.independent-column1 {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content minmax(min-content, 1fr) minmax(min-content, 1fr);
+    gap: 5px 5px;
+}
+
+div.independent-column2 {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: min-content minmax(min-content, max-content) minmax(min-content, max-content);
