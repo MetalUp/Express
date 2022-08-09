@@ -1,5 +1,5 @@
 <ng-container *ngIf="hasTests()">
-    <div class="one-colmn pane">
+    <div class="one-column pane">
         <div class="pane-header">Testing</div>
         <div class="one-column pane-body"  [ngClass]="submitting ? 'in-progress' : ''">
             <textarea readonly>{{message()}}</textarea>

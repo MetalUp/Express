@@ -6,8 +6,8 @@ div.pane-body {
     "buttons";
     overflow: auto;
     font-size: 11pt;
-    justify-items: end;
     gap: 5px;
+    align-content: space-between;
 }
 
 .message {
