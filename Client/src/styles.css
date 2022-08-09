@@ -28,12 +28,17 @@ textarea {
     box-sizing: border-box;
 }
 
+.pane-holder {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 100%;
+}
+
 div.pane {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 25px minmax(min-content, 1fr);
-    border: 2px solid var(--border-color);
-    height: 98%;
+    border: 2px solid var(--border-color); 
 }
 
 div.pane-header {
@@ -93,6 +98,7 @@ code {
 }
 
 button {
+    width: fit-content;
     margin-right: 10px;
     margin-bottom: 10px;
 }

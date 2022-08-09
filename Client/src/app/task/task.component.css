@@ -12,7 +12,6 @@ div.hint-body {
     grid-template-rows:  minmax(5vh, 15vh) min-content;
 }
 
-
 .task, .hint {
     width: 100%;
     overflow: auto;
@@ -22,10 +21,4 @@ div.pane-group {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows:  min-content min-content;
-    
 }
-
-button {
-    width: fit-content;
-}
-
