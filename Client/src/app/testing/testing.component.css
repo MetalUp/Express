@@ -1,6 +1,4 @@
 div.pane-body {
-    display: grid;
-    grid-template-columns: 1fr;
     grid-template-rows:  minmax(min-content, 1fr) minmax(0%, 1fr)  min-content;
     grid-template-areas: 
     "body"
@@ -18,8 +16,4 @@ div.pane-body {
 
 .button-bar{
     grid-area: buttons;
-}
-
-button {
-    width: fit-content;
 }

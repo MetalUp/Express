@@ -29,14 +29,15 @@ textarea {
 }
 
 .pane-holder {
+    grid-template-rows: 1fr;
+}
+
+.one-column {
     display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 100%;
+    grid-template-columns: 1fr;
 }
 
 div.pane {
-    display: grid;
-    grid-template-columns: 1fr;
     grid-template-rows: 25px minmax(min-content, 1fr);
     border: 2px solid var(--border-color); 
 }
@@ -92,9 +93,10 @@ code {
 
 .button-bar {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
     direction: rtl;
+    justify-self: end;
 }
 
 button {

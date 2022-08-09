@@ -1,7 +1,7 @@
-<div class="pane-group">
-    <div class="pane">
+<div class="one-column pane-group">
+    <div class="one-column pane">
         <div class="pane-header">Task: {{currentTask.Title}}</div>
-        <div class="pane-body">
+        <div class="one-column pane-body">
             <div class="task" [innerHtml]="taskHtml"></div>
             <div class="button-bar">
                 <button [disabled]="!hasHint()" (click)="onFirstHint()">Hint 1</button>
@@ -9,9 +9,9 @@
             </div>
         </div>
     </div>
-    <div *ngIf="hintHtml" class="pane">
+    <div *ngIf="hintHtml" class="one-column pane">
         <div class="pane-header">Hint: {{hintIndex + 1}}</div>
-        <div class="pane-body hint-body">
+        <div class="one-column pane-body hint-body">
             <div class="hint" [innerHtml]="hintHtml"></div>
             <div class="button-bar">
                 <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
