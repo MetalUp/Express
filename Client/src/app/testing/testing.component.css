@@ -1,11 +1,11 @@
 div.pane-body {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows:  minmax(min-content, 1fr) min-content;
+    grid-template-rows:  minmax(min-content, 1fr) minmax(0%, 1fr)  min-content;
     overflow: auto;
     font-size: 11pt;
     justify-items: end;
-    padding: 5px;
+    gap: 5px;
 }
 
 .message {
