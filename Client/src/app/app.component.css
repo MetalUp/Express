@@ -7,7 +7,7 @@ div.ile {
     height : 95vh;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: min-content minmax(min-content, 1fr);
+    grid-template-rows: min-content minmax(min-content, 90vh);
     gap: 5px 5px;
 }
 
@@ -28,6 +28,6 @@ div.independent-column1 {
 div.independent-column2 {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: min-content minmax(min-content, max-content) minmax(min-content, max-content);
+    grid-template-rows: min-content minmax(min-content, max-content) minmax(min-content, 1fr);
     gap: 5px 5px;
 }
