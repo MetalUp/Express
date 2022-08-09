@@ -1,11 +1,17 @@
 div.pane-body {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows:  minmax(5vh, 25vh) min-content;
+    grid-template-rows:  minmax(5vh, 30vh) min-content;
     font-size: 11pt;
     justify-items: end;
-    
+    padding: 5px 5px; 
+    gap: 5px;
 }
+
+div.hint-body {
+    grid-template-rows:  minmax(5vh, 15vh) min-content;
+}
+
 
 .task, .hint {
     width: 100%;

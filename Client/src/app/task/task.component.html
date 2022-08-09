@@ -12,7 +12,7 @@
     <ng-container *ngIf="hintHtml">
         <div class="pane">
             <div class="pane-header">Hint: {{hintIndex + 1}}</div>
-            <div class="pane-body">
+            <div class="pane-body hint-body">
                 <div class="hint" [innerHtml]="hintHtml"></div>
                 <div class="button-bar">
                     <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
