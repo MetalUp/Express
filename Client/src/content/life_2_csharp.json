@@ -11,5 +11,6 @@
     "PasteExpression": false,
     "PasteFunction": true,
     "Tests": "life_2_tests.cs",
+    "PreviousTask": "life_1_csharp.json",
     "NextTask": "life_3_csharp.json"
 }
