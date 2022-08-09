@@ -3,6 +3,7 @@
     font-size: 11pt;
     padding: 5px 5px; 
     gap: 5px;
+    align-content: space-between;
 }
 
 .task {

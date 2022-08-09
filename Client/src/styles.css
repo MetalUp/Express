@@ -94,8 +94,8 @@ code {
 
 .button-bar {
     display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: min-content;
+    grid-template-columns: max-content max-content max-content;
     direction: rtl;
     justify-self: end;
 }
