@@ -1,13 +1,15 @@
 <div class="ile" [ngClass]="language" >
     <div class="masthead">MetalUp.Express</div>
-    <div></div>
-    
-    <app-user></app-user>
-    <app-selected-language></app-selected-language>
-
-    <app-expression-evaluation></app-expression-evaluation>
-    <app-task></app-task>
-    
-    <app-function-definition></app-function-definition>
-    <app-testing></app-testing>
+    <div class="content">
+        <div class="independent-column">
+            <app-user></app-user>
+            <app-expression-evaluation></app-expression-evaluation>
+            <app-function-definition></app-function-definition>
+        </div>
+        <div class="independent-column">
+            <app-selected-language></app-selected-language>
+            <app-task></app-task>
+            <app-testing></app-testing>
+        </div>
+    </div>
 </div>

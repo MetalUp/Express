@@ -6,7 +6,21 @@
 div.ile {
     height : 95vh;
     display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content minmax(min-content, 1fr);
+    gap: 5px 5px;
+}
+
+div.content {
+    display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: min-content min-content minmax(min-content, 1fr) minmax(min-content, 1fr);
-    grid-gap: 5px 5px;
+    grid-template-rows: 1fr;
+    gap: 5px 5px;
+}
+
+div.independent-column {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content min-content min-content;
+    gap: 5px 5px;
 }

@@ -1,24 +1,22 @@
-<div class="pane-group">
+<div class="pane">
+    <div class="pane-header">Task: {{currentTask.Title}}</div>
+    <div class="pane-body">
+        <div class="task" [innerHtml]="taskHtml"></div>
+        <div class="button-bar">
+            <button [disabled]="!hasHint()" (click)="onFirstHint()">Hint 1</button>
+            <button [disabled]="!hasNextTask()" (click)="onNextTask()">Next Task</button>
+        </div>
+    </div>
+</div>
+<ng-container *ngIf="hintHtml">
     <div class="pane">
-        <div class="pane-header">Task: {{currentTask.Title}}</div>
+        <div class="pane-header">Hint: {{hintIndex + 1}}</div>
         <div class="pane-body">
-            <div class="task" [innerHtml]="taskHtml"></div>
+            <div class="hint" [innerHtml]="hintHtml"></div>
             <div class="button-bar">
-                <button  [disabled]="!hasHint()" (click)="onFirstHint()">Hint 1</button>
-                <button  [disabled]="!hasNextTask()" (click)="onNextTask()">Next Task</button>
+                <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
+                <button [disabled]="!hasPreviousHint()" (click)="onPreviousHint()">Previous</button>
             </div>
         </div>
     </div>
-    <ng-container *ngIf="hintHtml">
-        <div class="pane">
-            <div class="pane-header">Hint: {{hintIndex + 1}}</div>
-            <div class="pane-body">
-                <div class="hint" [innerHtml]="hintHtml"></div>
-                <div class="button-bar">
-                    <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
-                    <button [disabled]="!hasPreviousHint()" (click)="onPreviousHint()">Previous</button>
-                </div>
-            </div>
-        </div>
-    </ng-container>
-</div>
+</ng-container> -->
