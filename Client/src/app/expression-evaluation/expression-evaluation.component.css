@@ -1,13 +1,13 @@
-div.pane-body {
+.pane-body {
     grid-template-rows: 1fr 1fr;
 }
 
-div.previous {
+.previous {
     background-color: var(--previous-expression-color);
     grid-template-rows: min-content  minmax(max-content, 1fr);
 }
 
-div.expression {
+.expression {
     display: grid;
     grid-template-columns: 10px 1fr;
     grid-template-rows: 1fr;

@@ -1,4 +1,4 @@
-div.pane-body {
+.pane-body {
     grid-template-rows:  minmax(min-content, 1fr) minmax(0%, 1fr)  min-content;
     grid-template-areas: 
     "body"
