@@ -4,7 +4,6 @@
 }
 
 div.ile {
-    height : 95vh;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: min-content minmax(min-content, 90vh);

@@ -6,6 +6,7 @@
     --header-text-color: white;
     --previous-expression-color:  #DAE3F3;
     --placeholder-color:  #D9D9D9;
+    height: 100vh;
 }
 
 body {
