@@ -1,10 +1,10 @@
 div.pane-body {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows:  minmax(10vh, 25vh) min-content;
+    grid-template-rows:  minmax(5vh, 25vh) min-content;
     font-size: 11pt;
     justify-items: end;
-    gap: 5px;
+    
 }
 
 .task, .hint {
