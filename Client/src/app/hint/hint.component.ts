@@ -17,17 +17,18 @@ export class HintComponent implements OnInit, OnDestroy {
     return this.currentHint;
   }
 
-  private currentHint = '';
+  private currentHint = 'Click Next to use the first Hint';
 
   constructor(private taskService: TaskService) { }
 
   private sub?: Subscription;
 
-  hintIndex = 0;
+  hintIndex = -1;
 
-  hasHint() {
-    return this.hintIndex < this.currentTask.Hints.length;
+  get title() {
+    return `Hint: ${this.hintIndex >= 0 ? this.hintIndex + 1 : ''}`;
   }
+
 
   hasNextHint() {
     return this.hintIndex + 1 < this.currentTask.Hints.length;
@@ -45,11 +46,6 @@ export class HintComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFirstHint() {
-    this.hintIndex = 0;
-    return this.onHint();
-  }
-
   onPreviousHint() {
     this.hintIndex--;
     return this.onHint();
@@ -63,7 +59,7 @@ export class HintComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.currentHint = '';
+      this.currentHint = 'Click Next to use the first Hint';
       this.hintIndex = -1;
     })
   }

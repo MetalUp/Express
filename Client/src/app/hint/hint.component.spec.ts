@@ -43,9 +43,12 @@ describe('TaskComponent', () => {
     const testTask = { Hints: ['hint1.html', 'hint2.html']} as unknown as ITask;
     taskSubject.next(testTask);
 
-    expect(component.hasHint()).toEqual(true);
+    expect(component.hasNextHint()).toEqual(true);
 
-    component.onFirstHint(); 
+    expect(component.title).toEqual("Hint: ");
+    expect(component.hintHtml).toEqual('Click Next to use the first Hint');
+
+    component.onNextHint(); 
 
     expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('hint1.html');
     expect(component.hintIndex).toEqual(0);
@@ -73,13 +76,6 @@ describe('TaskComponent', () => {
     expect(component.hasPreviousHint()).toEqual(false);
     expect(component.hasNextHint()).toEqual(true);
 
-    component.onFirstHint(); 
-
-    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('hint1.html');
-    expect(component.hintIndex).toEqual(0);
-    expect(component.hintHtml).toEqual('hint1 html');
-    expect(component.hasPreviousHint()).toEqual(false);
-    expect(component.hasNextHint()).toEqual(true);
   });
 
 });
