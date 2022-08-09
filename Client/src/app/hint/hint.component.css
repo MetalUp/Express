@@ -1,11 +1,11 @@
 .pane-body {
-    grid-template-rows:  minmax(5vh, 30vh) min-content;
+    grid-template-rows:  minmax(5vh, 15vh) min-content;
     font-size: 11pt;
     padding: 5px 5px; 
     gap: 5px;
 }
 
-.task {
+.task, .hint {
     width: 100%;
     overflow: auto;
 }

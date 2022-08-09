@@ -1,0 +1,11 @@
+<div class="one-column pane">
+    <div class="pane-header">Hint: {{hintIndex + 1}}</div>
+    <div class="one-column pane-body">
+        <div class="hint" [innerHtml]="hintHtml"></div>
+        <div class="button-bar">
+            <button [disabled]="!hasHint()" (click)="onFirstHint()">Hint 1</button>
+            <button [disabled]="!hasNextHint()" (click)="onNextHint()">Next</button>
+            <button [disabled]="!hasPreviousHint()" (click)="onPreviousHint()">Previous</button>
+        </div>
+    </div>
+</div>

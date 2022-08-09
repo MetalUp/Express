@@ -11,6 +11,7 @@ import { SelectedLanguageComponent } from './selected-language/selected-language
 import { rulesFactory, RulesService } from './services/rules.service';
 import { TaskComponent } from './task/task.component';
 import { TestingComponent } from './testing/testing.component';
+import { HintComponent } from './hint/hint.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { TestingComponent } from './testing/testing.component';
     UserComponent,
     SelectedLanguageComponent,
     TaskComponent,
-    TestingComponent
+    TestingComponent,
+    HintComponent
   ],
   imports: [
     BrowserModule,

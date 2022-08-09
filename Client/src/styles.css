@@ -95,7 +95,7 @@ code {
 .button-bar {
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     direction: rtl;
     justify-self: end;
 }
