@@ -12,6 +12,14 @@ div.pane-body {
     width: 100%;
 }
 
+div.pane-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows:  minmax(100px, 1fr) minmax(0%, min-content);
+    grid-row-gap: 5px;
+    border: 2px transparent;
+}
+
 button {
     width: fit-content;
 }
