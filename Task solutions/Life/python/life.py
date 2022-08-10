@@ -20,7 +20,7 @@ def will_live(alive, neighbours) :
     return (alive and neighbours > 1 and neighbours < 4) \
             or (not alive and neighbours == 3) 
 
-def next_cell_value(grid, c) : return will_live(grid[c], live_neighbours(grid, c));
+def next_cell_value(grid, c) : return will_live(grid[c], live_neighbours(grid, c))
 
 def next_generation(grid) : return list(map(lambda n : next_cell_value(grid, n), range(0, size)))
 

@@ -1,1 +1,18 @@
-<p>Write <code>NextGeneration</code></p>
+<p>You are now ready to write the final function, completing the logic of the Life game.</p>
+
+<p>Write a function named <code class="csharp">NextGeneration</code><code class="python">next_generation</code> which returns a complete new 'grid' (a list of 400 Boolean values)
+     that represents the next generation for each of the cells. It should define a single parameter, <code>grid</code>, of
+    the same type as used to define the <code class="csharp">NextCellValue</code><code class="python">next_cell_value</code> function, 
+    which now exists within the system.</p>
+
+
+<p>When written, and passing tests, try applying the function out in the <b>Expression</b> pane to the pre-defined data set: <code>grid1</code>. 
+    First, just type <code>grid1</code> into <b>Expression</b> to check the current state of the grid; then try:
+
+<code class="python">next_generation(grid1)</code>
+<code class="csharp">NextGeneration(grid1)</code>
+
+<p>You can even chain the calls to get the following generation:</p>
+ 
+<code class="python">next_generation(next_generation(grid1))</code>
+<code class="csharp">NextGeneration(NextGeneration(grid1))</code>
