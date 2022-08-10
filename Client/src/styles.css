@@ -49,6 +49,11 @@ textarea {
     padding-left: 5px;
 }
 
+.pane-body {
+   gap: 5px;
+   align-content: space-between;
+}
+
 .info {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -98,10 +103,10 @@ code {
     grid-template-columns: max-content max-content max-content;
     direction: rtl;
     justify-self: end;
+    margin-bottom: 5px;
 }
 
 button {
     width: fit-content;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin-right: 5px;
 }
