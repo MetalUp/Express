@@ -4,6 +4,7 @@
         <div class="task" [innerHtml]="taskHtml"></div>
         <div class="button-bar">
             <button [disabled]="!hasNextTask()" (click)="onNextTask()">Next Task</button>
+            <button [disabled]="!hasPreviousTask()" (click)="onPreviousTask()">Previous Task</button>
         </div>
     </div>
 </div>

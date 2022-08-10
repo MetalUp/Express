@@ -64,4 +64,22 @@ describe('TaskComponent', () => {
     expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('nexttask.json');
   });
 
+  it('should disable previous task if no previous task', () => {
+
+    const testTask = { PreviousTask: ""} as unknown as ITask;
+    taskSubject.next(testTask);
+
+    expect(component.hasPreviousTask()).toEqual(false);   
+  });
+
+  it('should get the previous task', () => {
+
+    const testTask = { PreviousTask: "previoustask.json"} as unknown as ITask;
+    taskSubject.next(testTask);
+    expect(component.hasPreviousTask()).toEqual(true);
+    component.onPreviousTask();
+    expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('previoustask.json');
+  });
+
+
 });

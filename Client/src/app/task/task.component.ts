@@ -19,6 +19,14 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   private sub?: Subscription;
 
+  hasPreviousTask() {
+    return !!this.currentTask.PreviousTask;
+  }
+
+  onPreviousTask() {
+    this.taskService.gotoTask(this.currentTask.PreviousTask!);
+  }
+
   hasNextTask() {
     return !!this.currentTask.NextTask;
   }
