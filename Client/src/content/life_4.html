@@ -1,15 +1,14 @@
-<p>The function written previously, <code class="csharp">AdjustedNeighbourCells</code><code class="python">adjusted_neighbour_cells</code> and
-    the functions that it depends upon have now been added into the background code. 
-    You can either call it from the <em>Expression pane</em> or from within any other function that you write. </p>
+<p>The function written previously, <code class="csharp">AdjustedNeighbourCells</code><code class="python">adjusted_neighbour_cells</code>, has now been added into the background code. 
+    You can call use it in the <b>Expression</b> pane or from within any other function that you write.</p>
 
 <p>The next task is to determine, for a given cell, how many of its neighbours are alive. This will be needed (in a <i>subsequent</i> task) to determine whether a cell lives or dies in the next generation.</p>
 
-<p>So, write a new function named <code class="csharp">LiveNeighbours</code><code class="python">live_neighbours</code>, 
-    which defines two parameters in the order given below:</p>
-    <ul>
+<p>Write a new function named <code class="csharp">LiveNeighbours</code><code class="python">live_neighbours</code>, 
+    which defines two parameters in the order given here:</p>
+    <ol>
         <li>A list of Boolean values, named <code>grid</code></li>
         <li>The cell number (an integer) of interest</li>
-    </ul>
+    </ol>
  </p>The function should return an integer representing the number of the cell's neighbours (out of 8) that are currently alive (have the value <code class="csharp">true</code><code class="python">True</code>)
 
- <p>You can test the new function manually, in the Expression pane, by passing in <code>grid1</code> as the first parameter, then any cell number in the range 0-399. Then run the automated tests.</p>
+ <p>You can test the new function manually in the <b>Expression</b> pane by passing in <code>grid1</code> as the first parameter, then any cell number in the range 0-399. Then run the automated tests.</p>
