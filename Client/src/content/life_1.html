@@ -1,25 +1,23 @@
-<p>This task has pre-defined a list named <code">grid1</code> containing 400 random Boolean values. 
-        Type <code">grid</code> now into the <em>Expression</em> pane and view the returned list.</p>
+<p>This task has pre-defined a list named <code>grid1</code> containing 400 random Boolean values. 
+        Type <code">grid</code> now into the <b>Expression</b> pane and view the returned list.</p>
 
 <p>[NOT IMPLEMENTED YET] You will also see that the list has also been rendered in the <em>Graphics</em> pane as small squares 
 (black for <code class="csharp">true</code><code class="python">True</code> - meaning 'live') 'wrapped' to a width of 20 cells. 
 <code>grid[0]</code> will thus retrieve the top-left value and <code>grid[399]</code> the bottom-right.<p>
 
-<p>In Life we will need to know about the 'neighbours of a cell'. Including the diagonals, a cell has eight immediate neighbours.</p>
+<p>In Life we will need to know about the <i>neighbours</i> of a cell. Including the diagonals, a cell has eight immediate neighbours.</p>
 
-</p>Your task is to write a function named <code class="csharp">NeighbourCells</code><code class="python">neighbour_cells</code>
-that takes in an integer value named <code>c</code> representing the cell number and returns a list of eight integers representing the cell numbers of
+</p>Write a function named <code class="csharp">NeighbourCells</code><code class="python">neighbour_cells</code>
+that defines one parameter named <code>c</code> - an integer value representing a specific cell number - and returns a list of eight integers representing the cell numbers of
 its eight neighbours. For example, knowing that the width of the grid is 20:</p>
 
 <ul>
 <li>The neighbour to the <i>right</i> of <code>c</code> is <code>c+1</code></li>
-<li>The neighbour <i>above</i> of <code>c</code> is <code>c-20</code></li>
-<li>You'll need to work out the values for the other <i>six</i> neighbours and return them all as a list. 
-(The ordering within the list is not important, but you should specify them in some sensible order that makes it easy to read.)</li>
+<li>The neighbour <i>above</i> <code>c</code> is <code>c-20</code></li>
+<li>You'll need to work out the values for the other six neighbours and return them all as a list. 
+(The ordering within the list is not important, but you should specify them in some sensible order.)</li>
 </ul>
 
 <p>This algorithm will work for most of the cells, including those at the left and right edges of the grid (which wrap around),
 but if we apply it to cells in the top or bottom rows, some of the values returned values will be outside the range 0-399.
 That's OK for now - we'll deal with it in the next task.</p>
-
-<p>Meantime, write the function and run the tests.</p>
