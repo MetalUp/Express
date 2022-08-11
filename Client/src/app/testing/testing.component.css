@@ -6,8 +6,6 @@
     "buttons";
     overflow: auto;
     font-size: 11pt;
-    gap: 5px;
-    align-content: space-between;
 }
 
 .message {

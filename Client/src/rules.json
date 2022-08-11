@@ -62,7 +62,7 @@
                     "Messages.NotPermitted"
                 ],
                 [
-                    "\\w*[^=]=[^(=|>)]\\w*",
+                    "\\w*[^(=|>|<)]=[^(=|>)]\\w*",
                     "Messages.Assignment"
                 ],
                 [

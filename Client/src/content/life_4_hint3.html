@@ -5,6 +5,7 @@
 <code class="csharp">static int LiveNeighbours(List&lt;bool&gt; grid, int c) => AdjustedNeighbourCells(c).Where(i => grid[i] == true).Count();</code>
 
 <p class="csharp">It is possible to condense this further, because the <code class="csharp">Count</code> method can also take a lambda:</p>
+<p class="csharp">and there's no need to compare a boolean to a boolean?</p>
 
-<code class="csharp">static int LiveNeighbours(List&lt;bool&gt; grid, int c) => AdjustedNeighbourCells(c).Count(i => grid[i] == true);</code>
+<code class="csharp">static int LiveNeighbours(List&lt;bool&gt; grid, int c) => AdjustedNeighbourCells(c).Count(i => grid[i]);</code>
 

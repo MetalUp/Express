@@ -91,10 +91,8 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     this.sub = this.taskService.currentTask.subscribe(t => {
       this.canPaste = !!t.PasteFunction;
       this.skeleton = t.SkeletonCode || '';
-      if (this.skeleton) {
-        this.functionDefinitions = this.skeleton;
-        this.modelChanged();
-      }
+      this.functionDefinitions = this.skeleton;
+      this.modelChanged();
     })
   }
 
