@@ -4,6 +4,7 @@ export function wrapPythonExpression(expression : string) {
     return `
 from math import *
 from datetime import date, datetime
+from functools import reduce
 
 ${ReadyMadeFunctionsPlaceholder}
 

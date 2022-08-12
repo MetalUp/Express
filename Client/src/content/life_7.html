@@ -1,18 +1,19 @@
 <p>You are now ready to write the final function, completing the logic for Conway's Game of Life.</p>
 
-<p>Write a function named <code class="csharp">NextGeneration</code><code class="python">next_generation</code> which returns a complete new 'grid' (a list of 400 Boolean values)
-     that represents the next generation for each of the cells. The function should define a single parameter, <code>grid</code>, of
+<p>Write a function named <code class="csharp">NextGeneration</code><code class="python">next_generation</code> which returns a complete new list of 400 Boolean values)
+     that represents the next generation for each of the cells. The function should define a single parameter, <code>cells</code>, of
     the same type as used to define the <code class="csharp">NextCellValue</code><code class="python">next_cell_value</code> function, 
     which now exists within the system.</p>
 
 
-<p>When written, and passing tests, try applying the function out in the <b>Expression</b> pane to the pre-defined data set: <code>grid1</code>. 
-    First, just type <code>grid1</code> into <b>Expression</b> to check the current state of the grid; then try:
+<p>When written, and passing tests, try applying the function out in the <b>Expression</b> pane to the pre-defined data set: 
+    <code class="csharp">exampleCells</code><code class="python">example_cells</code>. 
+    First, just type <code class="csharp">AsGrid(exampleCells)</code><code class="python">as_grid(example_cells)</code> into <b>Expression</b> to check the current state of the grid; then try:
 
-<code class="python">next_generation(grid1)</code>
-<code class="csharp">NextGeneration(grid1)</code>
+<code class="python">as_grid(next_generation(example_cells))</code>
+<code class="csharp">AsGrid(NextGeneration(exampleCells))</code>
 
 <p>You can even chain the calls to get the following generation:</p>
  
-<code class="python">next_generation(next_generation(grid1))</code>
-<code class="csharp">NextGeneration(NextGeneration(grid1))</code>
+<code class="python">as_grid(next_generation(next_generation(example_cells)))</code>
+<code class="csharp">AsGrid(NextGeneration(NextGeneration(exampleCells)))</code>

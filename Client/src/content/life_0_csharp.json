@@ -1,8 +1,8 @@
 {
     "Language": "csharp",
-    "Title": "Conway's Game of Life - Part 1",
-    "Description": "life_1.html",
-    "Hints": ["life_1_hint1.html","life_1_hint2.html","life_1_hint3.html"],
+    "Title": "Conway's Game of Life - Introduction",
+    "Description": "life_0.html",
+    "Hints": [],
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
@@ -10,7 +10,7 @@
     "SkeletonCode": "",
     "PasteExpression": false,
     "PasteFunction": false,
-    "Tests": "life_1_tests.cs",
+    "Tests": "",
     "PreviousTask": "",
-    "NextTask": "life_2_csharp.json"
+    "NextTask": "life_1_csharp.json"
 }

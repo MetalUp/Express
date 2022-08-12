@@ -1,6 +1,6 @@
 <p>Here is the complete code to implement the function. Re-type into <b>Function definition</b> and run the tests.</p>
 
-<code class="python">def live_neighbours(grid, c) : return len(list(filter(lambda c: grid[c] is True, adjusted_neighbour_cells(c))))</code>
+<code class="python">def live_neighbours(cells, c) : return len(list(filter(lambda c: cells[c] is True, adjusted_neighbour_cells(c))))</code>
 
 <code class="csharp">static int LiveNeighbours(List&lt;bool&gt; grid, int c) => AdjustedNeighbourCells(c).Where(i => grid[i] == true).Count();</code>
 

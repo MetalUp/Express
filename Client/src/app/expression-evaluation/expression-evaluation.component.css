@@ -1,5 +1,5 @@
 .pane-body {
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 3fr 1fr;
 }
 
 .previous {

@@ -15,7 +15,7 @@
 }
 
 .independent-column1 {
-    grid-template-rows: min-content minmax(min-content, 1fr) minmax(min-content, 1fr);
+    grid-template-rows: min-content minmax(min-content, 2fr) minmax(min-content, 1fr);
     gap: 5px 5px;
 }
 

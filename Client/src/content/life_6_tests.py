@@ -1,7 +1,7 @@
-﻿def run_tests_next_cell_value() :
+﻿def run_tests() :
     fn = next_cell_value.__name__
     def test(c, expected):
-        test_function(fn, expected, next_cell_value(testGrid, c), ["testGrid", c]);
+        test_function(fn, expected, next_cell_value(example_cells, c), ["example_cells", c])
     test(0, False); #Currently: False, 4
     test(19, False); #Currently: True,4
     test(30, True); #Currently: True,2
