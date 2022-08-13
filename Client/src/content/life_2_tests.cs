@@ -1,7 +1,5 @@
 static void RunTests()
 {
-    try
-    {
         testKeepWithinBounds(0, 0);
         testKeepWithinBounds(399, 399);
         testKeepWithinBounds(400, 0);
@@ -10,8 +8,6 @@ static void RunTests()
         testKeepWithinBounds(-1, 399);
         testKeepWithinBounds(-20, 380);
         AllTestsPassed();
-    }
-    catch (TestFailure) { }
 }
 
 private static void testKeepWithinBounds(int p1, int expected)
