@@ -25,7 +25,7 @@ def assert_true(function_name, args, actual, message) :
         print(fail + f"{function_name}({arg_string(args)}) {message}")
         raise TestFailure
 
-all_passed = "All tests passed"
+all_passed = "All tests passed."
 
 def all_tests_passed():
     print(all_passed)
