@@ -1,4 +1,15 @@
 ﻿using CSharp;
+using static CSharp.Life;
+
+var g = Glider();
+
+while (true)
+{
+    Console.Clear();
+    Console.Write(AsGrid(g));
+    g = NextGeneration(g);
+    Thread.Sleep(10);
+}
 
 Life.RunTests_NeighbourCells();
 Life.RunTests_KeepWithinBounds();
