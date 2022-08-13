@@ -45,7 +45,7 @@ def display(x):
     return str(x)
   else:
     try:
-         return list(iter(x))
+         return str(list(iter(x)))
     except TypeError:
          return str(x)
 

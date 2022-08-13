@@ -3,10 +3,9 @@
 <code class="python">def keep_within_bounds(i) : return <span class="field">expression</span></code>
 <code class="csharp">static int KeepWithinBounds(int i) => <span class="field">expression</span>;</code>
 
-<p>To implement the <span class="field">expression</span>, make use of the 'ternary operator':<p>
+<p>To implement the <span class="field">expression</span>, make use of the modulo operator <code class="python">%</code><code class="csharp">%</code>
 
-<code class="python"><span class="field">value_if_True</span> if <span class="field">condition</span> else <span class="field">value_if_False</span></code>
-<code class="csharp"><span class="field">condition</span> ? <span class="field">value_if_true</span> : <span class="field">value_if_false</span></code>
-
-<p>Note that the fields <span class="field">value_...</span> may be expressions that generate a value</p>
-<p>You will need to use two ternary operators, one nested in one of the terms of the other.</p>
+<p>Before you write the function, test the functioning of the modulo operator in the <b>Expression</b> pane for at least the four example cases listed in
+the <b>Task</b> pane. In particular, watch for the negative input values, as the behaviour of the modulo operator when applied to <i>negative</i>
+input values varies between languages. Depending on the language you <i>might</i> need to add a suitable constant to the input value <i>before</i> applying
+the modulo operator to get the required result.</p>
