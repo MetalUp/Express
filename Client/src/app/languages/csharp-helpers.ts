@@ -84,7 +84,7 @@ export function wrapCSharpTests(tests : string) {
     
         public static void AllTestsPassed()
         {
-            Console.WriteLine(allTestsPassed);
+            Console.Write(allTestsPassed);
         }
     
         public class TestFailure : Exception { }

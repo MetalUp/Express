@@ -68,7 +68,7 @@ def assert_true(function_name, args, actual, message) :
 all_passed = "All tests passed."
 
 def all_tests_passed():
-    print(all_passed)
+    print(all_passed, end="")
 
 class TestFailure(Exception) : pass
  

@@ -46,7 +46,7 @@ namespace Framework
 
     public static void AllTestsPassed()
     {
-        Console.WriteLine(allTestsPassed);
+        Console.Write(allTestsPassed);
     }
 
     public class TestFailure : Exception { }
