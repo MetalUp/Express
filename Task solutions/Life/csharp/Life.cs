@@ -46,6 +46,9 @@ namespace CSharp
         static bool NextCellValue(List<bool> cells, int c) => WillLive(cells[c], LiveNeighbours(cells, c));
 
         public static List<bool> NextGeneration(List<bool> cells) => Enumerable.Range(0, 400).Select(n => NextCellValue(cells, n)).ToList();
+
+        //Alternate code, avoiding use of Range, by getting both the item and its index for each member
+        //public static List<bool> NextGeneration(List<bool> cells) => cells.Select((c, n)=> NextCellValue(cells, n)).ToList();
         #endregion
 
         #region App
