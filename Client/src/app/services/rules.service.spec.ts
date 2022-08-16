@@ -114,11 +114,16 @@ describe('RulesService', () => {
     expect(validated).toEqual("Use of 'Add', or any other method that mutates a List is not permitted");
   });
 
-  //C# expressions - passes
+  //C# expressions
 
   it('should mustNotContain csharp expression - simple expression', () => {
     const validated = service.mustNotContain(language.csharp, Applicability.expressions, " (3 + 4)*5");
     expect(validated).toEqual("");
+  });
+
+  it('should mustNotContain csharp expression - expression with ;', () => {
+    const validated = service.mustNotContain(language.csharp, Applicability.expressions, " (3 + 4)*5;");
+    expect(validated).toEqual("Use of ';' is not permitted");
   });
 
   //C# functions - fails
@@ -128,23 +133,26 @@ describe('RulesService', () => {
     expect(validated).toEqual("Function implementation may not start with curly brace '{'");
   });
 
+  it('should mustNotContain csharp function - more than one ;', () => {
+    const validated = service.mustNotContain(language.csharp, Applicability.functions, "static int Sq(int x) => x;x;");
+    expect(validated).toEqual("Function implementation may only have a ';' at the end");
+  });
+
   it('should mustMatch csharp function - not static', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "int Sq(int x) => x*x;");
-    expect(validated).toEqual("Functions must start with the 'static' keyword");
+    expect(validated).toEqual("Functions must follow the form: static <ReturnType> <Name>(<parameters>) => <expression>;");
   });
 
   it('should mustMatch csharp function - no semi-colon', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) => x*x");
-    expect(validated).toEqual("Functions must end with the symbol ';'");
+    expect(validated).toEqual("Functions must follow the form: static <ReturnType> <Name>(<parameters>) => <expression>;");
   });
 
   it('should mustMatch csharp function - no fat arrow', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) return x*x");
-    expect(validated).toEqual("Functions must include the symbol '=>' followed by the expression to be evaluated");
+    expect(validated).toEqual("Functions must follow the form: static <ReturnType> <Name>(<parameters>) => <expression>;");
   });
 
-
-  //C# functions - passes
   it('should mustMatch csharp function - simple function', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) => x*x;");
     expect(validated).toEqual("");
@@ -157,7 +165,7 @@ describe('RulesService', () => {
   });
 
   it('should mustNotContain python expression - input', () => {
-    const validated = service.mustNotContain(language.python, Applicability.expressions, "something input something");
+    const validated = service.mustNotContain(language.python, Applicability.expressions, "something input() something");
     expect(validated).toEqual("Use of 'input' is not permitted");
   });
 
@@ -177,30 +185,40 @@ describe('RulesService', () => {
     expect(validated).toEqual("");
   });
 
+  it('should mustNotContain python expression - semi-colon', () => {
+    const validated = service.mustNotContain(language.python, Applicability.expressions, "3+4;5");
+    expect(validated).toEqual("Use of ';' is not permitted");
+  });
+
   //Python parsing - fails
   it('should mustMatch python expression - not beginning with def', () => {
     const parsed = service.mustMatch(language.python, Applicability.functions, "Foo() : return 3");
-    expect(parsed).toEqual("Functions must start with the 'def' keyword followed by the function name and '('");
+    expect(parsed).toEqual("Functions must follow the standard form: def <name>(<parameters>): return <expression>");
   });
 
   it('should mustMatch python expression - no colon', () => {
     const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() return 3");
-    expect(parsed).toEqual("Functions must include the symbol ':' followed by 'return' (may be on the next line if correctly indented) and the expression to be evaluated");
+    expect(parsed).toEqual("Functions must follow the standard form: def <name>(<parameters>): return <expression>");
   });
 
   it('should mustMatch python expression - no return', () => {
     const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() : 3");
-    expect(parsed).toEqual("Functions must include the symbol ':' followed by 'return' (may be on the next line if correctly indented) and the expression to be evaluated");
+    expect(parsed).toEqual("Functions must follow the standard form: def <name>(<parameters>): return <expression>");
   });
 
-  it('should mustMatch python expression - no indentation on newline', () => {
-    const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() :\\nreturn 3");
-    expect(parsed).toEqual("Functions must include the symbol ':' followed by 'return' (may be on the next line if correctly indented) and the expression to be evaluated");
+  it('should mustMatch python expression - no semi colon', () => {
+    const validated = service.mustNotContain(language.python, Applicability.functions, "def Foo() : return 3; 4");
+    expect(validated).toEqual("Use of ';' is not permitted");
   });
 
   //Python parsing - passes
   it('should mustMatch python expression - simple case', () => {
     const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() : return 3");
+    expect(parsed).toEqual("");
+  });
+
+  it('should mustMatch python expression - without spaces around :', () => {
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo():return 3");
     expect(parsed).toEqual("");
   });
 
