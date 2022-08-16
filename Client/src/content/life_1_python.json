@@ -10,7 +10,7 @@
     "SkeletonCode": "",
     "PasteExpression": false,
     "PasteFunction": false,
-    "Tests": "life_1_tests.py",
+    "Tests": "life_1_tests.txt",
     "PreviousTask": "",
     "NextTask": "life_2_python.json"
 }
