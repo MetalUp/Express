@@ -1,13 +1,13 @@
 <p>Here is the complete code for two different ways to implement the function.  First, using Ternary operators:</p>
 
-<code class="python">def will_live(alive, neighbours) : return (neighbours > 1 and neighbours < 4) if alive else neighbours == 3</code>
+<code class="python">def will_live(alive, neighbours) : return (neighbours == 2 or neighbours == 3) if alive else neighbours == 3</code>
 
-<code class="csharp">static bool WillLive(bool alive, int neighbours) => (alive ? neighbours > 1 && neighbours < 4 : neighbours == 3);</code>
+<code class="csharp">static bool WillLive(bool alive, int neighbours) => alive ? neighbours == 2 || neighbours == 3 : neighbours == 3;</code>
 
 <p>Alternatively, using only logical operators:</p>
 
-<code class="python">def will_live(alive, neighbours) : return (alive and neighbours > 1 and neighbours < 4) or (not alive and neighbours == 3)</code>
+<code class="python">def will_live(alive, neighbours) : return (alive and (neighbours == 2 or neighbours == 3)) or (not alive and neighbours == 3)</code>
 
-<code class="csharp">static bool WillLive(bool alive, int neighbours) => (alive && neighbours > 1 && neighbours < 4) | (!alive && neighbours == 3);</code>
+<code class="csharp">static bool WillLive(bool alive, int neighbours) => (alive && (neighbours == 2 || neighbours == 3)) | (!alive && neighbours == 3);</code>
 
 <p>Choose the one you are more comfortable with, re-type the code into <b>Function definition</b> and run the tests.</p>
