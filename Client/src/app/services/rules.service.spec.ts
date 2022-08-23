@@ -126,31 +126,40 @@ describe('RulesService', () => {
     expect(validated).toEqual("Use of ';' is not permitted");
   });
 
-  //C# functions - fails
-
-  it('should mustNotContain csharp function - braces', () => {
-    const validated = service.mustNotContain(language.csharp, Applicability.functions, "static int Sq(int x) => {x*x};");
-    expect(validated).toEqual("Function implementation may not start with curly brace '{'");
+    //C# functions - passes
+  it('should mustMatch csharp function - simple function', () => {
+    const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) => x*x;");
+    expect(validated).toEqual("");
   });
+
+  it('should mustMatch csharp function - multiple functions', () => {
+    const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) => x*x;\nstatic int Foo(int x) => 3;");
+    expect(validated).toEqual("");
+  });
+  it('should mustMatch csharp function - function over multiple lines', () => {
+    const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) \n =>\n x*\nx\n;");
+    expect(validated).toEqual("");
+  });
+  //C# functions - fails
 
   it('should mustMatch csharp function - not static', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "int Sq(int x) => x*x;");
     expect(validated).toEqual("Functions must start with 'static'");
   });
 
-  it('should mustMatch csharp function - no semi-colon', () => {
-    const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) => x*x");
-    expect(validated).toEqual("Functions must follow the form: static <ReturnType> <NameStartingInUpperCase>(<parameters>) => <expression>;");
+  it('should mustMatch csharp function - funciton name not starting upper case', () => {
+    const validated = service.mustMatch(language.csharp, Applicability.functions, "static int sq(int x) => x*x;");
+    expect(validated).toEqual("Function name must start with an upper-case letter");
+  });
+
+  it('should mustNotContain csharp function - braces', () => {
+    const validated = service.mustNotContain(language.csharp, Applicability.functions, "static int Sq(int x) => {x*x};");
+    expect(validated).toEqual("Function implementation may not start with curly brace '{'");
   });
 
   it('should mustMatch csharp function - no fat arrow', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) return x*x");
     expect(validated).toEqual("Function signature should be followed by '=>'");
-  });
-
-  it('should mustMatch csharp function - simple function', () => {
-    const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) => x*x;");
-    expect(validated).toEqual("");
   });
 
   //Python expressions - fails
@@ -202,8 +211,13 @@ describe('RulesService', () => {
   });
 
   it('should mustMatch python expression - no semi colon', () => {
-    const validated = service.mustNotContain(language.python, Applicability.functions, "def foo() : return 3; 4");
-    expect(validated).toEqual("Use of ';' is not permitted");
+    const parsed = service.mustNotContain(language.python, Applicability.functions, "def foo() : return 3; 4");
+    expect(parsed).toEqual("Use of ';' is not permitted");
+  });
+
+  it('should mustMatch python expression - function may not be formatted over muliple lines without backslash', () => {
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() : return 3 + \n4");
+    expect(parsed).toEqual("All functions must follow the standard form: def <name_in_lower_case>(<parameters>): return <expression>");
   });
 
   //Python parsing - passes
@@ -219,6 +233,16 @@ describe('RulesService', () => {
 
   it('should mustMatch python expression - with line breaks', () => {
     const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() :\n return 3");
+    expect(parsed).toEqual("");
+  });
+
+  it('should mustMatch python expression - multiple function defs', () => {
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() :\n return 3\ndef bar() : return 4");
+    expect(parsed).toEqual("");
+  });
+
+  it('should mustMatch python expression - function may be formatted over muliple lines using backslash', () => {
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() : return 3 + \\n4");
     expect(parsed).toEqual("");
   });
 
