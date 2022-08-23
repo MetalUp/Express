@@ -16,7 +16,7 @@ const taskRules : ITaskRules = {
   CodeMustMatch: {
     "both": [
       [
-        "Foo",
+        "foo",
         "Messages.TaskMessage1"
       ]
     ],
@@ -30,7 +30,7 @@ const taskRules : ITaskRules = {
         "Messages.TaskMessage2"
       ],
       [
-        "(Qux)",
+        "(qux)",
         "Messages.NotPermitted"
       ]
     ],
@@ -133,24 +133,19 @@ describe('RulesService', () => {
     expect(validated).toEqual("Function implementation may not start with curly brace '{'");
   });
 
-  it('should mustNotContain csharp function - more than one ;', () => {
-    const validated = service.mustNotContain(language.csharp, Applicability.functions, "static int Sq(int x) => x;x;");
-    expect(validated).toEqual("Function implementation may only have a ';' at the end");
-  });
-
   it('should mustMatch csharp function - not static', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "int Sq(int x) => x*x;");
-    expect(validated).toEqual("Functions must follow the form: static <ReturnType> <Name>(<parameters>) => <expression>;");
+    expect(validated).toEqual("Functions must start with 'static'");
   });
 
   it('should mustMatch csharp function - no semi-colon', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) => x*x");
-    expect(validated).toEqual("Functions must follow the form: static <ReturnType> <Name>(<parameters>) => <expression>;");
+    expect(validated).toEqual("Functions must follow the form: static <ReturnType> <NameStartingInUpperCase>(<parameters>) => <expression>;");
   });
 
   it('should mustMatch csharp function - no fat arrow', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) return x*x");
-    expect(validated).toEqual("Functions must follow the form: static <ReturnType> <Name>(<parameters>) => <expression>;");
+    expect(validated).toEqual("Function signature should be followed by '=>'");
   });
 
   it('should mustMatch csharp function - simple function', () => {
@@ -193,37 +188,37 @@ describe('RulesService', () => {
   //Python parsing - fails
   it('should mustMatch python expression - not beginning with def', () => {
     const parsed = service.mustMatch(language.python, Applicability.functions, "Foo() : return 3");
-    expect(parsed).toEqual("Functions must follow the standard form: def <name>(<parameters>): return <expression>");
+    expect(parsed).toEqual("Function definitions must start with 'def '");
   });
 
   it('should mustMatch python expression - no colon', () => {
-    const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() return 3");
-    expect(parsed).toEqual("Functions must follow the standard form: def <name>(<parameters>): return <expression>");
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() return 3");
+    expect(parsed).toEqual("Function signature should be followed by ':' (with or without a space) on the same line");
   });
 
   it('should mustMatch python expression - no return', () => {
-    const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() : 3");
-    expect(parsed).toEqual("Functions must follow the standard form: def <name>(<parameters>): return <expression>");
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() : 3");
+    expect(parsed).toEqual("The ':' should be followed by 'return' on the same line, or on the next line but indented");
   });
 
   it('should mustMatch python expression - no semi colon', () => {
-    const validated = service.mustNotContain(language.python, Applicability.functions, "def Foo() : return 3; 4");
+    const validated = service.mustNotContain(language.python, Applicability.functions, "def foo() : return 3; 4");
     expect(validated).toEqual("Use of ';' is not permitted");
   });
 
   //Python parsing - passes
   it('should mustMatch python expression - simple case', () => {
-    const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() : return 3");
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() : return 3");
     expect(parsed).toEqual("");
   });
 
   it('should mustMatch python expression - without spaces around :', () => {
-    const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo():return 3");
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def foo():return 3");
     expect(parsed).toEqual("");
   });
 
   it('should mustMatch python expression - with line breaks', () => {
-    const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() :\n return 3");
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() :\n return 3");
     expect(parsed).toEqual("");
   });
 
@@ -232,36 +227,36 @@ describe('RulesService', () => {
   it('should pick up mustMatch rules from the task - pass', () => {
     taskSubject.next(taskRules as ITask);
 
-    const parsed = service.mustMatch(language.python, Applicability.functions, "def Foo() :\n return 3");
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() :\n return 3");
     expect(parsed).toEqual("");
   });
 
   it('should pick up mustMatch rules from the task - fail', () => {
     taskSubject.next(taskRules as ITask);
 
-    const parsed = service.mustMatch(language.python, Applicability.functions, "def Bar() :\n return 3");
+    const parsed = service.mustMatch(language.python, Applicability.functions, "def baz() :\n return 3");
     expect(parsed).toEqual("a task message 1");
   });
 
   it('should pick up mustNotContain rules from the task - pass', () => {
     taskSubject.next(taskRules as ITask);
 
-    const parsed = service.mustNotContain(language.python, Applicability.functions, "def Foo() :\n return Bar");
+    const parsed = service.mustNotContain(language.python, Applicability.functions, "def foo() :\n return Bar");
     expect(parsed).toEqual("");
   });
 
   it('should pick up mustNotContain rules from the task - fail', () => {
     taskSubject.next(taskRules as ITask);
 
-    const parsed = service.mustNotContain(language.python, Applicability.functions, "def Baz() :\n return Foo");
+    const parsed = service.mustNotContain(language.python, Applicability.functions, "def foo() :\n return Baz");
     expect(parsed).toEqual("a task message 2");
   });
 
   it('should pick up messages from the rules.json file', () => {
     taskSubject.next(taskRules as ITask);
 
-    const parsed = service.mustNotContain(language.python, Applicability.functions, "def Qux() :\n return Foo");
-    expect(parsed).toEqual("Use of 'Qux' is not permitted");
+    const parsed = service.mustNotContain(language.python, Applicability.functions, "def foo() :\n return qux");
+    expect(parsed).toEqual("Use of 'qux' is not permitted");
   });
 
 });

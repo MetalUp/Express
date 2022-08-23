@@ -22,8 +22,16 @@
             "expressions": [],
             "functions": [
                 [
-                    "\\s*static\\s+\\w*\\s+[A-Z]\\w*\\s*\\(.*\\)\\s*=>\\s*.+;$",
-                    "Functions must follow the form: static <ReturnType> <Name>(<parameters>) => <expression>;"
+                    "^static.*",
+                    "Functions must start with 'static'"
+                ],
+                [
+                    "^static\\s+\\w*\\s+[A-Z]\\w*\\s*\\(.*\\)\\s*=>.*",
+                    "Function signature should be followed by '=>'"
+                ],
+                [
+                    "^(?:static\\s+\\w*\\s+[A-Z]\\w*\\s*\\(.*\\)\\s*=>(?:.|\\n)*;\\s*)*$",
+                    "Functions must follow the form: static <ReturnType> <NameStartingInUpperCase>(<parameters>) => <expression>;"
                 ]
             ]
         },
@@ -32,10 +40,25 @@
             "expressions": [],
             "functions": [
                 [
-                    "^\\s*def\\s+\\w+\\s*\\(.*\\)\\s*:\\s*return.*$",
-                    "Functions must follow the standard form: def <name>(<parameters>): return <expression>"
+                    "^def\\s.*",
+                    "Function definitions must start with 'def '"
+                ],
+                [
+                    "^def\\s+[a-z,_]+\\s*\\(.*",
+                    "Function name should use only lower case letters or underscores"
+                ],
+                [
+                    "^def\\s+[a-z,_]+\\s*\\(.*\\)\\s*:.*",
+                    "Function signature should be followed by ':' (with or without a space) on the same line"
+                ],
+                [
+                    "^def\\s+[a-z,_]+\\s*\\(.*\\)\\s*:\\s*return.*",
+                    "The ':' should be followed by 'return' on the same line, or on the next line but indented"
+                ],
+                [
+                    "^(?:def\\s+[a-z,_]+\\s*\\(.*\\)\\s*:\\s*return(?:.|\\\\\\n)*(?:\\n|$)|\\s*\\n)*$",
+                    "All functions must follow the standard form: def <name_in_lower_case>(<parameters>): return <expression>"
                 ]
-
             ]
         }
     },
@@ -77,10 +100,6 @@
                 [
                     "=>\\s*{",
                     "Function implementation may not start with curly brace '{'"
-                ],
-                [
-                    ";\\s*\\w",
-                    "Function implementation may only have a ';' at the end"
                 ]
             ]
         },
