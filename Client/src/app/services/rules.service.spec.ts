@@ -140,16 +140,15 @@ describe('RulesService', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) \n =>\n x*\nx\n;");
     expect(validated).toEqual("");
   });
+  it('should mustMatch csharp function - complex example', () => {
+    const validated = service.mustMatch(language.csharp, Applicability.functions, "static List<int> NeighbourCells(int c) => new List<int> { c - 21, c - 20, c - 19, c - 1, c + 1, c + 19, c + 20, c + 21 };\n\nstatic int KeepWithinBounds(int i) => (i + 400) % 400;\n\nstatic List<int> AdjustedNeighbourCells(int c) => NeighbourCells(c).Select(x => KeepWithinBounds(x)).ToList();\nstatic int LiveNeighbours(List<bool> cells, int c) => AdjustedNeighbourCells(c).Where(i => cells[i] == true).Count();\nstatic bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);\n \nstatic bool NextCellValue(List<bool> cells, int c) => WillLive(cells[c], LiveNeighbours(cells, c));\nstatic List<bool> NextGeneration(List<bool> cells) => Enumerable.Range(0, 400).Select(n => NextCellValue(cells, n)).ToList();");
+    expect(validated).toEqual("");
+  });
   //C# functions - fails
 
   it('should mustMatch csharp function - not static', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "int Sq(int x) => x*x;");
     expect(validated).toEqual("Functions must start with 'static'");
-  });
-
-  it('should mustMatch csharp function - funciton name not starting upper case', () => {
-    const validated = service.mustMatch(language.csharp, Applicability.functions, "static int sq(int x) => x*x;");
-    expect(validated).toEqual("Function name must start with an upper-case letter");
   });
 
   it('should mustNotContain csharp function - braces', () => {
@@ -159,7 +158,7 @@ describe('RulesService', () => {
 
   it('should mustMatch csharp function - no fat arrow', () => {
     const validated = service.mustMatch(language.csharp, Applicability.functions, "static int Sq(int x) return x*x");
-    expect(validated).toEqual("Function signature should be followed by '=>'");
+    expect(validated).toEqual("Functions must include the symbol '=>'");
   });
 
   //Python expressions - fails
