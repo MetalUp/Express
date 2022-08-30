@@ -13,7 +13,6 @@ export class StudentViewComponent implements OnInit, OnDestroy {
   title = 'ile-client';
 
   constructor(private taskService: TaskService, private route: ActivatedRoute) {
-
   }
 
   language: string = '';

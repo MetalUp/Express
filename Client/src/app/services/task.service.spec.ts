@@ -1,18 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TaskService } from './task.service';
-import { of, Subject } from 'rxjs';
+import { of } from 'rxjs';
 import { ITask } from './task';
-import { first } from 'rxjs';
+import { first, throwError } from 'rxjs';
 
 describe('TaskService', () => {
   let service: TaskService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let routerSpy: jasmine.SpyObj<Router>;
-
-  let testParams = new Subject<Params>();
-  let params = { queryParams: testParams } as unknown as ActivatedRoute;
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
@@ -36,6 +33,15 @@ describe('TaskService', () => {
     service.loadTask('testTask');
 
     expect(httpClientSpy.get).toHaveBeenCalledWith('content/testTask.json', { withCredentials: true });
+  });
+
+  it('should navigate home if task not found', () => {
+    httpClientSpy.get.and.returnValue(throwError(() => { status: 404 }));
+
+    service.loadTask('testTask');
+
+    expect(httpClientSpy.get).toHaveBeenCalledWith('content/testTask.json', { withCredentials: true });
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
   });
 
   it('should get the html file for the task', () => {

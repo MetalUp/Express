@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { EmptyTask, ITask } from './task';
 import { of, Subject } from 'rxjs';
 import { first } from 'rxjs';
@@ -18,10 +18,6 @@ export class TaskService {
   }
 
   private currentTaskAsSubject = new Subject<ITask>()
-
-  private setTask(taskId: string) {
-    this.router.navigate([`/task/${taskId}`]);
-  }
 
   loadTask(taskId: string) {
     const options = {
@@ -44,7 +40,7 @@ export class TaskService {
       taskId = taskId.replace(".json", "");
     }
 
-    this.setTask(taskId);
+    this.router.navigate([`/task/${taskId}`]);
   }
 
   getHtml(fileName: string) {

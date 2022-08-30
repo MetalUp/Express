@@ -45,4 +45,22 @@ describe('SelectedLanguageComponent', () => {
     expect(component.selectedLanguage).toEqual("language1");
   });
 
+  it('should display language - csharp', () => {
+   
+    component.ngOnInit();
+
+    taskSubject.next({Language: 'csharp'} as ITask);
+
+    expect(component.displayLanguage).toEqual("C#");
+  });
+
+  it('should display language - python', () => {
+   
+    component.ngOnInit();
+
+    taskSubject.next({Language: 'python'} as ITask);
+
+    expect(component.displayLanguage).toEqual("Python");
+  });
+
 });
