@@ -1,0 +1,16 @@
+{
+    "Language": "csharp",
+    "Title": "Default Task",
+    "Description": "default.html",
+    "Hints": [],
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "ReadyMadeFunctions": "",
+    "SkeletonCode": "",
+    "PasteExpression": false,
+    "PasteFunction": false,
+    "Tests": "",
+    "PreviousTask": "",
+    "NextTask": ""
+}
