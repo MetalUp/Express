@@ -26,6 +26,14 @@ describe('ExpressionEvaluationComponent', () => {
     stderr: ''
   }
 
+  let testRunResultOKWhiteSpace: RunResult = {
+    run_id: 'a',
+    outcome: 15,
+    cmpinfo: '',
+    stdout: ' expression result',
+    stderr: ''
+  }
+
   let testRunResultCmp: RunResult = {
     run_id: 'a',
     outcome: 11,
@@ -153,6 +161,22 @@ describe('ExpressionEvaluationComponent', () => {
     expect(component.previousExpressionResult).toBe('expression result')
 
   });
+
+  it('should submit code on enter and show result without trimming', () => {
+    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOKWhiteSpace));
+
+    component.expression = 'test';
+    const wrapped = wrapExpression(component.selectedLanguage, component.expression);
+
+    component.onEnter();
+    expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+
+    expect(component.expression).toBe('');
+    expect(component.previousExpression).toBe('test');
+    expect(component.previousExpressionResult).toBe(' expression result')
+
+  });
+
 
   it('should submit code on enter and show compiler error', () => {
     jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultCmp));

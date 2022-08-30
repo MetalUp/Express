@@ -70,7 +70,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
   }
 
   private pushExpression() {
-    this.previousExpressions.push([this.expression, this.result.stdout.trim()]);
+    this.previousExpressions.push([this.expression, this.result.stdout]);
     this.expression = '';
     this.previousExpressionIndex = this.previousExpressions.length;
   }
