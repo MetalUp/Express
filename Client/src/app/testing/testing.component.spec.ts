@@ -14,7 +14,7 @@ let testRunResultTestPass: RunResult = {
   run_id: 'a',
   outcome: 15,
   cmpinfo: '',
-  stdout: 'test pass',
+  stdout: 'All tests passed.',
   stderr: ''
 }
 
