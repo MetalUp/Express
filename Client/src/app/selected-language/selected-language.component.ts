@@ -11,6 +11,15 @@ export class SelectedLanguageComponent implements OnInit, OnDestroy {
 
   constructor(private taskService: TaskService) { }
 
+  private displayMap: Map<string, string> = new Map<string, string>([
+    ["csharp", "C#"],
+    ["python", "Python"]
+  ]);
+
+  get displayLanguage() {
+    return this.displayMap.get(this.selectedLanguage) || this.selectedLanguage;
+  }
+
   selectedLanguage: string = '';
 
   private sub?: Subscription;
