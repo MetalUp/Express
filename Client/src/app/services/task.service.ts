@@ -24,9 +24,15 @@ export class TaskService {
 
   private currentTaskAsSubject = new Subject<ITask>()
 
-  private updateLanguage(task: ITask, taskId: string) {
+  private setDefaultTask() {
     const params = {
-      "language": task.Language,
+      "task": 'default_python'
+    }
+    this.router.navigate(['/'], { queryParams: params });
+  }
+
+  private setTask(taskId : string) {
+    const params = {
       "task": taskId
     }
     this.router.navigate(['/'], { queryParams: params });
@@ -38,17 +44,16 @@ export class TaskService {
     }
 
     this.http.get<ITask>(`content/${taskId}.json`, options).pipe(first()).subscribe(t => {
-      this.updateLanguage(t, taskId);
       this.currentTaskAsSubject.next(t);
     });
   }
 
-  gotoTask(task: string){
-    if (task.endsWith(".json")){
-      task = task.replace(".json", "");
+  gotoTask(taskId: string){
+    if (taskId.endsWith(".json")){
+      taskId = taskId.replace(".json", "");
     }
 
-    this.load(task);
+    this.setTask(taskId);
   }
 
   getHtml(fileName: string) {

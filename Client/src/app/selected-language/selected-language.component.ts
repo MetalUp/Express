@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { JobeServerService } from '../services/jobe-server.service';
 import { Subscription } from 'rxjs';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-selected-language',
@@ -10,43 +9,21 @@ import { Subscription } from 'rxjs';
 })
 export class SelectedLanguageComponent implements OnInit, OnDestroy {
 
-  constructor(private jobeServer: JobeServerService, private route: ActivatedRoute) { }
+  constructor(private taskService: TaskService) { }
 
-  languages: Array<[string, string]> = [];
+  selectedLanguage: string = '';
 
-  get selectedLanguage() {
-    return this.jobeServer.selectedLanguage;
-  }
-
-  private checkLanguage() {
-    if (this.selectedLanguage && this.languages.length > 0) {
-      // check language is supported if not leave empty
-      if (!this.languages.map(l => l[0]).includes(this.selectedLanguage)) {
-        this.jobeServer.selectedLanguage = '';
-      }
-    }
-  }
-
-  private sub1?: Subscription;
-  private sub2?: Subscription;
+  private sub?: Subscription;
 
   ngOnInit(): void {
-    this.sub1 = this.jobeServer.get_languages().subscribe(supportedLanguages => {
-      this.languages = supportedLanguages;
-      this.checkLanguage()
-    });
-    this.sub2 = this.route.queryParams.subscribe(params => {
-      this.jobeServer.selectedLanguage = params['language'];
-      this.checkLanguage()
-    });
+    this.sub = this.taskService.currentTask.subscribe(t => {
+      this.selectedLanguage = t.Language;
+    })
   }
 
   ngOnDestroy(): void {
-    if (this.sub1) {
-      this.sub1.unsubscribe();
-    }
-    if (this.sub2) {
-      this.sub2.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
   }
 }

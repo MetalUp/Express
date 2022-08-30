@@ -28,7 +28,7 @@ describe('TaskService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get the task and update language', () => {
+  it('should get the task', () => {
     service.currentTask.pipe(first()).subscribe(t =>
       expect(t.Language).toEqual('testlanguage')
     );
@@ -36,7 +36,6 @@ describe('TaskService', () => {
     testParams.next({ task: 'testTask' });
 
     expect(httpClientSpy.get).toHaveBeenCalledWith('content/testTask.json', { withCredentials: true });
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/'], { queryParams: { language: 'testlanguage', task: 'testTask' } });
   });
 
   it('should get the html file for the task', () => {
@@ -48,14 +47,13 @@ describe('TaskService', () => {
     expect(httpClientSpy.get).toHaveBeenCalledWith('content/testHtmlFile.html', parms as any);
   });
 
-  it('should goto a new task and update language', () => {
+  it('should goto a new task', () => {
     service.currentTask.pipe(first()).subscribe(t =>
       expect(t.Language).toEqual('testlanguage')
     );
 
     service.gotoTask('newTask.json');
 
-    expect(httpClientSpy.get).toHaveBeenCalledWith('content/newTask.json', { withCredentials: true });
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/'], { queryParams: { language: 'testlanguage', task: 'newTask' } });
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/'], { queryParams: { task: 'newTask' } });
   });
 });

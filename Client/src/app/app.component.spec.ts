@@ -4,11 +4,17 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { Subject} from 'rxjs'
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { TaskService } from './services/task.service';
+import { ITask } from './services/task';
 
 describe('AppComponent', () => {
-  let testParams = new Subject<Params>();
+  let taskServiceSpy: jasmine.SpyObj<TaskService>;
+  let taskSubject = new Subject<ITask>();
 
   beforeEach(async () => {
+
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
+
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule
@@ -19,10 +25,8 @@ describe('AppComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
-          provide: ActivatedRoute,
-          useValue: {
-            queryParams: testParams
-          },
+          provide: TaskService,
+          useValue: taskServiceSpy
         }
       ]
     }).compileComponents();
@@ -46,7 +50,7 @@ describe('AppComponent', () => {
 
     app.ngOnInit();
 
-    testParams.next({language: 'testlanguage'} as Params);
+    taskSubject.next({Language: 'testlanguage'} as ITask);
 
     expect(app.language).toEqual('testlanguage');
   });

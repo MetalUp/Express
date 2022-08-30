@@ -14,6 +14,7 @@ export class JobeServerService {
   constructor(private http: HttpClient, taskService: TaskService) {
     taskService.currentTask.subscribe(t => {
       this.readyMadeFunctions = t.ReadyMadeFunctions || '';
+      this.selectedLanguage = t.Language;
     })
   }
 

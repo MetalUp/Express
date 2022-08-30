@@ -1,34 +1,29 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Params } from '@angular/router';
-import { of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { JobeServerService } from '../services/jobe-server.service';
+import { ITask } from '../services/task';
+import { TaskService } from '../services/task.service';
 import { SelectedLanguageComponent } from './selected-language.component';
 
 describe('SelectedLanguageComponent', () => {
   let component: SelectedLanguageComponent;
   let fixture: ComponentFixture<SelectedLanguageComponent>;
-  let jobeServerServiceSpy: jasmine.SpyObj<JobeServerService>;
-  let testParams: any = {};
+  let taskServiceSpy: jasmine.SpyObj<TaskService>;
+  let taskSubject = new Subject<ITask>();
 
   beforeEach(async () => {
-    jobeServerServiceSpy = jasmine.createSpyObj('JobeServerService', ['submit_run', 'get_languages']);
-    jobeServerServiceSpy.get_languages.and.returnValue(of<[string, string][]>([["1", "2"]]));
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
 
     await TestBed.configureTestingModule({
       declarations: [SelectedLanguageComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
-          provide: JobeServerService,
-          useValue: jobeServerServiceSpy
+          provide: TaskService,
+          useValue: taskServiceSpy
         },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            queryParams: of<Params>(testParams)
-          },
-        }
       ]
     }).compileComponents();
 
@@ -42,10 +37,10 @@ describe('SelectedLanguageComponent', () => {
   });
 
   it('should setup selected language', () => {
-    jobeServerServiceSpy.get_languages.and.returnValue(of<[string, string][]>([["language1", "language2"]]));
-    testParams['language'] = 'language1';
-
+   
     component.ngOnInit();
+
+    taskSubject.next({Language: 'language1'} as ITask);
 
     expect(component.selectedLanguage).toEqual("language1");
   });
