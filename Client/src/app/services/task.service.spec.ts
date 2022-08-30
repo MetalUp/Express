@@ -21,7 +21,7 @@ describe('TaskService', () => {
     httpClientSpy.get.and.returnValue(of({ Language: 'testlanguage' } as unknown as ITask))
 
     TestBed.configureTestingModule({});
-    service = new TaskService(httpClientSpy, routerSpy, params)
+    service = new TaskService(httpClientSpy, routerSpy)
   });
 
   it('should be created', () => {
@@ -33,7 +33,7 @@ describe('TaskService', () => {
       expect(t.Language).toEqual('testlanguage')
     );
 
-    testParams.next({ task: 'testTask' });
+    service.loadTask('testTask');
 
     expect(httpClientSpy.get).toHaveBeenCalledWith('content/testTask.json', { withCredentials: true });
   });
@@ -54,6 +54,6 @@ describe('TaskService', () => {
 
     service.gotoTask('newTask.json');
 
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/'], { queryParams: { task: 'newTask' } });
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/task/newTask']);
   });
 });

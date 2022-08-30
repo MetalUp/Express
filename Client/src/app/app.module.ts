@@ -12,6 +12,7 @@ import { rulesFactory, RulesService } from './services/rules.service';
 import { TaskComponent } from './task/task.component';
 import { TestingComponent } from './testing/testing.component';
 import { HintComponent } from './hint/hint.component';
+import { StudentViewComponent } from './student-view/student-view.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HintComponent } from './hint/hint.component';
     SelectedLanguageComponent,
     TaskComponent,
     TestingComponent,
-    HintComponent
+    HintComponent,
+    StudentViewComponent
   ],
   imports: [
     BrowserModule,

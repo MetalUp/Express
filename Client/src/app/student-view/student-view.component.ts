@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TaskService } from './services/task.service';
+import { TaskService } from '../services/task.service';
+
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-student-view',
+  templateUrl: './student-view.component.html',
+  styleUrls: ['./student-view.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class StudentViewComponent implements OnInit, OnDestroy {
   title = 'ile-client';
 
   constructor(private taskService: TaskService, private route: ActivatedRoute) {
