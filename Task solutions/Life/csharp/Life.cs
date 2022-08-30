@@ -51,22 +51,18 @@ namespace CSharp
         //public static List<bool> NextGeneration(List<bool> cells) => cells.Select((c, n)=> NextCellValue(cells, n)).ToList();
         #endregion
 
-        #region App
-        public static void RunApp()
-        {
-            //Initialise grid with approx 33% randomly-selected live cells
-            var grid = Enumerable.Range(0, 400).Select(n => rand.Next(0, 3) > 1).ToList();
+        #region App Code
 
+        public static List<bool> GenerateRandomGrid() =>Enumerable.Range(0, 400).Select(n => rand.Next(0, 3) > 1).ToList();
+
+        public static void RunApp(List<bool> g)
+        {
             while (true)
             {
                 Console.Clear();
-                for (int i = 0; i < 400; i++)
-                {
-                    Console.Write(grid[i] ? "* " : "  ");
-                    if (i % 20 == 0) Console.WriteLine(); //New line whenever a full row has been written
-                }
-                grid = NextGeneration(grid);
-                Thread.Sleep(500); //Delay 100 milliseconds to slow the refresh rate
+                Console.Write(AsGrid(g));
+                g = NextGeneration(g);
+                Thread.Sleep(300);
             }
         }
         #endregion
