@@ -1,15 +1,10 @@
 ﻿using CSharp;
 using static CSharp.Life;
 
-var g = Glider();
+//var g = Glider();
+var g = Enumerable.Range(0, 400).Select(n => rand.Next(0, 3) > 1).ToList();
 
-while (true)
-{
-    Console.Clear();
-    Console.Write(AsGrid(g));
-    g = NextGeneration(g);
-    Thread.Sleep(10);
-}
+RunApp(g);
 
 Life.RunTests_NeighbourCells();
 Life.RunTests_KeepWithinBounds();
