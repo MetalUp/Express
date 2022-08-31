@@ -33,6 +33,6 @@
 
     public enum Role
     {
-        User, Student, Teacher, Author, System
+        Student, Teacher, Author, System
     }
 }

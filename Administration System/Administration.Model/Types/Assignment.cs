@@ -32,7 +32,7 @@ namespace Model.Types
 
         public DateTime DueBy { get; init; }
 
-        public Activity Status {get; init; }
+        public ActivityType Status {get; init; }
 
         public int MarksAwarded { get; init; }
 

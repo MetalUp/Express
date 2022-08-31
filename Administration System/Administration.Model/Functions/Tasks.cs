@@ -39,7 +39,7 @@ namespace Model.Functions
                 AssignedTo = student,
                 AssignedById = assignedBy.Id,
                 DueBy = dueBy,
-                Status = Activity.Assigned
+                Status = ActivityType.Assigned
             };
         }
 

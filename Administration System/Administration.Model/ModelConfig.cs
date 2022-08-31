@@ -25,7 +25,7 @@ namespace Model
         public static Func<IConfiguration, DbContext> EFCoreDbContextCreator =>
             c => {
                 var db = new AdminDbContext(c.GetConnectionString("ILEAdmin"));
-                db.Create();
+                //db.Create();
                 return db;
             };
 
