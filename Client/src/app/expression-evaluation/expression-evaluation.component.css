@@ -1,10 +1,10 @@
 .multipane {
     grid-template-rows: 1fr 1fr;
-    gap: 5px;
+    gap: 10px;
 }
 
 .pane-body {
-    grid-template-rows: 3fr 1fr;
+    grid-template-rows: minmax(min-content, 100%) min-content;
 }
 
 .previous {
@@ -15,5 +15,5 @@
 .expression {
     display: grid;
     grid-template-columns: 10px 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: 100%;
 }

@@ -9,6 +9,6 @@
         <div class="function-definition code">
             <textarea [(ngModel)]="functionDefinitions" (ngModelChange)="modelChanged()" spellcheck="false" (paste)="onPaste($event)"></textarea>
         </div>
-        <textarea readonly>{{currentStatus}}</textarea>
+        <textarea *ngIf="currentStatus"  readonly>{{currentStatus}}</textarea>
     </div>
 </div>
