@@ -11,15 +11,15 @@
     display: grid;
     grid-template-columns: .2fr 1fr 1fr;
     grid-template-rows: 1fr;
-    gap: 5px 5px;
+    gap: 10px 10px;
 }
 
 .independent-column1 {
     grid-template-rows: minmax(min-content, 2fr) minmax(min-content, 1fr) min-content min-content;
-    gap: 5px 5px;
+    gap: 10px 10px;
 }
 
 .independent-column2 {
     grid-template-rows: minmax(min-content, 100%)  minmax(min-content, max-content) minmax(min-content, max-content) min-content;
-    gap: 5px 5px;
+    gap: 10px 10px;
 }
