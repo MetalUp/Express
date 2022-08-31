@@ -1,13 +1,5 @@
 <div class="one-column multipane">
     <div class="one-column pane">
-        <div class="pane-header">Result</div>
-        <div class="one-column pane-body">
-            <div class="result">
-                <textarea readonly>{{previousExpressionResult}}</textarea>
-            </div>
-        </div>
-    </div>
-    <div class="one-column pane">
         <div class="pane-header">Expression</div>
         <div class="one-column pane-body" [ngClass]="submitting ? 'in-progress' : ''">
             <div class="expression code">
@@ -17,6 +9,14 @@
                     (keyup)="onKey($event)" spellcheck="false" autofocus="autofocus"></textarea>
             </div>
             <textarea *ngIf="validationFail" readonly>{{validationFail}}</textarea>
+        </div>
+    </div>
+    <div class="one-column pane">
+        <div class="pane-header">Result</div>
+        <div class="one-column pane-body">
+            <div class="result">
+                <textarea readonly>{{previousExpressionResult}}</textarea>
+            </div>
         </div>
     </div>
 </div>
