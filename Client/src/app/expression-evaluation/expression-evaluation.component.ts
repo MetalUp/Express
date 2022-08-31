@@ -71,8 +71,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   private pushExpression() {
     this.previousExpressions.push([this.expression, this.result.stdout]);
-    this.expression = '';
-    this.previousExpressionIndex = this.previousExpressions.length;
+    this.previousExpressionIndex = this.previousExpressions.length -1;
   }
 
   onEnter() {
