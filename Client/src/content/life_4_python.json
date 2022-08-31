@@ -12,5 +12,6 @@
     "PasteFunction": false,
     "Tests": "life_4_tests.txt",
     "PreviousTask": "life_3_python.json",
-    "NextTask": "life_5_python.json"
+    "NextTask": "life_5_python.json",
+    "NextTaskDoesNotClearFunctions": true
 }

@@ -12,5 +12,6 @@
     "PasteFunction": false,
     "Tests": "life_6_tests.cs",
     "PreviousTask": "life_5_csharp.json",
-    "NextTask": "life_7_csharp.json"
+    "NextTask": "life_7_csharp.json",
+    "NextTaskDoesNotClearFunctions": true
 }
