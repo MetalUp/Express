@@ -35,6 +35,8 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   private canPaste = false;
 
+  private nextTaskClears = true;
+
   get skeletonUnchanged() {
     return this.functionDefinitions === this.skeleton;
   };
@@ -101,8 +103,13 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     this.sub = this.taskService.currentTask.subscribe(t => {
       this.canPaste = !!t.PasteFunction;
       this.skeleton = t.SkeletonCode || '';
-      this.functionDefinitions = this.skeleton;
-      this.modelChanged();
+      
+      if (this.nextTaskClears) {
+        this.functionDefinitions = this.skeleton;
+        this.modelChanged();
+      }
+
+      this.nextTaskClears = !!!t.NextTaskDoesNotClearFunctions;
     })
   }
 
