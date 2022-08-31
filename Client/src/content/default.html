@@ -1,9 +1,15 @@
 <span class="python">(This is the Python version. There is also a <a href="task/default_csharp">C# version</a>.)</span>
 <span class="csharp">(This is the C# version. There is also a <a href="task/default_python">Python version</a>.)</span>
 
-<p>In <b>Expression</b> pane on the left, you may enter any expression, simple: <code>(3+4)/5</code> or complex: 
-<code class="python">map(lambda x : x * x, range(1,10))</code>
-<code class="csharp">Enumerable.Range(1,10).Select(x => x * x)</code>. When you hit Enter, the expression will be evaluates and displayed in the <b>Result</b> pane. 
+<p>In <b>Expression</b> pane on the left, you may enter any expression, simple: 
+    
+    <p><code>(3+4)/5</code></p> 
+    <p>or complex: </p>
+
+<p><code class="python">map(lambda x : x * x, range(1,10))</code>
+<code class="csharp">Enumerable.Range(1,10).Select(x => x * x)</code></p>
+
+<p>When you hit Enter, the expression will be evaluates and displayed in the <b>Result</b> pane. 
 Don't worry if you have no idea what the second example means for now - try them both now.</p>
 <p>Note that:</p>
 <ul>
@@ -13,9 +19,13 @@ Don't worry if you have no idea what the second example means for now - try them
 </ul>
 
 <p>Now click in the <b>Functions</b> pane. Here you may enter any 'pure' function: one that simply returns the value of an expression, 
-    which will typically make use of values passed into the function as 'parameters', for example:<code class="python">def square(a) : return a*a</code>
-<code class="csharp">static int Square(int a) => a*a;</code>. Type (copy/paste is deliberately not permitted) that function into the <b>Functions</b> pane, and hit <b>Submit</b>. 
-If there are no errors, you will see 'Compiled OK' - if not, correct your code. You can then call use your new function from within the <b>Expression</b> pane, for example with: 
-<code class="python">square(3) + square(4)</code>
-<code class="csharp">Square(3) + Square(4)</code>
+    which will typically make use of values passed into the function as 'parameters', for example:</p>
+    <p><code class="python">def square(a) : return a*a</code>
+<code class="csharp">static int Square(int a) => a*a;</code></p>
+
+<p>Type (copy/paste is deliberately not permitted) that function into the <b>Functions</b> pane, and hit <b>Submit</b>. 
+If there are no errors, you will see 'Compiled OK' - if not, correct your code. You can then call use your new function from within the <b>Expression</b> pane, for example with:</p> 
+
+<p><code class="python">square(3) + square(4)</code>
+<code class="csharp">Square(3) + Square(4)</code></p>
 
