@@ -40,13 +40,15 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
   }
 
   filteredCmpinfo() {
-    if (this.validationFail) {
-      return this.validationFail;
-    }
-
     return this.result.cmpinfo
       ? this.rulesService.filter(this.selectedLanguage, ErrorType.cmpinfo, this.result.cmpinfo)
-      : this.rulesService.filter(this.selectedLanguage, ErrorType.stderr, this.result.stderr);
+      : ''
+  }
+
+  filteredStderr() {
+    return this.result.stderr
+      ? this.rulesService.filter(this.selectedLanguage, ErrorType.stderr, this.result.stderr)
+      : ''
   }
 
   mapOutcome(outcome: number) {
@@ -66,7 +68,11 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
   }
 
   get previousExpressionResult() {
-    return this.getPrevious(1) || this.filteredCmpinfo();
+    return this.getPrevious(1) || this.filteredStderr();
+  }
+
+  get expressionError() {
+    return this.validationFail || this.filteredCmpinfo();
   }
 
   private pushExpression() {

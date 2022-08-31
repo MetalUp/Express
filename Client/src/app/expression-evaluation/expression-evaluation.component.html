@@ -8,7 +8,7 @@
                     [(ngModel)]="expression" (keydown)="onEnterKey($event)" (keyup.enter)="onEnter()"
                     (keyup)="onKey($event)" spellcheck="false" autofocus="autofocus"></textarea>
             </div>
-            <textarea *ngIf="validationFail" readonly>{{validationFail}}</textarea>
+            <textarea *ngIf="expressionError" readonly>{{expressionError}}</textarea>
         </div>
     </div>
     <div class="one-column pane">
