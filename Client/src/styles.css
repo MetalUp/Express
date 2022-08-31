@@ -6,6 +6,7 @@
     --header-text-color: white;
     --placeholder-color:  #F2C58E;
     height: 100vh;
+    background-image: url("background.png");
 }
 
 body {
@@ -38,8 +39,8 @@ textarea {
 }
 
 .pane {
-    grid-template-rows: 25px minmax(min-content, 1fr);
-    border: 2px solid var(--border-color); 
+    grid-template-rows: 28px minmax(min-content, 1fr);
+    border: none; 
 }
 
 .pane-header {
@@ -48,19 +49,22 @@ textarea {
     padding-left: 5px;
     display:flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .pane-body {
    gap: 5px;
    align-content: space-between;
+   background-color: var(--background-color);
 }
 
 .info {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 21px;
+    grid-template-rows: 28px;
     box-sizing: border-box;
-    border: 2px solid var(--border-color);
+    border: none;
+    background-color: var(--background-color);
 }
 
 .data {
@@ -101,10 +105,12 @@ code {
 div.button-bar {
     display:flex;
     flex-direction:row-reverse;
+    align-items: center;
+    height: 100%;
 }
 
 button {
-    height: fit-content;
+    height: 20px;
     width: fit-content;
     margin-right: 5px;
     border: none;

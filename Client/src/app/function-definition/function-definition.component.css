@@ -5,7 +5,3 @@ div.pane-body {
 div.function-definition {
     width: 100%;
 }
-
-.uncompiled {
-    border: 2px solid var(--uncompiled-border-color);
-}
