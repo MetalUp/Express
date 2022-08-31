@@ -14,7 +14,8 @@ export interface ITask {
     PasteFunction?: boolean,
     Tests?: string,
     NextTask?: string,
-    PreviousTask?: string
+    PreviousTask?: string,
+    NextTaskDoesNotClearFunctions?: boolean
 }
 
 export const EmptyTask = {
