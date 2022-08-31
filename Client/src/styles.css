@@ -1,10 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-    --header-color: red;
+    --border-color:  #4472C4;
+    --uncompiled-border-color:  red;
+    --header-color:  #E37422;
     --header-text-color: white;
-    --previous-expression-color:  #DAE3F3;
-    --placeholder-color:  #D9D9D9;
-    --background-color:  white;
+    --placeholder-color:  #F2C58E;
     height: 100vh;
     background-image: url("background.png");
 }
@@ -113,4 +113,10 @@ button {
     height: 20px;
     width: fit-content;
     margin-right: 5px;
+    border: none;
+    background-color: #77190F;;
+    margin-top: 3px;
+    color: white;
+padding-top: 2px;
 }
+

@@ -11,6 +11,6 @@
     "PasteExpression": false,
     "PasteFunction": false,
     "Tests": "life_1_tests.txt",
-    "PreviousTask": "",
+    "PreviousTask": "life_0_python.json",
     "NextTask": "life_2_python.json"
 }
