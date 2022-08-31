@@ -88,6 +88,7 @@ describe('TestingComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
     component.result = EmptyRunResult;
+    component.tests = "tests";
   });
 
   it('should create', () => {
@@ -129,7 +130,6 @@ describe('TestingComponent', () => {
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.currentResultMessage).toEqual('All tests passed.');
-    expect(component.currentErrorMessage).toEqual('');
     expect(component.message()).toEqual('All tests passed.');
     expect(component.testedOk).toEqual(true);
   });
@@ -146,7 +146,6 @@ describe('TestingComponent', () => {
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.currentResultMessage).toEqual('test failed');
-    expect(component.currentErrorMessage).toEqual('');
     expect(component.message()).toEqual('test failed');
     expect(component.testedOk).toEqual(false);
   });
@@ -163,9 +162,8 @@ describe('TestingComponent', () => {
 
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
-    expect(component.currentResultMessage).toEqual('');
-    expect(component.currentErrorMessage).toEqual('run error');
-    expect(component.message()).toEqual('');
+    expect(component.currentResultMessage).toEqual('run error');
+    expect(component.message()).toEqual('run error');
     expect(component.testedOk).toEqual(false);
   });
 
@@ -181,9 +179,8 @@ describe('TestingComponent', () => {
 
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
-    expect(component.currentResultMessage).toEqual("Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint.");
-    expect(component.currentErrorMessage).toEqual('compile error');
-    expect(component.message()).toEqual("Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint.");
+    expect(component.currentResultMessage).toEqual("Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint. " + 'compile error');
+    expect(component.message()).toEqual("Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint. " + 'compile error');
     expect(component.testedOk).toEqual(false);
   });
 
@@ -198,9 +195,8 @@ describe('TestingComponent', () => {
 
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
-    expect(component.currentResultMessage).toEqual('');
-    expect(component.currentErrorMessage).toEqual('Unknown or pending outcome');
-    expect(component.message()).toEqual('');
+    expect(component.currentResultMessage).toEqual('Unknown or pending outcome');
+    expect(component.message()).toEqual('Unknown or pending outcome');
     expect(component.testedOk).toEqual(false);
   });
 
@@ -208,12 +204,11 @@ describe('TestingComponent', () => {
     
     jobeServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
     component.testedOk = true;
-    component.currentErrorMessage = 'message';
     component.result = EmptyRunResult;
 
     expect(component.canRunTests()).toEqual(true);
     expect(component.testedOk).toBe(true);
-    expect(component.currentErrorMessage).toEqual('message');
+    expect(component.currentResultMessage).toEqual('');
     expect(component.result.outcome).toBe(0);
   });
 
@@ -222,12 +217,11 @@ describe('TestingComponent', () => {
     jobeServerServiceSpy.hasFunctionDefinitions.and.returnValue(false);
 
     component.testedOk = true;
-    component.currentErrorMessage = 'message';
     component.result = EmptyRunResult;
 
     expect(component.canRunTests()).toEqual(false);
     expect(component.testedOk).toBe(false);
-    expect(component.currentErrorMessage).toEqual('');
+    expect(component.currentResultMessage).toEqual('');
     expect(component.result.outcome).toBe(0);
   });
 
@@ -235,12 +229,11 @@ describe('TestingComponent', () => {
     
     jobeServerServiceSpy.hasFunctionDefinitions.and.returnValue(false);
     component.testedOk = true;
-    component.currentErrorMessage = 'message';
     component.result = testRunResultTestOutcome;
 
     expect(component.canRunTests()).toEqual(false);
     expect(component.testedOk).toBe(false);
-    expect(component.currentErrorMessage).toEqual('');
+    expect(component.currentResultMessage).toEqual('');
     expect(component.result.outcome).toBe(0);
   });
 

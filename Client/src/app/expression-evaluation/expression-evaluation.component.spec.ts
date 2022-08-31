@@ -156,7 +156,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.onEnter();
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
-    expect(component.expression).toBe('');
+    expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
     expect(component.previousExpressionResult).toBe('expression result')
 
@@ -171,7 +171,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.onEnter();
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
-    expect(component.expression).toBe('');
+    expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
     expect(component.previousExpressionResult).toBe(' expression result')
 
@@ -187,7 +187,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.onEnter();
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
-    expect(component.expression).toBe('');
+    expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
     expect(component.previousExpressionResult).toBe('compiler error')
   });
@@ -201,7 +201,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.onEnter();
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
-    expect(component.expression).toBe('');
+    expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
     expect(component.previousExpressionResult).toBe('run error')
   });
@@ -227,7 +227,7 @@ describe('ExpressionEvaluationComponent', () => {
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
-    expect(component.expression).toBe('');
+    expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
   });
 
@@ -242,7 +242,7 @@ describe('ExpressionEvaluationComponent', () => {
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
     expect(jobeServerServiceSpy.submit_run).not.toHaveBeenCalled();
 
-    expect(component.expression).toBe('');
+    expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
     expect(component.previousExpressionResult).toBe('rules fail')
   });
