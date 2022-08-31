@@ -7,7 +7,13 @@
     </div>
     <div class="one-column pane-body" [ngClass]="submitting ? 'in-progress' : ''">
         <div class="function-definition code">
-            <textarea [(ngModel)]="functionDefinitions" (ngModelChange)="modelChanged()" spellcheck="false" (paste)="onPaste($event)"></textarea>
+            <textarea 
+                [(ngModel)]="functionDefinitions" 
+                (ngModelChange)="modelChanged()" 
+                placeholder="{{placeholder}}"
+                spellcheck="false" 
+                (paste)="onPaste($event)">
+            </textarea>
         </div>
         <textarea *ngIf="currentStatus"  readonly>{{currentStatus}}</textarea>
     </div>

@@ -253,4 +253,8 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.skeleton).toEqual('demo skeleton code');
     expect(component.skeletonUnchanged).toBe(true);
   });
+
+  it('gets the placeholder for the selected language', () => {
+    expect(component.placeholder).toEqual('static [returnType] Name([parameter definitions]) => [expression];');
+  });
 });
