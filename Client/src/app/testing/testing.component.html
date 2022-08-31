@@ -1,8 +1,7 @@
 <div class="one-column pane">
-    <div class="pane-header">Testing</div>
+    <div class="pane-header">Test</div>
     <div class="one-column pane-body" [ngClass]="submitting ? 'in-progress' : ''">
         <textarea readonly>{{message()}}</textarea>
-        <textarea *ngIf="currentErrorMessage" readonly>{{currentErrorMessage}}</textarea>
         <div class="button-bar">
             <button [disabled]="!canRunTests()" (click)="onRunTests()">Run Tests</button>
         </div>

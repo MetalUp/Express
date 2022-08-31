@@ -1,8 +1,7 @@
 .pane-body {
-    grid-template-rows:  minmax(min-content, 1fr) minmax(0%, 1fr)  min-content;
+    grid-template-rows:  minmax(min-content, 1fr)  min-content;
     grid-template-areas: 
     "body"
-    "error"
     "buttons";
     overflow: auto;
     font-size: 11pt;
