@@ -17,7 +17,7 @@ export class HintComponent implements OnInit, OnDestroy {
     return this.currentHint;
   }
 
-  private currentHint = 'Click Next to use the first Hint';
+  private currentHint = '';
 
   constructor(private taskService: TaskService) { }
 
@@ -59,7 +59,12 @@ export class HintComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.currentHint = 'Click Next to use the first Hint';
+      if (this.currentTask.Hints.length > 0) {
+        this.currentHint = 'Click Next to use the first Hint';
+      }
+      else {
+        this.currentHint = 'There are no Hints for this task.'
+      }
       this.hintIndex = -1;
     })
   }
