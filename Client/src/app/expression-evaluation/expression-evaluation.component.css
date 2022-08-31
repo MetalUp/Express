@@ -1,3 +1,8 @@
+.multipane {
+    grid-template-rows: 1fr 1fr;
+    gap: 5px;
+}
+
 .pane-body {
     grid-template-rows: 3fr 1fr;
 }
