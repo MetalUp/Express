@@ -1,5 +1,5 @@
 div.pane-body {
-    grid-template-rows: 1fr min-content min-content;
+    grid-template-rows: 1fr min-content;
 }
 
 div.function-definition {

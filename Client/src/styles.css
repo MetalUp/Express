@@ -47,6 +47,8 @@ textarea {
     background-color: var(--header-color);
     color: var(--header-text-color);
     padding-left: 5px;
+    display:flex;
+    justify-content: space-between;
 }
 
 .pane-body {
@@ -97,16 +99,13 @@ code {
     color:cornflowerblue;
 }
 
-.button-bar {
-    display: grid;
-    grid-template-rows: min-content;
-    grid-template-columns: max-content max-content max-content;
-    direction: rtl;
-    justify-self: end;
-    margin-bottom: 5px;
+div.button-bar {
+    display:flex;
+    flex-direction:row-reverse;
 }
 
 button {
+    height: fit-content;
     width: fit-content;
     margin-right: 5px;
 }

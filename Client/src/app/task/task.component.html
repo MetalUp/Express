@@ -1,10 +1,11 @@
 <div class="one-column pane">
-    <div class="pane-header">Task: {{currentTask.Title}}</div>
-    <div class="one-column pane-body">
-        <div class="task" [innerHtml]="taskHtml"></div>
+    <div class="pane-header">Task: {{currentTask.Title}}
         <div class="button-bar">
             <button [disabled]="!hasNextTask()" (click)="onNextTask()">Next Task</button>
             <button [disabled]="!hasPreviousTask()" (click)="onPreviousTask()">Previous Task</button>
         </div>
+    </div>
+    <div class="one-column pane-body">
+        <div class="task" [innerHtml]="taskHtml"></div>    
     </div>
 </div>
