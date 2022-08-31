@@ -137,12 +137,12 @@ describe('ExpressionEvaluationComponent', () => {
     component.result = testRunResultCmp;
 
     expect(component.previousExpression).toEqual('');
-    expect(component.previousExpressionResult).toEqual('compiler error');
+    expect(component.previousExpressionResult).toEqual('');
 
     component.validationFail = "validFail"
 
     expect(component.previousExpression).toEqual('');
-    expect(component.previousExpressionResult).toEqual('validFail');
+    expect(component.previousExpressionResult).toEqual('');
 
     component.result = EmptyRunResult;
   });
@@ -158,7 +158,8 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('expression result')
+    expect(component.previousExpressionResult).toBe('expression result');
+    expect(component.expressionError).toBe('');
 
   });
 
@@ -173,8 +174,8 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe(' expression result')
-
+    expect(component.previousExpressionResult).toBe(' expression result');
+    expect(component.expressionError).toBe('');
   });
 
 
@@ -189,7 +190,8 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('compiler error')
+    expect(component.previousExpressionResult).toBe('');
+    expect(component.expressionError).toBe('compiler error');
   });
 
   it('should submit code on enter and show runtime error', () => {
@@ -203,7 +205,8 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('run error')
+    expect(component.previousExpressionResult).toBe('run error');
+    expect(component.expressionError).toBe('');
   });
 
   it('should ignore empty expressions', () => {
@@ -214,6 +217,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.onEnter();
     expect(jobeServerServiceSpy.submit_run).not.toHaveBeenCalled();
     expect(component.previousExpressionResult).toBe('');
+    expect(component.expressionError).toBe('');
   });
 
   it('should call checkRules on enter', () => {
@@ -244,7 +248,8 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('rules fail')
+    expect(component.previousExpressionResult).toBe('');
+    expect(component.expressionError).toBe('rules fail');
   });
 
   it('should disable paste by default', () => {
