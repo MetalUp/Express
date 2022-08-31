@@ -2,10 +2,9 @@
 :root {
     --border-color:  #4472C4;
     --uncompiled-border-color:  red;
-    --header-color:  #4472C4;
+    --header-color:  #E37422;
     --header-text-color: white;
-    --previous-expression-color:  #DAE3F3;
-    --placeholder-color:  #D9D9D9;
+    --placeholder-color:  #F2C58E;
     height: 100vh;
 }
 
@@ -108,4 +107,10 @@ button {
     height: fit-content;
     width: fit-content;
     margin-right: 5px;
+    border: none;
+    background-color: #77190F;;
+    margin-top: 3px;
+    color: white;
+padding-top: 2px;
 }
+
