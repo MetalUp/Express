@@ -89,8 +89,8 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   private placeholderMap: Map<string, string> = new Map(
     [
-      ['csharp', 'static [returnType] Name([parameter definitions]) => [expression];'],
-      ['python', 'def name([parameter definitions]) : return [expression]']
+      ['csharp', 'static <returnType> Name(<parameter definitions>) => <expression>;'],
+      ['python', 'def name(<parameter definitions>) : return <expression>']
     ]);
     
   get placeholder() {

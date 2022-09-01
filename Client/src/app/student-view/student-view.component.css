@@ -1,6 +1,8 @@
 .masthead {
     font-size: 24pt;
     color: var(--masthead-color);
+    padding-bottom: 5px;
+    text-align: right;
 }
 
 .ile {
