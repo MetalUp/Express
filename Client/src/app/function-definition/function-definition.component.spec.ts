@@ -144,6 +144,34 @@ describe('FunctionDefinitionComponent', () => {
     expect(jobeServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
   });
 
+  it('should call model changed when changed', () => {
+    component.functionDefinitions = '';
+    
+    taskSubject.next({ PasteFunction: true, SkeletonCode: 'test' } as ITask);
+
+    expect(component.compiledOK).toBe(false);
+    expect(component.currentStatus).toBe('');
+    expect(component.pendingSubmit).toBe(true);
+
+    expect(jobeServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
+  });
+
+  it('should not call model changed when changed in nextClassClears flag unset', () => {
+    component.functionDefinitions = 'original';
+    component.nextTaskClears = false;
+    component.compiledOK = true;
+    
+    taskSubject.next({ PasteFunction: true, SkeletonCode: 'test' } as ITask);
+
+    expect(component.functionDefinitions).toBe('original');
+    expect(component.compiledOK).toBe(true);
+    expect(component.currentStatus).toBe('Compiled OK');
+    expect(component.pendingSubmit).toBe(false);
+
+    expect(jobeServerServiceSpy.clearFunctionDefinitions).not.toHaveBeenCalled();
+  });
+
+
   it('should not allow empty code to be submitted', () => {
 
     component.modelChanged();

@@ -35,7 +35,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   private canPaste = false;
 
-  private nextTaskClears = true;
+  nextTaskClears = true;
 
   get skeletonUnchanged() {
     return this.functionDefinitions === this.skeleton;
