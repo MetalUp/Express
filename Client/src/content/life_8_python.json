@@ -1,8 +1,8 @@
 {
     "Language": "python",
-    "Title": "Conway's Game of Life - Part 7",
-    "Description": "life_7.html",
-    "Hints": ["life_7_hint1.html","life_7_hint2.html","life_7_hint3.html"],
+    "Title": "Conway's Game of Life - Part 8",
+    "Description": "life_8.html",
+    "Hints": [],
     "Messages": [],
     "CodeMustMatch": {},
     "CodeMustNotContain": {},
@@ -10,8 +10,7 @@
     "SkeletonCode": "",
     "PasteExpression": false,
     "PasteFunction": false,
-    "Tests": "life_7_tests.txt",
-    "PreviousTask": "life_6_python.json",
-    "NextTask": "life_8_python.json",
-    "NextTaskDoesNotClearFunctions": true
+    "Tests": "",
+    "PreviousTask": "life_7_python.json",
+    "NextTask": ""
 }
