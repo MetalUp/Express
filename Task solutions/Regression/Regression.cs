@@ -46,6 +46,12 @@ public static class Regression
         TestTerm(SumXY, empty, 0.0);
         TestTerm(SumXY, l1, 90.66);
 
+        TestFunction(nameof(CalcA), 0.7663359541491346, CalcA(SumX(l1), SumXsq(l1), SumY(l1), SumXY(l1), l1.Count), l1);
+        TestFunction(nameof(CalcB), 1.0926439783101325, CalcB(SumX(l1), SumXsq(l1), SumY(l1), SumXY(l1), l1.Count), l1);
+
+        TestFunction(nameof(BestFitFromSummaryTerms), (0.7663359541491346, 1.0926439783101325), BestFitFromSummaryTerms(SumX(l1), SumXsq(l1), SumY(l1), SumXY(l1), l1.Count), l1);
+        TestFunction(nameof(BestFitFromPoints), (0.7663359541491346, 1.0926439783101325), BestFitFromPoints(l1), l1);
+
         AllTestsPassed();
     }
 
@@ -53,27 +59,5 @@ public static class Regression
     {
         TestFunction(nameof(f), expected, f(data), data);
     }
-
-    private static void TestCalcA()
-    {
-
-    }
-
-    private static void TestCalcB()
-    {
-
-    }
-
-    private static void TestBestFitFromSummaryTerms()
-    {
-
-    }
-
-    private static void TestBestFitFromPoints()
-    {
-
-    }
-
-
     #endregion
 }
