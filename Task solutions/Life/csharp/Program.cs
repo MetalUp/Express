@@ -1,18 +1,11 @@
-﻿using CSharp;
-using static CSharp.Life;
+﻿using static Life;
 
 //var g = Glider();
-var g = Enumerable.Range(0, 400).Select(n => rand.Next(0, 3) > 1).ToList();
+//var g = Enumerable.Range(0, 400).Select(n => rand.Next(0, 3) > 1).ToList();
 
-RunApp(g);
+//RunApp(g);
 
-Life.RunTests_NeighbourCells();
-Life.RunTests_KeepWithinBounds();
-Life.RunTests_AdjustedNeighbourCells();
-Life.RunTests_LiveNeighbourCount();
-Life.RunTests_WillLive();
-Life.RunTests_NextCellValue();
-Life.RunTests_NextGeneration();
+RunTests();
 
 
 

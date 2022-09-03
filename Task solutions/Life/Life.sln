@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharp", "CSharp\CSharp.csproj", "{8D61DEC4-EC03-4FE9-8424-F5D3C239B6B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Life_csharp", "CSharp\Life_csharp.csproj", "{8D61DEC4-EC03-4FE9-8424-F5D3C239B6B7}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonApplication1", "Python\PythonApplication1.pyproj", "{3753DC14-23ED-4476-8129-0EDDCCCE66F4}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Life_python", "Python\Life_python.pyproj", "{3753DC14-23ED-4476-8129-0EDDCCCE66F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework", "..\Framework\csharp\Framework.csproj", "{24BE06DA-67D1-45A0-B357-6471CC78A73D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Framework_csharp", "..\Framework\csharp\Framework_csharp.csproj", "{24BE06DA-67D1-45A0-B357-6471CC78A73D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
