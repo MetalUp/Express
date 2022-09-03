@@ -171,6 +171,25 @@ describe('FunctionDefinitionComponent', () => {
     expect(jobeServerServiceSpy.clearFunctionDefinitions).not.toHaveBeenCalled();
   });
 
+  it('should default nextClassClears flag', () => {
+    expect(component.nextTaskClears).toBe(true);
+    taskSubject.next({ } as ITask);
+    expect(component.nextTaskClears).toBe(true);
+  });
+
+  it('should unset nextClassClears flag from task', () => {
+    expect(component.nextTaskClears).toBe(true);
+    taskSubject.next({ NextTaskDoesNotClearFunctions: true} as ITask);
+    expect(component.nextTaskClears).toBe(false);
+  });
+
+  it('should set nextClassClears flag from task', () => {
+    component.nextTaskClears = false;
+    expect(component.nextTaskClears).toBe(false);
+    taskSubject.next({ NextTaskDoesNotClearFunctions: false} as ITask);
+    expect(component.nextTaskClears).toBe(true);
+  });
+
 
   it('should not allow empty code to be submitted', () => {
 
