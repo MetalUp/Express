@@ -1,6 +1,6 @@
 ﻿using static csharp.Framework;
 
-public static class Regression
+public static class BestFit
 {
     #region Data definitions and other hidden task-specific code
     #endregion
@@ -24,11 +24,32 @@ public static class Regression
 
     #region App code
 
+    //Assumes all x,y values are in range 0,<20 
+    public static void Plot(List<(double, double)> l)
+    {
+        var grid = new bool[20,20];
+        Console.WriteLine("20");
+        foreach(var p in l)
+        {
+            grid[(int)p.Item1, (int)p.Item2] = true;
+        }
+        for (int y=19; y >= 0; y--)
+        {
+            Console.Write($"|");
+            for (int x = 0; x < 20; x++)
+            {
+                Console.Write(grid[x, y] ? "■ " : "  ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine("0---------------------------------------20");
+    }
+
     #endregion
 
     #region Tests
     private static List<(double, double)> empty = new List<(double, double)>();
-    private static List<(double, double)> l1 = new List<(double, double)> 
+    public static List<(double, double)> l1 = new List<(double, double)> 
     { (0.71, 1.12), (3.56, 5.36), (7.83, 9.04) };
 
 

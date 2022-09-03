@@ -1,3 +1,5 @@
-﻿using static Regression;
+﻿using static BestFit;
 
-RunTests();
+//RunTests();
+
+Plot(l1);
