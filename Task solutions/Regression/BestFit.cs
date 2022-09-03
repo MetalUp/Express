@@ -1,4 +1,5 @@
-﻿using static csharp.Framework;
+﻿using System.Text;
+using static csharp.Framework;
 
 public static class BestFit
 {
@@ -25,24 +26,25 @@ public static class BestFit
     #region App code
 
     //Assumes all x,y values are in range 0,<20 
-    public static void Plot(List<(double, double)> l)
+    public static string Plot(List<(double, double)> l)
     {
         var grid = new bool[20,20];
-        Console.WriteLine("20");
+        var s = new StringBuilder("20");
         foreach(var p in l)
         {
             grid[(int)p.Item1, (int)p.Item2] = true;
         }
         for (int y=19; y >= 0; y--)
         {
-            Console.Write($"|");
+            s.Append($"|");
             for (int x = 0; x < 20; x++)
             {
-                Console.Write(grid[x, y] ? "■ " : "  ");
+                s.Append(grid[x, y] ? "■ " : "  ");
             }
-            Console.WriteLine();
+            s.Append("\n");
         }
-        Console.WriteLine("0---------------------------------------20");
+        s.Append("0---------------------------------------20");
+        return s.ToString();
     }
 
     #endregion

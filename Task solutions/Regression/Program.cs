@@ -2,4 +2,4 @@
 
 //RunTests();
 
-Plot(l1);
+Console.Write(Plot(l1));
