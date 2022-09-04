@@ -3,3 +3,8 @@
     font-size: 16pt;
     color: white;
 }
+
+.info {
+    display: grid;
+    grid-template-columns: min-content min-content;
+}
