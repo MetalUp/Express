@@ -1,5 +1,5 @@
 .multipane {
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 4fr;
     gap: 10px;
 }
 
