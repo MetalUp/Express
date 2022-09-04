@@ -8,3 +8,7 @@
     display: grid;
     grid-template-columns: min-content min-content;
 }
+
+.data {
+    padding-left: 20px;
+}

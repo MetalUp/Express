@@ -6,5 +6,9 @@
 
 .info {
     display: grid;
-    grid-template-columns: 2fr 3fr;
+    grid-template-columns: min-content min-content;
+}
+
+.data {
+    padding-left: 20px;
 }
