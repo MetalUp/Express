@@ -6,7 +6,7 @@ namespace Model.Functions
     {
         public static (Task, IContext) CreateNewTask(string title, IContext context)
         {
-            var t = new Task { Name = title };
+            var t = new Task { Title = title };
             return (t, context.WithNew(t));
         }       
 
