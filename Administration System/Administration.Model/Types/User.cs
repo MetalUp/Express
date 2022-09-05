@@ -7,7 +7,7 @@
         public User(User cloneFrom)
         {
             Id = cloneFrom.Id;
-            FriendlyName = cloneFrom.FriendlyName;
+            FullName = cloneFrom.FullName;
             UserName = cloneFrom.UserName;
             Password = cloneFrom.Password;
         }
@@ -15,24 +15,24 @@
         [Hidden]
         public int Id { get; init; }
 
-        public string FriendlyName { get; init; }
+        public string FullName { get; init; }
 
+        //[RegEx()]
         public string UserName { get; init; }
 
         public Role Role { get; init; }
 
         [Hidden]
-        public int OrganisationId { get; init; }
-        public virtual Organisation Organisation { get; init; }
-
-        [Hidden]
         public string Password { get; init; }
 
-        public override string ToString() => FriendlyName;
+        [Hidden]
+        public int? OrganisationId { get; init; }
+        public virtual Organisation Organisation { get; init; }
+
+        public ProgrammingLanguage PreferredLanguage { get; init; }
+
+        public override string ToString() => FullName;
     }
 
-    public enum Role
-    {
-        Student, Teacher, Author, System
-    }
+
 }

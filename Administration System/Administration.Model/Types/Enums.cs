@@ -1,0 +1,17 @@
+﻿namespace Model.Types
+{
+    public enum Role
+    {
+        Guest, Student, Teacher, Author, Admin, Root
+    }
+
+    public enum ProgrammingLanguage
+    {
+        Python, CSharp, VB, Java
+    }
+
+    public enum ActivityType
+    {
+        AccessedTask, SubmitFail, SubmitSuccess, TestFail, TestSuccess, HintUsed
+    }
+}

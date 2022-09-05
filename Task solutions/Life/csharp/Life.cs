@@ -17,7 +17,7 @@ static class Life
         return g;
     }
 
-    public static string AsGrid(List<bool> cells) => Enumerable.Range(0, 400).Aggregate("Grid:\n", (s, n) => s + (n > 0 && n % 20 == 0 ? "\n" : "") + (cells[n] ? "■ " : "  "));
+    public static string AsGrid(List<bool> cells) => Enumerable.Range(0, 400).Aggregate("", (s, n) => s + (n > 0 && n % 20 == 0 ? "\n" : "") + (cells[n] ? "■ " : "  "));
     #endregion
 
     #region Student code
