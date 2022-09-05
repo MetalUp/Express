@@ -21,6 +21,7 @@ namespace CSharp
 
         public static (string, string, int) MarkYellows(string attempt, string target, int n) =>
             n == 5 ? (attempt, target, n) : //First, test for the 'exit condition'
+                attempt[n] == '*' ? MarkYellows(attempt, target, n+1) :
                     target.Contains(attempt[n]) ? MarkYellows(Set(attempt, n, '+'), Set(target, target.IndexOf(attempt[n]), '_'), n + 1) :
                         MarkYellows( Set(attempt, n, '_'), target, n + 1);
 
@@ -36,6 +37,7 @@ namespace CSharp
             priorPossible.Where(w => MarkAttempt(attempt, w) == mark).ToList();
 
         public static int RemainingWordCountLeftByWorstOutcome(List<string> possibleWords, string attempt) =>
+            
             possibleWords.GroupBy(w => MarkAttempt(attempt, w)).Max(g => g.Count());
 
         public static string BestAttempt(List<string> possibleWords, List<string> allWords) =>
