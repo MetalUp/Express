@@ -25,7 +25,8 @@ describe('JobeServerService', () => {
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml'], { currentTask: taskSubject });
+    taskServiceSpy.getHtml.and.returnValue(of('additional task code'));
 
     TestBed.configureTestingModule({});
     service = new JobeServerService(httpClientSpy, taskServiceSpy);
@@ -75,19 +76,24 @@ describe('JobeServerService', () => {
 
   it('should call post on /runs including any task wrapping code', () => {
     httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));
-    taskSubject.next({ ReadyMadeFunctions: "additional task code " } as ITask);
+   
+
+    taskSubject.next({ ReadyMadeFunctions: "code.cs", Language: '' } as ITask);
+
+    expect(taskServiceSpy.getHtml).toHaveBeenCalledOnceWith("code.cs");
 
     service.selectedLanguage = 'stub language';
     service.setFunctionDefinitions('test definitions ');
 
     service.submit_run(`${UserDefinedFunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
 
-    testRunSpec.run_spec.sourcecode = 'test definitions additional task code stub code';
+    testRunSpec.run_spec.sourcecode = 'test definitions additional task codestub code';
 
     expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
       Object(testRunSpec),
       jasmine.any(Object));
   });
+
 
   it('should call post on /runs excluding empty task wrapping code', () => {
     httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, first } from 'rxjs/operators';
 import { RunResult, errorRunResult } from './run-result';
 import { UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../languages/language-helpers';
 import { TaskService } from './task.service';
@@ -13,7 +13,13 @@ export class JobeServerService {
 
   constructor(private http: HttpClient, taskService: TaskService) {
     taskService.currentTask.subscribe(t => {
-      this.readyMadeFunctions = t.ReadyMadeFunctions || '';
+
+      if (t.ReadyMadeFunctions && this.isProgramFile(t.ReadyMadeFunctions)) {
+        taskService.getHtml(t.ReadyMadeFunctions)
+        .pipe(first())
+        .subscribe(f => this.readyMadeFunctions = f);
+      }
+
       this.selectedLanguage = t.Language;
     })
   }
@@ -25,6 +31,12 @@ export class JobeServerService {
 
   private userDefinedFunction: string = '';
   private readyMadeFunctions: string = '';
+
+  private programFileExtensions = ['.cs', '.py', '.txt'];
+
+  private isProgramFile(fn: string) {
+    return this.programFileExtensions.some(ext => fn.endsWith(ext) );
+  }
 
   // easier to test functions
   setFunctionDefinitions(functionDefinitions: string) {
