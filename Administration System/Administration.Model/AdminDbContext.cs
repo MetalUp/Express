@@ -12,11 +12,11 @@ namespace Model
         public AdminDbContext(string cs) => this.cs = cs;
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<Organisation> Organisations { get; set; }
-        public DbSet<Invitation> Invitations { get; set; }
+        //public DbSet<Group> Groups { get; set; }
+        //public DbSet<Organisation> Organisations { get; set; }
+        //public DbSet<Invitation> Invitations { get; set; }
         public DbSet<Task> Tasks { get; set; }
-        public DbSet<Assignment> Assignments { get; set; }
+        //public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Activity> Activities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -28,9 +28,9 @@ namespace Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedBy).WithMany().OnDelete(DeleteBehavior.NoAction); //Because cascading delete would be confused by the two FKs to User
-            modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedTo).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Invitation>().HasOne(e => e.FromUser).WithMany().OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedBy).WithMany().OnDelete(DeleteBehavior.NoAction); //Because cascading delete would be confused by the two FKs to User
+            //modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedTo).WithMany().OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Invitation>().HasOne(e => e.FromUser).WithMany().OnDelete(DeleteBehavior.NoAction);
         }
 
         //private void AddSeedData(ModelBuilder modelBuilder)
