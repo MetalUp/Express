@@ -9,7 +9,7 @@
             Id = cloneFrom.Id;
             TaskId = cloneFrom.TaskId;
             Task = cloneFrom.Task; 
-            //TimeStamp ?
+            TimeStamp = cloneFrom.TimeStamp;
             Type = cloneFrom.Type;
             Code = cloneFrom.Code;
         }
@@ -19,6 +19,7 @@
 
         [Hidden]
         public int TaskId { get; init; }
+
         public virtual Task Task { get; init; }
 
         public DateTime TimeStamp { get; init; }

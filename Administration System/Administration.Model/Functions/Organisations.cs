@@ -13,7 +13,7 @@
         public static IQueryable<Organisation> AllOrganisations(IContext context) => context.Instances<Organisation>();
 
         public static Organisation MyOrganisation(IContext context) =>
-            User_MenuFunctions.Me(context).Organisation;
+            Users_Menu.Me(context).Organisation;
     }
 
     public static class Organisations_Functions

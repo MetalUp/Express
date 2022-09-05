@@ -20,7 +20,7 @@ namespace Model
           PublicClassesInterfacesEnums.Where(t => t.Namespace == "Model.Functions"   && t.IsStaticClass()).ToArray();
 
     public static Type[] MainMenus() =>
-        TypesDefiningDomainFunctions().Where(t => t.FullName.Contains("MenuFunctions")).ToArray();
+        TypesDefiningDomainFunctions().Where(t => t.FullName.Contains("Menu")).ToArray();
 
         public static Func<IConfiguration, DbContext> EFCoreDbContextCreator =>
             c => {

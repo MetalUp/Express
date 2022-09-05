@@ -38,7 +38,7 @@
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(4)]
-        public int MaxMarks { get; init; }
+        public int? MaxMarks { get; init; }
 
         //Comma-separated .html file paths
         [MemberOrder(5)]
@@ -77,6 +77,6 @@
         [MemberOrder(13)]
         public bool NextTaskDoesNotClearFunctions { get; init; }
 
-        public override string ToString() => Title;
+        public override string ToString() => $"{Title} ({Language})";
     }
 }
