@@ -7,11 +7,11 @@ import { AuthService } from '@auth0/auth0-angular';
 
 describe('AppComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let taskSubject = new Subject<boolean>();
+  let isAuthSubject = new Subject<boolean>();
 
   beforeEach(async () => {
 
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['load'], { isAuthenticated$: taskSubject });
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['load'], { isAuthenticated$: isAuthSubject });
 
     await TestBed.configureTestingModule({
       imports: [
@@ -34,5 +34,23 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
+  });
+
+  it('should be logged in', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    app.ngOnInit();
+    isAuthSubject.next(true);
+    expect(app.isLoggedIn).toBeTrue();
+    app.ngOnDestroy();
+  });
+
+  it('should be logged out', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    app.ngOnInit();
+    isAuthSubject.next(false);
+    expect(app.isLoggedIn).toBeFalse();
+    app.ngOnDestroy();
   });
 });
