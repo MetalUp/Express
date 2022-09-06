@@ -2,6 +2,7 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthModule } from '@auth0/auth0-angular';
 import { AppComponent } from './app.component';
 import { ExpressionEvaluationComponent } from './expression-evaluation/expression-evaluation.component';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +14,8 @@ import { TaskComponent } from './task/task.component';
 import { TestingComponent } from './testing/testing.component';
 import { HintComponent } from './hint/hint.component';
 import { StudentViewComponent } from './student-view/student-view.component';
+import { LoginButtonComponent } from './login-button';
+import { LogoutButtonComponent } from './logout-button';
 
 @NgModule({
   declarations: [
@@ -24,10 +27,16 @@ import { StudentViewComponent } from './student-view/student-view.component';
     TaskComponent,
     TestingComponent,
     HintComponent,
-    StudentViewComponent
+    StudentViewComponent,
+    LoginButtonComponent,
+    LogoutButtonComponent
   ],
   imports: [
     BrowserModule,
+    AuthModule.forRoot({
+      domain: 'nakedobjects.eu.auth0.com',
+      clientId: 'UASxK8nzWzY2qiZzZg4RIDB4N6dRzXc1'
+    }),
     HttpClientModule,
     FormsModule,
     AppRoutingModule

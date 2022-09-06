@@ -1,1 +1,3 @@
 <router-outlet></router-outlet>
+<app-login-button *ngIf="!isLoggedIn"></app-login-button>
+<app-logout-button *ngIf="isLoggedIn"></app-logout-button>
