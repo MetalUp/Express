@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { Subscription } from 'rxjs';
-import { TaskService } from './services/task.service';
 
 @Component({
   selector: 'app-root',
