@@ -14,7 +14,7 @@ describe('UserComponent', () => {
 
   beforeEach(async () => {
 
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['load'], { user$: userSubject });
+    authServiceSpy = jasmine.createSpyObj('AuthService', [], { user$: userSubject });
     await TestBed.configureTestingModule({
       declarations: [ UserComponent ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -34,5 +34,18 @@ describe('UserComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should default user', () => {
+
+    userSubject.next({email : ''});
+  
+    expect(component.userName).toEqual('Unknown');
+  });
+
+  it('should display email user', () => {
+    userSubject.next({email : 'testEmail'});
+
+    expect(component.userName).toEqual('testEmail');
   });
 });
