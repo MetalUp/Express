@@ -1,19 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Params } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { Subject} from 'rxjs'
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TaskService } from './services/task.service';
-import { ITask } from './services/task';
+import { AuthService } from '@auth0/auth0-angular';
 
 describe('AppComponent', () => {
-  let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITask>();
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let taskSubject = new Subject<boolean>();
 
   beforeEach(async () => {
 
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['load'], { isAuthenticated$: taskSubject });
 
     await TestBed.configureTestingModule({
       imports: [
@@ -25,8 +23,8 @@ describe('AppComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
-          provide: TaskService,
-          useValue: taskServiceSpy
+          provide: AuthService,
+          useValue: authServiceSpy
         }
       ]
     }).compileComponents();
@@ -36,11 +34,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'ile-client'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('ile-client');
   });
 });
