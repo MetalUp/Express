@@ -2,45 +2,52 @@
 {
     public class Invitation
     {
-        public Invitation() { }
+        public Invitation() {
+            Status = InvitationStatus.Pending;
+        }
 
         public Invitation(Invitation cloneFrom)
         {
             Id = cloneFrom.Id;
-            ToUser = cloneFrom.ToUser;
-            FromUser = cloneFrom.FromUser;
+            ToUserName = cloneFrom.ToUserName;
+            From = cloneFrom.From;
             ToJoin = cloneFrom.ToJoin;
             AsRole = cloneFrom.AsRole;
             IssuedOn = cloneFrom.IssuedOn;
-            ValidForDays = cloneFrom.ValidForDays;
+            Valid = cloneFrom.Valid;
+            Status = cloneFrom.Status;
         }
 
         [Hidden]
         public int Id { get; init; }
 
-        public string ToUser { get; init; } //Email address
+        [MemberOrder(1)]
+        public string ToUserName { get; init; } //Username
 
         [Hidden]
         public int FromUserId { get; init; }
-        public virtual User FromUser { get; init; }
+        [MemberOrder(2)]
+        public virtual User From { get; init; }
 
         [Hidden]
         public  int ToJoinId { get; init; }
+        [MemberOrder(3)]
         public virtual Organisation ToJoin { get; init; }
 
+        [MemberOrder(4)]
         public Role AsRole { get; init; }
 
+        [MemberOrder(5)]
         public DateTime IssuedOn { get; init; }
 
-        public int ValidForDays { get; init; }
+        [Named("Valid (no. of days)")][MemberOrder(6)]
+        public int Valid { get; init; }
 
+        [MemberOrder(7)]
         public InvitationStatus Status {get; init;}  
 
         public override string ToString() => "An invitation";
     }
 
-    public enum InvitationStatus
-    {
-        Pending, Accepted, Expired, Rescinded
-    }
+
 }

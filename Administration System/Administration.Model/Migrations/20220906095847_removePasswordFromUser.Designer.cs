@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Model;
 
@@ -11,9 +12,10 @@ using Model;
 namespace Model.Migrations
 {
     [DbContext(typeof(AdminDbContext))]
-    partial class AdminDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220906095847_removePasswordFromUser")]
+    partial class removePasswordFromUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,9 +123,6 @@ namespace Model.Migrations
                     b.Property<int>("AsRole")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FromId")
-                        .HasColumnType("int");
-
                     b.Property<int>("FromUserId")
                         .HasColumnType("int");
 
@@ -136,15 +135,15 @@ namespace Model.Migrations
                     b.Property<int>("ToJoinId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ToUserName")
+                    b.Property<string>("ToUser")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Valid")
+                    b.Property<int>("ValidForDays")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FromId");
+                    b.HasIndex("FromUserId");
 
                     b.HasIndex("ToJoinId");
 
@@ -231,9 +230,6 @@ namespace Model.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("EmailAddress")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
@@ -312,10 +308,11 @@ namespace Model.Migrations
 
             modelBuilder.Entity("Model.Types.Invitation", b =>
                 {
-                    b.HasOne("Model.Types.User", "From")
+                    b.HasOne("Model.Types.User", "FromUser")
                         .WithMany()
-                        .HasForeignKey("FromId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("FromUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("Model.Types.Organisation", "ToJoin")
                         .WithMany()
@@ -323,7 +320,7 @@ namespace Model.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("From");
+                    b.Navigation("FromUser");
 
                     b.Navigation("ToJoin");
                 });

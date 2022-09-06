@@ -14,4 +14,9 @@
     {
         AccessedTask, SubmitFail, SubmitSuccess, TestFail, TestSuccess, HintUsed
     }
+
+    public enum InvitationStatus
+    {
+        Pending, Accepted, Expired, Rescinded
+    }
 }
