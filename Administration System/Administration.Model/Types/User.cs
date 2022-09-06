@@ -28,7 +28,7 @@
         public string Password { get; init; }
 
         [MemberOrder(4)]
-        public ProgrammingLanguage PreferredLanguage { get; init; }
+        public ProgrammingLanguage? PreferredLanguage { get; init; }
 
         [Hidden]
         public int? OrganisationId { get; init; }
