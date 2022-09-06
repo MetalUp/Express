@@ -2,9 +2,9 @@
 {
 
     [Named("Organisations")]
-    public static class Organisation_MenuFunctions
+    public static class Organisations_Menu
     {
-        public static (Organisation, IContext) CreateNewInvitation(string name, IContext context)
+        public static (Organisation, IContext) CreateNewOrganisation(string name, IContext context)
         {
             var o = new Organisation {Name = name };
             return (o, context.WithNew(o));
@@ -16,8 +16,4 @@
             Users_Menu.Me(context).Organisation;
     }
 
-    public static class Organisations_Functions
-    {
-
-    }
 }

@@ -30,7 +30,7 @@ namespace Model
         {
             modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedBy).WithMany().OnDelete(DeleteBehavior.NoAction); //Because cascading delete would be confused by the two FKs to User
             modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedTo).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Invitation>().HasOne(e => e.FromUser).WithMany().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Invitation>().HasOne(e => e.From).WithMany().OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Task>().HasOne(e => e.NextTask).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.PreviousTask).WithMany().OnDelete(DeleteBehavior.NoAction);

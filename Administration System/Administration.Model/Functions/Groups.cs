@@ -6,7 +6,7 @@
     {
         public static (Group, IContext) CreateNewGroup(string name, IContext context)
         {
-            int orgId = Organisation_MenuFunctions.MyOrganisation(context).Id;
+            int orgId = Organisations_Menu.MyOrganisation(context).Id;
             var g = new Group { GroupName = name, OrganisationId = orgId };
             return (g, context.WithNew(g));
         }
@@ -15,7 +15,7 @@
 
         public static IList<Group> MyGroups(IContext context)
         {
-            int orgId = Organisation_MenuFunctions.MyOrganisation(context).Id;
+            int orgId = Organisations_Menu.MyOrganisation(context).Id;
             return AllGroups(context).Where(g => g.OrganisationId == orgId).ToList();
         }
     }

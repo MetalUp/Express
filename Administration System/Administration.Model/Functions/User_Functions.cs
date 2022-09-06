@@ -33,5 +33,11 @@ namespace Model.Functions
             context.WithUpdated(user, new(user) { Role = role });
 
         #endregion
+
+        internal static bool HasRoleAtLeast(this User user, Role role) => (int) user.Role >= (int)role;
+
+        internal static bool HasRole(this User user, Role role) => user.Role == role;
+
+
     }
 }
