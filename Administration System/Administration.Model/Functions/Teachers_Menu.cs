@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model.Functions
 {
+    [Named("Teachers")]
     public static class Teachers_Menu
     {
 

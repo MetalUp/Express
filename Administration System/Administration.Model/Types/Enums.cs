@@ -7,7 +7,7 @@
 
     public enum ProgrammingLanguage
     {
-        Python, CSharp, VB, Java
+        Python, Csharp, VB, Java
     }
 
     public enum ActivityType

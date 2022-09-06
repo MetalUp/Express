@@ -21,7 +21,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditPreferredLanguage(
             this User user,
-            ProgrammingLanguage preferredLanguage,
+            ProgrammingLanguage? preferredLanguage,
             IContext context) =>
             context.WithUpdated(user, new(user) { PreferredLanguage = preferredLanguage });
 
@@ -31,6 +31,13 @@ namespace Model.Functions
             Role role,
             IContext context) =>
             context.WithUpdated(user, new(user) { Role = role });
+
+        [Edit]
+        public static IContext EditOrganisation(
+    this User user,
+    Organisation organisation,
+    IContext context) =>
+    context.WithUpdated(user, new(user) { Organisation = organisation, OrganisationId = organisation.Id });
 
         #endregion
 

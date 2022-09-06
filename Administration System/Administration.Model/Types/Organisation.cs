@@ -15,7 +15,7 @@
 
         public string Name { get; init; }
 
-        public virtual ICollection<User> Teachers { get; set; }
+        public virtual ICollection<User> Teachers { get; set; } = new List<User>();
 
         public override string ToString() => Name;
     }
