@@ -7,9 +7,12 @@
         public User(User cloneFrom)
         {
             Id = cloneFrom.Id;
-            FullName = cloneFrom.FullName;
             UserName = cloneFrom.UserName;
-            Password = cloneFrom.Password;
+            FullName = cloneFrom.FullName;
+            Role = cloneFrom.Role;
+            PreferredLanguage = cloneFrom.PreferredLanguage;
+            OrganisationId = cloneFrom.OrganisationId;
+            Organisation = cloneFrom.Organisation;
         }
 
         [Hidden]
@@ -23,9 +26,6 @@
 
         [MemberOrder(3)]
         public Role Role { get; init; }
-
-        [Hidden]
-        public string Password { get; init; }
 
         [MemberOrder(4)]
         public ProgrammingLanguage? PreferredLanguage { get; init; }

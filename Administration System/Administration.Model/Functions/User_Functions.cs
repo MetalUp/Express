@@ -9,20 +9,6 @@ namespace Model.Functions
     public static class User_Functions
     {
 
-        public static IContext ChangePassword(
-            this User user,
-            [Password] string currentPassword,
-            [Password] string newPassword,
-            [Password] string confirmNewPassword,
-            IContext context) =>
-            context.WithUpdated(user, new(user) { Password = newPassword });
-
-        public static string ValidateChangePassword(this User user, string currentPassword, string newPassword, string confirmNewPassword) =>
-            currentPassword != user.Password ? "Current Password is incorrect" :
-                newPassword == currentPassword ? "New Password is the same as Current Password" :
-                    newPassword != confirmNewPassword ? "New Password and Confirm New Password do not match" :
-                        "";
-
         #region Editing
         [Edit]
         public static IContext EditFullName(
