@@ -30,7 +30,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditMaxMarks(
             this Task task,
-            int? maxMarks,
+            int maxMarks,
             IContext context) =>
                 context.WithUpdated(task, new(task) { MaxMarks = maxMarks });
 
@@ -111,12 +111,11 @@ namespace Model.Functions
           this Task task,
           bool nextTaskDoesNotClearFunctions,
           IContext context) =>
-            context.WithUpdated(task, new(task) { NextTaskDoesNotClearFunctions = nextTaskDoesNotClearFunctions });
+            context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskDoesNotClearFunctions });
 
-     #endregion
+        #endregion
 
-
-        //#region AssignTaskToGroup
+        #region Assigning
         //public static IContext AssignTaskToGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
         // group.Students.Aggregate(context, (c, s) => c.WithNew(NewAssignment(task, s, dueBy, User_MenuFunctions.Me(context))));
 
@@ -124,11 +123,9 @@ namespace Model.Functions
         //    Group_MenuFunctions.MyGroups(context);
 
 
-        //#endregion
-
         //Need autocomplete for group & default for assignedBy
 
-        //public static IContext AssignTaskToStudent(this Task task, User student, DateTime dueBy, IContext context) =>
+        //public static IContext AssignTaskToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
         //        context.WithNew(NewAssignment(task, student, dueBy, User_MenuFunctions.Me(context)));
 
         ////Need autocomplete for student & default for assignedBy
@@ -143,7 +140,7 @@ namespace Model.Functions
         //        Status = ActivityType.Assigned
         //    };
         //}
+        #endregion
 
-        //ListActivity(Task task)
     }
 }

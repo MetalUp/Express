@@ -6,8 +6,10 @@
         public Task(Task cloneFrom)
         {
             Id = cloneFrom.Id;
-            Language = cloneFrom.Language;
+            AuthorId = cloneFrom.AuthorId;
+            Author = cloneFrom.Author;
             Title = cloneFrom.Title;
+            Language = cloneFrom.Language;
             Description = cloneFrom.Description;
             MaxMarks = cloneFrom.MaxMarks;
             Hints = cloneFrom.Hints;
@@ -20,11 +22,16 @@
             PreviousTask = cloneFrom.PreviousTask;
             NextTaskId = cloneFrom.NextTaskId;
             NextTask = cloneFrom.NextTask;
-            NextTaskDoesNotClearFunctions = cloneFrom.NextTaskDoesNotClearFunctions;
+            NextTaskClearsFunctions = cloneFrom.NextTaskClearsFunctions;
         }
 
         [Hidden]
         public int Id { get; init; }
+
+        [Hidden]
+        public int AuthorId { get; init; }
+        [MemberOrder(0)]
+        public virtual User Author { get; init; }
 
         [MemberOrder(1)]
         public string Title { get; init; }
@@ -38,9 +45,9 @@
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(4)]
-        public int? MaxMarks { get; init; }
+        public int MaxMarks { get; init; }
 
-        //Comma-separated .html file paths
+        //Comma-separated list of .html file paths
         [MemberOrder(5)]
         public string Hints { get; init; }
 
@@ -48,7 +55,7 @@
         [MemberOrder(6)]
         public string HintCosts { get; init; }
 
-        //File path to code for ready-made functions and/or data definitions
+        //File path to code (in the specified language) for ready-made functions and/or data definitions
         [MemberOrder(7)]
         public string ReadyMadeFunctions { get; init; }
 
@@ -75,7 +82,7 @@
         public virtual Task NextTask { get; init; }
 
         [MemberOrder(13)]
-        public bool NextTaskDoesNotClearFunctions { get; init; }
+        public bool NextTaskClearsFunctions { get; init; }
 
         public override string ToString() => $"{Title} ({Language})";
     }

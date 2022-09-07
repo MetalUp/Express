@@ -11,9 +11,6 @@
         }
 
         public static IQueryable<Organisation> AllOrganisations(IContext context) => context.Instances<Organisation>();
-
-        public static Organisation MyOrganisation(IContext context) =>
-            Users_Menu.Me(context).Organisation;
     }
 
 }

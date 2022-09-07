@@ -2,14 +2,12 @@
 {
     public class Invitation
     {
-        public Invitation() {
-            Status = InvitationStatus.Pending;
-        }
+        public Invitation() { }
 
         public Invitation(Invitation cloneFrom)
         {
             Id = cloneFrom.Id;
-            ToUserName = cloneFrom.ToUserName;
+            ToEmailAddress = cloneFrom.ToEmailAddress;
             From = cloneFrom.From;
             ToJoin = cloneFrom.ToJoin;
             AsRole = cloneFrom.AsRole;
@@ -22,12 +20,13 @@
         public int Id { get; init; }
 
         [MemberOrder(1)]
-        public string ToUserName { get; init; } //Username
+        public string ToEmailAddress { get; init; }
 
         [Hidden]
-        public int FromUserId { get; init; }
+        public int FromId { get; init; }
+
         [MemberOrder(2)]
-        public virtual User From { get; init; }
+        public virtual Teacher From { get; init; }
 
         [Hidden]
         public  int ToJoinId { get; init; }

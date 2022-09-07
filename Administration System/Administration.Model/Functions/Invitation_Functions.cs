@@ -13,10 +13,11 @@
 
         public static IContext Accept(this Invitation invitation, IContext context)
         {
-            var user = Users_Menu.FindByUserName(invitation.ToUserName, context);
-            return context.WithUpdated(user, new User(user) {
-                OrganisationId = invitation.From.OrganisationId, 
-                Role = invitation.AsRole});
+            throw new NotImplementedException();
+            //var user = Users_Menu.FindByUserName(invitation.ToUserName, context);
+            //return context.WithUpdated(user, new Student() {
+            //    OrganisationId = invitation.From.OrganisationId, 
+            //    Role = invitation.AsRole});
         }
    
          

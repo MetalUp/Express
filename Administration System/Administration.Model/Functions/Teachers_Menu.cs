@@ -6,21 +6,30 @@ using System.Threading.Tasks;
 
 namespace Model.Functions
 {
-    [Named("Teachers")]
+    [Named("Teacher Actions")]
     public static class Teachers_Menu
     {
+        public static Teacher Me(IContext context)
+        {
+            var userId = Users_Menu.Me(context).Id;
+            return context.Instances<Teacher>().Single(t => t.UserId == userId);
+        }
 
-        public static IContext InviteUser(
-            string userName, 
+        public static Organisation MyOrganisation(IContext context) =>
+            Me(context).Organisation;
+
+        #region Invitations
+        public static IContext CreateInvitation(
+            string toEmailAddress,
             Role asRole,
-            [ValueRange(1,30)][DefaultValue(7)][Named("Valid (no. of days)")] int valid, 
+            [ValueRange(1, 30)][DefaultValue(7)][Named("Valid (no. of days)")] int valid,
             IContext context) =>
             context.WithNew(new Invitation()
             {
-                From = Users_Menu.Me(context),
-                ToUserName = userName,
-                ToJoin = Users_Menu.Me(context).Organisation,
-                AsRole = Role.Student,
+                From = Me(context),
+                ToEmailAddress = toEmailAddress,
+                ToJoin = Me(context).Organisation,
+                AsRole = asRole,
                 IssuedOn = context.Today(),
                 Valid = valid,
                 Status = InvitationStatus.Pending
@@ -28,38 +37,45 @@ namespace Model.Functions
 
         public static Role Default1InviteUser() => Role.Student;
 
-        public static string Validate1InviteUser(Role asRole) => asRole == Role.Student || asRole == Role.Teacher ? "": "Can only invite user as Student or Teacher";
+        public static string Validate1InviteUser(Role asRole) => asRole == Role.Student || asRole == Role.Teacher || asRole == Role.Administrator ? "": "Can only invite as Role: Student, Teacher, or Administrator";
 
-        public static bool HideInviteUserToBeStudent(IContext context) => UserIsTeacher(context);
-
-
-        public static IQueryable<Invitation> ViewPendingInvitations(IContext context)
+        public static IQueryable<Invitation> MyPendingInvitations(IContext context)
         {
-            int myId = Users_Menu.Me(context).Id;
-            return context.Instances<Invitation>().Where(i => i.FromUserId == myId && i.Status == InvitationStatus.Pending);
+            var myId = Me(context).Id;
+            return AllPendingInvitations(context).Where(i => i.FromId == myId);
         }
+
+        public static IQueryable<Invitation> AllPendingInvitations(IContext context) =>
+            context.Instances<Invitation>().Where(i => i.Status == InvitationStatus.Pending);
+
 
         public static IContext SendReminderToAllPendingInvitations(IContext context) => throw new NotImplementedException();
+        #endregion
 
-        public static IQueryable<User> OurStudents(this User user, IContext context)
+        #region Students
+        public static IQueryable<Student> OurStudents(IContext context)
         {
-            int myOrgId = Users_Menu.Me(context).OrganisationId.Value;
-            return context.Instances<User>().Where(u => u.OrganisationId == myOrgId && u.Role == Role.Student);
+            int myOrgId = Me(context).OrganisationId;
+            return context.Instances<Student>().Where(s => s.OrganisationId == myOrgId);
         }
 
-        public static bool HideOurStudents(IContext context) => UserIsTeacher(context);
+        public static Student FindStudent(Student name, IContext context) => name;
 
-        private static bool UserIsTeacher(IContext context) => !Users_Menu.Me(context).HasRoleAtLeast(Role.Teacher);
+        [PageSize(10)]
+        public static IQueryable<Student> AutoComplete0FindStudent(string name, IContext context) =>
+            OurStudents(context).Where( s => s.RealName.ToUpper().Contains(name.ToUpper()));
 
-        public static IQueryable<User> MyColleagues(IContext context)
+        #endregion
+
+        #region Colleagues
+        public static IQueryable<Teacher> MyColleagues(IContext context)
         {
-            User me = Users_Menu.Me(context);
-            int myOrgId = me.OrganisationId.Value;
+            var me = Me(context);
+            int myOrgId = me.OrganisationId;
             int myId = me.Id;
-            return context.Instances<User>().Where(u => u.OrganisationId == myOrgId && u.Role == Role.Teacher && u.Id != myId);
+            return context.Instances<Teacher>().Where(t => t.OrganisationId == myOrgId && t.Id != myId);
         }
 
-        public static bool HideMyColleagues(this User user, IContext context) => UserIsTeacher(context);
-
+        #endregion
     }
 }

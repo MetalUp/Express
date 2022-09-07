@@ -8,12 +8,7 @@
         {
             Id = cloneFrom.Id;
             UserName = cloneFrom.UserName;
-            FullName = cloneFrom.FullName;
-            EmailAddress = cloneFrom.EmailAddress;
             Role = cloneFrom.Role;
-            PreferredLanguage = cloneFrom.PreferredLanguage;
-            OrganisationId = cloneFrom.OrganisationId;
-            Organisation = cloneFrom.Organisation;
         }
 
         [Hidden]
@@ -23,27 +18,9 @@
         public string UserName { get; init; }
 
         [MemberOrder(2)]
-        public string FullName { get; init; }
-
-        [MemberOrder(3)]
-        public string EmailAddress { get; init; }
-
-        [MemberOrder(4)]
-        public bool EmailAddressConfirmed { get; init; }
-
-        [MemberOrder(5)]
         public Role Role { get; init; }
 
-        [MemberOrder(6)]
-        public ProgrammingLanguage? PreferredLanguage { get; init; }
-
-        [Hidden]
-        public int? OrganisationId { get; init; }
-
-        [MemberOrder(7)]
-        public virtual Organisation Organisation { get; init; }
-
-        public override string ToString() => $"{FullName}";
+        public override string ToString() => $"{UserName}";
     }
 
 

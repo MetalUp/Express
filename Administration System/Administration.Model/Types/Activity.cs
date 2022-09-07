@@ -3,30 +3,32 @@
     public class Activity
     {
         public Activity() { }
-
         public Activity(Activity cloneFrom) 
         { 
             Id = cloneFrom.Id;
-            TaskId = cloneFrom.TaskId;
-            Task = cloneFrom.Task; 
-            TimeStamp = cloneFrom.TimeStamp;
+            AssignmentId = cloneFrom.AssignmentId;
+            Assignment = cloneFrom.Assignment;
             Type = cloneFrom.Type;
-            Code = cloneFrom.Code;
+            TimeStamp = cloneFrom.TimeStamp;
+            SubmittedCode = cloneFrom.SubmittedCode;
         }
 
         [Hidden]
         public  int Id { get; init; }
 
         [Hidden]
-        public int TaskId { get; init; }
+        public int AssignmentId { get; init; }
+        [MemberOrder(2)]
+        public virtual Assignment Assignment { get; init; }
 
-        public virtual Task Task { get; init; }
-
-        public DateTime TimeStamp { get; init; }
-
+        [MemberOrder(4)]
         public ActivityType Type { get; init; }
 
-        public string Code { get; init; }    
+        [MemberOrder(6)]
+        public DateTime TimeStamp { get; init; }
+
+        [MemberOrder(8)]
+        public string SubmittedCode { get; init; }    
 
         public override string ToString() => Type.ToString();
     }
