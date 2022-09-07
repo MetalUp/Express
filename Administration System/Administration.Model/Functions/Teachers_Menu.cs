@@ -19,35 +19,36 @@ namespace Model.Functions
             Me(context).Organisation;
 
         #region Invitations
-        public static IContext CreateInvitation(
-            string toEmailAddress,
-            Role asRole,
-            [ValueRange(1, 30)][DefaultValue(7)][Named("Valid (no. of days)")] int valid,
-            IContext context) =>
-            context.WithNew(new Invitation()
+        public static IContext InviteStudentToJoin(
+            string name,
+            string emailAddress,
+            IContext context) =>  //TODO also send email
+            context.WithNew(new Student()
             {
-                From = Me(context),
-                ToEmailAddress = toEmailAddress,
-                ToJoin = Me(context).Organisation,
-                AsRole = asRole,
-                IssuedOn = context.Today(),
-                Valid = valid,
-                Status = InvitationStatus.Pending
+                Name = name,
+                EmailAddress = emailAddress,
+                Organisation = Me(context).Organisation,
+                Status = MemberStatus.Pending
             });
 
-        public static Role Default1InviteUser() => Role.Student;
+        public static IContext InviteTeacherToJoin(
+            string name,
+            string emailAddress,
+            IContext context) =>  //TODO also send email
+            context.WithNew(new Teacher()
+            {
+                Name = name,
+                EmailAddress = emailAddress,
+                Organisation = Me(context).Organisation,
+                Status = MemberStatus.Pending
+            });
 
-        public static string Validate1InviteUser(Role asRole) => asRole == Role.Student || asRole == Role.Teacher || asRole == Role.Administrator ? "": "Can only invite as Role: Student, Teacher, or Administrator";
 
-        public static IQueryable<Invitation> MyPendingInvitations(IContext context)
-        {
-            var myId = Me(context).Id;
-            return AllPendingInvitations(context).Where(i => i.FromId == myId);
-        }
+        public static IQueryable<Student> PendingStudentInvitations(IContext context) =>
+            context.Instances<Student>().Where(i => i.Status == MemberStatus.Pending);
 
-        public static IQueryable<Invitation> AllPendingInvitations(IContext context) =>
-            context.Instances<Invitation>().Where(i => i.Status == InvitationStatus.Pending);
-
+        public static IQueryable<Teacher> PendingTeacherInvitations(IContext context) =>
+            context.Instances<Teacher>().Where(i => i.Status == MemberStatus.Pending);
 
         public static IContext SendReminderToAllPendingInvitations(IContext context) => throw new NotImplementedException();
         #endregion
@@ -63,7 +64,7 @@ namespace Model.Functions
 
         [PageSize(10)]
         public static IQueryable<Student> AutoComplete0FindStudent(string name, IContext context) =>
-            OurStudents(context).Where( s => s.RealName.ToUpper().Contains(name.ToUpper()));
+            OurStudents(context).Where( s => s.Name.ToUpper().Contains(name.ToUpper()));
 
         #endregion
 

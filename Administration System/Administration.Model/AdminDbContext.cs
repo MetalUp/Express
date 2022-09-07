@@ -17,7 +17,6 @@ namespace Model
         public DbSet<StudentGroup> StudentGroups { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
-        public DbSet<Invitation> Invitations { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Activity> Activities { get; set; }
@@ -33,7 +32,6 @@ namespace Model
         {
             modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedBy).WithMany().OnDelete(DeleteBehavior.NoAction); //Because cascading delete would be confused by the two FKs to User
             modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedTo).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Invitation>().HasOne(e => e.From).WithMany().OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Task>().HasOne(e => e.NextTask).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.PreviousTask).WithMany().OnDelete(DeleteBehavior.NoAction);

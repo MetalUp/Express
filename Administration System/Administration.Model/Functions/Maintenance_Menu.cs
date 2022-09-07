@@ -21,7 +21,7 @@ namespace Model.Functions
 
         public static (Student, IContext) CreateNewStudent(User fromUser,  string name, Organisation organisation, IContext context)
         {
-            var s = new Student() { UserId = fromUser.Id, RealName = name, OrganisationId = organisation.Id };           
+            var s = new Student() { UserId = fromUser.Id, Name = name, OrganisationId = organisation.Id };           
             return (s, context.WithNew(s).WithUpdated(fromUser, new User(fromUser) { Role = Role.Student}));
         }
 
@@ -69,11 +69,6 @@ namespace Model.Functions
             var  t = new Task() { Title = title, AuthorId = Teachers_Menu.Me(context).Id };
             return (t, context.WithNew(t));
         }
-        #endregion
-
-        #region Invitations
-        public static IQueryable<Invitation> AllInvitations(IContext context) => context.Instances<Invitation>();
-
         #endregion
 
         #region Assignments

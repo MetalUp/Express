@@ -26,6 +26,12 @@
         [MemberOrder(6)]
         public string EmailAddress { get; init; }
 
+        [MemberOrder(7)]
+        public MemberStatus Status { get; init; }
+
+        [MemberOrder(8)]
+        public Role Role { get {return User.Role; } }
+
         [Hidden]
         public int OrganisationId { get; init; }
         [MemberOrder(8)]

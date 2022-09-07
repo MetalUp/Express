@@ -14,7 +14,7 @@ namespace Model.Types
             Id = cloneFrom.Id;
             UserId = cloneFrom.UserId;
             User = cloneFrom.User;
-            RealName = cloneFrom.RealName;
+            Name = cloneFrom.Name;
             EmailAddress = cloneFrom.EmailAddress;
             OrganisationId = cloneFrom.OrganisationId;
             Organisation = cloneFrom.Organisation;
@@ -24,21 +24,24 @@ namespace Model.Types
         public int Id { get; init; }
 
         [Hidden]
-        public int UserId { get; init; }
+        public int? UserId { get; init; }
         [MemberOrder(1)]
         public virtual User User { get; init; }
 
         [MemberOrder(2)][DescribedAs("Name and/or Student Id")]
-        public string RealName { get; init; }
+        public string Name { get; init; }
 
         [MemberOrder(3)]
         public string EmailAddress { get; init; }
+
+        [MemberOrder(4)]
+        public MemberStatus Status { get; init; }
 
         [Hidden]
         public int OrganisationId { get; init; }
         [MemberOrder(6)]
         public virtual Organisation Organisation { get; init; }
 
-        public override string ToString() => RealName;
+        public override string ToString() => Name;
     }
 }
