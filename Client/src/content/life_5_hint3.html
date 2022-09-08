@@ -10,4 +10,10 @@
 
 <code class="csharp">static bool WillLive(bool alive, int neighbours) => (alive && (neighbours == 2 || neighbours == 3)) | (!alive && neighbours == 3);</code>
 
+<p>Which may be simplified to:</p>
+
+<code class="python">def will_live(alive, neighbours) : return (neighbours == 3) or (alive and (neighbours ==2))</code>
+
+<code class="csharp">static bool WillLive(bool alive, int neighbours) => neighbours == 3 || (alive && neighbours == 3);</code>
+
 <p>Choose the one you are more comfortable with, re-type the code into <b>Function definition</b> and run the tests.</p>
