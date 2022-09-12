@@ -202,20 +202,20 @@ gemini {
     color: var(--link-text-color12, var(--default-link-text-color));
 }
 
-.bg {
+.metalup .bg {
     height: 100%;
 }
 
-body {
+.metalup body {
     font-family: 'Segoe UI', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
 }
 
 
-::placeholder {
+.metalup ::placeholder {
     color: var(--placeholder-color);
 }
 
-textarea {
+.metalup textarea {
     display: inline;
     background-color: transparent;
     resize: none;
@@ -227,21 +227,21 @@ textarea {
     overflow: auto;
 }
 
-.pane-holder {
+.metalup .pane-holder {
     grid-template-rows: 1fr;
 }
 
-.one-column {
+.metalup .one-column {
     display: grid;
     grid-template-columns: 1fr;
 }
 
-.pane {
+.metalup .pane {
     grid-template-rows: 28px minmax(min-content, 1fr);
     border: none; 
 }
 
-.pane-header {
+.metalup .pane-header {
     background-color: var(--header-color);
     color: var(--header-text-color);
     padding-left: 5px;
@@ -250,13 +250,13 @@ textarea {
     align-items: center;
 }
 
-.pane-body {
+.metalup .pane-body {
    gap: 5px;
    align-content: space-between;
    background-color: var(--background-color);
 }
 
-.info {
+.metalup .info {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 28px;
@@ -265,23 +265,23 @@ textarea {
     background-color: var(--background-color);
 }
 
-.data {
+.metalup .data {
     padding-left: 5px;
 }
 
-span.prompt::before {
+.metalup span.prompt::before {
     content: '\00BB ';
 }
 
-.in-progress * {
+.metalup .in-progress * {
     cursor: progress;
 }
 
-.code {
+.metalup .code {
     font-family: monospace;
 }
 
-.field {
+.metalup .field {
     font-family: monospace;
     color: grey;
 }
@@ -294,20 +294,20 @@ span.prompt::before {
     display:none;
 }
 
-code {
+.metalup code {
     font-family: monospace;
     font-size: 11pt;
     color:black;
 }
 
-div.button-bar {
+.metalup div.button-bar {
     display:flex;
     flex-direction:row-reverse;
     align-items: center;
     height: 100%;
 }
 
-button {
+.metalup button {
     height: 20px;
     width: fit-content;
     margin-right: 5px;
@@ -319,14 +319,14 @@ button {
     padding-top: 2px;
 }
 
-button:disabled {
+.metalup button:disabled {
     background-color: var(--button-disabled);
 }
 
-button:hover {
+.metalup button:hover {
     background-color: var(--button-enabled-hover);
 }
 
-button:disabled:hover {
+.metalup button:disabled:hover {
     background-color: var(--button-disabled);
 }
