@@ -1,0 +1,32 @@
+
+/* You can add global styles to this file, and also import other style files */
+
+
+
+.masthead {
+    font-size: 24pt;
+    color: var(--masthead-color);
+    padding-bottom: 5px;
+    text-align: right;
+}
+
+.ile {
+    grid-template-rows: min-content minmax(min-content, 90vh);
+}
+
+.content {
+    display: grid;
+    grid-template-columns: .2fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 10px 10px;
+}
+
+.independent-column1 {
+    grid-template-rows: minmax(min-content, 5fr) minmax(min-content, 4fr) min-content;
+    gap: 10px 10px;
+}
+
+.independent-column2 {
+    grid-template-rows: minmax(min-content, 100%)  minmax(min-content, max-content) minmax(min-content, max-content) min-content;
+    gap: 10px 10px;
+}

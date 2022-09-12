@@ -1,0 +1,82 @@
+﻿{
+    "authenticate": true,
+    "authClientId" : "UASxK8nzWzY2qiZzZg4RIDB4N6dRzXc1",
+    "authDomain" : "nakedobjects.eu.auth0.com",
+    "appPath": "https://admin.metalup.org",
+    "logoffUrl": "",
+    "urlShortCuts": [ "http://localhost:5000", "AdventureWorksModel" ],
+    "doUrlValidation": true,
+    "applicationName" : "Adventureworks Demo",
+    "clearCacheOnChange": true,
+    "colors": {
+        "regexArray": [
+            {
+                "regex": ".*Customer.*",
+                "color": 1
+            },
+            {
+                "regex": ".*SalesOrder.*",
+                "color": 2
+            },
+            {
+                "regex": ".*Product.*",
+                "color": 4
+            },
+            {
+                "regex": ".*Employee.*",
+                "color": 5
+            },
+            {
+                "regex": ".*SalesPerson.*",
+                "color": 6
+            },
+            {
+                "regex": ".*SpecialOffer.*",
+                "color": 7
+            },
+            {
+                "regex": ".*Vendot.*",
+                "color": 9
+            },
+            {
+                "regex": ".*PurchaseOrder.*",
+                "color": 10
+            },
+            {
+                "regex": ".*WorkOrder.*",
+                "color": 12
+            }
+        ],
+        "default": 0,
+        "randomMaxIndex" : 12
+    },
+    "masks": {
+        "currencyMasks": {
+            "C": {
+                "format": "decimal",
+                "symbol": "GBP",
+                "digits": "1.2-2"
+            },
+            "c": {
+                "format": "decimal",
+                "symbol": "GBP",
+                "digits": "1.2-2"
+            }
+        },
+        "dateMasks": {
+            "d": {
+                "format": "date-time",
+                "mask": "D MMM YYYY"
+            },
+            "D": {
+                "format": "date",
+                "mask": "D MMM YYYY hh:mm:ss"
+            },
+            "T": {
+                "format": "time",
+                "mask": "HH:mm"
+            }
+        }
+    },
+    "logLevel": "debug"
+}

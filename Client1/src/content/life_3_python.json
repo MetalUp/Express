@@ -1,0 +1,17 @@
+{
+    "Language": "python",
+    "Title": "Conway's Game of Life - Part 3",
+    "Description": "life_3.html",
+    "Hints": ["life_3_hint1.html","life_3_hint2.html","life_3_hint3.html"],
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "ReadyMadeFunctions": "life_python.txt",
+    "SkeletonCode": "",
+    "PasteExpression": false,
+    "PasteFunction": false,
+    "Tests": "life_3_tests.txt",
+    "PreviousTask": "life_2_python.json",
+    "NextTask": "life_4_python.json",
+    "NextTaskDoesNotClearFunctions": true
+}

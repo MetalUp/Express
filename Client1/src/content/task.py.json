@@ -1,0 +1,15 @@
+{
+    "Language": "python",
+    "Title": "test python task",
+    "Description": "task.html",
+    "Hints": ["hint1.html", "hint1.html"],
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "ReadyMadeFunctions": "",
+    "SkeletonCode": "def double(x): return x * x;",
+    "PasteExpression": false,
+    "PasteFunction": false,
+    "Tests": "tests.py",
+    "NextTask": "task.cs"
+}

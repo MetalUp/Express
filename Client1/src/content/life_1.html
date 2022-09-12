@@ -1,0 +1,18 @@
+<p>In Life we will need to know about the <i>neighbours</i> of a cell. Including the diagonals, a cell has <i>eight</i> immediate neighbours.</p>
+
+</p>Write a function named <code class="csharp">NeighbourCells</code><code class="python">neighbour_cells</code>
+that defines one parameter named <code>c</code> - an integer value representing a specific cell number - and returns a list of eight integers representing the cell numbers of
+its eight neighbours. For example, knowing that the width of the grid is 20:</p>
+
+<ul>
+<li>The neighbour to the <i>right</i> of <code>c</code> is <code>c+1</code></li>
+<li>The neighbour <i>above</i> <code>c</code> is <code>c-20</code></li>
+<li>You'll need to work out the values for the other six neighbours and return them all as a list. 
+(The ordering within the list is not important, but you should specify them in some sensible order.)</li>
+</ul>
+
+<p>This algorithm will work for most of the cells, including those at the left and right edges of the grid (which wrap around),
+but if we apply it to cells in the top or bottom rows, some of the values returned values will be outside the range 0-399.
+That's OK for now - we'll deal with it in the next task.</p>
+
+<p>Test your function manually, in the <b>Expression</b> pane, then run the automated tests.</p>

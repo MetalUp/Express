@@ -1,0 +1,16 @@
+{
+    "Language": "csharp",
+    "Title": "Conway's Game of Life - Part 7",
+    "Description": "life_7.html",
+    "Hints": ["life_7_hint1.html","life_7_hint2.html","life_7_hint3.html"],
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "ReadyMadeFunctions": "life_functions.cs",
+    "PasteExpression": false,
+    "PasteFunction": false,
+    "Tests": "life_7_tests.cs",
+    "PreviousTask": "life_6_csharp.json",
+    "NextTask": "life_8_csharp.json",
+    "NextTaskDoesNotClearFunctions": true
+}

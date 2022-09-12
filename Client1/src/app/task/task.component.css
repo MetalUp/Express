@@ -1,0 +1,10 @@
+.pane-body {
+    grid-template-rows:  minmax(min-content, 40vh);
+    font-size: 11pt;
+}
+
+.task {
+    width: 99%;
+    overflow: auto;
+    margin: 5px;
+}

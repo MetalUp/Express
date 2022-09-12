@@ -1,0 +1,9 @@
+.pane-body {
+    grid-template-rows:  minmax(min-content, 1fr);
+    overflow: auto;
+    font-size: 11pt;
+}
+
+.message {
+    width: 100%;
+}

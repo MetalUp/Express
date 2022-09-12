@@ -1,0 +1,12 @@
+<p>Your function <i>signature</i> should look like this:</p>
+
+<code class="python">def next_generation(cells): return <span class="field">expression</span></code>
+<code class="csharp">static List&lt;bool&gt; NextGeneration(List&lt;bool&gt; cells) => <span class="field">expression</span>;</code>
+
+<p>Your implementation will need to apply the function <code class="csharp">NextCellValue</code><code class="python">next_cell_value</code> to
+    each cell in the grid, generating a new list of Boolean values. This should suggest the use of one of the standard <i>higher order functions</i> to you.
+    But instead of passing in the <code>cells</code> directly, you should pass in a generated range of integers representing the cell <i>numbers</i>.</p>
+
+    <p>The higher order function will also need a <i>lambda</i>, and this can apply <code class="csharp">NextCellValue</code><code class="python">next_cell_value</code>
+    to a cell retrieved from the <code>cells</code> by its cell number.</p>
+     

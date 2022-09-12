@@ -1,0 +1,16 @@
+{
+    "Language": "csharp",
+    "Title": "Conway's Game of Life - Introduction",
+    "Description": "life_0.html",
+    "Hints": [],
+    "Messages": [],
+    "CodeMustMatch": {},
+    "CodeMustNotContain": {},
+    "ReadyMadeFunctions": "life_functions.cs",
+    "SkeletonCode": "",
+    "PasteExpression": false,
+    "PasteFunction": false,
+    "Tests": "",
+    "PreviousTask": "",
+    "NextTask": "life_1_csharp.json"
+}
