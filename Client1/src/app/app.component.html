@@ -1,15 +1,3 @@
-<ng-container *ngIf="config.loadingStatus === 0">
-  <p class="startup-message">Loading configuration...</p>
-</ng-container>
-<ng-container *ngIf="config.loadingStatus === 1">
-  <ng-container *ngIf="!$any(auth).authenticate || auth.isAuthenticated()">
-    <router-outlet></router-outlet>
-    <nof-footer *ngIf="isGemini()"></nof-footer>
-  </ng-container>
-  <ng-container *ngIf="$any(auth).authenticate && !auth.isAuthenticated()">
-    <nof-login></nof-login>
-  </ng-container>
-</ng-container>
-<ng-container *ngIf="config.loadingStatus === 2">
-  <p class="startup-message">Application configuration failed to load, trying refreshing the page, if that fails please contact the application administrator.</p>
-</ng-container>
+<router-outlet></router-outlet>
+<app-login-button *ngIf="!isLoggedIn"></app-login-button>
+<app-logout-button *ngIf="isLoggedIn"></app-logout-button>

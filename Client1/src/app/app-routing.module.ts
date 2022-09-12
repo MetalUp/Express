@@ -1,126 +1,16 @@
-﻿import { NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {
-    ApplicationPropertiesComponent,
-    AttachmentComponent,
-    CallbackComponent,
-    DynamicErrorComponent,
-    DynamicListComponent,
-    DynamicObjectComponent,
-    HomeComponent,
-    LogoffComponent,
-    MultiLineDialogComponent,
-    RecentComponent
-} from '@nakedobjects/gemini';
-import { AuthService, ViewType } from '@nakedobjects/services';
+import { AuthGuard } from './auth.guard';
 import { StudentViewComponent } from './student-view/student-view.component';
 
 const routes: Routes = [
-    { path: '',  redirectTo: '/gemini/home',  pathMatch: 'full' },
-    {
-        path: 'gemini/home',
-        component: HomeComponent,
-        canActivate: [AuthService],
-        data: { pane: 1, paneType: 'single' },
-        children: [
-            { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'object', component: DynamicObjectComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'list', component: DynamicListComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'attachment', component: AttachmentComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'recent', component: RecentComponent, data: { pane: 2, paneType: 'split' } }
-        ]
-    },
-    {
-        path: 'gemini/object',
-        component: DynamicObjectComponent,
-        canActivate: [AuthService],
-        data: { pane: 1, paneType: 'single', dynamicType: ViewType.Object },
-        children: [
-            { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'object', component: DynamicObjectComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'list', component: DynamicListComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'attachment', component: AttachmentComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'recent', component: RecentComponent, data: { pane: 2, paneType: 'split' } }
-        ]
-    },
-    {
-        path: 'gemini/list',
-        component: DynamicListComponent,
-        canActivate: [AuthService],
-        data: { pane: 1, paneType: 'single' },
-        children: [
-            { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'object', component: DynamicObjectComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'list', component: DynamicListComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'attachment', component: AttachmentComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'recent', component: RecentComponent, data: { pane: 2, paneType: 'split' } }
-        ]
-    },
-    {
-        path: 'gemini/attachment',
-        component: AttachmentComponent,
-        canActivate: [AuthService],
-        data: { pane: 1, paneType: 'single' },
-        children: [
-            { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'object', component: DynamicObjectComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'list', component: DynamicListComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'attachment', component: AttachmentComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'recent', component: RecentComponent, data: { pane: 2, paneType: 'split' } }
-        ]
-    },
-    {
-        path: 'gemini/recent',
-        component: RecentComponent,
-        canActivate: [AuthService],
-        data: { pane: 1, paneType: 'single' },
-        children: [
-            { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'object', component: DynamicObjectComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'list', component: DynamicListComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'attachment', component: AttachmentComponent, data: { pane: 2, paneType: 'split' } },
-            { path: 'recent', component: RecentComponent, data: { pane: 2, paneType: 'split' } }
-        ]
-    },
-    {
-        path: 'gemini/error',
-        component: DynamicErrorComponent,
-        canActivate: [AuthService],
-        data: { pane: 1, paneType: 'single' }
-    },
-    {
-        path: 'gemini/applicationProperties',
-        component: ApplicationPropertiesComponent,
-        canActivate: [AuthService],
-        data: { pane: 1, paneType: 'single' }
-    },
-    {
-        path: 'gemini/multiLineDialog',
-        component: MultiLineDialogComponent,
-        canActivate: [AuthService],
-        data: { pane: 1, paneType: 'single' }
-    },
-    {
-        path: 'gemini/logoff',
-        component: LogoffComponent,
-        canActivate: [AuthService],
-        canDeactivate: [AuthService],
-        data: { pane: 1, paneType: 'single' }
-    },
-    {
-        path: 'gemini/callback',
-        component: CallbackComponent
-    },
-    { path: 'task/:id', component: StudentViewComponent, canActivate: [AuthService] },
-    { path: 'task',  redirectTo: 'task/default_python', pathMatch: 'full'},
-    { path: '**',
-    redirectTo: '/gemini/home',
-    pathMatch: 'full' }
+  { path: '',  redirectTo: 'task/default_python', pathMatch: 'full'},
+  { path: 'task/:id', component: StudentViewComponent, canActivate: [AuthGuard] },
+  { path: '**',  redirectTo: 'task/default_python', pathMatch: 'full'},
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
-    exports: [RouterModule],
-    providers: []
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class RoutingModule { }
+export class AppRoutingModule { }

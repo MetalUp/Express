@@ -1,49 +1,49 @@
+﻿import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { AuthModule } from '@auth0/auth0-angular';
+import { LibModule as GeminiModule } from '@nakedobjects/gemini';
+import { LibModule as ServicesModule } from '@nakedobjects/services';
+//import { ObfuscateService } from '@nakedobjects/services';
+import { LibModule as ViewModelModule } from '@nakedobjects/view-models';
+import { RoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ExpressionEvaluationComponent } from './expression-evaluation/expression-evaluation.component';
-import { FormsModule } from '@angular/forms';
 import { FunctionDefinitionComponent } from './function-definition/function-definition.component';
-import { UserComponent } from './user/user.component';
+import { HintComponent } from './hint/hint.component';
 import { SelectedLanguageComponent } from './selected-language/selected-language.component';
 import { rulesFactory, RulesService } from './services/rules.service';
+import { StudentViewComponent } from './student-view/student-view.component';
 import { TaskComponent } from './task/task.component';
 import { TestingComponent } from './testing/testing.component';
-import { HintComponent } from './hint/hint.component';
-import { StudentViewComponent } from './student-view/student-view.component';
-import { LoginButtonComponent } from './login-button';
-import { LogoutButtonComponent } from './logout-button';
+import { UserComponent } from './user/user.component';
+// import { Base64ObfuscateService } from './base64obfuscate.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ExpressionEvaluationComponent,
-    FunctionDefinitionComponent,
-    UserComponent,
-    SelectedLanguageComponent,
-    TaskComponent,
-    TestingComponent,
-    HintComponent,
-    StudentViewComponent,
-    LoginButtonComponent,
-    LogoutButtonComponent
-  ],
-  imports: [
-    BrowserModule,
-    AuthModule.forRoot({
-      domain: 'nakedobjects.eu.auth0.com',
-      clientId: 'UASxK8nzWzY2qiZzZg4RIDB4N6dRzXc1'
-    }),
-    HttpClientModule,
-    FormsModule,
-    AppRoutingModule
-  ],
-  providers: [
-    { provide: APP_INITIALIZER, useFactory: rulesFactory, deps: [RulesService], multi: true },
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        ExpressionEvaluationComponent,
+        FunctionDefinitionComponent,
+        UserComponent,
+        SelectedLanguageComponent,
+        TaskComponent,
+        TestingComponent,
+        HintComponent,
+        StudentViewComponent,
+    ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        RoutingModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        ServicesModule.forRoot(),
+        ViewModelModule.forRoot(),
+        GeminiModule.forRoot(),
+    ],
+    providers: [
+        { provide: APP_INITIALIZER, useFactory: rulesFactory, deps: [RulesService], multi: true },
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

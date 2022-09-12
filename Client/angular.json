@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ile-client": {
+    "ILEClient": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,20 +13,22 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ile-client",
+            "outputPath": "dist/ileclient",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/favicon.png",
+              "src/favicon.ico",
               "src/assets",
               "src/rules.json",
+              "src/config.json",
               "src/content",
               "src/.htaccess"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/theme.css"
             ],
             "scripts": []
           },
@@ -36,12 +38,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "8kb"
                 }
               ],
               "fileReplacements": [
@@ -67,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ile-client:build:production"
+              "browserTarget": "ILEClient:build:production"
             },
             "development": {
-              "browserTarget": "ile-client:build:development"
+              "browserTarget": "ILEClient:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ile-client:build"
+            "browserTarget": "ILEClient:build"
           }
         },
         "test": {
@@ -89,9 +91,10 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
-              "src/favicon.png",
+              "src/favicon.ico",
               "src/assets",
               "src/rules.json",
+              "src/config.json",
               "src/content",
               "src/.htaccess"
             ],
@@ -100,23 +103,11 @@
             ],
             "scripts": []
           }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
-          }
         }
       }
     }
   },
   "cli": {
-    "analytics": "a37f538b-9cf5-4dba-adb0-661c462bf088",
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ]
+    "analytics": "9dae8f51-b69b-437b-a74f-199ea217d5c3"
   }
 }

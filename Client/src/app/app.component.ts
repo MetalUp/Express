@@ -1,32 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { AuthService, ConfigService, UrlManagerService } from '@nakedobjects/services';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    // tslint:disable-next-line:component-selector
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    styleUrls: ['app.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  title = 'ile-client';
 
-  private sub?: Subscription;
-  private isAuthenticated: boolean = false;
+export class AppComponent {
+    constructor(public readonly auth: AuthService,
+                private readonly urlManager: UrlManagerService,
+                public readonly config: ConfigService) {
+        auth.handleAuthentication();
+     }
 
-  constructor(private authService: AuthService) {
+     get outletClass() {
+        return this.isGemini() ? "gemini" : "metalup";
+     }
 
-  }
-  ngOnDestroy(): void {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-  }
-  
-  ngOnInit(): void {
-    this.sub = this.authService.isAuthenticated$.subscribe(b => this.isAuthenticated = b);
-  }
 
-  get isLoggedIn() {
-    return this.isAuthenticated;
-  }
+    isGemini = () =>  this.urlManager.isGemini();
 }
