@@ -5,7 +5,7 @@
   <ng-container *ngIf="!$any(auth).authenticate || auth.isAuthenticated()">
     <div [ngClass]="outletClass" >
       <router-outlet></router-outlet>
-      <nof-footer *ngIf="isGemini()"></nof-footer>
+      <nof-footer *ngIf="isDashboard()"></nof-footer>
     </div>
   </ng-container>
   <ng-container *ngIf="$any(auth).authenticate && !auth.isAuthenticated()">

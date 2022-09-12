@@ -16,9 +16,9 @@ import { AuthService, ViewType } from '@nakedobjects/services';
 import { TaskViewComponent } from './task-view/task-view.component';
 
 const routes: Routes = [
-    { path: '',  redirectTo: '/gemini/home',  pathMatch: 'full' },
+    { path: '',  redirectTo: '/dashboard/home',  pathMatch: 'full' },
     {
-        path: 'gemini/home',
+        path: 'dashboard/home',
         component: HomeComponent,
         canActivate: [AuthService],
         data: { pane: 1, paneType: 'single' },
@@ -31,7 +31,7 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'gemini/object',
+        path: 'dashboard/object',
         component: DynamicObjectComponent,
         canActivate: [AuthService],
         data: { pane: 1, paneType: 'single', dynamicType: ViewType.Object },
@@ -44,7 +44,7 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'gemini/list',
+        path: 'dashboard/list',
         component: DynamicListComponent,
         canActivate: [AuthService],
         data: { pane: 1, paneType: 'single' },
@@ -57,7 +57,7 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'gemini/attachment',
+        path: 'dashboard/attachment',
         component: AttachmentComponent,
         canActivate: [AuthService],
         data: { pane: 1, paneType: 'single' },
@@ -70,7 +70,7 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'gemini/recent',
+        path: 'dashboard/recent',
         component: RecentComponent,
         canActivate: [AuthService],
         data: { pane: 1, paneType: 'single' },
@@ -83,39 +83,38 @@ const routes: Routes = [
         ]
     },
     {
-        path: 'gemini/error',
+        path: 'dashboard/error',
         component: DynamicErrorComponent,
         canActivate: [AuthService],
         data: { pane: 1, paneType: 'single' }
     },
     {
-        path: 'gemini/applicationProperties',
+        path: 'dashboard/applicationProperties',
         component: ApplicationPropertiesComponent,
         canActivate: [AuthService],
         data: { pane: 1, paneType: 'single' }
     },
     {
-        path: 'gemini/multiLineDialog',
+        path: 'dashboard/multiLineDialog',
         component: MultiLineDialogComponent,
         canActivate: [AuthService],
         data: { pane: 1, paneType: 'single' }
     },
     {
-        path: 'gemini/logoff',
+        path: 'dashboard/logoff',
         component: LogoffComponent,
         canActivate: [AuthService],
         canDeactivate: [AuthService],
         data: { pane: 1, paneType: 'single' }
     },
     {
-        path: 'gemini/callback',
+        path: 'dashboard/callback',
         component: CallbackComponent
     },
     { path: 'task/:id', component: TaskViewComponent, canActivate: [AuthService] },
     { path: 'task',  redirectTo: 'task/default_python', pathMatch: 'full'},
-    { path: '**',
-    redirectTo: '/gemini/home',
-    pathMatch: 'full' }
+    { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
+    { path: '**', redirectTo: '/dashboard/home', pathMatch: 'full' }
 ];
 
 @NgModule({
