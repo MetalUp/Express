@@ -3,9 +3,12 @@
 </ng-container>
 <ng-container *ngIf="config.loadingStatus === 1">
   <ng-container *ngIf="!$any(auth).authenticate || auth.isAuthenticated()">
-    <div [ngClass]="outletClass" >
-      <router-outlet></router-outlet>
-      <nof-footer *ngIf="isDashboard()"></nof-footer>
+    <div class="view-area">
+      <div></div>
+      <div [ngClass]="outletClass">
+        <router-outlet></router-outlet>
+        <nof-footer *ngIf="isDashboard()"></nof-footer>
+      </div>
     </div>
   </ng-container>
   <ng-container *ngIf="$any(auth).authenticate && !auth.isAuthenticated()">
