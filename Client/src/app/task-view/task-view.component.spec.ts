@@ -6,7 +6,7 @@ import { Subject} from 'rxjs'
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 
-import { StudentViewComponent } from './student-view.component';
+import { TaskViewComponent } from './task-view.component';
 import { TaskService } from '../services/task.service';
 import { ITask } from '../services/task';
 
@@ -23,7 +23,7 @@ describe('StudentViewComponentComponent', () => {
         RouterTestingModule
       ],
       declarations: [
-        StudentViewComponent
+        TaskViewComponent
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
@@ -36,7 +36,7 @@ describe('StudentViewComponentComponent', () => {
   });
 
   it(`should set the language`, () => {
-    const fixture = TestBed.createComponent(StudentViewComponent);
+    const fixture = TestBed.createComponent(TaskViewComponent);
     const app = fixture.componentInstance;
 
     app.ngOnInit();

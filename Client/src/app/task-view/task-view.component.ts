@@ -5,11 +5,11 @@ import { TaskService } from '../services/task.service';
 
 
 @Component({
-  selector: 'app-student-view',
-  templateUrl: './student-view.component.html',
-  styleUrls: ['./student-view.component.css']
+  selector: 'app-task-view',
+  templateUrl: './task-view.component.html',
+  styleUrls: ['./task-view.component.css']
 })
-export class StudentViewComponent implements OnInit, OnDestroy {
+export class TaskViewComponent implements OnInit, OnDestroy {
   title = 'ile-client';
 
   constructor(private taskService: TaskService, private route: ActivatedRoute) {

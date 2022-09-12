@@ -13,7 +13,7 @@ import { FunctionDefinitionComponent } from './function-definition/function-defi
 import { HintComponent } from './hint/hint.component';
 import { SelectedLanguageComponent } from './selected-language/selected-language.component';
 import { rulesFactory, RulesService } from './services/rules.service';
-import { StudentViewComponent } from './student-view/student-view.component';
+import { TaskViewComponent } from './task-view/task-view.component';
 import { TaskComponent } from './task/task.component';
 import { TestingComponent } from './testing/testing.component';
 import { UserComponent } from './user/user.component';
@@ -29,7 +29,7 @@ import { UserComponent } from './user/user.component';
         TaskComponent,
         TestingComponent,
         HintComponent,
-        StudentViewComponent,
+        TaskViewComponent,
     ],
     imports: [
         BrowserModule,

@@ -13,7 +13,7 @@ import {
     RecentComponent
 } from '@nakedobjects/gemini';
 import { AuthService, ViewType } from '@nakedobjects/services';
-import { StudentViewComponent } from './student-view/student-view.component';
+import { TaskViewComponent } from './task-view/task-view.component';
 
 const routes: Routes = [
     { path: '',  redirectTo: '/gemini/home',  pathMatch: 'full' },
@@ -111,7 +111,7 @@ const routes: Routes = [
         path: 'gemini/callback',
         component: CallbackComponent
     },
-    { path: 'task/:id', component: StudentViewComponent, canActivate: [AuthService] },
+    { path: 'task/:id', component: TaskViewComponent, canActivate: [AuthService] },
     { path: 'task',  redirectTo: 'task/default_python', pathMatch: 'full'},
     { path: '**',
     redirectTo: '/gemini/home',
