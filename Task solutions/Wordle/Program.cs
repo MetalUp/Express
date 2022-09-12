@@ -1,39 +1,59 @@
 ﻿using static CSharp.Wordle;
 using static CSharp.Reference;
 
-var rand = new Random();
-
-//var target = "SILLS";
-var words = AllWords;
-//var attempt = "RAISE";
-//while (true)
+//var x =PossibleAnswers.Where(p => !AllWords.Contains(p)).ToList();
+//foreach(var w in x)
 //{
-//    var result = MarkAttempt(attempt, target);
-//    Console.Write($"{attempt}: {result}");
-//    words = RemainingValidWords(words, attempt, result);
-//    foreach (var w in words) Console.Write($"{w} ");
-//    Console.WriteLine();
-//    var best1 = BestAttempt(words);
-//    var worst1 = RemainingWordCountLeftByWorstOutcome(words, best1);
-//    var best2 = BestAttemptFromAllWords(words, AllWords);
-//    var worst2 = RemainingWordCountLeftByWorstOutcome(words, best2);
-//    attempt = worst2 < worst1 ? best2 : best1;
-//    Console.ReadKey();
+//    Console.Write($"\"{w}\",");
 //}
-//Select the word at random
-//var words = AllWords;
-string result = "";
-int count = 0;
+//Console.ReadLine();
 
-var attempt = "RAISE";
-while (result != "*****")
+//var result = "";
+
+//var analysis = new double[10];
+//foreach (var target in PossibleAnswers)
+//{
+//    result = "";
+//    var attempt = "ARISE";
+//    var possible = PossibleAnswers;
+//    int count = 0;
+//    while (result != "*****")
+//    {
+//        Console.Write($"{attempt} ");
+//        result = MarkAttempt(attempt, target);
+//        count++;
+//        possible = RemainingValidWords(possible, attempt, result);
+//        attempt = BestAttempt(possible, AllWords);
+//    }
+//    analysis[count]++;
+//    Console.WriteLine();
+//}
+//int words = PossibleAnswers.Count();
+//double weighted = 0;
+//for (int i = 0; i < analysis.Length; i++)
+//{
+//    weighted += i * analysis[i];
+//    Console.WriteLine($"{i} - {analysis[i]} - {analysis[i] / words}");
+//}
+//Console.WriteLine($"{weighted / words}");
+
+
+
+var result = "";
+
+while (true)
 {
-    Console.WriteLine(attempt);
-    result = Console.ReadLine();
-    words = RemainingValidWords(words, attempt, result);
-    attempt = BestAttempt(words, AllWords);
+    var possible = PossibleAnswers;
+    var attempt = "ARISE";
+    while (result != "*****")
+    {
+        Console.WriteLine(attempt);
+        result = Console.ReadLine();
+        possible = RemainingValidWords(possible, attempt, result);
+        attempt = BestAttempt(possible, AllWords);
+    }
+    Console.Write("Press any key for new game");
 }
-
 
 
 
