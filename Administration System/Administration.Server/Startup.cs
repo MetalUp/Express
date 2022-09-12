@@ -67,7 +67,10 @@ namespace NakedFunctions.Rest.App.Demo
                 corsOptions.AddPolicy(MyAllowSpecificOrigins, policyBuilder =>
                 {
                     policyBuilder
-                        .WithOrigins("http://localhost:5001")
+                        .WithOrigins(
+                            "http://localhost:5001",
+                            "http://localhost:49998",
+                            "https://express.metalup.org")
                         .AllowAnyHeader()
                         .WithExposedHeaders("Warning", "ETag", "Set-Cookie")
                         .AllowAnyMethod()
