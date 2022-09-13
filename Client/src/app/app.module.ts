@@ -14,7 +14,7 @@ import { HintComponent } from './hint/hint.component';
 import { SelectedLanguageComponent } from './selected-language/selected-language.component';
 import { rulesFactory, RulesService } from './services/rules.service';
 import { TaskViewComponent } from './task-view/task-view.component';
-import { TaskComponent } from './task/task.component';
+import { TaskDescriptionComponent } from './task-description/task-description.component';
 import { TestingComponent } from './testing/testing.component';
 import { UserComponent } from './user/user.component';
 // import { Base64ObfuscateService } from './base64obfuscate.service';
@@ -26,7 +26,7 @@ import { UserComponent } from './user/user.component';
         FunctionDefinitionComponent,
         UserComponent,
         SelectedLanguageComponent,
-        TaskComponent,
+        TaskDescriptionComponent,
         TestingComponent,
         HintComponent,
         TaskViewComponent,

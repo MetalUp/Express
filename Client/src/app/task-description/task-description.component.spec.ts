@@ -4,11 +4,11 @@ import { of, Subject } from 'rxjs';
 import { ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
 
-import { TaskComponent } from './task.component';
+import { TaskDescriptionComponent } from './task-description.component';
 
-describe('TaskComponent', () => {
-  let component: TaskComponent;
-  let fixture: ComponentFixture<TaskComponent>;
+describe('TaskDescriptionComponent', () => {
+  let component: TaskDescriptionComponent;
+  let fixture: ComponentFixture<TaskDescriptionComponent>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let taskSubject = new Subject<ITask>();
 
@@ -17,7 +17,7 @@ describe('TaskComponent', () => {
     taskServiceSpy.getHtml.and.returnValue(of('test html'));
 
     await TestBed.configureTestingModule({
-      declarations: [TaskComponent],
+      declarations: [TaskDescriptionComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
@@ -27,7 +27,7 @@ describe('TaskComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TaskComponent);
+    fixture = TestBed.createComponent(TaskDescriptionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

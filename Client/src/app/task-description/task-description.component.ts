@@ -5,11 +5,11 @@ import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-task',
-  templateUrl: './task.component.html',
-  styleUrls: ['./task.component.css']
+  selector: 'app-task-description',
+  templateUrl: './task-description.component.html',
+  styleUrls: ['./task-description.component.css']
 })
-export class TaskComponent implements OnInit, OnDestroy {
+export class TaskDescriptionComponent implements OnInit, OnDestroy {
 
   currentTask: ITask = EmptyTask;
 

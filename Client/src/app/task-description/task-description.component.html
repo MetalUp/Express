@@ -1,5 +1,5 @@
 <div class="one-column pane">
-    <div class="pane-header">Task: {{currentTask.Title}}
+    <div class="pane-header">Task Description: {{currentTask.Title}}
         <div class="button-bar">
             <button [disabled]="!hasNextTask()" (click)="onNextTask()">Next Task</button>
             <button [disabled]="!hasPreviousTask()" (click)="onPreviousTask()">Previous Task</button>

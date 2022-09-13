@@ -10,7 +10,7 @@ import { TaskViewComponent } from './task-view.component';
 import { TaskService } from '../services/task.service';
 import { ITask } from '../services/task';
 
-describe('StudentViewComponentComponent', () => {
+describe('TaskViewComponent', () => {
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let taskSubject = new Subject<ITask>();
 
