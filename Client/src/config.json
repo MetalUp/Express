@@ -4,7 +4,7 @@
     "authDomain" : "nakedobjects.eu.auth0.com",
     "appPath": "https://admin.metalup.org",
     "logoffUrl": "",
-    "urlShortCuts": [ "http://localhost:5000", "AdventureWorksModel" ],
+    "urlShortCuts": [ "https://admin.metalup.org", "Model" ],
     "doUrlValidation": true,
     "applicationName" : "MetalUp.Express",
     "clearCacheOnChange": true,

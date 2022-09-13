@@ -13,7 +13,7 @@ describe('UserComponent', () => {
 
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
   let testUser = {
-    friendlyName : () => 'testName'
+    userName : () => 'testName'
   }
 
   beforeEach(async () => {
