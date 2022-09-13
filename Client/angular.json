@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ILEClient": {
+    "ile-client": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -19,7 +19,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
+              "src/favicon.png",
               "src/assets",
               "src/rules.json",
               "src/config.json",
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "ILEClient:build:production"
+              "browserTarget": "ile-client:build:production"
             },
             "development": {
-              "browserTarget": "ILEClient:build:development"
+              "browserTarget": "ile-client:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ILEClient:build"
+            "browserTarget": "ile-client:build"
           }
         },
         "test": {
@@ -91,7 +91,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
-              "src/favicon.ico",
+              "src/favicon.png",
               "src/assets",
               "src/rules.json",
               "src/config.json",
@@ -99,15 +99,28 @@
               "src/.htaccess"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/theme.css"
             ],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
     }
   },
   "cli": {
-    "analytics": "9dae8f51-b69b-437b-a74f-199ea217d5c3"
+    "analytics": "a37f538b-9cf5-4dba-adb0-661c462bf088",
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

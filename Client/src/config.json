@@ -6,7 +6,7 @@
     "logoffUrl": "",
     "urlShortCuts": [ "http://localhost:5000", "AdventureWorksModel" ],
     "doUrlValidation": true,
-    "applicationName" : "Adventureworks Demo",
+    "applicationName" : "MetalUp.Express",
     "clearCacheOnChange": true,
     "colors": {
         "regexArray": [
