@@ -17,6 +17,6 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contextService.getUser().then(u => this.user = u.friendlyName() || "Guest" ).catch(e => this.user = "Unknown");
+    this.contextService.getUser().then(u => this.user = u.userName() || "Guest" ).catch(e => this.user = "Unknown");
   }
 }
