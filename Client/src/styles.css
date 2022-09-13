@@ -206,10 +206,13 @@ gemini {
     height: 100%;
 }
 
-.metalup body {
+.metalup :is(div, textarea, button) {
     font-family: 'Segoe UI', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
 }
 
+.gemini, :is(table, a, pre, textarea, input, button) {
+    font-family: var(--font-text-family);
+}
 
 .metalup ::placeholder {
     color: var(--placeholder-color);
