@@ -12,7 +12,7 @@ namespace Model.Types
             AssignedBy  = cloneFrom.AssignedBy;
             DueBy = cloneFrom.DueBy;
             Status = cloneFrom.Status;
-            MarksAwarded = cloneFrom.MarksAwarded;
+            Marks = cloneFrom.Marks;
             Status = cloneFrom.Status;
         }
         [Hidden]
@@ -30,7 +30,7 @@ namespace Model.Types
         public virtual Task Task { get; init; }
 
         [MemberOrder(12)]
-        public int MarksAwarded { get; init; }
+        public int Marks { get; init; }
 
         [Hidden]
         public int AssignedToId { get; init; }

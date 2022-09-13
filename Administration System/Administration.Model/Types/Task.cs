@@ -39,7 +39,11 @@
         [MemberOrder(2)]
         public ProgrammingLanguage Language { get; init; }
 
-        //.html file path
+        //This path will be applied to all files
+        [MemberOrder(3)]
+        public string PathToFiles { get; init; }
+
+        //.html filename
         [MemberOrder(3)]
         public string Description { get; init; }
 
@@ -47,7 +51,7 @@
         [MemberOrder(4)]
         public int MaxMarks { get; init; }
 
-        //Comma-separated list of .html file paths
+        //Comma-separated list of .html filenames
         [MemberOrder(5)]
         public string Hints { get; init; }
 
@@ -55,7 +59,7 @@
         [MemberOrder(6)]
         public string HintCosts { get; init; }
 
-        //File path to code (in the specified language) for ready-made functions and/or data definitions
+        //Filename for code (in the specified language) for ready-made functions and/or data definitions
         [MemberOrder(7)]
         public string ReadyMadeFunctions { get; init; }
 
@@ -65,7 +69,7 @@
         [MemberOrder(9)]
         public bool PasteFunctions { get; init; }
 
-        //File path to code for executable tests
+        //Filename for executable tests written in the language specified
         [MemberOrder(10)]
         public string Tests { get; init; }
 
