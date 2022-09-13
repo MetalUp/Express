@@ -1,5 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { UserRepresentation } from '@nakedobjects/restful-objects';
+import { ContextService } from '@nakedobjects/services';
 //import { AuthService, User } from '@auth0/auth0-angular';
 import { Subject } from 'rxjs';
 
@@ -9,43 +11,40 @@ describe('UserComponent', () => {
   let component: UserComponent;
   let fixture: ComponentFixture<UserComponent>;
 
-  // let authServiceSpy: jasmine.SpyObj<AuthService>;
-  // let userSubject = new Subject<User>();
+  let contextServiceSpy: jasmine.SpyObj<ContextService>;
+  let testUser = {
+    friendlyName : () => 'testName'
+  }
 
   beforeEach(async () => {
 
-    // authServiceSpy = jasmine.createSpyObj('AuthService', [], { user$: userSubject });
-    // await TestBed.configureTestingModule({
-    //   declarations: [ UserComponent ],
-    //   schemas: [NO_ERRORS_SCHEMA],
-    //   providers: [
-    //     // {
-    //     //   provide: AuthService,
-    //     //   useValue: authServiceSpy
-    //     // },
-    //   ]
-    // })
-    // .compileComponents();
+    contextServiceSpy = jasmine.createSpyObj('ContextService', ['getUser']);
 
-    // fixture = TestBed.createComponent(UserComponent);
-    // component = fixture.componentInstance;
-    // fixture.detectChanges();
+    contextServiceSpy.getUser.and.returnValue(Promise.resolve(testUser as UserRepresentation));
+
+    await TestBed.configureTestingModule({
+      declarations: [ UserComponent ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        {
+          provide: ContextService,
+          useValue: contextServiceSpy
+        },
+      ]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(UserComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
-   // expect(component).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  // it('should default user', () => {
+  it('should display user', () => {  
+    expect(component.userName).toEqual('testName');
+  });
 
-  //   userSubject.next({email : ''});
-  
-  //   expect(component.userName).toEqual('Unknown');
-  // });
-
-  // it('should display email user', () => {
-  //   userSubject.next({email : 'testEmail'});
-
-  //   expect(component.userName).toEqual('testEmail');
-  // });
 });

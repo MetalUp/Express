@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-//import { AuthService } from '@auth0/auth0-angular';
+import { AuthService, ContextService } from '@nakedobjects/services';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -7,25 +7,16 @@ import { Subscription } from 'rxjs';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit, OnDestroy {
+export class UserComponent implements OnInit {
   private user?: string;
 
-  //constructor(private authService: AuthService) { }
-
-  private sub?: Subscription;
+  constructor(private contextService: ContextService) { }
 
   get userName() {
     return this.user;
   }
 
-  ngOnDestroy(): void {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
-  }
-
   ngOnInit(): void {
-   
-      this.user = 'Unknown';
+    this.contextService.getUser().then(u => this.user = u.friendlyName() || "Guest" ).catch(e => this.user = "Unknown");
   }
 }

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { wrapFunctions } from '../languages/language-helpers';
+import { wrapFunctions } from '../language-helpers/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { RunResult } from '../services/run-result';
 import { of, Subject } from 'rxjs';

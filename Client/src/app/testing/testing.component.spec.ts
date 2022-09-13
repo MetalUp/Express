@@ -7,7 +7,7 @@ import { TestingComponent } from './testing.component';
 import { JobeServerService } from '../services/jobe-server.service';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../services/run-result';
-import { wrapTests } from '../languages/language-helpers';
+import { wrapTests } from '../language-helpers/language-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 let testRunResultTestPass: RunResult = {

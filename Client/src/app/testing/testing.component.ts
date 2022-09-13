@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { JobeServerService } from '../services/jobe-server.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
-import { wrapTests } from '../languages/language-helpers';
+import { wrapTests } from '../language-helpers/language-helpers';
 import { RulesService } from '../services/rules.service';
 import { ErrorType } from '../services/rules';
 

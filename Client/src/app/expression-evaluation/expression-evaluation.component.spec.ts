@@ -3,7 +3,7 @@ import { JobeServerService } from '../services/jobe-server.service';
 import { ExpressionEvaluationComponent } from './expression-evaluation.component';
 import { of, Subject } from 'rxjs';
 import { EmptyRunResult, RunResult } from '../services/run-result';
-import { wrapExpression } from '../languages/language-helpers';
+import { wrapExpression } from '../language-helpers/language-helpers';
 import { RulesService } from '../services/rules.service';
 import { Applicability } from '../services/rules';
 import { TaskService } from '../services/task.service';

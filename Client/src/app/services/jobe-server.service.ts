@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 import { catchError, first } from 'rxjs/operators';
 import { RunResult, errorRunResult } from './run-result';
-import { UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../languages/language-helpers';
+import { UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../language-helpers/language-helpers';
 import { TaskService } from './task.service';
 
 @Injectable({

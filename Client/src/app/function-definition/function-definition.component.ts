@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { wrapFunctions } from '../languages/language-helpers';
+import { wrapFunctions } from '../language-helpers/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { Applicability, ErrorType } from '../services/rules';
 import { RulesService } from '../services/rules.service';

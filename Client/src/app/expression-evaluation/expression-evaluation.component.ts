@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { wrapExpression } from '../languages/language-helpers';
+import { wrapExpression } from '../language-helpers/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
 import { Applicability, ErrorType } from '../services/rules';
 import { RulesService } from '../services/rules.service';
