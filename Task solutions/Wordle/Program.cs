@@ -37,14 +37,12 @@ using static CSharp.Reference;
 //}
 //Console.WriteLine($"{weighted / words}");
 
-
-
 var result = "";
 
 while (true)
 {
     var possible = PossibleAnswers;
-    var attempt = "ARISE";
+    var attempt = "RAISE";
     while (result != "*****")
     {
         Console.WriteLine(attempt);
