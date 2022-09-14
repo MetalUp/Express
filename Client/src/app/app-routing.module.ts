@@ -112,9 +112,9 @@ const routes: Routes = [
         component: CallbackComponent
     },
     { path: 'task/:id', component: TaskViewComponent, canActivate: [AuthService] },
-    { path: 'task',  redirectTo: 'task/default_python', pathMatch: 'full'},
+    { path: 'task',  redirectTo: 'task/9', pathMatch: 'full'},
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
-    { path: '**', redirectTo: 'task/default_python', pathMatch: 'full' }
+    { path: '**', redirectTo: 'task/9', pathMatch: 'full' }
 ];
 
 @NgModule({
