@@ -1,4 +1,6 @@
-﻿namespace Model.Functions
+﻿using Model.Functions.Menus;
+
+namespace Model.Functions
 {
     public static class Student_Functions
     {
@@ -36,7 +38,7 @@
             var a = new Assignment()
             {
                 AssignedToId = student.Id,
-                AssignedById = Teachers_Menu.Me(context).Id,
+                AssignedById = Teachers.Me(context).Id,
                 TaskId = task.Id,
                 DueBy = dueBy,
                 Marks = 0,

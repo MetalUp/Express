@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Model.Functions
 {
-    public static class Teacher_Functions
+    public static class TeacherRepository
     {
 
         public static (Teacher, IContext) AcceptInvitation(this Teacher teacher, User user, IContext context)

@@ -12,14 +12,14 @@ namespace Model
     //specify the lists of types, functions, and menus explicitly.
     public static class ModelConfig
     {
-        public static Type[] DomainTypes() => 
-          PublicClassesInterfacesEnums.Where(t => t.Namespace == "Model.Types" && !t.IsStaticClass()).ToArray();
+        public static Type[] DomainTypes() =>
+          DomainTypes("Model.Types").ToArray();
 
         public static Type[] TypesDefiningDomainFunctions() =>
-          PublicClassesInterfacesEnums.Where(t => t.Namespace == "Model.Functions"   && t.IsStaticClass()).ToArray();
+          PublicStaticClasses("Model.Functions").ToArray();
 
     public static Type[] MainMenus() =>
-        TypesDefiningDomainFunctions().Where(t => t.FullName.Contains("Menu")).ToArray();
+        PublicStaticClasses("Model.Functions.Menus").ToArray();
 
         public static Func<IConfiguration, DbContext> EFCoreDbContextCreator =>
             c => {
@@ -29,10 +29,19 @@ namespace Model
             };
 
         #region Helpers
-        private static IEnumerable<Type> PublicClassesInterfacesEnums =>
-            typeof(ModelConfig).Assembly.GetTypes().Where(t => t.IsPublic && (t.IsClass || t.IsInterface || t.IsEnum));
 
-        private static bool IsStaticClass(this Type t) => t.IsAbstract && t.IsSealed;
+        private static IEnumerable<Type> PublicStaticClasses(string nameSpace) =>
+            PublicClasses(nameSpace).Where(t => t.IsAbstract && t.IsSealed);
+
+        private static IEnumerable<Type> PublicClasses(string namespaceStarting) =>
+            typeof(ModelConfig).Assembly.GetTypes().Where(t => t.IsPublic && t.IsClass && t.Namespace.StartsWith(namespaceStarting));
+
+        private static IEnumerable<Type> DomainTypes(string nameSpace) =>
+            typeof(ModelConfig).Assembly.GetTypes().Where(t => 
+                t.Namespace == nameSpace &&
+                t.IsPublic && 
+                ((t.IsClass && !t.IsAbstract && !t.IsSealed) || t.IsInterface || t.IsEnum));
+
         #endregion
     }
 }

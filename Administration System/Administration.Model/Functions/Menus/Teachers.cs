@@ -1,7 +1,8 @@
-﻿namespace Model.Functions
+﻿using Model.Functions;
+
+namespace Model.Functions.Menus
 {
-    [Named("Teacher Actions")]
-    public static class Teachers_Menu
+    public static class Teachers
     {
         public static Teacher Me(IContext context)
         {
@@ -58,7 +59,7 @@
 
         [PageSize(10)]
         public static IQueryable<Student> AutoComplete0FindStudent(string name, IContext context) =>
-            OurStudents(context).Where( s => s.Name.ToUpper().Contains(name.ToUpper()));
+            OurStudents(context).Where(s => s.Name.ToUpper().Contains(name.ToUpper()));
 
         #endregion
 

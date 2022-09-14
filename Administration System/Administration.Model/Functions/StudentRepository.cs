@@ -2,7 +2,7 @@
 
 namespace Model.Functions
 {
-    public static class Students
+    public static class StudentRepository
     {
         public static Student MeAsStudent(IContext context)
         {
