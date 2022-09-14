@@ -12,8 +12,6 @@
             Language = cloneFrom.Language;
             Description = cloneFrom.Description;
             MaxMarks = cloneFrom.MaxMarks;
-            Hints = cloneFrom.Hints;
-            HintCosts = cloneFrom.HintCosts;
             ReadyMadeFunctions = cloneFrom.ReadyMadeFunctions;
             PasteExpression = cloneFrom.PasteExpression;
             PasteFunctions = cloneFrom.PasteFunctions;
@@ -23,6 +21,8 @@
             NextTaskId = cloneFrom.NextTaskId;
             NextTask = cloneFrom.NextTask;
             NextTaskClearsFunctions = cloneFrom.NextTaskClearsFunctions;
+            MinimumRoleToAccess = cloneFrom.MinimumRoleToAccess;
+            Hints = cloneFrom.Hints;
         }
 
         [Hidden]
@@ -50,14 +50,6 @@
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(4)]
         public int MaxMarks { get; init; }
-
-        //Comma-separated list of .html filenames
-        [MemberOrder(5)]
-        public string Hints { get; init; }
-
-        //Comma-separated list of integer values representing cost of each hint
-        [MemberOrder(6)]
-        public string HintCosts { get; init; }
 
         //Filename for code (in the specified language) for ready-made functions and/or data definitions
         [MemberOrder(7)]
@@ -87,6 +79,11 @@
 
         [MemberOrder(13)]
         public bool NextTaskClearsFunctions { get; init; }
+
+        [MemberOrder(15)]
+        public Role MinimumRoleToAccess { get; init; }
+
+        public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
         public override string ToString() => $"{Title} ({Language})";
     }

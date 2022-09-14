@@ -35,25 +35,9 @@ namespace Model.Functions
                 context.WithUpdated(task, new(task) { MaxMarks = maxMarks });
 
         [Edit]
-        public static IContext EditHints(
-            this Task task,
-            [RegEx(@"[A-Za-z0-9_]+.[A-Za-z0-9_]+(\s*,\s*[A-Za-z0-9_]+.[A-Za-z0-9_]+)*\s*")] string hints,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { Hints = hints });
-
-        [Edit]
-        public static IContext EditHintCosts(
-            this Task task,
-            [RegEx(@"[0-9]+(\s*,\s*[0-9]+)*\s*")] string hintCosts,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { HintCosts = hintCosts });
-
-        private const string filePath = "";
-
-        [Edit]
         public static IContext EditReadyMadeFunctions(
             this Task task,
-            [RegEx(filePath)] string readyMadeFunctions,
+            string readyMadeFunctions,
             IContext context) =>
                 context.WithUpdated(task, new(task) { ReadyMadeFunctions = readyMadeFunctions });
 
@@ -74,7 +58,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditTests(
             this Task task,
-            [RegEx(filePath)] string tests,
+            string tests,
             IContext context) =>
                 context.WithUpdated(task, new(task) { Tests = tests });
 
@@ -112,6 +96,13 @@ namespace Model.Functions
           bool nextTaskDoesNotClearFunctions,
           IContext context) =>
             context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskDoesNotClearFunctions });
+
+        #endregion
+
+        #region Hints
+        public static IContext AddNewHint(this Task task, string name, string htmlFile, int costInMarks, IContext context) =>
+            context.WithNew(new Hint { Title = name, HtmlFile = htmlFile, CostInMarks = costInMarks, TaskId = task.Id, Task = task });
+
 
         #endregion
 
