@@ -12,5 +12,5 @@ div.gemini {
     grid-template-rows: 0px 1fr min-content;;
     align-content: space-between;
     height: 100%;
-    background-color: black;
+    background-color: #1F1110;
 }
