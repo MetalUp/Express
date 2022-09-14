@@ -13,4 +13,9 @@ div.gemini {
     align-content: space-between;
     height: 100%;
     background-color: #1F1110;
+    margin: 5px 5px 0 5px;
+}
+
+div.metalup {
+    margin: 5px 5px 0 5px;
 }
