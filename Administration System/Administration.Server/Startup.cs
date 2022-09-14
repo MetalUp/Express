@@ -20,6 +20,7 @@ using NakedFramework.Rest.Extensions;
 using NakedFunctions.Reflector.Extensions;
 using Newtonsoft.Json;
 using Model;
+using Server;
 
 namespace NakedFunctions.Rest.App.Demo
 {
@@ -61,6 +62,7 @@ namespace NakedFunctions.Rest.App.Demo
                     appOptions.DomainFunctions = ModelConfig.TypesDefiningDomainFunctions();
                 });
                 frameworkOptions.AddRestfulObjects(_ => { });
+                frameworkOptions.AuthorizationConfiguration = AuthorizationHelpers.AdminAuthConfig();
             });
             services.AddCors(corsOptions =>
             {
