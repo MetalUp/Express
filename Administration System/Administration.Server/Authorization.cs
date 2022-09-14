@@ -20,11 +20,18 @@ namespace Server
 
         public static bool UserHasRoleAtLeast(Role role, IContext context)
         {
-            var userName = context.CurrentUser().Identity.Name;
             var user = Users.Me(context);
             var usersRole = user == null ? Role.Guest : user.Role;
             //TODO: Can we safely statically cache all the above?
-            return user.Role >= role;
+            return usersRole >= role;
+        }
+
+        public static bool UserHasSpecificRole(Role role, IContext context)
+        {
+            var user = Users.Me(context);
+            var usersRole = user == null ? Role.Guest : user.Role;
+            //TODO: Can we safely statically cache all the above?
+            return usersRole == role;
         }
     }
 
