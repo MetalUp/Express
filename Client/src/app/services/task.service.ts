@@ -25,22 +25,6 @@ export class TaskService {
 
   private currentTaskAsSubject = new Subject<ITask>()
 
-  loadTaskOld(taskId: string) {
-    const options = {
-      withCredentials: true,
-    }
-
-    this.http.get<ITask>(`content/${taskId}.json`, options).pipe(first()).pipe(catchError(e => of(EmptyTask))).subscribe(t => {
-      if (t.Language === '') {
-        // empty task
-        this.router.navigate(['/']);
-      }
-      else {
-        this.currentTaskAsSubject.next(t);
-      }
-    });
-  }
-
   private setValue(task: any, member: Ro.PropertyMember) {
     if (member.entryType() == EntryType.Choices) {
       const raw = member.value().scalar() as number;
@@ -48,7 +32,7 @@ export class TaskService {
       for (const k in choices) {
         const v = choices[k];
         if (v.scalar() === raw) {
-          task[member.id()] = k.replace(' ', '');
+          task[member.id()] = k.replace(' ', ''); // to fix 'C Sharp'
         }
       }
     }
@@ -71,7 +55,6 @@ export class TaskService {
   }
 
   loadTask(taskId: string) {
-
     const object = new DomainObjectRepresentation();
     object.hateoasUrl = `${this.configService.config.appPath}/objects/Model.Types.Task/${taskId}`;
 
@@ -81,12 +64,13 @@ export class TaskService {
         this.currentTaskAsSubject.next(task);
       })
       .catch((e) => {
+        // todo
         throw e;
       });
   }
 
-  gotoTask(taskId: string) {
-    var segments = taskId.split('/');
+  gotoTask(taskUrl: string) {
+    var segments = taskUrl.split('/');
     var key = segments[segments.length -1];
 
     this.router.navigate([`/task/${key}`]);
