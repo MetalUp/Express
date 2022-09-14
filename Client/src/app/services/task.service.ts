@@ -30,7 +30,7 @@ export class TaskService {
       for (const k in choices) {
         const v = choices[k];
         if (v.scalar() === raw) {
-          task[member.id()] = k.replace(' ', ''); // to fix 'C Sharp'
+          task[member.id()] = k;
         }
       }
     }

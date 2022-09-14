@@ -19,7 +19,16 @@ export interface ITask {
 }
 
 export class Task implements ITask {
-    Language: string = "";
+    private language = "";
+    
+    get Language() {
+        return this.language;
+    }
+
+    set Language(l : string) {
+        this.language = l.replace(' ', '').toLowerCase(); // to fix 'C Sharp'
+    }
+    
     Title: string = "";
     Description: string = "";
     Hints: string[] = [];
