@@ -56,13 +56,14 @@ namespace NakedFunctions.Rest.App.Demo
             {
                 frameworkOptions.MainMenus = MenuHelper.GenerateMenus(ModelConfig.MainMenus());
                 frameworkOptions.AddEFCorePersistor(peristorOptions => { peristorOptions.ContextCreators = new[] { ModelConfig.EFCoreDbContextCreator }; });
+                frameworkOptions.AuthorizationConfiguration = AuthorizationHelpers.AdminAuthConfig();
                 frameworkOptions.AddNakedFunctions(appOptions =>
                 {
                     appOptions.DomainTypes = ModelConfig.DomainTypes();
                     appOptions.DomainFunctions = ModelConfig.TypesDefiningDomainFunctions();
                 });
                 frameworkOptions.AddRestfulObjects(_ => { });
-                frameworkOptions.AuthorizationConfiguration = AuthorizationHelpers.AdminAuthConfig();
+               
             });
             services.AddCors(corsOptions =>
             {
