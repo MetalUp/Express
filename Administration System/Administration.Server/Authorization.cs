@@ -12,10 +12,8 @@ namespace Server
     {
         public static IAuthorizationConfiguration AdminAuthConfig()
         {
-            var config = new AuthorizationConfiguration<DefaultTypeAuthorizer, DefaultMainMenuAuthorizer>();
-            //config.AddNamespaceAuthorizer<MyAppAuthorizer>("MyApp");
-            //config.AddNamespaceAuthorizer<MyCluster1Authorizer>("MyApp.MyCluster1");
-            //config.AddTypeAuthorizer<Bar, MyBarAuthorizer>();
+            var config = new AuthorizationConfiguration<DefaultTypeAuthorizer, MainMenuAuthorizer>();
+            config.AddTypeAuthorizer<Task, TaskAuthorizer>();
             return config;
         }
 

@@ -9,10 +9,4 @@ namespace Model.Authorization
         public bool IsVisible(object target, string memberName, IContext context)
             => Users.UserHasRoleAtLeast(Role.Root, context);
     }
-
-    public class DefaultMainMenuAuthorizer : IMainMenuAuthorizer
-    {
-        public bool IsVisible(string target, string memberName, IContext context)
-        => Users.UserHasRoleAtLeast(Role.Root, context);
-    }
 }

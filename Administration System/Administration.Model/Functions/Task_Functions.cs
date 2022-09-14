@@ -126,11 +126,12 @@ namespace Model.Functions
         #region internal functions
         internal static bool IsPublic(this Task task) => task.MinimumRoleToAccess == Role.Guest;
 
-        internal static bool IsAssignedToCurrentUser(this Task task, IContext context) {
+        internal static bool IsAssignedToCurrentUser(this Task task, IContext context)
+        {
             var myId = Users.Me(context).Id;
             var taskId = task.Id;
-            context.Instances<Assignment>().Any(a => a.AssignedToId == myId && a.TaskId == taskId);
-                }
+            return context.Instances<Assignment>().Any(a => a.AssignedToId == myId && a.TaskId == taskId);
+        }
         #endregion
     }
 }

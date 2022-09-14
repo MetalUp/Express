@@ -19,6 +19,7 @@ namespace Model.Authorization
 
         private bool TeacherAuthorization(Task task, string memberName, IContext context) => !(memberName.StartsWith("Edit") || memberName.StartsWith("Add"));
 
-        private bool StudentAuthorization(Task task, string memberName, IContext context) => false;
+        private bool StudentAuthorization(Task task, string memberName, IContext context) =>
+            Helpers.MemberIsProperty(task, memberName) && task.IsAssignedToCurrentUser(context);
     }
 }
