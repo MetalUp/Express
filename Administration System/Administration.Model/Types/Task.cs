@@ -30,7 +30,7 @@
 
         [Hidden]
         public int AuthorId { get; init; }
-        [MemberOrder(0)]
+        [Hidden]
         public virtual User Author { get; init; }
 
         [MemberOrder(1)]

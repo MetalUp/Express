@@ -18,7 +18,7 @@ namespace Model.Functions
 
         public static (Teacher, IContext) UpgradeRoleToAdministrator(this Teacher teacher, IContext context)
         {
-            var u = new User(teacher.User) { Role = Role.Administrator };
+            var u = new User(teacher.User) { Role = Role.Manager };
             return (teacher, context.WithUpdated(teacher.User, u));
         }
     }

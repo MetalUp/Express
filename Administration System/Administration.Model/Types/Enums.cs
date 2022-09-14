@@ -2,7 +2,7 @@
 {
     public enum Role
     {
-        Guest, Student, Teacher, Author, Administrator, Root
+        Guest, Student, Teacher, Author, Manager, Root
     }
 
     public enum ProgrammingLanguage

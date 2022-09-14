@@ -6,6 +6,7 @@ namespace Model.Functions
 {
     public static class Users
     {
+        //TODO Can we cache this information?
         public static User Me(IContext context)
         {
             var userName = context.CurrentUser().Identity.Name;
@@ -26,6 +27,14 @@ namespace Model.Functions
             SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(userName)).Aggregate("", (s, b) => s + b.ToString("x2"));
 
 
-    }
+        public static bool UserHasRoleAtLeast(Role role, IContext context) => UserRole (context) >= role;
 
+        public static bool UserHasSpecificRole(Role role, IContext context) => UserRole(context) == role;
+
+        public static Role UserRole(IContext context)
+        {
+            var user = Users.Me(context);
+            return user == null ? Role.Guest : user.Role;
+        }
+    }
 }
