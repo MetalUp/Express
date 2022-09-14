@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Model.Functions
+﻿namespace Model.Functions
 {
     [Named("Teacher Actions")]
     public static class Teachers_Menu
     {
         public static Teacher Me(IContext context)
         {
-            var userId = Users_Menu.Me(context).Id;
-            return context.Instances<Teacher>().Single(t => t.UserId == userId);
+            var userId = Users.Me(context).Id;
+            return context.Instances<Teacher>().SingleOrDefault(t => t.UserId == userId);
         }
 
         public static Organisation MyOrganisation(IContext context) =>
@@ -75,6 +69,16 @@ namespace Model.Functions
             int myOrgId = me.OrganisationId;
             int myId = me.Id;
             return context.Instances<Teacher>().Where(t => t.OrganisationId == myOrgId && t.Id != myId);
+        }
+
+        #endregion
+
+        #region Assigments
+        [PageSize(20)]
+        public static IQueryable<Assignment> AssignmentsMadeByMe(IContext context)
+        {
+            var meId = Me(context).Id;
+            return context.Instances<Assignment>().Where(s => s.AssignedById == meId).OrderByDescending(a => a.DueBy);
         }
 
         #endregion

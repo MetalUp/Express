@@ -10,18 +10,21 @@ namespace Model.Functions
     {
 
         #region Editing
+        [Edit]
         public static IContext EditTitle(
             this Hint hint,
             string title,
             IContext context) =>
         context.WithUpdated(hint, new(hint) { Title = title });
 
+        [Edit]
         public static IContext EditHtmlFile(
             this Hint hint,
             string htmlFile,
             IContext context) =>
         context.WithUpdated(hint, new(hint) { HtmlFile = htmlFile });
 
+        [Edit]
         public static IContext EditCostInMarks(
             this Hint hint,
             int costInMarks,

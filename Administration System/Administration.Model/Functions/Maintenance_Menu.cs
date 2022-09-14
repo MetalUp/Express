@@ -1,6 +1,7 @@
 ﻿
 namespace Model.Functions
 {
+    [Named("Maintenance")]
     public static class Maintenance_Menu
     {
         #region Users

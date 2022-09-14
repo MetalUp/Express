@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Model.Functions
+﻿namespace Model.Functions
 {
     public static class Assignment_Functions
     {
@@ -17,9 +11,9 @@ namespace Model.Functions
 
         #endregion
 
-        //    public static IContext MarkNotCompleted(this Assignment a, string teacherNote, IContext context) =>
-        //        context.WithNew(new Activity() { Assignment = a, TimeStamp = context.Now(), Type = ActivityType.NotCompleted, Details = teacherNote })
-        //        .WithUpdated(a, new Assignment(a) { Status = ActivityType.NotCompleted });
+        public static IContext MarkNotCompleted(this Assignment a, string teacherNote, IContext context) =>
+            context.WithNew(new Activity() { Assignment = a, TimeStamp = context.Now(), Type = ActivityType.TeacherNote, Details = teacherNote })
+            .WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.NotCompleted });
 
         //    public static IContext MarkTasksNotCompleted(this IQueryable<Assignment> assignments, string teacherNote, IContext context) =>
         //      assignments.Aggregate(context, (c, a) => MarkNotCompleted(a, teacherNote, c));

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Model.Functions
+﻿namespace Model.Functions
 {
     public static class Student_Functions
     {
@@ -30,5 +24,26 @@ namespace Model.Functions
             var u = new User(user) { Role = Role.Student };
             return (s, context.WithNew(s).WithUpdated(user, u));
         }
+
+        public static IQueryable<Assignment> Assignments(this Student student, IContext context)
+        {
+            var studentId = student.Id;
+            return context.Instances<Assignment>().Where(a => a.AssignedToId == studentId).OrderByDescending(a => a.DueBy);
+        }
+
+        public static (Assignment, IContext) AssignTask(this Student student, Task task, DateTime dueBy, IContext context)
+        {
+            var a = new Assignment()
+            {
+                AssignedToId = student.Id,
+                AssignedById = Teachers_Menu.Me(context).Id,
+                TaskId = task.Id,
+                DueBy = dueBy,
+                Marks = 0,
+                Status = AssignmentStatus.PendingStart
+            };
+            return (a, context.WithNew(a));
+        }
+
     }
 }

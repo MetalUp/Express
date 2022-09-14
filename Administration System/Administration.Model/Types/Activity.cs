@@ -10,7 +10,7 @@
             Assignment = cloneFrom.Assignment;
             Type = cloneFrom.Type;
             TimeStamp = cloneFrom.TimeStamp;
-            SubmittedCode = cloneFrom.SubmittedCode;
+            Details = cloneFrom.Details;
         }
 
         [Hidden]
@@ -28,7 +28,7 @@
         public DateTime TimeStamp { get; init; }
 
         [MemberOrder(8)]
-        public string SubmittedCode { get; init; }    
+        public string Details { get; init; }    
 
         public override string ToString() => Type.ToString();
     }

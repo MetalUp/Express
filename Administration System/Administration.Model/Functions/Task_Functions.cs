@@ -91,7 +91,7 @@ namespace Model.Functions
                 nextTask.Language == task.Language ? "" : "Next Task must specify the same Language";
 
         [Edit]
-        public static IContext EditNextTaskDoesNotClearFunctions(
+        public static IContext EditNextTaskClearsFunctions(
           this Task task,
           bool nextTaskDoesNotClearFunctions,
           IContext context) =>
@@ -119,18 +119,8 @@ namespace Model.Functions
         //public static IContext AssignTaskToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
         //        context.WithNew(NewAssignment(task, student, dueBy, User_MenuFunctions.Me(context)));
 
-        ////Need autocomplete for student & default for assignedBy
-        //private static Assignment NewAssignment(Task task, User student, DateTime dueBy, User assignedBy)
-        //{
-        //    return new Assignment()
-        //    {
-        //        Task = task,
-        //        AssignedTo = student,
-        //        AssignedById = assignedBy.Id,
-        //        DueBy = dueBy,
-        //        Status = ActivityType.Assigned
-        //    };
-        //}
+        public static (Assignment, IContext) AssignToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
+            Student_Functions.AssignTask(student, task, dueBy, context);
         #endregion
 
     }
