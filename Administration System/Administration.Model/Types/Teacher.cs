@@ -37,5 +37,6 @@
         [MemberOrder(8)]
         public virtual Organisation Organisation { get; init; }
 
+        public override string ToString() => Name;
     }
 }

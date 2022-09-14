@@ -12,7 +12,7 @@
 
     public enum ActivityType
     {
-        AccessedTask, SubmitFail, SubmitSuccess, TestFail, TestSuccess, HintUsed
+        AccessedTask, SubmitFail, SubmitSuccess, TestFail, TestSuccess, HintUsed, TeacherNote
     }
 
     public enum MemberStatus

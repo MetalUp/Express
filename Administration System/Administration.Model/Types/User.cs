@@ -20,7 +20,7 @@
         [MemberOrder(2)]
         public Role Role { get; init; }
 
-        public override string ToString() => $"{UserName}";
+        public override string ToString() => $"A {Role} user";
     }
 
 

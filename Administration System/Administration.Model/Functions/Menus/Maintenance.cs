@@ -1,28 +1,31 @@
-﻿
-namespace Model.Functions
+﻿using Model.Functions;
+
+namespace Model.Functions.Menus
 {
-    public static class Maintenance_Menu
+
+    public static class Maintenance
     {
         #region Users
+        [MemberOrder(1)]
+        public static User Me(IContext context) => Users.Me(context);
+
+        [MemberOrder(2)]
+        public static User FindByUserName(string userName, IContext context) => Users.FindByUserName(userName, context);
+
+        [MemberOrder(3)]
         public static IQueryable<User> AllUsers(IContext context) => context.Instances<User>();
 
-        [CreateNew] //TODO: attribute does not appear to be working
-        public static (User, IContext) CreateNewUser(
-     [RegEx(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")] string userName,
-    IContext context)
-        {
-            var s = new User { UserName = userName };
-            return (s, context.WithNew(s));
-        }
+        public static (User, IContext) CreateNewUser(string userName, Role role, IContext context) =>
+            Users.CreateNewUser(userName, role, context);
         #endregion
 
         #region Students
         public static IQueryable<Student> AllStudents(IContext context) => context.Instances<Student>();
 
-        public static (Student, IContext) CreateNewStudent(User fromUser,  string name, Organisation organisation, IContext context)
+        public static (Student, IContext) CreateNewStudent(User fromUser, string name, Organisation organisation, IContext context)
         {
-            var s = new Student() { UserId = fromUser.Id, Name = name, OrganisationId = organisation.Id };           
-            return (s, context.WithNew(s).WithUpdated(fromUser, new User(fromUser) { Role = Role.Student}));
+            var s = new Student() { UserId = fromUser.Id, Name = name, OrganisationId = organisation.Id };
+            return (s, context.WithNew(s).WithUpdated(fromUser, new User(fromUser) { Role = Role.Student }));
         }
 
         #endregion
@@ -44,7 +47,7 @@ namespace Model.Functions
         [CreateNew]
         public static (Organisation, IContext) CreateNewOrganisation(string name, IContext context)
         {
-            var org= new Organisation() { Name = name};
+            var org = new Organisation() { Name = name };
             return (org, context.WithNew(org));
         }
         #endregion
@@ -66,7 +69,7 @@ namespace Model.Functions
         [CreateNew]
         public static (Task, IContext) CreateNewTask(string title, IContext context)
         {
-            var  t = new Task() { Title = title, AuthorId = Teachers_Menu.Me(context).Id };
+            var t = new Task() { Title = title, AuthorId = Teachers.Me(context).Id };
             return (t, context.WithNew(t));
         }
         #endregion
