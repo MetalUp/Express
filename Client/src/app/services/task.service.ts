@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { EmptyTask, ITask, Task } from './task';
-import { of, Subject } from 'rxjs';
-import { first } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { ITask, Task } from './task';
+import { Subject } from 'rxjs';
 import { ConfigService, RepLoaderService } from '@nakedobjects/services';
 import * as Ro from '@nakedobjects/restful-objects';
-import { DomainObjectRepresentation, EntryType, Value } from '@nakedobjects/restful-objects';
+import { DomainObjectRepresentation, EntryType } from '@nakedobjects/restful-objects';
 
 @Injectable({
   providedIn: 'root'

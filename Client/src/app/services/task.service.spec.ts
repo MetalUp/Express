@@ -5,20 +5,27 @@ import { TaskService } from './task.service';
 import { of } from 'rxjs';
 import { ITask } from './task';
 import { first, throwError } from 'rxjs';
+import { ConfigService, RepLoaderService } from '@nakedobjects/services';
+import { DomainObjectRepresentation, IHateoasModel } from '@nakedobjects/restful-objects';
 
 describe('TaskService', () => {
   let service: TaskService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let routerSpy: jasmine.SpyObj<Router>;
+  let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
+  let configServiceSpy: jasmine.SpyObj<ConfigService>;
 
   beforeEach(() => {
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    configServiceSpy = jasmine.createSpyObj('ConfigService', [], { config: { appPath: 'testPath' } });
+    repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate'])
+
 
     httpClientSpy.get.and.returnValue(of({ Language: 'testlanguage' } as unknown as ITask))
 
     TestBed.configureTestingModule({});
-    service = new TaskService(httpClientSpy, routerSpy)
+    service = new TaskService(httpClientSpy, routerSpy, configServiceSpy, repLoaderSpy)
   });
 
   it('should be created', () => {
@@ -30,19 +37,26 @@ describe('TaskService', () => {
       expect(t.Language).toEqual('testlanguage')
     );
 
-    service.loadTask('testTask');
+    const object = new DomainObjectRepresentation() as IHateoasModel;
+    object.hateoasUrl = `testPath/objects/Model.Types.Task/testTask`;
+    const promise = new Promise<IHateoasModel>(() => object);
 
-    expect(httpClientSpy.get).toHaveBeenCalledWith('content/testTask.json', { withCredentials: true });
-  });
-
-  it('should navigate home if task not found', () => {
-    httpClientSpy.get.and.returnValue(throwError(() => { status: 404 }));
+    repLoaderSpy.populate.and.returnValue(promise);
 
     service.loadTask('testTask');
 
-    expect(httpClientSpy.get).toHaveBeenCalledWith('content/testTask.json', { withCredentials: true });
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+    // fix parameters
+    expect(repLoaderSpy.populate).toHaveBeenCalled();
   });
+
+  // it('should navigate home if task not found', () => {
+  //   repLoaderSpy.populate.and.returnValue(new Promise({ status: 404 }));
+
+  //   service.loadTask('testTask');
+
+  //   expect(httpClientSpy.get).toHaveBeenCalledWith('content/testTask.json', { withCredentials: true });
+  //   expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
+  // });
 
   it('should get the html file for the task', () => {
 
@@ -58,7 +72,7 @@ describe('TaskService', () => {
       expect(t.Language).toEqual('testlanguage')
     );
 
-    service.gotoTask('newTask.json');
+    service.gotoTask('task/newTask');
 
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/task/newTask']);
   });
