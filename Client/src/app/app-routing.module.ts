@@ -16,7 +16,7 @@ import { AuthService, ViewType } from '@nakedobjects/services';
 import { TaskViewComponent } from './task-view/task-view.component';
 
 const routes: Routes = [
-    { path: '',  redirectTo: '/dashboard/home',  pathMatch: 'full' },
+    { path: '',  redirectTo: 'task',  pathMatch: 'full' },
     {
         path: 'dashboard/home',
         component: HomeComponent,
@@ -114,7 +114,7 @@ const routes: Routes = [
     { path: 'task/:id', component: TaskViewComponent, canActivate: [AuthService] },
     { path: 'task',  redirectTo: 'task/default_python', pathMatch: 'full'},
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
-    { path: '**', redirectTo: '/dashboard/home', pathMatch: 'full' }
+    { path: '**', redirectTo: 'task/default_python', pathMatch: 'full' }
 ];
 
 @NgModule({
