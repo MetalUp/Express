@@ -1,5 +1,23 @@
 /*Global fonts*/
 
+body{
+    height: 98vh;
+    margin: none;
+}
+
+app-root {
+    height: 100%;
+}
+
+nof-dynamic-object {
+    height: 100%;
+}
+
+nof-object {
+    height: 100%;
+}
+
+
 .gemini {
     font-family: var(--font-text-family);
 }
@@ -60,7 +78,7 @@ gemini {
 
 .gemini :is(.single, .split) {
     overflow-x: auto;
-    padding-bottom: 60px;
+    padding-bottom: 10px;
 }
 
 .gemini .single {
