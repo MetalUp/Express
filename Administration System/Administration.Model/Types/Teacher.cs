@@ -1,9 +1,9 @@
 ﻿namespace Model.Types
 {
-    public class Teacher
+    public class User
     {
-        public Teacher() { }
-        public Teacher(Teacher cloneFrom) {
+        public User() { }
+        public User(User cloneFrom) {
             Id = cloneFrom.Id;
             UserId = cloneFrom.UserId;
             User = cloneFrom.User;

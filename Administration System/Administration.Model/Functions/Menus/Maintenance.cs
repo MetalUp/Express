@@ -20,25 +20,16 @@ namespace Model.Functions.Menus
         #endregion
 
         #region Students
-        public static IQueryable<Student> AllStudents(IContext context) => context.Instances<Student>();
-
-        public static (Student, IContext) CreateNewStudent(User fromUser, string name, Organisation organisation, IContext context)
-        {
-            var s = new Student() { UserId = fromUser.Id, Name = name, OrganisationId = organisation.Id };
-            return (s, context.WithNew(s).WithUpdated(fromUser, new User(fromUser) { Role = Role.Student }));
-        }
+        public static IQueryable<User> AllStudents(IContext context) => 
+            context.Instances<User>().Where(u => u.Role == Role.Teacher);
 
         #endregion
 
         #region Teachers
-        public static IQueryable<Teacher> AllTeachers(IContext context) => context.Instances<Teacher>();
+        public static IQueryable<User> AllTeachers(IContext context) =>  
+            context.Instances<User>().Where(u => u.Role == Role.Teacher);
 
-        [CreateNew]
-        public static (Teacher, IContext) CreateNewTeacher(User fromUser, string name, Organisation organisation, IContext context)
-        {
-            var t = new Teacher() { UserId = fromUser.Id, Name = name, OrganisationId = organisation.Id };
-            return (t, context.WithNew(t).WithUpdated(fromUser, new User(fromUser) { Role = Role.Teacher }));
-        }
+
         #endregion
 
         #region Organisations

@@ -2,7 +2,7 @@
 {
     public enum Role
     {
-        Guest, Student, Teacher, Author, Manager, Root
+        Guest, Student, Teacher, Author, Root
     }
 
     public enum ProgrammingLanguage
@@ -17,7 +17,7 @@
 
     public enum MemberStatus
     {
-        Pending, Active, NotAccepted, NoLongerActive
+        PendingAcceptance, Active, NotAccepted, NoLongerActive
     }
 
     public enum AssignmentStatus

@@ -12,10 +12,10 @@ namespace Model
         public AdminDbContext(string cs) => this.cs = cs;
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Student> Students { get; set; }
+        public DbSet<User> Students { get; set; }
         public DbSet<Group> Group { get; set; }
         public DbSet<StudentGroup> StudentGroups { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<User> Teachers { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Assignment> Assignments { get; set; }

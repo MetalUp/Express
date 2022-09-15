@@ -35,12 +35,12 @@ namespace Model.Types
         [Hidden]
         public int AssignedToId { get; init; }
         [MemberOrder(4)]
-        public virtual Student AssignedTo { get; init; }
+        public virtual User AssignedTo { get; init; }
 
         [Hidden]
         public int AssignedById { get; init; }
         [MemberOrder(14)]
-        public virtual Teacher AssignedBy { get; init; }
+        public virtual User AssignedBy { get; init; }
 
         public override string ToString() => $"{Task}";
     }

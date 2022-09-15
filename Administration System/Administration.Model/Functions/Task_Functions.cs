@@ -119,7 +119,7 @@ namespace Model.Functions
         //public static IContext AssignTaskToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
         //        context.WithNew(NewAssignment(task, student, dueBy, User_MenuFunctions.Me(context)));
 
-        public static (Assignment, IContext) AssignToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
+        public static (Assignment, IContext) AssignToStudent(this Task task, User student, DateTime dueBy, IContext context) =>
             Student_Functions.AssignTask(student, task, dueBy, context);
 
 

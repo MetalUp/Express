@@ -10,7 +10,7 @@ namespace Model.Authorization
                 {
                     Role.Root => true,
                     Role.Author => AuthorAuthorization(task, memberName, context),
-                    >= Role.Teacher  => TeacherAuthorization(task, memberName, context),
+                    Role.Teacher  => TeacherAuthorization(task, memberName, context),
                     Role.Student => StudentAuthorization(task, memberName, context),
                     _ => false
                 };
@@ -22,6 +22,6 @@ namespace Model.Authorization
            task.IsAssignable() && (!(memberName.StartsWith("Edit") || memberName.StartsWith("Add")));
 
         private bool StudentAuthorization(Task task, string memberName, IContext context) =>
-            Helpers.MemberIsProperty(task, memberName) && task.IsAssignedToCurrentUser(context);
+            task.IsAssignedToCurrentUser(context) && Helpers.MemberIsProperty(task, memberName);
     }
 }
