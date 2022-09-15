@@ -42,6 +42,6 @@ namespace Model.Types
         [MemberOrder(6)]
         public virtual Organisation Organisation { get; init; }
 
-        public override string ToString() => Name;
+        public override string ToString() => $"Name{(Status == MemberStatus.Pending ? " (PENDING)" : null)}";
     }
 }

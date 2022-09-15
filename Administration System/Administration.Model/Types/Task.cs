@@ -6,6 +6,7 @@
         public Task(Task cloneFrom)
         {
             Id = cloneFrom.Id;
+            Status = cloneFrom.Status;
             AuthorId = cloneFrom.AuthorId;
             Author = cloneFrom.Author;
             Title = cloneFrom.Title;
@@ -21,7 +22,6 @@
             NextTaskId = cloneFrom.NextTaskId;
             NextTask = cloneFrom.NextTask;
             NextTaskClearsFunctions = cloneFrom.NextTaskClearsFunctions;
-            MinimumRoleToAccess = cloneFrom.MinimumRoleToAccess;
             Hints = cloneFrom.Hints;
         }
 
@@ -32,6 +32,9 @@
         public int AuthorId { get; init; }
         [Hidden]
         public virtual User Author { get; init; }
+
+        [MemberOrder(0)]
+        public TaskStatus Status { get; init; }
 
         [MemberOrder(1)]
         public string Title { get; init; }
@@ -79,9 +82,6 @@
 
         [MemberOrder(13)]
         public bool NextTaskClearsFunctions { get; init; }
-
-        [MemberOrder(15)]
-        public Role MinimumRoleToAccess { get; init; }
 
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 

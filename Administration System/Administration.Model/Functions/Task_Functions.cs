@@ -121,10 +121,14 @@ namespace Model.Functions
 
         public static (Assignment, IContext) AssignToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
             Student_Functions.AssignTask(student, task, dueBy, context);
+
+
         #endregion
 
         #region internal functions
-        internal static bool IsPublic(this Task task) => task.MinimumRoleToAccess == Role.Guest;
+        internal static bool IsPublic(this Task task) => task.Status == TaskStatus.Public;
+
+        internal static bool IsAssignable(this Task task) => task.Status != TaskStatus.UnderDevelopment;
 
         internal static bool IsAssignedToCurrentUser(this Task task, IContext context)
         {

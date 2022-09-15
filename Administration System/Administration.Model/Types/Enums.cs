@@ -24,4 +24,9 @@
     {
         PendingStart, Started, Completed, NotCompleted
     }
+
+    public enum TaskStatus
+    {
+        UnderDevelopment, Public, MustBeAssignedToStudent
+    }
 }
