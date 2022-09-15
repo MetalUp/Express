@@ -35,6 +35,7 @@ namespace Model.Functions
 
         public static (Assignment, IContext) AssignTask(this Student student, Task task, DateTime dueBy, IContext context)
         {
+            if (task.Status == TaskStatus.UnderDevelopment) throw new Exception("Tasks under development cannot be assigned - this should have been prevented");
             var a = new Assignment()
             {
                 AssignedToId = student.Id,
