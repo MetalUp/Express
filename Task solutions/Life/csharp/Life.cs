@@ -28,11 +28,22 @@ static class Life
     //static int KeepWithinBounds(int i) => i >= 400 ? i - 400 : i < 0 ? i + 400 : i;
     static int KeepWithinBounds(int i) => (i + 400) % 400;
 
+    static int N(int c) => c > 19 ? c - 20 : c + 380;
+    static int S(int c) => c < 380  ? c + 20 : c - 380;
+    static int E(int c) => c % 20 < 19 ? c + 1 : c - 19;
+    static int W(int c) => c % 20 > 0 ? c - 1 : c + 19;
+    
+    static int NE(int c) => N(E(c)); 
+    static int SE(int c) => S(E(c));
+    static int NW(int c) => N(W(c));
+    static int SW(int c) => S(W(c));
+
+    static List<int> NewNeighbourCells(int c) => new List<int> {NW(c), N(c), NE(c), W(c), E(c), SW(c), S(c), SE(c)};
 
     static List<int> AdjustedNeighbourCells(int c) => NeighbourCells(c).Select(x => KeepWithinBounds(x)).ToList();
 
     //static int LiveNeighbours(List<bool> cells, int c) => AdjustedNeighbourCells(c).Count(i => cells[i] == true);
-    static int LiveNeighbours(List<bool> cells, int c) => AdjustedNeighbourCells(c).Where(i => cells[i] == true).Count();
+static int LiveNeighbours(List<bool> cells, int c) => AdjustedNeighbourCells(c).Where(i => cells[i] == true).Count();
 
     static bool WillLive(bool currentlyAlive, int liveNeighbours) => (currentlyAlive ? liveNeighbours > 1 && liveNeighbours < 4 : liveNeighbours == 3);
 
@@ -138,10 +149,21 @@ static class Life
         TestFunction(nameof(KeepWithinBounds), expected, KeepWithinBounds(p1), p1);
     }
 
-    private static void testAdjustedNeighbourCells(int cell, List<int> expected)
+    public static void testAdjustedNeighbourCells(int cell, List<int> expected)
     {
         var n = AdjustedNeighbourCells(cell);
         string fn = nameof(AdjustedNeighbourCells);
+        AssertTrue(fn, cell.ToString(), n.Count == 8, $" Expected: 8 elements Actual: {n.Count}");
+        foreach (int val in expected)
+        {
+            AssertTrue(fn, cell.ToString(), n.Contains(val), $"List does not contain: {val}");
+        }
+    }
+
+    public static void testNewNeighbourCells(int cell, List<int> expected)
+    {
+        var n = NewNeighbourCells(cell);
+        string fn = nameof(NewNeighbourCells);
         AssertTrue(fn, cell.ToString(), n.Count == 8, $" Expected: 8 elements Actual: {n.Count}");
         foreach (int val in expected)
         {
