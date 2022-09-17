@@ -4,9 +4,12 @@ namespace Model.Authorization
 {
     public class TaskAuthorizer : ITypeAuthorizer<Task>
     {
+        //TODO: Student must not be able to access the content files of a task directly;
+        // so only author has access to methods to retrieve (or save) a content file associated with a task
+
         public bool IsVisible(Task task, string memberName, IContext context) =>
             task.IsPublic() && Helpers.MemberIsProperty(task, memberName) ? true :
-                Users.UserRole(context) switch
+                UserRepository.UserRole(context) switch
                 {
                     Role.Root => true,
                     Role.Author => AuthorAuthorization(task, memberName, context),
@@ -16,7 +19,7 @@ namespace Model.Authorization
                 };
 
         private bool AuthorAuthorization(Task task, string memberName, IContext context) => 
-           task.IsAssignable() || task.AuthorId == Users.Me(context).Id;
+           task.IsAssignable() || task.AuthorId == UserRepository.Me(context).Id;
 
         private bool TeacherAuthorization(Task task, string memberName, IContext context) => 
            task.IsAssignable() && (!(memberName.StartsWith("Edit") || memberName.StartsWith("Add")));

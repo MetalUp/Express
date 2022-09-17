@@ -27,18 +27,18 @@
         [MemberOrder(2)]
         public string Name { get; init; }
 
-        [MemberOrder(3)]
+        [MemberOrder(3)] //Required only for Teacher role and above
         public string EmailAddress { get; init; }
 
         [MemberOrder(4)]
-        public MemberStatus Status { get; init; }
+        public UserStatus Status { get; init; }
 
         [Hidden]
         public int OrganisationId { get; init; }
         [MemberOrder(6)]
         public virtual Organisation Organisation { get; init; }
 
-        public override string ToString() => $"{Name}{(Status == MemberStatus.PendingAcceptance ? " (PENDING)" : null)}";
+        public override string ToString() => $"{Name}{(Status == UserStatus.PendingAcceptance ? " (PENDING)" : null)}";
     }
 
 

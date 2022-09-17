@@ -15,9 +15,9 @@
         AccessedTask, SubmitFail, SubmitSuccess, TestFail, TestSuccess, HintUsed, TeacherNote
     }
 
-    public enum MemberStatus
+    public enum UserStatus
     {
-        PendingAcceptance, Active, NotAccepted, NoLongerActive
+        PendingAcceptance, Active, NotAccepted, Inactive
     }
 
     public enum AssignmentStatus

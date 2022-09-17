@@ -11,9 +11,9 @@ namespace Model.Authorization
         public bool IsVisible(string target, string memberName, IContext context) =>
             NameOnly(target) switch
             {
-                nameof(Students) => Users.UserHasRoleAtLeast(Role.Student, context),
-                nameof(Teachers) => Users.UserHasRoleAtLeast(Role.Teacher, context),    
-                nameof(Maintenance) => Users.UserHasSpecificRole(Role.Root, context),
+                nameof(Students) => UserRepository.UserHasRoleAtLeast(Role.Student, context),
+                nameof(Teachers) => UserRepository.UserHasRoleAtLeast(Role.Teacher, context),    
+                nameof(Maintenance) => UserRepository.UserHasSpecificRole(Role.Root, context),
                 _ => false
             };
     }

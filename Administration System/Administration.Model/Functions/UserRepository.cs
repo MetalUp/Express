@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Model.Functions
 {
-    public static class Users
+    public static class UserRepository
     {
         //TODO Can we cache this information?
         public static User Me(IContext context)
@@ -33,7 +33,7 @@ namespace Model.Functions
 
         public static Role UserRole(IContext context)
         {
-            var user = Users.Me(context);
+            var user = Me(context);
             return user == null ? Role.Guest : user.Role;
         }
     }

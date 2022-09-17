@@ -7,29 +7,22 @@ namespace Model.Functions.Menus
     {
         #region Users
         [MemberOrder(1)]
-        public static User Me(IContext context) => Users.Me(context);
+        public static User Me(IContext context) => UserRepository.Me(context);
 
         [MemberOrder(2)]
-        public static User FindByUserName(string userName, IContext context) => Users.FindByUserName(userName, context);
+        public static User FindByUserName(string userName, IContext context) => UserRepository.FindByUserName(userName, context);
 
         [MemberOrder(3)]
         public static IQueryable<User> AllUsers(IContext context) => context.Instances<User>();
 
         public static (User, IContext) CreateNewUser(string userName, Role role, IContext context) =>
-            Users.CreateNewUser(userName, role, context);
-        #endregion
+            UserRepository.CreateNewUser(userName, role, context);
 
-        #region Students
         public static IQueryable<User> AllStudents(IContext context) => 
             context.Instances<User>().Where(u => u.Role == Role.Teacher);
 
-        #endregion
-
-        #region Teachers
         public static IQueryable<User> AllTeachers(IContext context) =>  
             context.Instances<User>().Where(u => u.Role == Role.Teacher);
-
-
         #endregion
 
         #region Organisations

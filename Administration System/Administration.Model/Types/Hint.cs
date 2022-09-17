@@ -15,6 +15,9 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
+        [MemberOrder(1)]
+        public int Number { get; init; }
+
         [MemberOrder(2)]
         public string Title { get; init; }
 
@@ -29,6 +32,6 @@ namespace Model.Types
         [MemberOrder(8)]
         public virtual Task Task { get; init; }
 
-        public override string ToString() => $"{Title} ({CostInMarks} marks)";
+        public override string ToString() => $"{Number}.{Title} ({CostInMarks} marks)";
     }
 }

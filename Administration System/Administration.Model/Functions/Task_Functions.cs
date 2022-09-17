@@ -1,11 +1,54 @@
-﻿
+﻿using NakedFramework.Value;
+
 namespace Model.Functions
 {
 
 
     public static class Task_Functions
     {
-        #region Editing
+
+
+        #region Hints
+        public static IContext AddNewHint(this Task task, string name, string htmlFile, int costInMarks, IContext context) =>
+            context.WithNew(new Hint { Title = name, HtmlFile = htmlFile, CostInMarks = costInMarks, TaskId = task.Id, Task = task });
+
+
+        #endregion
+
+        #region Assigning
+        //public static IContext AssignTaskToGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
+        // group.Students.Aggregate(context, (c, s) => c.WithNew(NewAssignment(task, s, dueBy, User_MenuFunctions.Me(context))));
+
+        //public static IList<Group> Choices1AssignTaskToGroup(IContext context) =>
+        //    Group_MenuFunctions.MyGroups(context);
+
+
+        //Need autocomplete for group & default for assignedBy
+
+        //public static IContext AssignTaskToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
+        //        context.WithNew(NewAssignment(task, student, dueBy, User_MenuFunctions.Me(context)));
+
+        public static (Assignment, IContext) AssignToStudent(this Task task, User student, DateTime dueBy, IContext context) =>
+            User_Functions.AssignTask(student, task, dueBy, context);
+
+
+        #endregion
+
+        #region internal functions
+        internal static bool IsPublic(this Task task) => task.Status == TaskStatus.Public;
+
+        internal static bool IsAssignable(this Task task) => task.Status != TaskStatus.UnderDevelopment;
+
+        internal static bool IsAssignedToCurrentUser(this Task task, IContext context)
+        {
+            var myId = UserRepository.Me(context).Id;
+            var taskId = task.Id;
+            return context.Instances<Assignment>().Any(a => a.AssignedToId == myId && a.TaskId == taskId);
+        }
+        #endregion
+
+        #region Authoring
+        #region Editing Task
         [Edit]
         public static IContext EditTitle(
             this Task task,
@@ -99,43 +142,57 @@ namespace Model.Functions
 
         #endregion
 
-        #region Hints
-        public static IContext AddNewHint(this Task task, string name, string htmlFile, int costInMarks, IContext context) =>
-            context.WithNew(new Hint { Title = name, HtmlFile = htmlFile, CostInMarks = costInMarks, TaskId = task.Id, Task = task });
+        #region FileAttachments
 
+        public static FileAttachment ViewFile(this Task task, string fileName) => 
+            throw new NotImplementedException();
+        //TODO: delegate to file service
 
-        #endregion
-
-        #region Assigning
-        //public static IContext AssignTaskToGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
-        // group.Students.Aggregate(context, (c, s) => c.WithNew(NewAssignment(task, s, dueBy, User_MenuFunctions.Me(context))));
-
-        //public static IList<Group> Choices1AssignTaskToGroup(IContext context) =>
-        //    Group_MenuFunctions.MyGroups(context);
-
-
-        //Need autocomplete for group & default for assignedBy
-
-        //public static IContext AssignTaskToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
-        //        context.WithNew(NewAssignment(task, student, dueBy, User_MenuFunctions.Me(context)));
-
-        public static (Assignment, IContext) AssignToStudent(this Task task, User student, DateTime dueBy, IContext context) =>
-            Student_Functions.AssignTask(student, task, dueBy, context);
-
-
-        #endregion
-
-        #region internal functions
-        internal static bool IsPublic(this Task task) => task.Status == TaskStatus.Public;
-
-        internal static bool IsAssignable(this Task task) => task.Status != TaskStatus.UnderDevelopment;
-
-        internal static bool IsAssignedToCurrentUser(this Task task, IContext context)
+        public static List<string> Choices1ViewFile(this Task task, string fileName)
         {
-            var myId = Users.Me(context).Id;
-            var taskId = task.Id;
-            return context.Instances<Assignment>().Any(a => a.AssignedToId == myId && a.TaskId == taskId);
+            var filenames = new List<string>();
+            filenames.Add(task.Description);
+            filenames.Add(task.ReadyMadeFunctions);
+            filenames.Add(task.Tests);
+            filenames.AddRange(task.Hints.Select(h => h.HtmlFile));
+            return filenames;
         }
+
+        public static IContext UploadDescriptionFile(this Task task, FileAttachment file, string destination, IContext context) =>
+    throw new NotImplementedException();
+        //TODO: delegate to file service
+
+        public static IContext UploadReadyMadeFunctionsFile(this Task task, FileAttachment file, string destination, IContext context) =>
+throw new NotImplementedException();
+        //TODO: delegate to file service
+
+        public static IContext UploadTestsFile(this Task task, FileAttachment file, string destination, IContext context) =>
+throw new NotImplementedException();
+        //TODO: delegate to file service
+
+        #endregion
+
+        #region Hints 
+        public static Hint AddHint(
+            this Task task, 
+            int number,
+            string title, 
+            [Optionally] FileAttachment file, 
+            [DefaultValue(1)]int costInMarks,
+            IContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static int Default1AddHint(this Task task) =>
+            task.Hints.Count + 1;
+
+        public static IContext RemoveHint(this Task task, Hint hint, IContext context) =>
+            context.WithDeleted(hint);
+
+        public static List<Hint> Choices1RemoveHint(this Task task, Hint hint, IContext context) =>
+            task.Hints.ToList();
+        #endregion
         #endregion
     }
 }

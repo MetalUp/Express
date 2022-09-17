@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NakedFramework.Value;
 
 namespace Model.Functions
 {
     public static class Hint_Functions
     {
 
-        #region Editing
+        [Edit]
+        public static IContext EditNumber(
+             this Hint hint,
+             int number,
+             IContext context) =>
+         context.WithUpdated(hint, new(hint) { Number = number });
+
         [Edit]
         public static IContext EditTitle(
             this Hint hint,
@@ -18,19 +20,17 @@ namespace Model.Functions
         context.WithUpdated(hint, new(hint) { Title = title });
 
         [Edit]
-        public static IContext EditHtmlFile(
-            this Hint hint,
-            string htmlFile,
-            IContext context) =>
-        context.WithUpdated(hint, new(hint) { HtmlFile = htmlFile });
-
-        [Edit]
         public static IContext EditCostInMarks(
             this Hint hint,
             int costInMarks,
             IContext context) =>
         context.WithUpdated(hint, new(hint) { CostInMarks = costInMarks });
 
-        #endregion
+        public static FileAttachment ViewFile() => throw new NotImplementedException();
+
+        public static IContext UploadFile(this Hint hint, FileAttachment file, IContext context) =>
+            throw new NotImplementedException();
+        //TODO: delegate to file service
     }
+
 }
