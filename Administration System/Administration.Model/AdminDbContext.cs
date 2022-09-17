@@ -43,6 +43,11 @@ namespace Model
             modelBuilder.Entity<StudentGroup>().HasOne(e => e.Group).WithMany().HasForeignKey(e => e.GroupId).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Invitation>().Property(e => e.Id).ValueGeneratedNever();
+            modelBuilder.Entity<Invitation>().HasOne(e => e.Invitee).WithMany().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Invitation>().HasOne(e => e.Sender).WithMany().OnDelete(DeleteBehavior.NoAction);
+
+
+            modelBuilder.Entity<User>().Property(b => b.OrganisationId).HasDefaultValue(1);
         }
     }
 }

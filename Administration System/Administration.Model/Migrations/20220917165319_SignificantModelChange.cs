@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Model.Migrations
 {
-    public partial class MakeUserModelStudentAndTeacher : Migration
+    public partial class SignificantModelChange : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -38,6 +39,18 @@ namespace Model.Migrations
                 name: "Users",
                 newName: "User");
 
+            migrationBuilder.RenameColumn(
+                name: "MinimumRoleToAccess",
+                table: "Tasks",
+                newName: "Status");
+
+            migrationBuilder.AddColumn<int>(
+                name: "Number",
+                table: "Hint",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
+
             migrationBuilder.AddColumn<string>(
                 name: "EmailAddress",
                 table: "User",
@@ -55,7 +68,7 @@ namespace Model.Migrations
                 table: "User",
                 type: "int",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 1);
 
             migrationBuilder.AddColumn<int>(
                 name: "Status",
@@ -69,10 +82,44 @@ namespace Model.Migrations
                 table: "User",
                 column: "Id");
 
+            migrationBuilder.CreateTable(
+                name: "Invitation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    InviteeId = table.Column<int>(type: "int", nullable: false),
+                    SenderId = table.Column<int>(type: "int", nullable: false),
+                    Sent = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invitation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Invitation_User_InviteeId",
+                        column: x => x.InviteeId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Invitation_User_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_User_OrganisationId",
                 table: "User",
                 column: "OrganisationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invitation_InviteeId",
+                table: "Invitation",
+                column: "InviteeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invitation_SenderId",
+                table: "Invitation",
+                column: "SenderId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Assignments_User_AssignedById",
@@ -133,6 +180,9 @@ namespace Model.Migrations
                 name: "FK_User_Organisations_OrganisationId",
                 table: "User");
 
+            migrationBuilder.DropTable(
+                name: "Invitation");
+
             migrationBuilder.DropPrimaryKey(
                 name: "PK_User",
                 table: "User");
@@ -140,6 +190,10 @@ namespace Model.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_User_OrganisationId",
                 table: "User");
+
+            migrationBuilder.DropColumn(
+                name: "Number",
+                table: "Hint");
 
             migrationBuilder.DropColumn(
                 name: "EmailAddress",
@@ -160,6 +214,11 @@ namespace Model.Migrations
             migrationBuilder.RenameTable(
                 name: "User",
                 newName: "Users");
+
+            migrationBuilder.RenameColumn(
+                name: "Status",
+                table: "Tasks",
+                newName: "MinimumRoleToAccess");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Users",

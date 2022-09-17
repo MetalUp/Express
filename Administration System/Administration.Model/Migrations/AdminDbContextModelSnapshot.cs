@@ -273,7 +273,9 @@ namespace Model.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrganisationId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
@@ -356,13 +358,13 @@ namespace Model.Migrations
                     b.HasOne("Model.Types.User", "Invitee")
                         .WithMany()
                         .HasForeignKey("InviteeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Model.Types.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Invitee");

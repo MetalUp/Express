@@ -12,8 +12,8 @@ using Model;
 namespace Model.Migrations
 {
     [DbContext(typeof(AdminDbContext))]
-    [Migration("20220915113230_MakeUserModelStudentAndTeacher")]
-    partial class MakeUserModelStudentAndTeacher
+    [Migration("20220917165319_SignificantModelChange")]
+    partial class SignificantModelChange
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -126,6 +126,9 @@ namespace Model.Migrations
                     b.Property<string>("HtmlFile")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
                     b.Property<int>("TaskId")
                         .HasColumnType("int");
 
@@ -137,6 +140,29 @@ namespace Model.Migrations
                     b.HasIndex("TaskId");
 
                     b.ToTable("Hint");
+                });
+
+            modelBuilder.Entity("Model.Types.Invitation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("InviteeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Sent")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InviteeId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Invitation");
                 });
 
             modelBuilder.Entity("Model.Types.Organisation", b =>
@@ -249,7 +275,9 @@ namespace Model.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrganisationId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
@@ -325,6 +353,25 @@ namespace Model.Migrations
                         .IsRequired();
 
                     b.Navigation("Task");
+                });
+
+            modelBuilder.Entity("Model.Types.Invitation", b =>
+                {
+                    b.HasOne("Model.Types.User", "Invitee")
+                        .WithMany()
+                        .HasForeignKey("InviteeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Model.Types.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Invitee");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("Model.Types.StudentGroup", b =>
