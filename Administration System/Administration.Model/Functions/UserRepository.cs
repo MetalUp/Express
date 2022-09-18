@@ -17,9 +17,9 @@ namespace Model.Functions
         public static User FindByUserName(string userName, IContext context) =>
     context.Instances<User>().FirstOrDefault(c => c.UserName == Hash(userName));
 
-        public static (User, IContext) CreateNewUser(string userName, Role role, IContext context)
+        public static (User, IContext) CreateNewUser(string userName, Role role, Organisation org, IContext context)
         {
-            var s = new User { UserName = Hash(userName), Role = role };
+            var s = new User { UserName = Hash(userName), Role = role, OrganisationId = org.Id, Organisation = org };
             return (s, context.WithNew(s));
         }
 

@@ -158,15 +158,15 @@ namespace Model.Functions
             return filenames;
         }
 
-        public static IContext UploadDescriptionFile(this Task task, FileAttachment file, string destination, IContext context) =>
+        public static IContext UploadDescriptionFile(this Task task, FileAttachment file,  IContext context) =>
     throw new NotImplementedException();
         //TODO: delegate to file service
 
-        public static IContext UploadReadyMadeFunctionsFile(this Task task, FileAttachment file, string destination, IContext context) =>
+        public static IContext UploadReadyMadeFunctionsFile(this Task task, FileAttachment file,  IContext context) =>
 throw new NotImplementedException();
         //TODO: delegate to file service
 
-        public static IContext UploadTestsFile(this Task task, FileAttachment file, string destination, IContext context) =>
+        public static IContext UploadTestsFile(this Task task, FileAttachment file,  IContext context) =>
 throw new NotImplementedException();
         //TODO: delegate to file service
 
