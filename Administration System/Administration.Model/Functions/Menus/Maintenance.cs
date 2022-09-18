@@ -68,6 +68,21 @@ namespace Model.Functions.Menus
 
         #endregion
 
+        #region Invitations
+        public static IQueryable<Invitation> AllInvitations(IContext context) => context.Instances<Invitation>();
+
+        [CreateNew]
+        public static (Invitation, IContext) CreateNewInvitation(this User toUser, User sender, IContext context)
+        {
+           var inv = new Invitation() { 
+                InviteeId = toUser.Id, 
+                Invitee = toUser,
+                SenderId = sender.Id, 
+                Sender = sender, 
+                Sent = context.Now() };
+            return (inv, context.WithNew(inv));
+        }
+        #endregion
 
 
     }
