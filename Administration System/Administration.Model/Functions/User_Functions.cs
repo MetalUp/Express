@@ -83,7 +83,6 @@ namespace Model.Functions
         {
             var inv = new Invitation()
             {
-                Id = context.NewGuid(),
                 InviteeId = toUser.Id,
                 Invitee = toUser,
                 SenderId = sender.Id,
