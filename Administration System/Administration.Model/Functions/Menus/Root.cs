@@ -24,6 +24,8 @@ namespace Model.Functions.Menus
 
         public static IQueryable<User> AllTeachers(IContext context) =>  
             context.Instances<User>().Where(u => u.Role == Role.Teacher);
+
+
         #endregion
 
         #region Organisations
@@ -74,6 +76,9 @@ namespace Model.Functions.Menus
 
         public static (Invitation, IContext) CreateNewInvitation(User toUser, IContext context) =>
              toUser.CreateNewInvitation(UserRepository.Me(context), context);
+
+        public static IContext DeleteInvitation(Invitation invitation, IContext context) =>
+            context.WithDeleted(invitation);
 
         #endregion
 
