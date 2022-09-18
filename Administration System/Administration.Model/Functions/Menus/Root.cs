@@ -3,7 +3,7 @@
 namespace Model.Functions.Menus
 {
 
-    public static class Maintenance
+    public static class Root
     {
         #region Users
         [MemberOrder(1)]

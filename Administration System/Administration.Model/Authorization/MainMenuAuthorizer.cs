@@ -13,7 +13,7 @@ namespace Model.Authorization
             {
                 nameof(Students) => UserRepository.UserHasRoleAtLeast(Role.Student, context),
                 nameof(Teachers) => UserRepository.UserHasRoleAtLeast(Role.Teacher, context),    
-                nameof(Maintenance) => UserRepository.UserHasSpecificRole(Role.Root, context),
+                nameof(Root) => UserRepository.UserHasSpecificRole(Role.Root, context),
                 _ => false
             };
     }

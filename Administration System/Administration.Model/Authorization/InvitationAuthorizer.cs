@@ -8,12 +8,13 @@ namespace Model.Authorization
 
         //Cannot access Accept if you are logged on as an existing user.
         public bool IsVisible(Invitation inv, string memberName, IContext context) =>
-            UserRepository.UserRole(context) switch
-            {
-               >= Role.Teacher => inv.SenderId == UserRepository.Me(context).Id && !IsAcceptAction(memberName),
-               Role.Guest => Helpers.MemberIsProperty(inv, memberName) || IsAcceptAction(memberName),
-               _ => false
-            };
+            !inv.IsPending() ? false :
+                UserRepository.UserRole(context) switch
+                {
+                   >= Role.Teacher => inv.SenderId == UserRepository.Me(context).Id && !IsAcceptAction(memberName),
+                   Role.Guest => Helpers.MemberIsProperty(inv, memberName) || IsAcceptAction(memberName),
+                   _ => false
+                }; 
 
         private bool IsAcceptAction(string memberName) => memberName == nameof(Invitation_Functions.Accept);
     }
