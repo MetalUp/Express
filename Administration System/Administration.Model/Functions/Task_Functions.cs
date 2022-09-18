@@ -140,6 +140,14 @@ namespace Model.Functions
           IContext context) =>
             context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskDoesNotClearFunctions });
 
+
+        [Edit]
+        public static IContext EditStatus(
+          this Task task,
+          TaskStatus status,
+          IContext context) =>
+            context.WithUpdated(task, new(task) { Status = status });
+
         #endregion
 
         #region FileAttachments

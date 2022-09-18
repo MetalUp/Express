@@ -8,15 +8,14 @@ namespace Model.Functions
             var student_U = new User(student) {
                 UserName = UserRepository.HashedCurrentUserName(context), 
                 Status = UserStatus.Active };
-            return (student_U, context.WithUpdated(student, student_U));
+            return (student_U, context.WithUpdated(student, student_U).WithDeleted(inv));
         }
 
-        public static (User, IContext) Cancel(this Invitation invitation, IContext context)
+        public static (User, IContext) Cancel(this Invitation inv, IContext context)
         {
-            throw new NotImplementedException();
-            //var student = invitation.Invitee;
-            //var student_U = new User(invitation.Invitee) { Status = UserStatus.Inactive };
-            //return (student_U, context.WithUpdated(student, student_U).WithDeleted(invitation));
+            var student = inv.Invitee;
+            var student_U = new User(inv.Invitee) { Status = UserStatus.Inactive };
+            return (student_U, context.WithUpdated(student, student_U).WithDeleted(inv));
         }
 
         internal static bool IsPending(this Invitation invitation) =>
