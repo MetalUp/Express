@@ -23,6 +23,8 @@
         public virtual User Sender { get; init; }
 
         public DateTime Sent { get; init; }
+
+        public override string ToString() => $"An invitation";
     }
 
 

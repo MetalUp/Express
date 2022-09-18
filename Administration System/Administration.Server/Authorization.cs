@@ -13,6 +13,8 @@ namespace Server
         public static IAuthorizationConfiguration AdminAuthConfig()
         {
             var config = new AuthorizationConfiguration<DefaultTypeAuthorizer, MainMenuAuthorizer>();
+            config.AddTypeAuthorizer<User, UserAuthorizer>();
+            config.AddTypeAuthorizer<Invitation, InvitationAuthorizer>();
             config.AddTypeAuthorizer<Task, TaskAuthorizer>();
             return config;
         }

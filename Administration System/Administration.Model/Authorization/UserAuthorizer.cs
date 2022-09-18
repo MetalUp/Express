@@ -1,9 +1,14 @@
-﻿
+﻿using NakedFunctions.Security;
 
 namespace Model.Authorization
 {
-    public class UserAuthorizer
+    public class UserAuthorizer : ITypeAuthorizer<User>
     {
-        //Cannot access anything unless you are Teacher or above AND the user belongs to the same organization as you
+        public bool IsVisible(User user, string memberName, IContext context) =>
+            UserRepository.UserRole(context) switch
+            {
+                >= Role.Teacher => UserRepository.Me(context).OrganisationId == user.OrganisationId,
+                _ => false
+            };
     }
 }

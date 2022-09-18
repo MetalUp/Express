@@ -15,8 +15,8 @@ namespace Model.Functions.Menus
         [MemberOrder(3)]
         public static IQueryable<User> AllUsers(IContext context) => context.Instances<User>();
 
-        public static (User, IContext) CreateNewUser(string userName, Role role, Organisation org, IContext context) =>
-            UserRepository.CreateNewUser(userName, role, org, context);
+        public static (User, IContext) CreateNewPendingUser(string name, Role role, Organisation org, IContext context) =>
+            UserRepository.CreateNewPendingUser(name, role, org, context);
 
         public static IQueryable<User> AllStudents(IContext context) => 
             context.Instances<User>().Where(u => u.Role == Role.Teacher);
@@ -75,6 +75,7 @@ namespace Model.Functions.Menus
         public static (Invitation, IContext) CreateNewInvitation(this User toUser, User sender, IContext context)
         {
            var inv = new Invitation() { 
+               Id = context.NewGuid(),
                 InviteeId = toUser.Id, 
                 Invitee = toUser,
                 SenderId = sender.Id, 

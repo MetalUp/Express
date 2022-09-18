@@ -5,7 +5,9 @@ namespace Model.Functions
     {
         public static (User, IContext) Accept(this Invitation invitation, IContext context) {
             var student = invitation.Invitee;
-            var student_U = new User(student) { Status = UserStatus.Active };
+            var student_U = new User(student) {
+                UserName = UserRepository.HashedCurrentUserName(context), 
+                Status = UserStatus.Active };
             return (student_U, context.WithUpdated(student, student_U).WithDeleted(invitation));
         }
 
@@ -15,6 +17,5 @@ namespace Model.Functions
             var student_U = new User(invitation.Invitee) { Status = UserStatus.Inactive };
             return (student_U, context.WithUpdated(student, student_U).WithDeleted(invitation));
         }
-
     }
 }
