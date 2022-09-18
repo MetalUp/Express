@@ -1,9 +1,6 @@
-﻿using Model.Functions;
-using Model.Types;
+﻿using Model.Types;
 using NakedFramework.Metamodel.Authorization;
-using NakedFunctions;
 using NakedFunctions.Reflector.Authorization;
-using NakedFunctions.Security;
 using Model.Authorization;
 
 namespace Server
@@ -14,8 +11,12 @@ namespace Server
         {
             var config = new AuthorizationConfiguration<DefaultTypeAuthorizer, MainMenuAuthorizer>();
             config.AddTypeAuthorizer<User, UserAuthorizer>();
+            config.AddTypeAuthorizer<Organisation, OrganisationAuthorizer>();
+            config.AddTypeAuthorizer<Group, GroupAuthorizer>();
             config.AddTypeAuthorizer<Invitation, InvitationAuthorizer>();
             config.AddTypeAuthorizer<Task, TaskAuthorizer>();
+            config.AddTypeAuthorizer<Hint, HintAuthorizer>();
+            config.AddTypeAuthorizer<Assignment, AssignmentAuthorizer>();
             return config;
         }
 
