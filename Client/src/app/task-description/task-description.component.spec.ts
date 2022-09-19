@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of, Subject } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
 
@@ -79,6 +79,18 @@ describe('TaskDescriptionComponent', () => {
     expect(component.hasPreviousTask()).toEqual(true);
     component.onPreviousTask();
     expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('previoustask.json');
+  });
+
+  it('should handle errors when getting task html file', () => {
+
+    taskServiceSpy.getHtml.and.returnValue(throwError(() => { status: 404 }));
+
+    const testTask = { Description: 'testfile.html' } as unknown as ITask;
+    taskSubject.next(testTask);
+
+    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('testfile.html');
+    expect(component.currentTask).toEqual(testTask);
+    expect(component.taskHtml).toEqual('');
   });
 
 

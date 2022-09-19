@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { ITask } from './task';
 import { first, throwError } from 'rxjs';
 import { ConfigService, RepLoaderService } from '@nakedobjects/services';
-import { DomainObjectRepresentation, IHateoasModel } from '@nakedobjects/restful-objects';
+import { DomainObjectRepresentation, EntryType, IHateoasModel, PropertyMember } from '@nakedobjects/restful-objects';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -37,26 +37,34 @@ describe('TaskService', () => {
       expect(t.Language).toEqual('testlanguage')
     );
 
-    const object = new DomainObjectRepresentation() as IHateoasModel;
+    const object = new DomainObjectRepresentation();
     object.hateoasUrl = `testPath/objects/Model.Types.Task/testTask`;
-    const promise = new Promise<IHateoasModel>(() => object);
+    const pm = new PropertyMember({value : 'testlanguage'} as any, object, 'language');
+    pm.entryType = () => EntryType.FreeForm;
+    pm.isScalar = () => true;
+
+    object.propertyMembers = () => ({'language': pm});
+    
+    const promise = Promise.resolve(object);
 
     repLoaderSpy.populate.and.returnValue(promise);
 
     service.loadTask('testTask');
 
-    // fix parameters
-    expect(repLoaderSpy.populate).toHaveBeenCalled();
+    expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({hateoasUrl: `testPath/objects/Model.Types.Task/testTask`}), true);
   });
 
-  // it('should navigate home if task not found', () => {
-  //   repLoaderSpy.populate.and.returnValue(new Promise({ status: 404 }));
+  it('should load empty task if task not found', () => {
+    service.currentTask.pipe(first()).subscribe(t =>
+      expect(t.Language).toEqual('')
+    );
+    
+    repLoaderSpy.populate.and.returnValue(Promise.reject({ status: 404 }));
 
-  //   service.loadTask('testTask');
+    service.loadTask('testTask');
 
-  //   expect(httpClientSpy.get).toHaveBeenCalledWith('content/testTask.json', { withCredentials: true });
-  //   expect(routerSpy.navigate).toHaveBeenCalledWith(['/']);
-  // });
+    expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({hateoasUrl: `testPath/objects/Model.Types.Task/testTask`}), true);
+  });
 
   it('should get the html file for the task', () => {
 

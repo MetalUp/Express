@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of, Subject } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
 
@@ -78,4 +78,24 @@ describe('TaskComponent', () => {
 
   });
 
+  it('should handle errors when getting hint html file', () => {
+
+    taskServiceSpy.getHtml.and.returnValue(throwError(() => { status: 404 }));
+
+    const testTask = { Hints: ['hint1.html', 'hint2.html']} as unknown as ITask;
+    taskSubject.next(testTask);
+
+    expect(component.hasNextHint()).toEqual(true);
+
+    expect(component.title).toEqual("Hint: ");
+    expect(component.hintHtml).toEqual('Click Next to use the first Hint');
+
+    component.onNextHint(); 
+
+    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('hint1.html');
+    expect(component.hintIndex).toEqual(0);
+    expect(component.hintHtml).toEqual('');
+    expect(component.hasPreviousHint()).toEqual(false);
+    expect(component.hasNextHint()).toEqual(true);
+  });
 });
