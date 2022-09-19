@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ITask, Task } from './task';
+import { EmptyTask, ITask, Task } from './task';
 import { Subject } from 'rxjs';
-import { ConfigService, RepLoaderService } from '@nakedobjects/services';
+import { ConfigService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
 import * as Ro from '@nakedobjects/restful-objects';
 import { DomainObjectRepresentation, EntryType } from '@nakedobjects/restful-objects';
 
@@ -23,16 +23,21 @@ export class TaskService {
 
   private currentTaskAsSubject = new Subject<ITask>()
 
+  private getChoicesValue(member: Ro.PropertyMember) {
+    const raw = member.value().scalar() as number;
+    const choices = member.choices();
+    for (const k in choices) {
+      const v = choices[k];
+      if (v.scalar() === raw) {
+        return k;
+      }
+    }
+    return undefined;
+  }
+
   private setValue(task: any, member: Ro.PropertyMember) {
     if (member.entryType() == EntryType.Choices) {
-      const raw = member.value().scalar() as number;
-      const choices = member.choices();
-      for (const k in choices) {
-        const v = choices[k];
-        if (v.scalar() === raw) {
-          task[member.id()] = k;
-        }
-      }
+      task[member.id()] = this.getChoicesValue(member);
     }
     else if (member.isScalar()) {
       task[member.id()] = member.value().scalar();
@@ -43,13 +48,16 @@ export class TaskService {
   }
 
   private convertToTask(rep: DomainObjectRepresentation) {
-    const task = new Task() as any;
-    const members = rep.propertyMembers()
-    for (const k in members) {
-      const member = members[k];
-      this.setValue(task, member);
+    if (rep && Object.keys(rep.propertyMembers()).length > 0) {
+      const task = new Task() as any;
+      const members = rep.propertyMembers()
+      for (const k in members) {
+        const member = members[k];
+        this.setValue(task, member);
+      }
+      return task as ITask;
     }
-    return task as ITask;
+    return EmptyTask;
   }
 
   loadTask(taskId: string) {
@@ -61,9 +69,9 @@ export class TaskService {
         const task = this.convertToTask(obj);
         this.currentTaskAsSubject.next(task);
       })
-      .catch((e) => {
-        // todo
-        throw e;
+      .catch((e : ErrorWrapper) => {
+        console.log(`${e.title}:${e.description}`);
+        this.currentTaskAsSubject.next(EmptyTask);
       });
   }
 

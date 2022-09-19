@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmptyTask, ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
-import { Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { of, Subscription } from 'rxjs';
+import { catchError, first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-hint',
@@ -38,11 +38,16 @@ export class HintComponent implements OnInit, OnDestroy {
     return this.hintIndex - 1 >= 0;
   }
 
+  handleError(e : unknown) {
+    console.log("error getting hint ");
+    return of('');
+  }
+
   onHint() {
     const hintFileName = this.currentTask.Hints[this.hintIndex];
 
     if (hintFileName) {
-      this.taskService.getHtml(hintFileName).pipe(first()).subscribe(h => this.currentHint = h);
+      this.taskService.getHtml(hintFileName).pipe(first()).pipe(catchError(this.handleError)).subscribe(h => this.currentHint = h);
     }
   }
 

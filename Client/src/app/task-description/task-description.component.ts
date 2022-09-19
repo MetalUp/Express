@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmptyTask, ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
-import { Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { of, Subscription } from 'rxjs';
+import { catchError, first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-task-description',
@@ -35,10 +35,16 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
     this.taskService.gotoTask(this.currentTask.NextTask!);
   }
 
+  handleError(e : unknown) {
+    console.log("error getting description ");
+    return of('');
+  }
+
+
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.taskService.getHtml(this.currentTask.Description).pipe(first()).subscribe(h => this.taskHtml = h);
+      this.taskService.getHtml(this.currentTask.Description).pipe(first()).pipe(catchError(this.handleError)).subscribe(h => this.taskHtml = h)
     })
   }
 
