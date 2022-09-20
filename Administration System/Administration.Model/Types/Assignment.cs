@@ -42,6 +42,15 @@ namespace Model.Types
         [MemberOrder(14)]
         public virtual User AssignedBy { get; init; }
 
+        [UrlLink("Task")]
+        public string Start
+        {
+            get
+            {
+                return @"https://express.metalup.org/task/" + TaskId;
+            }
+        }
+
         public override string ToString() => $"{Task}";
     }
 }
