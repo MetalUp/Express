@@ -110,5 +110,16 @@ namespace Model.Functions.Menus
         }
 
         #endregion
+
+        #region Tasks
+        public static IQueryable<Task> AllTasks(IContext context) => TaskRepository.AllTasks(context);
+
+        [MemberOrder(20)]
+        public static IQueryable<Task> FindTasks(
+    [Optionally] string title,
+    [Optionally] ProgrammingLanguage? language,
+    IContext context) =>
+    TaskRepository.FindTasks(title, language, context);
+        #endregion
     }
 }
