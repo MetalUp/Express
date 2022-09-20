@@ -51,7 +51,7 @@ namespace Model.Types
             get
             {
                 if (DescriptionContent == null) return null;
-                return new FileAttachment(DescriptionContent);
+                return new FileAttachment(DescriptionContent, null, @"text/html");
             }
         }
 

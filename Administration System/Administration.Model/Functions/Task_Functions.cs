@@ -150,7 +150,13 @@ namespace Model.Functions
             FileAttachment newAttachment, 
             IContext context) =>
                 context.WithUpdated(task, 
-                    new Task(task) { DescriptionContent = newAttachment.GetResourceAsByteArray(), ReadyMadeFunctions = newAttachment.MimeType });
+                    new Task(task) { DescriptionContent = newAttachment.GetResourceAsByteArray()});
+
+        public static string ValidateAddOrChangeDescription(
+            this Task task,
+            FileAttachment newAttachment,
+            IContext context) =>
+            newAttachment.MimeType != @"text/html" ? "File must be of mime type text/html": null;
         #endregion
 
         #region Hints 
