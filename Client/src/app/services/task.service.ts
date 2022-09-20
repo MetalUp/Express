@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmptyTask, ITask, Task } from './task';
-import { Subject } from 'rxjs';
+import { from, Subject } from 'rxjs';
 import { ConfigService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
 import * as Ro from '@nakedobjects/restful-objects';
 import { DomainObjectRepresentation, EntryType } from '@nakedobjects/restful-objects';
@@ -38,6 +38,12 @@ export class TaskService {
   private setValue(task: any, member: Ro.PropertyMember) {
     if (member.entryType() == EntryType.Choices) {
       task[member.id()] = this.getChoicesValue(member);
+    }
+    else if (member.attachmentLink()){
+      const link = member.attachmentLink();
+      const href = link?.href();
+      const mt = link?.type().asString;
+      task[member.id()] = href;
     }
     else if (member.isScalar()) {
       task[member.id()] = member.value().scalar();
@@ -89,5 +95,14 @@ export class TaskService {
     }
 
     return this.http.get(`content/${fileName}`, options);
+  }
+
+  getFile(url: string) {
+    const options = {
+      withCredentials: true,
+      responseType: 'text' as const
+    }
+
+    return  from(this.repLoader.getFile(url, 'text/html', true));
   }
 }

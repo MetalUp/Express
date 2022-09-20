@@ -40,11 +40,19 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
     return of('');
   }
 
-
+  handleBlob(h: string | Blob ){
+    if (h instanceof Blob){
+      h.text().then(t => this.taskHtml = t);
+    }
+    else {
+      this.taskHtml = h;
+    }
+  }
+  
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.taskService.getHtml(this.currentTask.Description).pipe(first()).pipe(catchError(this.handleError)).subscribe(h => this.taskHtml = h)
+      this.taskService.getFile(this.currentTask.Description).pipe(first()).pipe(catchError(this.handleError)).subscribe(h => this.handleBlob(h));
     })
   }
 
