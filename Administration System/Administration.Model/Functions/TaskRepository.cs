@@ -13,8 +13,7 @@
                     (title == null || t.Title.ToUpper().Contains(title.ToUpper()) &&
                     (language == null || t.Language == language)));
 
-        [CreateNew]
-        public static (Task, IContext) CreateNewTask(string title, IContext context)
+         public static (Task, IContext) CreateNewTask(string title, IContext context)
         {
             var t = new Task() { Title = title, AuthorId = UserRepository.Me(context).Id };
             return (t, context.WithNew(t));
