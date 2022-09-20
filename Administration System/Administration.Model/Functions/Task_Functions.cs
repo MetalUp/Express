@@ -143,12 +143,16 @@ namespace Model.Functions
 
         #region FileAttachments
 
-        public static IContext AddOrChangeDescription(
+        public static IContext SpecifyDescription(
             this Task task, 
-            FileAttachment newAttachment, 
+            FileAttachment file, 
             IContext context) =>
                 context.WithUpdated(task, 
-                    new Task(task) { DescriptionContent = newAttachment.GetResourceAsByteArray()});
+                    new Task(task) { 
+                        DescriptionContent = file.GetResourceAsByteArray(),
+                        DescriptionName = file.Name,
+                        DescriptionMime = file.MimeType,
+                    });
 
         #endregion
 
