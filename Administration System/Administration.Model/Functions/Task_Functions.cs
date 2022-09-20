@@ -150,7 +150,7 @@ namespace Model.Functions
             FileAttachment newAttachment, 
             IContext context) =>
                 context.WithUpdated(task, 
-                    new Task(task) { DescriptionContent = newAttachment.GetResourceAsByteArray() });
+                    new Task(task) { DescriptionContent = newAttachment.GetResourceAsByteArray(), ReadyMadeFunctions = newAttachment.MimeType });
         #endregion
 
         #region Hints 

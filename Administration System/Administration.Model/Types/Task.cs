@@ -51,12 +51,12 @@ namespace Model.Types
             get
             {
                 if (DescriptionContent == null) return null;
-                return new FileAttachment(DescriptionContent, $"Title.html", ".html");
+                return new FileAttachment(DescriptionContent);
             }
         }
 
-        [Hidden]
-        public virtual byte[] DescriptionContent { get; set; }
+        [MemberOrder(3)]
+        public byte[] DescriptionContent { get; init; }
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(4)]
