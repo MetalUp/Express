@@ -56,7 +56,7 @@ namespace Model.Types
 
         #region Description
         [MemberOrder(5)]  
-        public FileAttachment Decription => (DescContent == null) ? null:
+        public FileAttachment Description => (DescContent == null) ? null:
                  new FileAttachment(DescContent, DescName, DescMime);
 
         [Hidden]
