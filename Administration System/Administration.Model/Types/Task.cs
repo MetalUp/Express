@@ -47,7 +47,7 @@ namespace Model.Types
 
         [MemberOrder(3)]  
         public FileAttachment Decription => (DescriptionContent == null) ? null:
-                 new FileAttachment(DescriptionContent, null, @"text/html");
+                 new FileAttachment(DescriptionContent, DescriptionName, DescriptionMime);
 
         [Hidden]
         public byte[] DescriptionContent { get; init; }
