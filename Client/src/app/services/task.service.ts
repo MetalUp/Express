@@ -36,14 +36,14 @@ export class TaskService {
   }
 
   private setValue(task: any, member: Ro.PropertyMember) {
-    if (member.entryType() == EntryType.Choices) {
-      task[member.id()] = this.getChoicesValue(member);
+    const attachmentLink = member.attachmentLink();
+    if (attachmentLink) {
+      const href = attachmentLink.href();
+      const mt = attachmentLink.type().asString;
+      task[member.id()] = [href, mt];
     }
-    else if (member.attachmentLink()){
-      const link = member.attachmentLink();
-      const href = link?.href();
-      const mt = link?.type().asString;
-      task[member.id()] = href;
+    else if (member.entryType() == EntryType.Choices) {
+      task[member.id()] = this.getChoicesValue(member);
     }
     else if (member.isScalar()) {
       task[member.id()] = member.value().scalar();
@@ -97,12 +97,7 @@ export class TaskService {
     return this.http.get(`content/${fileName}`, options);
   }
 
-  getFile(url: string) {
-    const options = {
-      withCredentials: true,
-      responseType: 'text' as const
-    }
-
-    return  from(this.repLoader.getFile(url, 'text/html', true));
+  getFile(urlAndMediaType: [string, string]) {
+    return  from(this.repLoader.getFile(urlAndMediaType[0], urlAndMediaType[1], true));
   }
 }

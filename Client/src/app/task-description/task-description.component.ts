@@ -42,7 +42,8 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
 
   handleBlob(h: string | Blob ){
     if (h instanceof Blob){
-      h.text().then(t => this.taskHtml = t);
+      h.text().then(t => 
+        this.taskHtml = t);
     }
     else {
       this.taskHtml = h;
