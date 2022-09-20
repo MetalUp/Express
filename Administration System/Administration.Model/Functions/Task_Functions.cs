@@ -48,7 +48,7 @@ namespace Model.Functions
         #endregion
 
         #region Authoring
-        #region Editing Task
+        #region Editing Task properties
         [Edit]
         public static IContext EditTitle(
             this Task task,
@@ -62,13 +62,6 @@ namespace Model.Functions
             ProgrammingLanguage language,
             IContext context) =>
                 context.WithUpdated(task, new(task) { Language = language });
-
-        [Edit]
-        public static IContext EditDescription(
-            this Task task,
-            string description,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { Description = description });
 
         [Edit]
         public static IContext EditMaxMarks(
@@ -152,32 +145,12 @@ namespace Model.Functions
 
         #region FileAttachments
 
-        public static FileAttachment ViewFile(this Task task, string fileName) => 
-            throw new NotImplementedException();
-        //TODO: delegate to file service
-
-        public static List<string> Choices1ViewFile(this Task task, string fileName)
-        {
-            var filenames = new List<string>();
-            filenames.Add(task.Description);
-            filenames.Add(task.ReadyMadeFunctions);
-            filenames.Add(task.Tests);
-            filenames.AddRange(task.Hints.Select(h => h.HtmlFile));
-            return filenames;
-        }
-
-        public static IContext UploadDescriptionFile(this Task task, FileAttachment file,  IContext context) =>
-    throw new NotImplementedException();
-        //TODO: delegate to file service
-
-        public static IContext UploadReadyMadeFunctionsFile(this Task task, FileAttachment file,  IContext context) =>
-throw new NotImplementedException();
-        //TODO: delegate to file service
-
-        public static IContext UploadTestsFile(this Task task, FileAttachment file,  IContext context) =>
-throw new NotImplementedException();
-        //TODO: delegate to file service
-
+        public static IContext AddOrChangeDescription(
+            this Task task, 
+            FileAttachment newAttachment, 
+            IContext context) =>
+                context.WithUpdated(task, 
+                    new Task(task) { DescriptionContent = newAttachment.GetResourceAsByteArray() });
         #endregion
 
         #region Hints 

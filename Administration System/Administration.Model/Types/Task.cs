@@ -1,4 +1,6 @@
-﻿namespace Model.Types
+﻿using NakedFramework.Value;
+
+namespace Model.Types
 {
     public class Task
     {
@@ -11,7 +13,7 @@
             Author = cloneFrom.Author;
             Title = cloneFrom.Title;
             Language = cloneFrom.Language;
-            Description = cloneFrom.Description;
+            DescriptionContent = cloneFrom.DescriptionContent;
             MaxMarks = cloneFrom.MaxMarks;
             ReadyMadeFunctions = cloneFrom.ReadyMadeFunctions;
             PasteExpression = cloneFrom.PasteExpression;
@@ -42,13 +44,19 @@
         [MemberOrder(2)]
         public ProgrammingLanguage Language { get; init; }
 
-        //This path will be applied to all files
-        [MemberOrder(3)]
-        public string PathToFiles { get; init; }
 
-        //.html filename
-        [MemberOrder(3)]
-        public string Description { get; init; }
+        [MemberOrder(3)]  //TODO: Move to functions & DisplayAsProperty
+        public virtual FileAttachment Description
+        {
+            get
+            {
+                if (DescriptionContent == null) return null;
+                return new FileAttachment(DescriptionContent, $"Title.html", ".html");
+            }
+        }
+
+        [Hidden]
+        public virtual byte[] DescriptionContent { get; set; }
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(4)]

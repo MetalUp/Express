@@ -1,6 +1,14 @@
-﻿Open Command window (via Tools menu) and cd to the Model project folder
+﻿Open Command window (via Tools menu) which should be at the solution level
 
-dotnet ef migrations add [migrationName]
-dotnet ef database update
+dotnet ef migrations add [migrationName] -p Administration.Model -s Administration.Server
+dotnet ef database update -p Administration.Model -s Administration.Server
+
+(the options specify the 'migrations' assembly and the server assembly - needed for the injected DbContext)
+
+dotnet ef migrations remove  -p Administration.Model -s Administration.Server
+//removes the latest migration and re-creates the database snapshot
+
+dotnet ef database update [migrationName(no date)]  -p Administration.Model -s Administration.Server
+//updates database to a specific migration
 
 https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli
