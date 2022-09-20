@@ -26,11 +26,17 @@ namespace Model.Functions
             IContext context) =>
         context.WithUpdated(hint, new(hint) { CostInMarks = costInMarks });
 
-        public static FileAttachment ViewFile() => throw new NotImplementedException();
-
-        public static IContext UploadFile(this Hint hint, FileAttachment file, IContext context) =>
-            throw new NotImplementedException();
-        //TODO: delegate to file service
+        public static IContext SpecifyHtmlFile(
+                this Hint hint,
+                FileAttachment file,
+                IContext context) =>
+                    context.WithUpdated(hint,
+                        new Hint(hint)
+                        {
+                            FileContent = file.GetResourceAsByteArray(),
+                            FileName = file.Name,
+                            FileMime = file.MimeType,
+                        });
     }
 
 }

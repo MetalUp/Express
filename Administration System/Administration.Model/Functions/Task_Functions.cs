@@ -6,13 +6,6 @@ namespace Model.Functions
 
     public static class Task_Functions
     {
-        #region Hints
-        public static IContext AddNewHint(this Task task, string name, string htmlFile, int costInMarks, IContext context) =>
-            context.WithNew(new Hint { Title = name, HtmlFile = htmlFile, CostInMarks = costInMarks, TaskId = task.Id, Task = task });
-
-
-        #endregion
-
         #region Assigning
         //public static IContext AssignTaskToGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
         // group.Students.Aggregate(context, (c, s) => c.WithNew(NewAssignment(task, s, dueBy, User_MenuFunctions.Me(context))));
@@ -69,13 +62,6 @@ namespace Model.Functions
                 context.WithUpdated(task, new(task) { MaxMarks = maxMarks });
 
         [Edit]
-        public static IContext EditReadyMadeFunctions(
-            this Task task,
-            string readyMadeFunctions,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { ReadyMadeFunctions = readyMadeFunctions });
-
-        [Edit]
         public static IContext EditPasteExpression(
             this Task task,
             bool pasteExpression,
@@ -88,13 +74,6 @@ namespace Model.Functions
             bool pasteFunctions,
             IContext context) =>
                 context.WithUpdated(task, new(task) { PasteFunctions = pasteFunctions });
-
-        [Edit]
-        public static IContext EditTests(
-            this Task task,
-            string tests,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { Tests = tests });
 
         [Edit]
         public static IContext EditPreviousTask(
@@ -144,32 +123,69 @@ namespace Model.Functions
         #region FileAttachments
 
         public static IContext SpecifyDescription(
-            this Task task, 
-            FileAttachment file, 
+            this Task task,
+            FileAttachment file,
             IContext context) =>
-                context.WithUpdated(task, 
-                    new Task(task) { 
-                        DescriptionContent = file.GetResourceAsByteArray(),
-                        DescriptionName = file.Name,
-                        DescriptionMime = file.MimeType,
+                context.WithUpdated(task,
+                    new Task(task)
+                    {
+                        DescContent = file.GetResourceAsByteArray(),
+                        DescName = file.Name,
+                        DescMime = file.MimeType,
                     });
 
+        public static IContext SpecifyReadyMadeFunctions(
+            this Task task,
+            FileAttachment file,
+            IContext context) =>
+                context.WithUpdated(task,
+                    new Task(task)
+                    {
+                        RMFContent = file.GetResourceAsByteArray(),
+                        RMFName = file.Name,
+                        RMFMime = file.MimeType,
+                    });
+
+        [Edit]
+        public static IContext EditTests(
+            this Task task,
+            FileAttachment tests,
+            IContext context) =>
+                context.WithUpdated(task,
+                    new Task(task)
+                    {
+                        TestsContent = tests.GetResourceAsByteArray(),
+                        TestsName = tests.Name,
+                        TestsMime = tests.MimeType,
+                    });
         #endregion
 
         #region Hints 
-        public static Hint AddHint(
-            this Task task, 
+        public static IContext AddHint(
+            this Task task,
             int number,
-            string title, 
-            [Optionally] FileAttachment file, 
-            [DefaultValue(1)]int costInMarks,
+            string title,
+            [DefaultValue(1)] int costInMarks,
+            [Optionally] FileAttachment file,
             IContext context)
         {
-            throw new NotImplementedException();
+            var hint = new Hint
+            {
+                Number = number,
+                Title = title,
+                CostInMarks = costInMarks,
+                TaskId = task.Id,
+                Task = task,
+                FileContent = file == null ? null : file.GetResourceAsByteArray(),
+                FileName = file == null ? null : file.Name,
+                FileMime = file == null ? null : file.MimeType
+            };
+            return context.WithNew(hint);
         }
 
         public static int Default1AddHint(this Task task) =>
             task.Hints.Count + 1;
+
 
         public static IContext RemoveHint(this Task task, Hint hint, IContext context) =>
             context.WithDeleted(hint);

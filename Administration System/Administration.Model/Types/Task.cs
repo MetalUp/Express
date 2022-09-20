@@ -8,17 +8,23 @@ namespace Model.Types
         public Task(Task cloneFrom)
         {
             Id = cloneFrom.Id;
-            Status = cloneFrom.Status;
             AuthorId = cloneFrom.AuthorId;
             Author = cloneFrom.Author;
+            Status = cloneFrom.Status;
             Title = cloneFrom.Title;
             Language = cloneFrom.Language;
-            DescriptionContent = cloneFrom.DescriptionContent;
             MaxMarks = cloneFrom.MaxMarks;
-            ReadyMadeFunctions = cloneFrom.ReadyMadeFunctions;
+            DescContent = cloneFrom.DescContent;
+            DescName = cloneFrom.DescName;
+            DescMime = cloneFrom.DescMime;
+            RMFContent = cloneFrom.RMFContent;
+            RMFName = cloneFrom.RMFName;
+            RMFMime = cloneFrom.RMFMime;
             PasteExpression = cloneFrom.PasteExpression;
             PasteFunctions = cloneFrom.PasteFunctions;
-            Tests = cloneFrom.Tests; 
+            TestsContent = cloneFrom.TestsContent;
+            TestsName = cloneFrom.TestsName;
+            TestsMime= cloneFrom.TestsMime;
             PreviousTaskId = cloneFrom.PreviousTaskId;
             PreviousTask = cloneFrom.PreviousTask;
             NextTaskId = cloneFrom.NextTaskId;
@@ -44,37 +50,60 @@ namespace Model.Types
         [MemberOrder(2)]
         public ProgrammingLanguage Language { get; init; }
 
-
-        [MemberOrder(3)]  
-        public FileAttachment Decription => (DescriptionContent == null) ? null:
-                 new FileAttachment(DescriptionContent, DescriptionName, DescriptionMime);
-
-        [Hidden]
-        public byte[] DescriptionContent { get; init; }
-
-        [Hidden]
-        public string DescriptionName { get; init; }
-
-        [Hidden]
-        public string DescriptionMime { get; init; }
-
         //Marks awarded for completing the task with no hints taken
-        [MemberOrder(4)]
+        [MemberOrder(3)]
         public int MaxMarks { get; init; }
 
-        //Filename for code (in the specified language) for ready-made functions and/or data definitions
-        [MemberOrder(7)]
-        public string ReadyMadeFunctions { get; init; }
+        #region Description
+        [MemberOrder(5)]  
+        public FileAttachment Decription => (DescContent == null) ? null:
+                 new FileAttachment(DescContent, DescName, DescMime);
 
-        [MemberOrder(8)]
+        [Hidden]
+        public byte[] DescContent { get; init; }
+
+        [Hidden]
+        public string DescName { get; init; }
+
+        [Hidden]
+        public string DescMime { get; init; }
+        #endregion
+
+        #region ReadyMadeFunctions
+        [MemberOrder(6)]
+        public FileAttachment ReadyMadeFunctions => (RMFContent == null) ? null :
+                 new FileAttachment(RMFContent, RMFName, RMFMime);
+
+        [Hidden]
+        public byte[] RMFContent { get; init; }
+
+        [Hidden]
+        public string RMFName { get; init; }
+
+        [Hidden]
+        public string RMFMime { get; init; }
+        #endregion
+
+        #region Tests
+        [MemberOrder(7)]
+        public FileAttachment Tests => (TestsContent == null) ? null :
+                 new FileAttachment(TestsContent, TestsName, TestsMime);
+
+        [Hidden]
+        public byte[] TestsContent { get; init; }
+
+        [Hidden]
+        public string TestsName { get; init; }
+
+        [Hidden]
+        public string TestsMime { get; init; }
+        #endregion
+
+        [MemberOrder(9)]
         public bool PasteExpression { get; init; }
 
         [MemberOrder(9)]
         public bool PasteFunctions { get; init; }
-
-        //Filename for executable tests written in the language specified
-        [MemberOrder(10)]
-        public string Tests { get; init; }
 
         [Hidden]
         public int? PreviousTaskId { get; init; }

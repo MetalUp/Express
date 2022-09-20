@@ -1,4 +1,6 @@
 ﻿
+using NakedFramework.Value;
+
 namespace Model.Types
 {
     public class Hint
@@ -7,10 +9,14 @@ namespace Model.Types
         public Hint(Hint cloneFrom)
         {
             Id = cloneFrom.Id;
+            Title = cloneFrom.Title;
+            Number = cloneFrom.Number;
+            CostInMarks = cloneFrom.CostInMarks;
+            FileContent = cloneFrom.FileContent;
+            FileName = cloneFrom.FileName;
+            FileMime = cloneFrom.FileMime;
             TaskId = cloneFrom.TaskId;
             Task = cloneFrom.Task;
-            HtmlFile = cloneFrom.HtmlFile;
-            CostInMarks = cloneFrom.CostInMarks;
         }
         [Hidden]
         public int Id { get; init; }
@@ -21,15 +27,27 @@ namespace Model.Types
         [MemberOrder(2)]
         public string Title { get; init; }
 
-        [MemberOrder(4)]
-        public string HtmlFile { get; init; }
-
-        [MemberOrder(6)]
+        [MemberOrder(3)]
         public int CostInMarks { get; init; }
+
+        #region HtmlFile
+        [MemberOrder(4)]
+        public FileAttachment HtmlFile => (FileContent == null) ? null :
+                 new FileAttachment(FileContent, FileName, FileMime);
+
+        [Hidden]
+        public byte[] FileContent { get; init; }
+
+        [Hidden]
+        public string FileName { get; init; }
+
+        [Hidden]
+        public string FileMime { get; init; }
+        #endregion
 
         [Hidden]
         public int TaskId { get; init; }
-        [MemberOrder(8)]
+        [MemberOrder(10)]
         public virtual Task Task { get; init; }
 
         public override string ToString() => $"{Number}.{Title} ({CostInMarks} marks)";
