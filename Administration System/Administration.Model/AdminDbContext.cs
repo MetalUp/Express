@@ -6,11 +6,6 @@ namespace Model
     {
         public AdminDbContext(DbContextOptions<AdminDbContext> options): base(options) { }
 
-
-        private readonly string cs;
-
-        public AdminDbContext(string cs) => this.cs = cs;
-
         public DbSet<User> Users { get; set; }
         public DbSet<User> Students { get; set; }
         public DbSet<Group> Group { get; set; }
@@ -24,7 +19,6 @@ namespace Model
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.LogTo(l => Debug.WriteLine(l));
-            optionsBuilder.UseSqlServer(cs);
             optionsBuilder.UseLazyLoadingProxies();
         }
 

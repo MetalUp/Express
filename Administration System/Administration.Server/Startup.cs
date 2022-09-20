@@ -8,6 +8,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,6 +22,7 @@ using NakedFunctions.Reflector.Extensions;
 using Newtonsoft.Json;
 using Model;
 using Server;
+using Microsoft.Extensions.Options;
 
 namespace NakedFunctions.Rest.App.Demo
 {
@@ -55,15 +57,14 @@ namespace NakedFunctions.Rest.App.Demo
             services.AddNakedFramework(frameworkOptions =>
             {
                 frameworkOptions.MainMenus = MenuHelper.GenerateMenus(ModelConfig.MainMenus());
-                frameworkOptions.AddEFCorePersistor(peristorOptions => { peristorOptions.ContextCreators = new[] { ModelConfig.EFCoreDbContextCreator }; });
+                frameworkOptions.AddEFCorePersistor();
                 frameworkOptions.AuthorizationConfiguration = AuthorizationHelpers.AdminAuthConfig();
                 frameworkOptions.AddNakedFunctions(appOptions =>
                 {
                     appOptions.DomainTypes = ModelConfig.DomainTypes();
                     appOptions.DomainFunctions = ModelConfig.TypesDefiningDomainFunctions();
                 });
-                frameworkOptions.AddRestfulObjects(_ => { });
-               
+                frameworkOptions.AddRestfulObjects();
             });
             services.AddCors(corsOptions =>
             {
@@ -79,6 +80,9 @@ namespace NakedFunctions.Rest.App.Demo
                         .AllowAnyMethod()
                         .AllowCredentials();
                 });
+            });
+            services.AddDbContext<DbContext, AdminDbContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("ILEAdmin"));
             });
         }
 
