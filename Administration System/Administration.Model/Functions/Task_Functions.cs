@@ -6,8 +6,6 @@ namespace Model.Functions
 
     public static class Task_Functions
     {
-
-
         #region Hints
         public static IContext AddNewHint(this Task task, string name, string htmlFile, int costInMarks, IContext context) =>
             context.WithNew(new Hint { Title = name, HtmlFile = htmlFile, CostInMarks = costInMarks, TaskId = task.Id, Task = task });
@@ -152,11 +150,6 @@ namespace Model.Functions
                 context.WithUpdated(task, 
                     new Task(task) { DescriptionContent = newAttachment.GetResourceAsByteArray()});
 
-        public static string ValidateAddOrChangeDescription(
-            this Task task,
-            FileAttachment newAttachment,
-            IContext context) =>
-            newAttachment.MimeType != @"text/html" ? "File must be of mime type text/html": null;
         #endregion
 
         #region Hints 

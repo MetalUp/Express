@@ -45,18 +45,18 @@ namespace Model.Types
         public ProgrammingLanguage Language { get; init; }
 
 
-        [MemberOrder(3)]  //TODO: Move to functions & DisplayAsProperty
-        public virtual FileAttachment Description
-        {
-            get
-            {
-                if (DescriptionContent == null) return null;
-                return new FileAttachment(DescriptionContent, null, @"text/html");
-            }
-        }
+        [MemberOrder(3)]  
+        public FileAttachment Decription => (DescriptionContent == null) ? null:
+                 new FileAttachment(DescriptionContent, null, @"text/html");
 
-        [MemberOrder(3)]
+        [Hidden]
         public byte[] DescriptionContent { get; init; }
+
+        [Hidden]
+        public string DescriptionName { get; init; }
+
+        [Hidden]
+        public string DescriptionMime { get; init; }
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(4)]
