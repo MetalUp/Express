@@ -3,7 +3,7 @@ import { ICodeRulesBlock, IMessages } from "./rules";
 export interface ITask {
     Language: string;
     Title: string;
-    Description: string;
+    Description: [string, string];
     Hints: string[];
     Messages?: IMessages,
     CodeMustMatch?: ICodeRulesBlock,
@@ -30,7 +30,7 @@ export class Task implements ITask {
     }
     
     Title: string = "";
-    Description: string = "";
+    Description: [string, string] = ["", ""];
     Hints: string[] = [];
     Messages?: IMessages | undefined;
     CodeMustMatch?: ICodeRulesBlock | undefined;
@@ -49,6 +49,6 @@ export class Task implements ITask {
 export const EmptyTask = {
     Language: '',
     Title: '',
-    Description: '',
+    Description: ['', ''] as [string, string],
     Hints: []
 }
