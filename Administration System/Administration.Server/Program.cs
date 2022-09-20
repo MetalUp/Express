@@ -21,11 +21,11 @@ namespace NakedFunctions.Rest.App.Demo {
 
             var host = CreateHostBuilder(args).Build();
 
-            using (var scope = host.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<AdminDbContext>();
-                db.Database.Migrate();
-            }
+            //using (var scope = host.Services.CreateScope())
+            //{
+            //    var db = scope.ServiceProvider.GetRequiredService<AdminDbContext>();
+            //    db.Database.Migrate();
+            //}
 
             host.Run();
         }
