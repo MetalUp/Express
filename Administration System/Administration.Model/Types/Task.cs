@@ -70,7 +70,7 @@ namespace Model.Types
         #endregion
 
         #region ReadyMadeFunctions
-        [MemberOrder(6)]
+        [Named("Hidden Functions")][MemberOrder(6)]
         public FileAttachment ReadyMadeFunctions => (RMFContent == null) ? null :
                  new FileAttachment(RMFContent, RMFName, RMFMime);
 
@@ -120,6 +120,7 @@ namespace Model.Types
         [MemberOrder(13)]
         public bool NextTaskClearsFunctions { get; init; }
 
+        [RenderEagerly]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
         public override string ToString() => $"{Title} ({Language})";
