@@ -19,6 +19,7 @@ namespace Model.Functions
         //public static IContext AssignTaskToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
         //        context.WithNew(NewAssignment(task, student, dueBy, User_MenuFunctions.Me(context)));
 
+        [MemberOrder(10)]
         public static (Assignment, IContext) AssignToStudent(this Task task, User student, DateTime dueBy, IContext context) =>
             User_Functions.AssignTask(student, task, dueBy, context);
 
@@ -106,9 +107,9 @@ namespace Model.Functions
         [Edit]
         public static IContext EditNextTaskClearsFunctions(
           this Task task,
-          bool nextTaskDoesNotClearFunctions,
+          bool nextTaskClearsFunctions,
           IContext context) =>
-            context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskDoesNotClearFunctions });
+            context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskClearsFunctions });
 
 
         [Edit]
@@ -122,6 +123,7 @@ namespace Model.Functions
 
         #region FileAttachments
 
+        [MemberOrder(20)]
         public static IContext SpecifyDescription(
             this Task task,
             FileAttachment file,
@@ -134,7 +136,24 @@ namespace Model.Functions
                         DescMime = file.MimeType,
                     });
 
-        public static IContext SpecifyReadyMadeFunctions(
+        [MemberOrder(22)]
+        public static IContext ClearDescription(
+            this Task task,
+            bool confirm,
+            IContext context) =>
+            context.WithUpdated(task,
+                new Task(task)
+                {
+                    DescContent = null,
+                    DescName = null,
+                    DescMime = null,
+                });
+
+        public static string ValidateClearDescription(this Task task, bool confirm) =>
+            confirm ? null : "Confirm must be selected";
+
+        [MemberOrder(30)]
+        public static IContext SpecifyHiddenFunctions(
             this Task task,
             FileAttachment file,
             IContext context) =>
@@ -146,8 +165,24 @@ namespace Model.Functions
                         RMFMime = file.MimeType,
                     });
 
-        [Edit]
-        public static IContext EditTests(
+        [MemberOrder(32)]
+        public static IContext ClearHiddenFunctions(
+            this Task task,
+            bool confirm,
+            IContext context) =>
+            context.WithUpdated(task,
+                new Task(task)
+                {
+                    RMFContent = null,
+                    RMFName = null,
+                    RMFMime = null,
+                });
+
+        public static string ValidateClearReadyMadeFunctions(this Task task, bool confirm) =>
+            confirm ? null : "Confirm must be selected";
+
+        [MemberOrder(40)]
+        public static IContext SpecifyTests(
             this Task task,
             FileAttachment tests,
             IContext context) =>
@@ -158,9 +193,27 @@ namespace Model.Functions
                         TestsName = tests.Name,
                         TestsMime = tests.MimeType,
                     });
+
+        [MemberOrder(42)]
+        public static IContext ClearTests(
+            this Task task,
+            bool confirm,
+            IContext context) =>
+                context.WithUpdated(task,
+                    new Task(task)
+                    {
+                        TestsContent = null,
+                        TestsName = null,
+                        TestsMime = null,
+                    });
+
+        public static string ValidateClearTests(this Task task, bool confirm) =>
+            confirm ? null : "Confirm must be selected";
+
         #endregion
 
         #region Hints 
+        [MemberOrder(50)]
         public static IContext AddHint(
             this Task task,
             int number,
@@ -186,7 +239,7 @@ namespace Model.Functions
         public static int Default1AddHint(this Task task) =>
             task.Hints.Count + 1;
 
-
+        [MemberOrder(55)]
         public static IContext RemoveHint(this Task task, Hint hint, IContext context) =>
             context.WithDeleted(hint);
 
