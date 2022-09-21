@@ -98,6 +98,11 @@ export class TaskService {
   }
 
   getFile(urlAndMediaType: [string, string]) {
-    return  from(this.repLoader.getFile(urlAndMediaType[0], urlAndMediaType[1], true));
+    return this.repLoader.getFile(urlAndMediaType[0], urlAndMediaType[1], true)
+      .then(b => b.text())
+      .catch((e: ErrorWrapper) => {
+        console.log(`${e.title}:${e.description}`);
+        return "";
+      });
   }
 }

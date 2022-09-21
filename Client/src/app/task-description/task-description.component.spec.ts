@@ -15,7 +15,7 @@ describe('TaskDescriptionComponent', () => {
   beforeEach(async () => {
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml', 'getFile', 'gotoTask'], { currentTask: taskSubject });
     taskServiceSpy.getHtml.and.returnValue(of('test html'));
-    taskServiceSpy.getFile.and.returnValue(of(new Blob(['test html'], {type: 'text/html'})));
+    taskServiceSpy.getFile.and.returnValue(Promise.resolve('test html'));
 
     await TestBed.configureTestingModule({
       declarations: [TaskDescriptionComponent],
@@ -84,7 +84,7 @@ describe('TaskDescriptionComponent', () => {
 
   it('should handle errors when getting task html file', () => {
 
-    taskServiceSpy.getFile.and.returnValue(throwError(() => { status: 404 }));
+    taskServiceSpy.getFile.and.returnValue(Promise.reject(() => { status: 404 }));
 
     const testTask = { Description: ['testUrl', 'testMediaType'] } as unknown as ITask;
     taskSubject.next(testTask);

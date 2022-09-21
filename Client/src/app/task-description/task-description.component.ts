@@ -35,25 +35,12 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
     this.taskService.gotoTask(this.currentTask.NextTask!);
   }
 
-  handleError(e : unknown) {
-    console.log("error getting description ");
-    return of('');
-  }
-
-  handleBlob(h: string | Blob ){
-    if (h instanceof Blob){
-      h.text().then(t => 
-        this.taskHtml = t);
-    }
-    else {
-      this.taskHtml = h;
-    }
-  }
-  
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.taskService.getFile(this.currentTask.Description).pipe(first()).pipe(catchError(this.handleError)).subscribe(h => this.handleBlob(h));
+      this.taskService.getFile(this.currentTask.Description)
+        .then(h => this.taskHtml = h)
+        .catch(_ => this.taskHtml = '');
     })
   }
 

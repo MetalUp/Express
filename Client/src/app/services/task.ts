@@ -5,17 +5,17 @@ export interface ITask {
     Title: string;
     Description: [string, string];
     Hints: string[];
-    Messages?: IMessages,
-    CodeMustMatch?: ICodeRulesBlock,
-    CodeMustNotContain?: ICodeRulesBlock,
-    ReadyMadeFunctions?: string,
+    Messages?: IMessages;
+    CodeMustMatch?: ICodeRulesBlock;
+    CodeMustNotContain?: ICodeRulesBlock;
+    ReadyMadeFunctions?:  [string, string];
     SkeletonCode?: string;
-    PasteExpression?: boolean,
-    PasteFunction?: boolean,
-    Tests?: string,
-    NextTask?: string,
-    PreviousTask?: string,
-    NextTaskDoesNotClearFunctions?: boolean
+    PasteExpression?: boolean;
+    PasteFunction?: boolean;
+    Tests?: string;
+    NextTask?: string;
+    PreviousTask?: string;
+    NextTaskDoesNotClearFunctions?: boolean;
 }
 
 export class Task implements ITask {
@@ -33,9 +33,9 @@ export class Task implements ITask {
     Description: [string, string] = ["", ""];
     Hints: string[] = [];
     Messages?: IMessages | undefined;
-    CodeMustMatch?: ICodeRulesBlock | undefined;
-    CodeMustNotContain?: ICodeRulesBlock | undefined;
-    ReadyMadeFunctions?: string | undefined;
+    CodeMustMatch?: ICodeRulesBlock;
+    CodeMustNotContain?: ICodeRulesBlock;
+    ReadyMadeFunctions?: [string, string];
     SkeletonCode?: string | undefined;
     PasteExpression?: boolean | undefined;
     PasteFunction?: boolean | undefined;
