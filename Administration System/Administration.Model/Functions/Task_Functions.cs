@@ -264,6 +264,8 @@ namespace Model.Functions
                 Language = newLanguage,
                 RMFContent = null,
                 TestsContent = null,
+                NextTask = null,
+                PreviousTask = null,
                 Hints = newHints
             };
             return (task2, context2.WithNew(task2));

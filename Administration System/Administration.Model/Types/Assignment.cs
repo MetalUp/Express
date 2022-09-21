@@ -20,6 +20,9 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
+        [MemberOrder(0)][UrlLink("Start Task")]
+        public string Link =>  @"https://express.metalup.org/task/" + TaskId;
+
         [MemberOrder(1)]
         public DateTime DueBy { get; init; }
 
@@ -44,14 +47,6 @@ namespace Model.Types
         [MemberOrder(14)]
         public virtual User AssignedBy { get; init; }
 
-        [UrlLink("Task")]
-        public string Start
-        {
-            get
-            {
-                return @"https://express.metalup.org/task/" + TaskId;
-            }
-        }
 
         public override string ToString() => $"{Task}";
     }
