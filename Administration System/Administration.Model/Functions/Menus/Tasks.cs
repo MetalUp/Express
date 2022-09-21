@@ -2,19 +2,23 @@
 {
     public static class Tasks
     {
-        internal static IQueryable<Task> AllTasks(
-            ProgrammingLanguage? language, 
-            TaskStatus? status,
+        public static IQueryable<Task> AllTasks(
+            [Optionally] ProgrammingLanguage? language,
+            [Optionally] TaskStatus? status,
             IContext context) =>
             context.Instances<Task>()
                 .Where(t => (language == null || t.Language == language) &&
                 (status == null || t.Status == status))
                 .OrderBy(t => t.Title).ThenBy(t => t.Language);
 
-        public static IQueryable<Task> PublicTasks( ProgrammingLanguage? language, IContext context) =>
+        public static IQueryable<Task> PublicTasks(
+            [Optionally] ProgrammingLanguage? language, 
+            IContext context) =>
             AllTasks(language, TaskStatus.Public, context);
 
-        public static IQueryable<Task> AllAssignableTasks(ProgrammingLanguage? language, IContext context) =>
+        public static IQueryable<Task> AllAssignableTasks(
+            [Optionally] ProgrammingLanguage? language, 
+            IContext context) =>
             AllTasks(language, TaskStatus.Assignable, context);
 
         public static IQueryable<Task> FindTasks(
@@ -33,20 +37,14 @@
         }
 
         [MemberOrder(20)]
-        public static IQueryable<Task> TasksAuthoredByMe(IContext context,  
-            ProgrammingLanguage? language, 
-            TaskStatus? status)
+        public static IQueryable<Task> TasksAuthoredByMe(IContext context,
+            [Optionally] ProgrammingLanguage? language,
+            [Optionally] TaskStatus? status)
         {
             var id = Users.Me(context).Id;
-            return context.Instances<Task>()
+            return AllTasks(language, status, context)
                 .Where(t => t.AuthorId == id)
                 .OrderBy(t => t.Status);
         }
-
-        [MemberOrder(30)]
-        public static IQueryable<Task> TasksUnderDevelopment(IContext context) =>
-            context.Instances<Task>()
-                .Where(t => t.Status == TaskStatus.UnderDevelopment)
-                .OrderBy(t => t.Title).ThenBy(t => t.Language);
     }
 }
