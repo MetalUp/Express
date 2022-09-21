@@ -3,6 +3,7 @@ export interface IHint {
     Title: string;
     CostInMarks: number;
     HtmlFile: [string, string];
+    HtmlContent?: string;
     Task: string;
 }
 
