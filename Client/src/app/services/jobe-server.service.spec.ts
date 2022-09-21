@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { JobeServerService } from './jobe-server.service';
 import { errorRunResult, RunResult } from './run-result';
 import { of, Subject, throwError } from 'rxjs';
@@ -74,25 +74,25 @@ describe('JobeServerService', () => {
       jasmine.any(Object));
   });
 
-  // it('should call post on /runs including any task wrapping code', () => {
-  //   httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));
+  it('should call post on /runs including any task wrapping code', fakeAsync(() => {
+    httpClientSpy.post.and.returnValue(of<RunResult>(testRunResult));
    
 
-  //   taskSubject.next({ ReadyMadeFunctions: ["codeUrl", "codeMt"], Language: '' } as ITask);
+    taskSubject.next({ ReadyMadeFunctions: ["codeUrl", "codeMt"], Language: '' } as ITask);
 
-  //   expect(taskServiceSpy.getFile).toHaveBeenCalledOnceWith(["codeUrl", "codeMt"]);
+    expect(taskServiceSpy.getFile).toHaveBeenCalledOnceWith(["codeUrl", "codeMt"]);
+    tick();
+    service.selectedLanguage = 'stub language';
+    service.setFunctionDefinitions('test definitions ');
 
-  //   service.selectedLanguage = 'stub language';
-  //   service.setFunctionDefinitions('test definitions ');
+    service.submit_run(`${UserDefinedFunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
 
-  //   service.submit_run(`${UserDefinedFunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+    testRunSpec.run_spec.sourcecode = 'test definitions additional task codestub code';
 
-  //   testRunSpec.run_spec.sourcecode = 'test definitions additional task codestub code';
-
-  //   expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
-  //     Object(testRunSpec),
-  //     jasmine.any(Object));
-  // });
+    expect(httpClientSpy.post).toHaveBeenCalledOnceWith(`${service.path}/runs`,
+      Object(testRunSpec),
+      jasmine.any(Object));
+  }));
 
 
   it('should call post on /runs excluding empty task wrapping code', () => {

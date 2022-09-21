@@ -64,6 +64,7 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
     expect(component.hintIndex).toEqual(0);
     tick();
+    expect(component.title).toEqual("Hint: hint1 title");
     expect(component.hintHtml).toEqual('hint1 html');
     expect(component.hasPreviousHint()).toEqual(false);
     expect(component.hasNextHint()).toEqual(true);
@@ -75,6 +76,7 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint2url', 'hint2mt']);
     expect(component.hintIndex).toEqual(1);
     tick();
+    expect(component.title).toEqual("Hint: hint2 title");
     expect(component.hintHtml).toEqual('hint2 html');
     expect(component.hasPreviousHint()).toEqual(true);
     expect(component.hasNextHint()).toEqual(false);
@@ -86,6 +88,7 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
     expect(component.hintIndex).toEqual(0);
     tick();
+    expect(component.title).toEqual("Hint: hint1 title");
     expect(component.hintHtml).toEqual('hint1 html');
     expect(component.hasPreviousHint()).toEqual(false);
     expect(component.hasNextHint()).toEqual(true);
@@ -108,6 +111,7 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
     expect(component.hintIndex).toEqual(0);
     tick();
+    expect(component.title).toEqual("Hint: hint1 title");
     expect(component.hintHtml).toEqual('error getting hint');
     expect(component.hasPreviousHint()).toEqual(false);
     expect(component.hasNextHint()).toEqual(true);

@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { TaskService } from './task.service';
 import { of } from 'rxjs';
 import { ITask } from './task';
-import { first, throwError } from 'rxjs';
+import { first } from 'rxjs';
 import { ConfigService, RepLoaderService } from '@nakedobjects/services';
 import { DomainObjectRepresentation, EntryType, IHateoasModel, PropertyMember } from '@nakedobjects/restful-objects';
 
@@ -32,39 +32,39 @@ describe('TaskService', () => {
     expect(service).toBeTruthy();
   });
 
-  // it('should get the task', () => {
-  //   service.currentTask.pipe(first()).subscribe(t =>
-  //     expect(t.Language).toEqual('testlanguage')
-  //   );
+  it('should get the task', fakeAsync(() => {
+   
+    const object = new DomainObjectRepresentation();
+    object.hateoasUrl = `testPath/objects/Model.Types.Task/testTask`;
+    const pm = new PropertyMember({value : 'testlanguage'} as any, object, 'language');
+    pm.entryType = () => EntryType.FreeForm;
+    pm.isScalar = () => true;
 
-  //   const object = new DomainObjectRepresentation();
-  //   object.hateoasUrl = `testPath/objects/Model.Types.Task/testTask`;
-  //   const pm = new PropertyMember({value : 'testlanguage'} as any, object, 'language');
-  //   pm.entryType = () => EntryType.FreeForm;
-  //   pm.isScalar = () => true;
-
-  //   object.propertyMembers = () => ({'language': pm});
+    object.propertyMembers = () => ({'language': pm});
     
-  //   const promise = Promise.resolve(object);
+    const promise = Promise.resolve(object);
 
-  //   repLoaderSpy.populate.and.returnValue(promise);
+    repLoaderSpy.populate.and.returnValue(promise);
 
-  //   service.loadTask('testTask');
-
-  //   expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({hateoasUrl: `testPath/objects/Model.Types.Task/testTask`}), true);
-  // });
-
-  it('should load empty task if task not found', () => {
+    service.loadTask('testTask');
+    tick();
+    expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({hateoasUrl: `testPath/objects/Model.Types.Task/testTask`}), true);
     service.currentTask.pipe(first()).subscribe(t =>
-      expect(t.Language).toEqual('')
+      expect(t.Language).toEqual('testlanguage')
     );
-    
+  }));
+
+  it('should load empty task if task not found', fakeAsync(() => {
+
     repLoaderSpy.populate.and.returnValue(Promise.reject({ status: 404 }));
 
     service.loadTask('testTask');
 
-    expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({hateoasUrl: `testPath/objects/Model.Types.Task/testTask`}), true);
-  });
+    expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({ hateoasUrl: `testPath/objects/Model.Types.Task/testTask` }), true);
+    service.currentTask.pipe(first()).subscribe(t =>
+      expect(t.Language).toEqual('')
+    );
+  }));
 
   it('should get the html file for the task', () => {
 
