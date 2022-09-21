@@ -1,8 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import { EmptyHint } from '../services/hint';
-import { EmptyTask, ITask } from '../services/task';
+import { EmptyHint } from '../models/hint';
+import { EmptyTask, ITask } from '../models/task';
 import { TaskService } from '../services/task.service';
 
 import { HintComponent } from './hint.component';

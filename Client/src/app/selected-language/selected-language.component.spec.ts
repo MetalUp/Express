@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Params } from '@angular/router';
 import { of, Subject } from 'rxjs';
 import { JobeServerService } from '../services/jobe-server.service';
-import { ITask } from '../services/task';
+import { ITask } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { SelectedLanguageComponent } from './selected-language.component';
 

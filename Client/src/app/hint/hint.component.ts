@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EmptyTask, ITask } from '../services/task';
+import { EmptyTask, ITask } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { of, Subscription } from 'rxjs';
 import { catchError, first } from 'rxjs/operators';
-import { EmptyHint, IHint } from '../services/hint';
+import { EmptyHint, IHint } from '../models/hint';
 
 @Component({
   selector: 'app-hint',

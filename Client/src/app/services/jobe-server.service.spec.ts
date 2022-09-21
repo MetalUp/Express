@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { JobeServerService } from './jobe-server.service';
-import { errorRunResult, RunResult } from './run-result';
+import { errorRunResult, RunResult } from '../models/run-result';
 import { of, Subject, throwError } from 'rxjs';
 import { UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../language-helpers/language-helpers';
 import { TaskService } from './task.service';
-import { ITask } from './task';
+import { ITask } from '../models/task';
 
 describe('JobeServerService', () => {
   let service: JobeServerService;

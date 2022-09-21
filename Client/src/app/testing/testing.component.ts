@@ -3,10 +3,10 @@ import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { JobeServerService } from '../services/jobe-server.service';
-import { EmptyRunResult, getResultOutcome, RunResult } from '../services/run-result';
+import { EmptyRunResult, getResultOutcome, RunResult } from '../models/run-result';
 import { wrapTests } from '../language-helpers/language-helpers';
 import { RulesService } from '../services/rules.service';
-import { ErrorType } from '../services/rules';
+import { ErrorType } from '../models/rules';
 
 @Component({
   selector: 'app-testing',

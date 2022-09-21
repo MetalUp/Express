@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { wrapFunctions } from '../language-helpers/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
-import { Applicability, ErrorType } from '../services/rules';
+import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
-import { EmptyRunResult, RunResult } from '../services/run-result';
+import { EmptyRunResult, RunResult } from '../models/run-result';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';

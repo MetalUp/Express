@@ -1,11 +1,11 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { EmptyTask, ITask } from '../services/task';
+import { EmptyTask, ITask } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { of, Subject } from 'rxjs';
 import { TestingComponent } from './testing.component';
 import { JobeServerService } from '../services/jobe-server.service';
 import { RulesService } from '../services/rules.service';
-import { EmptyRunResult, RunResult } from '../services/run-result';
+import { EmptyRunResult, RunResult } from '../models/run-result';
 import { wrapTests } from '../language-helpers/language-helpers';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 

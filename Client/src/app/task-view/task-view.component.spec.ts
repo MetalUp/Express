@@ -8,7 +8,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { TaskViewComponent } from './task-view.component';
 import { TaskService } from '../services/task.service';
-import { ITask } from '../services/task';
+import { ITask } from '../models/task';
 
 describe('TaskViewComponent', () => {
   let taskServiceSpy: jasmine.SpyObj<TaskService>;

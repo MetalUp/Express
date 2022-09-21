@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Applicability, ErrorType, IRules, ICodeRulesBlock, MsgPrefix, EmptyCodeRulesBlock, ITaskRules } from './rules';
+import { Applicability, ErrorType, IRules, ICodeRulesBlock, MsgPrefix, EmptyCodeRulesBlock, ITaskRules } from '../models/rules';
 import { TaskService } from './task.service';
 
 export function rulesFactory(rules: RulesService) {
