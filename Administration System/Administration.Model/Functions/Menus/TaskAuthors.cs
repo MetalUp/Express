@@ -1,7 +1,7 @@
 ﻿
 namespace Model.Functions.Menus
 {
-    public static class Authors
+    public static class TaskAuthors
     {
         [MemberOrder(10)]
         public static IQueryable<Task> AllTasks(IContext context) => TaskRepository.AllTasks(context);

@@ -101,16 +101,6 @@ namespace Model.Functions.Menus
 
         #endregion
 
-        #region Assigments
-        [PageSize(20)]
-        public static IQueryable<Assignment> AssignmentsMadeByMe(IContext context)
-        {
-            var meId = Me(context).Id;
-            return context.Instances<Assignment>().Where(s => s.AssignedById == meId).OrderByDescending(a => a.DueBy);
-        }
-
-        #endregion
-
         #region Tasks
         public static IQueryable<Task> AllTasks(IContext context) => TaskRepository.AllTasks(context);
 
@@ -120,6 +110,16 @@ namespace Model.Functions.Menus
     [Optionally] ProgrammingLanguage? language,
     IContext context) =>
     TaskRepository.FindTasks(title, language, context);
+        #endregion
+
+        #region Assigments
+        [PageSize(20)]
+        public static IQueryable<Assignment> AssignmentsMadeByMe(IContext context)
+        {
+            var meId = Me(context).Id;
+            return context.Instances<Assignment>().Where(s => s.AssignedById == meId).OrderByDescending(a => a.DueBy);
+        }
+
         #endregion
     }
 }
