@@ -14,11 +14,15 @@ export class HintComponent implements OnInit, OnDestroy {
 
   currentTask: ITask = EmptyTask;
   currentHint: IHint = EmptyHint;
-  currentHtml: string = '';
+  message: string = '';
 
   get hintHtml() {
-    if (this.currentHtml){
-      return this.currentHtml;
+    if (this.currentHint.HtmlContent){
+      return this.currentHint.HtmlContent;
+    }
+
+    if (this.message) {
+      return this.message;
     }
 
     if (this.currentTask.Hints.length > 0) {
@@ -48,15 +52,16 @@ export class HintComponent implements OnInit, OnDestroy {
 
   handleError(e : unknown) {
     console.log("error getting hint ");
-    this.currentHtml = 'error getting hint';
+    this.message = 'error getting hint';
   }
 
   onHint() {
     this.currentHint = this.currentTask.Hints[this.hintIndex];
 
-    if (this.currentHint.HtmlFile[0]) {
+    if (this.currentHint.HtmlFile[0] && !this.currentHint.HtmlContent) {
+      this.message = "";
       this.taskService.getFile(this.currentHint.HtmlFile)
-        .then(h => this.currentHtml = h)
+        .then(h => this.currentHint.HtmlContent = h)
         .catch(e => this.handleError(e));
     }
   }
