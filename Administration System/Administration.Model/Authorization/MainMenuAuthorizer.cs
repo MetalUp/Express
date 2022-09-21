@@ -1,5 +1,4 @@
 ﻿using NakedFunctions.Security;
-using Model.Functions.Menus;
 
 namespace Model.Authorization
 {
@@ -49,10 +48,10 @@ namespace Model.Authorization
                 Role.Author => true,
                 Role.Teacher => Matches(memberName,
                     nameof(Tasks.AllAssignableTasks),
-                    nameof(Tasks.AllPublicTasks),
-                    nameof(Tasks.FindAssignableTasks)),
+                    nameof(Tasks.PublicTasks),
+                    nameof(Tasks.FindTasks)),
                 Role.Student => Matches(memberName,
-                    nameof(Tasks.AllPublicTasks)),
+                    nameof(Tasks.PublicTasks)),
                 _ => false
             };
 
