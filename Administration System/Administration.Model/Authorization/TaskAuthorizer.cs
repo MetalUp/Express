@@ -9,7 +9,7 @@ namespace Model.Authorization
 
         public bool IsVisible(Task task, string memberName, IContext context) =>
             task.IsPublic() && Helpers.MemberIsProperty(task, memberName) ? true :
-                UserRepository.UserRole(context) switch
+                Users.UserRole(context) switch
                 {
                     Role.Root => true,
                     Role.Author => AuthorAuthorization(task, memberName, context),
@@ -19,7 +19,7 @@ namespace Model.Authorization
                 };
 
         private bool AuthorAuthorization(Task task, string memberName, IContext context) => 
-           task.IsAssignable() || task.AuthorId == UserRepository.Me(context).Id;
+           task.IsAssignable() || task.AuthorId == Users.Me(context).Id;
 
         private bool TeacherAuthorization(Task task, string memberName, IContext context) => 
            task.IsAssignable() && (!(memberName.StartsWith("Edit") || memberName.StartsWith("Add")));

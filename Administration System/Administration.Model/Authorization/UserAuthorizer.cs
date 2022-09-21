@@ -5,9 +5,9 @@ namespace Model.Authorization
     public class UserAuthorizer : ITypeAuthorizer<User>
     {
         public bool IsVisible(User user, string memberName, IContext context) =>
-            UserRepository.UserRole(context) switch
+            Users.UserRole(context) switch
             {
-                >= Role.Teacher => UserRepository.Me(context).OrganisationId == user.OrganisationId,
+                >= Role.Teacher => Users.Me(context).OrganisationId == user.OrganisationId,
                 _ => false
             };
     }

@@ -6,16 +6,103 @@ namespace Model.Authorization
     public class MainMenuAuthorizer : IMainMenuAuthorizer
     {
         private const string qualifier = "Model.Functions.Menus.";
-        private string NameOnly(string target) => target.Remove(0, qualifier.Length);
+        private string MenuNameOnly(string target) => target.Remove(0, qualifier.Length);
 
         public bool IsVisible(string target, string memberName, IContext context) =>
-            NameOnly(target) switch
+            MenuNameOnly(target) switch
             {
-                nameof(Students) => UserRepository.UserHasRoleAtLeast(Role.Student, context),
-                nameof(Teachers) => UserRepository.UserHasRoleAtLeast(Role.Teacher, context),
-                nameof(Authors) => UserRepository.UserHasRoleAtLeast(Role.Author, context),
-                nameof(Root) => UserRepository.UserHasSpecificRole(Role.Root, context),
+                nameof(Users) => UsersAuth(memberName, context),
+                nameof(Organisations) => OrganisationsAuth(memberName, context),
+                nameof(Groups) => GroupsAuth(memberName, context),
+                nameof(Invitations) => InvitationsAuth(memberName, context),
+                nameof(Tasks) => TasksAuth(memberName, context),
+                nameof(Assignments) =>AssignmentsAuth(memberName, context),
+                nameof(Activities) => ActivitiesAuth(memberName, context),
                 _ => false
             };
+
+        private bool ActivitiesAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                _ => false
+            };
+
+        private bool AssignmentsAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                >= Role.Teacher => Matches(memberName,
+                    nameof(Assignments.MyAssignments), 
+                    nameof(Assignments.AssignmentsCreatedByMe), 
+                    nameof(Assignments.NewAssignmentToIndividual),
+                    nameof(Assignments.NewAssignmentToAllInGroup)),
+                Role.Student => Matches(memberName,
+                    nameof(Assignments.MyAssignments)),
+                _ => false
+            };
+
+        private bool TasksAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                Role.Author => true,
+                Role.Teacher => Matches(memberName,
+                    nameof(Tasks.AllAssignableTasks),
+                    nameof(Tasks.AllPublicTasks),
+                    nameof(Tasks.FindAssignableTasks)),
+                Role.Student => Matches(memberName,
+                    nameof(Tasks.AllPublicTasks)),
+                _ => false
+            };
+
+        private bool InvitationsAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                >= Role.Teacher => Matches(memberName,
+                    nameof(Invitations.AllOurPendingInvitations),
+                    nameof(Invitations.InviteNewTeacher),
+                    nameof(Invitations.InviteNewStudent)),
+                Role.Student => false,
+                _ => false
+            };
+
+        private bool GroupsAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                >= Role.Teacher => Matches(memberName, 
+                    nameof(Groups.AllOurGroups),
+                    nameof(Groups.CreateNewGroup)),
+                Role.Student => false,
+                _ => false
+            };
+
+        private bool OrganisationsAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                >= Role.Teacher => Matches(memberName, nameof(Organisations.MyOrganisation)),
+                Role.Student => false,
+                _ => false
+            };
+
+        private bool UsersAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                >= Role.Teacher => Matches(memberName,
+                    nameof(Users.Me),
+                    nameof(Users.OurStudents), 
+                    nameof(Users.FindStudentByLoginId),
+                    nameof(Users.FindStudentByName),
+                    nameof(Users.MyColleagues)),
+                Role.Student => false,
+                _ => false
+            };
+
+        private bool Matches(string memberName, params string[] names) =>
+            names.Contains(memberName);
     }
 }

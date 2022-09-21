@@ -7,16 +7,21 @@ namespace Model.Types
         public Assignment() { }
         public Assignment(Assignment cloneFrom) { 
             Id = cloneFrom.Id;
+            TaskId = cloneFrom.TaskId;
             Task = cloneFrom.Task;
+            AssignedToId = cloneFrom.AssignedToId;
             AssignedTo = cloneFrom.AssignedTo;
+            AssignedById = cloneFrom.AssignedById;
             AssignedBy  = cloneFrom.AssignedBy;
             DueBy = cloneFrom.DueBy;
             Status = cloneFrom.Status;
             Marks = cloneFrom.Marks;
-            Status = cloneFrom.Status;
         }
         [Hidden]
         public int Id { get; init; }
+
+        [MemberOrder(0)][UrlLink("Start Task")]
+        public string Link =>  @"https://express.metalup.org/task/" + TaskId;
 
         [MemberOrder(1)]
         public DateTime DueBy { get; init; }
@@ -42,14 +47,6 @@ namespace Model.Types
         [MemberOrder(14)]
         public virtual User AssignedBy { get; init; }
 
-        [UrlLink("Task")]
-        public string Start
-        {
-            get
-            {
-                return @"https://express.metalup.org/task/" + TaskId;
-            }
-        }
 
         public override string ToString() => $"{Task}";
     }

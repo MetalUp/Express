@@ -27,6 +27,6 @@
 
     public enum TaskStatus
     {
-        UnderDevelopment, Public, MustBeAssignedToStudent
+        UnderDevelopment, Public, MustBeAssigned
     }
 }

@@ -31,14 +31,14 @@ namespace Model.Functions
            user.Status == UserStatus.Inactive;
 
         public static IContext RemoveIndentityInfo(this User user,
-            string confirm,
+            [DescribedAs("type REMOVE IDENTITY")] string confirm,
             IContext context) =>
             context.WithUpdated(user, new User(user) { UserName = "", Name = "" });
 
         public static string ValidateRemoveIndentityInfo(this User user,
             string confirm,
             IContext context) =>
-             confirm.ToUpper() == "CONFIRM" ? null : "Must type CONFIRM into the Confirm field";
+             confirm.ToUpper() == "REMOVE IDENTITY" ? null : "Must type REMOVE IDENTITY into the Confirm field";
 
         public static bool HideRemoveIndentityInfo(this User user,
             string confirm,
@@ -54,28 +54,15 @@ namespace Model.Functions
         internal static bool HasRole(this User user, Role role) => user.Role == role;
         #endregion
 
-
         #region Assignments
-        public static IQueryable<Assignment> Assignments(this User student, IContext context)
-        {
-            var studentId = student.Id;
-            return context.Instances<Assignment>().Where(a => a.AssignedToId == studentId).OrderByDescending(a => a.DueBy);
-        }
 
-        public static (Assignment, IContext) AssignTask(this User student, Task task, DateTime dueBy, IContext context)
-        {
-            if (task.Status == TaskStatus.UnderDevelopment) throw new Exception("Tasks under development cannot be assigned - this should have been prevented");
-            var a = new Assignment()
-            {
-                AssignedToId = student.Id,
-                AssignedById = UserRepository.Me(context).Id,
-                TaskId = task.Id,
-                DueBy = dueBy,
-                Marks = 0,
-                Status = AssignmentStatus.PendingStart
-            };
-            return (a, context.WithNew(a));
-        }
+        [PageSize(20)]
+        public static IQueryable<Assignment> Assignments(this User user, IContext context) => 
+            Menus.Assignments.AssignmentsTo(user, context);
+
+        public static IContext AssignTask(this User user, Task task, DateTime dueBy, IContext context) =>
+            Menus.Assignments.NewAssignmentToIndividual(user, task, dueBy, context);
+
         #endregion
 
         #region Invitation
