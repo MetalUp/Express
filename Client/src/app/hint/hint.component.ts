@@ -48,7 +48,7 @@ export class HintComponent implements OnInit, OnDestroy {
 
   handleError(e : unknown) {
     console.log("error getting hint ");
-    return of('');
+    this.currentHtml = 'error getting hint';
   }
 
   onHint() {
@@ -57,7 +57,7 @@ export class HintComponent implements OnInit, OnDestroy {
     if (this.currentHint.HtmlFile[0]) {
       this.taskService.getFile(this.currentHint.HtmlFile)
         .then(h => this.currentHtml = h)
-        .catch(_ => this.currentHtml = '');
+        .catch(e => this.handleError(e));
     }
   }
 

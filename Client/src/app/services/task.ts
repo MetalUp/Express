@@ -50,5 +50,5 @@ export const EmptyTask = {
     Language: '',
     Title: '',
     Description: ['', ''] as [string, string],
-    Hints: []
+    Hints: [] as IHint[]
 }
