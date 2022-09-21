@@ -1,20 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { EmptyTask, ITask, Task } from './task';
-import { from, Subject } from 'rxjs';
+import { EmptyTask, ITask } from './task';
+import { EmptyHint, IHint } from './hint';
+import { Subject } from 'rxjs';
 import { ConfigService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
 import * as Ro from '@nakedobjects/restful-objects';
-import { DomainObjectRepresentation, EntryType } from '@nakedobjects/restful-objects';
+import { CollectionRepresentation, DomainObjectRepresentation, EntryType } from '@nakedobjects/restful-objects';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
   constructor(private http: HttpClient,
-              private router: Router,
-              private configService : ConfigService,
-              private repLoader: RepLoaderService) {
+    private router: Router,
+    private configService: ConfigService,
+    private repLoader: RepLoaderService) {
   }
 
   get currentTask() {
@@ -35,35 +36,75 @@ export class TaskService {
     return undefined;
   }
 
-  private setValue(task: any, member: Ro.PropertyMember) {
+  private setPropertyValue(toObj: any, member: Ro.PropertyMember) {
     const attachmentLink = member.attachmentLink();
     if (attachmentLink) {
       const href = attachmentLink.href();
       const mt = attachmentLink.type().asString;
-      task[member.id()] = [href, mt];
+      toObj[member.id()] = [href, mt];
     }
     else if (member.entryType() == EntryType.Choices) {
-      task[member.id()] = this.getChoicesValue(member);
+      toObj[member.id()] = this.getChoicesValue(member);
     }
     else if (member.isScalar()) {
-      task[member.id()] = member.value().scalar();
+      toObj[member.id()] = member.value().scalar();
     }
     else {
-      task[member.id()] = member.value().getHref();
+      toObj[member.id()] = member.value().getHref();
     }
   }
 
-  private convertToTask(rep: DomainObjectRepresentation) {
-    if (rep && Object.keys(rep.propertyMembers()).length > 0) {
-      const task = new Task() as any;
-      const members = rep.propertyMembers()
-      for (const k in members) {
-        const member = members[k];
-        this.setValue(task, member);
-      }
-      return task as ITask;
+  private setCollectionValue(toObj: any, member: Ro.CollectionMember) {
+    const details = member.getDetails();
+
+    if (details) {
+      this.repLoader.populate(details, true).then(d => {
+        const pDetails = d as CollectionRepresentation;
+        const links = pDetails.value();
+        if (links && links.length > 0) {
+          const items: IHint[] = [];
+          var count = 0;
+          for (const l of links) {
+            this.repLoader.retrieveFromLink(l)
+              .then((o: any) => {
+                const hint = this.convertToHint(o);
+                items[hint.Number - 1] = hint;
+                count++;
+                if (count === links.length) {
+                  // only add hints once all have been loaded
+                  toObj[member.collectionId()] = items;
+                }
+              })
+              .catch(_ => console.log(`hints failed to load`));
+          }
+        }
+      });
     }
-    return EmptyTask;
+  }
+
+  private convertTo<T>(toObj: any, rep: DomainObjectRepresentation) {
+    if (rep && Object.keys(rep.propertyMembers()).length > 0) {
+      const pMembers = rep.propertyMembers()
+      for (const k in pMembers) {
+        const member = pMembers[k];
+        this.setPropertyValue(toObj, member);
+      }
+      const cMembers = rep.collectionMembers()
+      for (const k in cMembers) {
+        const member = cMembers[k];
+        this.setCollectionValue(toObj, member);
+      }
+      return toObj as T;
+    }
+    return toObj as T;
+  }
+
+  private convertToTask(rep: DomainObjectRepresentation) {
+    return this.convertTo<ITask>(structuredClone(EmptyTask), rep);
+  }
+
+  private convertToHint(rep: DomainObjectRepresentation) {
+    return this.convertTo<IHint>(structuredClone(EmptyHint), rep);
   }
 
   loadTask(taskId: string) {
@@ -75,7 +116,7 @@ export class TaskService {
         const task = this.convertToTask(obj);
         this.currentTaskAsSubject.next(task);
       })
-      .catch((e : ErrorWrapper) => {
+      .catch((e: ErrorWrapper) => {
         console.log(`${e.title}:${e.description}`);
         this.currentTaskAsSubject.next(EmptyTask);
       });
@@ -83,7 +124,7 @@ export class TaskService {
 
   gotoTask(taskUrl: string) {
     var segments = taskUrl.split('/');
-    var key = segments[segments.length -1];
+    var key = segments[segments.length - 1];
 
     this.router.navigate([`/task/${key}`]);
   }

@@ -32,27 +32,27 @@ describe('TaskService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should get the task', () => {
-    service.currentTask.pipe(first()).subscribe(t =>
-      expect(t.Language).toEqual('testlanguage')
-    );
+  // it('should get the task', () => {
+  //   service.currentTask.pipe(first()).subscribe(t =>
+  //     expect(t.Language).toEqual('testlanguage')
+  //   );
 
-    const object = new DomainObjectRepresentation();
-    object.hateoasUrl = `testPath/objects/Model.Types.Task/testTask`;
-    const pm = new PropertyMember({value : 'testlanguage'} as any, object, 'language');
-    pm.entryType = () => EntryType.FreeForm;
-    pm.isScalar = () => true;
+  //   const object = new DomainObjectRepresentation();
+  //   object.hateoasUrl = `testPath/objects/Model.Types.Task/testTask`;
+  //   const pm = new PropertyMember({value : 'testlanguage'} as any, object, 'language');
+  //   pm.entryType = () => EntryType.FreeForm;
+  //   pm.isScalar = () => true;
 
-    object.propertyMembers = () => ({'language': pm});
+  //   object.propertyMembers = () => ({'language': pm});
     
-    const promise = Promise.resolve(object);
+  //   const promise = Promise.resolve(object);
 
-    repLoaderSpy.populate.and.returnValue(promise);
+  //   repLoaderSpy.populate.and.returnValue(promise);
 
-    service.loadTask('testTask');
+  //   service.loadTask('testTask');
 
-    expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({hateoasUrl: `testPath/objects/Model.Types.Task/testTask`}), true);
-  });
+  //   expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({hateoasUrl: `testPath/objects/Model.Types.Task/testTask`}), true);
+  // });
 
   it('should load empty task if task not found', () => {
     service.currentTask.pipe(first()).subscribe(t =>

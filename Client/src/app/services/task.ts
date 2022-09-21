@@ -1,10 +1,11 @@
+import { IHint } from "./hint";
 import { ICodeRulesBlock, IMessages } from "./rules";
 
 export interface ITask {
     Language: string;
     Title: string;
     Description: [string, string];
-    Hints: string[];
+    Hints: IHint[];
     Messages?: IMessages;
     CodeMustMatch?: ICodeRulesBlock;
     CodeMustNotContain?: ICodeRulesBlock;
@@ -12,7 +13,7 @@ export interface ITask {
     SkeletonCode?: string;
     PasteExpression?: boolean;
     PasteFunction?: boolean;
-    Tests?: string;
+    Tests?: [string, string];
     NextTask?: string;
     PreviousTask?: string;
     NextTaskDoesNotClearFunctions?: boolean;
@@ -31,7 +32,7 @@ export class Task implements ITask {
     
     Title: string = "";
     Description: [string, string] = ["", ""];
-    Hints: string[] = [];
+    Hints: IHint[] = [];
     Messages?: IMessages | undefined;
     CodeMustMatch?: ICodeRulesBlock;
     CodeMustNotContain?: ICodeRulesBlock;
@@ -39,16 +40,15 @@ export class Task implements ITask {
     SkeletonCode?: string | undefined;
     PasteExpression?: boolean | undefined;
     PasteFunction?: boolean | undefined;
-    Tests?: string | undefined;
+    Tests?: [string, string];
     NextTask?: string | undefined;
     PreviousTask?: string | undefined;
     NextTaskDoesNotClearFunctions?: boolean | undefined;
 }
 
-
 export const EmptyTask = {
     Language: '',
     Title: '',
     Description: ['', ''] as [string, string],
-    Hints: []
+    Hints: [] as IHint[]
 }

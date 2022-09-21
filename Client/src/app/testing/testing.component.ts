@@ -97,7 +97,9 @@ export class TestingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       if (task.Tests) {
-        this.taskService.getHtml(task.Tests).pipe(first()).subscribe(h => this.tests = h);
+        this.taskService.getFile(task.Tests)
+        .then(h => this.tests = h)
+        .catch(_ => this.tests = '');
       }
     })
   }

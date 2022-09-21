@@ -3,6 +3,7 @@ import { EmptyTask, ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
 import { of, Subscription } from 'rxjs';
 import { catchError, first } from 'rxjs/operators';
+import { EmptyHint, IHint } from '../services/hint';
 
 @Component({
   selector: 'app-hint',
@@ -12,12 +13,20 @@ import { catchError, first } from 'rxjs/operators';
 export class HintComponent implements OnInit, OnDestroy {
 
   currentTask: ITask = EmptyTask;
+  currentHint: IHint = EmptyHint;
+  currentHtml: string = '';
 
   get hintHtml() {
-    return this.currentHint;
-  }
+    if (this.currentHtml){
+      return this.currentHtml;
+    }
 
-  private currentHint = '';
+    if (this.currentTask.Hints.length > 0) {
+      return 'Click Next to use the first Hint';
+    }
+   
+    return 'There are no Hints for this task.'
+  }
 
   constructor(private taskService: TaskService) { }
 
@@ -26,9 +35,8 @@ export class HintComponent implements OnInit, OnDestroy {
   hintIndex = -1;
 
   get title() {
-    return `Hint: ${this.hintIndex >= 0 ? this.hintIndex + 1 : ''}`;
+    return `Hint: ${this.currentHint.Title}`;
   }
-
 
   hasNextHint() {
     return this.hintIndex + 1 < this.currentTask.Hints.length;
@@ -40,14 +48,16 @@ export class HintComponent implements OnInit, OnDestroy {
 
   handleError(e : unknown) {
     console.log("error getting hint ");
-    return of('');
+    this.currentHtml = 'error getting hint';
   }
 
   onHint() {
-    const hintFileName = this.currentTask.Hints[this.hintIndex];
+    this.currentHint = this.currentTask.Hints[this.hintIndex];
 
-    if (hintFileName) {
-      this.taskService.getHtml(hintFileName).pipe(first()).pipe(catchError(this.handleError)).subscribe(h => this.currentHint = h);
+    if (this.currentHint.HtmlFile[0]) {
+      this.taskService.getFile(this.currentHint.HtmlFile)
+        .then(h => this.currentHtml = h)
+        .catch(e => this.handleError(e));
     }
   }
 
@@ -64,12 +74,6 @@ export class HintComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      if (this.currentTask.Hints.length > 0) {
-        this.currentHint = 'Click Next to use the first Hint';
-      }
-      else {
-        this.currentHint = 'There are no Hints for this task.'
-      }
       this.hintIndex = -1;
     })
   }

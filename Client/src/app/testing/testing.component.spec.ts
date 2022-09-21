@@ -95,16 +95,16 @@ describe('TestingComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get the test code file', () => {
+  // it('should get the test code file', () => {
 
-    taskServiceSpy.getHtml.and.returnValue(of('test code'));
+  //   taskServiceSpy.getHtml.and.returnValue(of('test code'));
 
-    const testTask = { Tests: 'testfile.cs' } as unknown as ITask;
-    taskSubject.next(testTask);
+  //   const testTask = { Tests: 'testfile.cs' } as unknown as ITask;
+  //   taskSubject.next(testTask);
 
-    expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('testfile.cs');
-    expect(component.tests).toEqual('test code');
-  });
+  //   expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('testfile.cs');
+  //   expect(component.tests).toEqual('test code');
+  // });
 
   it('should disable run tests until code compiled', () => {
 
