@@ -50,17 +50,6 @@ namespace Model.Functions.Menus
         }
         #endregion
 
-        #region Tasks
-        public static IQueryable<Task> AllTasks(IContext context) => context.Instances<Task>();
-
-        [CreateNew]
-        public static (Task, IContext) CreateNewTask(string title, IContext context)
-        {
-            var t = new Task() { Title = title, AuthorId = Teachers.Me(context).Id };
-            return (t, context.WithNew(t));
-        }
-        #endregion
-
         #region Assignments
         public static IQueryable<Assignment> AllAssignments(IContext context) => context.Instances<Assignment>();
 
