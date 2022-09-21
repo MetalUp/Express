@@ -14,10 +14,10 @@ export class JobeServerService {
   constructor(private http: HttpClient, taskService: TaskService) {
     taskService.currentTask.subscribe(t => {
 
-      if (t.ReadyMadeFunctions && this.isProgramFile(t.ReadyMadeFunctions)) {
-        taskService.getHtml(t.ReadyMadeFunctions)
-        .pipe(first())
-        .subscribe(f => this.readyMadeFunctions = f);
+      if (t.ReadyMadeFunctions) {
+        taskService.getFile(t.ReadyMadeFunctions)
+          .then(h => this.readyMadeFunctions = h)
+          .catch(_ => this.readyMadeFunctions = '');
       }
 
       this.selectedLanguage = t.Language;
