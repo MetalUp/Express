@@ -15,8 +15,7 @@
             context.WithNew(new Activity() { Assignment = a, TimeStamp = context.Now(), Type = ActivityType.TeacherNote, Details = teacherNote })
             .WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.NotCompleted });
 
-        //    public static IContext MarkTasksNotCompleted(this IQueryable<Assignment> assignments, string teacherNote, IContext context) =>
-        //      assignments.Aggregate(context, (c, a) => MarkNotCompleted(a, teacherNote, c));
+
 
         //    Called when the assignee navigates from the assignment to view of the task itself
         //    public static IContext StartAssigment(this Assignment a, IContext context) =>

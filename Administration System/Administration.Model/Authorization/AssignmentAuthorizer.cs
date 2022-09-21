@@ -6,7 +6,7 @@ namespace Model.Authorization
     {
         public bool IsVisible(Assignment a, string memberName, IContext context)
         {
-            var me = UserRepository.Me(context);
+            var me = Users.Me(context);
             return me.Role   switch
             {
                 >= Role.Teacher => TeacherAuthorization(a, memberName,me, context),

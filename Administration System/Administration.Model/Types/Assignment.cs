@@ -7,13 +7,15 @@ namespace Model.Types
         public Assignment() { }
         public Assignment(Assignment cloneFrom) { 
             Id = cloneFrom.Id;
+            TaskId = cloneFrom.TaskId;
             Task = cloneFrom.Task;
+            AssignedToId = cloneFrom.AssignedToId;
             AssignedTo = cloneFrom.AssignedTo;
+            AssignedById = cloneFrom.AssignedById;
             AssignedBy  = cloneFrom.AssignedBy;
             DueBy = cloneFrom.DueBy;
             Status = cloneFrom.Status;
             Marks = cloneFrom.Marks;
-            Status = cloneFrom.Status;
         }
         [Hidden]
         public int Id { get; init; }

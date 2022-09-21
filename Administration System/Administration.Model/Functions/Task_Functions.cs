@@ -20,9 +20,12 @@ namespace Model.Functions
         //        context.WithNew(NewAssignment(task, student, dueBy, User_MenuFunctions.Me(context)));
 
         [MemberOrder(10)]
-        public static (Assignment, IContext) AssignToStudent(this Task task, User student, DateTime dueBy, IContext context) =>
-            User_Functions.AssignTask(student, task, dueBy, context);
+        public static IContext AssignToIndividual(this Task task, User user, DateTime dueBy, IContext context) =>
+            Assignments.NewAssignmentToIndividual(user, task, dueBy, context);
 
+        [MemberOrder(10)]
+        public static IContext AssignToAlInGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
+            Assignments.NewAssignmentToAllInGroup(group, task, dueBy, context);
 
         #endregion
 
@@ -33,7 +36,7 @@ namespace Model.Functions
 
         internal static bool IsAssignedToCurrentUser(this Task task, IContext context)
         {
-            var myId = UserRepository.Me(context).Id;
+            var myId = Users.Me(context).Id;
             var taskId = task.Id;
             return context.Instances<Assignment>().Any(a => a.AssignedToId == myId && a.TaskId == taskId);
         }
@@ -246,6 +249,27 @@ namespace Model.Functions
         public static List<Hint> Choices1RemoveHint(this Task task, Hint hint, IContext context) =>
             task.Hints.ToList();
         #endregion
+
+        #region Copy
+        public static (Task, IContext) DuplicateTaskForNewLanguage(this Task task,
+            ProgrammingLanguage newLanguage,
+            IContext context
+            )
+        {
+            var newHints = task.Hints.Select(h => new Hint(h) { Id = 0}).ToList();
+            var context2 = newHints.Aggregate(context, (c, h) => c.WithNew(h));
+            var task2 = new Task(task)
+            {
+                Id = 0, //Because its a new object
+                Language = newLanguage,
+                RMFContent = null,
+                TestsContent = null,
+                Hints = newHints
+            };
+            return (task2, context2.WithNew(task2));
+        }
+        #endregion
+
         #endregion
     }
 }
