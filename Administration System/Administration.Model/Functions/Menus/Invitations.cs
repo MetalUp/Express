@@ -43,7 +43,6 @@
             };
             var invite = new Invitation()
             {
-                Id = context.NewGuid(),
                 Invitee = user,
                 SenderId = me.Id,
                 Sender = me,
