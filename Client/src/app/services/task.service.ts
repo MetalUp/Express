@@ -12,10 +12,9 @@ import { CollectionRepresentation, DomainObjectRepresentation, EntryType } from 
   providedIn: 'root'
 })
 export class TaskService {
-  constructor(private http: HttpClient,
-    private router: Router,
-    private configService: ConfigService,
-    private repLoader: RepLoaderService) {
+  constructor(private router: Router,
+              private configService: ConfigService,
+              private repLoader: RepLoaderService) {
   }
 
   get currentTask() {
@@ -129,14 +128,6 @@ export class TaskService {
     this.router.navigate([`/task/${key}`]);
   }
 
-  getHtml(fileName: string) {
-    const options = {
-      withCredentials: true,
-      responseType: 'text' as const
-    }
-
-    return this.http.get(`content/${fileName}`, options);
-  }
 
   getFile(urlAndMediaType: [string, string]) {
     return this.repLoader.getFile(urlAndMediaType[0], urlAndMediaType[1], true)

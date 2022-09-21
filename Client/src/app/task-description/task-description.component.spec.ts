@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of, Subject, throwError } from 'rxjs';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Subject } from 'rxjs';
 import { ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
 
@@ -13,8 +13,7 @@ describe('TaskDescriptionComponent', () => {
   let taskSubject = new Subject<ITask>();
 
   beforeEach(async () => {
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml', 'getFile', 'gotoTask'], { currentTask: taskSubject });
-    taskServiceSpy.getHtml.and.returnValue(of('test html'));
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile', 'gotoTask'], { currentTask: taskSubject });
     taskServiceSpy.getFile.and.returnValue(Promise.resolve('test html'));
 
     await TestBed.configureTestingModule({
@@ -37,15 +36,16 @@ describe('TaskDescriptionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get the task html file', () => {
+  it('should get the task html file', fakeAsync(() => {
 
     const testTask = { Description: ['testUrl', 'testMediaType'] } as unknown as ITask;
     taskSubject.next(testTask);
 
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['testUrl', 'testMediaType']);
     expect(component.currentTask).toEqual(testTask);
-    //expect(component.taskHtml).toEqual('test html');
-  });
+    tick();
+    expect(component.taskHtml).toEqual('test html');
+  }));
 
   it('should disable next task if no next task', () => {
 
@@ -93,6 +93,4 @@ describe('TaskDescriptionComponent', () => {
     expect(component.currentTask).toEqual(testTask);
     expect(component.taskHtml).toEqual('');
   });
-
-
 });

@@ -1,31 +1,23 @@
-import { HttpClient } from '@angular/common/http';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { TaskService } from './task.service';
-import { of } from 'rxjs';
-import { ITask } from './task';
 import { first } from 'rxjs';
 import { ConfigService, RepLoaderService } from '@nakedobjects/services';
-import { DomainObjectRepresentation, EntryType, IHateoasModel, PropertyMember } from '@nakedobjects/restful-objects';
+import { DomainObjectRepresentation, EntryType, PropertyMember } from '@nakedobjects/restful-objects';
 
 describe('TaskService', () => {
   let service: TaskService;
-  let httpClientSpy: jasmine.SpyObj<HttpClient>;
   let routerSpy: jasmine.SpyObj<Router>;
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
   let configServiceSpy: jasmine.SpyObj<ConfigService>;
 
   beforeEach(() => {
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get', 'post']);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     configServiceSpy = jasmine.createSpyObj('ConfigService', [], { config: { appPath: 'testPath' } });
-    repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate'])
-
-
-    httpClientSpy.get.and.returnValue(of({ Language: 'testlanguage' } as unknown as ITask))
+    repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'getFile'])
 
     TestBed.configureTestingModule({});
-    service = new TaskService(httpClientSpy, routerSpy, configServiceSpy, repLoaderSpy)
+    service = new TaskService(routerSpy, configServiceSpy, repLoaderSpy)
   });
 
   it('should be created', () => {
@@ -67,12 +59,17 @@ describe('TaskService', () => {
   }));
 
   it('should get the html file for the task', () => {
+   
+    repLoaderSpy.getFile.and.returnValue(Promise.resolve(new Blob(['task description'])));
+    service.getFile(['testUrl', 'testMt']).then(t => expect(t).toBe('task description'));
+    expect(repLoaderSpy.getFile).toHaveBeenCalledWith('testUrl', 'testMt', true);
+  });
 
-    service.getHtml('testHtmlFile.html');
-
-    const parms = { withCredentials: true, responseType: 'text' as const };
-
-    expect(httpClientSpy.get).toHaveBeenCalledWith('content/testHtmlFile.html', parms as any);
+  it('should handle error when get the html file for the task', () => {
+   
+    repLoaderSpy.getFile.and.returnValue(Promise.reject());
+    service.getFile(['testUrl', 'testMt']).then(t => expect(t).toBe(''));
+    expect(repLoaderSpy.getFile).toHaveBeenCalledWith('testUrl', 'testMt', true);
   });
 
   it('should goto a new task', () => {

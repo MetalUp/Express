@@ -1,8 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ITask } from '../services/task';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { EmptyTask, ITask } from '../services/task';
 import { TaskService } from '../services/task.service';
 import { of, Subject } from 'rxjs';
-
 import { TestingComponent } from './testing.component';
 import { JobeServerService } from '../services/jobe-server.service';
 import { RulesService } from '../services/rules.service';
@@ -62,7 +61,7 @@ describe('TestingComponent', () => {
 
   beforeEach(async () => {
     jobeServerServiceSpy = jasmine.createSpyObj('JobeServerService', ['submit_run', 'hasFunctionDefinitions'], { "selectedLanguage": "csharp" });
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getHtml'], { currentTask: taskSubject });
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile'], { currentTask: taskSubject });
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter']);
 
     await TestBed.configureTestingModule({
@@ -95,16 +94,19 @@ describe('TestingComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should get the test code file', () => {
+  it('should get the test code file', fakeAsync(() => {
 
-  //   taskServiceSpy.getHtml.and.returnValue(of('test code'));
+    taskServiceSpy.getFile.and.returnValue(Promise.resolve('test code'));
 
-  //   const testTask = { Tests: 'testfile.cs' } as unknown as ITask;
-  //   taskSubject.next(testTask);
+    const testTask = structuredClone(EmptyTask) as ITask;
+    testTask.Tests = ["testUrl", "testMt"];
 
-  //   expect(taskServiceSpy.getHtml).toHaveBeenCalledWith('testfile.cs');
-  //   expect(component.tests).toEqual('test code');
-  // });
+    taskSubject.next(testTask);
+
+    expect(taskServiceSpy.getFile).toHaveBeenCalledWith(["testUrl", "testMt"]);
+    tick();
+    expect(component.tests).toEqual('test code');
+  }));
 
   it('should disable run tests until code compiled', () => {
 
