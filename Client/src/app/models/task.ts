@@ -29,7 +29,7 @@ export class Task implements ITask {
     set Language(l : string) {
         this.language = l.replace(' ', '').toLowerCase(); // to fix 'C Sharp'
     }
-    
+   
     Title: string = "";
     Description: [string, string] = ["", ""];
     Hints: IHint[] = [];
@@ -46,9 +46,4 @@ export class Task implements ITask {
     NextTaskDoesNotClearFunctions?: boolean | undefined;
 }
 
-export const EmptyTask = {
-    Language: '',
-    Title: '',
-    Description: ['', ''] as [string, string],
-    Hints: [] as IHint[]
-}
+export const EmptyTask = new Task();

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { RulesService } from './rules.service';
-import { IRules, ErrorType, Applicability, ITaskRules } from './rules';
+import { IRules, ErrorType, Applicability, ITaskRules } from '../models/rules';
 import { TaskService } from './task.service';
-import { ITask } from './task';
+import { ITask } from '../models/task';
 import { Subject } from 'rxjs';
 
 import rules from '../../rules.json';

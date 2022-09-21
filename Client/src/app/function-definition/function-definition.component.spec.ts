@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { wrapFunctions } from '../language-helpers/language-helpers';
 import { JobeServerService } from '../services/jobe-server.service';
-import { RunResult } from '../services/run-result';
+import { RunResult } from '../models/run-result';
 import { of, Subject } from 'rxjs';
 
 import { FunctionDefinitionComponent } from './function-definition.component';
 import { RulesService } from '../services/rules.service';
-import { Applicability } from '../services/rules';
+import { Applicability } from '../models/rules';
 import { TaskService } from '../services/task.service';
-import { ITask } from '../services/task';
+import { ITask } from '../models/task';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('FunctionDefinitionComponent', () => {

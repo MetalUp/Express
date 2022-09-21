@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import { ITask } from '../services/task';
+import { ITask } from '../models/task';
 import { TaskService } from '../services/task.service';
 
 import { TaskDescriptionComponent } from './task-description.component';
