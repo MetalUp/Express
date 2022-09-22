@@ -24,18 +24,21 @@ namespace Model.Functions.Menus
         public static IQueryable<User> AllUsers(IContext context) =>context.Instances<User>();
 
         #region Students & Colleagues
-        public static IQueryable<User> OurStudents(IContext context)
+        public static IQueryable<User> Students(IContext context)
         {
             int myOrgId = Me(context).OrganisationId;
             return context.Instances<User>().Where(s => s.OrganisationId == myOrgId).
                 OrderBy(s => s.Name);
         }
 
+        public static IQueryable<User> StudentsPendingAcceptance(IContext context) =>
+            Students(context).Where(u => u.Status == UserStatus.PendingAcceptance);
+
         public static User FindStudentByLoginId(string userName, IContext context) =>
-            OurStudents(context).SingleOrDefault(c => c.UserName == Hash(userName));
+            Students(context).SingleOrDefault(c => c.UserName == Hash(userName));
 
         public static IQueryable<User> FindStudentByName(string nameOrPartName, IContext context) =>
-            OurStudents(context).Where(u => u.Name.ToUpper().Contains(nameOrPartName.ToUpper()));
+            Students(context).Where(u => u.Name.ToUpper().Contains(nameOrPartName.ToUpper()));
 
         public static IQueryable<User> MyColleagues(IContext context)
         {

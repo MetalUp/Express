@@ -18,6 +18,8 @@
         [Hidden]
         public int Id { get; init; }
 
+        public string InvitationCode { get; init; } //Visible only to teachers in organisation and when status is Pending
+
         [MemberOrder(1)]
         public string UserName { get; init; }
 

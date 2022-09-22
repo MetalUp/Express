@@ -2,60 +2,61 @@
 {
     public static class Invitations
     {
-        public static (Invitation, IContext) InviteNewStudent(
+        public static (User, IContext) InviteNewStudent(
            string name,
            [Optionally] Group group,
            IContext context)
         {
-            (var student, var invite, var context2) = InviteNewUser(name, Role.Student, context);
+            (var student, var context2) = InviteNewUser(name, Role.Student, Organisations.MyOrganisation(context), context);
             if (group != null)
             {
                 var sg = new StudentGroup() { Student = student, Group = group };
-                return (invite, context2.WithNew(sg));
+                return (student, context2.WithNew(sg));
 
             }
             else
             {
-                return (invite, context);
+                return (student, context);
             }
         }
 
 
-        public static (Invitation, IContext) InviteNewTeacher(string name, IContext context)
+        public static (User, IContext) InviteNewTeacher(string name, IContext context)
         {
-            (var teacher, var invite, var context2) = InviteNewUser(name, Role.Teacher, context);
-            return (invite, context2);
+            (var teacher, var context2) = InviteNewUser(name, Role.Teacher, Organisations.MyOrganisation(context), context);
+            return (teacher, context2);
         }
 
-        private static (User, Invitation, IContext) InviteNewUser(
+        public static (User, IContext) InviteNewUser(
              string name,
              Role asRole,
+             Organisation organisation,
              IContext context)
         {
-            var me = Users.Me(context);
             var user = new User()
             {
                 Name = name,
+                InvitationCode = context.NewGuid().ToString(),
                 Role = asRole,
                 Status = UserStatus.PendingAcceptance,
-                OrganisationId = me.OrganisationId,
-                Organisation = me.Organisation
+                OrganisationId = organisation.Id,
+                Organisation = organisation
             };
-            var invite = new Invitation()
-            {
-                Invitee = user,
-                SenderId = me.Id,
-                Sender = me,
-                Sent = context.Now()
-            };
-            return (user, invite, context.WithNew(user).WithNew(invite));
+            return (user, context.WithNew(user));
         }
 
-        public static IQueryable<Invitation> AllOurPendingInvitations(IContext context) => 
-            context.Instances<Invitation>();
+        public static (User, IContext) AcceptInvitation(
+            [RegEx("^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$")]
+            [DescribedAs("Paste your Invitation Code here")] string code,
+            IContext context)
+        {
+            var user = context.Instances<User>().Single(u => u.InvitationCode == code);
+            var user2 = new User(user) { InvitationCode = null, Status = UserStatus.Active };
+            return (user2, context.WithUpdated(user, user2));
+        }
 
-
-        public static IQueryable<Invitation> AllInvitations(IContext context) => context.Instances<Invitation>();
-
+        public static string ValidateAcceptInvitation(string code, IContext context) =>
+            context.Instances<User>().Any(u => u.InvitationCode == code) ? null :
+            "That is not a valid Invitation Code";
     }
 }

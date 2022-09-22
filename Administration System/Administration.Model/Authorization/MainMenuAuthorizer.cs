@@ -60,11 +60,10 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 >= Role.Teacher => Matches(memberName,
-                    nameof(Invitations.AllOurPendingInvitations),
                     nameof(Invitations.InviteNewTeacher),
                     nameof(Invitations.InviteNewStudent)),
                 Role.Student => false,
-                _ => false
+                _ => Matches(memberName, nameof(Invitations.AcceptInvitation))
             };
 
         private bool GroupsAuth(string memberName, IContext context) =>
@@ -93,7 +92,8 @@ namespace Model.Authorization
                 Role.Root => true,
                 >= Role.Teacher => Matches(memberName,
                     nameof(Users.Me),
-                    nameof(Users.OurStudents), 
+                    nameof(Users.Students), 
+                    nameof(Users.StudentsPendingAcceptance),
                     nameof(Users.FindStudentByLoginId),
                     nameof(Users.FindStudentByName),
                     nameof(Users.MyColleagues)),
