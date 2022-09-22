@@ -13,6 +13,7 @@
             EmailAddress = cloneFrom.EmailAddress;
             OrganisationId = cloneFrom.OrganisationId;
             Organisation = cloneFrom.Organisation;
+            Groups = cloneFrom.Groups;
         }
 
         [Hidden]

@@ -8,6 +8,9 @@
             Id = cloneFrom.Id;
             Name = cloneFrom.Name;
             Description = cloneFrom.Description;
+            OrganisationId = cloneFrom.OrganisationId;
+            Organisation = cloneFrom.Organisation;
+            Students = cloneFrom.Students;
         }
 
         [Hidden]
