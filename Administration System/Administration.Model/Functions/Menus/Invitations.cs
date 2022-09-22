@@ -50,7 +50,7 @@
             [DescribedAs("Paste your Invitation Code here")] string code,
             IContext context)
         {
-            var userName = context.CurrentUser().Identity.Name;
+            var userName = Users.HashedCurrentUserName(context);
             var invitee = context.Instances<User>().Single(u => u.InvitationCode == code);
             var invitee2 = new User(invitee) {UserName = userName, InvitationCode = null, Status = UserStatus.Active };
             return (invitee2, context.WithUpdated(invitee, invitee2));
