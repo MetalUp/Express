@@ -46,7 +46,7 @@ namespace Model.Migrations
 
                     b.HasIndex("AssignmentId");
 
-                    b.ToTable("Activities");
+                    b.ToTable("Activities", (string)null);
                 });
 
             modelBuilder.Entity("Model.Types.Assignment", b =>
@@ -83,7 +83,7 @@ namespace Model.Migrations
 
                     b.HasIndex("TaskId");
 
-                    b.ToTable("Assignments");
+                    b.ToTable("Assignments", (string)null);
                 });
 
             modelBuilder.Entity("Model.Types.Group", b =>
@@ -107,7 +107,7 @@ namespace Model.Migrations
 
                     b.HasIndex("OrganisationId");
 
-                    b.ToTable("Group");
+                    b.ToTable("Group", (string)null);
                 });
 
             modelBuilder.Entity("Model.Types.Hint", b =>
@@ -143,7 +143,7 @@ namespace Model.Migrations
 
                     b.HasIndex("TaskId");
 
-                    b.ToTable("Hint");
+                    b.ToTable("Hint", (string)null);
                 });
 
             modelBuilder.Entity("Model.Types.Organisation", b =>
@@ -162,7 +162,7 @@ namespace Model.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Organisations");
+                    b.ToTable("Organisations", (string)null);
                 });
 
             modelBuilder.Entity("Model.Types.StudentGroup", b =>
@@ -177,7 +177,7 @@ namespace Model.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("StudentGroups");
+                    b.ToTable("StudentGroups", (string)null);
                 });
 
             modelBuilder.Entity("Model.Types.Task", b =>
@@ -253,7 +253,7 @@ namespace Model.Migrations
 
                     b.HasIndex("PreviousTaskId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("Model.Types.User", b =>
@@ -289,7 +289,7 @@ namespace Model.Migrations
 
                     b.HasIndex("OrganisationId");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("Model.Types.Activity", b =>

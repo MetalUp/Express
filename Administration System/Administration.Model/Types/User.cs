@@ -18,8 +18,6 @@
         [Hidden]
         public int Id { get; init; }
 
-        public string InvitationCode { get; init; } //Visible only to teachers in organisation and when status is Pending
-
         [MemberOrder(1)]
         public string UserName { get; init; }
 
@@ -40,7 +38,10 @@
         [MemberOrder(6)]
         public virtual Organisation Organisation { get; init; }
 
-        public override string ToString() => $"{Name}{(Status == UserStatus.PendingAcceptance ? " (PENDING)" : null)}";
+        [MemberOrder(7)]
+        public string InvitationCode { get; init; } //Visible only to teachers in organisation and when status is Pending
+
+        public override string ToString() => $"{Name} - {(Status == UserStatus.PendingAcceptance ? "PENDING ":null)}{Role}";
     }
 
 

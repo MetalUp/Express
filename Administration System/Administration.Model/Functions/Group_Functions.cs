@@ -11,7 +11,7 @@
         //TODO: validation that user is
         public static IContext AddStudent(this Group group, User student, IContext context)
         {
-            var sg = new StudentGroup() { GroupId = group.Id, Group = group, StudentId = student.Id, Student = student };
+            var sg = new StudentGroup() {GroupId = group.Id, Group = group, StudentId = student.Id, Student = student };
             return context.WithNew(sg);
         }
 

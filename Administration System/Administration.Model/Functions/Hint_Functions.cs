@@ -4,7 +4,6 @@ namespace Model.Functions
 {
     public static class Hint_Functions
     {
-
         [Edit]
         public static IContext EditNumber(
              this Hint hint,

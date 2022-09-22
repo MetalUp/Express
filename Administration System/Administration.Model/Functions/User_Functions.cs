@@ -3,12 +3,6 @@ namespace Model.Functions
 {
     public static class User_Functions
     {
-        #region display of User
-
-        public static bool HideEmailAddress(this User user) => user.Role < Role.Teacher;
-
-        #endregion
-
         #region Editing
         [Edit]
         public static IContext EditName(
@@ -16,9 +10,20 @@ namespace Model.Functions
             string name,
             IContext context) =>
             context.WithUpdated(student, new(student) { Name = name });
+
+        [Edit]
+        public static IContext EditEmailAddress(
+            this User student,
+            string emailAddress,
+            IContext context) =>
+            context.WithUpdated(student, new(student) { EmailAddress = emailAddress });
+
+        public static bool HideEditEmailAddress(
+            this User student,
+            string emailAddress,
+            IContext context) =>
+            student.HasRole(Role.Student);
         #endregion
-
-
 
         #region End of lifecycle
         public static IContext SetToInactive(this User user, IContext context) =>
@@ -47,7 +52,6 @@ namespace Model.Functions
 
         #endregion
 
-
         #region internal methods
         internal static bool HasRoleAtLeast(this User user, Role role) => (int) user.Role >= (int)role;
 
@@ -64,7 +68,5 @@ namespace Model.Functions
             Menus.Assignments.NewAssignmentToIndividual(user, task, dueBy, context);
 
         #endregion
-
-
     }
 }

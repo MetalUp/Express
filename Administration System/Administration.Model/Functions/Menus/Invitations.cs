@@ -10,16 +10,13 @@
             (var student, var context2) = InviteNewUser(name, Role.Student, Organisations.MyOrganisation(context), context);
             if (group != null)
             {
-                var sg = new StudentGroup() { Student = student, Group = group };
-                return (student, context2.WithNew(sg));
-
+                return (student, Group_Functions.AddStudent(group, student, context));
             }
             else
             {
                 return (student, context2);
             }
         }
-
 
         public static (User, IContext) InviteNewTeacher(string name, IContext context)
         {

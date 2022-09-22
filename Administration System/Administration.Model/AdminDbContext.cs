@@ -32,6 +32,8 @@ namespace Model
 
             modelBuilder.Entity<Organisation>().HasMany(e => e.Teachers).WithOne(e => e.Organisation).OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<StudentGroup>().Property(e => e.StudentId).ValueGeneratedNever();
+            modelBuilder.Entity<StudentGroup>().Property(e => e.GroupId).ValueGeneratedNever();
             modelBuilder.Entity<StudentGroup>().HasKey(e => new { e.StudentId, e.GroupId });
             modelBuilder.Entity<StudentGroup>().HasOne(e => e.Student).WithMany().HasForeignKey(e => e.StudentId).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<StudentGroup>().HasOne(e => e.Group).WithMany().HasForeignKey(e => e.GroupId).OnDelete(DeleteBehavior.NoAction);
