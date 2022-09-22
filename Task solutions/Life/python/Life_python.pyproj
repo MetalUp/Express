@@ -23,6 +23,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
+    <Compile Include="Code files to upload\life_1_tests.py" />
+    <Compile Include="Code files to upload\life_2_tests.py" />
+    <Compile Include="Code files to upload\life_3_tests.py" />
+    <Compile Include="Code files to upload\life_4_tests.py" />
+    <Compile Include="Code files to upload\life_5_tests.py" />
+    <Compile Include="Code files to upload\life_6_tests.py" />
+    <Compile Include="Code files to upload\life_7_tests.py" />
+    <Compile Include="Code files to upload\life_functions.py" />
     <Compile Include="framework.py" />
     <Compile Include="life.py" />
     <Compile Include="tests.py" />
@@ -33,6 +41,9 @@
       <Project>{87f20306-92ae-47a5-b8c0-25903c59388e}</Project>
       <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Code files to upload\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
