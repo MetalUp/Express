@@ -2,16 +2,16 @@
 {
     public static class Group_Functions
     {
+        [DisplayAsProperty]
         public static List<User> Students(this Group group, IContext context)
         {
             var id = group.Id;
             return context.Instances<StudentGroup>().Where(sg => sg.GroupId == id).Select(sg => sg.Student).ToList();
         }
 
-        //TODO: validation that user is
         public static IContext AddStudent(this Group group, User student, IContext context)
         {
-            var sg = new StudentGroup() {GroupId = group.Id, Group = group, StudentId = student.Id, Student = student };
+            var sg = new StudentGroup() {GroupId = group.Id, StudentId = student.Id };
             return context.WithNew(sg);
         }
 
