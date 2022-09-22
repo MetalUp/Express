@@ -2,39 +2,35 @@
 {
     public static class Group_Functions
     {
-        [DisplayAsProperty]
-        public static List<User> Students(this Group group, IContext context)
-        {
-            var id = group.Id;
-            return context.Instances<StudentGroup>().Where(sg => sg.GroupId == id).Select(sg => sg.Student).ToList();
-        }
 
         public static IContext AddStudent(this Group group, User student, IContext context)
         {
-            var sg = new StudentGroup() {GroupId = group.Id, StudentId = student.Id };
-            return context.WithNew(sg);
+            var s2 = new List<User>(group.Students);
+            s2.Add(student);
+            var g2 = new Group(group) {Students = s2};
+            return context.WithUpdated(group, g2);
         }
 
         public static string ValidateAddStudent(this Group group, User student, IContext context) =>
             !student.HasRole(Role.Student) ? "User is not a Student" :
-                group.Students(context).Contains(student) ? "User is already a member of group" : null;
+                group.Students.Contains(student) ? "User is already a member of group" : null;
 
         public static IContext RemoveStudent(this Group group, User student, IContext context)
         {
-            var gid = group.Id;
-            var sid = student.Id;
-            var sg = context.Instances<StudentGroup>().Single(sg => sg.GroupId == gid && sg.StudentId == sid);
-            return context.WithDeleted(sg);
+            var s2 = new List<User>(group.Students);
+            s2.Remove(student);
+            var g2 = new Group(group) { Students = s2 };
+            return context.WithUpdated(group, g2);
         }
 
         public static List<User> Choices1RemoveStudent(this Group group, User student, IContext context) =>
-            group.Students(context);
+            group.Students.ToList();
 
         public static IContext RemoveAllStudents(this Group group, string confirm, IContext context)
         {
-            var gid = group.Id;
-            var sgs = context.Instances<StudentGroup>().Where(sg => sg.GroupId == gid);
-            return sgs.Aggregate(context, (context, sg) => context.WithDeleted(sg));
+            var s2 = new List<User>(group.Students);
+            var g2 = new Group(group) { Students = s2 };
+            return context.WithUpdated(group, g2);
         }
 
         public static string ValidateRemoveAllStudents(this Group group, [DescribedAs("type REMOVE ALL")] string confirm, IContext context) =>

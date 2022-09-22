@@ -9,7 +9,6 @@ namespace Model
         public DbSet<User> Users { get; set; }
         public DbSet<User> Students { get; set; }
         public DbSet<Group> Group { get; set; }
-        public DbSet<StudentGroup> StudentGroups { get; set; }
         public DbSet<User> Teachers { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Task> Tasks { get; set; }
@@ -32,11 +31,7 @@ namespace Model
 
             modelBuilder.Entity<Organisation>().HasMany(e => e.Teachers).WithOne(e => e.Organisation).OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<StudentGroup>().Property(e => e.StudentId).ValueGeneratedNever();
-            modelBuilder.Entity<StudentGroup>().Property(e => e.GroupId).ValueGeneratedNever();
-            modelBuilder.Entity<StudentGroup>().HasKey(e => new { e.StudentId, e.GroupId });
-            modelBuilder.Entity<StudentGroup>().HasOne(e => e.Student).WithMany().HasForeignKey(e => e.StudentId).OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<StudentGroup>().HasOne(e => e.Group).WithMany().HasForeignKey(e => e.GroupId).OnDelete(DeleteBehavior.NoAction);
-        }
+            modelBuilder.Entity<User>().HasMany(e => e.Groups).WithMany(e => e.Students).UsingEntity(j => j.ToTable("StudentGroups"));
+             }
     }
 }

@@ -41,6 +41,9 @@
         [MemberOrder(7)]
         public string InvitationCode { get; init; } //Visible only to teachers in organisation and when status is Pending
 
+
+        public  virtual ICollection<Group> Groups { get; init; } = new List<Group>();
+
         public override string ToString() => $"{Name} - {(Status == UserStatus.PendingAcceptance ? "PENDING ":null)}{Role}";
     }
 

@@ -21,7 +21,9 @@
 
         [Hidden]
         public int OrganisationId { get; init; }
-        public virtual Organisation Organisation { get; init; }         
+        public virtual Organisation Organisation { get; init; }
+
+        public virtual ICollection<User> Students { get; init; } = new List<User>();
 
         public override string ToString() => Name;
     }
