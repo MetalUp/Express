@@ -50,9 +50,10 @@
             [DescribedAs("Paste your Invitation Code here")] string code,
             IContext context)
         {
-            var user = context.Instances<User>().Single(u => u.InvitationCode == code);
-            var user2 = new User(user) { InvitationCode = null, Status = UserStatus.Active };
-            return (user2, context.WithUpdated(user, user2));
+            var userName = context.CurrentUser().Identity.Name;
+            var invitee = context.Instances<User>().Single(u => u.InvitationCode == code);
+            var invitee2 = new User(invitee) {UserName = userName, InvitationCode = null, Status = UserStatus.Active };
+            return (invitee2, context.WithUpdated(invitee, invitee2));
         }
 
         public static string ValidateAcceptInvitation(string code, IContext context) =>
