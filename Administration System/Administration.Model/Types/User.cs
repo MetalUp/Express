@@ -19,8 +19,8 @@
         [Hidden]
         public int Id { get; init; }
 
-        [MemberOrder(1)]
-        public string UserName { get; init; }
+        [Hidden]
+        public string UserName { get; init; } //Always Hashed
 
         [MemberOrder(2)]
         public Role Role { get; init; }
@@ -28,7 +28,7 @@
         [MemberOrder(2)]
         public string Name { get; init; }
 
-        [MemberOrder(3)] //Required only for Teacher role and above
+        [MemberOrder(3)] //Stored only for Teacher role and above
         public string EmailAddress { get; init; }
 
         [MemberOrder(4)]

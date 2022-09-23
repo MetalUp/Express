@@ -7,6 +7,7 @@ namespace Model.Authorization
         public bool IsVisible(User user, string memberName, IContext context) =>
             Users.UserRole(context) switch
             {
+                Role.Root => true,
                 >= Role.Teacher => Users.Me(context).OrganisationId == user.OrganisationId,
                 _ => false
             };
