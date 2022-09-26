@@ -28,7 +28,6 @@ namespace CSharp
             priorPossible.Where(w => MarkAttempt(attempt, w) == mark).ToList();
 
         public static int RemainingWordCountLeftByWorstOutcome(List<string> possibleWords, string attempt) =>
-
             possibleWords.GroupBy(w => MarkAttempt(attempt, w)).Max(g => g.Count());
 
         public static string BestAttempt(List<string> possibleWords, List<string> allWords) =>
