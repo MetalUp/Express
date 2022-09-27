@@ -90,6 +90,11 @@ gemini {
     width: 50%;
 }
 
+.url-link {
+    background-color: var(--default-link-color);
+    color: var(--default-object-text-color);
+}
+
 .object-color0 {
     background-color: var(--object-color0, var(--default-object-color));
     color: var(--object-text-color0, var(--default-object-text-color));
