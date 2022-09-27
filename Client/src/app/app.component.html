@@ -7,9 +7,10 @@
       <div></div>
       <div [ngClass]="outletClass">
         <router-outlet></router-outlet>
-        <nof-footer *ngIf="isDashboard()"></nof-footer>
+        <div class="composite-footer"><nof-footer></nof-footer><app-user></app-user></div>
       </div>
     </div>
+    
   </ng-container>
   <ng-container *ngIf="$any(auth).authenticate && !auth.isAuthenticated()">
     <nof-login></nof-login>

@@ -356,3 +356,31 @@ gemini {
 .metalup button:disabled:hover {
     background-color: var(--button-disabled);
 }
+
+nof-footer {
+    background-color: #1F1110;
+}
+
+div.icon.properties {
+    display: none;
+}
+
+div.icon.recent {
+    display: none;
+}
+
+.metalup div.icon.back {
+    display: none;
+}
+
+.metalup div.icon.forward {
+    display: none;
+}
+
+.metalup div.icon.full {
+    display: none;
+}
+
+.metalup div.icon.swap {
+    display: none;
+}
