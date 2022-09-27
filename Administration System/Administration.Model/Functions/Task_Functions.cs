@@ -13,7 +13,7 @@ namespace Model.Functions
             Assignments.NewAssignmentToIndividual(user, task, dueBy, context);
 
         [MemberOrder(10)]
-        public static IContext AssignToAlInGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
+        public static IContext AssignToAllInGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
             Assignments.NewAssignmentToAllInGroup(group, task, dueBy, context);
 
         #endregion
