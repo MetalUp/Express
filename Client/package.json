@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
     "@nakedobjects/gemini": "file:./temp_no/nakedobjects-gemini-v13.1.0.tgz",
-    "@nakedobjects/restful-objects": "file:./temp_no/nakedobjects-restful-objects-v13.1.0.tgz" ,
+    "@nakedobjects/restful-objects": "file:./temp_no/nakedobjects-restful-objects-v13.1.0.tgz",
     "@nakedobjects/services": "file:./temp_no/nakedobjects-services-v13.1.0.tgz",
     "@nakedobjects/view-models": "file:./temp_no/nakedobjects-view-models-v13.1.0.tgz",
     "@types/lodash": "^4.14.185",
