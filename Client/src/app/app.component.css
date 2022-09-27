@@ -26,8 +26,15 @@ div.metalup {
 
 .composite-footer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr min-content;
   grid-template-rows: 1fr;
   align-items: center;
+  justify-content: space-between;
+}
+
+.masthead {
+    font-size: 24pt;
+    color: var(--masthead-color);
+    margin-right: 10px;
 }
 
