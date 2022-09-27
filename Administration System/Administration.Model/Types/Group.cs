@@ -10,7 +10,7 @@
             Description = cloneFrom.Description;
             OrganisationId = cloneFrom.OrganisationId;
             Organisation = cloneFrom.Organisation;
-            Students = cloneFrom.Students;
+            Students = new List<User>(cloneFrom.Students);
         }
 
         [Hidden]
