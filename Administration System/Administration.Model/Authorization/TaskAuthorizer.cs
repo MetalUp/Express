@@ -15,16 +15,28 @@ namespace Model.Authorization
                     Role.Author => AuthorAuthorization(task, memberName, context),
                     Role.Teacher  => TeacherAuthorization(task, memberName, context),
                     Role.Student => StudentAuthorization(task, memberName, context),
-                    _ => false
+                    _ => GuestAuthorization(task, memberName, context)
                 };
 
         private bool AuthorAuthorization(Task task, string memberName, IContext context) => 
            task.IsAssignable() || task.AuthorId == Users.Me(context).Id;
 
         private bool TeacherAuthorization(Task task, string memberName, IContext context) => 
-           task.IsAssignable() && (!(memberName.StartsWith("Edit") || memberName.StartsWith("Add")));
+           task.IsAssignable() && (IsBasicProperty(memberName) || Helpers.MatchesOneOf(nameof(Task.TeacherNotes)));
 
         private bool StudentAuthorization(Task task, string memberName, IContext context) =>
-            task.IsAssignedToCurrentUser(context) && Helpers.MemberIsProperty(task, memberName);
+            (task.IsPublic() || task.IsAssignedToCurrentUser(context)) && IsBasicProperty(memberName);
+
+        private bool GuestAuthorization(Task task, string memberName, IContext context) =>
+            task.IsPublic() && IsBasicProperty(memberName);
+
+
+        private bool IsBasicProperty(string memberName) =>
+            Helpers.MatchesOneOf(memberName,
+                nameof(Task.Link),
+                nameof(Task.Status),
+                nameof(Task.Title),
+                nameof(Task.Language),
+                nameof(Task.MaxMarks));
     }
 }

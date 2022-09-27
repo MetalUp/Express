@@ -1,4 +1,7 @@
-﻿namespace Model.Functions.Menus
+﻿using System.Security.Cryptography;
+using System.Text;
+
+namespace Model.Functions.Menus
 {
     public static class Invitations
     {
@@ -24,6 +27,10 @@
             return (teacher, context2);
         }
 
+        private static string GenerateInvitationCode(IContext context) =>
+            SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(context.RandomSeed().Value.ToString()))
+            .Aggregate("", (s, b) => s + b.ToString("x2"));
+
         public static (User, IContext) InviteNewUser(
              string name,
              Role asRole,
@@ -33,7 +40,7 @@
             var user = new User()
             {
                 Name = name,
-                InvitationCode = context.NewGuid().ToString(),
+                InvitationCode = GenerateInvitationCode(context),
                 Role = asRole,
                 Status = UserStatus.PendingAcceptance,
                 OrganisationId = organisation.Id,
@@ -43,7 +50,6 @@
         }
 
         public static (User, IContext) AcceptInvitation(
-            [RegEx("^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$")]
             [DescribedAs("Paste your Invitation Code here")] string code,
             IContext context)
         {

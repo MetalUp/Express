@@ -31,12 +31,12 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Matches(memberName,
+                >= Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Assignments.MyAssignments), 
                     nameof(Assignments.AssignmentsCreatedByMe), 
                     nameof(Assignments.NewAssignmentToIndividual),
                     nameof(Assignments.NewAssignmentToAllInGroup)),
-                Role.Student => Matches(memberName,
+                Role.Student => Helpers.MatchesOneOf(memberName,
                     nameof(Assignments.MyAssignments)),
                 _ => false
             };
@@ -46,31 +46,31 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 Role.Author => true,
-                Role.Teacher => Matches(memberName,
+                Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Tasks.AllAssignableTasks),
                     nameof(Tasks.PublicTasks),
                     nameof(Tasks.FindTasks)),
-                Role.Student => Matches(memberName,
+                Role.Student => Helpers.MatchesOneOf(memberName,
                     nameof(Tasks.PublicTasks)),
-                _ => false
+                _ => Helpers.MatchesOneOf(memberName, nameof(Tasks.PublicTasks))
             };
 
         private bool InvitationsAuth(string memberName, IContext context) =>
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Matches(memberName,
+                >= Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Invitations.InviteNewTeacher),
                     nameof(Invitations.InviteNewStudent)),
                 Role.Student => false,
-                _ => Matches(memberName, nameof(Invitations.AcceptInvitation))
+                _ => Helpers.MatchesOneOf(memberName, nameof(Invitations.AcceptInvitation))
             };
 
         private bool GroupsAuth(string memberName, IContext context) =>
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Matches(memberName, 
+                >= Role.Teacher => Helpers.MatchesOneOf(memberName, 
                     nameof(Groups.AllOurGroups),
                     nameof(Groups.CreateNewGroup)),
                 Role.Student => false,
@@ -81,7 +81,7 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Matches(memberName, nameof(Organisations.MyOrganisation)),
+                >= Role.Teacher => Helpers.MatchesOneOf(memberName, nameof(Organisations.MyOrganisation)),
                 Role.Student => false,
                 _ => false
             };
@@ -90,7 +90,7 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Matches(memberName,
+                >= Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Users.Me),
                     nameof(Users.Students), 
                     nameof(Users.StudentsPendingAcceptance),
@@ -101,7 +101,6 @@ namespace Model.Authorization
                 _ => false
             };
 
-        private bool Matches(string memberName, params string[] names) =>
-            names.Contains(memberName);
+
     }
 }
