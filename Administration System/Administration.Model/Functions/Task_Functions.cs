@@ -8,18 +8,6 @@ namespace Model.Functions
     public static class Task_Functions
     {
         #region Assigning
-        //public static IContext AssignTaskToGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
-        // group.Students.Aggregate(context, (c, s) => c.WithNew(NewAssignment(task, s, dueBy, User_MenuFunctions.Me(context))));
-
-        //public static IList<Group> Choices1AssignTaskToGroup(IContext context) =>
-        //    Group_MenuFunctions.MyGroups(context);
-
-
-        //Need autocomplete for group & default for assignedBy
-
-        //public static IContext AssignTaskToStudent(this Task task, Student student, DateTime dueBy, IContext context) =>
-        //        context.WithNew(NewAssignment(task, student, dueBy, User_MenuFunctions.Me(context)));
-
         [MemberOrder(10)]
         public static IContext AssignToIndividual(this Task task, User user, DateTime dueBy, IContext context) =>
             Assignments.NewAssignmentToIndividual(user, task, dueBy, context);
