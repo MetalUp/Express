@@ -41,7 +41,10 @@ namespace Model.Types
         [Hidden]
         public virtual User Author { get; init; }
 
-        [MemberOrder(0)]
+        [UrlLink]
+        public string TryOutTask => $"https://express.metalup.org/task/{Id}";
+
+        [MemberOrder(1)]
         public TaskStatus Status { get; init; }
 
         [MemberOrder(1)]
