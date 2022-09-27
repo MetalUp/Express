@@ -7,7 +7,7 @@ namespace Model
     //The implementation here relies on the conventions that:
     //- All domain classes are defined in namespace "Model.Types"
     //- All domain functions are defined on static types in namespace "Model.Functions"
-    //- All main menu function are defined on static types that have 'MenuFunctions' in their name
+    //- All main menu functionS are defined on static types that are in the namespace Model.Functions.Menus
     //This ModelConfig may be re-written to change the conventions, or to remove conventions altogether, and
     //specify the lists of types, functions, and menus explicitly.
     public static class ModelConfig

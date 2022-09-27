@@ -1,4 +1,5 @@
 ﻿using NakedFramework.Value;
+using System.Text;
 
 namespace Model.Functions
 {
@@ -127,17 +128,36 @@ namespace Model.Functions
         #region FileAttachments
 
         [MemberOrder(20)]
-        public static IContext SpecifyDescription(
+        public static IContext LoadDescriptionFromFile(
             this Task task,
             FileAttachment file,
+            IContext context) =>
+                SaveDescription(task, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
+
+        [MemberOrder(21)]
+        public static IContext EnterDescriptionAsString(
+            this Task task,
+            [MultiLine(20)] string description,
+            IContext context) =>
+                 SaveDescription(task, Encoding.ASCII.GetBytes(description),
+                     $"Desscription.html", 
+                     "txt/html", 
+                     context);
+
+        public static IContext SaveDescription(
+            this Task task,
+            byte[] bytes,
+            string name,
+            string mimeType,
             IContext context) =>
                 context.WithUpdated(task,
                     new Task(task)
                     {
-                        DescContent = file.GetResourceAsByteArray(),
-                        DescName = file.Name,
-                        DescMime = file.MimeType,
+                        DescContent = bytes,
+                        DescName = name,
+                        DescMime = mimeType,
                     });
+
 
         [MemberOrder(22)]
         public static IContext ClearDescription(
