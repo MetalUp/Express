@@ -21,7 +21,7 @@ namespace Model.Types
         public int Id { get; init; }
 
         [MemberOrder(0)][UrlLink("Start Task")]
-        public string Link =>  @"https://express.metalup.org/task/" + TaskId;
+        public string Link =>  $"https://express.metalup.org/task/{TaskId}";
 
         [MemberOrder(1)]
         public DateTime DueBy { get; init; }
