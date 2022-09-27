@@ -1,4 +1,5 @@
 ﻿using NakedFunctions.Security;
+using static Model.Authorization.Helpers;
 
 namespace Model.Authorization
 {
@@ -22,31 +23,20 @@ namespace Model.Authorization
 
         internal static bool TeacherAuthorization(Task task, string memberName, IContext context) =>
            task.IsAssignable() && 
-            (IsGuestVisibleProperty(memberName) || 
-                Helpers.MatchesOneOf(
-                    nameof(Task.TeacherNotes), 
+            (IsTaskProperty(memberName) || 
+                MatchesOneOf(
                     nameof(Task_Functions.AssignToAlInGroup), 
                     nameof(Task_Functions.AssignToIndividual)));
 
         internal static bool StudentAuthorization(Task task, string memberName, IContext context) =>
-            TaskIsPublicOrAssignedToUser(task, context) && IsGuestVisibleProperty(memberName);
+            TaskIsPublicOrAssignedToUser(task, context) && IsTaskProperty(memberName);
 
         internal static bool TaskIsPublicOrAssignedToUser(Task task, IContext context) =>
             task.IsPublic() || task.IsAssignedToCurrentUser(context);
 
         internal static bool GuestAuthorization(Task task, string memberName, IContext context) =>
-            task.IsPublic() && IsGuestVisibleProperty(memberName);
+            task.IsPublic() && IsTaskProperty(memberName) && !MatchesOneOf(memberName, nameof(Task.TeacherNotes));
 
-        internal static bool IsGuestVisibleProperty(string memberName) =>
-            Helpers.MatchesOneOf(memberName,
-                nameof(Task.Link),
-                nameof(Task.Status),
-                nameof(Task.Title),
-                nameof(Task.Language),
-                nameof(Task.MaxMarks),
-                nameof(Task.Description), //TODO: These should go when [HideInClient] is implemented 
-                nameof(Task.ReadyMadeFunctions),
-                nameof(Task.Tests)
-                );
+        private static bool IsTaskProperty(string memberName) => IsProperty<Task>(memberName);
     }
 }

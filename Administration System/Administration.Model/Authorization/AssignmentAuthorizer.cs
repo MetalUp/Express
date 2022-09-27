@@ -1,4 +1,5 @@
 ﻿using NakedFunctions.Security;
+using static Model.Authorization.Helpers;
 
 namespace Model.Authorization
 {
@@ -18,10 +19,10 @@ namespace Model.Authorization
 
         private static bool TeacherAuthorization(Assignment a, string memberName, User me, IContext context) =>
             IsAssignedToMe(a, me) ||
-            IsAssignedByOrToAnyoneInMyOrganisation(a, me) && !Helpers.MatchesOneOf(memberName, nameof(Assignment.Link));
+            IsAssignedByOrToAnyoneInMyOrganisation(a, me) && !MatchesOneOf(memberName, nameof(Assignment.Link));
             
         private static bool StudentAuthorization(Assignment a, string memberName, User me, IContext context) =>
-            IsAssignedToMe(a, me) && Helpers.MemberIsProperty(a, memberName);
+            IsAssignedToMe(a, me) && IsProperty<Assignment>(memberName);
 
         private static bool IsAssignedToMe(Assignment a, User me) => a.AssignedToId == me.Id;
 
@@ -29,4 +30,5 @@ namespace Model.Authorization
             a.AssignedBy.OrganisationId == me.OrganisationId ||
             a.AssignedTo.OrganisationId == me.OrganisationId;
     }
+
 }

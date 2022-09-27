@@ -1,4 +1,5 @@
 ﻿using NakedFunctions.Security;
+using static Model.Authorization.Helpers;
 
 namespace Model.Authorization
 {
@@ -10,11 +11,13 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 Role.Author => true,
-                Role.Teacher => Helpers.MemberIsProperty(hint, memberName),
+                Role.Teacher => IsHintProperty(memberName),
                 Role.Student => TaskAuthorizer.TaskIsPublicOrAssignedToUser(hint.Task, context) && 
-                                Helpers.MemberIsProperty(hint, memberName),
-                _ => hint.Task.IsPublic() &&  Helpers.MemberIsProperty(hint, memberName)
+                               IsHintProperty(memberName),
+                _ => hint.Task.IsPublic() && IsHintProperty(memberName)
             };
+
+        private static bool IsHintProperty(string memberName) => IsProperty<Hint>(memberName);
 
     }
 }
