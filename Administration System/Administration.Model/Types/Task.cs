@@ -24,7 +24,7 @@ namespace Model.Types
             PasteFunctions = cloneFrom.PasteFunctions;
             TestsContent = cloneFrom.TestsContent;
             TestsName = cloneFrom.TestsName;
-            TestsMime= cloneFrom.TestsMime;
+            TestsMime = cloneFrom.TestsMime;
             PreviousTaskId = cloneFrom.PreviousTaskId;
             PreviousTask = cloneFrom.PreviousTask;
             NextTaskId = cloneFrom.NextTaskId;
@@ -41,25 +41,26 @@ namespace Model.Types
         [Hidden]
         public virtual User Author { get; init; }
 
-        [MemberOrder(0)][UrlLink("Try out the Task")]
+        [MemberOrder(10)]
+        [UrlLink("Try out the Task")]
         public string Link => $"https://express.metalup.org/task/{Id}";
 
-        [MemberOrder(1)]
+        [MemberOrder(20)]
         public TaskStatus Status { get; init; }
 
-        [MemberOrder(1)]
+        [MemberOrder(30)]
         public string Title { get; init; }
 
-        [MemberOrder(2)]
+        [MemberOrder(40)]
         public ProgrammingLanguage Language { get; init; }
 
         //Marks awarded for completing the task with no hints taken
-        [MemberOrder(3)]
+        [MemberOrder(60)]
         public int MaxMarks { get; init; }
 
         #region Description
-        [MemberOrder(5)]  
-        public FileAttachment Description => (DescContent == null) ? null:
+        [MemberOrder(70)]
+        public FileAttachment Description => (DescContent == null) ? null :
                  new FileAttachment(DescContent, DescName, DescMime);
 
         [Hidden]
@@ -73,7 +74,8 @@ namespace Model.Types
         #endregion
 
         #region ReadyMadeFunctions
-        [Named("Hidden Functions")][MemberOrder(6)]
+        [MemberOrder(80)]
+        [Named("Hidden Functions")]
         public FileAttachment ReadyMadeFunctions => (RMFContent == null) ? null :
                  new FileAttachment(RMFContent, RMFName, RMFMime);
 
@@ -88,7 +90,7 @@ namespace Model.Types
         #endregion
 
         #region Tests
-        [MemberOrder(7)]
+        [MemberOrder(90)]
         public FileAttachment Tests => (TestsContent == null) ? null :
                  new FileAttachment(TestsContent, TestsName, TestsMime);
 
@@ -102,26 +104,30 @@ namespace Model.Types
         public string TestsMime { get; init; }
         #endregion
 
-        [MemberOrder(9)]
+        [MemberOrder(100)]
         public bool PasteExpression { get; init; }
 
-        [MemberOrder(9)]
+        [MemberOrder(101)]
         public bool PasteFunctions { get; init; }
 
         [Hidden]
         public int? PreviousTaskId { get; init; }
 
-        [MemberOrder(11)]
+        [MemberOrder(110)]
         public virtual Task PreviousTask { get; init; }
 
         [Hidden]
         public int? NextTaskId { get; init; }
 
-        [MemberOrder(12)]
+        [MemberOrder(120)]
         public virtual Task NextTask { get; init; }
 
-        [MemberOrder(13)]
+        [MemberOrder(130)]
         public bool NextTaskClearsFunctions { get; init; }
+
+        [MemberOrder(140)]
+        [MultiLine(10)]
+        public string TeacherNotes { get; init; }
 
         [RenderEagerly]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
