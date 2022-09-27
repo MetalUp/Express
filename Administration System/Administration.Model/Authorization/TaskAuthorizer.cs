@@ -1,4 +1,5 @@
 ﻿using NakedFunctions.Security;
+using static Model.Authorization.Helpers;
 
 namespace Model.Authorization
 {
@@ -12,29 +13,30 @@ namespace Model.Authorization
                 {
                     Role.Root => true,
                     Role.Author => AuthorAuthorization(task, memberName, context),
-                    Role.Teacher  => TeacherAuthorization(task, memberName, context),
+                    Role.Teacher => TeacherAuthorization(task, memberName, context),
                     Role.Student => StudentAuthorization(task, memberName, context),
                     _ => GuestAuthorization(task, memberName, context)
                 };
 
-        private bool AuthorAuthorization(Task task, string memberName, IContext context) => 
+        internal static bool AuthorAuthorization(Task task, string memberName, IContext context) =>
            task.IsAssignable() || task.AuthorId == Users.Me(context).Id;
 
-        private bool TeacherAuthorization(Task task, string memberName, IContext context) => 
-           task.IsAssignable() && (IsGuestVisibleProperty(memberName) || Helpers.MatchesOneOf(nameof(Task.TeacherNotes)));
+        internal static bool TeacherAuthorization(Task task, string memberName, IContext context) =>
+           task.IsAssignable() && 
+            (IsTaskProperty(memberName) || 
+                MatchesOneOf(
+                    nameof(Task_Functions.AssignToAlInGroup), 
+                    nameof(Task_Functions.AssignToIndividual)));
 
-        private bool StudentAuthorization(Task task, string memberName, IContext context) =>
-            (task.IsPublic() || task.IsAssignedToCurrentUser(context)) && IsGuestVisibleProperty(memberName);
+        internal static bool StudentAuthorization(Task task, string memberName, IContext context) =>
+            TaskIsPublicOrAssignedToUser(task, context) && IsTaskProperty(memberName);
 
-        private bool GuestAuthorization(Task task, string memberName, IContext context) =>
-            task.IsPublic() && IsGuestVisibleProperty(memberName);
+        internal static bool TaskIsPublicOrAssignedToUser(Task task, IContext context) =>
+            task.IsPublic() || task.IsAssignedToCurrentUser(context);
 
-        private bool IsGuestVisibleProperty(string memberName) =>
-            Helpers.MatchesOneOf(memberName,
-                nameof(Task.Link),
-                nameof(Task.Status),
-                nameof(Task.Title),
-                nameof(Task.Language),
-                nameof(Task.MaxMarks));
+        internal static bool GuestAuthorization(Task task, string memberName, IContext context) =>
+            task.IsPublic() && IsTaskProperty(memberName) && !MatchesOneOf(memberName, nameof(Task.TeacherNotes));
+
+        private static bool IsTaskProperty(string memberName) => IsProperty<Task>(memberName);
     }
 }
