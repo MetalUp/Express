@@ -1,4 +1,5 @@
 .view-area {
+
     display: grid;
     grid-template-columns: .1fr 1fr;
     grid-template-rows: 1fr;
@@ -21,7 +22,8 @@ div.metalup {
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 0px minmax(min-content, max-content) min-content;
+    grid-template-rows: 0px minmax(min-content, 100%) min-content;
+    align-content: space-between;
 }
 
 .composite-footer {
@@ -37,4 +39,3 @@ div.metalup {
     color: var(--masthead-color);
     margin-right: 10px;
 }
-

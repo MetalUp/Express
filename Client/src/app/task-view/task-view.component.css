@@ -10,14 +10,15 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
     gap: 10px 10px;
+    height: 100%;
 }
 
 .independent-column1 {
-    grid-template-rows: minmax(min-content, 5fr) minmax(min-content, 4fr);
+    grid-template-rows: minmax(min-content, 100%) minmax(min-content, 100%);
     gap: 10px 10px;
 }
 
 .independent-column2 {
-    grid-template-rows: minmax(min-content, 100%)  minmax(min-content, max-content) minmax(min-content, max-content);
+    grid-template-rows: minmax(min-content, 100%)  minmax(min-content, 100%) minmax(min-content, 100%);
     gap: 10px 10px;
 }
