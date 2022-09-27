@@ -111,10 +111,12 @@ const routes: Routes = [
         path: 'dashboard/callback',
         component: CallbackComponent
     },
+    { path: 'task/logoff',  redirectTo: 'dashboard/logoff', pathMatch: 'full'},
+    { path: 'task/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'task/:id', component: TaskViewComponent, canActivate: [AuthService] },
     { path: 'task',  redirectTo: 'task/30', pathMatch: 'full'},
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
-    { path: '**', redirectTo: 'task/30', pathMatch: 'full' }
+    { path: '**', redirectTo: 'dashboard/home', pathMatch: 'full' }
 ];
 
 @NgModule({

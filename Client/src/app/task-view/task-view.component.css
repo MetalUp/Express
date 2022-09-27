@@ -1,17 +1,7 @@
 
 /* You can add global styles to this file, and also import other style files */
 
-
-
-.masthead {
-    font-size: 24pt;
-    color: var(--masthead-color);
-    padding-bottom: 5px;
-    text-align: right;
-}
-
 .ile {
-    grid-template-rows: min-content minmax(min-content, 90vh);
     height: 100%;
 }
 
