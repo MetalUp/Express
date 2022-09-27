@@ -351,3 +351,7 @@ gemini {
 .metalup button:disabled:hover {
     background-color: var(--button-disabled);
 }
+
+nof-footer {
+    background-color: #1F1110;
+}
