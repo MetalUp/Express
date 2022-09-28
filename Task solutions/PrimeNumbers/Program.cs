@@ -4,8 +4,8 @@ using System.Diagnostics;
 
 var sw = new Stopwatch();
 sw.Start();
-var result = Enumerable.Range(1,1000000).AsParallel().Where(x => PrimeNumbers.IsPrime(x)).ToList();
+var result = Enumerable.Range(1,1000000).Where(x => PrimeNumbers.IsPrime(x)).ToList();
 sw.Stop();
 
-Console.WriteLine(sw.ElapsedMilliseconds);
+Console.WriteLine(sw.ElapsedMilliseconds/1000);
 
