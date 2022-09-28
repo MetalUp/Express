@@ -28,7 +28,7 @@ namespace Model.Functions.Menus
         }
 
         private static string GenerateInvitationCode(IContext context) =>
-            SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(context.RandomSeed().Value.ToString()))
+            SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(context.RandomSeed().Value.ToString())).Take(8)
             .Aggregate("", (s, b) => s + b.ToString("x2"));
 
         public static (User, IContext) InviteNewUser(
@@ -50,7 +50,7 @@ namespace Model.Functions.Menus
         }
 
         public static (User, IContext) AcceptInvitation(
-            [DescribedAs("Paste your Invitation Code here")] string code,
+            [RegEx(@"^[a-f0-9]{16}")][DescribedAs("Paste your Invitation Code here")] string code,
             IContext context)
         {
             var userName = Users.HashedCurrentUserName(context);
