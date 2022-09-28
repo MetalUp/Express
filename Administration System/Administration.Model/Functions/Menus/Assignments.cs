@@ -21,8 +21,7 @@
             return context.Instances<Assignment>().Where(s => s.AssignedById == meId).OrderByDescending(a => a.DueBy);
         }
 
-        public static IQueryable<Assignment> AllAssignments(IContext context) => 
-            context.Instances<Assignment>();
+        public static IQueryable<Assignment> AllAssignments(IContext context) => context.Instances<Assignment>();
 
         //TODO: validate date
         public static IContext NewAssignmentToIndividual(User assignedTo, Task task, DateTime dueBy, IContext context)
