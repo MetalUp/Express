@@ -7,4 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="WordsThatTake5Attempts.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="WordsThatTake5Attempts.cs" />
+  </ItemGroup>
+
 </Project>
