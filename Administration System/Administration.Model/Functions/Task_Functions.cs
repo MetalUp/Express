@@ -18,8 +18,13 @@ namespace Model.Functions
             allInGroup && inGroup is null ? "Must specify a Group" :
                !allInGroup && singleUser is null ? "Must specify a Single User" : null;
 
+        public static List<Group> Choices1AssignTo(this Task task, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
+            Groups.AllOurGroups(context).ToList();
+
         public static List<User> Choices3AssignTo(this Task task, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
-            inGroup is null ? new List<User>() : inGroup.Students.ToList();
+            inGroup is null ? 
+                Users.Students(context).ToList() : 
+                inGroup.Students.ToList();
 
 
         #endregion

@@ -159,13 +159,13 @@ namespace Model.Functions
 
         [MemberOrder(31)]
         public static IContext EnterHiddenFunctionsAsString(
-    this TaskAuthorView tav,
-    [MultiLine(20)] string description,
-    IContext context) =>
-         SaveHiddenFunctions(tav, Encoding.ASCII.GetBytes(description),
-             $"HiddenFunctions{tav.Task.LanguageAsFileExtension()}",
-             "text/plain",
-             context);
+            this TaskAuthorView tav,
+            [MultiLine(20)] string description,
+            IContext context) =>
+                 SaveHiddenFunctions(tav, Encoding.ASCII.GetBytes(description),
+                     $"HiddenFunctions{tav.Task.LanguageAsFileExtension()}",
+                     "text/plain",
+                     context);
 
         internal static IContext SaveHiddenFunctions(
             this TaskAuthorView tav,
@@ -209,13 +209,13 @@ namespace Model.Functions
 
         [MemberOrder(41)]
         public static IContext EnterTestsAsString(
-    this TaskAuthorView tav,
-    [MultiLine(20)] string description,
-    IContext context) =>
-         SaveTests(tav, Encoding.ASCII.GetBytes(description),
-             $"HiddenFunctions{tav.Task.LanguageAsFileExtension()}",
-             "text/plain",
-             context);
+            this TaskAuthorView tav,
+            [MultiLine(20)] string description,
+            IContext context) =>
+                 SaveTests(tav, Encoding.ASCII.GetBytes(description),
+                     $"HiddenFunctions{tav.Task.LanguageAsFileExtension()}",
+                     "text/plain",
+                     context);
 
         internal static IContext SaveTests(
             this TaskAuthorView tav,
