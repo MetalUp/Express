@@ -24,8 +24,8 @@ namespace Model.Authorization
         internal static bool TeacherAuthorization(Task task, string memberName, IContext context) =>
            task.IsAssignable() && 
             (IsTaskProperty(memberName) || 
-                MatchesOneOf(
-                    nameof(Task_Functions.AssignToAlInGroup), 
+                MatchesOneOf(memberName,
+                    //nameof(Task_Functions.AssignToAllInGroup), 
                     nameof(Task_Functions.AssignToIndividual)));
 
         internal static bool StudentAuthorization(Task task, string memberName, IContext context) =>

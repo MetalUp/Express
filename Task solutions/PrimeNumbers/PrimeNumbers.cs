@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace PrimeNumbers
-{
     public static class PrimeNumbers
     {
         public static List<int> Primes(int upTo) => Enumerable.Range(2, upTo + 1).Where(n => IsPrime(n)).ToList();
@@ -16,4 +10,4 @@ namespace PrimeNumbers
 
 
     }
-}
+
