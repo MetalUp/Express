@@ -7,14 +7,20 @@ namespace Model.Functions
 
     public static class Task_Functions
     {
-        #region Assigning
+        #region AssignTo
         [MemberOrder(10)]
-        public static IContext AssignToIndividual(this Task task, User user, DateTime dueBy, IContext context) =>
-            Assignments.NewAssignmentToIndividual(user, task, dueBy, context);
+        public static IContext AssignTo(this Task task, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
+           allInGroup ? throw new NotImplementedException("All In Group assignment not yet implemented") :
+            Assignments.NewAssignmentToIndividual(singleUser, task, dueBy, context);
 
-        [MemberOrder(10)]
-        public static IContext AssignToAllInGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
-            Assignments.NewAssignmentToAllInGroup(group, task, dueBy, context);
+
+        public static string ValidateAssignTo(this Task task, Group inGroup, bool allInGroup, User singleUser, DateTime dueBy, IContext context) =>
+            allInGroup && inGroup is null ? "Must specify a Group" :
+               !allInGroup && singleUser is null ? "Must specify a Single User" : null;
+
+        public static List<User> Choices3AssignTo(this Task task, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
+            inGroup is null ? new List<User>() : inGroup.Students.ToList();
+
 
         #endregion
 
@@ -114,8 +120,11 @@ namespace Model.Functions
         #endregion
 
         #region FileAttachments
-
         [MemberOrder(20)]
+        public static FileAttachment ViewDescription(this Task task) => (task.DescContent == null) ? null :
+ new FileAttachment(task.DescContent, task.DescName, task.DescMime);
+
+        [MemberOrder(21)]
         public static IContext LoadDescriptionFromFile(
             this Task task,
             FileAttachment file,

@@ -60,6 +60,7 @@ namespace Model.Types
 
         #region Description
         [MemberOrder(70)]
+        [HideInClient]
         public FileAttachment Description => (DescContent == null) ? null :
                  new FileAttachment(DescContent, DescName, DescMime);
 
@@ -76,6 +77,7 @@ namespace Model.Types
         #region ReadyMadeFunctions
         [MemberOrder(80)]
         [Named("Hidden Functions")]
+        [HideInClient]
         public FileAttachment ReadyMadeFunctions => (RMFContent == null) ? null :
                  new FileAttachment(RMFContent, RMFName, RMFMime);
 
@@ -91,6 +93,7 @@ namespace Model.Types
 
         #region Tests
         [MemberOrder(90)]
+        [HideInClient]
         public FileAttachment Tests => (TestsContent == null) ? null :
                  new FileAttachment(TestsContent, TestsName, TestsMime);
 

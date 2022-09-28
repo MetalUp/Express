@@ -25,11 +25,10 @@ namespace Model.Authorization
            task.IsAssignable() && 
             (IsTaskProperty(memberName) || 
                 MatchesOneOf(memberName,
-                    //nameof(Task_Functions.AssignToAllInGroup), 
-                    nameof(Task_Functions.AssignToIndividual)));
+                    nameof(Task_Functions.AssignTo)));
 
         internal static bool StudentAuthorization(Task task, string memberName, IContext context) =>
-            TaskIsPublicOrAssignedToUser(task, context) && IsTaskProperty(memberName);
+            TaskIsPublicOrAssignedToUser(task, context) && IsTaskProperty(memberName) && !MatchesOneOf(memberName, nameof(Task.TeacherNotes));
 
         internal static bool TaskIsPublicOrAssignedToUser(Task task, IContext context) =>
             task.IsPublic() || task.IsAssignedToCurrentUser(context);

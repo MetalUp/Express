@@ -32,6 +32,7 @@ namespace Model.Types
 
         #region HtmlFile
         [MemberOrder(4)]
+        [HideInClient]
         public FileAttachment HtmlFile => (FileContent == null) ? null :
                  new FileAttachment(FileContent, FileName, FileMime);
 
