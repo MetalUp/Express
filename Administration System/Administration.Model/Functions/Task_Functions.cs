@@ -35,6 +35,16 @@ namespace Model.Functions
             var taskId = task.Id;
             return context.Instances<Assignment>().Any(a => a.AssignedToId == myId && a.TaskId == taskId);
         }
+
+        internal static string LanguageAsFileExtension(this Task task) =>
+            task.Language switch
+            {
+                ProgrammingLanguage.Python => ".py",
+                ProgrammingLanguage.CSharp => ".cs",
+                ProgrammingLanguage.VB => ".vb",
+                ProgrammingLanguage.Java => ".java",
+                _ => ".txt"
+            };
         #endregion
 
         #region Edit (via a VM & for authors only)

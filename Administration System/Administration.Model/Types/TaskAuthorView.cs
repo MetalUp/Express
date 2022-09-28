@@ -14,7 +14,8 @@ namespace Model.Types
             Task = task;
         }
 
-        [Hidden]
+        [MemberOrder(10)]
+        [Named("Return to Task view")]
         public Task Task { get; init; }
 
         [MemberOrder(10)]

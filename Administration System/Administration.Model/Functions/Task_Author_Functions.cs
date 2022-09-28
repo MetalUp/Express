@@ -7,7 +7,7 @@ namespace Model.Functions
 
     public static class Task_Author_Functions
     {
-        #region ViewModel functions
+        #region ViewModel required functions
         public static string[] DeriveKeys(this TaskAuthorView tav) =>  new[] { tav.Task.Id.ToString() };
 
         public static TaskAuthorView CreateFromKeys(string[] keys, IContext context)
@@ -15,7 +15,6 @@ namespace Model.Functions
             int customerId = int.Parse(keys[0]);
             return new TaskAuthorView(context.Instances<Task>().Single(t => t.Id == customerId));
         }
-
         #endregion
 
         #region Editing Task properties
@@ -100,7 +99,7 @@ namespace Model.Functions
         #endregion
 
         #region FileAttachments
-
+        #region Description
         [MemberOrder(21)]
         public static IContext LoadDescriptionFromFile(
             this TaskAuthorView tav,
@@ -115,7 +114,7 @@ namespace Model.Functions
             IContext context) =>
                  SaveDescription(tav, Encoding.ASCII.GetBytes(description),
                      $"Desscription.html", 
-                     "txt/html", 
+                     "text/html", 
                      context);
 
         internal static IContext SaveDescription(
@@ -148,19 +147,40 @@ namespace Model.Functions
 
         public static string ValidateClearDescription(this TaskAuthorView tav, bool confirm) =>
             confirm ? null : "Confirm must be selected";
+        #endregion
 
+        #region Hidden Functions
         [MemberOrder(30)]
-        public static IContext SpecifyHiddenFunctions(
+        public static IContext LoadHiddenFunctionsFromFile(
             this TaskAuthorView tav,
             FileAttachment file,
+            IContext context) =>
+            SaveHiddenFunctions(tav, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
+
+        [MemberOrder(31)]
+        public static IContext EnterHiddenFunctionsAsString(
+    this TaskAuthorView tav,
+    [MultiLine(20)] string description,
+    IContext context) =>
+         SaveHiddenFunctions(tav, Encoding.ASCII.GetBytes(description),
+             $"HiddenFunctions{tav.Task.LanguageAsFileExtension()}",
+             "text/plain",
+             context);
+
+        internal static IContext SaveHiddenFunctions(
+            this TaskAuthorView tav,
+            byte[] bytes,
+            string name,
+            string mimeType,
             IContext context) =>
                 context.WithUpdated(tav.Task,
                     new(tav.Task)
                     {
-                        RMFContent = file.GetResourceAsByteArray(),
-                        RMFName = file.Name,
-                        RMFMime = file.MimeType,
+                        RMFContent = bytes,
+                        RMFName = name,
+                        RMFMime = mimeType,
                     });
+    
 
         [MemberOrder(32)]
         public static IContext ClearHiddenFunctions(
@@ -177,18 +197,38 @@ namespace Model.Functions
 
         public static string ValidateClearReadyMadeFunctions(this Task task, bool confirm) =>
             confirm ? null : "Confirm must be selected";
+        #endregion
 
+        #region Tests
         [MemberOrder(40)]
-        public static IContext SpecifyTests(
+        public static IContext LoadTestsFromFile(
             this TaskAuthorView tav,
-            FileAttachment tests,
+            FileAttachment file,
+            IContext context) =>
+            SaveTests(tav, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
+
+        [MemberOrder(41)]
+        public static IContext EnterTestsAsString(
+    this TaskAuthorView tav,
+    [MultiLine(20)] string description,
+    IContext context) =>
+         SaveTests(tav, Encoding.ASCII.GetBytes(description),
+             $"HiddenFunctions{tav.Task.LanguageAsFileExtension()}",
+             "text/plain",
+             context);
+
+        internal static IContext SaveTests(
+            this TaskAuthorView tav,
+            byte[] bytes,
+            string name,
+            string mimeType,
             IContext context) =>
                 context.WithUpdated(tav.Task,
                     new(tav.Task)
                     {
-                        TestsContent = tests.GetResourceAsByteArray(),
-                        TestsName = tests.Name,
-                        TestsMime = tests.MimeType,
+                        TestsContent = bytes,
+                        TestsName = name,
+                        TestsMime = mimeType,
                     });
 
         [MemberOrder(42)]
@@ -206,6 +246,7 @@ namespace Model.Functions
 
         public static string ValidateClearTests(this TaskAuthorView tav, bool confirm) =>
             confirm ? null : "Confirm must be selected";
+        #endregion
 
         #endregion
 
