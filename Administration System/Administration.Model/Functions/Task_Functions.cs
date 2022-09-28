@@ -23,7 +23,7 @@ namespace Model.Functions
 
         public static List<User> Choices3AssignTo(this Task task, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
             inGroup is null ? 
-                Users.Students(context).ToList() : 
+                Users.OurStudents(context).ToList() : 
                 inGroup.Students.ToList();
 
 

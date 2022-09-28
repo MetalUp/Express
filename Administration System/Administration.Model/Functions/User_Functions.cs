@@ -68,5 +68,19 @@ namespace Model.Functions
             Menus.Assignments.NewAssignmentToIndividual(user, task, dueBy, context);
 
         #endregion
+
+        #region Grouping
+        public static IContext AddToGroup(this User student, Group group, IContext context) =>
+                group.AddStudent(student, context);
+
+        public static List<Group> Choices1AddToGroup(this User student, Group group, IContext context) =>
+            Groups.AllOurGroups(context).ToList();
+
+        public static IContext AddSelectedStudentsToGroup(this IQueryable<User> students, Group group, IContext context) =>
+            students.Aggregate(context, (c, s) => group.AddStudent(s, c));
+
+        public static List<Group> Choices1AddSelectedStudentsToGroup(this IQueryable<User> students, Group group, IContext context) =>
+            Groups.AllOurGroups(context).ToList();
+        #endregion
     }
 }

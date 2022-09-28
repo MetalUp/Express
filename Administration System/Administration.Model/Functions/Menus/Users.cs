@@ -24,28 +24,32 @@ namespace Model.Functions.Menus
         public static IQueryable<User> AllUsers(IContext context) =>context.Instances<User>();
 
         #region Students & Colleagues
-        public static IQueryable<User> Students(IContext context)
+        private static IQueryable<User> OurUsers(IContext context)
         {
             int myOrgId = Me(context).OrganisationId;
             return context.Instances<User>().Where(s => s.OrganisationId == myOrgId).
                 OrderBy(s => s.Name);
         }
 
+        [MemberOrder(100)]
+        public static IQueryable<User> OurStudents(IContext context) =>
+            OurUsers(context).Where(u => u.Role == Role.Student);
+
+        [MemberOrder(110)]
         public static IQueryable<User> StudentsPendingAcceptance(IContext context) =>
-            Students(context).Where(u => u.Status == UserStatus.PendingAcceptance);
+            OurStudents(context).Where(u => u.Status == UserStatus.PendingAcceptance);
 
-        public static User FindStudentByLoginId(string userName, IContext context) =>
-            Students(context).SingleOrDefault(c => c.UserName == Hash(userName));
+        [MemberOrder(120)]
+        public static User FindStudentByName(User student, IContext context) => student;
 
-        public static IQueryable<User> FindStudentByName(string nameOrPartName, IContext context) =>
-            Students(context).Where(u => u.Name.ToUpper().Contains(nameOrPartName.ToUpper()));
+        public static IQueryable<User> AutoComplete0FindStudentByName(string nameOrPartName, IContext context) => 
+            OurStudents(context).Where(u => u.Name.ToUpper().Contains(nameOrPartName.ToUpper()));
 
+        [MemberOrder(130)]
         public static IQueryable<User> MyColleagues(IContext context)
         {
-            var me = Me(context);
-            int myOrgId = me.OrganisationId;
-            int myId = me.Id;
-            return context.Instances<User>().Where(t => t.OrganisationId == myOrgId && t.Id != myId);
+            var myId = Me(context).Id;
+            return OurUsers(context).Where(t => t.Id != myId);
         }
         #endregion
 
