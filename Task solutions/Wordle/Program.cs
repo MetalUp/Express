@@ -1,5 +1,7 @@
 ﻿using static CSharp.Wordle;
 using static CSharp.Reference;
+using static CSharp.MyData;
+
 
 //PLAY GAME
 //var result = "";
@@ -21,28 +23,38 @@ using static CSharp.Reference;
 //}
 
 //FIND THE WORDS THAT TAKE 5
+//foreach (var target in PossibleAnswers)
+//{
+//    var result = "";
+//    var history = "";
+//    var attempt = "RAISE";
+//    var possible = PossibleAnswers;
+//    int count = 0;
+//    while (result != "*****")
+//    {
+//        history += attempt + ",";
+//        result = MarkAttempt(attempt, target);
+//        count++;
+//        possible = RemainingValidWords(possible, attempt, result);
+//        attempt = BestAttempt(possible, AllWords);
+//    }
+//    if (count > 4)
+//    Console.WriteLine(history);
+//}
 
-
-foreach (var target in PossibleAnswers)
+//Sort 5 attempt words
+var sorted = FiveAttemptWords.OrderBy(w => w.Substring(6, 5)).ThenBy(w => w.Substring(12, 5)).ThenBy(w => w.Substring(18, 5));
+var grouped = sorted.GroupBy(w => w.Substring(6, 5)).ToList();
+var ordered = grouped.OrderByDescending(g => g.Count()).ToList();
+foreach(var g in ordered)
 {
-    var result = "";
-    var history = "RAISE,";
-    var attempt = "RAISE";
-    var possible = PossibleAnswers;
-    int count = 0;
-    while (result != "*****")
+    Console.WriteLine();
+    //Console.WriteLine($"{g.Key} {g.Count()}");
+    foreach(var w in g)
     {
-        result = MarkAttempt(attempt, target);
-        count++;
-        possible = RemainingValidWords(possible, attempt, result);
-        attempt = BestAttempt(possible, AllWords);
-        history += attempt + ",";
+        Console.WriteLine(w);
     }
-    if (count > 4)
-    Console.WriteLine(history);
 }
-
-
 
 
 
