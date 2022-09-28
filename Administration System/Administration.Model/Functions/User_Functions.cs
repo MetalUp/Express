@@ -35,6 +35,9 @@ namespace Model.Functions
         public static bool HideSetToInactive(this User user, IContext context) =>
            user.Status == UserStatus.Inactive;
 
+        public static IContext SetToInactive(this IQueryable<User> users, IContext context) =>
+            users.Aggregate(context, (c, u) => u.SetToInactive(c));
+
         public static IContext RemoveIndentityInfo(this User user,
             [DescribedAs("type REMOVE IDENTITY")] string confirm,
             IContext context) =>
@@ -79,8 +82,8 @@ namespace Model.Functions
         public static IContext AddSelectedStudentsToGroup(this IQueryable<User> students, Group group, IContext context) =>
             students.Aggregate(context, (c, s) => group.AddStudent(s, c));
 
-        public static List<Group> Choices1AddSelectedStudentsToGroup(this IQueryable<User> students, Group group, IContext context) =>
-            Groups.AllOurGroups(context).ToList();
+        //public static List<Group> Choices1AddSelectedStudentsToGroup(this IQueryable<User> students, Group group, IContext context) =>
+        //    Groups.AllOurGroups(context).ToList();
         #endregion
     }
 }
