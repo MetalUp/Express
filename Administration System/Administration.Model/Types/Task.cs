@@ -108,9 +108,11 @@ namespace Model.Types
         #endregion
 
         [MemberOrder(100)]
+        [HideInClient]
         public bool PasteExpression { get; init; }
 
         [MemberOrder(101)]
+        [HideInClient]
         public bool PasteFunctions { get; init; }
 
         [Hidden]
