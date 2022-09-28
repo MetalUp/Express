@@ -9,9 +9,12 @@ namespace Model.Functions
     {
         #region AssignTo
         [MemberOrder(10)]
-        public static IContext AssignTo(this Task task, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
-           allInGroup ? throw new NotImplementedException("All In Group assignment not yet implemented") :
+        public static IContext AssignToIndividual(this Task task, User singleUser, DateTime dueBy, IContext context) =>
             Assignments.NewAssignmentToIndividual(singleUser, task, dueBy, context);
+
+        [MemberOrder(20)]
+        public static IContext AssignToGroup(this Task task, Group group, DateTime dueBy, IContext context) =>
+         Assignments.NewAssignmentToGroup(group, task, dueBy, context);
 
 
         public static string ValidateAssignTo(this Task task, Group inGroup, bool allInGroup, User singleUser, DateTime dueBy, IContext context) =>
@@ -21,11 +24,7 @@ namespace Model.Functions
         public static List<Group> Choices1AssignTo(this Task task, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
             Groups.AllOurGroups(context).ToList();
 
-        public static List<User> Choices3AssignTo(this Task task, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
-            inGroup is null ? 
-                Users.OurStudents(context).ToList() : 
-                inGroup.Students.ToList();
-
+  
 
         #endregion
 

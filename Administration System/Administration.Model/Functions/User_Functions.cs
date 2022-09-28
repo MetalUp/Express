@@ -67,13 +67,14 @@ namespace Model.Functions
 
         #region Grouping
         public static IContext AddToGroup(this User student, Group group, IContext context) =>
-                group.AddStudent(student, context);
+               context.WithUpdated(student,
+                new User(student) { Groups = student.Groups.Append(group).ToList() });
 
         public static List<Group> Choices1AddToGroup(this User student, Group group, IContext context) =>
             Groups.AllOurGroups(context).ToList();
 
         public static IContext AddSelectedStudentsToGroup(this IQueryable<User> students, Group group, IContext context) =>
-            students.Aggregate(context, (c, s) => group.AddStudent(s, c));
+            students.Aggregate(context, (c, s) => s.AddToGroup(group, c)); 
 
         public static List<Group> Choices1AddSelectedStudentsToGroup(this IQueryable<User> students, IContext context) =>
             Groups.AllOurGroups(context).ToList();

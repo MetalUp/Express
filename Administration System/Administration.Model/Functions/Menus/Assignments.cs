@@ -23,8 +23,8 @@
 
         public static IQueryable<Assignment> AllAssignments(IContext context) => context.Instances<Assignment>();
 
-        //TODO: validate date
-        public static IContext NewAssignmentToIndividual(User assignedTo, Task task, DateTime dueBy, IContext context)
+
+        public static IContext NewAssignmentToIndividual(User assignedTo, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context)
         {
             var me = Users.Me(context);
             var a = new Assignment()
@@ -41,11 +41,11 @@
             return context.WithNew(a);
         }
 
-        //TODO: validate date and provide OurGroups as choices
-        public static IContext NewAssignmentToAllInGroup(Group group, Task task, DateTime dueBy, IContext context)
-        {
-            throw new NotImplementedException();
-        }
+        public static IContext NewAssignmentToGroup(Group group, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
+            group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, task, dueBy, context)); 
+
+        public static List<Group> Choices0NewAssignmentToGroup(Group group, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
+            Groups.AllOurGroups(context).ToList();
 
         public static IContext MarkTasksNotCompleted(this IQueryable<Assignment> assignments, string teacherNote, IContext context) =>
           assignments.Aggregate(context, (c, a) => a.MarkNotCompleted(teacherNote, c));

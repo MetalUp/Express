@@ -35,7 +35,7 @@ namespace Model.Authorization
                     nameof(Assignments.MyAssignments), 
                     nameof(Assignments.AssignmentsCreatedByMe), 
                     nameof(Assignments.NewAssignmentToIndividual),
-                    nameof(Assignments.NewAssignmentToAllInGroup)),
+                    nameof(Assignments.NewAssignmentToGroup)),
                 Role.Student => Helpers.MatchesOneOf(memberName,
                     nameof(Assignments.MyAssignments)),
                 _ => false
