@@ -1,82 +1,49 @@
 ﻿using static CSharp.Wordle;
 using static CSharp.Reference;
 
-
-//Generate list of possible outcomes
-//var symbols = "_+*".ToCharArray();
-//foreach (var s0 in symbols)
-//{
-//    foreach (var s1 in symbols)
-//    {
-//        foreach (var s2 in symbols)
-//        {
-//            foreach (var s3 in symbols)
-//            {
-//                foreach (var s4 in symbols)
-//                {
-//                    var outcome = $"{s0}{s1}{s2}{s3}{s4}";
-//                    Console.Write($"\"{outcome}\",");
-//                }
-//            }
-//        }
-//    }
-//}
-//Console.ReadLine();
-
-//var x =PossibleAnswers.Where(p => !AllWords.Contains(p)).ToList();
-//foreach(var w in x)
-//{
-//    Console.Write($"\"{w}\",");
-//}
-//Console.ReadLine();
-
+//PLAY GAME
 //var result = "";
-
-//var analysis = new double[10];
-//foreach (var target in PossibleAnswers)
+//while (true)
 //{
-//    result = "";
-//    var attempt = "ARISE";
 //    var possible = PossibleAnswers;
-//    int count = 0;
+//    var attempt = "RAISE";
 //    while (result != "*****")
 //    {
-//        Console.Write($"{attempt} ");
-//        result = MarkAttempt(attempt, target);
-//        count++;
+//        int after = RemainingWordCountLeftByWorstOutcome(possible, attempt);
+//        Console.WriteLine($"{attempt} ({possible.Count} -> {after})");
+//        result = Console.ReadLine();
+
 //        possible = RemainingValidWords(possible, attempt, result);
 //        attempt = BestAttempt(possible, AllWords);
+
 //    }
-//    analysis[count]++;
-//    Console.WriteLine();
+//    Console.Write("Press any key for new game");
 //}
-//int words = PossibleAnswers.Count();
-//double weighted = 0;
-//for (int i = 0; i < analysis.Length; i++)
-//{
-//    weighted += i * analysis[i];
-//    Console.WriteLine($"{i} - {analysis[i]} - {analysis[i] / words}");
-//}
-//Console.WriteLine($"{weighted / words}");
 
-var result = "";
+//FIND THE WORDS THAT TAKE 5
 
-while (true)
+
+foreach (var target in PossibleAnswers)
 {
-    var possible = PossibleAnswers;
+    var result = "";
+    var history = "RAISE,";
     var attempt = "RAISE";
+    var possible = PossibleAnswers;
+    int count = 0;
     while (result != "*****")
     {
-        int after = RemainingWordCountLeftByWorstOutcome(possible, attempt);
-        Console.WriteLine($"{attempt} ({possible.Count} -> {after})");
-        result = Console.ReadLine();
-
+        result = MarkAttempt(attempt, target);
+        count++;
         possible = RemainingValidWords(possible, attempt, result);
         attempt = BestAttempt(possible, AllWords);
-
+        history += attempt + ",";
     }
-    Console.Write("Press any key for new game");
+    if (count > 4)
+    Console.WriteLine(history);
 }
+
+
+
 
 
 
@@ -106,40 +73,38 @@ while (true)
 //var result = "";
 //var possible = PossibleAnswers;
 //var attempt = "";
+//var dict = new Dictionary<string, int>();
 
-//Console.WriteLine("First attempt: RAISE");
-////foreach (var outcome1 in Outcomes)
-////{
-//    var possible1 = RemainingValidWords(PossibleAnswers, "RAISE", "_____");
-//foreach (var outcome1 in Outcomes) {
-//    var attempt2 = BestAttempt(possible1, AllWords);
-//    var remain2 = RemainingValidWords(possible1, attempt2, outcome1);
-//    Console.WriteLine($"{outcome1} ({remain2.Count})");
+////var possible2 = RemainingValidWords(PossibleAnswers, "RAISE", "__*__");
+////var attempt2 = BestAttempt(possible2, AllWords);
 
-//}
-
-//    //foreach (var outcome2 in Outcomes)
-//    //{
-//    //    var possible2 = RemainingValidWords(PossibleAnswers, attempt2, outcome2);
-//    //    Console.Write($"{outcome1} ({possible.Count}), ");
-//    //}
-//    Console.WriteLine();
-//    Console.ReadKey();
-
-
-//
-//while (true)
+//foreach (var outcome in Outcomes)
 //{
-//    
-//    var attempt = "RAISE";
-//    while (result != "*****")
-//    {
-
-//        attempt = BestAttempt(possible, AllWords);
-//        int remain = RemainingWordCountLeftByWorstOutcome(possible, attempt);
-//        Console.WriteLine($"{attempt} ({remain})");
-//        result = Console.ReadLine();
-//        possible = RemainingValidWords(possible, attempt, result);
-//    }
-//        Console.Write("Press any key for new game");
+//    int count = RemainingValidWords(PossibleAnswers, "RAISE", outcome).Count;
+//    dict[outcome] = count;
 //}
+
+//var sorted = dict.OrderByDescending(kvp => kvp.Value);
+//var total = dict.Sum(kvp => kvp.Value);
+//Console.WriteLine($"Total words left after round 1 {total}");
+//foreach (var kvp in sorted)
+//{
+//    Console.WriteLine($"{kvp.Key} {kvp.Value}");
+//}
+//Console.ReadKey();
+
+//WORST OUTCOMES FROM RAISE as first attempt
+//Outcome, remaining words, bestattempt2, worst outcome after 2
+//"_____",167, BLUDY, 13
+//"____+",120, DENET, 9
+//"__+__",107, UNTIL, 11
+//"+____",103, COLON, 10
+//"+___+",102, OUTER, 16
+//"_+___",91,  CLOAK, 7
+//"_*___",91,  BUNTY, 11
+//"___+_",80,  MUTON, 7
+//"++___",77,  TRONC, 9
+//"_+__+",69,  METAL, 5
+//"____*",61,  CLOUD, 5
+//"__*__",51,  CLOUT, 5
+
