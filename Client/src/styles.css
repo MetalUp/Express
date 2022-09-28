@@ -384,3 +384,7 @@ div.icon.recent {
 .metalup div.icon.swap {
     display: none;
 }
+
+.hide-in-client {
+    display: none !important;
+}
