@@ -42,7 +42,7 @@
         }
 
         public static IContext NewAssignmentToGroup(Group group, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
-            group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, task, dueBy, context)); 
+            group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, task, dueBy, c)); 
 
         public static List<Group> Choices0NewAssignmentToGroup(Group group, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
             Groups.AllOurGroups(context).ToList();

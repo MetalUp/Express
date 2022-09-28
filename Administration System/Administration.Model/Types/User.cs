@@ -11,6 +11,7 @@
             Role = cloneFrom.Role;
             Name = cloneFrom.Name;
             EmailAddress = cloneFrom.EmailAddress;
+            Status = cloneFrom.Status;
             OrganisationId = cloneFrom.OrganisationId;
             Organisation = cloneFrom.Organisation;
             Groups = new List<Group>(cloneFrom.Groups);

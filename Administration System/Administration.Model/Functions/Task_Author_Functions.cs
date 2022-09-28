@@ -107,16 +107,6 @@ namespace Model.Functions
             IContext context) =>
                 SaveDescription(tav, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
 
-        [MemberOrder(21)]
-        public static IContext EnterDescriptionAsString(
-            this TaskAuthorView tav,
-            [MultiLine(20)] string description,
-            IContext context) =>
-                 SaveDescription(tav, Encoding.ASCII.GetBytes(description),
-                     $"Desscription.html", 
-                     "text/html", 
-                     context);
-
         internal static IContext SaveDescription(
             this TaskAuthorView tav,
             byte[] bytes,
@@ -257,7 +247,7 @@ namespace Model.Functions
             int number,
             string title,
             [DefaultValue(1)] int costInMarks,
-            [Optionally] FileAttachment file,
+            FileAttachment file,
             IContext context)
         {
             var hint = new Hint
@@ -265,11 +255,11 @@ namespace Model.Functions
                 Number = number,
                 Title = title,
                 CostInMarks = costInMarks,
-                TaskId = tav.Task.Id,
-                Task = tav.Task,
                 FileContent = file == null ? null : file.GetResourceAsByteArray(),
                 FileName = file == null ? null : file.Name,
-                FileMime = file == null ? null : file.MimeType
+                FileMime = file == null ? null : file.MimeType,
+                TaskId = tav.Task.Id,
+                Task = tav.Task
             };
             return context.WithNew(hint);
         }
