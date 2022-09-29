@@ -4,23 +4,23 @@ using static CSharp.MyData;
 
 
 //PLAY GAME
-//var result = "";
-//while (true)
-//{
-//    var possible = PossibleAnswers;
-//    var attempt = "RAISE";
-//    while (result != "*****")
-//    {
-//        int after = RemainingWordCountLeftByWorstOutcome(possible, attempt);
-//        Console.WriteLine($"{attempt} ({possible.Count} -> {after})");
-//        result = Console.ReadLine();
+var result = "";
+while (true)
+{
+    var possible = PossibleAnswers;
+    var attempt = "RAISE";
+    while (result != "*****")
+    {
+        int after = RemainingWordCountLeftByWorstOutcome(possible, attempt);
+        Console.WriteLine($"{attempt} ({possible.Count} -> {after})");
+        result = Console.ReadLine();
 
-//        possible = RemainingValidWords(possible, attempt, result);
-//        attempt = BestAttempt(possible, AllWords);
+        possible = RemainingValidWords(possible, attempt, result);
+        attempt = BestAttempt(possible, AllWords);
 
-//    }
-//    Console.Write("Press any key for new game");
-//}
+    }
+    Console.Write("Press any key for new game");
+}
 
 //FIND THE WORDS THAT TAKE 5
 //foreach (var target in PossibleAnswers)
@@ -43,18 +43,18 @@ using static CSharp.MyData;
 //}
 
 //Sort 5 attempt words
-var sorted = FiveAttemptWords.OrderBy(w => w.Substring(6, 5)).ThenBy(w => w.Substring(12, 5)).ThenBy(w => w.Substring(18, 5));
-var grouped = sorted.GroupBy(w => w.Substring(6, 5)).ToList();
-var ordered = grouped.OrderByDescending(g => g.Count()).ToList();
-foreach(var g in ordered)
-{
-    Console.WriteLine();
-    //Console.WriteLine($"{g.Key} {g.Count()}");
-    foreach(var w in g)
-    {
-        Console.WriteLine(w);
-    }
-}
+//var sorted = FiveAttemptWords.OrderBy(w => w.Substring(6, 5)).ThenBy(w => w.Substring(12, 5)).ThenBy(w => w.Substring(18, 5));
+//var grouped = sorted.GroupBy(w => w.Substring(6, 5)).ToList();
+//var ordered = grouped.OrderByDescending(g => g.Count()).ToList();
+//foreach(var g in ordered)
+//{
+//    Console.WriteLine();
+//    //Console.WriteLine($"{g.Key} {g.Count()}");
+//    foreach(var w in g)
+//    {
+//        Console.WriteLine(w);
+//    }
+//}
 
 
 
