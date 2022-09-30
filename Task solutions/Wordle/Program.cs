@@ -1,25 +1,33 @@
 ﻿using static CSharp.Wordle;
 using static CSharp.Reference;
 using static CSharp.MyData;
+using CSharp;
+using System.Diagnostics;
 
 
 //PLAY GAME
-var result = "";
-while (true)
+//var outcome = "";
+//var possible = AllPossibleAnswers;
+//var attempt = "RAISE";
+//while (outcome != "*****")
+//{
+//    int after = RemainingWordCountLeftByWorstOutcome(possible, attempt);
+//    Console.WriteLine($"{attempt} ({possible.Count} -> {after})");
+//    outcome = Console.ReadLine();
+//    possible = RemainingValidWords(possible, attempt, outcome);
+//    attempt = BestAttempt(possible, AllWords);
+//}
+
+
+//PLAY GAME - MINIMAL
+var possible = AllPossibleAnswers;
+var outcome = "";
+while (outcome != "*****")
 {
-    var possible = PossibleAnswers;
-    var attempt = "RAISE";
-    while (result != "*****")
-    {
-        int after = RemainingWordCountLeftByWorstOutcome(possible, attempt);
-        Console.WriteLine($"{attempt} ({possible.Count} -> {after})");
-        result = Console.ReadLine();
-
-        possible = RemainingValidWords(possible, attempt, result);
-        attempt = BestAttempt(possible, AllWords);
-
-    }
-    Console.Write("Press any key for new game");
+    var attempt = BestAttempt(possible, AllWords);
+    Console.WriteLine(attempt);
+    outcome = Console.ReadLine();
+    possible = RemainingValidWords(possible, attempt, outcome);
 }
 
 //FIND THE WORDS THAT TAKE 5
