@@ -10,11 +10,8 @@ using Microsoft.CSharp.RuntimeBinder;
 namespace CompileServer.Workers;
 
 public static class CSharpCompiler {
-    public static Task<ActionResult<RunResult>> CompileAsTask(RunSpec runSpec) {
-        return Task.Factory.StartNew(() => new ActionResult<RunResult>(Compile(runSpec)));
-    }
-
-    private static RunResult Compile(RunSpec runSpec) {
+   
+    public static (RunResult, byte[]) Compile(RunSpec runSpec) {
         var code = runSpec.sourcecode;
 
         using var peStream = new MemoryStream();
@@ -23,18 +20,16 @@ public static class CSharpCompiler {
 
         if (!result.Success) {
             var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
-            return new RunResult {
+            return (new RunResult {
                 cmpinfo = string.Join('\n', failures.Select(d => $"{d.Id}: {d.GetMessage()}").ToArray()),
                 outcome = Outcome.CompilationError
-            };
+            }, Array.Empty<byte>());
         }
 
         peStream.Seek(0, SeekOrigin.Begin);
 
         var assembly = peStream.ToArray();
-        return new RunResult {
-            outcome = Outcome.Ok
-        };
+        return (new RunResult {outcome = Outcome.Ok}, assembly);
     }
 
     private static CSharpCompilation GenerateCode(string sourceCode) {
