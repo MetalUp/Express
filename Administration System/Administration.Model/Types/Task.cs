@@ -21,7 +21,7 @@ namespace Model.Types
             RMFName = cloneFrom.RMFName;
             RMFMime = cloneFrom.RMFMime;
             PasteExpression = cloneFrom.PasteExpression;
-            PasteFunctions = cloneFrom.PasteFunctions;
+            PasteFunction = cloneFrom.PasteFunction;
             TestsContent = cloneFrom.TestsContent;
             TestsName = cloneFrom.TestsName;
             TestsMime = cloneFrom.TestsMime;
@@ -59,7 +59,6 @@ namespace Model.Types
         public int MaxMarks { get; init; }
 
         #region Description
-        [MemberOrder(70)]
         [HideInClient]
         public FileAttachment Description => (DescContent == null) ? null :
                  new FileAttachment(DescContent, DescName, DescMime);
@@ -75,7 +74,6 @@ namespace Model.Types
         #endregion
 
         #region ReadyMadeFunctions
-        [MemberOrder(80)]
         [Named("Hidden Functions")]
         [HideInClient]
         public FileAttachment ReadyMadeFunctions => (RMFContent == null) ? null :
@@ -92,7 +90,6 @@ namespace Model.Types
         #endregion
 
         #region Tests
-        [MemberOrder(90)]
         [HideInClient]
         public FileAttachment Tests => (TestsContent == null) ? null :
                  new FileAttachment(TestsContent, TestsName, TestsMime);
@@ -113,7 +110,7 @@ namespace Model.Types
 
         [MemberOrder(101)]
         [HideInClient]
-        public bool PasteFunctions { get; init; }
+        public bool PasteFunction { get; init; }
 
         [Hidden]
         public int? PreviousTaskId { get; init; }

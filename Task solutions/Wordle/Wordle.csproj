@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Program.cs" />
+    <Compile Remove="Program2 - Copy.cs" />
+  </ItemGroup>
+
 </Project>

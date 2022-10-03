@@ -40,22 +40,18 @@ namespace Model.Types
 
         [MemberOrder(80)]
         [Named("Hidden Functions")]
-        [HideInClient]
         public FileAttachment ReadyMadeFunctions => (Task.RMFContent == null) ? null :
                  new FileAttachment(Task.RMFContent, Task.RMFName, Task.RMFMime);
 
         [MemberOrder(90)]
-        [HideInClient]
         public FileAttachment Tests => (Task.TestsContent == null) ? null :
                  new FileAttachment(Task.TestsContent, Task.TestsName, Task.TestsMime);
 
         [MemberOrder(100)]
-        [HideInClient]
         public bool PasteExpression => Task.PasteExpression;
 
         [MemberOrder(101)]
-        [HideInClient]
-        public bool PasteFunctions => Task.PasteFunctions;
+        public bool PasteFunction => Task.PasteFunction;
 
         [MemberOrder(110)]
         public virtual Task PreviousTask => Task.PreviousTask;

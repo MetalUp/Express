@@ -51,7 +51,7 @@ namespace Model.Functions
             this TaskAuthorView tav,
             bool pasteFunctions,
             IContext context) =>
-                context.WithUpdated(tav.Task, new(tav.Task) { PasteFunctions = pasteFunctions });
+                context.WithUpdated(tav.Task, new(tav.Task) { PasteFunction = pasteFunctions });
 
         [Edit]
         public static IContext EditPreviousTask(
@@ -203,9 +203,10 @@ namespace Model.Functions
             [MultiLine(20)] string description,
             IContext context) =>
                  SaveTests(tav, Encoding.ASCII.GetBytes(description),
-                     $"HiddenFunctions{tav.Task.LanguageAsFileExtension()}",
+                     $"Tests{tav.Task.LanguageAsFileExtension()}",
                      "text/plain",
                      context);
+
 
         internal static IContext SaveTests(
             this TaskAuthorView tav,
