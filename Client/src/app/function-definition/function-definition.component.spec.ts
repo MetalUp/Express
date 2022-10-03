@@ -174,20 +174,20 @@ describe('FunctionDefinitionComponent', () => {
   it('should default nextClassClears flag', () => {
     expect(component.nextTaskClears).toBe(true);
     taskSubject.next({ } as ITask);
-    expect(component.nextTaskClears).toBe(true);
+    expect(component.nextTaskClears).toBe(false);
   });
 
   it('should unset nextClassClears flag from task', () => {
     expect(component.nextTaskClears).toBe(true);
     taskSubject.next({ NextTaskClearsFunctions: true} as ITask);
-    expect(component.nextTaskClears).toBe(false);
+    expect(component.nextTaskClears).toBe(true);
   });
 
   it('should set nextClassClears flag from task', () => {
     component.nextTaskClears = false;
     expect(component.nextTaskClears).toBe(false);
     taskSubject.next({ NextTaskClearsFunctions: false} as ITask);
-    expect(component.nextTaskClears).toBe(true);
+    expect(component.nextTaskClears).toBe(false);
   });
 
 
