@@ -1,13 +1,12 @@
 ﻿using CompileServer.Models;
-using Microsoft.AspNetCore.Mvc;
 
-namespace CompileServer.Workers; 
+namespace CompileServer.Workers;
 
-public class Compiler {
-    public static Task<ActionResult<RunResult>> Compile(RunSpecWrapper runSpec) {
-        return runSpec.run_spec.language_id switch {
-            "csharp" => CSharpCompiler.CompileAsTask(runSpec.run_spec),
-            _ => Task.Factory.StartNew(() => new ActionResult<RunResult>(new RunResult() {outcome = Outcome.IllegalSystemCall}))
+public static class Compiler {
+    public static (RunResult, byte[]) Compile(RunSpec runSpec) {
+        return runSpec.language_id switch {
+            "csharp" => CSharpCompiler.Compile(runSpec),
+            _ => (new RunResult { outcome = Outcome.IllegalSystemCall, cmpinfo = $"Unknown language: {runSpec.language_id}"}, Array.Empty<byte>())
         };
     }
 }

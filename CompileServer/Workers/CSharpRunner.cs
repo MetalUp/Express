@@ -1,21 +1,24 @@
 ﻿using System.Runtime.CompilerServices;
+using CompileServer.Models;
 
-namespace CompileServer.Workers; 
+namespace CompileServer.Workers;
 
-public class CSharpRunner {
-    public void Execute(byte[] compiledAssembly, string[] args) {
-        var assemblyLoadContextWeakRef = LoadAndExecute(compiledAssembly, args);
+public static class CSharpRunner {
+    public static RunResult Execute(byte[] compiledAssembly, RunResult runResult) {
+        var assemblyLoadContextWeakRef = LoadAndExecute(compiledAssembly, runResult);
 
-        for (var i = 0; i < 8 && assemblyLoadContextWeakRef.IsAlive; i++) {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
-
-        Console.WriteLine(assemblyLoadContextWeakRef.IsAlive ? "Unloading failed!" : "Unloading success!");
+        Task.Run(() => {
+            for (var i = 0; i < 8 && assemblyLoadContextWeakRef.IsAlive; i++) {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            Console.WriteLine(assemblyLoadContextWeakRef.IsAlive ? "Unloading failed!" : "Unloading success!");
+        });
+        return runResult;
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private static WeakReference LoadAndExecute(byte[] compiledAssembly, string[] args) {
+    private static WeakReference LoadAndExecute(byte[] compiledAssembly, RunResult runResult) {
         using var asm = new MemoryStream(compiledAssembly);
         var assemblyLoadContext = new SimpleUnloadableAssemblyLoadContext();
 
@@ -23,9 +26,27 @@ public class CSharpRunner {
 
         var entry = assembly.EntryPoint;
 
-        _ = entry != null && entry.GetParameters().Length > 0
-            ? entry.Invoke(null, new object[] { args })
-            : entry.Invoke(null, null);
+        var consoleOut = new StringWriter();
+        var consoleErr = new StringWriter();
+        var oldOut = Console.Out;
+        var oldErr = Console.Error;
+
+        Console.SetOut(consoleOut);
+        Console.SetError(consoleErr);
+
+        try {
+            entry.Invoke(null, new object[] { Array.Empty<string>() });
+
+            runResult.stdout = consoleOut.ToString();
+            runResult.stderr = consoleErr.ToString();
+        }
+        catch (Exception e) {
+            runResult.outcome = Outcome.RunTimeError;
+            runResult.stderr = e.Message;
+        }
+
+        Console.SetOut(oldOut);
+        Console.SetError(oldErr);
 
         assemblyLoadContext.Unload();
 
