@@ -101,7 +101,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
-      this.canPaste = !!t.PasteFunction;
+      this.canPaste = !!t.PasteFunctions;
       this.skeleton = t.SkeletonCode || '';
       
       if (this.nextTaskClears) {
@@ -109,7 +109,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
         this.modelChanged();
       }
 
-      this.nextTaskClears = !!!t.NextTaskDoesNotClearFunctions;
+      this.nextTaskClears = !!t.NextTaskClearsFunctions;
     })
   }
 

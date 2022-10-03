@@ -12,11 +12,11 @@ export interface ITask {
     ReadyMadeFunctions?:  [string, string];
     SkeletonCode?: string;
     PasteExpression?: boolean;
-    PasteFunction?: boolean;
+    PasteFunctions?: boolean;
     Tests?: [string, string];
     NextTask?: string;
     PreviousTask?: string;
-    NextTaskDoesNotClearFunctions?: boolean;
+    NextTaskClearsFunctions?: boolean;
 }
 
 export class Task implements ITask {
@@ -39,11 +39,11 @@ export class Task implements ITask {
     ReadyMadeFunctions?: [string, string];
     SkeletonCode?: string | undefined;
     PasteExpression?: boolean | undefined;
-    PasteFunction?: boolean | undefined;
+    PasteFunctions?: boolean | undefined;
     Tests?: [string, string];
     NextTask?: string | undefined;
     PreviousTask?: string | undefined;
-    NextTaskDoesNotClearFunctions?: boolean | undefined;
+    NextTaskClearsFunctions?: boolean | undefined;
 }
 
 export const EmptyTask = new Task();

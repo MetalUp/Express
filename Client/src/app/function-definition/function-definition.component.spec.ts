@@ -147,7 +147,7 @@ describe('FunctionDefinitionComponent', () => {
   it('should call model changed when changed', () => {
     component.functionDefinitions = '';
     
-    taskSubject.next({ PasteFunction: true, SkeletonCode: 'test' } as ITask);
+    taskSubject.next({ PasteFunctions: true, SkeletonCode: 'test' } as ITask);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('');
@@ -161,7 +161,7 @@ describe('FunctionDefinitionComponent', () => {
     component.nextTaskClears = false;
     component.compiledOK = true;
     
-    taskSubject.next({ PasteFunction: true, SkeletonCode: 'test' } as ITask);
+    taskSubject.next({ PasteFunctions: true, SkeletonCode: 'test' } as ITask);
 
     expect(component.functionDefinitions).toBe('original');
     expect(component.compiledOK).toBe(true);
@@ -174,20 +174,20 @@ describe('FunctionDefinitionComponent', () => {
   it('should default nextClassClears flag', () => {
     expect(component.nextTaskClears).toBe(true);
     taskSubject.next({ } as ITask);
-    expect(component.nextTaskClears).toBe(true);
+    expect(component.nextTaskClears).toBe(false);
   });
 
   it('should unset nextClassClears flag from task', () => {
     expect(component.nextTaskClears).toBe(true);
-    taskSubject.next({ NextTaskDoesNotClearFunctions: true} as ITask);
-    expect(component.nextTaskClears).toBe(false);
+    taskSubject.next({ NextTaskClearsFunctions: true} as ITask);
+    expect(component.nextTaskClears).toBe(true);
   });
 
   it('should set nextClassClears flag from task', () => {
     component.nextTaskClears = false;
     expect(component.nextTaskClears).toBe(false);
-    taskSubject.next({ NextTaskDoesNotClearFunctions: false} as ITask);
-    expect(component.nextTaskClears).toBe(true);
+    taskSubject.next({ NextTaskClearsFunctions: false} as ITask);
+    expect(component.nextTaskClears).toBe(false);
   });
 
 
@@ -250,7 +250,7 @@ describe('FunctionDefinitionComponent', () => {
   it('should enable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteFunction: true } as ITask);
+    taskSubject.next({ PasteFunctions: true } as ITask);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).not.toHaveBeenCalled();
@@ -259,7 +259,7 @@ describe('FunctionDefinitionComponent', () => {
   it('should disable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteFunction: false } as ITask);
+    taskSubject.next({ PasteFunctions: false } as ITask);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();

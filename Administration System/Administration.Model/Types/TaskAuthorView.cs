@@ -51,7 +51,7 @@ namespace Model.Types
         public bool PasteExpression => Task.PasteExpression;
 
         [MemberOrder(101)]
-        public bool PasteFunction => Task.PasteFunction;
+        public bool PasteFunctions => Task.PasteFunctions;
 
         [MemberOrder(110)]
         public virtual Task PreviousTask => Task.PreviousTask;
