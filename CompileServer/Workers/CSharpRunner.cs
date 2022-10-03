@@ -2,8 +2,8 @@
 
 namespace CompileServer.Workers; 
 
-public class CSharpRunner {
-    public void Execute(byte[] compiledAssembly, string[] args) {
+public static class CSharpRunner {
+    public static void Execute(byte[] compiledAssembly, string[] args) {
         var assemblyLoadContextWeakRef = LoadAndExecute(compiledAssembly, args);
 
         for (var i = 0; i < 8 && assemblyLoadContextWeakRef.IsAlive; i++) {

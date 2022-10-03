@@ -1,4 +1,5 @@
-﻿using System.Runtime;
+﻿using System.Collections;
+using System.Runtime;
 using CompileServer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -8,7 +9,7 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace CompileServer.Workers;
 
-public class CSharpCompiler {
+public static class CSharpCompiler {
     public static Task<ActionResult<RunResult>> CompileAsTask(RunSpec runSpec) {
         return Task.Factory.StartNew(() => new ActionResult<RunResult>(Compile(runSpec)));
     }
@@ -46,10 +47,14 @@ public class CSharpCompiler {
             MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(AssemblyTargetedPatchBandAttribute).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(CSharpArgumentInfo).Assembly.Location)
+            MetadataReference.CreateFromFile(typeof(CSharpArgumentInfo).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // System.Linq
+            MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
+            MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location), // System.Collections.Generic
+            MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
         };
 
-        return CSharpCompilation.Create("Hello.dll",
+        return CSharpCompilation.Create("compiled.dll",
                                         new[] { parsedSyntaxTree },
                                         references,
                                         new CSharpCompilationOptions(OutputKind.ConsoleApplication,

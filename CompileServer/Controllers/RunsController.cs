@@ -12,5 +12,5 @@ public class RunsController : ControllerBase {
     public RunsController(ILogger<RunsController> logger) => this.logger = logger;
 
     [HttpPost]
-    public async Task<ActionResult<RunResult>> Run([FromBody] RunSpecWrapper runSpec) => await Compiler.Compile(runSpec);
+    public async Task<ActionResult<RunResult>> Run([FromBody] RunSpecWrapper runSpec) => await Compiler.Compile(runSpec.run_spec);
 }
