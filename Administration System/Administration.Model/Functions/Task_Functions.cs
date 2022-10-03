@@ -51,8 +51,9 @@ namespace Model.Functions
             };
         #endregion
 
-        #region Edit (via a VM & for authors only)
-        public static TaskAuthorView Edit(this Task task) => new TaskAuthorView(task);
+        #region AuthorView (via a VM & for authors only)
+        [Named("Show Author's View")]
+        public static TaskAuthorView AuthorView(this Task task) => new TaskAuthorView(task);
 
         #endregion
     }

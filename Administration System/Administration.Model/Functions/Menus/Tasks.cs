@@ -37,14 +37,20 @@
         }
 
         [MemberOrder(20)]
-        public static IQueryable<Task> TasksAuthoredByMe(IContext context,
+        public static IQueryable<Task> TasksAuthoredByMe(
             [Optionally] ProgrammingLanguage? language,
-            [Optionally] TaskStatus? status)
+            [Optionally] TaskStatus? status,
+            IContext context)
         {
             var id = Users.Me(context).Id;
             return AllTasks(language, status, context)
                 .Where(t => t.AuthorId == id)
                 .OrderBy(t => t.Status);
         }
+
+        [MemberOrder(21)]
+        public static IQueryable<Task> MyTasksUnderDevelopment(IContext context) =>
+            TasksAuthoredByMe(null, TaskStatus.UnderDevelopment, context);
+        
     }
 }
