@@ -28,7 +28,6 @@ namespace Model
 
             modelBuilder.Entity<Task>().HasOne(e => e.NextTask).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.PreviousTask).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Task>().Property(e => e.PasteFunction).HasColumnName("PasteFunctions");
 
             modelBuilder.Entity<Organisation>().HasMany(e => e.Teachers).WithOne(e => e.Organisation).OnDelete(DeleteBehavior.NoAction);
 
