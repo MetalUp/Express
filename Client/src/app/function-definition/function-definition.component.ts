@@ -109,7 +109,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
         this.modelChanged();
       }
 
-      this.nextTaskClears = !!!t.NextTaskClearsFunctions;
+      this.nextTaskClears = !!t.NextTaskClearsFunctions;
     })
   }
 
