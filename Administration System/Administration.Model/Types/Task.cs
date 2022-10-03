@@ -21,7 +21,7 @@ namespace Model.Types
             RMFName = cloneFrom.RMFName;
             RMFMime = cloneFrom.RMFMime;
             PasteExpression = cloneFrom.PasteExpression;
-            PasteFunctions = cloneFrom.PasteFunctions;
+            PasteFunction = cloneFrom.PasteFunction;
             TestsContent = cloneFrom.TestsContent;
             TestsName = cloneFrom.TestsName;
             TestsMime = cloneFrom.TestsMime;
@@ -110,7 +110,7 @@ namespace Model.Types
 
         [MemberOrder(101)]
         [HideInClient]
-        public bool PasteFunctions { get; init; }
+        public bool PasteFunction { get; init; }
 
         [Hidden]
         public int? PreviousTaskId { get; init; }

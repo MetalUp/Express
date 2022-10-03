@@ -51,7 +51,7 @@ namespace Model.Functions
             this TaskAuthorView tav,
             bool pasteFunctions,
             IContext context) =>
-                context.WithUpdated(tav.Task, new(tav.Task) { PasteFunctions = pasteFunctions });
+                context.WithUpdated(tav.Task, new(tav.Task) { PasteFunction = pasteFunctions });
 
         [Edit]
         public static IContext EditPreviousTask(
