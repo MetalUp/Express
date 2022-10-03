@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Runtime;
 using CompileServer.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -10,7 +9,19 @@ using Microsoft.CSharp.RuntimeBinder;
 namespace CompileServer.Workers;
 
 public static class CSharpCompiler {
-   
+    private static readonly CSharpParseOptions Options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp10);
+
+    private static readonly MetadataReference[] References = {
+        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+        MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
+        MetadataReference.CreateFromFile(typeof(AssemblyTargetedPatchBandAttribute).Assembly.Location),
+        MetadataReference.CreateFromFile(typeof(CSharpArgumentInfo).Assembly.Location),
+        MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // System.Linq
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
+        MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location), // System.Collections.Generic
+        MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
+    };
+
     public static (RunResult, byte[]) Compile(RunSpec runSpec) {
         var code = runSpec.sourcecode;
 
@@ -28,30 +39,17 @@ public static class CSharpCompiler {
 
         peStream.Seek(0, SeekOrigin.Begin);
 
-        var assembly = peStream.ToArray();
-        return (new RunResult {outcome = Outcome.Ok}, assembly);
+        return (new RunResult { outcome = Outcome.Ok }, peStream.ToArray());
     }
 
     private static CSharpCompilation GenerateCode(string sourceCode) {
         var codeString = SourceText.From(sourceCode);
-        var options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp10);
 
-        var parsedSyntaxTree = SyntaxFactory.ParseSyntaxTree(codeString, options);
-
-        var references = new MetadataReference[] {
-            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(AssemblyTargetedPatchBandAttribute).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(CSharpArgumentInfo).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // System.Linq
-            MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
-            MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location), // System.Collections.Generic
-            MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
-        };
+        var parsedSyntaxTree = SyntaxFactory.ParseSyntaxTree(codeString, Options);
 
         return CSharpCompilation.Create("compiled.dll",
                                         new[] { parsedSyntaxTree },
-                                        references,
+                                        References,
                                         new CSharpCompilationOptions(OutputKind.ConsoleApplication,
                                                                      optimizationLevel: OptimizationLevel.Release,
                                                                      assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default));

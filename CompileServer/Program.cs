@@ -1,3 +1,5 @@
+using CompileServer.Workers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

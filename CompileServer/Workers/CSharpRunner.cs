@@ -7,12 +7,13 @@ public static class CSharpRunner {
     public static RunResult Execute(byte[] compiledAssembly, RunResult runResult) {
         var assemblyLoadContextWeakRef = LoadAndExecute(compiledAssembly, runResult);
 
-        for (var i = 0; i < 8 && assemblyLoadContextWeakRef.IsAlive; i++) {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-        }
-
-        Console.WriteLine(assemblyLoadContextWeakRef.IsAlive ? "Unloading failed!" : "Unloading success!");
+        Task.Run(() => {
+            for (var i = 0; i < 8 && assemblyLoadContextWeakRef.IsAlive; i++) {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+            }
+            Console.WriteLine(assemblyLoadContextWeakRef.IsAlive ? "Unloading failed!" : "Unloading success!");
+        });
         return runResult;
     }
 

@@ -8,7 +8,7 @@ public static class Handler {
         return Task.Factory.StartNew(() => {
                 var (runResult, assembly) = Compiler.Compile(runSpec);
                 if (runResult.outcome == Outcome.Ok) {
-                    runResult = CSharpRunner.Execute(assembly, runResult);
+                    runResult = Runner.Run(runSpec, assembly, runResult);
                 }
 
                 return new ActionResult<RunResult>(runResult);
