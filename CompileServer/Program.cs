@@ -9,8 +9,10 @@ builder.Services.AddControllers();
 builder.Services.AddCors(options => {
     options.AddPolicy("_myAllowSpecificOrigins", builder => {
         builder
-            .WithOrigins("http://localhost:5001"
-            )
+            .WithOrigins(
+                "http://localhost:5001",
+                "http://localhost:49998",
+                "https://express.metalup.org")
             .AllowAnyHeader()
             .WithExposedHeaders("Warning", "ETag", "Set-Cookie")
             .AllowAnyMethod()
