@@ -1,8 +1,10 @@
-﻿namespace CSharp
+﻿using System.Collections.Immutable;
+
+namespace CSharp
 {
     public static class Reference
     {
-        public static List<string> AllWords = new List<string> //Total 12,947
+        public static ImmutableList<string> AllWords = ImmutableList<string>.Empty.AddRange(new List<string> //Total 12,947
         {
             ///Possible answers  - 2309
             "ABACK","ABASE","ABATE","ABBEY","ABBOT","ABHOR","ABIDE","ABLED","ABODE","ABORT",
@@ -1302,8 +1304,8 @@
             "ZONER","ZONES","ZONKS","ZOOEA","ZOOEY","ZOOID","ZOOKS","ZOOMS","ZOONS","ZOOTY",
             "ZOPPA","ZOPPO","ZORIL","ZORIS","ZORRO","ZOUKS","ZOWEE","ZOWIE","ZULUS","ZUPAN",
             "ZUPAS","ZUPPA","ZURFS","ZUZIM","ZYGAL","ZYGON","ZYMES","ZYMIC"
-        };
-        public static List<string> AllPossibleAnswers = new List<string>
+        });
+        public static ImmutableList<string> AllPossibleAnswers = ImmutableList<string>.Empty.AddRange(new List<string>
         {
             "ABACK","ABASE","ABATE","ABBEY","ABBOT","ABHOR","ABIDE","ABLED","ABODE","ABORT","ABOUT","ABOVE",
             "ABUSE","ABYSS","ACORN","ACRID","ACTOR","ACUTE","ADAGE","ADAPT","ADEPT","ADMIN","ADMIT","ADOBE",
@@ -1498,10 +1500,9 @@
             "WORLD","WORRY","WORSE","WORST","WORTH","WOULD","WOUND","WOVEN","WRACK","WRATH","WREAK","WRECK",
             "WREST","WRING","WRIST","WRITE","WRONG","WROTE","WRUNG","WRYLY","YACHT","YEARN","YEAST","YIELD",
             "YOUNG","YOUTH","ZEBRA","ZESTY","ZONAL"
-        };
+        });
 
-        public static List<string> Outcomes = new List<string>
-        {
+        public static List<string> Outcomes = new List<string> { 
             "_____","____+","____*","___+_","___++","___+*","___*_","___*+","___**","__+__","__+_+","__+_*","__++_","__+++","__++*",
             "__+*_","__+*+","__+**","__*__","__*_+","__*_*","__*+_","__*++","__*+*","__**_","__**+","__***","_+___","_+__+","_+__*",
             "_+_+_","_+_++","_+_+*","_+_*_","_+_*+","_+_**","_++__","_++_+","_++_*","_+++_","_++++","_+++*","_++*_","_++*+","_++**",
