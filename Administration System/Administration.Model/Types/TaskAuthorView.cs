@@ -48,11 +48,9 @@ namespace Model.Types
                  new FileAttachment(Task.TestsContent, Task.TestsName, Task.TestsMime);
 
         [MemberOrder(100)]
-        [HideInClient]
         public bool PasteExpression => Task.PasteExpression;
 
         [MemberOrder(101)]
-        [HideInClient]
         public bool PasteFunctions => Task.PasteFunctions;
 
         [MemberOrder(110)]
