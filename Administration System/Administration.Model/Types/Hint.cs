@@ -31,7 +31,6 @@ namespace Model.Types
         public int CostInMarks { get; init; }
 
         #region HtmlFile
-        [MemberOrder(4)]
         [HideInClient]
         public FileAttachment HtmlFile => (FileContent == null) ? null :
                  new FileAttachment(FileContent, FileName, FileMime);
@@ -39,7 +38,7 @@ namespace Model.Types
         [Hidden]
         public byte[] FileContent { get; init; }
 
-        [Hidden]
+        [MemberOrder(4)]
         public string FileName { get; init; }
 
         [Hidden]
