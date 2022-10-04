@@ -3,7 +3,7 @@ using CompileServer.Models;
 
 namespace CompileServer.Workers;
 
-public static class CSharpRunner {
+public static class DotNetRunner {
     public static RunResult Execute(byte[] compiledAssembly, RunResult runResult) {
         var assemblyLoadContextWeakRef = LoadAndExecute(compiledAssembly, runResult);
 
