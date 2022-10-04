@@ -7,7 +7,7 @@ namespace CompileServer.Workers;
 
 public class PythonHandler {
     public static Task<ActionResult<RunResult>> CompileAndRun(RunSpec runSpec) {
-        return Task.Factory.StartNew(() => {
+        return Task.Run(() => {
             const string tempFileName = "temp.py";
             var file = $"{System.IO.Path.GetTempPath()}{tempFileName}";
             var pythonExe = $"{RunsController.PythonPath}\\python.exe";

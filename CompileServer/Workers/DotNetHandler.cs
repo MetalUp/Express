@@ -5,7 +5,7 @@ namespace CompileServer.Workers;
 
 public static class DotNetHandler {
     public static Task<ActionResult<RunResult>> CompileAndRun(RunSpec runSpec) =>
-        Task.Factory.StartNew(() => {
+        Task.Run(() => {
                 var (runResult, assembly) = Compiler.Compile(runSpec);
                 if (runResult.outcome == Outcome.Ok) {
                     runResult = Runner.Run(runSpec, assembly, runResult);

@@ -5,7 +5,7 @@ namespace CompileServer.Workers;
 
 public static class JavaHandler {
     public static Task<ActionResult<RunResult>> CompileAndRun(RunSpec runSpec) =>
-        Task.Factory.StartNew(() => {
+        Task.Run(() => {
                 var (runResult, classFile) = JavaCompiler.Compile(runSpec);
                 if (runResult.outcome == Outcome.Ok) {
                     runResult = JavaRunner.Execute(classFile);
