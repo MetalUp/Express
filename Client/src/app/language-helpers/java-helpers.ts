@@ -43,55 +43,58 @@ export function wrapJavaFunctions(userDefinedFunction : string) {
 
 export function wrapJavaTests(tests : string) {
     return `
-    using System;
-    using System.Linq;
-    using System.Collections;
-    using System.Collections.Generic;
+    public class temp {
+        public static String fail = "Test failed calling ";
 
+        public static String ArgString(Object... arguments) {
+            String display = "";
+            for(Object o : arguments) {
+                display = display + ", " + Display(o);
+            }
+            return display;
+        } 
     
-    class MainWrapper{
-        public static string fail = "Test failed calling ";
-
-        public static string ArgString(params object[] arguments) => arguments.Aggregate("", (s, a) => s + Display(a) + ", ").TrimEnd(' ', ',');
-    
-        public static void TestFunction(string functionName, object expected, object actual, params object[] args)
+        public static void TestFunction(String functionName, Object expected, Object actual, Object... args)
         {
             if (Display(actual) != Display(expected))
             {
-                Console.WriteLine(fail + $"{functionName}({ArgString(args)}) Expected: {Display(expected)}  Actual: {Display(actual)}");
+                System.out.println(fail + functionName + ArgString(args) + " Expected: " + Display(expected) + " Actual: " + Display(actual));
                 throw new TestFailure();
             }
         }
     
-        public static void AssertTrue(string functionName, string args, bool actual, string message)
+        public static void AssertTrue(String functionName, String args, Boolean actual, String message)
         {
             if (actual != true)
             {
-                Console.WriteLine(fail +$"{functionName}({ArgString(args)}) {message}");
+                System.out.println(fail + functionName + ArgString(args) + " " + message);
                 throw new TestFailure();
             }
         }
     
-        public static string allTestsPassed = "All tests passed.";
+        public static String allTestsPassed = "All tests passed.";
     
         public static void AllTestsPassed()
         {
-            Console.Write(allTestsPassed);
+            System.out.print(allTestsPassed);
         }
     
-        public class TestFailure : Exception { }
+        public static class TestFailure extends Exception { }
 
-        private static string Display(object obj)
+        private static String Display(Object obj)
         {
             if (obj == null)  return null;
-            if (obj is string) return $"{obj}";
-            if (obj is Boolean) return (Boolean) obj ? "true" : "false";
-            if (obj is IEnumerable)
+            if (obj instanceof String) return (String)obj;
+            if (obj instanceof Boolean) return (Boolean) obj ? "true" : "false";
+            if (obj instanceof Iterable)
             {
-                var display = ((IEnumerable)obj).Cast<object>().Select(o => Display(o));
-                return $@"{{{string.Join(',', display)}}}";
+                String display = "";
+                for(Object i : (Iterable)obj ){
+                    display = display + "," + Display(i);
+                }
+                return display;
             }
-            return obj.ToString();
+            return obj.toString();
         }
 
         ${ReadyMadeFunctionsPlaceholder}
@@ -100,7 +103,7 @@ export function wrapJavaTests(tests : string) {
 
         ${tests}
 
-        static void Main(string[] args) {
+        static void main(String[] args) {
             RunTests();
         }
     }
