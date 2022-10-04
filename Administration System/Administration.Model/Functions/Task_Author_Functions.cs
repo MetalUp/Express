@@ -100,12 +100,22 @@ namespace Model.Functions
 
         #region FileAttachments
         #region Description
-        [MemberOrder(21)]
+        [MemberOrder(20)]
         public static IContext LoadDescriptionFromFile(
             this TaskAuthorView tav,
             FileAttachment file,
             IContext context) =>
                 SaveDescription(tav, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
+
+        [MemberOrder(21)]
+        public static IContext EnterDescriptionAsString(
+            this TaskAuthorView tav,
+            [MultiLine(20)] string description,
+            IContext context) =>
+             SaveDescription(tav, Encoding.ASCII.GetBytes(description),
+                 $"Description.html",
+                 "text/html",
+                 context);
 
         internal static IContext SaveDescription(
             this TaskAuthorView tav,
@@ -140,12 +150,12 @@ namespace Model.Functions
         #endregion
 
         #region Hidden Functions
-        [MemberOrder(30)]
-        public static IContext LoadHiddenFunctionsFromFile(
-            this TaskAuthorView tav,
-            FileAttachment file,
-            IContext context) =>
-            SaveHiddenFunctions(tav, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
+        //[MemberOrder(30)]
+        //public static IContext LoadHiddenFunctionsFromFile(
+        //    this TaskAuthorView tav,
+        //    FileAttachment file,
+        //    IContext context) =>
+        //    SaveHiddenFunctions(tav, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
 
         [MemberOrder(31)]
         public static IContext EnterHiddenFunctionsAsString(
@@ -190,12 +200,12 @@ namespace Model.Functions
         #endregion
 
         #region Tests
-        [MemberOrder(40)]
-        public static IContext LoadTestsFromFile(
-            this TaskAuthorView tav,
-            FileAttachment file,
-            IContext context) =>
-            SaveTests(tav, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
+        //[MemberOrder(40)]
+        //public static IContext LoadTestsFromFile(
+        //    this TaskAuthorView tav,
+        //    FileAttachment file,
+        //    IContext context) =>
+        //    SaveTests(tav, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
 
         [MemberOrder(41)]
         public static IContext EnterTestsAsString(
