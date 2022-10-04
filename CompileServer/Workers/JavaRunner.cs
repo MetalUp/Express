@@ -13,17 +13,18 @@ namespace CompileServer.Workers;
 public static class JavaRunner {
    
 
-    public static RunResult Execute(string execPath) {
+    public static RunResult Execute(string classFile) {
        
 
         var start = new ProcessStartInfo
         {
             FileName = @"C:\Program Files\Java\jdk-17.0.4.1\bin\java.exe",
-            Arguments = execPath,
+            Arguments = classFile,
             UseShellExecute = false,
             RedirectStandardOutput = true,
-            RedirectStandardError = true
-        };
+            RedirectStandardError = true,
+            WorkingDirectory = Path.GetTempPath()
+    };
 
         var runResult = new RunResult();
 
@@ -37,7 +38,7 @@ public static class JavaRunner {
             using var stdErr = process.StandardError;
             runResult.stdout = stdOutput.ReadToEnd();
             runResult.stderr = stdErr.ReadToEnd();
-            runResult.outcome = Outcome.Ok;
+            runResult.outcome = string.IsNullOrEmpty(runResult.stderr) ? Outcome.Ok : Outcome.RunTimeError;
         }
         catch (Exception e)
         {
@@ -46,7 +47,7 @@ public static class JavaRunner {
         }
         finally
         {
-            File.Delete(execPath);
+            File.Delete($"{Path.GetTempPath()}{classFile}.class");
         }
 
         return runResult;

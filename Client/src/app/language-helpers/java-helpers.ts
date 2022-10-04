@@ -2,12 +2,7 @@ import {  UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from "
 
 export function wrapJavaExpression(expression : string) {
     return `
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    class MainWrapper {
+    public class temp {
         ${ReadyMadeFunctionsPlaceholder}
 
         ${UserDefinedFunctionPlaceholder}
@@ -15,14 +10,14 @@ export function wrapJavaExpression(expression : string) {
         private static String Display(Object obj)
         {
             if (obj == null)  return null;
-            if (obj is string) return $"{obj}";
-            if (obj is Boolean) return (Boolean) obj ? "true" : "false";
-            if (obj is IEnumerable)
-            {
-                var display = ((IEnumerable)obj).Cast<object>().Select(o => Display(o));
-                return $@"{{{string.Join(',', display)}}}";
-            }
-            return obj.ToString();
+            if (obj instanceof String) return (String)obj;
+            if (obj instanceof Boolean) return (Boolean) obj ? "true" : "false";
+            // if (obj is IEnumerable)
+            // {
+            //     //var display = ((IEnumerable)obj).Cast<object>().Select(o => Display(o));
+            //     //return $@"{{{string.Join(',', display)}}}";
+            // }
+            return obj.toString();
         }
 
         public static void main(String[] args) {

@@ -37,6 +37,6 @@ public static class JavaCompiler {
             File.Delete(file);
         }
 
-        return (runResult, path + "temp.class");
+        return (runResult, "temp");
     }
 }

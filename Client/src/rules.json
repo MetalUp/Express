@@ -21,7 +21,7 @@
         },
         "java": {
             "cmpinfo": "error.*",
-            "stderr": ".*"
+            "stderr": "\\w+Exception"
         }
     },
     "CodeMustMatch": {
