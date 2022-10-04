@@ -12,7 +12,7 @@ export function wrapJavaExpression(expression : string) {
 
         ${UserDefinedFunctionPlaceholder}
 
-        private static string Display(object obj)
+        private static String Display(Object obj)
         {
             if (obj == null)  return null;
             if (obj is string) return $"{obj}";
@@ -25,8 +25,8 @@ export function wrapJavaExpression(expression : string) {
             return obj.ToString();
         }
 
-        static void Main(string[] args) {
-           System.Console.WriteLine(Display(${(expression)}));
+        public static void main(String[] args) {
+           System.out.println(Display(${(expression)}));
         }
     }`;
 }

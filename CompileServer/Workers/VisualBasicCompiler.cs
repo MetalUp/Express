@@ -4,7 +4,7 @@ using CompileServer.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.CodeAnalysis.Text;
-
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace CompileServer.Workers;
 
@@ -16,6 +16,7 @@ public static class VisualBasicCompiler {
         MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
         MetadataReference.CreateFromFile(typeof(AssemblyTargetedPatchBandAttribute).Assembly.Location),
         MetadataReference.CreateFromFile(typeof(VisualBasicCommandLineArguments).Assembly.Location),
+        MetadataReference.CreateFromFile(typeof(StandardModuleAttribute).Assembly.Location),
         MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // System.Linq
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
         MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location), // System.Collections.Generic

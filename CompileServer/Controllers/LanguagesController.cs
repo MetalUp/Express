@@ -9,5 +9,5 @@ public class LanguagesController : ControllerBase {
     public LanguagesController(ILogger<LanguagesController> logger) => this.logger = logger;
 
     [HttpGet]
-    public IEnumerable<string> Get() => new[] { "csharp", "python" };
+    public IEnumerable<string> Get() => new[] { "csharp", "python", "vb", "java" };
 }

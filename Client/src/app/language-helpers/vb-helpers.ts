@@ -41,7 +41,7 @@ export function wrapVBExpression(expression : string) {
         End Function
 
         Sub Main(args As String())
-            System.Console.WriteLine(Display(${(expression)}));
+            System.Console.WriteLine(Display(${(expression)}))
         End Sub
     End Module`;
 }
