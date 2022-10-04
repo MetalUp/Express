@@ -12,11 +12,14 @@ export function wrapJavaExpression(expression : string) {
             if (obj == null)  return null;
             if (obj instanceof String) return (String)obj;
             if (obj instanceof Boolean) return (Boolean) obj ? "true" : "false";
-            // if (obj is IEnumerable)
-            // {
-            //     //var display = ((IEnumerable)obj).Cast<object>().Select(o => Display(o));
-            //     //return $@"{{{string.Join(',', display)}}}";
-            // }
+            if (obj instanceof Iterable)
+            {
+                String display = "";
+                for(Object i : (Iterable)obj ){
+                    display = display + "," + Display(i);
+                }
+                return display;
+            }
             return obj.toString();
         }
 
@@ -28,18 +31,12 @@ export function wrapJavaExpression(expression : string) {
 
 export function wrapJavaFunctions(userDefinedFunction : string) {
     return `
-    using System;
-    using System.Linq;
-    using System.Collections;
-    using System.Collections.Generic;
-
-    
-    class MainWrapper{
+    public class temp {
         ${ReadyMadeFunctionsPlaceholder}
 
         ${userDefinedFunction}
 
-        static void Main(string[] args) {}
+        public static void main(String[] args) {}
     }
     `;
 }
