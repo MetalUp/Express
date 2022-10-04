@@ -14,6 +14,14 @@
         "python": {
             "cmpinfo": "\\s\\w*Error:.*",
             "stderr": "\\s\\w*Error:.*"
+        },
+        "vb": {
+            "cmpinfo": "BC.*",
+            "stderr": "\\w+Exception"
+        },
+        "java": {
+            "cmpinfo": "error.*",
+            "stderr": ".*"
         }
     },
     "CodeMustMatch": {

@@ -15,7 +15,6 @@ public static class JavaCompiler {
             FileName = @"C:\Program Files\Java\jdk-17.0.4.1\bin\javac.exe",
             Arguments = file,
             UseShellExecute = false,
-            RedirectStandardOutput = true,
             RedirectStandardError = true
         };
 
@@ -26,12 +25,9 @@ public static class JavaCompiler {
 
             process.WaitForExit();
 
-            using var stdOutput = process.StandardOutput;
             using var stdErr = process.StandardError;
-            runResult.stdout = stdOutput.ReadToEnd();
-            runResult.stderr = stdErr.ReadToEnd();
-
-            runResult.outcome = string.IsNullOrEmpty(runResult.stderr) ? Outcome.Ok : Outcome.CompilationError;
+            runResult.cmpinfo = stdErr.ReadToEnd();
+            runResult.outcome = string.IsNullOrEmpty(runResult.cmpinfo) ? Outcome.Ok : Outcome.CompilationError;
         }
         catch (Exception e) {
             runResult.outcome = Outcome.CompilationError;
