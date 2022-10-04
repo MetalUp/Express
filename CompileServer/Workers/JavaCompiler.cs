@@ -1,18 +1,19 @@
 ﻿using System.Diagnostics;
+using CompileServer.Controllers;
 using CompileServer.Models;
 
 namespace CompileServer.Workers;
 
 public static class JavaCompiler {
     public static (RunResult, string) Compile(RunSpec runSpec) {
-        var path = Path.GetTempPath();
         const string tempFileName = "temp.java";
-        var file = path + tempFileName;
+        var file = $"{(string?)Path.GetTempPath()}{tempFileName}";
+        var javaCompiler = $"{RunsController.JavaPath}\\bin\\javac.exe";
 
         File.WriteAllText(file, runSpec.sourcecode);
 
         var start = new ProcessStartInfo {
-            FileName = @"C:\Program Files\Java\jdk-17.0.4.1\bin\javac.exe",
+            FileName = javaCompiler,
             Arguments = file,
             UseShellExecute = false,
             RedirectStandardError = true

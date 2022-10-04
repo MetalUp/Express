@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using CompileServer.Controllers;
 using CompileServer.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,15 +8,14 @@ namespace CompileServer.Workers;
 public class PythonHandler {
     public static Task<ActionResult<RunResult>> CompileAndRun(RunSpec runSpec) {
         return Task.Factory.StartNew(() => {
-
-            var path = System.IO.Path.GetTempPath();
             const string tempFileName = "temp.py";
-            var file = path + tempFileName;
-            
+            var file = $"{System.IO.Path.GetTempPath()}{tempFileName}";
+            var pythonExe = $"{RunsController.PythonPath}\\python.exe";
+
             File.WriteAllText(file, runSpec.sourcecode);
 
             var start = new ProcessStartInfo {
-                FileName = @"C:\Python310\python.exe",
+                FileName = pythonExe,
                 Arguments = file,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,

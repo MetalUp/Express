@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Diagnostics;
 using System.Runtime;
+using CompileServer.Controllers;
 using CompileServer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -14,11 +15,12 @@ public static class JavaRunner {
    
 
     public static RunResult Execute(string classFile) {
-       
 
+        var java = $"{RunsController.JavaPath}\\bin\\java.exe";
+        
         var start = new ProcessStartInfo
         {
-            FileName = @"C:\Program Files\Java\jdk-17.0.4.1\bin\java.exe",
+            FileName = java,
             Arguments = classFile,
             UseShellExecute = false,
             RedirectStandardOutput = true,
