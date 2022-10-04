@@ -1,18 +1,12 @@
 ﻿using CompileServer.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CompileServer.Workers; 
+namespace CompileServer.Workers;
 
 public static class Handler {
-    public static Task<ActionResult<RunResult>> CompileAndRun(RunSpec runSpec) {
-        return Task.Factory.StartNew(() => {
-                var (runResult, assembly) = Compiler.Compile(runSpec);
-                if (runResult.outcome == Outcome.Ok) {
-                    runResult = Runner.Run(runSpec, assembly, runResult);
-                }
-
-                return new ActionResult<RunResult>(runResult);
-            }
-        );
-    }
+    public static Task<ActionResult<RunResult>> CompileAndRun(RunSpec runSpec) =>
+        runSpec.language_id switch {
+            "python" => PythonHandler.CompileAndRun(runSpec),
+            _ => DotNetHandler.CompileAndRun(runSpec)
+        };
 }
