@@ -138,6 +138,12 @@ export function wrapVBTests(tests : string) {
     
             Return obj.ToString()
         End Function
+
+        ${ReadyMadeFunctionsPlaceholder}
+
+        ${UserDefinedFunctionPlaceholder}
+
+        ${tests}
     
         Sub Main(args As String())
             RunTests()
