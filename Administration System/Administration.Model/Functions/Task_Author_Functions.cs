@@ -299,7 +299,9 @@ namespace Model.Functions
                 Id = 0, //Because its a new object
                 Language = newLanguage,
                 RMFContent = null,
+                RMFName = null,
                 TestsContent = null,
+                TestsName = null,
                 NextTask = null,
                 PreviousTask = null,
                 Hints = newHints
