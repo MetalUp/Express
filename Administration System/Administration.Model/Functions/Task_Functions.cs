@@ -23,9 +23,6 @@ namespace Model.Functions
 
         public static List<Group> Choices1AssignTo(this Task task, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
             Groups.AllOurGroups(context).ToList();
-
-  
-
         #endregion
 
         #region internal functions
@@ -43,10 +40,10 @@ namespace Model.Functions
         internal static string LanguageAsFileExtension(this Task task) =>
             task.Language switch
             {
-                ProgrammingLanguage.Python => ".py",
-                ProgrammingLanguage.CSharp => ".cs",
-                ProgrammingLanguage.VB => ".vb",
-                ProgrammingLanguage.Java => ".java",
+                ProgrammingLanguage.Python => "_py.txt",
+                ProgrammingLanguage.CSharp => "_cs.txt",
+                ProgrammingLanguage.VB => "_vb.txt",
+                ProgrammingLanguage.Java => "_java.txt",
                 _ => ".txt"
             };
         #endregion
