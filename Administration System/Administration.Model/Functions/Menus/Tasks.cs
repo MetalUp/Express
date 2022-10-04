@@ -30,9 +30,9 @@
                     (language == null || t.Language == language));
 
 
-        public static (Task, IContext) CreateNewTask(string title, IContext context)
+        public static (Task, IContext) CreateNewTask(string title, ProgrammingLanguage language, IContext context)
         {
-            var t = new Task() { Title = title, AuthorId = Users.Me(context).Id };
+            var t = new Task() { Title = title, Language = language, AuthorId = Users.Me(context).Id };
             return (t, context.WithNew(t));
         }
 
