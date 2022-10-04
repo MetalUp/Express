@@ -14,14 +14,12 @@ public static class JavaRunner {
    
 
     public static RunResult Execute(string execPath) {
-        var path = System.IO.Path.GetTempPath();
        
-        var file = path + execPath;
 
         var start = new ProcessStartInfo
         {
             FileName = @"C:\Program Files\Java\jdk-17.0.4.1\bin\java.exe",
-            Arguments = file,
+            Arguments = execPath,
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true
@@ -48,7 +46,7 @@ public static class JavaRunner {
         }
         finally
         {
-            File.Delete(file);
+            File.Delete(execPath);
         }
 
         return runResult;

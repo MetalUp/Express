@@ -1,27 +1,17 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using System.Runtime;
+﻿using System.Diagnostics;
 using CompileServer.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Text;
-using Microsoft.CSharp.RuntimeBinder;
 
 namespace CompileServer.Workers;
 
 public static class JavaCompiler {
-   
-
     public static (RunResult, string) Compile(RunSpec runSpec) {
-        var path = System.IO.Path.GetTempPath();
+        var path = Path.GetTempPath();
         const string tempFileName = "temp.java";
         var file = path + tempFileName;
 
         File.WriteAllText(file, runSpec.sourcecode);
 
-        var start = new ProcessStartInfo
-        {
+        var start = new ProcessStartInfo {
             FileName = @"C:\Program Files\Java\jdk-17.0.4.1\bin\javac.exe",
             Arguments = file,
             UseShellExecute = false,
@@ -31,8 +21,7 @@ public static class JavaCompiler {
 
         var runResult = new RunResult();
 
-        try
-        {
+        try {
             using var process = Process.Start(start);
 
             process.WaitForExit();
@@ -41,20 +30,17 @@ public static class JavaCompiler {
             using var stdErr = process.StandardError;
             runResult.stdout = stdOutput.ReadToEnd();
             runResult.stderr = stdErr.ReadToEnd();
-            runResult.outcome = Outcome.Ok;
+
+            runResult.outcome = string.IsNullOrEmpty(runResult.stderr) ? Outcome.Ok : Outcome.CompilationError;
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             runResult.outcome = Outcome.CompilationError;
             runResult.stderr = e.Message;
         }
-        finally
-        {
+        finally {
             File.Delete(file);
         }
 
         return (runResult, path + "temp.class");
     }
-
-  
 }
