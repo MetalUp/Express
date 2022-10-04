@@ -13,7 +13,7 @@ namespace CompileServer.Workers;
 public static class JavaRunner {
    
 
-    public static RunResult Execute(string execPath, RunSpec runSpec) {
+    public static RunResult Execute(string execPath) {
         var path = System.IO.Path.GetTempPath();
        
         var file = path + execPath;
