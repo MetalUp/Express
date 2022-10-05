@@ -15,6 +15,7 @@ import { TaskViewComponent } from './task-view/task-view.component';
 import { TaskDescriptionComponent } from './task-description/task-description.component';
 import { TestingComponent } from './testing/testing.component';
 import { UserComponent } from './user/user.component';
+import { LandingComponent } from './landing/landing.component';
 
 @NgModule({
     declarations: [
@@ -26,6 +27,7 @@ import { UserComponent } from './user/user.component';
         TestingComponent,
         HintComponent,
         TaskViewComponent,
+        LandingComponent,
     ],
     imports: [
         BrowserModule,
