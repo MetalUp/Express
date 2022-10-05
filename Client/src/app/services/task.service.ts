@@ -132,7 +132,7 @@ export class TaskService {
     return this.repLoader.getFile(urlAndMediaType[0], urlAndMediaType[1], true)
       .then(b => b.text())
       .catch((e: ErrorWrapper) => {
-        console.log(`${e.title}:${e.description}`);
+        //console.log(`${e.title}:${e.description}`);
         return "";
       });
   }
