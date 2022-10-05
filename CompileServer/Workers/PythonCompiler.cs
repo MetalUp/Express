@@ -1,16 +1,15 @@
-﻿using System.Text.RegularExpressions;
-using CompileServer.Controllers;
+﻿using CompileServer.Controllers;
 using CompileServer.Models;
 
 namespace CompileServer.Workers;
 
-public static class JavaCompiler {
+public static class PythonCompiler {
     public static string GetVersion() {
-        var java = $"{CompileServerController.JavaPath}\\bin\\javac.exe";
+        var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
         string version;
 
         try {
-            using var process = Helpers.CreateProcess(java, "-version");
+            using var process = Helpers.CreateProcess(pythonExe, "--version");
             process.WaitForExit();
             using var stdOutput = process.StandardOutput;
             version = stdOutput.ReadToEnd();
@@ -19,30 +18,28 @@ public static class JavaCompiler {
             version = e.Message;
         }
 
-        return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
+        return string.IsNullOrEmpty(version) ? "not found" : version.Replace("Python ", "").Trim();
     }
 
     public static (RunResult, string) Compile(RunSpec runSpec) {
-        const string tempFileName = "temp.java";
-        var file = $"{(string?)Path.GetTempPath()}{tempFileName}";
-        var javaCompiler = $"{CompileServerController.JavaPath}\\bin\\javac.exe";
+        const string tempFileName = "temp.py";
+        var file = $"{Path.GetTempPath()}{tempFileName}";
+        var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
 
         File.WriteAllText(file, runSpec.sourcecode);
 
         var runResult = new RunResult();
+        var args = $"-m py_compile {file}";
 
         try {
-            using var process = Helpers.CreateProcess(javaCompiler, file);
+            using var process = Helpers.CreateProcess(pythonExe, args);
             process.WaitForExit();
             runResult = Helpers.SetCompileResults(process, runResult);
         }
         catch (Exception e) {
             runResult = Helpers.SetCompileResults(runResult, e);
         }
-        finally {
-            File.Delete(file);
-        }
 
-        return (runResult, "temp");
+        return (runResult, tempFileName);
     }
 }

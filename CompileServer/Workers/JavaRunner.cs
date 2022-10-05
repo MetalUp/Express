@@ -24,16 +24,11 @@ public static class JavaRunner {
 
             process.WaitForExit();
 
-            using var stdOutput = process.StandardOutput;
-            using var stdErr = process.StandardError;
-            runResult.stdout = stdOutput.ReadToEnd();
-            runResult.stderr = stdErr.ReadToEnd();
-            runResult.outcome = string.IsNullOrEmpty(runResult.stderr) ? Outcome.Ok : Outcome.RunTimeError;
+            runResult = Helpers.SetRunResults(process, runResult);
         }
         catch (Exception e)
         {
-            runResult.outcome = Outcome.RunTimeError;
-            runResult.stderr = e.Message;
+            runResult = Helpers.SetRunResults(runResult, e);
         }
         finally
         {
@@ -42,6 +37,4 @@ public static class JavaRunner {
 
         return runResult;
     }
-
-  
 }

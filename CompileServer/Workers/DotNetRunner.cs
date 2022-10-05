@@ -37,12 +37,10 @@ public static class DotNetRunner {
         try {
             entry.Invoke(null, new object[] { Array.Empty<string>() });
 
-            runResult.stdout = consoleOut.ToString();
-            runResult.stderr = consoleErr.ToString();
+            runResult = Helpers.SetRunResults(runResult, consoleOut, consoleErr);
         }
         catch (Exception e) {
-            runResult.outcome = Outcome.RunTimeError;
-            runResult.stderr = e.Message;
+            runResult = Helpers.SetRunResults(runResult, e);
         }
 
         Console.SetOut(oldOut);
