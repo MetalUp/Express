@@ -6,37 +6,38 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class JavaCompiler {
-
-    public static string GetVersion()
-    {
+    public static string GetVersion() {
         var java = $"{CompileServerController.JavaPath}\\bin\\javac.exe";
         string version;
 
-        var start = new ProcessStartInfo
-        {
+        var start = new ProcessStartInfo {
             FileName = java,
             Arguments = "-version",
             UseShellExecute = false,
             RedirectStandardOutput = true,
+            RedirectStandardError = true,
             WorkingDirectory = Path.GetTempPath()
         };
 
-        try
-        {
+        try {
             using var process = Process.Start(start);
             process.WaitForExit();
             using var stdOutput = process.StandardOutput;
             version = stdOutput.ReadToEnd();
+            // debugging
+            if (string.IsNullOrEmpty(version)) {
+                using var stdErr = process.StandardError;
+                version = stdErr.ReadToEnd();
+            }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             version = e.Message;
         }
 
-        return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
+        return version;
+
+        //return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
     }
-
-
 
     public static (RunResult, string) Compile(RunSpec runSpec) {
         const string tempFileName = "temp.java";
