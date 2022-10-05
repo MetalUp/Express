@@ -49,7 +49,7 @@ namespace Model.Functions
         #region Edit Task (author action)
         public static TaskAuthorView EditTask(this Project project, Task task ) => new TaskAuthorView(task);
 
-        public static ICollection<Task> Choices1EditTask(this Project project) => project.Tasks;
+        public static ICollection<Task> Choices1EditTask(this Project project) => project.TaskObjects;
         #endregion
 
         #region Create Task (author action)
@@ -57,7 +57,6 @@ namespace Model.Functions
             this Project project, 
             string title,
             [Optionally] Task previousTask,
-            [Optionally] Task nextTask,
             IContext context)
         {
             var t = new Task {
@@ -66,23 +65,16 @@ namespace Model.Functions
                 Title = title, 
                 PreviousTaskId  = previousTask is null? null : previousTask.Id,
                 PreviousTask = previousTask,
-                NextTaskId = nextTask is null ? null : nextTask.Id,
-                NextTask = nextTask
             };
-            return context.WithNew(t);
+            var updatedPrevious = previousTask is null ? null :
+                new Task(previousTask) { NextTask = t };
+            var context2 = updatedPrevious is null ? context : context.WithUpdated(previousTask, updatedPrevious);
+            return context2.WithNew(t);
         }
-
-        public static ICollection<Task> Choices2CreateTask(
-            this Project project) =>
-            project.Tasks;
 
         public static Task Default2CreateTask(
             this Project project) =>
-            project.Tasks.LastOrDefault();
-
-        public static ICollection<Task> Choices3CreateTask(
-            this Project project) =>
-            project.Tasks;
+            project.TaskObjects.LastOrDefault();
 
         #endregion
     }
