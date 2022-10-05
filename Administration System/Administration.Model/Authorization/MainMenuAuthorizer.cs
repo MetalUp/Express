@@ -14,7 +14,7 @@ namespace Model.Authorization
                 nameof(Organisations) => OrganisationsAuth(memberName, context),
                 nameof(Groups) => GroupsAuth(memberName, context),
                 nameof(Invitations) => InvitationsAuth(memberName, context),
-                nameof(Tasks) => TasksAuth(memberName, context),
+                nameof(Projects) => ProjectsAuth(memberName, context),
                 nameof(Assignments) =>AssignmentsAuth(memberName, context),
                 nameof(Activities) => ActivitiesAuth(memberName, context),
                 _ => false
@@ -41,18 +41,17 @@ namespace Model.Authorization
                 _ => false
             };
 
-        private bool TasksAuth(string memberName, IContext context) =>
+        private bool ProjectsAuth(string memberName, IContext context) =>
             Users.UserRole(context) switch
             {
                 Role.Root => true,
                 Role.Author => true,
-                Role.Teacher => Helpers.MatchesOneOf(memberName,
-                    nameof(Tasks.AllAssignableTasks),
-                    nameof(Tasks.PublicTasks),
-                    nameof(Tasks.FindTasks)),
-                Role.Student => Helpers.MatchesOneOf(memberName,
-                    nameof(Tasks.PublicTasks)),
-                _ => Helpers.MatchesOneOf(memberName, nameof(Tasks.PublicTasks))
+                Role.Teacher => true,
+                //Role.Teacher => Helpers.MatchesOneOf(memberName,
+                //    nameof(Projects.AllAssignableTasks),
+                //    nameof(Projects.PublicTasks),
+                //    nameof(Projects.FindTasks)),
+                _ => false
             };
 
         private bool InvitationsAuth(string memberName, IContext context) =>

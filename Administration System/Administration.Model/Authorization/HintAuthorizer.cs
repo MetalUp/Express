@@ -12,9 +12,9 @@ namespace Model.Authorization
                 Role.Root => true,
                 Role.Author => true,
                 Role.Teacher => IsHintProperty(memberName),
-                Role.Student => TaskAuthorizer.TaskIsPublicOrAssignedToUser(hint.Task, context) && 
+                Role.Student => TaskAuthorizer.TaskIsDefaultOrAssignedToUser(hint.Task, context) && 
                                IsHintProperty(memberName),
-                _ => hint.Task.IsPublic() && IsHintProperty(memberName)
+                _ => hint.Task.IsDefault() && IsHintProperty(memberName)
             };
 
         private static bool IsHintProperty(string memberName) => IsProperty<Hint>(memberName);
