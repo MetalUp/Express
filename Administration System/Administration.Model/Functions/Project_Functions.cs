@@ -96,11 +96,7 @@ namespace Model.Functions
                 PreviousTaskId  = previousTask is null? null : previousTask.Id,
                 PreviousTask = previousTask,
                 RMFContent = previousTask is null ? null : previousTask.RMFContent,
-                RMFName = previousTask is null ? null : previousTask.RMFName,
-                RMFMime = previousTask is null ? null : previousTask.RMFMime,
                 TestsContent = previousTask is null ? null : previousTask.TestsContent,
-                TestsName = previousTask is null ? null : previousTask.TestsName,
-                TestsMime = previousTask is null ? null : previousTask.TestsMime,
             };
             var updatedPrevious = previousTask is null ? null :
                 new Task(previousTask) { NextTask = t };

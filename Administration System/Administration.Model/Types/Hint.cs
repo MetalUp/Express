@@ -50,6 +50,6 @@ namespace Model.Types
         [MemberOrder(10)]
         public virtual Task Task { get; init; }
 
-        public override string ToString() => $"{Title} ({CostInMarks} marks)";
+        public override string ToString() => $"{Title} (-{CostInMarks}) marks";
     }
 }
