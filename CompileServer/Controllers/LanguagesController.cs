@@ -5,9 +5,7 @@ namespace CompileServer.Controllers;
 
 [Route("restapi/[controller]")]
 public class LanguagesController : CompileServerController {
-    private readonly ILogger<LanguagesController> logger;
-
-    public LanguagesController(ILogger<LanguagesController> logger, IConfiguration configuration) :base(configuration)  => this.logger = logger;
+    public LanguagesController(ILogger<LanguagesController> logger, IConfiguration configuration) : base(logger, configuration) { }
 
     [HttpGet]
     public IEnumerable<string[]> Get() => new[] {
