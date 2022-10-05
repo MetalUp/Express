@@ -33,14 +33,12 @@
         [MemberOrder(15)]
         public ProgrammingLanguage Language { get; init; }  
 
-
         [MemberOrder(20)]
         [MultiLine(10)]
         public string Description { get; init; }
 
         public virtual ICollection<Task> Tasks { get; init; } = new List<Task>();
 
-        public override string ToString() => Title;
-
+        public override string ToString() => $"{Title} ({Language})";
     }
 }
