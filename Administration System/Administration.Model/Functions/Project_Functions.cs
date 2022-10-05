@@ -32,7 +32,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditDescription(
             this Project proj,
-            [MultiLine(10)] string description, //check if annotation is needed
+            [MultiLine(10)] string description,
             IContext context) =>
              context.WithUpdated(proj, new(proj) { Description = description });
         #endregion
