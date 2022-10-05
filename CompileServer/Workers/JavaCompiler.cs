@@ -34,7 +34,9 @@ public static class JavaCompiler {
             version = e.Message;
         }
 
-        return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
+        return version;
+
+        //return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
     }
 
     public static (RunResult, string) Compile(RunSpec runSpec) {
