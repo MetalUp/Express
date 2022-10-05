@@ -15,7 +15,7 @@ public static class JavaCompiler {
         var start = new ProcessStartInfo
         {
             FileName = java,
-            Arguments = "--version",
+            Arguments = "-version",
             UseShellExecute = false,
             RedirectStandardOutput = true,
             WorkingDirectory = Path.GetTempPath()
