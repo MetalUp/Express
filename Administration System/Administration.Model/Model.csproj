@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Compile Remove="AdminDbContextFactory.cs" />
-    <Compile Remove="Authorization\ProjectAuthorizer.cs" />
     <Compile Remove="Types\Teacher.cs" />
   </ItemGroup>
 

@@ -79,6 +79,9 @@ namespace Model.Functions
         #region Edit Task (author action)
         public static TaskAuthorView EditTask(this Project project, Task task ) => new TaskAuthorView(task);
 
+        public static Task Default1EditTask(this Project project) =>
+            project.Tasks.Count > 1 ? null : project.Tasks.FirstOrDefault();
+
         public static ICollection<Task> Choices1EditTask(this Project project) => project.Tasks;
         #endregion
 
