@@ -7,6 +7,36 @@ namespace Model.Functions
 
     public static class Project_Functions
     {
+        #region Edits
+        [Edit]
+        public static IContext EditTitle(
+             this Project proj,
+             string title,
+             IContext context) =>
+                 context.WithUpdated(proj, new(proj) { Title = title });
+
+        [Edit]
+        public static IContext EditStatus(
+             this Project proj,
+             ProjectStatus status,
+             IContext context) =>
+                 context.WithUpdated(proj, new(proj) { Status = status });
+
+        [Edit]
+        public static IContext EditLanguage(
+             this Project proj,
+             ProgrammingLanguage language,
+             IContext context) =>
+                 context.WithUpdated(proj, new(proj) { Language = language });
+
+        [Edit]
+        public static IContext EditDescription(
+            this Project proj,
+            [MultiLine(10)] string description, //check if annotation is needed
+            IContext context) =>
+             context.WithUpdated(proj, new(proj) { Description = description });
+        #endregion
+
         #region AssignTo
         [MemberOrder(10)]
         public static IContext AssignToIndividual(this Project project, User singleUser, DateTime dueBy, IContext context) =>
