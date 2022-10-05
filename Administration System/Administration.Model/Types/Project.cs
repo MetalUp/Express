@@ -19,7 +19,7 @@
         [Hidden]
         public int Id { get; init; }
 
-        [MemberOrder(10)]
+        [MemberOrder(1)]
         [UrlLink("Try out the Project")]
         public string Link => $"https://express.metalup.org/task/{Tasks.First().Id}"; //Will fail if no Tasks yet
 
@@ -41,6 +41,7 @@
         [MultiLine(10)]
         public string Description { get; init; }
 
+        [RenderEagerly]
         public virtual ICollection<Task> Tasks { get; init; } = new List<Task>();
 
         public override string ToString() => $"{Title} ({Language})";

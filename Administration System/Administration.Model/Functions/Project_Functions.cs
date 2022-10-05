@@ -32,7 +32,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditDescription(
             this Project proj,
-            [MultiLine(10)] string description, //check if annotation is needed
+            [MultiLine(10)] string description,
             IContext context) =>
              context.WithUpdated(proj, new(proj) { Description = description });
         #endregion
@@ -95,13 +95,18 @@ namespace Model.Functions
                 Title = title, 
                 PreviousTaskId  = previousTask is null? null : previousTask.Id,
                 PreviousTask = previousTask,
+                RMFContent = previousTask is null ? null : previousTask.RMFContent,
+                RMFName = previousTask is null ? null : previousTask.RMFName,
+                RMFMime = previousTask is null ? null : previousTask.RMFMime,
+                TestsContent = previousTask is null ? null : previousTask.TestsContent,
+                TestsName = previousTask is null ? null : previousTask.TestsName,
+                TestsMime = previousTask is null ? null : previousTask.TestsMime,
             };
             var updatedPrevious = previousTask is null ? null :
                 new Task(previousTask) { NextTask = t };
             var context2 = updatedPrevious is null ? context : context.WithUpdated(previousTask, updatedPrevious);
             return context2.WithNew(t);
         }
-
         public static Task Default2CreateTask(
             this Project project) =>
             project.Tasks.LastOrDefault();
