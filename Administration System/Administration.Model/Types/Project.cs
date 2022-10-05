@@ -19,6 +19,10 @@
         [Hidden]
         public int Id { get; init; }
 
+        [MemberOrder(10)]
+        [UrlLink("Try out the Project")]
+        public string Link => $"https://express.metalup.org/task/{Tasks.First().Id}"; //Will fail if no Tasks yet
+
         [Hidden]
         public int AuthorId { get; init; }
         [Hidden]
