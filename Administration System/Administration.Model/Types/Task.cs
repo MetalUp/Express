@@ -34,11 +34,6 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
-        [Hidden]
-        public int? ProjectId { get; init; }
-        [Hidden]
-        public virtual Project Project { get; init; }
-
         [MemberOrder(10)]
         [UrlLink("Try out the Task")]
         public string Link => $"https://express.metalup.org/task/{Id}";
@@ -127,6 +122,11 @@ namespace Model.Types
         [MemberOrder(130)]
         [HideInClient]
         public bool NextTaskClearsFunctions { get; init; }
+
+        [Hidden]
+        public int? ProjectId { get; init; }
+        [MemberOrder(200)]
+        public virtual Project Project { get; init; }
 
         [RenderEagerly]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();

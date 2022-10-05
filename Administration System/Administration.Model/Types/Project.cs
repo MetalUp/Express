@@ -41,6 +41,7 @@
         [MultiLine(10)]
         public string Description { get; init; }
 
+        [RenderEagerly]
         public virtual ICollection<Task> Tasks { get; init; } = new List<Task>();
 
         public override string ToString() => $"{Title} ({Language})";
