@@ -46,9 +46,43 @@ namespace Model.Functions
             };
         #endregion
 
-        #region AuthorView (via a VM & for authors only)
-        [Named("Show Author's View")]
-        public static TaskAuthorView AuthorView(this Task task) => new TaskAuthorView(task);
+        #region Edit Task (author action)
+        public static TaskAuthorView EditTask(this Project project, Task task ) => new TaskAuthorView(task);
+
+        public static ICollection<Task> Choices1EditTask(this Project project) => project.Tasks;
+        #endregion
+
+        #region Create Task (author action)
+        public static (TaskAuthorView, IContext) CreateTask(
+            this Project project, 
+            string title,
+            [Optionally] Task previousTask,
+            [Optionally] Task nextTask,
+            IContext context)
+        {
+            var t = new Task {
+                ProjectId = project.Id, 
+                Project = project, 
+                Title = title, 
+                PreviousTaskId  = previousTask is null? null : previousTask.Id,
+                PreviousTask = previousTask,
+                NextTaskId = nextTask is null ? null : nextTask.Id,
+                NextTask = nextTask
+            };
+            return (new TaskAuthorView(t), context.WithNew(t));
+        }
+
+        public static ICollection<Task> Choices2CreateTask(
+            this Project project) =>
+            project.Tasks;
+
+        public static Task Default2CreateTask(
+            this Project project) =>
+            project.Tasks.LastOrDefault();
+
+        public static ICollection<Task> Choices3CreateTask(
+            this Project project) =>
+            project.Tasks;
 
         #endregion
     }
