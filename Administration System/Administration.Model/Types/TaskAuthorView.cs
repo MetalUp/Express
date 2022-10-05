@@ -18,12 +18,6 @@ namespace Model.Types
         [Named("Return to Task view")]
         public Task Task { get; init; }
 
-        [MemberOrder(10)]
-        public virtual User Author => Task.Author;
-
-        [MemberOrder(20)]
-        public TaskStatus Status => Task.Status;
-
         [MemberOrder(30)]
         public string Title => Task.Title;
 
@@ -61,10 +55,6 @@ namespace Model.Types
 
         [MemberOrder(130)]
         public bool NextTaskClearsFunctions => Task.NextTaskClearsFunctions;
-
-        [MemberOrder(140)]
-        [MultiLine(10)]
-        public string TeacherNotes => Task.TeacherNotes;
 
         [RenderEagerly]
         public virtual ICollection<Hint> Hints => Task.Hints;

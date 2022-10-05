@@ -8,11 +8,7 @@ namespace Model.Types
         public Task(Task cloneFrom)
         {
             Id = cloneFrom.Id;
-            AuthorId = cloneFrom.AuthorId;
-            Author = cloneFrom.Author;
-            Status = cloneFrom.Status;
             Title = cloneFrom.Title;
-            Language = cloneFrom.Language;
             MaxMarks = cloneFrom.MaxMarks;
             DescContent = cloneFrom.DescContent;
             DescName = cloneFrom.DescName;
@@ -37,22 +33,19 @@ namespace Model.Types
         public int Id { get; init; }
 
         [Hidden]
-        public int AuthorId { get; init; }
+        public int? ProjectId { get; init; }
         [Hidden]
-        public virtual User Author { get; init; }
+        public virtual Project Project { get; init; }
 
         [MemberOrder(10)]
         [UrlLink("Try out the Task")]
         public string Link => $"https://express.metalup.org/task/{Id}";
 
-        [MemberOrder(20)]
-        public TaskStatus Status { get; init; }
-
         [MemberOrder(30)]
         public string Title { get; init; }
 
         [MemberOrder(40)]
-        public ProgrammingLanguage Language { get; init; }
+        public ProgrammingLanguage Language => Project.Language;
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(60)]
@@ -126,10 +119,6 @@ namespace Model.Types
 
         [MemberOrder(130)]
         public bool NextTaskClearsFunctions { get; init; }
-
-        [MemberOrder(140)]
-        [MultiLine(10)]
-        public string TeacherNotes { get; init; }
 
         [RenderEagerly]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();

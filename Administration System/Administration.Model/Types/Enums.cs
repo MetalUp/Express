@@ -25,8 +25,8 @@
         PendingStart, Started, Completed, NotCompleted
     }
 
-    public enum TaskStatus
+    public enum ProjectStatus
     {
-        UnderDevelopment, Public, Assignable
+        UnderDevelopment, Assignable
     }
 }

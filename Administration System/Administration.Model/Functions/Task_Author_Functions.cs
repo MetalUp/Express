@@ -26,13 +26,6 @@ namespace Model.Functions
                 context.WithUpdated(tav.Task, new(tav.Task) { Title = title });
 
         [Edit]
-        public static IContext EditLanguage(
-            this TaskAuthorView tav,
-            ProgrammingLanguage language,
-            IContext context) =>
-                context.WithUpdated(tav.Task, new(tav.Task) { Language = language });
-
-        [Edit]
         public static IContext EditMaxMarks(
             this TaskAuthorView tav,
             int maxMarks,
@@ -87,14 +80,6 @@ namespace Model.Functions
           bool nextTaskClearsFunctions,
           IContext context) =>
             context.WithUpdated(tav.Task, new(tav.Task) { NextTaskClearsFunctions = nextTaskClearsFunctions });
-
-
-        [Edit]
-        public static IContext EditStatus(
-          this TaskAuthorView tav,
-          TaskStatus status,
-          IContext context) =>
-            context.WithUpdated(tav.Task, new(tav.Task) { Status = status });
 
         #endregion
 
@@ -163,7 +148,7 @@ namespace Model.Functions
             [MultiLine(20)] string hiddenFunctionsCode,
             IContext context) =>
                  SaveHiddenFunctions(tav, Encoding.ASCII.GetBytes(hiddenFunctionsCode),
-                     $"HiddenFunctions{tav.Task.LanguageAsFileExtension()}",
+                     $"HiddenFunctions{tav.Task.Project.LanguageAsFileExtension()}",
                      "text/plain",
                      context);
 
@@ -213,7 +198,7 @@ namespace Model.Functions
             [MultiLine(20)] string testsCode,
             IContext context) =>
                  SaveTests(tav, Encoding.ASCII.GetBytes(testsCode),
-                     $"Tests{tav.Task.LanguageAsFileExtension()}",
+                     $"Tests{tav.Task.Project.LanguageAsFileExtension()}",
                      "text/plain",
                      context);
 
@@ -286,28 +271,5 @@ namespace Model.Functions
             tav.Task.Hints.ToList();
         #endregion
 
-        #region Copy
-        public static (Task, IContext) DuplicateTaskForNewLanguage(this TaskAuthorView tav,
-            ProgrammingLanguage newLanguage,
-            IContext context
-            )
-        {
-            var newHints = tav.Task.Hints.Select(h => new Hint(h) { Id = 0}).ToList();
-            var context2 = newHints.Aggregate(context, (c, h) => c.WithNew(h));
-            var task2 = new Task(tav.Task)
-            {
-                Id = 0, //Because its a new object
-                Language = newLanguage,
-                RMFContent = null,
-                RMFName = null,
-                TestsContent = null,
-                TestsName = null,
-                NextTask = null,
-                PreviousTask = null,
-                Hints = newHints
-            };
-            return (task2, context2.WithNew(task2));
-        }
-        #endregion
     }
 }

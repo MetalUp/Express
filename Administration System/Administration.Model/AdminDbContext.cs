@@ -11,6 +11,7 @@ namespace Model
         public DbSet<Group> Group { get; set; }
         public DbSet<User> Teachers { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
+        public DbSet<Project> Projects { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Activity> Activities { get; set; }

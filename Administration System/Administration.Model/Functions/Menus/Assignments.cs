@@ -3,7 +3,7 @@
     public static class Assignments
     {
         [PageSize(20)]
-        [TableView(false, nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.Task))]
+        [TableView(false, nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.Project))]
         public static IQueryable<Assignment> MyAssignments(IContext context) =>
             AssignmentsTo(Users.Me(context), context);
 
@@ -24,7 +24,7 @@
         public static IQueryable<Assignment> AllAssignments(IContext context) => context.Instances<Assignment>();
 
 
-        public static IContext NewAssignmentToIndividual(User assignedTo, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context)
+        public static IContext NewAssignmentToIndividual(User assignedTo, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context)
         {
             var me = Users.Me(context);
             var a = new Assignment()
@@ -33,16 +33,16 @@
                 AssignedTo = assignedTo,
                 AssignedById = me.Id,
                 AssignedBy = me,
-                TaskId = task.Id,
-                Task = task,
+                ProjectId = project.Id,
+                Project = project,
                 DueBy = dueBy,
                 Status = AssignmentStatus.PendingStart
             };
             return context.WithNew(a);
         }
 
-        public static IContext NewAssignmentToGroup(Group group, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
-            group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, task, dueBy, c)); 
+        public static IContext NewAssignmentToGroup(Group group, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
+            group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, project, dueBy, c)); 
 
         public static List<Group> Choices0NewAssignmentToGroup(Group group, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
             Groups.AllOurGroups(context).ToList();
