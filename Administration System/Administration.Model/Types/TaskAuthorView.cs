@@ -52,8 +52,12 @@ namespace Model.Types
         [MemberOrder(130)]
         public bool NextTaskClearsFunctions => Task.NextTaskClearsFunctions;
 
+        [MemberOrder(140)]
+        public Project Project => Task.Project;
+
         [RenderEagerly]
         public virtual ICollection<Hint> Hints => Task.Hints;
+
 
         public override string ToString() => $"AUTHOR VIEW - {Title} ({Language})";
     }
