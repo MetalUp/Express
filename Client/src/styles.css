@@ -253,6 +253,10 @@ gemini {
     overflow: auto;
 }
 
+.metalup .code textarea {
+    font-family: monospace;
+}
+
 .metalup .pane-holder {
     grid-template-rows: 1fr;
 }
@@ -303,10 +307,6 @@ gemini {
     cursor: progress;
 }
 
-.metalup .code {
-    font-family: monospace;
-}
-
 .metalup .field {
     font-family: monospace;
     color: grey;
@@ -318,12 +318,6 @@ gemini {
 
 .csharp .python {
     display:none;
-}
-
-.metalup code {
-    font-family: monospace;
-    font-size: 11pt;
-    color:black;
 }
 
 .metalup div.button-bar {
