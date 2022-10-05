@@ -90,7 +90,7 @@ namespace Model.Functions
             this TaskAuthorView tav,
             FileAttachment file,
             IContext context) =>
-                SaveDescription(tav, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
+                SaveDescription(tav, file.GetResourceAsByteArray(), file.Name, context);
 
         [MemberOrder(21)]
         public static IContext EnterDescriptionAsString(
@@ -99,21 +99,18 @@ namespace Model.Functions
             IContext context) =>
              SaveDescription(tav, Encoding.ASCII.GetBytes(description),
                  $"Description.html",
-                 "text/html",
                  context);
 
         internal static IContext SaveDescription(
             this TaskAuthorView tav,
             byte[] bytes,
             string name,
-            string mimeType,
             IContext context) =>
                 context.WithUpdated(tav.Task,
                     new(tav.Task)
                     {
                         DescContent = bytes,
                         DescName = name,
-                        DescMime = mimeType,
                     });
 
 
@@ -127,7 +124,6 @@ namespace Model.Functions
                 {
                     DescContent = null,
                     DescName = null,
-                    DescMime = null,
                 });
 
         public static string ValidateClearDescription(this TaskAuthorView tav, bool confirm) =>
@@ -153,7 +149,7 @@ namespace Model.Functions
                      context);
 
         public static string Default1EditHiddenFunctionsAsString(this TaskAuthorView tav) =>
-            Encoding.Default.GetString(tav.Task.RMFContent);
+            tav.Task.RMFContent is null? null : Encoding.Default.GetString(tav.Task.RMFContent);
 
         internal static IContext SaveHiddenFunctions(
             this TaskAuthorView tav,
@@ -161,13 +157,7 @@ namespace Model.Functions
             string name,
             string mimeType,
             IContext context) =>
-                context.WithUpdated(tav.Task,
-                    new(tav.Task)
-                    {
-                        RMFContent = bytes,
-                        RMFName = name,
-                        RMFMime = mimeType,
-                    });
+                context.WithUpdated(tav.Task, new(tav.Task) {RMFContent = bytes});
     
 
         [MemberOrder(32)]
@@ -175,13 +165,7 @@ namespace Model.Functions
             this TaskAuthorView tav,
             bool confirm,
             IContext context) =>
-            context.WithUpdated(tav.Task,
-                new(tav.Task)
-                {
-                    RMFContent = null,
-                    RMFName = null,
-                    RMFMime = null,
-                });
+            context.WithUpdated(tav.Task, new(tav.Task){ RMFContent = null});
 
         public static string ValidateClearReadyMadeFunctions(this Task task, bool confirm) =>
             confirm ? null : "Confirm must be selected";
@@ -206,7 +190,7 @@ namespace Model.Functions
                      context);
 
         public static string Default1EditTestsAsString(this TaskAuthorView tav) =>
-            Encoding.Default.GetString(tav.Task.TestsContent);
+            tav.Task.TestsContent is null ? null : Encoding.Default.GetString(tav.Task.TestsContent);
 
 
         internal static IContext SaveTests(
@@ -215,26 +199,14 @@ namespace Model.Functions
             string name,
             string mimeType,
             IContext context) =>
-                context.WithUpdated(tav.Task,
-                    new(tav.Task)
-                    {
-                        TestsContent = bytes,
-                        TestsName = name,
-                        TestsMime = mimeType,
-                    });
+                context.WithUpdated(tav.Task, new(tav.Task) { TestsContent = bytes});
 
         [MemberOrder(42)]
         public static IContext ClearTests(
             this TaskAuthorView tav,
             bool confirm,
             IContext context) =>
-                context.WithUpdated(tav.Task,
-                    new(tav.Task)
-                    {
-                        TestsContent = null,
-                        TestsName = null,
-                        TestsMime = null,
-                    });
+                context.WithUpdated(tav.Task,new(tav.Task) {TestsContent = null});
 
         public static string ValidateClearTests(this TaskAuthorView tav, bool confirm) =>
             confirm ? null : "Confirm must be selected";

@@ -28,17 +28,14 @@ namespace Model.Types
         public int MaxMarks => Task.MaxMarks;
 
         [MemberOrder(70)]
-        public FileAttachment Description => (Task.DescContent == null) ? null :
-                 new FileAttachment(Task.DescContent, Task.DescName, Task.DescMime);
+        public FileAttachment Description => (Task.DescContent == null) ? null : Task.Description;
 
         [MemberOrder(80)]
         [Named("Hidden Functions")]
-        public FileAttachment ReadyMadeFunctions => (Task.RMFContent == null) ? null :
-                 new FileAttachment(Task.RMFContent, Task.RMFName, Task.RMFMime);
+        public FileAttachment ReadyMadeFunctions => (Task.RMFContent == null) ? null : Task.ReadyMadeFunctions;
 
         [MemberOrder(90)]
-        public FileAttachment Tests => (Task.TestsContent == null) ? null :
-                 new FileAttachment(Task.TestsContent, Task.TestsName, Task.TestsMime);
+        public FileAttachment Tests => (Task.TestsContent == null) ? null : Task.Tests;
 
         [MemberOrder(100)]
         public bool PasteExpression => Task.PasteExpression;

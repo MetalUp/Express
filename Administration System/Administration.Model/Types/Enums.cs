@@ -27,6 +27,6 @@
 
     public enum ProjectStatus
     {
-        UnderDevelopment, Assignable
+        UnderDevelopment, Assignable, Public
     }
 }

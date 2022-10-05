@@ -14,15 +14,10 @@ namespace Model.Types
             MaxMarks = cloneFrom.MaxMarks;
             DescContent = cloneFrom.DescContent;
             DescName = cloneFrom.DescName;
-            DescMime = cloneFrom.DescMime;
             RMFContent = cloneFrom.RMFContent;
-            RMFName = cloneFrom.RMFName;
-            RMFMime = cloneFrom.RMFMime;
             PasteExpression = cloneFrom.PasteExpression;
             PasteFunctions = cloneFrom.PasteFunctions;
             TestsContent = cloneFrom.TestsContent;
-            TestsName = cloneFrom.TestsName;
-            TestsMime = cloneFrom.TestsMime;
             PreviousTaskId = cloneFrom.PreviousTaskId;
             PreviousTask = cloneFrom.PreviousTask;
             NextTaskId = cloneFrom.NextTaskId;
@@ -54,47 +49,33 @@ namespace Model.Types
         #region Description
         [HideInClient]
         public FileAttachment Description => (DescContent == null) ? null :
-                 new FileAttachment(DescContent, DescName, DescMime);
+                 new FileAttachment(DescContent, DescName, "text/html");
 
         [Hidden]
         public byte[] DescContent { get; init; }
 
         [Hidden]
         public string DescName { get; init; }
-
-        [Hidden]
-        public string DescMime { get; init; }
-        #endregion
+      #endregion
 
         #region ReadyMadeFunctions
         [Named("Hidden Functions")]
         [HideInClient]
         public FileAttachment ReadyMadeFunctions => (RMFContent == null) ? null :
-                 new FileAttachment(RMFContent, RMFName, RMFMime);
+                 new FileAttachment(RMFContent, $"HiddenFunctions{Project.LanguageAsFileExtension()}", "text/plain");
 
         [Hidden]
         public byte[] RMFContent { get; init; }
 
-        [Hidden]
-        public string RMFName { get; init; }
-
-        [Hidden]
-        public string RMFMime { get; init; }
         #endregion
 
         #region Tests
         [HideInClient]
         public FileAttachment Tests => (TestsContent == null) ? null :
-                 new FileAttachment(TestsContent, TestsName, TestsMime);
+                 new FileAttachment(TestsContent, $"Tests{Project.LanguageAsFileExtension()}", "text/plain");
 
         [Hidden]
         public byte[] TestsContent { get; init; }
-
-        [Hidden]
-        public string TestsName { get; init; }
-
-        [Hidden]
-        public string TestsMime { get; init; }
         #endregion
 
         [MemberOrder(100)]
@@ -128,7 +109,7 @@ namespace Model.Types
         [MemberOrder(200)]
         public virtual Project Project { get; init; }
 
-        [RenderEagerly]
+        [HideInClient]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
         public override string ToString() => $"{Title} {Language}";
