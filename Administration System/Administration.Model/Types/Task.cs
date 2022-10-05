@@ -58,7 +58,7 @@ namespace Model.Types
         public string DescName { get; init; }
       #endregion
 
-        #region ReadyMadeFunctions
+        #region Hidden Functions
         [Named("Hidden Functions")]
         [HideInClient]
         public FileAttachment ReadyMadeFunctions => (RMFContent == null) ? null :

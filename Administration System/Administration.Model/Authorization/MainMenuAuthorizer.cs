@@ -46,11 +46,9 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 Role.Author => true,
-                Role.Teacher => true,
-                //Role.Teacher => Helpers.MatchesOneOf(memberName,
-                //    nameof(Projects.AllAssignableTasks),
-                //    nameof(Projects.PublicTasks),
-                //    nameof(Projects.FindTasks)),
+                Role.Teacher => Helpers.MatchesOneOf(memberName,
+                    nameof(Projects.AllAssignableProjects),
+                    nameof(Projects.FindProjects)),
                 _ => false
             };
 

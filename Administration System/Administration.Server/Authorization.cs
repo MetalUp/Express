@@ -13,6 +13,7 @@ namespace Server
             config.AddTypeAuthorizer<User, UserAuthorizer>();
             config.AddTypeAuthorizer<Organisation, OrganisationAuthorizer>();
             config.AddTypeAuthorizer<Group, GroupAuthorizer>();
+            config.AddTypeAuthorizer<Project, ProjectAuthorizer>();
             config.AddTypeAuthorizer<Task, TaskAuthorizer>(); 
             config.AddTypeAuthorizer<TaskAuthorView, TaskAuthorViewAuthorizer>();
             config.AddTypeAuthorizer<Hint, HintAuthorizer>();
