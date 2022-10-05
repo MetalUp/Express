@@ -16,7 +16,8 @@ public static class JavaCompiler {
             FileName = javaCompiler,
             Arguments = file,
             UseShellExecute = false,
-            RedirectStandardError = true
+            RedirectStandardError = true,
+            WorkingDirectory = Path.GetTempPath()
         };
 
         var runResult = new RunResult();
