@@ -42,13 +42,16 @@ namespace Model.Types
         public string Link => $"https://express.metalup.org/task/{Id}";
 
         [MemberOrder(30)]
+        [HideInClient]
         public string Title { get; init; }
 
         [MemberOrder(40)]
+        [HideInClient]
         public ProgrammingLanguage Language => Project.Language;
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(60)]
+        [HideInClient]
         public int MaxMarks { get; init; }
 
         #region Description
@@ -109,20 +112,23 @@ namespace Model.Types
         public int? PreviousTaskId { get; init; }
 
         [MemberOrder(110)]
+        [HideInClient]
         public virtual Task PreviousTask { get; init; }
 
         [Hidden]
         public int? NextTaskId { get; init; }
 
         [MemberOrder(120)]
+        [HideInClient]
         public virtual Task NextTask { get; init; }
 
         [MemberOrder(130)]
+        [HideInClient]
         public bool NextTaskClearsFunctions { get; init; }
 
         [RenderEagerly]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
-        public override string ToString() => $"{Title} ({Language})";
+        public override string ToString() => $"{Title} {Language}";
     }
 }

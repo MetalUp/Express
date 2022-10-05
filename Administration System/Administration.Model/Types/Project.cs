@@ -13,7 +13,7 @@
             Title = cloneFrom.Title;
             Language = cloneFrom.Language;
             Description = cloneFrom.Description;
-            TaskObjects = new List<Task>(cloneFrom.TaskObjects);
+            Tasks = new List<Task>(cloneFrom.Tasks);
         }
 
         [Hidden]
@@ -37,10 +37,7 @@
         [MultiLine(10)]
         public string Description { get; init; }
 
-        public ICollection<TaskAuthorView> Tasks => TaskObjects.Select(t => new TaskAuthorView(t)).ToList();
-
- 
-        public virtual ICollection<Task> TaskObjects { get; init; } = new List<Task>();
+        public virtual ICollection<Task> Tasks { get; init; } = new List<Task>();
 
         public override string ToString() => $"{Title} ({Language})";
     }

@@ -49,7 +49,7 @@ namespace Model.Functions
         #region Edit Task (author action)
         public static TaskAuthorView EditTask(this Project project, Task task ) => new TaskAuthorView(task);
 
-        public static ICollection<Task> Choices1EditTask(this Project project) => project.TaskObjects;
+        public static ICollection<Task> Choices1EditTask(this Project project) => project.Tasks;
         #endregion
 
         #region Create Task (author action)
@@ -74,7 +74,7 @@ namespace Model.Functions
 
         public static Task Default2CreateTask(
             this Project project) =>
-            project.TaskObjects.LastOrDefault();
+            project.Tasks.LastOrDefault();
 
         #endregion
     }
