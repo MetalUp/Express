@@ -16,7 +16,7 @@ public static class JavaRunner {
 
     public static RunResult Execute(string classFile) {
 
-        var java = $"{RunsController.JavaPath}\\bin\\java.exe";
+        var java = $"{CompileServerController.JavaPath}\\bin\\java.exe";
         
         var start = new ProcessStartInfo
         {

@@ -23,6 +23,11 @@ public static class VisualBasicCompiler {
         MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
     };
 
+    public static string GetVersion()
+    {
+        return Options.LanguageVersion.ToString().Replace("VisualBasic", "");
+    }
+
     public static (RunResult, byte[]) Compile(RunSpec runSpec) {
         var code = runSpec.sourcecode;
 

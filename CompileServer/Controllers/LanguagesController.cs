@@ -1,13 +1,19 @@
+using CompileServer.Workers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompileServer.Controllers;
 
 [Route("restapi/[controller]")]
-public class LanguagesController : ControllerBase {
+public class LanguagesController : CompileServerController {
     private readonly ILogger<LanguagesController> logger;
 
-    public LanguagesController(ILogger<LanguagesController> logger) => this.logger = logger;
+    public LanguagesController(ILogger<LanguagesController> logger, IConfiguration configuration) :base(configuration)  => this.logger = logger;
 
     [HttpGet]
-    public IEnumerable<string> Get() => new[] { "csharp", "python", "vb", "java" };
+    public IEnumerable<string[]> Get() => new[] {
+        new[] { "csharp", CSharpCompiler.GetVersion() },
+        new[] { "python", PythonHandler.GetVersion() },
+        new[] { "vb", VisualBasicCompiler.GetVersion() },
+        new[] { "java", JavaCompiler.GetVersion() }
+    };
 }
