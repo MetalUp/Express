@@ -9,7 +9,7 @@ public static class JavaCompiler {
 
     public static string GetVersion()
     {
-        var java = $"{CompileServerController.JavaPath}\\bin\\java.exe";
+        var java = $"{CompileServerController.JavaPath}\\bin\\javac.exe";
         string version;
 
         var start = new ProcessStartInfo
@@ -33,7 +33,7 @@ public static class JavaCompiler {
             version = e.Message;
         }
 
-        return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "java ([\\d\\.]+) .*").Groups[1].Value;
+        return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
     }
 
 
