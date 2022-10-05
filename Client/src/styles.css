@@ -253,7 +253,7 @@ gemini {
     overflow: auto;
 }
 
-.metalup .code textarea {
+.metalup .code :is(textarea, span) {
     font-family: monospace;
 }
 
@@ -312,11 +312,19 @@ gemini {
     color: grey;
 }
 
-.python .csharp {
+.python :is(.csharp, .vb, .java) {
     display:none;
 }
 
-.csharp .python {
+.csharp :is(.python, .vb, .java) {
+    display:none;
+}
+
+.vb :is(.csharp, .python, .java) {
+    display:none;
+}
+
+.java :is(.csharp, .vb, .python) {
     display:none;
 }
 
