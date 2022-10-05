@@ -8,6 +8,8 @@ namespace Model.Types
         public Task(Task cloneFrom)
         {
             Id = cloneFrom.Id;
+            ProjectId = cloneFrom.ProjectId;
+            Project = cloneFrom.Project;
             Title = cloneFrom.Title;
             MaxMarks = cloneFrom.MaxMarks;
             DescContent = cloneFrom.DescContent;
