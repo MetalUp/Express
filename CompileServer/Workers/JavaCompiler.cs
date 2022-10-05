@@ -10,33 +10,17 @@ public static class JavaCompiler {
         var java = $"{CompileServerController.JavaPath}\\bin\\javac.exe";
         string version;
 
-        var start = new ProcessStartInfo {
-            FileName = java,
-            Arguments = "-version",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            WorkingDirectory = Path.GetTempPath()
-        };
-
         try {
-            using var process = Process.Start(start);
+            using var process = Helpers.CreateProcess(java, "-version");
             process.WaitForExit();
             using var stdOutput = process.StandardOutput;
             version = stdOutput.ReadToEnd();
-            // debugging
-            if (string.IsNullOrEmpty(version)) {
-                using var stdErr = process.StandardError;
-                version = stdErr.ReadToEnd();
-            }
         }
         catch (Exception e) {
             version = e.Message;
         }
 
-        return version;
-
-        //return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
+        return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
     }
 
     public static (RunResult, string) Compile(RunSpec runSpec) {
@@ -46,18 +30,10 @@ public static class JavaCompiler {
 
         File.WriteAllText(file, runSpec.sourcecode);
 
-        var start = new ProcessStartInfo {
-            FileName = javaCompiler,
-            Arguments = file,
-            UseShellExecute = false,
-            RedirectStandardError = true,
-            WorkingDirectory = Path.GetTempPath()
-        };
-
         var runResult = new RunResult();
 
         try {
-            using var process = Process.Start(start);
+            using var process = Helpers.CreateProcess(javaCompiler, file);
 
             process.WaitForExit();
 

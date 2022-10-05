@@ -12,18 +12,8 @@ public class PythonHandler {
         var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
         string version;
 
-        var start = new ProcessStartInfo
-        {
-            FileName = pythonExe,
-            Arguments = "--version",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            WorkingDirectory = Path.GetTempPath()
-        };
-
-        try
-        {
-            using var process = Process.Start(start);
+        try {
+            using var process = Helpers.CreateProcess(pythonExe, "--version");
             process.WaitForExit();
             using var stdOutput = process.StandardOutput;
             version = stdOutput.ReadToEnd();
@@ -44,19 +34,10 @@ public class PythonHandler {
 
             File.WriteAllText(file, runSpec.sourcecode);
 
-            var start = new ProcessStartInfo {
-                FileName = pythonExe,
-                Arguments = file,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                WorkingDirectory = Path.GetTempPath()
-            };
-
             var runResult = new RunResult();
 
             try {
-                using var process = Process.Start(start);
+                using var process = Helpers.CreateProcess(pythonExe, file);
 
                 process.WaitForExit();
 

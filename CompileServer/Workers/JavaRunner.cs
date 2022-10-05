@@ -17,22 +17,10 @@ public static class JavaRunner {
     public static RunResult Execute(string classFile) {
 
         var java = $"{CompileServerController.JavaPath}\\bin\\java.exe";
-        
-        var start = new ProcessStartInfo
-        {
-            FileName = java,
-            Arguments = classFile,
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            WorkingDirectory = Path.GetTempPath()
-    };
-
         var runResult = new RunResult();
 
-        try
-        {
-            using var process = Process.Start(start);
+        try {
+            using var process = Helpers.CreateProcess(java, classFile);
 
             process.WaitForExit();
 
