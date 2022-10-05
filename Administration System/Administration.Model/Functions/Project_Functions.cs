@@ -7,6 +7,12 @@ namespace Model.Functions
 
     public static class Project_Functions
     {
+        #region Display
+
+        public static bool HideLink(this Project project) => !project.Tasks.Any();
+
+        #endregion
+
         #region Edits
         [Edit]
         public static IContext EditTitle(
