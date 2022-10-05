@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmptyTask, ITask } from '../models/task';
 import { TaskService } from '../services/task.service';
-import { of, Subscription } from 'rxjs';
-import { catchError, first } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { EmptyHint, IHint } from '../models/hint';
 
 @Component({
@@ -80,6 +79,7 @@ export class HintComponent implements OnInit, OnDestroy {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
       this.hintIndex = -1;
+      this.currentHint = EmptyHint;
     })
   }
 
