@@ -53,7 +53,7 @@ namespace Model.Functions
         #endregion
 
         #region Create Task (author action)
-        public static (TaskAuthorView, IContext) CreateTask(
+        public static IContext CreateTask(
             this Project project, 
             string title,
             [Optionally] Task previousTask,
@@ -69,7 +69,7 @@ namespace Model.Functions
                 NextTaskId = nextTask is null ? null : nextTask.Id,
                 NextTask = nextTask
             };
-            return (new TaskAuthorView(t), context.WithNew(t));
+            return context.WithNew(t);
         }
 
         public static ICollection<Task> Choices2CreateTask(
