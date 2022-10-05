@@ -24,11 +24,11 @@ export class JobeServerService {
     })
   }
 
-  private ip = "https://compile.metalup.org";
-  path = `${this.ip}/jobe/index.php/restapi`;
+  // private ip = "https://compile.metalup.org";
+  // path = `${this.ip}/jobe/index.php/restapi`;
 
-  // private ip = "https://metalupcompileserver.azurewebsites.net";
-  // path = `${this.ip}/restapi`;
+  private ip = "https://metalupcompileserver.azurewebsites.net";
+  path = `${this.ip}/restapi`;
 
   selectedLanguage: string = '';
 
