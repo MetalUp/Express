@@ -19,7 +19,8 @@ public class PythonHandler {
                 Arguments = file,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
-                RedirectStandardError = true
+                RedirectStandardError = true,
+                WorkingDirectory = Path.GetTempPath()
             };
 
             var runResult = new RunResult();
