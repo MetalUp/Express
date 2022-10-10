@@ -257,6 +257,10 @@ gemini {
     font-family: monospace;
 }
 
+.metalup .result  {
+    font-family: monospace;
+}
+
 .metalup .pane-holder {
     grid-template-rows: 1fr;
 }
