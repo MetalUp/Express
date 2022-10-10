@@ -221,7 +221,7 @@ namespace Model.Functions
             int number,
             string title,
             [DefaultValue(1)] int costInMarks,
-            FileAttachment file,
+            [Optionally] FileAttachment file,
             IContext context)
         {
             var hint = new Hint
