@@ -7,3 +7,7 @@
 .message {
     width: 100%;
 }
+
+textarea {
+    font-size: 11pt;
+}

@@ -288,6 +288,8 @@ gemini {
    gap: 5px;
    align-content: space-between;
    background-color: var(--background-color);
+   color: black;
+   font-size: 11pt;
 }
 
 .metalup .info {
