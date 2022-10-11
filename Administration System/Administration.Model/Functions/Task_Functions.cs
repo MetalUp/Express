@@ -115,6 +115,7 @@ namespace Model.Functions
             IContext context) =>
             SaveHiddenFunctionsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
 
+        [MemberOrder(31)]
         public static IContext LoadHiddenFunctionsAsString(
     this Task task,
     [MultiLine(10)] string content,
@@ -162,6 +163,7 @@ namespace Model.Functions
             IContext context) =>
                 SaveTestsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
 
+        [MemberOrder(41)]
         public static IContext LoadTestsAsString(
             this Task task,
             [MultiLine(10)] string content,
