@@ -84,16 +84,17 @@ namespace Model.Functions
 
         #region Create Task (author action)
         public static IContext CreateTask(
-            this Project project, 
+            this Project project,
             string title,
             [Optionally] Task previousTask,
             IContext context)
         {
-            var t = new Task {
-                ProjectId = project.Id, 
-                Project = project, 
-                Title = title, 
-                PreviousTaskId  = previousTask is null? null : previousTask.Id,
+            var t = new Task
+            {
+                ProjectId = project.Id,
+                Project = project,
+                Title = title,
+                PreviousTaskId = previousTask is null ? null : previousTask.Id,
                 PreviousTask = previousTask,
                 HiddenFunctionsFileId = previousTask.HiddenFunctionsFileId,
                 HiddenFunctionsFile = previousTask.HiddenFunctionsFile,
@@ -109,6 +110,56 @@ namespace Model.Functions
         public static Task Default2CreateTask(
             this Project project) =>
             project.Tasks.LastOrDefault();
+        #endregion
+
+        #region Copying
+        public static (Project, IContext) CopyProjectForNewLanguage(
+            this Project project,
+            ProgrammingLanguage newLanguage,
+            IContext context
+            )
+        {
+            var author = Users.Me(context);
+            var p = new Project(project)
+            {
+                Language = newLanguage,
+                Tasks = new List<Task>()
+            };
+            return (p, context.WithNew(p));
+        }
+
+        public static IContext CopyNextTaskFromAnotherProject(
+            this Project project,
+            [Optionally] Task previousTask,
+            Task copyFrom,
+            IContext context
+            )
+        {
+            var t = new Task(copyFrom)
+            {
+                PreviousTaskId = previousTask is null ? null : previousTask.Id,
+                PreviousTask = previousTask,
+                NextTaskId = null,
+                NextTask = null,
+                HiddenFunctionsFileId = null,
+                HiddenFunctionsFile = null,
+                TestsFileId = null,
+                TestsFile = null,
+                Hints = new List<Hint>(copyFrom.Hints)
+            };
+            var p2 = new Project(project)
+            {
+                Tasks = project.Tasks.Append(t).ToList()
+            };
+            var context2 = context.WithNew(t).WithUpdated(project, p2);
+            var context3 = previousTask is null ? context2 : context2.WithUpdated(previousTask,
+                new Task(previousTask) {NextTask = t });
+            return context3;
+        }
+
+        public static Task Default1CopyNextTaskFromAnotherProject(this Project project) =>
+            project.Tasks.LastOrDefault();
+
         #endregion
     }
 }
