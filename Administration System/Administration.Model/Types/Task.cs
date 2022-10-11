@@ -57,7 +57,7 @@ namespace Model.Types
 
         #region Hidden Functions
         [HideInClient]
-        public FileAttachment HiddenFunctions => HiddenFunctionsFile is null ? null : HiddenFunctionsFile.Details;
+        public FileAttachment ReadyMadeFunctions => HiddenFunctionsFile is null ? null : HiddenFunctionsFile.Details;
 
         [Hidden]
         public int? HiddenFunctionsFileId { get; init; }
