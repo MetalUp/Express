@@ -95,8 +95,10 @@ namespace Model.Functions
                 Title = title, 
                 PreviousTaskId  = previousTask is null? null : previousTask.Id,
                 PreviousTask = previousTask,
-                RMFContent = previousTask is null ? null : previousTask.RMFContent,
-                TestsContent = previousTask is null ? null : previousTask.TestsContent,
+                HiddenFunctionsFileId = previousTask.HiddenFunctionsFileId,
+                HiddenFunctionsFile = previousTask.HiddenFunctionsFile,
+                TestsFileId = previousTask.TestsFileId,
+                TestsFile = previousTask.TestsFile,
             };
             var updatedPrevious = previousTask is null ? null :
                 new Task(previousTask) { NextTask = t };

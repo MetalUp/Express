@@ -14,16 +14,12 @@ namespace Model.Types
             MaxMarks = cloneFrom.MaxMarks;
             DescriptionFileId = cloneFrom.DescriptionFileId;
             DescriptionFile = cloneFrom.DescriptionFile;
-            DescContent = cloneFrom.DescContent;
-            DescName = cloneFrom.DescName;
             HiddenFunctionsFileId = cloneFrom.HiddenFunctionsFileId;
             HiddenFunctionsFile = cloneFrom.HiddenFunctionsFile;
-            RMFContent = cloneFrom.RMFContent;
             PasteExpression = cloneFrom.PasteExpression;
             PasteFunctions = cloneFrom.PasteFunctions;
             TestsFileId = cloneFrom.TestsFileId;
             TestsFile = cloneFrom.TestsFile;    
-            TestsContent = cloneFrom.TestsContent;
             PreviousTaskId = cloneFrom.PreviousTaskId;
             PreviousTask = cloneFrom.PreviousTask;
             NextTaskId = cloneFrom.NextTaskId;
@@ -55,16 +51,6 @@ namespace Model.Types
 
         [MemberOrder(70)]
         public virtual File DescriptionFile { get; init; }
-
-        [HideInClient]
-        public FileAttachment Description => (DescContent == null) ? null :
-                 new FileAttachment(DescContent, DescName, "text/html");
-
-        [Hidden]
-        public byte[] DescContent { get; init; }
-
-        [Hidden]
-        public string DescName { get; init; }
         #endregion
 
         #region Hidden Functions
@@ -73,15 +59,6 @@ namespace Model.Types
 
         [MemberOrder(80)]
         public virtual File HiddenFunctionsFile { get; init; }
-
-        [Named("Hidden Functions")]
-        [HideInClient]
-        public FileAttachment ReadyMadeFunctions => (RMFContent == null) ? null :
-                 new FileAttachment(RMFContent, $"HiddenFunctions{Project.LanguageAsFileExtension()}", "text/plain");
-
-        [Hidden]
-        public byte[] RMFContent { get; init; }
-
         #endregion
 
         #region Tests
@@ -90,13 +67,6 @@ namespace Model.Types
 
         [MemberOrder(90)]
         public virtual File TestsFile { get; init; }
-
-        [HideInClient]
-        public FileAttachment Tests => (TestsContent == null) ? null :
-                 new FileAttachment(TestsContent, $"Tests{Project.LanguageAsFileExtension()}", "text/plain");
-
-        [Hidden]
-        public byte[] TestsContent { get; init; }
         #endregion
 
         [MemberOrder(100)]

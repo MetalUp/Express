@@ -99,8 +99,8 @@ namespace Model.Functions
                 context.WithUpdated(task,
                     new(task)
                     {
-                        DescContent = bytes,
-                        DescName = name,
+                        //DescContent = bytes,
+                        //DescName = name,
                     });
 
 
@@ -112,8 +112,8 @@ namespace Model.Functions
             context.WithUpdated(task,
                 new(task)
                 {
-                    DescContent = null,
-                    DescName = null,
+                    //DescContent = null,
+                    //DescName = null,
                 });
 
         public static string ValidateClearDescription(this Task task, bool confirm) =>
@@ -138,24 +138,24 @@ namespace Model.Functions
                      "text/plain",
                      context);
 
-        public static string Default1EditHiddenFunctionsAsString(this Task task) =>
-            task.RMFContent is null ? null : Encoding.Default.GetString(task.RMFContent);
+        public static string Default1EditHiddenFunctionsAsString(this Task task) => "";
+        //task.RMFContent is null ? null : Encoding.Default.GetString(task.RMFContent);
 
         internal static IContext SaveHiddenFunctions(
             this Task task,
             byte[] bytes,
             string name,
             string mimeType,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { RMFContent = bytes });
+            IContext context) => null;
+        //context.WithUpdated(task, new(task) { RMFContent = bytes });
 
 
         [MemberOrder(32)]
         public static IContext ClearHiddenFunctions(
             this Task task,
             bool confirm,
-            IContext context) =>
-            context.WithUpdated(task, new(task) { RMFContent = null });
+            IContext context) => null;
+            //context.WithUpdated(task, new(task) { RMFContent = null });
 
         public static string ValidateClearReadyMadeFunctions(this Task task, bool confirm) =>
             confirm ? null : "Confirm must be selected";
@@ -179,8 +179,8 @@ namespace Model.Functions
                      "text/plain",
                      context);
 
-        public static string Default1EditTestsAsString(this Task task) =>
-            task.TestsContent is null ? null : Encoding.Default.GetString(task.TestsContent);
+        public static string Default1EditTestsAsString(this Task task) => "";
+            //task.TestsContent is null ? null : Encoding.Default.GetString(task.TestsContent);
 
 
         internal static IContext SaveTests(
@@ -188,15 +188,15 @@ namespace Model.Functions
             byte[] bytes,
             string name,
             string mimeType,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { TestsContent = bytes });
+            IContext context) => null;
+        //context.WithUpdated(task, new(task) { TestsContent = bytes });
 
         [MemberOrder(42)]
         public static IContext ClearTests(
             this Task task,
             bool confirm,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { TestsContent = null });
+            IContext context) => null;
+                //context.WithUpdated(task, new(task) { TestsContent = null });
 
         public static string ValidateClearTests(this Task task, bool confirm) =>
             confirm ? null : "Confirm must be selected";
