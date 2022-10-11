@@ -15,6 +15,7 @@ namespace Model.Authorization
                 nameof(Groups) => GroupsAuth(memberName, context),
                 nameof(Invitations) => InvitationsAuth(memberName, context),
                 nameof(Projects) => ProjectsAuth(memberName, context),
+                nameof(Files) => FilesAuth(memberName, context),
                 nameof(Assignments) =>AssignmentsAuth(memberName, context),
                 nameof(Activities) => ActivitiesAuth(memberName, context),
                 _ => false
@@ -49,6 +50,14 @@ namespace Model.Authorization
                 Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Projects.AllAssignableProjects),
                     nameof(Projects.FindProjects)),
+                _ => false
+            };
+
+        private bool FilesAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                Role.Author => true,
                 _ => false
             };
 
