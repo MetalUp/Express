@@ -16,7 +16,7 @@ namespace Model.Authorization
                 };
 
         internal static bool AuthorAuthorization(Project proj, string memberName, IContext context) =>
-           proj.IsAssignable() || proj.AuthorId == Users.Me(context).Id;
+           proj.IsAssignable() ? TeacherAuthorization(proj, memberName,context) : UserIsAuthor(proj, context);
 
         internal static bool TeacherAuthorization(Project proj, string memberName, IContext context) =>
            proj.IsAssignable() && 
@@ -26,5 +26,8 @@ namespace Model.Authorization
                     nameof(Project_Functions.AssignToIndividual)));
 
         private static bool IsTaskProperty(string memberName) => IsProperty<Task>(memberName);
+
+        private static bool UserIsAuthor(Project proj, IContext context) =>
+            proj.AuthorId == Users.Me(context).Id;
     }
 }
