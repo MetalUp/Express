@@ -197,7 +197,7 @@ namespace Model.Functions
             context.WithUpdated(task, new Task(task) { TestsFileId = testsFile.Id, TestsFile = testsFile });
 
 
-        [MemberOrder(41)]
+        [MemberOrder(42)]
         public static IContext ClearTests(
             this Task task,
             IContext context) =>
