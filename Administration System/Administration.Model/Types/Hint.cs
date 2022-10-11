@@ -21,6 +21,7 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
+
         [MemberOrder(1)]
         public int Number { get; init; }
 
@@ -31,6 +32,12 @@ namespace Model.Types
         public int CostInMarks { get; init; }
 
         #region HtmlFile
+        [Hidden]
+        public int FileId { get; init; }
+
+        [MemberOrder(4)]
+        public virtual File File { get; init; }
+
         [HideInClient]
         public FileAttachment HtmlFile => (FileContent == null) ? null :
                  new FileAttachment(FileContent, FileName, FileMime);

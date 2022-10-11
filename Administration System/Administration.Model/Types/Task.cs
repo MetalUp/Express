@@ -44,6 +44,12 @@ namespace Model.Types
         public int MaxMarks { get; init; }
 
         #region Description
+        [Hidden]
+        public int DescriptionFileId { get; init; }
+
+        [MemberOrder(70)]
+        public virtual File DescriptionFile { get; init; }
+
         [HideInClient]
         public FileAttachment Description => (DescContent == null) ? null :
                  new FileAttachment(DescContent, DescName, "text/html");
@@ -53,9 +59,15 @@ namespace Model.Types
 
         [Hidden]
         public string DescName { get; init; }
-      #endregion
+        #endregion
 
         #region Hidden Functions
+        [Hidden]
+        public int HiddenFunctionsFileId { get; init; }
+
+        [MemberOrder(80)]
+        public virtual File HiddenFunctionsFile { get; init; }
+
         [Named("Hidden Functions")]
         [HideInClient]
         public FileAttachment ReadyMadeFunctions => (RMFContent == null) ? null :
@@ -67,6 +79,12 @@ namespace Model.Types
         #endregion
 
         #region Tests
+        [Hidden]
+        public int TestsFileId { get; init; }
+
+        [MemberOrder(90)]
+        public virtual File TestsFile { get; init; }
+
         [HideInClient]
         public FileAttachment Tests => (TestsContent == null) ? null :
                  new FileAttachment(TestsContent, $"Tests{Project.LanguageAsFileExtension()}", "text/plain");
