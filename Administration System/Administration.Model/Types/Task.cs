@@ -46,6 +46,8 @@ namespace Model.Types
         public int MaxMarks { get; init; }
 
         #region Description
+        [HideInClient]
+        public FileAttachment Description => DescriptionFile is null ? null : DescriptionFile.Details;
         [Hidden]
         public int? DescriptionFileId { get; init; }
 
@@ -54,6 +56,9 @@ namespace Model.Types
         #endregion
 
         #region Hidden Functions
+        [HideInClient]
+        public FileAttachment HiddenFunctions => HiddenFunctionsFile is null ? null : HiddenFunctionsFile.Details;
+
         [Hidden]
         public int? HiddenFunctionsFileId { get; init; }
 
@@ -62,7 +67,9 @@ namespace Model.Types
         #endregion
 
         #region Tests
-        [Hidden]
+        [HideInClient]
+        public FileAttachment Tests => TestsFile is null ? null : TestsFile.Details;
+
         public int? TestsFileId { get; init; }
 
         [MemberOrder(90)]

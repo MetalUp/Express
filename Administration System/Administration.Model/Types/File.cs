@@ -1,4 +1,6 @@
-﻿namespace Model.Types
+﻿using NakedFramework.Value;
+
+namespace Model.Types
 {
     public class File
     {
@@ -17,14 +19,17 @@
         [Hidden]
         public int Id { get; init; }
 
-        [MemberOrder(10)]
+        [Hidden]
         public string Name { get; init; }
 
-        [MemberOrder(20)]
+        [Hidden]
         public string Mime { get; init; }
 
-        [MemberOrder(30)]
+        [Hidden]
         public byte[] Content { get; init; }
+
+        [MemberOrder(10)]
+        public FileAttachment Details => new FileAttachment(Content, Name, Mime);
 
         [Hidden]
         public int AuthorId { get; init; }
