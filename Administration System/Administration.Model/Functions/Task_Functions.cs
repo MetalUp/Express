@@ -84,7 +84,7 @@ namespace Model.Functions
             var author = Users.Me(context);
             var f = new File() {Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = "text/html", AuthorId = author.Id, Author = author};
             return context
-                .WithNew(file)
+                .WithNew(f)
                 .WithUpdated(task,
                     new(task)
                     {
