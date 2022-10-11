@@ -79,127 +79,80 @@ namespace Model.Functions
         public static IContext LoadDescriptionFromFile(
             this Task task,
             FileAttachment file,
-            IContext context) =>
-                SaveDescription(task, file.GetResourceAsByteArray(), file.Name, context);
-
-        [MemberOrder(21)]
-        public static IContext EnterDescriptionAsString(
-            this Task task,
-            [MultiLine(20)] string description,
-            IContext context) =>
-             SaveDescription(task, Encoding.ASCII.GetBytes(description),
-                 $"Description.html",
-                 context);
-
-        internal static IContext SaveDescription(
-            this Task task,
-            byte[] bytes,
-            string name,
-            IContext context) =>
-                context.WithUpdated(task,
+            IContext context) 
+        {
+            var author = Users.Me(context);
+            var f = new File() {Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = "text/html", AuthorId = author.Id, Author = author};
+            return context
+                .WithNew(file)
+                .WithUpdated(task,
                     new(task)
                     {
-                        //DescContent = bytes,
-                        //DescName = name,
+                        DescriptionFileId = f.Id,
+                        DescriptionFile = f,
                     });
+        }
 
-
-        [MemberOrder(22)]
-        public static IContext ClearDescription(
+        [Edit]
+        public static IContext EditDesciption(
             this Task task,
-            bool confirm,
+            File file,
             IContext context) =>
-            context.WithUpdated(task,
-                new(task)
-                {
-                    //DescContent = null,
-                    //DescName = null,
-                });
-
-        public static string ValidateClearDescription(this Task task, bool confirm) =>
-            confirm ? null : "Confirm must be selected";
+            context.WithUpdated(task, new Task(task) { DescriptionFileId = file.Id, DescriptionFile = file });
         #endregion
 
         #region Hidden Functions
-        //[MemberOrder(30)]
-        //public static IContext LoadHiddenFunctionsFromFile(
-        //    this Task task,
-        //    FileAttachment file,
-        //    IContext context) =>
-        //    SaveHiddenFunctions(task, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
-
-        [MemberOrder(31)]
-        public static IContext EditHiddenFunctionsAsString(
+        [MemberOrder(30)]
+        public static IContext LoadHiddenFunctionsFromFile(
             this Task task,
-            [MultiLine(20)] string hiddenFunctionsCode,
+            FileAttachment file,
+            IContext context) 
+        {
+            var author = Users.Me(context);
+        var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = $"HiddenFunctions{task.Project.LanguageAsFileExtension()}", AuthorId = author.Id, Author = author };
+            return context
+                .WithNew(f)
+                .WithUpdated(task,
+                    new (task)
+                    {
+                        HiddenFunctionsFileId = f.Id,
+                        HiddenFunctionsFile = f,
+                    });
+        }
+
+        [Edit]
+        public static IContext EditHiddenFunctions(
+            this Task task,
+            File file,
             IContext context) =>
-                 SaveHiddenFunctions(task, Encoding.ASCII.GetBytes(hiddenFunctionsCode),
-                     $"HiddenFunctions{task.Project.LanguageAsFileExtension()}",
-                     "text/plain",
-                     context);
-
-        public static string Default1EditHiddenFunctionsAsString(this Task task) => "";
-        //task.RMFContent is null ? null : Encoding.Default.GetString(task.RMFContent);
-
-        internal static IContext SaveHiddenFunctions(
-            this Task task,
-            byte[] bytes,
-            string name,
-            string mimeType,
-            IContext context) => null;
-        //context.WithUpdated(task, new(task) { RMFContent = bytes });
-
-
-        [MemberOrder(32)]
-        public static IContext ClearHiddenFunctions(
-            this Task task,
-            bool confirm,
-            IContext context) => null;
-            //context.WithUpdated(task, new(task) { RMFContent = null });
-
-        public static string ValidateClearReadyMadeFunctions(this Task task, bool confirm) =>
-            confirm ? null : "Confirm must be selected";
+            context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = file.Id, HiddenFunctionsFile = file });
         #endregion
 
         #region Tests
         //[MemberOrder(40)]
-        //public static IContext LoadTestsFromFile(
-        //    this Task task,
-        //    FileAttachment file,
-        //    IContext context) =>
-        //    SaveTests(task, file.GetResourceAsByteArray(), file.Name, file.MimeType, context);
-
-        [MemberOrder(41)]
-        public static IContext EditTestsAsString(
+        public static IContext LoadTestsFromFile(
             this Task task,
-            [MultiLine(20)] string testsCode,
+            FileAttachment file,
+            IContext context)
+        {
+            var author = Users.Me(context);
+            var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = $"HiddenFunctions{task.Project.LanguageAsFileExtension()}", AuthorId = author.Id, Author = author };
+            return context
+                .WithNew(f)
+                .WithUpdated(task,
+                    new(task)
+                    {
+                        TestsFileId = f.Id,
+                        TestsFile = f,
+                    });
+        }
+
+        [Edit]
+        public static IContext EditTests(
+            this Task task,
+            File file,
             IContext context) =>
-                 SaveTests(task, Encoding.ASCII.GetBytes(testsCode),
-                     $"Tests{task.Project.LanguageAsFileExtension()}",
-                     "text/plain",
-                     context);
-
-        public static string Default1EditTestsAsString(this Task task) => "";
-            //task.TestsContent is null ? null : Encoding.Default.GetString(task.TestsContent);
-
-
-        internal static IContext SaveTests(
-            this Task task,
-            byte[] bytes,
-            string name,
-            string mimeType,
-            IContext context) => null;
-        //context.WithUpdated(task, new(task) { TestsContent = bytes });
-
-        [MemberOrder(42)]
-        public static IContext ClearTests(
-            this Task task,
-            bool confirm,
-            IContext context) => null;
-                //context.WithUpdated(task, new(task) { TestsContent = null });
-
-        public static string ValidateClearTests(this Task task, bool confirm) =>
-            confirm ? null : "Confirm must be selected";
+            context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = file.Id, HiddenFunctionsFile = file });
         #endregion
 
         #endregion
