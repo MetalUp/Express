@@ -28,17 +28,16 @@ namespace Model
             modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedBy).WithMany().OnDelete(DeleteBehavior.NoAction); //Because cascading delete would be confused by the two FKs to User
             modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedTo).WithMany().OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Task>().Property(e => e.DescriptionFileId).HasDefaultValue(1);
+            modelBuilder.Entity<Task>().Property(e => e.HiddenFunctionsFileId).HasDefaultValue(1);
+            modelBuilder.Entity<Task>().Property(e => e.TestsFileId).HasDefaultValue(1);
             modelBuilder.Entity<Task>().HasOne(e => e.NextTask).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.PreviousTask).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.DescriptionFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.HiddenFunctionsFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.TestsFile).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Task>().Property(e => e.DescriptionFileId).HasDefaultValue(1);
-            modelBuilder.Entity<Task>().Property(e => e.HiddenFunctionsFileId).HasDefaultValue(1);
-            modelBuilder.Entity<Task>().Property(e => e.TestsFileId).HasDefaultValue(1);
+            modelBuilder.Entity<Task>().HasMany(e => e.Hints).WithMany(h => h.Tasks);
 
-            modelBuilder.Entity<Hint>().Property(e => e.FileId).HasDefaultValue(1);
-            modelBuilder.Entity<Hint>().HasOne(e => e.File).WithMany().OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Organisation>().HasMany(e => e.Teachers).WithOne(e => e.Organisation).OnDelete(DeleteBehavior.NoAction);
 

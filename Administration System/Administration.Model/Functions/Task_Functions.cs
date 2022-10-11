@@ -220,10 +220,6 @@ namespace Model.Functions
                 Title = title,
                 CostInMarks = costInMarks,
                 FileContent = file == null ? null : file.GetResourceAsByteArray(),
-                FileName = file == null ? null : file.Name,
-                FileMime = file == null ? null : file.MimeType,
-                TaskId = task.Id,
-                Task = task
             };
             return context.WithNew(hint);
         }

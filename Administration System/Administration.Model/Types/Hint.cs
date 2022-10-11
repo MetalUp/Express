@@ -13,11 +13,9 @@ namespace Model.Types
             Number = cloneFrom.Number;
             CostInMarks = cloneFrom.CostInMarks;
             FileContent = cloneFrom.FileContent;
-            FileName = cloneFrom.FileName;
-            FileMime = cloneFrom.FileMime;
-            TaskId = cloneFrom.TaskId;
-            Task = cloneFrom.Task;
+            Tasks = cloneFrom.Tasks;
         }
+
         [Hidden]
         public int Id { get; init; }
 
@@ -32,31 +30,16 @@ namespace Model.Types
         public int CostInMarks { get; init; }
 
         #region HtmlFile
-        [Hidden]
-        public int FileId { get; init; }
-
-        [MemberOrder(4)]
-        public virtual File File { get; init; }
-
         [HideInClient]
         public FileAttachment HtmlFile => (FileContent == null) ? null :
-                 new FileAttachment(FileContent, FileName, FileMime);
+                 new FileAttachment(FileContent, $"{Title}", "text/html");
 
         [Hidden]
         public byte[] FileContent { get; init; }
 
-        [MemberOrder(4)]
-        public string FileName { get; init; }
+        public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
-        [Hidden]
-        public string FileMime { get; init; }
         #endregion
-
-        [Hidden]
-        public int TaskId { get; init; }
-        [MemberOrder(10)]
-        public virtual Task Task { get; init; }
-
         public override string ToString() => $"{Title} (-{CostInMarks}) marks";
     }
 }

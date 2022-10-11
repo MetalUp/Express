@@ -33,8 +33,6 @@ namespace Model.Functions
                         new Hint(hint)
                         {
                             FileContent = file.GetResourceAsByteArray(),
-                            FileName = file.Name,
-                            FileMime = file.MimeType,
                         });
     }
 
