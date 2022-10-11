@@ -16,6 +16,7 @@ namespace Server
             config.AddTypeAuthorizer<Project, ProjectAuthorizer>();
             config.AddTypeAuthorizer<Task, TaskAuthorizer>(); 
             config.AddTypeAuthorizer<Hint, HintAuthorizer>();
+            config.AddTypeAuthorizer<File, FileAuthorizer>();
             config.AddTypeAuthorizer<Assignment, AssignmentAuthorizer>();
             return config;
         }

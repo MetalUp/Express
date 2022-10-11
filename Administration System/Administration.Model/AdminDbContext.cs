@@ -13,6 +13,7 @@ namespace Model
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Task> Tasks { get; set; }
+        public DbSet<File> Files { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Activity> Activities { get; set; }
 
