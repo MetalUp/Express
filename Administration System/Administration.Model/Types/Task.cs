@@ -12,11 +12,17 @@ namespace Model.Types
             Project = cloneFrom.Project;
             Title = cloneFrom.Title;
             MaxMarks = cloneFrom.MaxMarks;
+            DescriptionFileId = cloneFrom.DescriptionFileId;
+            DescriptionFile = cloneFrom.DescriptionFile;
             DescContent = cloneFrom.DescContent;
             DescName = cloneFrom.DescName;
+            HiddenFunctionsFileId = cloneFrom.HiddenFunctionsFileId;
+            HiddenFunctionsFile = cloneFrom.HiddenFunctionsFile;
             RMFContent = cloneFrom.RMFContent;
             PasteExpression = cloneFrom.PasteExpression;
             PasteFunctions = cloneFrom.PasteFunctions;
+            TestsFileId = cloneFrom.TestsFileId;
+            TestsFile = cloneFrom.TestsFile;    
             TestsContent = cloneFrom.TestsContent;
             PreviousTaskId = cloneFrom.PreviousTaskId;
             PreviousTask = cloneFrom.PreviousTask;
