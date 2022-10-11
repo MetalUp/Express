@@ -96,9 +96,15 @@ namespace Model.Functions
         [Edit]
         public static IContext EditDesciption(
             this Task task,
-            File file,
+            File descriptionFile,
             IContext context) =>
-            context.WithUpdated(task, new Task(task) { DescriptionFileId = file.Id, DescriptionFile = file });
+            context.WithUpdated(task, new Task(task) { DescriptionFileId = descriptionFile.Id, DescriptionFile = descriptionFile });
+
+        [MemberOrder(21)]
+        public static IContext ClearDesciption(
+    this Task task,
+    IContext context) =>
+    context.WithUpdated(task, new Task(task) { DescriptionFileId = null, DescriptionFile = null });
         #endregion
 
         #region Hidden Functions
@@ -123,13 +129,19 @@ namespace Model.Functions
         [Edit]
         public static IContext EditHiddenFunctions(
             this Task task,
-            File file,
+            File hiddenFunctionsfile,
             IContext context) =>
-            context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = file.Id, HiddenFunctionsFile = file });
+            context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = hiddenFunctionsfile.Id, HiddenFunctionsFile = hiddenFunctionsfile });
+
+        [MemberOrder(31)]
+        public static IContext ClearHiddenFunctions(
+            this Task task,
+            IContext context) =>
+            context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = null, HiddenFunctionsFile = null });
         #endregion
 
         #region Tests
-        //[MemberOrder(40)]
+        [MemberOrder(40)]
         public static IContext LoadTestsFromFile(
             this Task task,
             FileAttachment file,
@@ -150,9 +162,16 @@ namespace Model.Functions
         [Edit]
         public static IContext EditTests(
             this Task task,
-            File file,
+            File testsFile,
             IContext context) =>
-            context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = file.Id, HiddenFunctionsFile = file });
+            context.WithUpdated(task, new Task(task) { TestsFileId = testsFile.Id, TestsFile = testsFile });
+
+
+        [MemberOrder(41)]
+        public static IContext ClearTests(
+            this Task task,
+            IContext context) =>
+            context.WithUpdated(task, new Task(task) { TestsFileId = null, TestsFile = null });
         #endregion
 
         #endregion

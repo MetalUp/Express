@@ -47,7 +47,7 @@ namespace Model.Types
 
         #region Description
         [Hidden]
-        public int DescriptionFileId { get; init; }
+        public int? DescriptionFileId { get; init; }
 
         [MemberOrder(70)]
         public virtual File DescriptionFile { get; init; }
@@ -55,7 +55,7 @@ namespace Model.Types
 
         #region Hidden Functions
         [Hidden]
-        public int HiddenFunctionsFileId { get; init; }
+        public int? HiddenFunctionsFileId { get; init; }
 
         [MemberOrder(80)]
         public virtual File HiddenFunctionsFile { get; init; }
@@ -63,7 +63,7 @@ namespace Model.Types
 
         #region Tests
         [Hidden]
-        public int TestsFileId { get; init; }
+        public int? TestsFileId { get; init; }
 
         [MemberOrder(90)]
         public virtual File TestsFile { get; init; }
