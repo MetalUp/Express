@@ -109,5 +109,6 @@ namespace Model.Functions
         public static Task Default2CreateTask(
             this Project project) =>
             project.Tasks.LastOrDefault();
+        #endregion
     }
 }
