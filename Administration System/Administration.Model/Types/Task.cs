@@ -34,16 +34,13 @@ namespace Model.Types
         public string Link => $"https://express.metalup.org/task/{Id}";
 
         [MemberOrder(30)]
-        [HideInClient]
         public string Title { get; init; }
 
         [MemberOrder(40)]
-        [HideInClient]
         public ProgrammingLanguage Language => Project.Language;
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(60)]
-        [HideInClient]
         public int MaxMarks { get; init; }
 
         #region Description
@@ -79,37 +76,32 @@ namespace Model.Types
         #endregion
 
         [MemberOrder(100)]
-        [HideInClient]
         public bool PasteExpression { get; init; }
 
         [MemberOrder(101)]
-        [HideInClient]
         public bool PasteFunctions { get; init; }
 
         [Hidden]
         public int? PreviousTaskId { get; init; }
 
         [MemberOrder(110)]
-        [HideInClient]
         public virtual Task PreviousTask { get; init; }
 
         [Hidden]
         public int? NextTaskId { get; init; }
 
         [MemberOrder(120)]
-        [HideInClient]
         public virtual Task NextTask { get; init; }
 
         [MemberOrder(130)]
-        [HideInClient]
         public bool NextTaskClearsFunctions { get; init; }
 
         [Hidden]
         public int? ProjectId { get; init; }
+
         [MemberOrder(200)]
         public virtual Project Project { get; init; }
 
-        [HideInClient]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
         public override string ToString() => $"{Title} {Language}";
