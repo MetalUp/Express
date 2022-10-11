@@ -79,10 +79,10 @@ namespace Model.Functions
         public static IContext LoadDescriptionFromFile(
             this Task task,
             FileAttachment file,
-            IContext context) 
+            IContext context)
         {
             var author = Users.Me(context);
-            var f = new File() {Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = "text/html", AuthorId = author.Id, Author = author};
+            var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = "text/html", AuthorId = author.Id, Author = author };
             return context
                 .WithNew(f)
                 .WithUpdated(task,
@@ -112,19 +112,33 @@ namespace Model.Functions
         public static IContext LoadHiddenFunctionsFromFile(
             this Task task,
             FileAttachment file,
-            IContext context) 
-        {
-            var author = Users.Me(context);
-        var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = $"HiddenFunctions{task.Project.LanguageAsFileExtension()}", AuthorId = author.Id, Author = author };
-            return context
-                .WithNew(f)
-                .WithUpdated(task,
-                    new (task)
-                    {
-                        HiddenFunctionsFileId = f.Id,
-                        HiddenFunctionsFile = f,
-                    });
-        }
+            IContext context) =>
+            SaveHiddenFunctionsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+
+        public static IContext LoadHiddenFunctionsAsString(
+    this Task task,
+    [MultiLine(10)] string content,
+    IContext context) =>
+    SaveHiddenFunctionsAsFile(task, $"HiddenFunctions{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
+
+
+        private static IContext SaveHiddenFunctionsAsFile(
+            this Task task,
+            string name,
+            byte[] content,
+            IContext context)
+                {
+                    var author = Users.Me(context);
+                    var f = new File() { Name = name, Content = content, Mime = "text/plain", AuthorId = author.Id, Author = author };
+                    return context
+                        .WithNew(f)
+                        .WithUpdated(task,
+                            new(task)
+                            {
+                                HiddenFunctionsFileId = f.Id,
+                                HiddenFunctionsFile = f,
+                            });
+                }
 
         [Edit]
         public static IContext EditHiddenFunctions(
@@ -133,7 +147,7 @@ namespace Model.Functions
             IContext context) =>
             context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = hiddenFunctionsfile.Id, HiddenFunctionsFile = hiddenFunctionsfile });
 
-        [MemberOrder(31)]
+        [MemberOrder(32)]
         public static IContext ClearHiddenFunctions(
             this Task task,
             IContext context) =>
@@ -145,10 +159,24 @@ namespace Model.Functions
         public static IContext LoadTestsFromFile(
             this Task task,
             FileAttachment file,
+            IContext context) =>
+                SaveTestsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+
+        public static IContext LoadTestsAsString(
+            this Task task,
+            [MultiLine(10)] string content,
+            IContext context) =>
+                SaveTestsAsFile(task, $"Tests{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
+
+
+        private static IContext SaveTestsAsFile(
+            this Task task,
+            string name,
+            byte[] content,
             IContext context)
         {
             var author = Users.Me(context);
-            var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = $"HiddenFunctions{task.Project.LanguageAsFileExtension()}", AuthorId = author.Id, Author = author };
+            var f = new File() { Name = name, Content = content, Mime ="text/plain", AuthorId = author.Id, Author = author };
             return context
                 .WithNew(f)
                 .WithUpdated(task,
@@ -192,8 +220,8 @@ namespace Model.Functions
                 Title = title,
                 CostInMarks = costInMarks,
                 FileContent = file == null ? null : file.GetResourceAsByteArray(),
-            };        
-            return context.WithNew(hint).WithUpdated(task,new Task(task) { Hints = task.Hints.Append(hint).ToList() });
+            };
+            return context.WithNew(hint).WithUpdated(task, new Task(task) { Hints = task.Hints.Append(hint).ToList() });
         }
 
         public static int Default1AddNewHint(this Task task) =>
@@ -204,7 +232,7 @@ namespace Model.Functions
             this Task thisTask,
             Task otherTask,
             IContext context) =>
-            context.WithUpdated(thisTask,new Task(thisTask) { Hints = new List<Hint>(otherTask.Hints) });
+            context.WithUpdated(thisTask, new Task(thisTask) { Hints = new List<Hint>(otherTask.Hints) });
 
         #endregion
     }

@@ -105,10 +105,21 @@ namespace Model.Functions
             var context2 = updatedPrevious is null ? context : context.WithUpdated(previousTask, updatedPrevious);
             return context2.WithNew(t);
         }
+
         public static Task Default2CreateTask(
             this Project project) =>
             project.Tasks.LastOrDefault();
 
+        public static IContext DeleteAllTasks(
+           this Project project,
+           bool confirm,
+           IContext context) =>
+            project.Tasks.Aggregate(context, (c, t) => c.WithDeleted(t));
+
+        public static string Validate1DeleteAllTasks(
+           this Project project,
+           bool confirm,
+           IContext context) => confirm ? null : "Must select Confirm";
         #endregion
     }
 }
