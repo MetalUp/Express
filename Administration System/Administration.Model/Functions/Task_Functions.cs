@@ -206,12 +206,12 @@ namespace Model.Functions
 
         #region Hints 
         [MemberOrder(50)]
-        public static IContext AddHint(
+        public static IContext AddNewHint(
             this Task task,
             int number,
             string title,
             [DefaultValue(1)] int costInMarks,
-            [Optionally] FileAttachment file,
+            FileAttachment file,
             IContext context)
         {
             var hint = new Hint
@@ -220,19 +220,20 @@ namespace Model.Functions
                 Title = title,
                 CostInMarks = costInMarks,
                 FileContent = file == null ? null : file.GetResourceAsByteArray(),
-            };
-            return context.WithNew(hint);
+            };        
+            return context.WithNew(hint).WithUpdated(task,new Task(task) { Hints = task.Hints.Append(hint).ToList() });
         }
 
-        public static int Default1AddHint(this Task task) =>
+        public static int Default1AddNewHint(this Task task) =>
             task.Hints.Count + 1;
 
-        [MemberOrder(55)]
-        public static IContext RemoveHint(this Task task, Hint hint, IContext context) =>
-            context.WithDeleted(hint);
+        [MemberOrder(50)]
+        public static IContext UseExistingHintsFrom(
+            this Task thisTask,
+            Task otherTask,
+            IContext context) =>
+            context.WithUpdated(thisTask,new Task(thisTask) { Hints = new List<Hint>(otherTask.Hints) });
 
-        public static List<Hint> Choices1RemoveHint(this Task task, Hint hint, IContext context) =>
-            task.Hints.ToList();
         #endregion
     }
 }
