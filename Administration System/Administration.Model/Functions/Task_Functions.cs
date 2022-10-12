@@ -256,7 +256,7 @@ namespace Model.Functions
                 Number = number,
                 Name = title,
                 CostInMarks = costInMarks,
-                FileContent = file == null ? null : file.GetResourceAsByteArray(),
+                Content = file == null ? null : file.GetResourceAsByteArray(),
             };
             return context.WithNew(hint).WithUpdated(task, new Task(task) { Hints = task.Hints.Append(hint).ToList() });
         }

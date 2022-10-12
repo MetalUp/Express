@@ -26,19 +26,14 @@ namespace Model.Functions
             IContext context) =>
         context.WithUpdated(hint, new(hint) { CostInMarks = costInMarks });
 
-        public static IContext LoadHtmlFile(
-                this Hint hint,
-                FileAttachment file,
-                IContext context) =>
-                    context.WithUpdated(hint, new Hint(hint) { FileContent = file.GetResourceAsByteArray() });
+        public static IContext ReloadContentFromExternalFile(this Hint hint, FileAttachment externalFile, IContext context) =>
+            context.WithUpdated(hint, new Hint(hint) { Content = externalFile.GetResourceAsByteArray() });
 
-        public static IContext LoadContentAsString(
-            this Hint hint,
-            string content,
-            IContext context) =>
-                context.WithUpdated(hint, new Hint(hint) { FileContent = Encoding.ASCII.GetBytes(content) });
+        public static IContext EditContentAsString(this Hint hint, [MultiLine(20)] string content, IContext context) =>
+            context.WithUpdated(hint, new Hint(hint) { Content = Encoding.ASCII.GetBytes(content) });
 
-        public static string Default1LoadContentAsString(this Hint hint) => Encoding.Default.GetString(hint.FileContent);
+        public static string Default1EditContentAsString(this File file) =>
+            Encoding.Default.GetString(file.Content);
     }
 
 }

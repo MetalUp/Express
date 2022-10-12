@@ -12,7 +12,7 @@ namespace Model.Types
             Name = cloneFrom.Name;
             Number = cloneFrom.Number;
             CostInMarks = cloneFrom.CostInMarks;
-            FileContent = cloneFrom.FileContent;
+            Content = cloneFrom.Content;
             Tasks = cloneFrom.Tasks;
         }
 
@@ -33,11 +33,11 @@ namespace Model.Types
 
         #region HtmlFile
         [HideInClient]
-        public FileAttachment HtmlFile => (FileContent == null) ? null :
-                 new FileAttachment(FileContent, $"{Name}", "text/html");
+        public FileAttachment HtmlFile => (Content == null) ? null :
+                 new FileAttachment(Content, $"{Name}", "text/html");
 
         [Hidden]
-        public byte[] FileContent { get; init; }
+        public byte[] Content { get; init; }
 
         [Hidden]
         public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();

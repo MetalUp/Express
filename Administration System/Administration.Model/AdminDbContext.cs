@@ -37,6 +37,7 @@ namespace Model
             modelBuilder.Entity<Task>().HasMany(e => e.Hints).WithMany(h => h.Tasks);
 
             modelBuilder.Entity<Hint>().Property(e => e.Name).HasColumnName("Title");
+            modelBuilder.Entity<Hint>().Property(e => e.Content).HasColumnName("FileContent");
 
             modelBuilder.Entity<Organisation>().HasMany(e => e.Teachers).WithOne(e => e.Organisation).OnDelete(DeleteBehavior.NoAction);
 
