@@ -19,6 +19,7 @@ public static class VisualBasicCompiler {
         MetadataReference.CreateFromFile(typeof(StandardModuleAttribute).Assembly.Location),
         MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // System.Linq
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections").Location), // System.Collections
         MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location), // System.Collections.Generic
         MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
     };
