@@ -330,6 +330,10 @@ gemini {
     display:none;
 }
 
+.dotnet :is(.python, .java) {
+    display:none;
+}
+
 .java :is(.csharp, .vb, .python) {
     display:none;
 }
