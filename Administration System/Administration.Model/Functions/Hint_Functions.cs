@@ -32,8 +32,8 @@ namespace Model.Functions
         public static IContext EditContentAsString(this Hint hint, [MultiLine(20)] string content, IContext context) =>
             context.WithUpdated(hint, new Hint(hint) { Content = Encoding.ASCII.GetBytes(content) });
 
-        public static string Default1EditContentAsString(this File file) =>
-            Encoding.Default.GetString(file.Content);
+        public static string Default1EditContentAsString(this Hint hint) =>
+            Encoding.Default.GetString(hint.Content);
     }
 
 }
