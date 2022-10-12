@@ -122,6 +122,7 @@ namespace Model.Functions
             var author = Users.Me(context);
             var p = new Project(project)
             {
+                Id = 0, //Because it is a new object
                 Language = newLanguage,
                 Tasks = new List<Task>()
             };
@@ -137,6 +138,7 @@ namespace Model.Functions
         {
             var t = new Task(copyFrom)
             {
+                Id = 0, //Because it is a new object
                 PreviousTaskId = previousTask is null ? null : previousTask.Id,
                 PreviousTask = previousTask,
                 NextTaskId = null,
