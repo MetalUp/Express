@@ -37,6 +37,7 @@ namespace Model.Types
         [Hidden]
         public byte[] FileContent { get; init; }
 
+        [Hidden]
         public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
         #endregion
