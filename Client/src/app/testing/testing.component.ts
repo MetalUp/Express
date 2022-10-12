@@ -76,7 +76,7 @@ export class TestingComponent implements OnInit, OnDestroy {
     }
     else if (result.cmpinfo) {
       // compile error
-      this.currentResultMessage = "Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint. " + result.cmpinfo;
+      this.currentResultMessage = "The Test system cannot find the function(s) it expects to see in your code. Check the function signature(s) carefully. If you can't see why a function signature is wrong, use a Hint. " + result.cmpinfo;
     }
     else {
       this.currentResultMessage = getResultOutcome(result.outcome);

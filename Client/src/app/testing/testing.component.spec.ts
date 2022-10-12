@@ -181,8 +181,8 @@ describe('TestingComponent', () => {
 
     expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
-    expect(component.currentResultMessage).toEqual("Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint. " + 'compile error');
-    expect(component.message()).toEqual("Your function signature does not match that expected by the tests. Re-read the Task and, if you can't see why your function signature is wrong, use a Hint. " + 'compile error');
+    expect(component.currentResultMessage).toEqual("The Test system cannot find the function(s) it expects to see in your code. Check the function signature(s) carefully. If you can't see why a function signature is wrong, use a Hint. " + 'compile error');
+    expect(component.message()).toEqual("The Test system cannot find the function(s) it expects to see in your code. Check the function signature(s) carefully. If you can't see why a function signature is wrong, use a Hint. " + 'compile error');
     expect(component.testedOk).toEqual(false);
   });
 
