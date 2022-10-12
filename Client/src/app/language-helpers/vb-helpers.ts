@@ -87,7 +87,7 @@ export function wrapVBTests(tests : string) {
     
             If (Display(actual) IsNot Display(expected)) Then
                 Console.WriteLine(fail + $"{functionName}({ArgString(args)}) Expected: {Display(expected)}  Actual: {Display(actual)}")
-                Throw New TestFailure();
+                Throw New TestFailure()
             End If
     
         End Sub
