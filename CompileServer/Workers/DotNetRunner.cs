@@ -40,7 +40,7 @@ public static class DotNetRunner {
             runResult = Helpers.SetRunResults(runResult, consoleOut, consoleErr);
         }
         catch (Exception e) {
-            runResult = Helpers.SetRunResults(runResult, e);
+            runResult = Helpers.SetRunResults(runResult, consoleOut, consoleErr, e);
         }
 
         Console.SetOut(oldOut);

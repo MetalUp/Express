@@ -53,5 +53,13 @@ public static class Helpers {
         return runResult;
     }
 
-  
+    public static RunResult SetRunResults(RunResult runResult, StringWriter consoleOut, StringWriter consoleErr, Exception e)
+    {
+        runResult.outcome = Outcome.RunTimeError;
+        runResult.stdout =  consoleOut.ToString();
+        var err = consoleErr.ToString();
+        runResult.stderr = string.IsNullOrEmpty(err) ? e.Message : err;
+        return runResult;
+    }
+
 }
