@@ -44,6 +44,8 @@ namespace Model.Types
         public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
         #endregion
-        public override string ToString() => $"{Name} (-{CostInMarks}) marks";
+
+        private string marks => CostInMarks > 1 ? "marks" : "mark";
+        public override string ToString() => $"{Name} (-{CostInMarks} {marks})";
     }
 }
