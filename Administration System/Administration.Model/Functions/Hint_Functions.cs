@@ -1,4 +1,5 @@
 ﻿using NakedFramework.Value;
+using System.Text;
 
 namespace Model.Functions
 {
@@ -25,15 +26,19 @@ namespace Model.Functions
             IContext context) =>
         context.WithUpdated(hint, new(hint) { CostInMarks = costInMarks });
 
-        public static IContext SpecifyHtmlFile(
+        public static IContext LoadHtmlFile(
                 this Hint hint,
                 FileAttachment file,
                 IContext context) =>
-                    context.WithUpdated(hint,
-                        new Hint(hint)
-                        {
-                            FileContent = file.GetResourceAsByteArray(),
-                        });
+                    context.WithUpdated(hint, new Hint(hint) { FileContent = file.GetResourceAsByteArray() });
+
+        public static IContext LoadContentAsString(
+            this Hint hint,
+            string content,
+            IContext context) =>
+                context.WithUpdated(hint, new Hint(hint) { FileContent = Encoding.ASCII.GetBytes(content) });
+
+        public static string Default1LoadContentAsString(this Hint hint) => Encoding.Default.GetString(hint.FileContent);
     }
 
 }

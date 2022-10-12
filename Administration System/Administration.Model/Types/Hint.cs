@@ -19,7 +19,6 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
-
         [MemberOrder(1)]
         public int Number { get; init; }
 

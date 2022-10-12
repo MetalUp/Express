@@ -76,52 +76,79 @@ namespace Model.Functions
         #region FileAttachments
         #region Description
         [MemberOrder(20)]
-        public static IContext LoadDescriptionFromFile(
+        public static IContext AddDescriptionFromFile(
             this Task task,
             FileAttachment file,
+            IContext context) =>
+                SaveDescriptionAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+
+        public static string DisableAddDescriptionFromFile(this Task task) =>
+            task.HiddenFunctionsFileId is null ? null : "Either go to Description file and reload/edit it, or Clear Description to create a new file here.";
+
+        [MemberOrder(21)]
+        public static IContext AddDescriptionAsString(
+            this Task task,
+            [MultiLine(10)] string content,
+            IContext context) =>
+                SaveDescriptionAsFile(task, $"Description{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
+
+        public static string DisableAddDescriptionAsString(this Task task) => DisableAddDescriptionFromFile(task);
+
+
+        private static IContext SaveDescriptionAsFile(
+            this Task task,
+            string name,
+            byte[] content,
             IContext context)
-        {
-            var author = Users.Me(context);
-            var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = "text/html", AuthorId = author.Id, Author = author };
-            return context
-                .WithNew(f)
-                .WithUpdated(task,
-                    new(task)
-                    {
-                        DescriptionFileId = f.Id,
-                        DescriptionFile = f,
-                    });
-        }
+                {
+                    var author = Users.Me(context);
+                    var f = new File() { Name = name, Content = content, Mime = "text/html", AuthorId = author.Id, Author = author };
+                    return context
+                        .WithNew(f)
+                        .WithUpdated(task,
+                            new(task)
+                            {
+                                DescriptionFileId = f.Id,
+                                DescriptionFile = f,
+                            });
+                }
 
         [Edit]
         public static IContext EditDesciption(
             this Task task,
             File descriptionFile,
             IContext context) =>
-            context.WithUpdated(task, new Task(task) { DescriptionFileId = descriptionFile.Id, DescriptionFile = descriptionFile });
+                context.WithUpdated(task, new Task(task) { DescriptionFileId = descriptionFile.Id, DescriptionFile = descriptionFile });
 
-        [MemberOrder(21)]
+        [MemberOrder(22)]
         public static IContext ClearDesciption(
-    this Task task,
-    IContext context) =>
-    context.WithUpdated(task, new Task(task) { DescriptionFileId = null, DescriptionFile = null });
+            this Task task,
+            IContext context) =>
+                context.WithUpdated(task, new Task(task) { DescriptionFileId = null, DescriptionFile = null });
+
+
+        public static string DisableClearDescription(this Task task) => task.TestsFileId is null ? "No Description specified" : null;
         #endregion
 
         #region Hidden Functions
         [MemberOrder(30)]
-        public static IContext LoadHiddenFunctionsFromFile(
+        public static IContext AddHiddenFunctionsFromFile(
             this Task task,
             FileAttachment file,
             IContext context) =>
-            SaveHiddenFunctionsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+                SaveHiddenFunctionsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+
+        public static string DisableAddHiddenFunctionsFromFile(this Task task) =>
+            task.HiddenFunctionsFileId is null ? null : "Either go to Hidden Functions file and reload/edit it, or Clear Hidden Functions to create a new file here.";
 
         [MemberOrder(31)]
-        public static IContext LoadHiddenFunctionsAsString(
-    this Task task,
-    [MultiLine(10)] string content,
-    IContext context) =>
-    SaveHiddenFunctionsAsFile(task, $"HiddenFunctions{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
+        public static IContext AddHiddenFunctionsAsString(
+            this Task task,
+            [MultiLine(10)] string content,
+            IContext context) =>
+                SaveHiddenFunctionsAsFile(task, $"HiddenFunctions{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
 
+        public static string DisableAddHiddenFunctionsAsString(this Task task) => DisableAddHiddenFunctionsFromFile(task);
 
         private static IContext SaveHiddenFunctionsAsFile(
             this Task task,
@@ -146,62 +173,70 @@ namespace Model.Functions
             this Task task,
             File hiddenFunctionsfile,
             IContext context) =>
-            context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = hiddenFunctionsfile.Id, HiddenFunctionsFile = hiddenFunctionsfile });
+                context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = hiddenFunctionsfile.Id, HiddenFunctionsFile = hiddenFunctionsfile });
 
         [MemberOrder(32)]
         public static IContext ClearHiddenFunctions(
             this Task task,
             IContext context) =>
-            context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = null, HiddenFunctionsFile = null });
+                context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = null, HiddenFunctionsFile = null });
+
+        public static string DisableClearHiddenFunctions(this Task task) => task.TestsFileId is null ? "No Hidden Functions specified" : null;
         #endregion
 
         #region Tests
         [MemberOrder(40)]
-        public static IContext LoadTestsFromFile(
+        public static IContext AddTestsFromFile(
             this Task task,
             FileAttachment file,
             IContext context) =>
                 SaveTestsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
 
+        public static string DisableAddTestsFromFile(this Task task) =>
+            task.HiddenFunctionsFileId is null ? null : "Either go to Tests file and reload/edit it, or Clear Tests to create a new file here.";
+
         [MemberOrder(41)]
-        public static IContext LoadTestsAsString(
+        public static IContext AddTestsAsString(
             this Task task,
             [MultiLine(10)] string content,
             IContext context) =>
                 SaveTestsAsFile(task, $"Tests{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
 
+        public static string DisableAddTestsAsString(this Task task) => DisableAddTestsFromFile(task);
 
         private static IContext SaveTestsAsFile(
             this Task task,
             string name,
             byte[] content,
             IContext context)
-        {
-            var author = Users.Me(context);
-            var f = new File() { Name = name, Content = content, Mime ="text/plain", AuthorId = author.Id, Author = author };
-            return context
-                .WithNew(f)
-                .WithUpdated(task,
-                    new(task)
-                    {
-                        TestsFileId = f.Id,
-                        TestsFile = f,
-                    });
-        }
+                {
+                    var author = Users.Me(context);
+                    var f = new File() { Name = name, Content = content, Mime = "text/plain", AuthorId = author.Id, Author = author };
+                    return context
+                        .WithNew(f)
+                        .WithUpdated(task,
+                            new(task)
+                            {
+                                TestsFileId = f.Id,
+                                TestsFile = f,
+                            });
+                }
 
         [Edit]
         public static IContext EditTests(
             this Task task,
             File testsFile,
             IContext context) =>
-            context.WithUpdated(task, new Task(task) { TestsFileId = testsFile.Id, TestsFile = testsFile });
+                context.WithUpdated(task, new Task(task) { TestsFileId = testsFile.Id, TestsFile = testsFile });
 
 
         [MemberOrder(42)]
         public static IContext ClearTests(
             this Task task,
             IContext context) =>
-            context.WithUpdated(task, new Task(task) { TestsFileId = null, TestsFile = null });
+                context.WithUpdated(task, new Task(task) { TestsFileId = null, TestsFile = null });
+
+        public static string DisableClearTests(this Task task) => task.TestsFileId is null ? "No Tests specified" : null;
         #endregion
 
         #endregion

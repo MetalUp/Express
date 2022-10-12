@@ -29,9 +29,6 @@ namespace Model
             modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedTo).WithMany().OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Task>().Property(e => e.Name).HasColumnName("Title");
-            modelBuilder.Entity<Task>().Property(e => e.DescriptionFileId).HasDefaultValue(1);
-            modelBuilder.Entity<Task>().Property(e => e.HiddenFunctionsFileId).HasDefaultValue(1);
-            modelBuilder.Entity<Task>().Property(e => e.TestsFileId).HasDefaultValue(1);
             modelBuilder.Entity<Task>().HasOne(e => e.NextTask).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.PreviousTask).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.DescriptionFile).WithMany().OnDelete(DeleteBehavior.NoAction);
