@@ -9,7 +9,7 @@ namespace Model.Types
         public Hint(Hint cloneFrom)
         {
             Id = cloneFrom.Id;
-            Title = cloneFrom.Title;
+            Name = cloneFrom.Name;
             Number = cloneFrom.Number;
             CostInMarks = cloneFrom.CostInMarks;
             FileContent = cloneFrom.FileContent;
@@ -24,7 +24,10 @@ namespace Model.Types
         public int Number { get; init; }
 
         [MemberOrder(2)]
-        public string Title { get; init; }
+        public string Name { get; init; }
+
+        [HideInClient]
+        public string Title => ToString();
 
         [MemberOrder(3)]
         public int CostInMarks { get; init; }
@@ -32,7 +35,7 @@ namespace Model.Types
         #region HtmlFile
         [HideInClient]
         public FileAttachment HtmlFile => (FileContent == null) ? null :
-                 new FileAttachment(FileContent, $"{Title}", "text/html");
+                 new FileAttachment(FileContent, $"{Name}", "text/html");
 
         [Hidden]
         public byte[] FileContent { get; init; }
@@ -41,6 +44,6 @@ namespace Model.Types
         public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
         #endregion
-        public override string ToString() => $"{Title} (-{CostInMarks}) marks";
+        public override string ToString() => $"{Name} (-{CostInMarks}) marks";
     }
 }

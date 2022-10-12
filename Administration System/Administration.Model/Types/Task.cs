@@ -10,7 +10,7 @@ namespace Model.Types
             Id = cloneFrom.Id;
             ProjectId = cloneFrom.ProjectId;
             Project = cloneFrom.Project;
-            Title = cloneFrom.Title;
+            Name = cloneFrom.Name;
             MaxMarks = cloneFrom.MaxMarks;
             DescriptionFileId = cloneFrom.DescriptionFileId;
             DescriptionFile = cloneFrom.DescriptionFile;
@@ -36,7 +36,10 @@ namespace Model.Types
         public string Link => $"https://express.metalup.org/task/{Id}";
 
         [MemberOrder(30)]
-        public string Title { get; init; }
+        public string Name { get; init; }
+
+        [HideInClient]
+        public string Title => ToString();
 
         [MemberOrder(40)]
         public ProgrammingLanguage Language => Project.Language;
@@ -105,6 +108,6 @@ namespace Model.Types
 
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
-        public override string ToString() => $"{Title} {Language}";
+        public override string ToString() => $"{Name} {Language}";
     }
 }

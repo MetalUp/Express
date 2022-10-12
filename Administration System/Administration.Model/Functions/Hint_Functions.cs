@@ -16,7 +16,7 @@ namespace Model.Functions
             this Hint hint,
             string title,
             IContext context) =>
-        context.WithUpdated(hint, new(hint) { Title = title });
+        context.WithUpdated(hint, new(hint) { Name = title });
 
         [Edit]
         public static IContext EditCostInMarks(

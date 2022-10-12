@@ -93,7 +93,7 @@ namespace Model.Functions
             {
                 ProjectId = project.Id,
                 Project = project,
-                Title = title,
+                Name = title,
                 PreviousTaskId = previousTask is null ? null : previousTask.Id,
                 PreviousTask = previousTask,
                 HiddenFunctionsFileId = previousTask.HiddenFunctionsFileId,

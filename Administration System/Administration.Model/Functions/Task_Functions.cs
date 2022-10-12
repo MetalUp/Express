@@ -13,7 +13,7 @@ namespace Model.Functions
             this Task task,
             string title,
             IContext context) =>
-                context.WithUpdated(task, new(task) { Title = title });
+                context.WithUpdated(task, new(task) { Name = title });
 
         [Edit]
         public static IContext EditMaxMarks(
@@ -219,7 +219,7 @@ namespace Model.Functions
             var hint = new Hint
             {
                 Number = number,
-                Title = title,
+                Name = title,
                 CostInMarks = costInMarks,
                 FileContent = file == null ? null : file.GetResourceAsByteArray(),
             };
