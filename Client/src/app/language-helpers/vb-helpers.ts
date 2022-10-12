@@ -43,7 +43,8 @@ export function wrapVBExpression(expression : string) {
         Sub Main(args As String())
             System.Console.WriteLine(Display(${(expression)}))
         End Sub
-    End Module`;
+    End Module
+    `;
 }
 
 export function wrapVBFunctions(userDefinedFunction : string) {
