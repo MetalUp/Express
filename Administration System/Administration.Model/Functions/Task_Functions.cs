@@ -193,7 +193,7 @@ namespace Model.Functions
                 SaveTestsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
 
         public static string DisableAddTestsFromFile(this Task task) =>
-            task.HiddenFunctionsFileId is null ? null : "Either go to Tests file and reload/edit it, or Clear Tests to create a new file here.";
+            task.TestsFileId is null ? null : "Either go to Tests file and reload/edit it, or Clear Tests to create a new file here.";
 
         [MemberOrder(41)]
         public static IContext AddTestsAsString(
