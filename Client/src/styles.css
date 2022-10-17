@@ -318,7 +318,7 @@ gemini {
     color: grey;
 }
 
-.python :is(.csharp, .vb, .java) {
+.python :is(.dotnet, .csharp, .vb, .java, ) {
     display:none;
 }
 
@@ -330,11 +330,7 @@ gemini {
     display:none;
 }
 
-.dotnet :is(.python, .java) {
-    display:none;
-}
-
-.java :is(.csharp, .vb, .python) {
+.java :is(.dotnet, .csharp, .vb, .python) {
     display:none;
 }
 
