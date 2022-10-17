@@ -83,7 +83,7 @@ namespace Model.Functions
                 SaveDescriptionAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
 
         public static string DisableAddDescriptionFromFile(this Task task) =>
-            task.HiddenFunctionsFileId is null ? null : "Either go to Description file and reload/edit it, or Clear Description to create a new file here.";
+            task.DescriptionFileId is null ? null : "Either go to Description file and reload/edit it, or Clear Description to create a new file here.";
 
         [MemberOrder(21)]
         public static IContext AddDescriptionAsString(

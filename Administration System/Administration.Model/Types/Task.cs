@@ -73,6 +73,7 @@ namespace Model.Types
         [HideInClient]
         public FileAttachment Tests => TestsFile is null ? null : TestsFile.Details;
 
+        [Hidden]
         public int? TestsFileId { get; init; }
 
         [MemberOrder(90)]
