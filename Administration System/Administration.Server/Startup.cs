@@ -58,7 +58,7 @@ namespace NakedFunctions.Rest.App.Demo
             {
                 frameworkOptions.MainMenus = MenuHelper.GenerateMenus(ModelConfig.MainMenus());
                 frameworkOptions.AddEFCorePersistor();
-                //frameworkOptions.AuthorizationConfiguration = AuthorizationHelpers.AdminAuthConfig();
+                frameworkOptions.AuthorizationConfiguration = AuthorizationHelpers.AdminAuthConfig();
                 frameworkOptions.AddNakedFunctions(appOptions =>
                 {
                     appOptions.DomainTypes = ModelConfig.DomainTypes();
