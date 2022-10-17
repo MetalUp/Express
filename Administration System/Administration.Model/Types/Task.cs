@@ -16,8 +16,6 @@ namespace Model.Types
             DescriptionFile = cloneFrom.DescriptionFile;
             HiddenFunctionsFileId = cloneFrom.HiddenFunctionsFileId;
             HiddenFunctionsFile = cloneFrom.HiddenFunctionsFile;
-            PasteExpression = cloneFrom.PasteExpression;
-            PasteFunctions = cloneFrom.PasteFunctions;
             TestsFileId = cloneFrom.TestsFileId;
             TestsFile = cloneFrom.TestsFile;    
             PreviousTaskId = cloneFrom.PreviousTaskId;
@@ -80,11 +78,11 @@ namespace Model.Types
         public virtual File TestsFile { get; init; }
         #endregion
 
-        [MemberOrder(100)]
-        public bool PasteExpression { get; init; }
+        [HideInClient]
+        public bool PasteExpression => Project.PasteExpression;
 
-        [MemberOrder(101)]
-        public bool PasteFunctions { get; init; }
+        [HideInClient]
+        public bool PasteFunctions => Project.PasteFunctions;   
 
         [Hidden]
         public int? PreviousTaskId { get; init; }

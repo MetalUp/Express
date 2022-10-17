@@ -36,6 +36,20 @@ namespace Model.Functions
                  context.WithUpdated(proj, new(proj) { Language = language });
 
         [Edit]
+        public static IContext EditPasteExpression(
+    this Project proj,
+    bool pasteExpression,
+    IContext context) =>
+        context.WithUpdated(proj, new(proj) { PasteExpression = pasteExpression });
+
+        [Edit]
+        public static IContext EditPasteFunctions(
+            this Project proj,
+            bool pasteFunctions,
+            IContext context) =>
+                context.WithUpdated(proj, new(proj) { PasteFunctions = pasteFunctions });
+
+        [Edit]
         public static IContext EditDescription(
             this Project proj,
             [MultiLine(10)] string description,
