@@ -27,7 +27,7 @@ public static class Compile {
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
-    public static RunResult Runs(string languageID, string code) {
+    public static (RunResult, IContext) Runs(string languageID, string code, IContext context) {
         var runSpec = RunSpec.FromParams(languageID, code);
         using var content = JsonContent.Create(runSpec, new MediaTypeHeaderValue("application/json"));
         using var response = Client.PostAsync($"{CompileServer}/runs", content).Result;
@@ -37,7 +37,7 @@ public static class Compile {
             var json = sr.ReadToEnd();
             var apiRunResult = JsonSerializer.Deserialize<ApiRunResult>(json);
 
-            return apiRunResult.ToRunResult();
+            return (apiRunResult?.ToRunResult(), context);
         }
 
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
