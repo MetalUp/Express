@@ -63,6 +63,7 @@ namespace NakedFunctions.Rest.App.Demo
                 {
                     appOptions.DomainTypes = ModelConfig.DomainTypes();
                     appOptions.DomainFunctions = ModelConfig.TypesDefiningDomainFunctions();
+                    appOptions.DomainServices = ModelConfig.DomainServices();
                 });
                 frameworkOptions.AddRestfulObjects();
             });
