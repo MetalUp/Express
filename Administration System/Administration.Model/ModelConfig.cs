@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Model.Functions.Services;
 
 namespace Model
 {
@@ -18,8 +19,10 @@ namespace Model
         public static Type[] TypesDefiningDomainFunctions() =>
           PublicStaticClasses("Model.Functions").ToArray();
 
-    public static Type[] MainMenus() =>
-        PublicStaticClasses("Model.Functions.Menus").ToArray();
+        public static Type[] MainMenus() =>
+            PublicStaticClasses("Model.Functions.Menus").ToArray();
+
+        public static Type[] DomainServices() => new[] { typeof(Compile) };
 
     #region Helpers
 
