@@ -83,15 +83,13 @@ export function wrapVBTests(tests : string) {
             Return arguments.Aggregate("", Function(s, a) s + Display(a) + ", ").TrimEnd(" "c, ","c)
         End Function
     
-        Sub TestFunction(functionName As String, expected As Object, actual As Object, ParamArray args As Object())
-    
-            If (Display(actual) IsNot Display(expected)) Then
+        Sub TestFunction(functionName As String, expected As Object, actual As Object, ParamArray args As Object())   
+            If (Not Display(actual).Equals(Display(expected))) Then
                 Console.WriteLine(fail + $"{functionName}({ArgString(args)}) Expected: {Display(expected)}  Actual: {Display(actual)}")
                 Throw New TestFailure()
-            End If
-    
+            End If    
         End Sub
-    
+  
         Sub AssertTrue(functionName As String, args As String(), actual As Boolean, message As String)
     
             If (Not actual) Then
