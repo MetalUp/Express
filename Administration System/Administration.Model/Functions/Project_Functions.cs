@@ -36,6 +36,20 @@ namespace Model.Functions
                  context.WithUpdated(proj, new(proj) { Language = language });
 
         [Edit]
+        public static IContext EditPasteExpression(
+    this Project proj,
+    bool pasteExpression,
+    IContext context) =>
+        context.WithUpdated(proj, new(proj) { PasteExpression = pasteExpression });
+
+        [Edit]
+        public static IContext EditPasteFunctions(
+            this Project proj,
+            bool pasteFunctions,
+            IContext context) =>
+                context.WithUpdated(proj, new(proj) { PasteFunctions = pasteFunctions });
+
+        [Edit]
         public static IContext EditDescription(
             this Project proj,
             [MultiLine(10)] string description,
@@ -82,37 +96,8 @@ namespace Model.Functions
             };
         #endregion
 
-        #region Create Task (author action)
-        public static IContext CreateTask(
-            this Project project,
-            string title,
-            [Optionally] Task previousTask,
-            IContext context)
-        {
-            var t = new Task
-            {
-                ProjectId = project.Id,
-                Project = project,
-                Name = title,
-                PreviousTaskId = previousTask is null ? null : previousTask.Id,
-                PreviousTask = previousTask,
-                HiddenFunctionsFileId = previousTask.HiddenFunctionsFileId,
-                HiddenFunctionsFile = previousTask.HiddenFunctionsFile,
-                TestsFileId = previousTask.TestsFileId,
-                TestsFile = previousTask.TestsFile,
-            };
-            var updatedPrevious = previousTask is null ? null :
-                new Task(previousTask) { NextTask = t };
-            var context2 = updatedPrevious is null ? context : context.WithUpdated(previousTask, updatedPrevious);
-            return context2.WithNew(t);
-        }
-
-        public static Task Default2CreateTask(
-            this Project project) =>
-            project.Tasks.LastOrDefault();
-        #endregion
-
         #region Copying
+        [MemberOrder(30)]
         public static (Project, IContext) CopyProjectForNewLanguage(
             this Project project,
             ProgrammingLanguage newLanguage,
@@ -129,6 +114,7 @@ namespace Model.Functions
             return (p, context.WithNew(p));
         }
 
+        [MemberOrder(40)]
         public static IContext CopyNextTaskFromAnotherProject(
             this Project project,
             [Optionally] Task previousTask,
@@ -162,6 +148,37 @@ namespace Model.Functions
         public static Task Default1CopyNextTaskFromAnotherProject(this Project project) =>
             project.Tasks.LastOrDefault();
 
+        #endregion
+
+        #region Create Task
+        [MemberOrder(50)]
+        public static IContext CreateTask(
+            this Project project,
+            string title,
+            [Optionally] Task previousTask,
+            IContext context)
+        {
+            var t = new Task
+            {
+                ProjectId = project.Id,
+                Project = project,
+                Name = title,
+                PreviousTaskId = previousTask is null ? null : previousTask.Id,
+                PreviousTask = previousTask,
+                HiddenFunctionsFileId = previousTask.HiddenFunctionsFileId,
+                HiddenFunctionsFile = previousTask.HiddenFunctionsFile,
+                TestsFileId = previousTask.TestsFileId,
+                TestsFile = previousTask.TestsFile,
+            };
+            var updatedPrevious = previousTask is null ? null :
+                new Task(previousTask) { NextTask = t };
+            var context2 = updatedPrevious is null ? context : context.WithUpdated(previousTask, updatedPrevious);
+            return context2.WithNew(t);
+        }
+
+        public static Task Default2CreateTask(
+            this Project project) =>
+            project.Tasks.LastOrDefault();
         #endregion
     }
 }

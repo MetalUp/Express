@@ -12,6 +12,8 @@
             Status = cloneFrom.Status;
             Title = cloneFrom.Title;
             Language = cloneFrom.Language;
+            PasteExpression = cloneFrom.PasteExpression;
+            PasteFunctions = cloneFrom.PasteFunctions;
             Description = cloneFrom.Description;
             Tasks = new List<Task>(cloneFrom.Tasks);
         }
@@ -34,10 +36,16 @@
         [MemberOrder(10)]
         public string Title { get; init; }
 
-        [MemberOrder(15)]
-        public ProgrammingLanguage Language { get; init; }  
-
         [MemberOrder(20)]
+        public ProgrammingLanguage Language { get; init; }
+
+        [MemberOrder(30)]
+        public bool PasteExpression { get; init; }
+
+        [MemberOrder(40)]
+        public bool PasteFunctions { get; init; }
+
+        [MemberOrder(50)]
         [MultiLine(10)]
         public string Description { get; init; }
 

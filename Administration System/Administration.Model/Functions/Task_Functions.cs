@@ -23,20 +23,6 @@ namespace Model.Functions
                 context.WithUpdated(task, new(task) { MaxMarks = maxMarks });
 
         [Edit]
-        public static IContext EditPasteExpression(
-            this Task task,
-            bool pasteExpression,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { PasteExpression = pasteExpression });
-
-        [Edit]
-        public static IContext EditPasteFunctions(
-            this Task task,
-            bool pasteFunctions,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { PasteFunctions = pasteFunctions });
-
-        [Edit]
         public static IContext EditPreviousTask(
             this Task task,
             Task previousTask,
@@ -83,7 +69,7 @@ namespace Model.Functions
                 SaveDescriptionAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
 
         public static string DisableAddDescriptionFromFile(this Task task) =>
-            task.HiddenFunctionsFileId is null ? null : "Either go to Description file and reload/edit it, or Clear Description to create a new file here.";
+            task.DescriptionFileId is null ? null : "Either go to Description file and reload/edit it, or Clear Description to create a new file here.";
 
         [MemberOrder(21)]
         public static IContext AddDescriptionAsString(
