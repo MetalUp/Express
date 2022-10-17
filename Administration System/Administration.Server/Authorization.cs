@@ -2,6 +2,7 @@
 using NakedFramework.Metamodel.Authorization;
 using NakedFunctions.Reflector.Authorization;
 using Model.Authorization;
+using Model.Functions.Services;
 
 namespace Server
 {
@@ -10,6 +11,7 @@ namespace Server
         public static IAuthorizationConfiguration AdminAuthConfig()
         {
             var config = new AuthorizationConfiguration<DefaultTypeAuthorizer, MainMenuAuthorizer>();
+            config.AddNamespaceAuthorizer<CompileAuthorizer>("Model.Functions.Services");
             config.AddTypeAuthorizer<User, UserAuthorizer>();
             config.AddTypeAuthorizer<Organisation, OrganisationAuthorizer>();
             config.AddTypeAuthorizer<Group, GroupAuthorizer>();
