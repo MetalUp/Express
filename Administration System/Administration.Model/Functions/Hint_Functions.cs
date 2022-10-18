@@ -13,11 +13,11 @@ namespace Model.Functions
          context.WithUpdated(hint, new(hint) { Number = number });
 
         [Edit]
-        public static IContext EditTitle(
+        public static IContext EditName(
             this Hint hint,
-            string title,
+            string name,
             IContext context) =>
-        context.WithUpdated(hint, new(hint) { Name = title });
+        context.WithUpdated(hint, new(hint) { Name = name });
 
         [Edit]
         public static IContext EditCostInMarks(
