@@ -13,8 +13,8 @@ public class CSharpCompilerTest {
         var runSpec = new RunSpec { language_id = "csharp", sourcecode = SimpleCode };
         var (rr, code) = CSharpCompiler.Compile(runSpec);
 
-        Assert.AreEqual("", rr.cmpinfo);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
         Assert.AreEqual("", rr.run_id);
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.stdout);
@@ -28,8 +28,8 @@ public class CSharpCompilerTest {
         var runSpec = new RunSpec { language_id = "csharp", sourcecode = DivZero };
         var (rr, code) = CSharpCompiler.Compile(runSpec);
 
-        Assert.AreEqual("CS0020: Division by constant zero", rr.cmpinfo);
         Assert.AreEqual(Outcome.CompilationError, rr.outcome);
+        Assert.AreEqual("CS0020: Division by constant zero", rr.cmpinfo);
         Assert.AreEqual("", rr.run_id);
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.stdout);
