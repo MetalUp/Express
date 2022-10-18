@@ -27,9 +27,9 @@ public static class Compile {
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
-    public static RunResult Runs(RunSpec runSpec) {
-        var apiRunSpec = ApiRunSpec.FromRunSpec(runSpec);
-        using var content = JsonContent.Create(apiRunSpec, new MediaTypeHeaderValue("application/json"));
+    public static (RunResult, IContext) Runs(string languageID, string code, IContext context) {
+        var runSpec = RunSpec.FromParams(languageID, code);
+        using var content = JsonContent.Create(runSpec, new MediaTypeHeaderValue("application/json"));
         using var response = Client.PostAsync($"{CompileServer}/runs", content).Result;
 
         if (response.IsSuccessStatusCode) {
@@ -37,19 +37,19 @@ public static class Compile {
             var json = sr.ReadToEnd();
             var apiRunResult = JsonSerializer.Deserialize<ApiRunResult>(json);
 
-            return apiRunResult.ToRunResult();
+            return (apiRunResult?.ToRunResult(), context);
         }
 
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
-    private class ApiRunSpec {
+    private class RunSpec {
         public class InnerSpec {
             public string language_id { get; init; }
             public string sourcecode { get; init; }
         }
         public InnerSpec run_spec { get; init; }
-        public static ApiRunSpec FromRunSpec(RunSpec runSpec) => new() { run_spec = new InnerSpec { language_id = runSpec.LanguageID, sourcecode = runSpec.Sourcecode } };
+        public static RunSpec FromParams(string languageID, string code) => new() { run_spec = new InnerSpec { language_id = languageID, sourcecode = code } };
     }
 
 

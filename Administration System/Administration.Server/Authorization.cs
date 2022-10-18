@@ -2,6 +2,7 @@
 using NakedFramework.Metamodel.Authorization;
 using NakedFunctions.Reflector.Authorization;
 using Model.Authorization;
+using Model.Functions.Services;
 
 namespace Server
 {

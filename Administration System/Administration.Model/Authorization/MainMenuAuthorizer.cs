@@ -1,11 +1,12 @@
-﻿using NakedFunctions.Security;
+﻿using Model.Functions.Services;
+using NakedFunctions.Security;
 
 namespace Model.Authorization
 {
     public class MainMenuAuthorizer : IMainMenuAuthorizer
     {
         private const string qualifier = "Model.Functions.Menus.";
-        private string MenuNameOnly(string target) => target.Remove(0, qualifier.Length);
+        private string MenuNameOnly(string target) => target.Split('.').Last();
 
         public bool IsVisible(string target, string memberName, IContext context) =>
             MenuNameOnly(target) switch
@@ -18,6 +19,7 @@ namespace Model.Authorization
                 nameof(Files) => FilesAuth(memberName, context),
                 nameof(Assignments) =>AssignmentsAuth(memberName, context),
                 nameof(Activities) => ActivitiesAuth(memberName, context),
+                nameof(Compile) => CompileAuth(memberName, context),
                 _ => false
             };
 
@@ -106,6 +108,7 @@ namespace Model.Authorization
                 _ => false
             };
 
+        private bool CompileAuth(string memberName, IContext context) => true;
 
     }
 }
