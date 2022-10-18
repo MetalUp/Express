@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace Model.Functions.Services;
 
@@ -28,9 +29,17 @@ public static class Compile {
     }
 
     public static (RunResult, IContext) Runs(string languageID, string code, IContext context) {
+        var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
+        var token = httpContext.Request.Headers["Authorization"].First();
+
         var runSpec = RunSpec.FromParams(languageID, code);
         using var content = JsonContent.Create(runSpec, new MediaTypeHeaderValue("application/json"));
-        using var response = Client.PostAsync($"{CompileServer}/runs", content).Result;
+
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{CompileServer}/runs");
+        request.Headers.Add("Authorization", token);
+        request.Content = content;
+
+        using var response = Client.SendAsync(request).Result;
 
         if (response.IsSuccessStatusCode) {
             using var sr = new StreamReader(response.Content.ReadAsStream());
