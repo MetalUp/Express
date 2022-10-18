@@ -4,63 +4,82 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace Model.Functions.Services;
 
 public static class Compile {
+    private const string CompileServerName = "CompileServer";
+    private const string AdminServerName = "AdminServer";
     private static readonly HttpClient Client = new();
-    private static readonly string CompileServer = "https://metalupcompileserver.azurewebsites.net/restapi";
+    private static string compileServer;
 
-    public static IQueryable<Language> Languages() {
-        var httpRequest = new HttpRequestMessage(new HttpMethod("GET"), $"{CompileServer}/languages");
+    static Compile() => compileServer = Environment.GetEnvironmentVariable(CompileServerName);
+
+    private static void CheckServer(IContext context) {
+        if (compileServer is null) {
+            var configuration = context.GetService<IConfiguration>();
+            compileServer = configuration.GetSection(AdminServerName).GetSection(CompileServerName).Value;
+        }
+    }
+
+    private static HttpRequestMessage CreateMessage(IContext context, HttpMethod method, string path, HttpContent content = null) {
+        CheckServer(context);
+        var request = new HttpRequestMessage(method, path);
+        var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
+        var token = httpContext.Request.Headers["Authorization"].FirstOrDefault();
+        if (token is not null) {
+            request.Headers.Add("Authorization", token);
+        }
+        if (content is not null) {
+            request.Content = content;
+        }
+
+        return request;
+    }
+
+    public static IQueryable<Language> Languages(IContext context) {
+        var httpRequest = CreateMessage(context, HttpMethod.Get, $"{compileServer}/languages");
 
         using var response = Client.Send(httpRequest);
 
         if (response.IsSuccessStatusCode) {
-            using var sr = new StreamReader(response.Content.ReadAsStream());
-
-            var json = sr.ReadToEnd();
-            var source = JsonSerializer.Deserialize<List<string[]>>(json);
-
-            return source.Select(l => new Language { LanguageID = l[0], Version = l[1] }).AsQueryable();
+            var languages = ReadAs<List<string[]>>(response);
+            return languages.Select(l => new Language { LanguageID = l[0], Version = l[1] }).AsQueryable();
         }
 
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
     public static (RunResult, IContext) Runs(string languageID, string code, IContext context) {
-        var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
-        var token = httpContext.Request.Headers["Authorization"].First();
-
-        var runSpec = RunSpec.FromParams(languageID, code);
-        using var content = JsonContent.Create(runSpec, new MediaTypeHeaderValue("application/json"));
-
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{CompileServer}/runs");
-        request.Headers.Add("Authorization", token);
-        request.Content = content;
+        using var content = JsonContent.Create(RunSpec.FromParams(languageID, code), new MediaTypeHeaderValue("application/json"));
+        var request = CreateMessage(context, HttpMethod.Post, $"{compileServer}/runs", content);
 
         using var response = Client.SendAsync(request).Result;
 
         if (response.IsSuccessStatusCode) {
-            using var sr = new StreamReader(response.Content.ReadAsStream());
-            var json = sr.ReadToEnd();
-            var apiRunResult = JsonSerializer.Deserialize<ApiRunResult>(json);
-
+            var apiRunResult = ReadAs<ApiRunResult>(response);
             return (apiRunResult?.ToRunResult(), context);
         }
 
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
+    private static T ReadAs<T>(HttpResponseMessage response) {
+        using var sr = new StreamReader(response.Content.ReadAsStream());
+        var json = sr.ReadToEnd();
+        return JsonSerializer.Deserialize<T>(json);
+    }
+
     private class RunSpec {
+        public InnerSpec run_spec { get; init; }
+        public static RunSpec FromParams(string languageID, string code) => new() { run_spec = new InnerSpec { language_id = languageID, sourcecode = code } };
+
         public class InnerSpec {
             public string language_id { get; init; }
             public string sourcecode { get; init; }
         }
-        public InnerSpec run_spec { get; init; }
-        public static RunSpec FromParams(string languageID, string code) => new() { run_spec = new InnerSpec { language_id = languageID, sourcecode = code } };
     }
-
 
     private class ApiRunResult {
         public string cmpinfo { get; set; }
