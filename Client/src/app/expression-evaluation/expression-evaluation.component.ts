@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { wrapExpression } from '../language-helpers/language-helpers';
-import { JobeServerService } from '../services/jobe-server.service';
 import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../models/run-result';
 import { TaskService } from '../services/task.service';
 import { first } from 'rxjs/operators';
+import { CompileServerService } from '../services/compile-server.service';
 
 @Component({
   selector: 'app-expression-evaluation',
@@ -16,7 +16,7 @@ import { first } from 'rxjs/operators';
 export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   constructor(
-    private jobeServer: JobeServerService,
+    private compileServer: CompileServerService,
     private rulesService: RulesService,
     private taskService: TaskService) {
   }
@@ -36,7 +36,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
   private canPaste = false;
 
   get selectedLanguage() {
-    return this.jobeServer.selectedLanguage;
+    return this.compileServer.selectedLanguage;
   }
 
   filteredCmpinfo() {
@@ -88,7 +88,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
       if (!this.validationFail) {
         this.submitting = true;
         const code = wrapExpression(this.selectedLanguage, this.expression);
-        this.jobeServer.submit_run(code).pipe(first()).subscribe(rr => {
+        this.compileServer.submit_run(code).pipe(first()).subscribe(rr => {
           this.result = rr;
           this.pushExpression();
           this.submitting = false;

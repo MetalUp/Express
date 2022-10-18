@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { wrapFunctions } from '../language-helpers/language-helpers';
-import { JobeServerService } from '../services/jobe-server.service';
 import { RunResult } from '../models/run-result';
 import { of, Subject } from 'rxjs';
 
@@ -10,11 +9,12 @@ import { Applicability } from '../models/rules';
 import { TaskService } from '../services/task.service';
 import { ITask } from '../models/task';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { CompileServerService } from '../services/compile-server.service';
 
 describe('FunctionDefinitionComponent', () => {
   let component: FunctionDefinitionComponent;
   let fixture: ComponentFixture<FunctionDefinitionComponent>;
-  let jobeServerServiceSpy: jasmine.SpyObj<JobeServerService>;
+  let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let taskSubject = new Subject<ITask>();
@@ -45,7 +45,7 @@ describe('FunctionDefinitionComponent', () => {
 
 
   beforeEach(async () => {
-    jobeServerServiceSpy = jasmine.createSpyObj('JobeServerService', ['submit_run', 'clearFunctionDefinitions', 'setFunctionDefinitions'], { "selectedLanguage": "csharp" });
+    compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['submit_run', 'clearFunctionDefinitions', 'setFunctionDefinitions'], { "selectedLanguage": "csharp" });
 
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
     rulesServiceSpy.checkRules.and.returnValue('');
@@ -58,8 +58,8 @@ describe('FunctionDefinitionComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
-          provide: JobeServerService,
-          useValue: jobeServerServiceSpy
+          provide: CompileServerService,
+          useValue: compileServerServiceSpy
         },
         {
           provide: RulesService,
@@ -84,53 +84,53 @@ describe('FunctionDefinitionComponent', () => {
 
 
   it('should submit code for compile OK', () => {
-    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+    compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.functionDefinitions = 'test';
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.compiledOK).toBe(true);
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(jobeServerServiceSpy.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
 
   });
 
   it('should submit code for compile Fail', () => {
-    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultCmp));
+    compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultCmp));
 
     component.functionDefinitions = 'test';
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('compiler error');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
 
   });
 
   it('should submit code for compile Error', () => {
-    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultErr));
+    compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultErr));
 
     component.functionDefinitions = 'test';
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('run error');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
   });
 
   it('should clear code when changed', () => {
@@ -141,7 +141,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('');
     expect(component.pendingSubmit).toBe(true);
 
-    expect(jobeServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
+    expect(compileServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
   });
 
   it('should call model changed when changed', () => {
@@ -153,7 +153,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('');
     expect(component.pendingSubmit).toBe(true);
 
-    expect(jobeServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
+    expect(compileServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
   });
 
   it('should not call model changed when changed in nextClassClears flag unset', () => {
@@ -168,7 +168,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(jobeServerServiceSpy.clearFunctionDefinitions).not.toHaveBeenCalled();
+    expect(compileServerServiceSpy.clearFunctionDefinitions).not.toHaveBeenCalled();
   });
 
   it('should default nextClassClears flag', () => {
@@ -199,43 +199,43 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(jobeServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
+    expect(compileServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
   });
 
   it('should call checkRules on enter', () => {
 
-    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+    compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.functionDefinitions = 'test';
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(jobeServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
 
     expect(component.compiledOK).toBe(true);
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(jobeServerServiceSpy.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
   });
 
   it('should not submit on checkRules error', () => {
 
-    jobeServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+    compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
     rulesServiceSpy.checkRules.and.returnValue("rules fail");
 
     component.functionDefinitions = 'test';
 
     component.onSubmit();
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(jobeServerServiceSpy.submit_run).not.toHaveBeenCalled();
+    expect(compileServerServiceSpy.submit_run).not.toHaveBeenCalled();
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('rules fail');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(jobeServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
   });
 
 

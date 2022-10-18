@@ -1,10 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { catchError, from, of } from 'rxjs';
 import { UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../language-helpers/language-helpers';
-import { RunResult, errorRunResult, EmptyRunResult } from '../models/run-result';
+import { RunResult, errorRunResult } from '../models/run-result';
 import { TaskService } from './task.service';
 import { Dictionary } from 'lodash';
 
@@ -13,7 +12,7 @@ import { Dictionary } from 'lodash';
 })
 export class CompileServerService {
 
-  constructor(private http: HttpClient, taskService: TaskService, private repLoader: RepLoaderService, private contextService: ContextService) {
+  constructor(taskService: TaskService, private repLoader: RepLoaderService, private contextService: ContextService) {
     taskService.currentTask.subscribe(t => {
 
       if (t.ReadyMadeFunctions) {
@@ -41,19 +40,10 @@ export class CompileServerService {
 
   private compileServer? : DomainObjectRepresentation;
 
-  private ip = "https://metalupcompileserver.azurewebsites.net";
-  path = `${this.ip}/restapi`;
-
   selectedLanguage: string = '';
 
   private userDefinedFunction: string = '';
   private readyMadeFunctions: string = '';
-
-  private programFileExtensions = ['.cs', '.py', '.txt'];
-
-  private isProgramFile(fn: string) {
-    return this.programFileExtensions.some(ext => fn.endsWith(ext) );
-  }
 
   // easier to test functions
   setFunctionDefinitions(functionDefinitions: string) {
@@ -68,28 +58,41 @@ export class CompileServerService {
     return !!this.userDefinedFunction;
   }
 
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json; charset-utf-8' })
-  };
-
   run_spec(code: string) {
     code = code.replace(UserDefinedFunctionPlaceholder, this.userDefinedFunction)
                .replace(ReadyMadeFunctionsPlaceholder, this.readyMadeFunctions);
-    return { "run_spec": { "language_id": this.selectedLanguage, "sourcecode": code } };
+    return { "languageID": new Value(this.selectedLanguage), "code": new Value(code) } as Dictionary<Value>;
   }
 
   private ToRunResult(ar: ActionResultRepresentation) : RunResult {
-    return EmptyRunResult;
+      var result = ar.result().object();
+
+      return result ? {
+        cmpinfo: result?.propertyMember("Cmpinfo").value().scalar(),
+        outcome :  result?.propertyMember("Outcome").value().scalar(),
+        stderr :  result?.propertyMember("Stderr").value().scalar(),
+        stdout:  result?.propertyMember("Stdout").value().scalar(),
+        run_id: result?.propertyMember("RunID").value().scalar(),
+      } as RunResult : errorRunResult({message : "null result from server"});
+  }
+
+  // expose to make testing easier 
+
+  get action() {
+    return this.compileServer!.actionMember("Runs") as InvokableActionMember;
+  }
+
+  params(code : string) {
+    return this.run_spec(code);
+  }
+
+  get urlParams() {
+    return {} as Dictionary<Object>;
   }
 
   submit_run(code: string) {
-    //return this.http.post<RunResult>(`${this.path}/runs`, this.run_spec(code), this.httpOptions).pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
-
-    //this.repLoader.invoke()
-
-    const action = this.compileServer!.actionMember("Runs") as InvokableActionMember;
-
-    return from(this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>).then((ar) => 
-       this.ToRunResult(ar)
-    ))}
+    return from(this.repLoader.invoke(this.action, this.params(code), this.urlParams)
+      .then(ar => this.ToRunResult(ar)))
+      .pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
+  }
 }

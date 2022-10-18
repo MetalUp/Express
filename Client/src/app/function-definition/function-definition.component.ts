@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { wrapFunctions } from '../language-helpers/language-helpers';
-import { JobeServerService } from '../services/jobe-server.service';
 import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../models/run-result';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { CompileServerService } from '../services/compile-server.service';
 
 @Component({
   selector: 'app-function-definition',
@@ -16,7 +16,7 @@ import { first } from 'rxjs/operators';
 export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   constructor(
-    private jobeServer: JobeServerService,
+    private compileServer: CompileServerService,
     private rulesService: RulesService,
     private taskService: TaskService) {
   }
@@ -45,8 +45,8 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   get currentStatus() {
     return this.validationFail ||
-      this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.cmpinfo, this.result.cmpinfo) ||
-      this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.stderr, this.result.stderr) ||
+      this.rulesService.filter(this.compileServer.selectedLanguage, ErrorType.cmpinfo, this.result.cmpinfo) ||
+      this.rulesService.filter(this.compileServer.selectedLanguage, ErrorType.stderr, this.result.stderr) ||
       (this.compiledOK ? 'Compiled OK' : '');
   }
 
@@ -55,7 +55,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     this.compiledOK = false;
     this.result = EmptyRunResult;
     this.pendingSubmit = !!(this.functionDefinitions.trim());
-    this.jobeServer.clearFunctionDefinitions();
+    this.compileServer.clearFunctionDefinitions();
   }
 
   onPaste(event: ClipboardEvent) {
@@ -72,15 +72,15 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.compiledOK = false;
     this.pendingSubmit = false;
-    this.validationFail = this.rulesService.checkRules(this.jobeServer.selectedLanguage, Applicability.functions, this.functionDefinitions);
+    this.validationFail = this.rulesService.checkRules(this.compileServer.selectedLanguage, Applicability.functions, this.functionDefinitions);
     if (!this.validationFail) {
       this.submitting = true;
-      const code = wrapFunctions(this.jobeServer.selectedLanguage, this.functionDefinitions);
-      this.jobeServer.submit_run(code).pipe(first()).subscribe(rr => {
+      const code = wrapFunctions(this.compileServer.selectedLanguage, this.functionDefinitions);
+      this.compileServer.submit_run(code).pipe(first()).subscribe(rr => {
         this.result = rr;
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {
-          this.jobeServer.setFunctionDefinitions(this.functionDefinitions);
+          this.compileServer.setFunctionDefinitions(this.functionDefinitions);
         }
         this.submitting = false;
       });
@@ -94,7 +94,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     ]);
     
   get placeholder() {
-    return this.placeholderMap.get(this.jobeServer.selectedLanguage) || '';
+    return this.placeholderMap.get(this.compileServer.selectedLanguage) || '';
   }
 
   private sub?: Subscription;

@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { JobeServerService } from '../services/jobe-server.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../models/run-result';
 import { wrapTests } from '../language-helpers/language-helpers';
 import { RulesService } from '../services/rules.service';
 import { ErrorType } from '../models/rules';
+import { CompileServerService } from '../services/compile-server.service';
 
 @Component({
   selector: 'app-testing',
@@ -16,7 +16,7 @@ import { ErrorType } from '../models/rules';
 export class TestingComponent implements OnInit, OnDestroy {
 
   constructor(
-    private jobeServer: JobeServerService,
+    private compileServer: CompileServerService,
     private taskService: TaskService,
     private rulesService: RulesService
   ) { }
@@ -45,7 +45,7 @@ export class TestingComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    if (this.jobeServer.hasFunctionDefinitions()) {
+    if (this.compileServer.hasFunctionDefinitions()) {
       return this.result.outcome === 0;
     }
     this.testedOk = false;
@@ -72,7 +72,7 @@ export class TestingComponent implements OnInit, OnDestroy {
     }
     else if (result.stderr) {
       // unexpected runtime error
-      this.currentResultMessage = this.rulesService.filter(this.jobeServer.selectedLanguage, ErrorType.stderr, result.stderr);
+      this.currentResultMessage = this.rulesService.filter(this.compileServer.selectedLanguage, ErrorType.stderr, result.stderr);
     }
     else if (result.cmpinfo) {
       // compile error
@@ -85,8 +85,8 @@ export class TestingComponent implements OnInit, OnDestroy {
 
   onRunTests() {
     this.submitting = true;
-    const code = wrapTests(this.jobeServer.selectedLanguage, this.tests);
-    this.jobeServer.submit_run(code).pipe(first()).subscribe(rr => {
+    const code = wrapTests(this.compileServer.selectedLanguage, this.tests);
+    this.compileServer.submit_run(code).pipe(first()).subscribe(rr => {
       this.handleResult(rr);
       this.submitting = false;
     });
@@ -109,5 +109,4 @@ export class TestingComponent implements OnInit, OnDestroy {
       this.sub.unsubscribe();
     }
   }
-
 }
