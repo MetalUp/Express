@@ -21,14 +21,10 @@ public class VisualBasicCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = new RunSpec { language_id = "vb", sourcecode = SimpleCode };
+        var runSpec = Helpers.VisualBasicRunSpec(SimpleCode);
         var (rr, code) = VisualBasicCompiler.Compile(runSpec);
 
-        Assert.AreEqual(Outcome.Ok, rr.outcome);
-        Assert.AreEqual("", rr.cmpinfo);
-        Assert.AreEqual("", rr.run_id);
-        Assert.AreEqual("", rr.stderr);
-        Assert.AreEqual("", rr.stdout);
+        rr.AssertRunResult(Outcome.Ok);
 
         Assert.AreEqual(2560, code.Length);
     }
@@ -36,15 +32,10 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileFailDivisionByZero()
     {
-        var runSpec = new RunSpec { language_id = "vb", sourcecode = DivZero };
+        var runSpec = Helpers.VisualBasicRunSpec(DivZero);
         var (rr, code) = VisualBasicCompiler.Compile(runSpec);
 
-        Assert.AreEqual(Outcome.CompilationError, rr.outcome);
-        Assert.AreEqual("(3) : error BC30542: Division by zero occurred while evaluating this expression.", rr.cmpinfo);
-        Assert.AreEqual("", rr.run_id);
-        Assert.AreEqual("", rr.stderr);
-        Assert.AreEqual("", rr.stdout);
-
+        rr.AssertRunResult(Outcome.CompilationError, "(3) : error BC30542: Division by zero occurred while evaluating this expression.");
         Assert.AreEqual(0, code.Length);
     }
 }
