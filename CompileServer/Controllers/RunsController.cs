@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CompileServer.Controllers;
 
 [Route("restapi/[controller]")]
-[Authorize]
+//[Authorize]
 public class RunsController : CompileServerController {
     public RunsController(ILogger<RunsController> logger, IConfiguration configuration) : base(logger, configuration) { }
 
