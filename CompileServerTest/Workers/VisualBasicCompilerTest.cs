@@ -40,7 +40,7 @@ public class VisualBasicCompilerTest {
         var (rr, code) = VisualBasicCompiler.Compile(runSpec);
 
         Assert.AreEqual(Outcome.CompilationError, rr.outcome);
-        Assert.AreEqual("BC30542: Division by zero occurred while evaluating this expression.", rr.cmpinfo);
+        Assert.AreEqual("(3) : error BC30542: Division by zero occurred while evaluating this expression.", rr.cmpinfo);
         Assert.AreEqual("", rr.run_id);
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.stdout);

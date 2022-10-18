@@ -39,7 +39,7 @@ public static class VisualBasicCompiler {
         if (!result.Success) {
             var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
             return (new RunResult {
-                cmpinfo = string.Join('\n', failures.Select(d => $"{d.Id}: {d.GetMessage()}").ToArray()),
+                cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
                 outcome = Outcome.CompilationError
             }, Array.Empty<byte>());
         }

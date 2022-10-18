@@ -29,7 +29,7 @@ public class CSharpCompilerTest {
         var (rr, code) = CSharpCompiler.Compile(runSpec);
 
         Assert.AreEqual(Outcome.CompilationError, rr.outcome);
-        Assert.AreEqual("CS0020: Division by constant zero", rr.cmpinfo);
+        Assert.AreEqual("(1,9): error CS0020: Division by constant zero", rr.cmpinfo);
         Assert.AreEqual("", rr.run_id);
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.stdout);
