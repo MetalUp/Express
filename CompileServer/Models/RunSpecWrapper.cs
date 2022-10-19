@@ -3,5 +3,5 @@
 public struct RunSpecWrapper {
     public RunSpecWrapper() { }
 
-    public RunSpec run_spec { get; set; } = new RunSpec();
+    public RunSpec run_spec { get; set; } = new();
 }

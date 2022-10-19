@@ -1,14 +1,22 @@
-﻿using CompileServer.Models;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.VisualBasic;
-using System.Collections;
+﻿using System.Collections;
 using System.Runtime;
-using Microsoft.CSharp.RuntimeBinder;
-using Microsoft.VisualBasic.CompilerServices;
+using CompileServer.Models;
+using Microsoft.CodeAnalysis;
 
 namespace CompileServer.Workers;
 
 public static class DotNetCompiler {
+    public static readonly MetadataReference[] DotNetReferences = {
+        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+        MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
+        MetadataReference.CreateFromFile(typeof(AssemblyTargetedPatchBandAttribute).Assembly.Location),
+        MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // System.Linq
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections").Location), // System.Collections
+        MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location), // System.Collections.Generic
+        MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
+    };
+
     public static (RunResult, byte[]) Compile(RunSpec runSpec, Func<string, Compilation> generateCode) {
         var code = runSpec.sourcecode;
 
@@ -28,30 +36,4 @@ public static class DotNetCompiler {
 
         return (new RunResult { outcome = Outcome.Ok }, peStream.ToArray());
     }
-
-    public static readonly MetadataReference[] DotNetReferences = {
-        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(AssemblyTargetedPatchBandAttribute).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // System.Linq
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections").Location), // System.Collections
-        MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location), // System.Collections.Generic
-        MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
-    };
-
-
-    private static readonly MetadataReference[] VBReferences = {
-        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(AssemblyTargetedPatchBandAttribute).Assembly.Location),
-        //MetadataReference.CreateFromFile(typeof(VisualBasicCommandLineArguments).Assembly.Location),
-        //MetadataReference.CreateFromFile(typeof(StandardModuleAttribute).Assembly.Location),
-        MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // System.Linq
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections").Location), // System.Collections
-        MetadataReference.CreateFromFile(typeof(IList<>).Assembly.Location), // System.Collections.Generic
-        MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
-    };
-
 }

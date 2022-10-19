@@ -5,19 +5,9 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class JavaCompiler {
-    public static string GetVersion() {
+    private static string GetVersion() {
         var java = $"{CompileServerController.JavaPath}\\bin\\javac.exe";
-        string version;
-
-        try {
-            using var process = Helpers.CreateProcess(java, "-version");
-            process.WaitForExit();
-            using var stdOutput = process.StandardOutput;
-            version = stdOutput.ReadToEnd();
-        }
-        catch (Exception e) {
-            version = e.Message;
-        }
+        var version = Helpers.GetVersion(java, "-version");
 
         return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
     }
@@ -31,20 +21,6 @@ public static class JavaCompiler {
 
         File.WriteAllText(file, runSpec.sourcecode);
 
-        var runResult = new RunResult();
-
-        try {
-            using var process = Helpers.CreateProcess(javaCompiler, file);
-            process.WaitForExit();
-            runResult = Helpers.SetCompileResults(process, runResult);
-        }
-        catch (Exception e) {
-            runResult = Helpers.SetCompileResults(runResult, e);
-        }
-        finally {
-            File.Delete(file);
-        }
-
-        return (runResult, "temp");
+        return Helpers.Compile(javaCompiler, file, file, "temp");
     }
 }

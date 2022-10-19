@@ -79,4 +79,40 @@ public static class Helpers {
 
         return runResult;
     }
+
+    public static (RunResult, string) Compile(string exe, string args, string cleanUp, string returnFileName) {
+        var runResult = new RunResult();
+
+        try {
+            using var process = CreateProcess(exe, args);
+            process.WaitForExit();
+            runResult = SetCompileResults(process, runResult);
+        }
+        catch (Exception e) {
+            runResult = SetCompileResults(runResult, e);
+        }
+        finally {
+            if (!string.IsNullOrEmpty(cleanUp)) {
+                File.Delete(cleanUp);
+            }
+        }
+
+        return (runResult, returnFileName);
+    }
+
+    public static string GetVersion(string exe, string args) {
+        string version;
+
+        try {
+            using var process = CreateProcess(exe, args);
+            process.WaitForExit();
+            using var stdOutput = process.StandardOutput;
+            version = stdOutput.ReadToEnd();
+        }
+        catch (Exception e) {
+            version = e.Message;
+        }
+
+        return version;
+    }
 }
