@@ -12,12 +12,6 @@ namespace Model.Functions
              IContext context) =>
          context.WithUpdated(hint, new(hint) { Number = number });
 
-        [Edit]
-        public static IContext EditName(
-            this Hint hint,
-            string name,
-            IContext context) =>
-        context.WithUpdated(hint, new(hint) { Name = name });
 
         [Edit]
         public static IContext EditCostInMarks(
@@ -27,7 +21,7 @@ namespace Model.Functions
         context.WithUpdated(hint, new(hint) { CostInMarks = costInMarks });
 
         public static IContext ReloadContentFromExternalFile(this Hint hint, FileAttachment externalFile, IContext context) =>
-            context.WithUpdated(hint, new Hint(hint) { Content = externalFile.GetResourceAsByteArray() });
+            context.WithUpdated(hint, new Hint(hint) { Name = externalFile.Name, Content = externalFile.GetResourceAsByteArray() });
 
         public static IContext EditContentAsString(this Hint hint, [MultiLine(20)] string content, IContext context) =>
             context.WithUpdated(hint, new Hint(hint) { Content = Encoding.ASCII.GetBytes(content) });

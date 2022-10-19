@@ -232,7 +232,6 @@ namespace Model.Functions
         public static IContext AddNewHint(
             this Task task,
             int number,
-            string title,
             [DefaultValue(1)] int costInMarks,
             FileAttachment file,
             IContext context)
@@ -240,7 +239,7 @@ namespace Model.Functions
             var hint = new Hint
             {
                 Number = number,
-                Name = title,
+                Name = file.Name,
                 CostInMarks = costInMarks,
                 Content = file == null ? null : file.GetResourceAsByteArray(),
             };

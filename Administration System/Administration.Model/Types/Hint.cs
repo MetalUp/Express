@@ -45,6 +45,6 @@ namespace Model.Types
         #endregion
 
         private string marks => CostInMarks > 1 ? "marks" : "mark";
-        public override string ToString() => $"{Name} (-{CostInMarks} {marks})";
+        public override string ToString() => $"Hint {Number} (-{CostInMarks} {marks})";
     }
 }
