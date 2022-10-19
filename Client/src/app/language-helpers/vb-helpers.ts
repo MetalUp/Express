@@ -74,6 +74,7 @@ export function wrapVBTests(tests : string) {
     Imports System.Collections.Generic
     Imports System.IO
     Imports System.Linq
+    Imports System.Reflection
     
     Module Program
     

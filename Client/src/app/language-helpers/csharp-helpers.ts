@@ -55,8 +55,8 @@ export function wrapCSharpTests(tests : string) {
     using System.Linq;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Reflection;
 
-    
     class MainWrapper{
         public static string fail = "Test failed calling ";
 
