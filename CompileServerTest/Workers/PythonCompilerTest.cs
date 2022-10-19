@@ -22,28 +22,28 @@ public class PythonCompilerTest {
         var csv = PythonCompiler.GetNameAndVersion();
 
         Assert.AreEqual("python", csv[0]);
-        Assert.AreEqual("3.10.2", csv[1]);
+        Assert.IsTrue(csv[1].StartsWith("3.10."));
     }
 
     [TestMethod]
     public void TestCompileOk() {
         var runSpec = TestHelpers.PythonRunSpec(SimpleCode);
-        var (rr, code) = PythonCompiler.Compile(runSpec);
+        var (rr, file) = PythonCompiler.Compile(runSpec);
 
         rr.AssertRunResult(Outcome.Ok);
 
-        Assert.AreEqual("temp.py", code);
+        Assert.AreEqual("temp.py", file);
     }
 
     [TestMethod]
     public void TestCompileFailMissingTerm() {
         var runSpec = TestHelpers.PythonRunSpec(MissingTerm);
-        var (rr, code) = PythonCompiler.Compile(runSpec);
+        var (rr, file) = PythonCompiler.Compile(runSpec);
 
         rr.cmpinfo = TestHelpers.ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"File""{Path.GetTempPath()}temp.py"",line1print(str(1/))^SyntaxError:invalidsyntax");
 
-        Assert.AreEqual("temp.py", code);
+        Assert.AreEqual("temp.py", file);
     }
 }

@@ -12,9 +12,9 @@ public class LanguagesController : CompileServerController {
 
     [HttpGet]
     public IEnumerable<string[]> Get() => new[] {
-        new[] { "csharp", CSharpCompiler.GetVersion() },
-        new[] { "python", PythonCompiler.GetVersion() },
-        new[] { "vb", VisualBasicCompiler.GetVersion() },
-        new[] { "java", JavaCompiler.GetVersion() }
+        CSharpCompiler.GetNameAndVersion(),
+        PythonCompiler.GetNameAndVersion(),
+        VisualBasicCompiler.GetNameAndVersion(),
+        JavaCompiler.GetNameAndVersion()
     };
 }
