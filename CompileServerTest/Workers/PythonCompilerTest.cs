@@ -20,7 +20,7 @@ public class PythonCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = Helpers.PythonRunSpec(SimpleCode);
+        var runSpec = TestHelpers.PythonRunSpec(SimpleCode);
         var (rr, code) = PythonCompiler.Compile(runSpec);
 
         rr.AssertRunResult(Outcome.Ok);
@@ -31,10 +31,12 @@ public class PythonCompilerTest {
     [TestMethod]
     public void TestCompileFailMissingTerm()
     {
-        var runSpec = Helpers.PythonRunSpec(MissingTerm);
+        var runSpec = TestHelpers.PythonRunSpec(MissingTerm);
         var (rr, code) = PythonCompiler.Compile(runSpec);
 
-        rr.AssertRunResult(Outcome.CompilationError, "  File \"C:\\Users\\scasc\\AppData\\Local\\Temp\\temp.py\", line 1\r\n    print (str(1/))\r\n                 ^\r\nSyntaxError: invalid syntax\r\n");
+        rr.cmpinfo = TestHelpers.ClearWhiteSpace(rr.cmpinfo);
+
+        rr.AssertRunResult(Outcome.CompilationError, @$"File""{Path.GetTempPath()}temp.py"",line1print(str(1/))^SyntaxError:invalidsyntax");
 
         Assert.AreEqual("temp.py", code);
     }

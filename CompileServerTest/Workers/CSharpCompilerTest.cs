@@ -10,7 +10,7 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = Helpers.CsharpRunSpec(SimpleCode);
+        var runSpec = TestHelpers.CsharpRunSpec(SimpleCode);
         var (rr, code) = CSharpCompiler.Compile(runSpec);
 
         rr.AssertRunResult(Outcome.Ok);
@@ -20,7 +20,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileFailDivisionByZero()
     {
-        var runSpec = Helpers.CsharpRunSpec(DivZero);
+        var runSpec = TestHelpers.CsharpRunSpec(DivZero);
         var (rr, code) = CSharpCompiler.Compile(runSpec);
 
         rr.AssertRunResult(Outcome.CompilationError, "(1,9): error CS0020: Division by constant zero");

@@ -29,7 +29,7 @@ public class JavaCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = Helpers.JavaRunSpec(SimpleCode);
+        var runSpec = TestHelpers.JavaRunSpec(SimpleCode);
         var (rr, code) = JavaCompiler.Compile(runSpec);
 
         rr.AssertRunResult(Outcome.Ok);
@@ -40,10 +40,12 @@ public class JavaCompilerTest {
     [TestMethod]
     public void TestCompileFailMissingSemiColon()
     {
-        var runSpec = Helpers.JavaRunSpec(MissingSC);
+        var runSpec = TestHelpers.JavaRunSpec(MissingSC);
         var (rr, code) = JavaCompiler.Compile(runSpec);
 
-        rr.AssertRunResult(Outcome.CompilationError, "C:\\Users\\scasc\\AppData\\Local\\Temp\\temp.java:3: error: ';' expected\r\n           int a = 1 \r\n                    ^\r\n1 error\r\n");
+        rr.cmpinfo = TestHelpers.ClearWhiteSpace(rr.cmpinfo);
+
+        rr.AssertRunResult(Outcome.CompilationError, @$"{Path.GetTempPath()}temp.java:3:error:';'expectedinta=1^1error");
 
         Assert.AreEqual("temp", code);
     }

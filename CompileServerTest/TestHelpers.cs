@@ -2,11 +2,16 @@
 
 namespace CompileServerTest;
 
-public static class Helpers {
+public static class TestHelpers {
     public static RunSpec CsharpRunSpec(string code) => RunSpec("csharp", code);
     public static RunSpec VisualBasicRunSpec(string code) => RunSpec("vb", code);
     public static RunSpec JavaRunSpec(string code) => RunSpec("java", code);
     public static RunSpec PythonRunSpec(string code) => RunSpec("python", code);
+
+    public static string ClearWhiteSpace(string s) => s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
+
+   
+
 
     public static RunSpec RunSpec(string language, string code) => new() { language_id = language, sourcecode = code };
 
