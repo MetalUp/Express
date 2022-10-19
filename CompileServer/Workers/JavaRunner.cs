@@ -1,21 +1,10 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using System.Runtime;
-using CompileServer.Controllers;
+﻿using CompileServer.Controllers;
 using CompileServer.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Text;
-using Microsoft.CSharp.RuntimeBinder;
 
 namespace CompileServer.Workers;
 
 public static class JavaRunner {
-   
-
     public static RunResult Execute(string classFile) {
-
         var java = $"{CompileServerController.JavaPath}\\bin\\java.exe";
         var runResult = new RunResult();
 
@@ -26,12 +15,10 @@ public static class JavaRunner {
 
             runResult = Helpers.SetRunResults(process, runResult);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             runResult = Helpers.SetRunResults(runResult, e);
         }
-        finally
-        {
+        finally {
             File.Delete($"{Path.GetTempPath()}{classFile}.class");
         }
 

@@ -12,6 +12,7 @@ public static class DotNetRunner {
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }
+
             Console.WriteLine(assemblyLoadContextWeakRef.IsAlive ? "Unloading failed!" : "Unloading success!");
         });
         return runResult;

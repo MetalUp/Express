@@ -2,8 +2,8 @@
 using System.Runtime;
 using CompileServer.Models;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.CodeAnalysis.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace CompileServer.Workers;
@@ -24,10 +24,7 @@ public static class VisualBasicCompiler {
         MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
     };
 
-    public static string GetVersion()
-    {
-        return Options.LanguageVersion.ToString().Replace("VisualBasic", "");
-    }
+    public static string GetVersion() => Options.LanguageVersion.ToString().Replace("VisualBasic", "");
 
     public static string[] GetNameAndVersion() => new[] { "vb", GetVersion() };
 
@@ -60,7 +57,7 @@ public static class VisualBasicCompiler {
                                              new[] { parsedSyntaxTree },
                                              References,
                                              new VisualBasicCompilationOptions(OutputKind.ConsoleApplication,
-                                                                          optimizationLevel: OptimizationLevel.Release,
-                                                                          assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default));
+                                                                               optimizationLevel: OptimizationLevel.Release,
+                                                                               assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default));
     }
 }
