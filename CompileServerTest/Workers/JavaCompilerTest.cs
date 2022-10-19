@@ -11,6 +11,7 @@ public class JavaCompilerTest {
         @"public class temp {
         public static void main(String[] args) {
            int a = 1;
+           System.out.print(a);
         }
         }";
 
@@ -18,6 +19,14 @@ public class JavaCompilerTest {
         @"public class temp {
         public static void main(String[] args) {
            int a = 1 
+        }
+        }";
+
+    private const string RunTimeFail =
+        @"public class temp {
+        public static void main(String[] args) {
+           int a = Integer.parseInt(""invalid"");
+           System.out.print(a);
         }
         }";
 
@@ -56,6 +65,14 @@ public class JavaCompilerTest {
     }
 
     [TestMethod]
+    public void TestCompileAndRunOk() {
+        var runSpec = JavaRunSpec(SimpleCode);
+        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok, "", "1");
+    }
+
+    [TestMethod]
     public void TestCompileFailMissingSemiColon() {
         var runSpec = JavaRunSpec(MissingSC);
         var (rr, file) = JavaCompiler.Compile(runSpec);
@@ -65,5 +82,16 @@ public class JavaCompilerTest {
         rr.AssertRunResult(Outcome.CompilationError, @$"{Path.GetTempPath()}temp.java:3:error:';'expectedinta=1^1error");
 
         Assert.AreEqual("temp", file);
+    }
+
+    [TestMethod]
+    public void TestCompileAndRunFail()
+    {
+        var runSpec = JavaRunSpec(RunTimeFail);
+        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+
+        Assert.IsNotNull(rr);
+        rr.stderr = ClearWhiteSpace(rr.stderr);
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Exceptioninthread""main""java.lang.NumberFormatException:Forinputstring:""invalid""	atjava.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)	atjava.base/java.lang.Integer.parseInt(Integer.java:668)	atjava.base/java.lang.Integer.parseInt(Integer.java:786)	attemp.main(temp.java:3)");
     }
 }

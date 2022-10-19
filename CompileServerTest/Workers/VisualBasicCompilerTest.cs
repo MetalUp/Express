@@ -9,7 +9,8 @@ public class VisualBasicCompilerTest {
     private const string SimpleCode =
         @"Module Program
           Sub Main(args As String())       
-            Dim a = 1 
+            Dim a = 1
+            System.Console.Write(a)
             End Sub 
           End Module";
 
@@ -50,7 +51,7 @@ public class VisualBasicCompilerTest {
         var runSpec = VisualBasicRunSpec(SimpleCode);
         var rr = Handler.CompileAndRun(runSpec).Result.Value;
         Assert.IsNotNull(rr);
-        rr.AssertRunResult(Outcome.Ok);
+        rr.AssertRunResult(Outcome.Ok, "", "1");
     }
 
     [TestMethod]

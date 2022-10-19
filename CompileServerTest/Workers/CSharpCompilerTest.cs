@@ -6,7 +6,7 @@ namespace CompileServerTest.Workers;
 
 [TestClass]
 public class CSharpCompilerTest {
-    private const string SimpleCode = "var a = 1;";
+    private const string SimpleCode = "var a = 1;System.Console.Write(a);";
     private const string DivZero = "var a = 1/0;";
     private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
 
@@ -32,7 +32,7 @@ public class CSharpCompilerTest {
         var runSpec = CsharpRunSpec(SimpleCode);
         var rr = Handler.CompileAndRun(runSpec).Result.Value;
         Assert.IsNotNull(rr);
-        rr.AssertRunResult(Outcome.Ok);
+        rr.AssertRunResult(Outcome.Ok, "", "1");
     }
 
     [TestMethod]
