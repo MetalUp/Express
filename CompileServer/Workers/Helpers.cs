@@ -61,4 +61,22 @@ public static class Helpers {
         runResult.stderr = string.IsNullOrEmpty(err) ? GetInnerMostMessage(e) : err;
         return runResult;
     }
+
+    public static RunResult Execute(string exe, string args, string cleanUp) {
+        var runResult = new RunResult();
+
+        try {
+            using var process = CreateProcess(exe, args);
+            process.WaitForExit();
+            runResult = SetRunResults(process, runResult);
+        }
+        catch (Exception e) {
+            runResult = SetRunResults(runResult, e);
+        }
+        finally {
+            File.Delete(cleanUp);
+        }
+
+        return runResult;
+    }
 }
