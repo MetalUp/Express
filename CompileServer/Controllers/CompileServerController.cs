@@ -26,8 +26,8 @@ public class CompileServerController : ControllerBase {
 
     protected ILogger Logger { get; }
 
-    public static string PythonPath { get; private set; } = "";
-    public static string JavaPath { get; private set; } = "";
+    public static string PythonPath { get; set; } = "";
+    public static string JavaPath { get; set; } = "";
     public static LanguageVersion CSharpVersion { get; private set; } = 0;
     public static Microsoft.CodeAnalysis.VisualBasic.LanguageVersion VisualBasicVersion { get; private set; } = 0;
 

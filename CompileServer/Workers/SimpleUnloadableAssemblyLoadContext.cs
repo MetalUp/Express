@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
-namespace CompileServer.Workers; 
+namespace CompileServer.Workers;
 
 internal class SimpleUnloadableAssemblyLoadContext : AssemblyLoadContext {
     public SimpleUnloadableAssemblyLoadContext()
