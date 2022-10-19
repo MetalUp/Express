@@ -22,6 +22,8 @@ public static class JavaCompiler {
         return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
     }
 
+    public static string[] GetNameAndVersion() => new[] { "java", GetVersion() };
+
     public static (RunResult, string) Compile(RunSpec runSpec) {
         const string tempFileName = "temp.java";
         var file = $"{(string?)Path.GetTempPath()}{tempFileName}";

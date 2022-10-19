@@ -20,6 +20,14 @@ public class VisualBasicCompilerTest {
           End Module";
 
     [TestMethod]
+    public void TestVersion() {
+        var csv = VisualBasicCompiler.GetNameAndVersion();
+
+        Assert.AreEqual("vb", csv[0]);
+        Assert.AreEqual("16_9", csv[1]);
+    }
+
+    [TestMethod]
     public void TestCompileOk() {
         var runSpec = TestHelpers.VisualBasicRunSpec(SimpleCode);
         var (rr, code) = VisualBasicCompiler.Compile(runSpec);
@@ -30,8 +38,7 @@ public class VisualBasicCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileFailDivisionByZero()
-    {
+    public void TestCompileFailDivisionByZero() {
         var runSpec = TestHelpers.VisualBasicRunSpec(DivZero);
         var (rr, code) = VisualBasicCompiler.Compile(runSpec);
 

@@ -29,6 +29,8 @@ public static class VisualBasicCompiler {
         return Options.LanguageVersion.ToString().Replace("VisualBasic", "");
     }
 
+    public static string[] GetNameAndVersion() => new[] { "vb", GetVersion() };
+
     public static (RunResult, byte[]) Compile(RunSpec runSpec) {
         var code = runSpec.sourcecode;
 

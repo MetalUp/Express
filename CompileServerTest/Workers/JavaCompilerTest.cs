@@ -6,13 +6,6 @@ namespace CompileServerTest.Workers;
 
 [TestClass]
 public class JavaCompilerTest {
-
-    [ClassInitialize]
-    public static void Initialize(TestContext testContext) {
-        CompileServerController.JavaPath = "C:\\Program Files\\Java\\jdk-17.0.4.1";
-    }
-
-
     private const string SimpleCode =
         @"public class temp {
         public static void main(String[] args) {
@@ -27,6 +20,22 @@ public class JavaCompilerTest {
         }
         }";
 
+    [ClassInitialize]
+    public static void Initialize(TestContext testContext) {
+        const string localDir = "C:\\Program Files\\Java\\jdk-17.0.4.1";
+        const string appveyorDir = "C:\\Program Files\\Java\\jdk17";
+
+        CompileServerController.JavaPath = Directory.Exists(appveyorDir) ? appveyorDir : localDir;
+    }
+
+    [TestMethod]
+    public void TestVersion() {
+        var csv = JavaCompiler.GetNameAndVersion();
+
+        Assert.AreEqual("java", csv[0]);
+        Assert.AreEqual("17.0.4.1", csv[1]);
+    }
+
     [TestMethod]
     public void TestCompileOk() {
         var runSpec = TestHelpers.JavaRunSpec(SimpleCode);
@@ -38,8 +47,7 @@ public class JavaCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileFailMissingSemiColon()
-    {
+    public void TestCompileFailMissingSemiColon() {
         var runSpec = TestHelpers.JavaRunSpec(MissingSC);
         var (rr, code) = JavaCompiler.Compile(runSpec);
 

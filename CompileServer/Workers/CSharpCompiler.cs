@@ -23,10 +23,9 @@ public static class CSharpCompiler {
         MetadataReference.CreateFromFile(typeof(ArrayList).Assembly.Location) // System.Collections
     };
 
-    public static string GetVersion() {
-        return Options.LanguageVersion.ToString().Replace("CSharp", "");
-    }
+    public static string GetVersion() => Options.LanguageVersion.ToString().Replace("CSharp", "");
 
+    public static string[] GetNameAndVersion() => new[] { "csharp", GetVersion() };
 
     public static (RunResult, byte[]) Compile(RunSpec runSpec) {
         var code = runSpec.sourcecode;

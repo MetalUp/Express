@@ -21,6 +21,8 @@ public static class PythonCompiler {
         return string.IsNullOrEmpty(version) ? "not found" : version.Replace("Python ", "").Trim();
     }
 
+    public static string[] GetNameAndVersion() => new[] { "python", GetVersion() };
+
     public static (RunResult, string) Compile(RunSpec runSpec) {
         const string tempFileName = "temp.py";
         var file = $"{Path.GetTempPath()}{tempFileName}";

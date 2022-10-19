@@ -9,6 +9,14 @@ public class CSharpCompilerTest {
     private const string DivZero = "var a = 1/0;";
 
     [TestMethod]
+    public void TestVersion() {
+        var csv = CSharpCompiler.GetNameAndVersion();
+
+        Assert.AreEqual("csharp", csv[0]);
+        Assert.AreEqual("10", csv[1]);
+    }
+
+    [TestMethod]
     public void TestCompileOk() {
         var runSpec = TestHelpers.CsharpRunSpec(SimpleCode);
         var (rr, code) = CSharpCompiler.Compile(runSpec);
@@ -18,8 +26,7 @@ public class CSharpCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileFailDivisionByZero()
-    {
+    public void TestCompileFailDivisionByZero() {
         var runSpec = TestHelpers.CsharpRunSpec(DivZero);
         var (rr, code) = CSharpCompiler.Compile(runSpec);
 
