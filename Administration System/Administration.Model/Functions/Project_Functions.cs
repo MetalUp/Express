@@ -165,10 +165,10 @@ namespace Model.Functions
                 Name = title,
                 PreviousTaskId = previousTask is null ? null : previousTask.Id,
                 PreviousTask = previousTask,
-                HiddenFunctionsFileId = previousTask.HiddenFunctionsFileId,
-                HiddenFunctionsFile = previousTask.HiddenFunctionsFile,
-                TestsFileId = previousTask.TestsFileId,
-                TestsFile = previousTask.TestsFile,
+                HiddenFunctionsFileId = previousTask is null ? null : previousTask.HiddenFunctionsFileId,
+                HiddenFunctionsFile = previousTask is null ? null : previousTask.HiddenFunctionsFile,
+                TestsFileId = previousTask is null ? null : previousTask.TestsFileId,
+                TestsFile = previousTask is null ? null : previousTask.TestsFile,
             };
             var updatedPrevious = previousTask is null ? null :
                 new Task(previousTask) { NextTask = t };
