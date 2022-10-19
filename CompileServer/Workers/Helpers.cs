@@ -24,8 +24,7 @@ public static class Helpers {
         return runResult;
     }
 
-    public static RunResult SetCompileResults(RunResult runResult, Exception e)
-    {
+    public static RunResult SetCompileResults(RunResult runResult, Exception e) {
         runResult.outcome = Outcome.CompilationError;
         runResult.stderr = e.Message;
         return runResult;
@@ -53,13 +52,13 @@ public static class Helpers {
         return runResult;
     }
 
-    public static RunResult SetRunResults(RunResult runResult, StringWriter consoleOut, StringWriter consoleErr, Exception e)
-    {
+    private static string GetInnerMostMessage(Exception e) => e.InnerException is not null ? GetInnerMostMessage(e.InnerException) : e.Message;
+
+    public static RunResult SetRunResults(RunResult runResult, StringWriter consoleOut, StringWriter consoleErr, Exception e) {
         runResult.outcome = Outcome.RunTimeError;
-        runResult.stdout =  consoleOut.ToString();
+        runResult.stdout = consoleOut.ToString();
         var err = consoleErr.ToString();
-        runResult.stderr = string.IsNullOrEmpty(err) ? e.Message : err;
+        runResult.stderr = string.IsNullOrEmpty(err) ? GetInnerMostMessage(e) : err;
         return runResult;
     }
-
 }

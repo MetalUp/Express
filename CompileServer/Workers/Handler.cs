@@ -8,8 +8,7 @@ public static class Handler {
         runSpec.language_id switch {
             "python" => PythonHandler.CompileAndRun(runSpec),
             "java" => JavaHandler.CompileAndRun(runSpec),  
-            "csharp" => DotNetHandler.CompileAndRun(runSpec),
-            "vb" => DotNetHandler.CompileAndRun(runSpec),
+            "csharp" or "vb" => DotNetHandler.CompileAndRun(runSpec),
             _ => Task.Run(() => new ActionResult<RunResult>(new RunResult() {outcome = Outcome.IllegalSystemCall})) 
         };
 }

@@ -1,5 +1,6 @@
 using CompileServer.Models;
 using CompileServer.Workers;
+using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
@@ -7,6 +8,7 @@ namespace CompileServerTest.Workers;
 public class CSharpCompilerTest {
     private const string SimpleCode = "var a = 1;";
     private const string DivZero = "var a = 1/0;";
+    private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
 
     [TestMethod]
     public void TestVersion() {
@@ -18,19 +20,36 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = TestHelpers.CsharpRunSpec(SimpleCode);
+        var runSpec = CsharpRunSpec(SimpleCode);
         var (rr, code) = CSharpCompiler.Compile(runSpec);
-
+        Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
         Assert.AreEqual(2048, code.Length);
     }
 
     [TestMethod]
-    public void TestCompileFailDivisionByZero() {
-        var runSpec = TestHelpers.CsharpRunSpec(DivZero);
-        var (rr, code) = CSharpCompiler.Compile(runSpec);
+    public void TestCompileAndRunOk() {
+        var runSpec = CsharpRunSpec(SimpleCode);
+        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok);
+    }
 
+    [TestMethod]
+    public void TestCompileFailDivisionByZero() {
+        var runSpec = CsharpRunSpec(DivZero);
+        var (rr, code) = CSharpCompiler.Compile(runSpec);
+        Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.CompilationError, "(1,9): error CS0020: Division by constant zero");
         Assert.AreEqual(0, code.Length);
+    }
+
+    [TestMethod]
+    public void TestCompileAndRunFail() {
+        var runSpec = CsharpRunSpec(RunTimeFail);
+        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
     }
 }

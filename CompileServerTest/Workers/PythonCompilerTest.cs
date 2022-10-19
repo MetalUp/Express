@@ -1,6 +1,7 @@
 using CompileServer.Controllers;
 using CompileServer.Models;
 using CompileServer.Workers;
+using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
@@ -27,7 +28,7 @@ public class PythonCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = TestHelpers.PythonRunSpec(SimpleCode);
+        var runSpec = PythonRunSpec(SimpleCode);
         var (rr, file) = PythonCompiler.Compile(runSpec);
 
         rr.AssertRunResult(Outcome.Ok);
@@ -37,10 +38,10 @@ public class PythonCompilerTest {
 
     [TestMethod]
     public void TestCompileFailMissingTerm() {
-        var runSpec = TestHelpers.PythonRunSpec(MissingTerm);
+        var runSpec = PythonRunSpec(MissingTerm);
         var (rr, file) = PythonCompiler.Compile(runSpec);
 
-        rr.cmpinfo = TestHelpers.ClearWhiteSpace(rr.cmpinfo);
+        rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"File""{Path.GetTempPath()}temp.py"",line1print(str(1/))^SyntaxError:invalidsyntax");
 

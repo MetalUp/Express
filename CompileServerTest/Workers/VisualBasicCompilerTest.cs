@@ -1,5 +1,6 @@
 using CompileServer.Models;
 using CompileServer.Workers;
+using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
@@ -19,6 +20,13 @@ public class VisualBasicCompilerTest {
             End Sub 
           End Module";
 
+    private const string RunTimeFail =
+        @"Module Program
+          Sub Main(args As String())       
+            Dim a = Integer.Parse(""invalid"") 
+            End Sub 
+          End Module";
+
     [TestMethod]
     public void TestVersion() {
         var csv = VisualBasicCompiler.GetNameAndVersion();
@@ -29,7 +37,7 @@ public class VisualBasicCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = TestHelpers.VisualBasicRunSpec(SimpleCode);
+        var runSpec = VisualBasicRunSpec(SimpleCode);
         var (rr, code) = VisualBasicCompiler.Compile(runSpec);
 
         rr.AssertRunResult(Outcome.Ok);
@@ -38,11 +46,28 @@ public class VisualBasicCompilerTest {
     }
 
     [TestMethod]
+    public void TestCompileAndRunOk() {
+        var runSpec = VisualBasicRunSpec(SimpleCode);
+        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok);
+    }
+
+    [TestMethod]
     public void TestCompileFailDivisionByZero() {
-        var runSpec = TestHelpers.VisualBasicRunSpec(DivZero);
+        var runSpec = VisualBasicRunSpec(DivZero);
         var (rr, code) = VisualBasicCompiler.Compile(runSpec);
 
         rr.AssertRunResult(Outcome.CompilationError, "(3) : error BC30542: Division by zero occurred while evaluating this expression.");
         Assert.AreEqual(0, code.Length);
+    }
+
+    [TestMethod]
+    public void TestCompileAndRunFail() {
+        var runSpec = VisualBasicRunSpec(RunTimeFail);
+        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
     }
 }

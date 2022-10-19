@@ -1,6 +1,7 @@
 using CompileServer.Controllers;
 using CompileServer.Models;
 using CompileServer.Workers;
+using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
@@ -46,7 +47,7 @@ public class JavaCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = TestHelpers.JavaRunSpec(SimpleCode);
+        var runSpec = JavaRunSpec(SimpleCode);
         var (rr, file) = JavaCompiler.Compile(runSpec);
 
         rr.AssertRunResult(Outcome.Ok);
@@ -56,10 +57,10 @@ public class JavaCompilerTest {
 
     [TestMethod]
     public void TestCompileFailMissingSemiColon() {
-        var runSpec = TestHelpers.JavaRunSpec(MissingSC);
+        var runSpec = JavaRunSpec(MissingSC);
         var (rr, file) = JavaCompiler.Compile(runSpec);
 
-        rr.cmpinfo = TestHelpers.ClearWhiteSpace(rr.cmpinfo);
+        rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"{Path.GetTempPath()}temp.java:3:error:';'expectedinta=1^1error");
 
