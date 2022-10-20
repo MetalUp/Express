@@ -216,7 +216,7 @@ describe('RulesService', () => {
 
   it('should mustMatch python expression - function may not be formatted over muliple lines without backslash', () => {
     const parsed = service.mustMatch(language.python, Applicability.functions, "def foo() : return 3 + \n4");
-    expect(parsed).toEqual("All functions must follow the standard form: def <name_in_lower_case>(<parameters>): return <expression>");
+    expect(parsed).toEqual("All functions must follow the standard form: def <name>(<parameters>): return <expression>");
   });
 
   //Python parsing - passes
