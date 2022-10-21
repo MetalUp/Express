@@ -113,7 +113,7 @@ namespace Model.Functions
                 context.WithUpdated(task, new Task(task) { DescriptionFileId = null, DescriptionFile = null });
 
 
-        public static string DisableClearDescription(this Task task) => task.TestsFileId is null ? "No Description specified" : null;
+        public static string DisableClearDescription(this Task task) => task.DescriptionFileId is null ? "No Description specified" : null;
         #endregion
 
         #region Hidden Functions
@@ -167,7 +167,7 @@ namespace Model.Functions
             IContext context) =>
                 context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = null, HiddenFunctionsFile = null });
 
-        public static string DisableClearHiddenFunctions(this Task task) => task.TestsFileId is null ? "No Hidden Functions specified" : null;
+        public static string DisableClearHiddenFunctions(this Task task) => task.HiddenFunctionsFileId is null ? "No Hidden Functions specified" : null;
         #endregion
 
         #region Tests
@@ -225,6 +225,79 @@ namespace Model.Functions
         public static string DisableClearTests(this Task task) => task.TestsFileId is null ? "No Tests specified" : null;
         #endregion
 
+        #region BaseValidationRules
+        [Edit]
+        public static IContext EditBaseValidationRules(
+            this Task task,
+            File baseValidationRulesFile,
+            IContext context) =>
+                context.WithUpdated(task, new Task(task) { BaseValidationRulesFileId = baseValidationRulesFile.Id, BaseValidationRulesFile = baseValidationRulesFile });
+
+        [MemberOrder(22)]
+        public static IContext ClearBaseValidationRules(
+            this Task task,
+            IContext context) =>
+                context.WithUpdated(task, new Task(task) { BaseValidationRulesFileId = null, BaseValidationRulesFile = null });
+
+
+        public static string DisableClearBaseValidationRules(this Task task) => task.BaseValidationRulesFileId is null ? "No Base Validation Rules specified" : null;
+        #endregion
+
+        #region AdditionalValidationRules
+        [MemberOrder(20)]
+        public static IContext AddAdditionalValidationRulesFromFile(
+            this Task task,
+            FileAttachment file,
+            IContext context) =>
+                SaveAdditionalValidationRulesAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+
+        public static string DisableAddAdditionalValidationRulesFromFile(this Task task) =>
+            task.DescriptionFileId is null ? null : "Either go to Additional Validation Rules file and reload/edit it, or Clear Additional Validation Rules to create a new file here.";
+
+        [MemberOrder(21)]
+        public static IContext AddAdditionalValidationRulesAsString(
+            this Task task,
+            [MultiLine(10)] string content,
+            IContext context) =>
+                SaveAdditionalValidationRulesAsFile(task, $"AdditionalValidationRules{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
+
+        public static string DisableAddAdditionalValidationRulesAsString(this Task task) => DisableAddAdditionalValidationRulesFromFile(task);
+
+
+        private static IContext SaveAdditionalValidationRulesAsFile(
+            this Task task,
+            string name,
+            byte[] content,
+            IContext context)
+        {
+            var author = Users.Me(context);
+            var f = new File() { Name = name, Content = content, Mime = "application/json", AuthorId = author.Id, Author = author };
+            return context
+                .WithNew(f)
+                .WithUpdated(task,
+                    new(task)
+                    {
+                        AdditionalValidationRulesFileId = f.Id,
+                        AdditionalValidationRulesFile = f,
+                    });
+        }
+
+        [Edit]
+        public static IContext EditAdditionalValidationRules(
+            this Task task,
+            File additionalValidationRulesFile,
+            IContext context) =>
+                context.WithUpdated(task, new Task(task) { AdditionalValidationRulesFileId = additionalValidationRulesFile.Id, AdditionalValidationRulesFile = additionalValidationRulesFile });
+
+        [MemberOrder(22)]
+        public static IContext CleaAdditionalValidationRules(
+            this Task task,
+            IContext context) =>
+                context.WithUpdated(task, new Task(task) { AdditionalValidationRulesFileId = null, AdditionalValidationRulesFile = null });
+
+
+        public static string DisableClearAdditionalValidationRules(this Task task) => task.AdditionalValidationRulesFileId is null ? "No Additional Validation Rules specified" : null;
+        #endregion
         #endregion
 
         #region Hints 

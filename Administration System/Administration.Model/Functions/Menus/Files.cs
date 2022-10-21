@@ -7,6 +7,11 @@ namespace Model.Functions.Menus
     {
         public static IQueryable<File> AllFiles(IContext context) => context.Instances<File>();
 
+        public static File FindFile(File fileName, IContext context) => fileName;
+
+        public static IQueryable<File> AutoComplete0FindFile(string partialName, IContext context) =>
+            context.Instances<File>().Where(f => f.Name.ToUpper().Contains(partialName.ToUpper()));
+
         [CreateNew]
         public static (File, IContext) CreateNewFileFromExtFile(FileAttachment extFile, IContext context) =>
             CreateNewFile(extFile.Name, extFile.MimeType, extFile.GetResourceAsByteArray(), context);
@@ -30,5 +35,7 @@ namespace Model.Functions.Menus
             };
             return (f, context.WithNew(f));
         }
+
+
     }
 }

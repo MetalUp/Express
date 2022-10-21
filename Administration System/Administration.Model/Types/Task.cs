@@ -17,7 +17,11 @@ namespace Model.Types
             HiddenFunctionsFileId = cloneFrom.HiddenFunctionsFileId;
             HiddenFunctionsFile = cloneFrom.HiddenFunctionsFile;
             TestsFileId = cloneFrom.TestsFileId;
-            TestsFile = cloneFrom.TestsFile;    
+            TestsFile = cloneFrom.TestsFile;
+            BaseValidationRulesFileId = cloneFrom.BaseValidationRulesFileId;
+            BaseValidationRulesFile = cloneFrom.BaseValidationRulesFile;
+            AdditionalValidationRulesFileId = cloneFrom.AdditionalValidationRulesFileId;
+            AdditionalValidationRulesFile = cloneFrom.AdditionalValidationRulesFile;
             PreviousTaskId = cloneFrom.PreviousTaskId;
             PreviousTask = cloneFrom.PreviousTask;
             NextTaskId = cloneFrom.NextTaskId;
@@ -78,6 +82,26 @@ namespace Model.Types
         public virtual File TestsFile { get; init; }
         #endregion
 
+        #region BaseValidationRules
+        [HideInClient]
+        public FileAttachment BaseValidationRules => BaseValidationRules is null ? null : BaseValidationRulesFile.Details;
+        [Hidden]
+        public int? BaseValidationRulesFileId { get; init; }
+
+        [MemberOrder(100)]
+        public virtual File BaseValidationRulesFile { get; init; }
+        #endregion
+
+        #region AdditionalValidationRules
+        [HideInClient]
+        public FileAttachment AdditionalValidationRules => AdditionalValidationRules is null ? null : AdditionalValidationRulesFile.Details;
+        [Hidden]
+        public int? AdditionalValidationRulesFileId { get; init; }
+
+        [MemberOrder(110)]
+        public virtual File AdditionalValidationRulesFile { get; init; }
+        #endregion
+
         [HideInClient]
         public bool PasteExpression => Project.PasteExpression;
 
@@ -87,22 +111,22 @@ namespace Model.Types
         [Hidden]
         public int? PreviousTaskId { get; init; }
 
-        [MemberOrder(110)]
+        [MemberOrder(200)]
         public virtual Task PreviousTask { get; init; }
 
         [Hidden]
         public int? NextTaskId { get; init; }
 
-        [MemberOrder(120)]
+        [MemberOrder(210)]
         public virtual Task NextTask { get; init; }
 
-        [MemberOrder(130)]
+        [MemberOrder(220)]
         public bool NextTaskClearsFunctions { get; init; }
 
         [Hidden]
         public int? ProjectId { get; init; }
 
-        [MemberOrder(200)]
+        [MemberOrder(300)]
         public virtual Project Project { get; init; }
 
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
