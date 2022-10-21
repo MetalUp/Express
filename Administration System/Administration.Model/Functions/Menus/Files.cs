@@ -17,12 +17,12 @@ namespace Model.Functions.Menus
             CreateNewFile(extFile.Name, extFile.MimeType, extFile.GetResourceAsByteArray(), context);
 
         [CreateNew]
-        public static (File, IContext) CreateNewFileAsString(string name, string mimeType, string content, IContext context) =>
+        public static (File, IContext) CreateNewFileAsString(string name, string mimeType, [MultiLine(20)] string content, IContext context) =>
             CreateNewFile(name, mimeType, Encoding.ASCII.GetBytes(content), context);
 
         public static List<string> Choices1CreateNewFileAsString() => new List<string> { "text/plain", "text/html", "application/json" };
 
-        public static (File, IContext) CreateNewFile(string name, string mimeType, byte[] content, IContext context)
+        private static (File, IContext) CreateNewFile(string name, string mimeType, byte[] content, IContext context)
         {
             var me = Users.Me(context);
             var f = new File()
