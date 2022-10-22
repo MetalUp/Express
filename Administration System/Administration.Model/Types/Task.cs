@@ -18,10 +18,10 @@ namespace Model.Types
             HiddenFunctionsFile = cloneFrom.HiddenFunctionsFile;
             TestsFileId = cloneFrom.TestsFileId;
             TestsFile = cloneFrom.TestsFile;
-            BaseValidationRulesFileId = cloneFrom.BaseValidationRulesFileId;
-            BaseValidationRulesFile = cloneFrom.BaseValidationRulesFile;
-            AdditionalValidationRulesFileId = cloneFrom.AdditionalValidationRulesFileId;
-            AdditionalValidationRulesFile = cloneFrom.AdditionalValidationRulesFile;
+            BaseRulesFileId = cloneFrom.BaseRulesFileId;
+            BaseRulesFile = cloneFrom.BaseRulesFile;
+            ExtraRulesFileId = cloneFrom.ExtraRulesFileId;
+            ExtraRulesFile = cloneFrom.ExtraRulesFile;
             PreviousTaskId = cloneFrom.PreviousTaskId;
             PreviousTask = cloneFrom.PreviousTask;
             NextTaskId = cloneFrom.NextTaskId;
@@ -82,24 +82,24 @@ namespace Model.Types
         public virtual File TestsFile { get; init; }
         #endregion
 
-        #region BaseValidationRules
+        #region BaseRules
         [HideInClient]
-        public FileAttachment BaseValidationRules => BaseValidationRules is null ? null : BaseValidationRulesFile.Details;
+        public FileAttachment BaseRules => BaseRules is null ? null : BaseRulesFile.Details;
         [Hidden]
-        public int? BaseValidationRulesFileId { get; init; }
+        public int? BaseRulesFileId { get; init; }
 
         [MemberOrder(100)]
-        public virtual File BaseValidationRulesFile { get; init; }
+        public virtual File BaseRulesFile { get; init; }
         #endregion
 
-        #region AdditionalValidationRules
+        #region ExtraRules
         [HideInClient]
-        public FileAttachment AdditionalValidationRules => AdditionalValidationRules is null ? null : AdditionalValidationRulesFile.Details;
+        public FileAttachment ExtraRules => ExtraRules is null ? null : ExtraRulesFile.Details;
         [Hidden]
-        public int? AdditionalValidationRulesFileId { get; init; }
+        public int? ExtraRulesFileId { get; init; }
 
         [MemberOrder(110)]
-        public virtual File AdditionalValidationRulesFile { get; init; }
+        public virtual File ExtraRulesFile { get; init; }
         #endregion
 
         [HideInClient]

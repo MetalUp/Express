@@ -225,46 +225,46 @@ namespace Model.Functions
         public static string DisableClearTests(this Task task) => task.TestsFileId is null ? "No Tests specified" : null;
         #endregion
 
-        #region BaseValidationRules
+        #region BaseRules
         [Edit]
-        public static IContext EditBaseValidationRules(
+        public static IContext EditBaseRules(
             this Task task,
-            File baseValidationRulesFile,
+            File baseRulesFile,
             IContext context) =>
-                context.WithUpdated(task, new Task(task) { BaseValidationRulesFileId = baseValidationRulesFile.Id, BaseValidationRulesFile = baseValidationRulesFile });
+                context.WithUpdated(task, new Task(task) { BaseRulesFileId = baseRulesFile.Id, BaseRulesFile = baseRulesFile });
 
         [MemberOrder(22)]
-        public static IContext ClearBaseValidationRules(
+        public static IContext ClearBaseRules(
             this Task task,
             IContext context) =>
-                context.WithUpdated(task, new Task(task) { BaseValidationRulesFileId = null, BaseValidationRulesFile = null });
+                context.WithUpdated(task, new Task(task) { BaseRulesFileId = null, BaseRulesFile = null });
 
 
-        public static string DisableClearBaseValidationRules(this Task task) => task.BaseValidationRulesFileId is null ? "No Base Validation Rules specified" : null;
+        public static string DisableClearBaseRules(this Task task) => task.BaseRulesFileId is null ? "No Base Rules specified" : null;
         #endregion
 
-        #region AdditionalValidationRules
+        #region ExtraRules
         [MemberOrder(20)]
-        public static IContext AddAdditionalValidationRulesFromFile(
+        public static IContext AddExtraRulesFromFile(
             this Task task,
             FileAttachment file,
             IContext context) =>
-                SaveAdditionalValidationRulesAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+                SaveExtraRulesAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
 
-        public static string DisableAddAdditionalValidationRulesFromFile(this Task task) =>
-            task.DescriptionFileId is null ? null : "Either go to Additional Validation Rules file and reload/edit it, or Clear Additional Validation Rules to create a new file here.";
+        public static string DisableAddExtraRulesFromFile(this Task task) =>
+            task.DescriptionFileId is null ? null : "Either go to Extra Rules file and reload/edit it, or Clear Extra Rules to create a new file here.";
 
         [MemberOrder(21)]
-        public static IContext AddAdditionalValidationRulesAsString(
+        public static IContext AddExtraRulesAsString(
             this Task task,
             [MultiLine(10)] string content,
             IContext context) =>
-                SaveAdditionalValidationRulesAsFile(task, $"AdditionalValidationRules{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
+                SaveExtraRulesAsFile(task, $"ExtraRules{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
 
-        public static string DisableAddAdditionalValidationRulesAsString(this Task task) => DisableAddAdditionalValidationRulesFromFile(task);
+        public static string DisableAddExtraRulesAsString(this Task task) => DisableAddExtraRulesFromFile(task);
 
 
-        private static IContext SaveAdditionalValidationRulesAsFile(
+        private static IContext SaveExtraRulesAsFile(
             this Task task,
             string name,
             byte[] content,
@@ -277,26 +277,26 @@ namespace Model.Functions
                 .WithUpdated(task,
                     new(task)
                     {
-                        AdditionalValidationRulesFileId = f.Id,
-                        AdditionalValidationRulesFile = f,
+                        ExtraRulesFileId = f.Id,
+                        ExtraRulesFile = f,
                     });
         }
 
         [Edit]
-        public static IContext EditAdditionalValidationRules(
+        public static IContext EditExtraRules(
             this Task task,
-            File additionalValidationRulesFile,
+            File extraRulesFile,
             IContext context) =>
-                context.WithUpdated(task, new Task(task) { AdditionalValidationRulesFileId = additionalValidationRulesFile.Id, AdditionalValidationRulesFile = additionalValidationRulesFile });
+                context.WithUpdated(task, new Task(task) { ExtraRulesFileId = extraRulesFile.Id, ExtraRulesFile = extraRulesFile });
 
         [MemberOrder(22)]
-        public static IContext CleaAdditionalValidationRules(
+        public static IContext ClearExtraRules(
             this Task task,
             IContext context) =>
-                context.WithUpdated(task, new Task(task) { AdditionalValidationRulesFileId = null, AdditionalValidationRulesFile = null });
+                context.WithUpdated(task, new Task(task) { ExtraRulesFileId = null, ExtraRulesFile = null });
 
 
-        public static string DisableClearAdditionalValidationRules(this Task task) => task.AdditionalValidationRulesFileId is null ? "No Additional Validation Rules specified" : null;
+        public static string DisableClearExtraRules(this Task task) => task.ExtraRulesFileId is null ? "No Extra Rules specified" : null;
         #endregion
         #endregion
 
