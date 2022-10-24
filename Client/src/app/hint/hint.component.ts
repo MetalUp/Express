@@ -38,7 +38,7 @@ export class HintComponent implements OnInit, OnDestroy {
   hintIndex = -1;
 
   get title() {
-    return `Hint: ${this.currentHint.Title}`;
+    return `Hint ${this.hintIndex + 1}/${this.currentTask.Hints.length} -${this.currentHint.CostInMarks} marks`;
   }
 
   hasNextHint() {

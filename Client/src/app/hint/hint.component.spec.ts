@@ -17,10 +17,12 @@ describe('HintComponent', () => {
   const hint1 = structuredClone(EmptyHint);
   hint1.Title = 'hint1 title';
   hint1.HtmlFile = ['hint1url', 'hint1mt'];
+  hint1.CostInMarks = 1;
 
   const hint2 = structuredClone(EmptyHint);
   hint2.Title = 'hint2 title';
   hint2.HtmlFile = ['hint2url', 'hint2mt'];
+  hint2.CostInMarks = 2;
 
   testTask.Hints = [hint1, hint2];
 
@@ -56,7 +58,7 @@ describe('HintComponent', () => {
 
     expect(component.hasNextHint()).toEqual(true);
 
-    expect(component.title).toEqual("Hint: ");
+    expect(component.title).toEqual("Hint 0/2 -0 marks");
     expect(component.hintHtml).toEqual('Click Next to use the first Hint');
 
     component.onNextHint(); 
@@ -64,7 +66,7 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
     expect(component.hintIndex).toEqual(0);
     tick();
-    expect(component.title).toEqual("Hint: hint1 title");
+    expect(component.title).toEqual("Hint 1/2 -1 marks");
     expect(component.hintHtml).toEqual('hint1 html');
     expect(component.hasPreviousHint()).toEqual(false);
     expect(component.hasNextHint()).toEqual(true);
@@ -76,7 +78,7 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint2url', 'hint2mt']);
     expect(component.hintIndex).toEqual(1);
     tick();
-    expect(component.title).toEqual("Hint: hint2 title");
+    expect(component.title).toEqual("Hint 2/2 -2 marks");
     expect(component.hintHtml).toEqual('hint2 html');
     expect(component.hasPreviousHint()).toEqual(true);
     expect(component.hasNextHint()).toEqual(false);
@@ -88,32 +90,10 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
     expect(component.hintIndex).toEqual(0);
     tick();
-    expect(component.title).toEqual("Hint: hint1 title");
+    expect(component.title).toEqual("Hint 1/2 -1 marks");
     expect(component.hintHtml).toEqual('hint1 html');
     expect(component.hasPreviousHint()).toEqual(false);
     expect(component.hasNextHint()).toEqual(true);
 
   }));
-
-  // it('should handle errors when getting hint html file', fakeAsync(() => {
-
-  //   taskServiceSpy.getFile.and.returnValue(Promise.reject(() => { status: 404 }));
-
-  //   taskSubject.next(testTask);
-
-  //   expect(component.hasNextHint()).toEqual(true);
-
-  //   expect(component.title).toEqual("Hint: ");
-  //   expect(component.hintHtml).toEqual('Click Next to use the first Hint');
-
-  //   component.onNextHint(); 
-
-  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
-  //   expect(component.hintIndex).toEqual(0);
-  //   tick();
-  //   expect(component.title).toEqual("Hint: hint1 title");
-  //   expect(component.hintHtml).toEqual('error getting hint');
-  //   expect(component.hasPreviousHint()).toEqual(false);
-  //   expect(component.hasNextHint()).toEqual(true);
-  // }));
 });
