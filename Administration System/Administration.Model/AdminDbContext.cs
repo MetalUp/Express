@@ -34,6 +34,8 @@ namespace Model
             modelBuilder.Entity<Task>().HasOne(e => e.DescriptionFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.HiddenFunctionsFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasOne(e => e.TestsFile).WithMany().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Task>().HasOne(e => e.BaseRulesFile).WithMany().OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Task>().HasOne(e => e.ExtraRulesFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Task>().HasMany(e => e.Hints).WithMany(h => h.Tasks);
 
             modelBuilder.Entity<Hint>().Property(e => e.Name).HasColumnName("Title");
