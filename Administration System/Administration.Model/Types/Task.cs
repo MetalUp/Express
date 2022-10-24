@@ -88,7 +88,7 @@ namespace Model.Types
         [Hidden]
         public int? BaseRulesFileId { get; init; }
 
-        [Hidden]
+        
         public virtual File BaseRulesFile { get; init; }
         #endregion
 
