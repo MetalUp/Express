@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { TaskService } from './task.service';
 import { first } from 'rxjs';
 import { ConfigService, RepLoaderService } from '@nakedobjects/services';
-import { DomainObjectRepresentation, EntryType, PropertyMember } from '@nakedobjects/restful-objects';
+import { CollectionMember, DomainObjectRepresentation, EntryType, PropertyMember } from '@nakedobjects/restful-objects';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -28,22 +28,29 @@ describe('TaskService', () => {
    
     const object = new DomainObjectRepresentation();
     object.hateoasUrl = `testPath/objects/Model.Types.Task/testTask`;
-    const pm = new PropertyMember({value : 'testlanguage'} as any, object, 'language');
+    const pm = new PropertyMember({value : 'test language'} as any, object, 'Language');
+    const cm = new CollectionMember({value : []} as any, object, 'Hints');
     pm.entryType = () => EntryType.FreeForm;
     pm.isScalar = () => true;
 
-    object.propertyMembers = () => ({'language': pm});
+    object.propertyMembers = () => ({'Language': pm});
+    object.collectionMembers = () => ({'Hints': cm});
     
     const promise = Promise.resolve(object);
 
     repLoaderSpy.populate.and.returnValue(promise);
 
     service.loadTask('testTask');
-    tick();
+    
     expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({hateoasUrl: `testPath/objects/Model.Types.Task/testTask`}), true);
-    service.currentTask.pipe(first()).subscribe(t =>
-      expect(t.Language).toEqual('testlanguage')
+    
+    service.currentTask.pipe(first()).subscribe(t => {
+        expect(t.Language).toEqual('testlanguage');
+        expect(t.Hints.length).toEqual(0);
+      }
     );
+    
+   
   }));
 
   it('should load empty task if task not found', fakeAsync(() => {
