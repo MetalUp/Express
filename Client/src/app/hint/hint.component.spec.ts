@@ -58,7 +58,7 @@ describe('HintComponent', () => {
 
     expect(component.hasNextHint()).toEqual(true);
 
-    expect(component.title).toEqual("Hint 0/2 -0 marks");
+    expect(component.title).toEqual("Hint");
     expect(component.hintHtml).toEqual('Click Next to use the first Hint');
 
     component.onNextHint(); 
@@ -66,7 +66,7 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
     expect(component.hintIndex).toEqual(0);
     tick();
-    expect(component.title).toEqual("Hint 1/2 -1 marks");
+    expect(component.title).toEqual("Hint 1/2 -1 mark");
     expect(component.hintHtml).toEqual('hint1 html');
     expect(component.hasPreviousHint()).toEqual(false);
     expect(component.hasNextHint()).toEqual(true);
@@ -90,7 +90,7 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
     expect(component.hintIndex).toEqual(0);
     tick();
-    expect(component.title).toEqual("Hint 1/2 -1 marks");
+    expect(component.title).toEqual("Hint 1/2 -1 mark");
     expect(component.hintHtml).toEqual('hint1 html');
     expect(component.hasPreviousHint()).toEqual(false);
     expect(component.hasNextHint()).toEqual(true);
