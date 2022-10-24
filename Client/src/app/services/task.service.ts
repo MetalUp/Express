@@ -81,17 +81,20 @@ export class TaskService {
     }
   }
 
-  private convertTo<T>(toObj: any, rep: DomainObjectRepresentation) {
+  private convertTo<T extends ITask | IHint>(toObj: Task | Hint, rep: DomainObjectRepresentation) {
     if (rep && Object.keys(rep.propertyMembers()).length > 0) {
       const pMembers = rep.propertyMembers()
       for (const k in pMembers) {
         const member = pMembers[k];
         this.setPropertyValue(toObj, member);
       }
-      const cMembers = rep.collectionMembers()
-      for (const k in cMembers) {
-        const member = cMembers[k];
-        this.setCollectionValue(toObj, member);
+      if (toObj instanceof Task) {
+        // only get collections on task 
+        const cMembers = rep.collectionMembers()
+        for (const k in cMembers) {
+          const member = cMembers[k];
+          this.setCollectionValue(toObj, member);
+        }
       }
     }
     return toObj as T;
