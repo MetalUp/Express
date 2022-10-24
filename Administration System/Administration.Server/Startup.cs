@@ -65,7 +65,7 @@ namespace NakedFunctions.Rest.App.Demo
                     appOptions.DomainFunctions = ModelConfig.TypesDefiningDomainFunctions();
                     appOptions.DomainServices = ModelConfig.DomainServices();
                 });
-                frameworkOptions.AddRestfulObjects();
+                frameworkOptions.AddRestfulObjects(options => options.AcceptHeaderStrict = false);
             });
             services.AddCors(corsOptions =>
             {
