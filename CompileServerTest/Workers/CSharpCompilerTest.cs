@@ -11,15 +11,30 @@ public class CSharpCompilerTest {
     private const string DivZero = "var a = 1/0;";
     private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
 
-    private const string TestCode =
+    private const string TestCodeOk =
         @"
-        using System;
         using Microsoft.VisualStudio.TestTools.UnitTesting;
 
         namespace ExpressTests;
 
         [TestClass]
-        public class Tests : object
+        public class Tests
+        {
+            [TestMethod]
+            public void ATest()
+            {
+                Assert.IsTrue(true);
+            }
+        }";
+
+    private const string TestCodeFail =
+        @"
+        using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+        namespace ExpressTests;
+
+        [TestClass]
+        public class Tests
         {
             [TestMethod]
             public void ATest()
@@ -76,9 +91,26 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndTestOk()
     {
-        var runSpec = CsharpRunSpec(TestCode);
+        var runSpec = CsharpRunSpec(TestCodeOk);
         var rr = Handler.CompileAndTest(runSpec).Result.Value;
         Assert.IsNotNull(rr);
-        rr.AssertRunResult(Outcome.Ok, "", "1");
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
+        Assert.AreEqual("", rr.stderr);
+        Assert.AreEqual("", rr.run_id);
+    }
+
+    [TestMethod]
+    public void TestCompileAndTestFail()
+    {
+        var runSpec = CsharpRunSpec(TestCodeFail);
+        var rr = Handler.CompileAndTest(runSpec).Result.Value;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
+        Assert.AreEqual("", rr.stderr);
+        Assert.AreEqual("", rr.run_id);
     }
 }

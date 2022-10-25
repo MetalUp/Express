@@ -123,7 +123,7 @@ public static class DotNetTester {
 
         //return Helpers.Execute(@"""C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe""", args, "file");
 
-        return Helpers.Execute("dotnet", $"test {file}", "");
+        return Helpers.Execute("dotnet", $"test {file} --nologo", "");
     }
 }
 
