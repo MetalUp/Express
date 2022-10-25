@@ -32,17 +32,7 @@ public static class DotNetCompiler {
     };
 
     public static readonly MetadataReference[] TestReferences = {
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.TestPlatform.CommunicationUtilities").Location),
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.TestPlatform.CoreUtilities").Location),
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.TestPlatform.CrossPlatEngine").Location),
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.TestPlatform.PlatformAbstractions").Location),
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.TestPlatform.Utilities").Location),
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.VisualStudio.TestPlatform.Common").Location),
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.VisualStudio.TestPlatform.ObjectModel").Location),
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("testhost").Location),
-
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.VisualStudio.TestPlatform.TestFramework").Location),
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions").Location)
     };
 
     public static (RunResult, byte[]) Compile(RunSpec runSpec, Func<string, Compilation> generateCode) {
