@@ -4,11 +4,31 @@ using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
+
 [TestClass]
 public class CSharpCompilerTest {
     private const string SimpleCode = "var a = 1;System.Console.Write(a);";
     private const string DivZero = "var a = 1/0;";
     private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
+
+    private const string TestCode =
+        @"
+        using System;
+        using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+        namespace ExpressTests;
+
+        [TestClass]
+        public class Tests : object
+        {
+            [TestMethod]
+            public void ATest()
+            {
+                Assert.IsTrue(false);
+            }
+        }";
+
+
 
     [TestMethod]
     public void TestVersion() {
@@ -51,5 +71,14 @@ public class CSharpCompilerTest {
 
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
+    }
+
+    [TestMethod]
+    public void TestCompileAndTestOk()
+    {
+        var runSpec = CsharpRunSpec(TestCode);
+        var rr = Handler.CompileAndTest(runSpec).Result.Value;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok, "", "1");
     }
 }

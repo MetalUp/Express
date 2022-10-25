@@ -74,7 +74,9 @@ public static class Helpers {
             runResult = SetRunResults(runResult, e);
         }
         finally {
-            File.Delete(cleanUp);
+            if (!string.IsNullOrEmpty(cleanUp)) {
+                File.Delete(cleanUp);
+            }
         }
 
         return runResult;
