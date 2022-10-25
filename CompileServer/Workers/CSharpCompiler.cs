@@ -31,7 +31,7 @@ public static class CSharpCompiler {
     private static CSharpCompilation GenerateCode(string sourceCode, MetadataReference[] references, bool console) {
         var parsedSyntaxTree = SyntaxFactory.ParseSyntaxTree(SourceText.From(sourceCode), Options);
 
-        return CSharpCompilation.Create("SimpleTest",
+        return CSharpCompilation.Create("compiled",
                                         new[] { parsedSyntaxTree },
                                         references,
                                         new CSharpCompilationOptions(console ?  OutputKind.ConsoleApplication : OutputKind.DynamicallyLinkedLibrary,

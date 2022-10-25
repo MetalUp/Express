@@ -9,38 +9,26 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CompileServer.Workers;
 
 public static class DotNetCompiler {
-    private static MetadataReference CopyAndCreate(Assembly asm) {
-        var name = asm.GetName().Name;
-        var dest = $"{Path.GetTempPath()}{name}.dll";
-
-        if (!File.Exists(dest)) {
-            File.Copy(asm.Location, dest);
-        }
-
-        return MetadataReference.CreateFromFile(dest);
-    }
-
-
     public static readonly MetadataReference[] DotNetReferences = {
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Runtime")), // System.Runtime
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Collections")), // System.Collections
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Private.CoreLib")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Runtime")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Console")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("netstandard")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Text.RegularExpressions")), // IMPORTANT!
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Linq")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Linq.Expressions")), // IMPORTANT!
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.IO")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Net.Primitives")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Net.Http")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Private.Uri")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Reflection")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.ComponentModel.Primitives")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Globalization")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Collections.Concurrent")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("System.Collections.NonGeneric")),
-        CopyAndCreate(AppDomain.CurrentDomain.Load("Microsoft.CSharp"))
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections").Location), // System.Collections
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Private.CoreLib").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Console").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("netstandard").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Text.RegularExpressions").Location), // IMPORTANT!
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Linq").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Linq.Expressions").Location), // IMPORTANT!
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.IO").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Net.Primitives").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Net.Http").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Private.Uri").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Reflection").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.ComponentModel.Primitives").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Globalization").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections.Concurrent").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections.NonGeneric").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.CSharp").Location)
     };
 
     public static readonly MetadataReference[] TestReferences = {
