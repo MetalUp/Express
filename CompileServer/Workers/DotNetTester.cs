@@ -17,31 +17,38 @@ public static class DotNetTester {
     }
 
     public static RunResult Execute(byte[] compiledAssembly, RunResult runResult) {
-        const string tempFileName = "compiled.dll";
-        var file = $"{Path.GetTempPath()}{tempFileName}";
+        var consoleOut = new StringWriter();
+        var consoleErr = new StringWriter();
+        var oldOut = Console.Out;
+        var oldErr = Console.Error;
 
-        File.WriteAllBytes(file, compiledAssembly);
+        Console.SetOut(consoleOut);
+        Console.SetError(consoleErr);
 
-        //LoadIfNotInTemp("Microsoft.TestPlatform.CoreUtilities.dll");
+        try {
+            const string tempFileName = "compiled.dll";
+            var file = $"{Path.GetTempPath()}{tempFileName}";
 
-        LoadIfNotInTemp("testhost.dll");
-        LoadIfNotInTemp("Microsoft.TestPlatform.CoreUtilities.dll");
-        LoadIfNotInTemp("Microsoft.TestPlatform.PlatformAbstractions.dll");
-        LoadIfNotInTemp("Microsoft.TestPlatform.CrossPlatEngine.dll");
-        LoadIfNotInTemp("Microsoft.TestPlatform.CommunicationUtilities.dll");
-        LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.ObjectModel.dll");
-        LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.Common.dll");
-        LoadIfNotInTemp("Newtonsoft.Json.dll");
-        LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.TestFramework.dll");
-        LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll");
-        LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll");
-        LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll");
-        LoadIfNotInTemp("Microsoft.TestPlatform.AdapterUtilities.dll");
-        LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll");
-        LoadIfNotInTemp("NuGet.Frameworks.dll");
+            File.WriteAllBytes(file, compiledAssembly);
 
-        if (!File.Exists($"{Path.GetTempPath()}compiled.runtimeconfig.json")) {
-            var rtg = @"{
+            LoadIfNotInTemp("testhost.dll");
+            LoadIfNotInTemp("Microsoft.TestPlatform.CoreUtilities.dll");
+            LoadIfNotInTemp("Microsoft.TestPlatform.PlatformAbstractions.dll");
+            LoadIfNotInTemp("Microsoft.TestPlatform.CrossPlatEngine.dll");
+            LoadIfNotInTemp("Microsoft.TestPlatform.CommunicationUtilities.dll");
+            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.ObjectModel.dll");
+            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.Common.dll");
+            LoadIfNotInTemp("Newtonsoft.Json.dll");
+            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.TestFramework.dll");
+            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll");
+            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll");
+            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll");
+            LoadIfNotInTemp("Microsoft.TestPlatform.AdapterUtilities.dll");
+            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll");
+            LoadIfNotInTemp("NuGet.Frameworks.dll");
+
+            if (!File.Exists($"{Path.GetTempPath()}compiled.runtimeconfig.json")) {
+                var rtg = @"{
                           ""runtimeOptions"": {
                             ""tfm"": ""net6.0"",
                             ""framework"": {
@@ -51,11 +58,19 @@ public static class DotNetTester {
                           }
                         }";
 
-            File.WriteAllText($"{Path.GetTempPath()}compiled.runtimeconfig.json", rtg);
+                File.WriteAllText($"{Path.GetTempPath()}compiled.runtimeconfig.json", rtg);
+            }
+
+            var args = $"test {file} --nologo";
+
+            return Helpers.Execute("dotnet", args, file);
         }
-
-        var args = $"test {file} --nologo";
-
-        return Helpers.Execute("dotnet", args, file);
+        catch (Exception e) {
+            return Helpers.SetRunResults(runResult, consoleOut, consoleErr, e);
+        }
+        finally {
+            Console.SetOut(oldOut);
+            Console.SetError(oldErr);
+        }
     }
 }
