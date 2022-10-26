@@ -1,8 +1,8 @@
 using CompileServer.Models;
 using CompileServer.Workers;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
@@ -12,8 +12,6 @@ public class CSharpCompilerTest {
     private const string SimpleCode = "var a = 1;System.Console.Write(a);";
     private const string DivZero = "var a = 1/0;";
     private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
-    private readonly ILogger testLogger = NullLogger.Instance;
-
 
     private const string TestCodeOk =
         @"
@@ -46,6 +44,8 @@ public class CSharpCompilerTest {
                 Assert.IsTrue(false);
             }
         }";
+
+    private readonly ILogger testLogger = NullLogger.Instance;
 
     [TestMethod]
     public void TestVersion() {
@@ -101,6 +101,42 @@ public class CSharpCompilerTest {
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.run_id);
     }
+
+    //[TestMethod]
+    //public void TestCompileAndRunInParallel() {
+    //    var runSpec = CsharpRunSpec(TestCodeOk);
+
+    //    var runSpecs = Enumerable.Range(1, 10).Select(i => CsharpRunSpec(SimpleCode));
+
+    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).ToArray();
+
+    //    foreach (var rr in rrs) {
+    //        Assert.IsNotNull(rr);
+    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
+    //        Assert.AreEqual("", rr.cmpinfo);
+    //        Assert.AreEqual("1", rr.stdout);
+    //        Assert.AreEqual("", rr.stderr);
+    //        Assert.AreEqual("", rr.run_id);
+    //    }
+    //}
+
+    //[TestMethod]
+    //public void TestCompileAndTestInParallel() {
+    //    var runSpec = CsharpRunSpec(TestCodeOk);
+
+    //    var runSpecs = Enumerable.Range(1, 10).Select(i => CsharpRunSpec(TestCodeOk));
+
+    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).ToArray();
+
+    //    foreach (var rr in rrs) {
+    //        Assert.IsNotNull(rr);
+    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
+    //        Assert.AreEqual("", rr.cmpinfo);
+    //        Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
+    //        Assert.AreEqual("", rr.stderr);
+    //        Assert.AreEqual("", rr.run_id);
+    //    }
+    //}
 
     [TestMethod]
     public void TestCompileAndTestFail() {
