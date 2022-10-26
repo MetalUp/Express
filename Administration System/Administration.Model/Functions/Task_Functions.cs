@@ -9,11 +9,11 @@ namespace Model.Functions
 
         #region Editing Task properties
         [Edit]
-        public static IContext EditTitle(
+        public static IContext EditName(
             this Task task,
-            string title,
+            string name,
             IContext context) =>
-                context.WithUpdated(task, new(task) { Name = title });
+                context.WithUpdated(task, new(task) { Name = name });
 
         [Edit]
         public static IContext EditMaxMarks(
