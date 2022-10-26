@@ -2,15 +2,12 @@ using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
 [TestClass]
 public class VisualBasicCompilerTest {
-    private readonly ILogger testLogger = NullLogger.Instance;
-
     private const string SimpleCode =
         @"Module Program
           Sub Main(args As String())       
@@ -61,6 +58,8 @@ public class VisualBasicCompilerTest {
             End Class
         End Namespace";
 
+    private readonly ILogger testLogger = NullLogger.Instance;
+
     [TestMethod]
     public void TestVersion() {
         var csv = VisualBasicCompiler.GetNameAndVersion();
@@ -106,8 +105,7 @@ public class VisualBasicCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndTestOk()
-    {
+    public void TestCompileAndTestOk() {
         var runSpec = VisualBasicRunSpec(TestCodeOk);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
@@ -119,8 +117,7 @@ public class VisualBasicCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndTestFail()
-    {
+    public void TestCompileAndTestFail() {
         var runSpec = VisualBasicRunSpec(TestCodeFail);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
@@ -130,4 +127,36 @@ public class VisualBasicCompilerTest {
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.run_id);
     }
+
+    //[TestMethod]
+    //public void TestCompileAndRunInParallel() {
+    //    var runSpecs = Enumerable.Range(1, 10).Select(i => VisualBasicRunSpec(SimpleCode));
+
+    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).ToArray();
+
+    //    foreach (var rr in rrs) {
+    //        Assert.IsNotNull(rr);
+    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
+    //        Assert.AreEqual("", rr.cmpinfo);
+    //        Assert.AreEqual("1", rr.stdout);
+    //        Assert.AreEqual("", rr.stderr);
+    //        Assert.AreEqual("", rr.run_id);
+    //    }
+    //}
+
+    //[TestMethod]
+    //public void TestCompileAndTestInParallel() {
+    //    var runSpecs = Enumerable.Range(1, 10).Select(i => VisualBasicRunSpec(TestCodeOk));
+
+    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).ToArray();
+
+    //    foreach (var rr in rrs) {
+    //        Assert.IsNotNull(rr);
+    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
+    //        Assert.AreEqual("", rr.cmpinfo);
+    //        Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
+    //        Assert.AreEqual("", rr.stderr);
+    //        Assert.AreEqual("", rr.run_id);
+    //    }
+    //}
 }

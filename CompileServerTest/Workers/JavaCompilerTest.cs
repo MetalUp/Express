@@ -100,4 +100,40 @@ public class JavaCompilerTest {
         rr.stderr = ClearWhiteSpace(rr.stderr);
         rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Exceptioninthread""main""java.lang.NumberFormatException:Forinputstring:""invalid""	atjava.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)	atjava.base/java.lang.Integer.parseInt(Integer.java:668)	atjava.base/java.lang.Integer.parseInt(Integer.java:786)	attemp.main(temp.java:3)");
     }
+
+    //[TestMethod]
+    //public void TestCompileAndRunInParallel()
+    //{
+    //    var runSpecs = Enumerable.Range(1, 10).Select(i => JavaRunSpec(SimpleCode));
+
+    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).ToArray();
+
+    //    foreach (var rr in rrs)
+    //    {
+    //        Assert.IsNotNull(rr);
+    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
+    //        Assert.AreEqual("", rr.cmpinfo);
+    //        Assert.AreEqual("1", rr.stdout);
+    //        Assert.AreEqual("", rr.stderr);
+    //        Assert.AreEqual("", rr.run_id);
+    //    }
+    //}
+
+    //[TestMethod]
+    //public void TestCompileAndTestInParallel()
+    //{
+    //    var runSpecs = Enumerable.Range(1, 10).Select(i => JavaRunSpec(TestCodeOk));
+
+    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).ToArray();
+
+    //    foreach (var rr in rrs)
+    //    {
+    //        Assert.IsNotNull(rr);
+    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
+    //        Assert.AreEqual("", rr.cmpinfo);
+    //        Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
+    //        Assert.AreEqual("", rr.stderr);
+    //        Assert.AreEqual("", rr.run_id);
+    //    }
+    //}
 }

@@ -1,18 +1,14 @@
 using CompileServer.Controllers;
 using CompileServer.Models;
 using CompileServer.Workers;
-using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
 [TestClass]
 public class PythonCompilerTest {
-    private readonly ILogger testLogger = NullLogger.Instance;
-
-
     private const string SimpleCode =
         @"print (str(1))";
 
@@ -23,7 +19,7 @@ public class PythonCompilerTest {
         @"print (int(""invalid""))";
 
     private const string TestCodeOk =
-@"def test_Ok():
+        @"def test_Ok():
     assert sum([1, 2, 3]) == 6, ""Should be 6""
 
 if __name__ == ""__main__"":
@@ -32,13 +28,15 @@ if __name__ == ""__main__"":
 ";
 
     private const string TestCodeFail =
-@"def test_Fail():
+        @"def test_Fail():
     assert sum([1, 2, 4]) == 6, ""Should be 6""
 
 if __name__ == ""__main__"":
     test_Fail()
     print(""Everything passed"")
 ";
+
+    private readonly ILogger testLogger = NullLogger.Instance;
 
     [ClassInitialize]
     public static void Initialize(TestContext testContext) {
@@ -84,8 +82,7 @@ if __name__ == ""__main__"":
     }
 
     [TestMethod]
-    public void TestCompileAndRunFail()
-    {
+    public void TestCompileAndRunFail() {
         var runSpec = PythonRunSpec(RunTimeFail);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
 
@@ -96,8 +93,7 @@ if __name__ == ""__main__"":
     }
 
     [TestMethod]
-    public void TestCompileAndTestOk()
-    {
+    public void TestCompileAndTestOk() {
         var runSpec = PythonRunSpec(TestCodeOk);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
@@ -109,8 +105,7 @@ if __name__ == ""__main__"":
     }
 
     [TestMethod]
-    public void TestCompileAndTestFail()
-    {
+    public void TestCompileAndTestFail() {
         var runSpec = PythonRunSpec(TestCodeFail);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
@@ -120,4 +115,32 @@ if __name__ == ""__main__"":
         Assert.IsTrue(rr.stderr.Contains("Should be 6"), rr.stderr);
         Assert.AreEqual("", rr.run_id);
     }
+
+    //[TestMethod]
+    //public void TestCompileAndRunInParallel() {
+    //    var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(SimpleCode));
+
+    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).ToArray();
+
+    //    foreach (var rr in rrs) {
+    //        Assert.IsNotNull(rr);
+    //        rr.AssertRunResult(Outcome.Ok, "", "1\r\n");
+    //    }
+    //}
+
+    //[TestMethod]
+    //public void TestCompileAndTestInParallel() {
+    //    var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(TestCodeOk));
+
+    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).ToArray();
+
+    //    foreach (var rr in rrs) {
+    //        Assert.IsNotNull(rr);
+    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
+    //        Assert.AreEqual("", rr.cmpinfo);
+    //        Assert.IsTrue(rr.stdout.Contains("Everything passed"), rr.stdout);
+    //        Assert.AreEqual("", rr.stderr);
+    //        Assert.AreEqual("", rr.run_id);
+    //    }
+    //}
 }
