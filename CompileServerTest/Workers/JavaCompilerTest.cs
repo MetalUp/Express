@@ -1,12 +1,18 @@
 using CompileServer.Controllers;
 using CompileServer.Models;
 using CompileServer.Workers;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
 [TestClass]
 public class JavaCompilerTest {
+    private readonly ILogger testLogger = NullLogger.Instance;
+
+
     private const string SimpleCode =
         @"public class temp {
         public static void main(String[] args) {
@@ -67,7 +73,7 @@ public class JavaCompilerTest {
     [TestMethod]
     public void TestCompileAndRunOk() {
         var runSpec = JavaRunSpec(SimpleCode);
-        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
     }
@@ -88,7 +94,7 @@ public class JavaCompilerTest {
     public void TestCompileAndRunFail()
     {
         var runSpec = JavaRunSpec(RunTimeFail);
-        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
 
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);

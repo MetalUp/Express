@@ -36,11 +36,11 @@ public static class Handler {
             })
         );
 
-    private static Task<ActionResult<RunResult>> DotNetCompileAndRun(RunSpec runSpec) =>
+    private static Task<ActionResult<RunResult>> DotNetCompileAndRun(RunSpec runSpec, ILogger logger) =>
         Task.Run(Wrap(() => {
                 var (runResult, assembly) = DotNetCompile(runSpec);
                 if (runResult.outcome == Outcome.Ok) {
-                    runResult = DotNetRunner.Execute(assembly, runResult);
+                    runResult = DotNetRunner.Execute(assembly, runResult, logger);
                 }
 
                 return new ActionResult<RunResult>(runResult);
@@ -72,15 +72,15 @@ public static class Handler {
             _ => (new RunResult { outcome = Outcome.IllegalSystemCall, cmpinfo = $"Unknown language: {runSpec.language_id}" }, Array.Empty<byte>())
         };
 
-    public static Task<ActionResult<RunResult>> CompileAndRun(RunSpec runSpec) =>
+    public static Task<ActionResult<RunResult>> CompileAndRun(RunSpec runSpec, ILogger logger) =>
         runSpec.language_id switch {
             "python" => PythonCompileAndRun(runSpec),
             "java" => JavaCompileAndRun(runSpec),
-            "csharp" or "vb" => DotNetCompileAndRun(runSpec),
+            "csharp" or "vb" => DotNetCompileAndRun(runSpec, logger),
             _ => Task.Run(() => new ActionResult<RunResult>(new RunResult { outcome = Outcome.IllegalSystemCall }))
         };
 
-    public static Task<ActionResult<RunResult>> CompileAndTest(RunSpec runSpec) =>
+    public static Task<ActionResult<RunResult>> CompileAndTest(RunSpec runSpec, ILogger logger) =>
         runSpec.language_id switch {
             "csharp" or "vb" => DotNetCompileAndTest(runSpec),
             "python" => PythonCompileAndRun(runSpec),

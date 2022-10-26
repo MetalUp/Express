@@ -1,11 +1,16 @@
 using CompileServer.Models;
 using CompileServer.Workers;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
 [TestClass]
 public class VisualBasicCompilerTest {
+    private readonly ILogger testLogger = NullLogger.Instance;
+
     private const string SimpleCode =
         @"Module Program
           Sub Main(args As String())       
@@ -77,7 +82,7 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileAndRunOk() {
         var runSpec = VisualBasicRunSpec(SimpleCode);
-        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
     }
@@ -94,7 +99,7 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileAndRunFail() {
         var runSpec = VisualBasicRunSpec(RunTimeFail);
-        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
 
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
@@ -104,7 +109,7 @@ public class VisualBasicCompilerTest {
     public void TestCompileAndTestOk()
     {
         var runSpec = VisualBasicRunSpec(TestCodeOk);
-        var rr = Handler.CompileAndTest(runSpec).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -117,7 +122,7 @@ public class VisualBasicCompilerTest {
     public void TestCompileAndTestFail()
     {
         var runSpec = VisualBasicRunSpec(TestCodeFail);
-        var rr = Handler.CompileAndTest(runSpec).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);

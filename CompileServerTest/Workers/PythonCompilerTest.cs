@@ -1,12 +1,18 @@
 using CompileServer.Controllers;
 using CompileServer.Models;
 using CompileServer.Workers;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting.Logging;
 using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
 [TestClass]
 public class PythonCompilerTest {
+    private readonly ILogger testLogger = NullLogger.Instance;
+
+
     private const string SimpleCode =
         @"print (str(1))";
 
@@ -60,7 +66,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileAndRunOk() {
         var runSpec = PythonRunSpec(SimpleCode);
-        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1\r\n");
     }
@@ -81,7 +87,7 @@ if __name__ == ""__main__"":
     public void TestCompileAndRunFail()
     {
         var runSpec = PythonRunSpec(RunTimeFail);
-        var rr = Handler.CompileAndRun(runSpec).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
 
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
@@ -93,7 +99,7 @@ if __name__ == ""__main__"":
     public void TestCompileAndTestOk()
     {
         var runSpec = PythonRunSpec(TestCodeOk);
-        var rr = Handler.CompileAndTest(runSpec).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -106,7 +112,7 @@ if __name__ == ""__main__"":
     public void TestCompileAndTestFail()
     {
         var runSpec = PythonRunSpec(TestCodeFail);
-        var rr = Handler.CompileAndTest(runSpec).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
