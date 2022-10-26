@@ -4,8 +4,14 @@ namespace CompileServer.Workers;
 
 public static class DotNetTester {
     private static void LoadIfNotInTemp(string file) {
-        var binPath = @"C:\GitHub\ILE\CompileServerTest\bin\Debug\net6.0\";
-        if (!File.Exists($"{(string?)Path.GetTempPath()}{file}")) {
+        var home = AppDomain.CurrentDomain.BaseDirectory;
+        var binPath = @$".\{home}\TestPlatForm\";
+
+        if (!Directory.Exists(binPath)) {
+            binPath = @$"..\..\..\..\CompileServer\TestPlatForm\";
+        }
+
+        if (!File.Exists($"{Path.GetTempPath()}{file}")) {
             File.Copy($"{binPath}{file}", $"{Path.GetTempPath()}{file}");
         }
     }

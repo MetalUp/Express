@@ -4,7 +4,6 @@ using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
-
 [TestClass]
 public class CSharpCompilerTest {
     private const string SimpleCode = "var a = 1;System.Console.Write(a);";
@@ -42,8 +41,6 @@ public class CSharpCompilerTest {
                 Assert.IsTrue(false);
             }
         }";
-
-
 
     [TestMethod]
     public void TestVersion() {
@@ -88,31 +85,27 @@ public class CSharpCompilerTest {
         rr.AssertRunResult(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
     }
 
-    //[TestMethod]
-    //[Ignore]
-    //public void TestCompileAndTestOk()
-    //{
-    //    var runSpec = CsharpRunSpec(TestCodeOk);
-    //    var rr = Handler.CompileAndTest(runSpec).Result.Value;
-    //    Assert.IsNotNull(rr);
-    //    Assert.AreEqual(Outcome.Ok, rr.outcome);
-    //    Assert.AreEqual("", rr.cmpinfo);
-    //    Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
-    //    Assert.AreEqual("", rr.stderr);
-    //    Assert.AreEqual("", rr.run_id);
-    //}
+    [TestMethod]
+    public void TestCompileAndTestOk() {
+        var runSpec = CsharpRunSpec(TestCodeOk);
+        var rr = Handler.CompileAndTest(runSpec).Result.Value;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
+        Assert.AreEqual("", rr.stderr);
+        Assert.AreEqual("", rr.run_id);
+    }
 
-    //[TestMethod]
-    //[Ignore]
-    //public void TestCompileAndTestFail()
-    //{
-    //    var runSpec = CsharpRunSpec(TestCodeFail);
-    //    var rr = Handler.CompileAndTest(runSpec).Result.Value;
-    //    Assert.IsNotNull(rr);
-    //    Assert.AreEqual(Outcome.Ok, rr.outcome);
-    //    Assert.AreEqual("", rr.cmpinfo);
-    //    Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
-    //    Assert.AreEqual("", rr.stderr);
-    //    Assert.AreEqual("", rr.run_id);
-    //}
+    [TestMethod]
+    public void TestCompileAndTestFail() {
+        var runSpec = CsharpRunSpec(TestCodeFail);
+        var rr = Handler.CompileAndTest(runSpec).Result.Value;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
+        Assert.AreEqual("", rr.stderr);
+        Assert.AreEqual("", rr.run_id);
+    }
 }
