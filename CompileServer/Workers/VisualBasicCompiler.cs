@@ -16,19 +16,26 @@ public static class VisualBasicCompiler {
 
     private static readonly MetadataReference[] References = DotNetCompiler.DotNetReferences.Union(VisualBasicReferences).ToArray();
 
+    private static readonly MetadataReference[] TestReferences = References.Union(DotNetCompiler.TestReferences).ToArray();
+
     private static string GetVersion() => Options.LanguageVersion.ToString().Replace("VisualBasic", "");
 
     public static string[] GetNameAndVersion() => new[] { "vb", GetVersion() };
 
-    public static (RunResult, byte[]) Compile(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateCode);
+    public static (RunResult, byte[]) Compile(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(References, true));
 
-    private static VisualBasicCompilation GenerateCode(string sourceCode) {
+    public static (RunResult, byte[]) CompileForTest(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(TestReferences, false));
+
+    private static Func<string, VisualBasicCompilation> GenerateGenerateCode(MetadataReference[] references, bool console) =>
+        sourceCode => GenerateCode(sourceCode, references, console);
+
+    private static VisualBasicCompilation GenerateCode(string sourceCode, MetadataReference[] references, bool console) {
         var parsedSyntaxTree = SyntaxFactory.ParseSyntaxTree(SourceText.From(sourceCode), Options);
 
-        return VisualBasicCompilation.Create("compiled.dll",
+        return VisualBasicCompilation.Create("compiled",
                                              new[] { parsedSyntaxTree },
-                                             References,
-                                             new VisualBasicCompilationOptions(OutputKind.ConsoleApplication,
+                                             references,
+                                             new VisualBasicCompilationOptions(console ? OutputKind.ConsoleApplication : OutputKind.DynamicallyLinkedLibrary,
                                                                                optimizationLevel: OptimizationLevel.Release,
                                                                                assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default));
     }
