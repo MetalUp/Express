@@ -60,6 +60,9 @@ def test_function(function_name, expected, actual, args):
         print(fail + f"{function_name}({arg_string(args)}) Expected: {display(expected)}  Actual: {display(actual)}");
         raise TestFailure
 
+def fail_message(function_name, expected, actual, args):
+    return f" Calling {function_name}({arg_string(args)})  Expected: {display(expected)}  Actual: {display(actual)}"
+
 def assert_true(function_name, args, actual, message) :
     if actual is not True :
         print(fail + f"{function_name}({arg_string(args)}) {message}")
