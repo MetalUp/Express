@@ -7,11 +7,67 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestPlatform\Microsoft.TestPlatform.AdapterUtilities.dll" />
+    <None Remove="TestPlatform\Microsoft.TestPlatform.CommunicationUtilities.dll" />
     <None Remove="TestPlatform\Microsoft.TestPlatform.CoreUtilities.dll" />
+    <None Remove="TestPlatform\Microsoft.TestPlatform.CrossPlatEngine.dll" />
+    <None Remove="TestPlatform\Microsoft.TestPlatform.PlatformAbstractions.dll" />
+    <None Remove="TestPlatform\Microsoft.VisualStudio.TestPlatform.Common.dll" />
+    <None Remove="TestPlatform\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" />
+    <None Remove="TestPlatform\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll" />
+    <None Remove="TestPlatform\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" />
+    <None Remove="TestPlatform\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll" />
+    <None Remove="TestPlatform\Microsoft.VisualStudio.TestPlatform.TestFramework.dll" />
+    <None Remove="TestPlatform\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll" />
+    <None Remove="TestPlatform\Newtonsoft.Json.dll" />
+    <None Remove="TestPlatform\NuGet.Frameworks.dll" />
+    <None Remove="TestPlatform\testhost.dll" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="TestPlatform\Microsoft.TestPlatform.AdapterUtilities.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.TestPlatform.CommunicationUtilities.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestPlatform\Microsoft.TestPlatform.CoreUtilities.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.TestPlatform.CrossPlatEngine.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.TestPlatform.PlatformAbstractions.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.VisualStudio.TestPlatform.Common.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.VisualStudio.TestPlatform.TestFramework.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\NuGet.Frameworks.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestPlatform\testhost.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

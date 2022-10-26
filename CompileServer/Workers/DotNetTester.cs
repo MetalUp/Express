@@ -4,10 +4,10 @@ namespace CompileServer.Workers;
 
 public static class DotNetTester {
     private static void LoadIfNotInTemp(string file) {
-        var home = AppDomain.CurrentDomain.BaseDirectory;
-        var binPath = @$".\{home}\TestPlatForm\";
+        var binPath = @$"D:\home\site\wwwroot\TestPlatform\";
 
         if (!Directory.Exists(binPath)) {
+            // for tests
             binPath = @$"..\..\..\..\CompileServerTest\bin\Debug\net6.0\";
         }
 
@@ -31,21 +31,21 @@ public static class DotNetTester {
 
             File.WriteAllBytes(file, compiledAssembly);
 
-            LoadIfNotInTemp("testhost.dll");
-            LoadIfNotInTemp("Microsoft.TestPlatform.CoreUtilities.dll");
-            LoadIfNotInTemp("Microsoft.TestPlatform.PlatformAbstractions.dll");
-            LoadIfNotInTemp("Microsoft.TestPlatform.CrossPlatEngine.dll");
+            LoadIfNotInTemp("Microsoft.TestPlatform.AdapterUtilities.dll");
             LoadIfNotInTemp("Microsoft.TestPlatform.CommunicationUtilities.dll");
-            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.ObjectModel.dll");
+            LoadIfNotInTemp("Microsoft.TestPlatform.CoreUtilities.dll");
+            LoadIfNotInTemp("Microsoft.TestPlatform.CrossPlatEngine.dll");
+            LoadIfNotInTemp("Microsoft.TestPlatform.PlatformAbstractions.dll");
             LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.Common.dll");
-            LoadIfNotInTemp("Newtonsoft.Json.dll");
-            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.TestFramework.dll");
             LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll");
             LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll");
             LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll");
-            LoadIfNotInTemp("Microsoft.TestPlatform.AdapterUtilities.dll");
+            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.ObjectModel.dll");
+            LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.TestFramework.dll");
             LoadIfNotInTemp("Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll");
+            LoadIfNotInTemp("Newtonsoft.Json.dll");
             LoadIfNotInTemp("NuGet.Frameworks.dll");
+            LoadIfNotInTemp("testhost.dll");
 
             if (!File.Exists($"{Path.GetTempPath()}compiled.runtimeconfig.json")) {
                 var rtg = @"{
