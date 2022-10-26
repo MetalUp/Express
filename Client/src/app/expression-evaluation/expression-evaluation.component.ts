@@ -88,7 +88,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
       if (!this.validationFail) {
         this.submitting = true;
         const code = wrapExpression(this.selectedLanguage, this.expression);
-        this.compileServer.submit_run(code).pipe(first()).subscribe(rr => {
+        this.compileServer.submit_run(code, true).pipe(first()).subscribe(rr => {
           this.result = rr;
           this.pushExpression();
           this.submitting = false;

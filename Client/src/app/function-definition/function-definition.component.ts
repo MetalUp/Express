@@ -76,7 +76,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     if (!this.validationFail) {
       this.submitting = true;
       const code = wrapFunctions(this.compileServer.selectedLanguage, this.functionDefinitions);
-      this.compileServer.submit_run(code).pipe(first()).subscribe(rr => {
+      this.compileServer.submit_run(code, true).pipe(first()).subscribe(rr => {
         this.result = rr;
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {

@@ -86,7 +86,7 @@ export class TestingComponent implements OnInit, OnDestroy {
   onRunTests() {
     this.submitting = true;
     const code = wrapTests(this.compileServer.selectedLanguage, this.tests);
-    this.compileServer.submit_run(code).pipe(first()).subscribe(rr => {
+    this.compileServer.submit_run(code, false).pipe(first()).subscribe(rr => {
       this.handleResult(rr);
       this.submitting = false;
     });

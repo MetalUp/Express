@@ -78,8 +78,12 @@ export class CompileServerService {
 
   // expose to make testing easier 
 
-  get action() {
+  get runAction() {
     return this.compileServer!.actionMember("Runs") as InvokableActionMember;
+  }
+
+  get testAction() {
+    return this.compileServer!.actionMember("Tests") as InvokableActionMember;
   }
 
   params(code : string) {
@@ -90,8 +94,10 @@ export class CompileServerService {
     return {} as Dictionary<Object>;
   }
 
-  submit_run(code: string) {
-    return from(this.repLoader.invoke(this.action, this.params(code), this.urlParams)
+  submit_run(code: string, run: boolean) {
+    const action = run ? this.runAction : this.testAction;
+
+    return from(this.repLoader.invoke(action, this.params(code), this.urlParams)
       .then(ar => this.ToRunResult(ar)))
       .pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
   }
