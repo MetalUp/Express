@@ -52,6 +52,16 @@ if __name__ == ""__main__"":
     }
 
     [TestMethod]
+    public void TestVersionInParallel() {
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => PythonCompiler.GetNameAndVersion()).ToArray();
+
+        foreach (var csv in csvs) {
+            Assert.AreEqual("python", csv[0]);
+            Assert.IsTrue(csv[1].StartsWith("3.10."));
+        }
+    }
+
+    [TestMethod]
     public void TestCompileOk() {
         var runSpec = PythonRunSpec(SimpleCode);
         var (rr, file) = PythonCompiler.Compile(runSpec);

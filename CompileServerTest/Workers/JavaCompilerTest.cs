@@ -61,6 +61,17 @@ public class JavaCompilerTest {
     }
 
     [TestMethod]
+    public void TestVersionInParallel() {
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => JavaCompiler.GetNameAndVersion()).ToArray();
+
+        foreach (var csv in csvs) {
+            Assert.AreEqual("java", csv[0]);
+            Assert.AreEqual(JavaVersion, csv[1]);
+        }
+    }
+
+
+    [TestMethod]
     public void TestCompileOk() {
         var runSpec = JavaRunSpec(SimpleCode);
         var (rr, file) = JavaCompiler.Compile(runSpec);

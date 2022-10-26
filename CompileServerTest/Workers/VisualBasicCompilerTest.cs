@@ -69,6 +69,16 @@ public class VisualBasicCompilerTest {
     }
 
     [TestMethod]
+    public void TestVersionInParallel() {
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => VisualBasicCompiler.GetNameAndVersion()).ToArray();
+
+        foreach (var csv in csvs) {
+            Assert.AreEqual("vb", csv[0]);
+            Assert.AreEqual("16_9", csv[1]);
+        }
+    }
+
+    [TestMethod]
     public void TestCompileOk() {
         var runSpec = VisualBasicRunSpec(SimpleCode);
         var (rr, code) = VisualBasicCompiler.Compile(runSpec);

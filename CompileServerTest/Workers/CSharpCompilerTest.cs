@@ -55,6 +55,16 @@ public class CSharpCompilerTest {
     }
 
     [TestMethod]
+    public void TestVersionInParallel() {
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => CSharpCompiler.GetNameAndVersion()).ToArray();
+
+        foreach (var csv in csvs) {
+            Assert.AreEqual("csharp", csv[0]);
+            Assert.AreEqual("10", csv[1]);
+        }
+    }
+
+    [TestMethod]
     public void TestCompileOk() {
         var runSpec = CsharpRunSpec(SimpleCode);
         var (rr, code) = CSharpCompiler.Compile(runSpec);
