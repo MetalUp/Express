@@ -91,14 +91,16 @@ export function wrapVBTests(tests : string) {
                 Throw New TestFailure()
             End If    
         End Sub
+
+        Function FailMessage(functionName As String, ByVal expected As Object, ByVal actual As Object, ParamArray args As Object()) As String
+            Return $" Calling {functionName}({ArgString(args)}) Expected: {Display(expected)} Actual: {actual}"
+        End Function
   
-        Sub AssertTrue(functionName As String, args As String(), actual As Boolean, message As String)
-    
+        Sub AssertTrue(functionName As String, args As String(), actual As Boolean, message As String)    
             If (Not actual) Then
                 Console.WriteLine(fail + $"{functionName}({ArgString(args)}) {message}")
                 Throw New TestFailure()
-            End If
-    
+            End If  
         End Sub
     
         Dim _allTestsPassed = "All tests passed."
