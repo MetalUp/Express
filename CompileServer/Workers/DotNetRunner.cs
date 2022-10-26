@@ -4,7 +4,7 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class DotNetRunner {
-    public static RunResult Execute(byte[] compiledAssembly, RunResult runResult) {
+    public static RunResult Execute(byte[] compiledAssembly, RunResult runResult, ILogger logger) {
         var assemblyLoadContextWeakRef = LoadAndExecute(compiledAssembly, runResult);
 
         Task.Run(() => {
@@ -13,7 +13,9 @@ public static class DotNetRunner {
                 GC.WaitForPendingFinalizers();
             }
 
-            Console.WriteLine(assemblyLoadContextWeakRef.IsAlive ? "Unloading failed!" : "Unloading success!");
+            if (assemblyLoadContextWeakRef.IsAlive) {
+                logger.LogWarning("Unloading failed!");
+            }
         });
         return runResult;
     }
@@ -26,6 +28,12 @@ public static class DotNetRunner {
         var assembly = assemblyLoadContext.LoadFromStream(asm);
 
         var entry = assembly.EntryPoint;
+
+        if (entry is null) {
+            runResult.outcome = Outcome.InternalError;
+            runResult.stderr = "No entry point on compiled module";
+            return new WeakReference(assemblyLoadContext);
+        }
 
         var consoleOut = new StringWriter();
         var consoleErr = new StringWriter();
