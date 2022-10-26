@@ -51,9 +51,9 @@ public static class Compile {
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
-    public static (RunResult, IContext) Runs(string languageID, string code, IContext context) {
+    private static (RunResult, IContext) Execute(string languageID, string code, string url, IContext context) {
         using var content = JsonContent.Create(RunSpec.FromParams(languageID, code), new MediaTypeHeaderValue("application/json"));
-        var request = CreateMessage(context, HttpMethod.Post, $"{compileServer}/runs", content);
+        var request = CreateMessage(context, HttpMethod.Post, url, content);
 
         using var response = Client.SendAsync(request).Result;
 
@@ -64,6 +64,10 @@ public static class Compile {
 
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
+
+    public static (RunResult, IContext) Runs(string languageID, string code, IContext context) => Execute(languageID, code, $"{compileServer}/runs", context);
+
+    public static (RunResult, IContext) Tests(string languageID, string code, IContext context) => Execute(languageID, code, $"{compileServer}/tests", context);
 
     private static T ReadAs<T>(HttpResponseMessage response) {
         using var sr = new StreamReader(response.Content.ReadAsStream());

@@ -8,9 +8,9 @@ namespace CompileServer.Controllers;
 
 [Route("restapi/[controller]")]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class TestController : CompileServerController {
-    public TestController(ILogger<RunsController> logger, IConfiguration configuration) : base(logger, configuration) { }
+public class TestsController : CompileServerController {
+    public TestsController(ILogger<RunsController> logger, IConfiguration configuration) : base(logger, configuration) { }
 
     [HttpPost]
-    public async Task<ActionResult<RunResult>> Run([FromBody] RunSpecWrapper runSpec) => await Handler.CompileAndTest(runSpec.run_spec);
+    public async Task<ActionResult<RunResult>> Test([FromBody] RunSpecWrapper runSpec) => await Handler.CompileAndTest(runSpec.run_spec);
 }
