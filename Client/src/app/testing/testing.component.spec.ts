@@ -129,7 +129,7 @@ describe('TestingComponent', () => {
 
     component.onRunTests();
 
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, false);
 
     expect(component.currentResultMessage).toEqual('All tests passed.');
     expect(component.message()).toEqual('All tests passed.');
@@ -145,7 +145,7 @@ describe('TestingComponent', () => {
 
     component.onRunTests();
 
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, false);
 
     expect(component.currentResultMessage).toEqual('test failed');
     expect(component.message()).toEqual('test failed');
@@ -162,7 +162,7 @@ describe('TestingComponent', () => {
 
     component.onRunTests();
 
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, false);
 
     expect(component.currentResultMessage).toEqual('run error');
     expect(component.message()).toEqual('run error');
@@ -179,7 +179,7 @@ describe('TestingComponent', () => {
 
     component.onRunTests();
 
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, false);
 
     expect(component.currentResultMessage).toEqual("The Test system cannot find the function(s) it expects to see in your code. Check the function signature(s) carefully. If you can't see why a function signature is wrong, use a Hint. " + 'compile error');
     expect(component.message()).toEqual("The Test system cannot find the function(s) it expects to see in your code. Check the function signature(s) carefully. If you can't see why a function signature is wrong, use a Hint. " + 'compile error');
@@ -195,7 +195,7 @@ describe('TestingComponent', () => {
 
     component.onRunTests();
 
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, false);
 
     expect(component.currentResultMessage).toEqual('Unknown or pending outcome');
     expect(component.message()).toEqual('Unknown or pending outcome');

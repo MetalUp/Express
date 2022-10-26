@@ -88,7 +88,7 @@ describe('CompileServerService', () => {
     const promise = Promise.resolve(mockAR);
     repLoaderSpy.invoke.and.returnValue(promise);
     service.selectedLanguage = 'stub language';
-    service.submit_run("stub code").subscribe(o => expect(o).toEqual(testRunResult));
+    service.submit_run("stub code", true).subscribe(o => expect(o).toEqual(testRunResult));
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("stub code"), service.urlParams);
   }));
@@ -98,7 +98,7 @@ describe('CompileServerService', () => {
     repLoaderSpy.invoke.and.returnValue(promise);
     service.selectedLanguage = 'stub language';
     service.setFunctionDefinitions('test definitions ');
-    service.submit_run(`${UserDefinedFunctionPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+    service.submit_run(`${UserDefinedFunctionPlaceholder}stub code`, false).subscribe(o => expect(o).toEqual(testRunResult));
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("test definitions stub code"), service.urlParams);
   }));
@@ -108,7 +108,7 @@ describe('CompileServerService', () => {
     repLoaderSpy.invoke.and.returnValue(promise);
     service.selectedLanguage = 'stub language';
     service.clearFunctionDefinitions();
-    service.submit_run(`${UserDefinedFunctionPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+    service.submit_run(`${UserDefinedFunctionPlaceholder}stub code`, false).subscribe(o => expect(o).toEqual(testRunResult));
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("stub code"), service.urlParams);
   }));
@@ -124,7 +124,7 @@ describe('CompileServerService', () => {
     service.selectedLanguage = 'stub language';
     service.setFunctionDefinitions('test definitions ');
     tick();
-    service.submit_run(`${UserDefinedFunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+    service.submit_run(`${UserDefinedFunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`, false).subscribe(o => expect(o).toEqual(testRunResult));
 
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("test definitions additional task codestub code"), service.urlParams);
@@ -136,7 +136,7 @@ describe('CompileServerService', () => {
     repLoaderSpy.invoke.and.returnValue(promise);
     service.selectedLanguage = 'stub language';
     service.clearFunctionDefinitions();
-    service.submit_run(`${UserDefinedFunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`).subscribe(o => expect(o).toEqual(testRunResult));
+    service.submit_run(`${UserDefinedFunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`, false).subscribe(o => expect(o).toEqual(testRunResult));
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("stub code"), service.urlParams);
   }));
@@ -148,7 +148,7 @@ describe('CompileServerService', () => {
 
     service.selectedLanguage = 'stub language';
 
-    service.submit_run("stub code").subscribe(o => expect(o).toEqual(unknownError));
+    service.submit_run("stub code", true).subscribe(o => expect(o).toEqual(unknownError));
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("stub code"), service.urlParams);
   }));

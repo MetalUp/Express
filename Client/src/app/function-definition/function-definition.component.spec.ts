@@ -90,7 +90,7 @@ describe('FunctionDefinitionComponent', () => {
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
 
     expect(component.compiledOK).toBe(true);
     expect(component.currentStatus).toBe('Compiled OK');
@@ -107,7 +107,7 @@ describe('FunctionDefinitionComponent', () => {
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('compiler error');
@@ -124,7 +124,7 @@ describe('FunctionDefinitionComponent', () => {
     const wrapped = wrapFunctions('csharp', component.functionDefinitions);
 
     component.onSubmit();
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('run error');
@@ -211,7 +211,7 @@ describe('FunctionDefinitionComponent', () => {
 
     component.onSubmit();
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
 
     expect(component.compiledOK).toBe(true);
     expect(component.currentStatus).toBe('Compiled OK');

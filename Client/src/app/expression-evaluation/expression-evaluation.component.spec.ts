@@ -153,7 +153,7 @@ describe('ExpressionEvaluationComponent', () => {
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
@@ -169,7 +169,7 @@ describe('ExpressionEvaluationComponent', () => {
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
@@ -185,7 +185,7 @@ describe('ExpressionEvaluationComponent', () => {
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
@@ -200,7 +200,7 @@ describe('ExpressionEvaluationComponent', () => {
     const wrapped = wrapExpression(component.selectedLanguage, component.expression);
 
     component.onEnter();
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
@@ -228,7 +228,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     component.onEnter();
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
-    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped);
+    expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
