@@ -79,7 +79,7 @@ export function wrapVBTests(tests : string) {
     
     Module Program
     
-        Dim fail = "Test failed calling "
+        Dim fail = "!!!Test failed calling "
     
         Function ArgString(ParamArray arguments As Object()) As String
             Return arguments.Aggregate("", Function(s, a) s + Display(a) + ", ").TrimEnd(" "c, ","c)
@@ -87,13 +87,13 @@ export function wrapVBTests(tests : string) {
     
         Sub TestFunction(functionName As String, expected As Object, actual As Object, ParamArray args As Object())   
             If (Not Display(actual).Equals(Display(expected))) Then
-                Console.WriteLine(fail + $"{functionName}({ArgString(args)}) Expected: {Display(expected)}  Actual: {Display(actual)}")
+                Console.WriteLine(fail + $"{functionName}({ArgString(args)}) Expected: {Display(expected)}  Actual: {Display(actual)}~~~")
                 Throw New TestFailure()
             End If    
         End Sub
 
         Function FailMessage(functionName As String, ByVal expected As Object, ByVal actual As Object, ParamArray args As Object()) As String
-            Return $" Calling {functionName}({ArgString(args)}) Expected: {Display(expected)} Actual: {actual}"
+            Return $"!!!Calling {functionName}({ArgString(args)}) Expected: {Display(expected)} Actual: {actual}~~~"
         End Function
   
         Sub AssertTrue(functionName As String, args As String(), actual As Boolean, message As String)    
