@@ -59,7 +59,7 @@ namespace Model.Types
 
         #region Hidden Functions
         [Hidden]
-        public string ReadyMadeFunctions => HiddenFunctionsFile is null ? null : Encoding.Default.GetString(HiddenFunctionsFile.Content);
+        public string ReadyMadeFunctions => HiddenFunctionsFile?.ContentsAsString();
 
         [Hidden]
         public int? HiddenFunctionsFileId { get; init; }
@@ -69,10 +69,8 @@ namespace Model.Types
         #endregion
 
         #region Tests
-        [HideInClient]
-        public string Tests => TestsFile is null ? null : Encoding.Default.GetString(TestsFile.Content);
-
-        //Encoding.Default.GetString(WrapperFile.Content);
+        [Hidden]
+        public string Tests => TestsFile?.ContentsAsString();
 
         [Hidden]
         public int? TestsFileId { get; init; }

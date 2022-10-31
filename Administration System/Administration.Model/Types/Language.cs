@@ -42,8 +42,8 @@ public class Language
     public string MIMEType { get; init; }  //Most will be text/plain
 
     #region Wrapper
-    [HideInClient]
-    public string Wrapper => Encoding.Default.GetString(WrapperFile.Content);
+    [Hidden]
+    public string Wrapper => WrapperFile?.ContentsAsString();
 
     [Hidden]
     public int? WrapperFileId { get; init; }
@@ -55,8 +55,8 @@ public class Language
 
     #region Helpers
 
-    [HideInClient]
-    public string Helpers => Encoding.Default.GetString(HelpersFile.Content);
+    [Hidden]
+    public string Helpers => HelpersFile?.ContentsAsString();
 
     [Hidden]
     public int? HelpersFileId { get; init; }
@@ -68,8 +68,8 @@ public class Language
 
     #region RegExRules
 
-    [HideInClient]
-    public string RegExRules => Encoding.Default.GetString(RegExRulesFile.Content);
+    [Hidden]
+    public string RegExRules => RegExRulesFile?.ContentsAsString();
 
     [Hidden]
     public int? RegExRulesFileId { get; init; }

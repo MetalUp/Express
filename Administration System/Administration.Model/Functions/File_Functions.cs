@@ -14,6 +14,10 @@ namespace Model.Functions
         public static string Default1EditContentAsString(this File file) =>
             Encoding.Default.GetString(file.Content);
 
+
+        internal static string ContentsAsString(this File file) =>
+            Encoding.Default.GetString(file.Content);
+
         #region Editing
         [Edit]
         public static IContext EditLanguage(
