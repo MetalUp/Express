@@ -100,8 +100,8 @@ export class TaskService {
     return toObj as T;
   }
 
-  private convertToTask(rep: DomainObjectRepresentation) {
-    return this.convertTo<ITask>(new Task(), rep);
+  private convertToTask(rep: DomainObjectRepresentation, id: number) {
+    return this.convertTo<ITask>(new Task(id), rep);
   }
 
   private convertToHint(rep: DomainObjectRepresentation) {
@@ -114,7 +114,7 @@ export class TaskService {
 
     this.repLoader.populate<Ro.DomainObjectRepresentation>(object, true)
       .then((obj: Ro.DomainObjectRepresentation) => {
-        const task = this.convertToTask(obj);
+        const task = this.convertToTask(obj, parseInt(taskId));
         this.currentTaskAsSubject.next(task);
       })
       .catch((e: ErrorWrapper) => {

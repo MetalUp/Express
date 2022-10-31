@@ -57,6 +57,7 @@ export class TestingComponent implements OnInit, OnDestroy {
   result: RunResult = EmptyRunResult;
   testedOk = false;
   currentResultMessage = '';
+  taskId = 0;
 
   private handleResult(result: RunResult) {
     this.result = result;
@@ -85,8 +86,9 @@ export class TestingComponent implements OnInit, OnDestroy {
 
   onRunTests() {
     this.submitting = true;
-    const code = wrapTests(this.compileServer.selectedLanguage, this.tests);
-    this.compileServer.submit_run(code, false).pipe(first()).subscribe(rr => {
+    // const code = wrapTests(this.compileServer.selectedLanguage, this.tests);
+    // this.compileServer.submit_run(code, false).pipe(first()).subscribe(rr => {
+    this.compileServer.runTests(this.taskId).pipe(first()).subscribe(rr => {
       this.handleResult(rr);
       this.submitting = false;
     });
@@ -96,6 +98,7 @@ export class TestingComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
+      this.taskId = task.Id;
       if (task.Tests) {
         this.taskService.getFile(task.Tests)
         .then(h => this.tests = h)

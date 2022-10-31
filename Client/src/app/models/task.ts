@@ -2,6 +2,7 @@ import { IHint } from "./hint";
 import { ICodeRulesBlock, IMessages } from "./rules";
 
 export interface ITask {
+    Id: number;
     Language: string;
     Title: string;
     Description: [string, string];
@@ -20,6 +21,10 @@ export interface ITask {
 }
 
 export class Task implements ITask {
+  
+    constructor(public Id: number) {
+    }
+
     private language = "";
     
     get Language() {
@@ -46,4 +51,4 @@ export class Task implements ITask {
     NextTaskClearsFunctions?: boolean | undefined;
 }
 
-export const EmptyTask = new Task();
+export const EmptyTask = new Task(0);
