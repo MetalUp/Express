@@ -35,7 +35,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   private canPaste = false;
 
-  private taskId = 0;
+  taskId = 0;
 
   nextTaskClears = true;
 
@@ -77,8 +77,6 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     this.validationFail = this.rulesService.checkRules(this.compileServer.selectedLanguage, Applicability.functions, this.functionDefinitions);
     if (!this.validationFail) {
       this.submitting = true;
-      //const code = wrapFunctions(this.compileServer.selectedLanguage, this.functionDefinitions);
-      //this.compileServer.submit_run(code, true).pipe(first()).subscribe(rr => {
       this.compileServer.submitCode(this.taskId, this.functionDefinitions).pipe(first()).subscribe(rr => {
         this.result = rr;
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
