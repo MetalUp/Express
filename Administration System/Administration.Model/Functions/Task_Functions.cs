@@ -118,25 +118,25 @@ namespace Model.Functions
 
         #region Hidden Functions
         [MemberOrder(30)]
-        public static IContext AddHiddenFunctionsFromFile(
+        public static IContext AddHiddenCodeFromFile(
             this Task task,
             FileAttachment file,
             IContext context) =>
-                SaveHiddenFunctionsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+                SaveHiddenCodeAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
 
-        public static string DisableAddHiddenFunctionsFromFile(this Task task) =>
-            task.HiddenFunctionsFileId is null ? null : "Either go to Hidden Functions file and reload/edit it, or Clear Hidden Functions to create a new file here.";
+        public static string DisableAddHiddenCodeFromFile(this Task task) =>
+            task.HiddenCodeFileId is null ? null : "Either go to Hidden Code file and reload/edit it, or Clear Hidden Code to create a new file here.";
 
         [MemberOrder(31)]
-        public static IContext AddHiddenFunctionsAsString(
+        public static IContext AddHiddenCodeAsString(
             this Task task,
             [MultiLine(10)] string content,
             IContext context) =>
-                SaveHiddenFunctionsAsFile(task, $"HiddenFunctions{task.Project.Language.FileExtension}", Encoding.ASCII.GetBytes(content), context);
+                SaveHiddenCodeAsFile(task, $"HiddenCode{task.Project.Language.FileExtension}", Encoding.ASCII.GetBytes(content), context);
 
-        public static string DisableAddHiddenFunctionsAsString(this Task task) => DisableAddHiddenFunctionsFromFile(task);
+        public static string DisableAddHiddenCodeAsString(this Task task) => DisableAddHiddenCodeFromFile(task);
 
-        private static IContext SaveHiddenFunctionsAsFile(
+        private static IContext SaveHiddenCodeAsFile(
             this Task task,
             string name,
             byte[] content,
@@ -149,25 +149,25 @@ namespace Model.Functions
                         .WithUpdated(task,
                             new(task)
                             {
-                                HiddenFunctionsFileId = f.Id,
-                                HiddenFunctionsFile = f,
+                                HiddenCodeFileId = f.Id,
+                                HiddenCodeFile = f,
                             });
                 }
 
         [Edit]
-        public static IContext EditHiddenFunctions(
+        public static IContext EditHiddenCode(
             this Task task,
             File hiddenFunctionsfile,
             IContext context) =>
-                context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = hiddenFunctionsfile.Id, HiddenFunctionsFile = hiddenFunctionsfile });
+                context.WithUpdated(task, new Task(task) { HiddenCodeFileId = hiddenFunctionsfile.Id, HiddenCodeFile = hiddenFunctionsfile });
 
         [MemberOrder(32)]
-        public static IContext ClearHiddenFunctions(
+        public static IContext ClearHiddenCode(
             this Task task,
             IContext context) =>
-                context.WithUpdated(task, new Task(task) { HiddenFunctionsFileId = null, HiddenFunctionsFile = null });
+                context.WithUpdated(task, new Task(task) { HiddenCodeFileId = null, HiddenCodeFile = null });
 
-        public static string DisableClearHiddenFunctions(this Task task) => task.HiddenFunctionsFileId is null ? "No Hidden Functions specified" : null;
+        public static string DisableClearHiddenCode(this Task task) => task.HiddenCodeFileId is null ? "No Hidden Functions specified" : null;
         #endregion
 
         #region Tests

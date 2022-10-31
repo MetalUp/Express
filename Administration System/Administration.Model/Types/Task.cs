@@ -15,8 +15,8 @@ namespace Model.Types
             MaxMarks = cloneFrom.MaxMarks;
             DescriptionFileId = cloneFrom.DescriptionFileId;
             DescriptionFile = cloneFrom.DescriptionFile;
-            HiddenFunctionsFileId = cloneFrom.HiddenFunctionsFileId;
-            HiddenFunctionsFile = cloneFrom.HiddenFunctionsFile;
+            HiddenCodeFileId = cloneFrom.HiddenCodeFileId;
+            HiddenCodeFile = cloneFrom.HiddenCodeFile;
             TestsFileId = cloneFrom.TestsFileId;
             TestsFile = cloneFrom.TestsFile;
             PreviousTaskId = cloneFrom.PreviousTaskId;
@@ -49,7 +49,7 @@ namespace Model.Types
 
         #region Description
         [HideInClient]
-        public FileAttachment Description => DescriptionFile is null ? null : DescriptionFile.Details;
+        public FileAttachment Description => DescriptionFile?.Details;
         [Hidden]
         public int? DescriptionFileId { get; init; }
 
@@ -59,13 +59,13 @@ namespace Model.Types
 
         #region Hidden Functions
         [Hidden]
-        public string ReadyMadeFunctions => HiddenFunctionsFile?.ContentsAsString();
+        public string ReadyMadeFunctions => HiddenCodeFile?.ContentsAsString();
 
         [Hidden]
-        public int? HiddenFunctionsFileId { get; init; }
+        public int? HiddenCodeFileId { get; init; }
 
         [MemberOrder(80)]
-        public virtual File HiddenFunctionsFile { get; init; }
+        public virtual File HiddenCodeFile { get; init; }
         #endregion
 
         #region Tests
@@ -108,7 +108,7 @@ namespace Model.Types
         public bool PasteExpression => Project.PasteExpression;
 
         [HideInClient]
-        public bool PasteFunctions => Project.PasteFunctions;   
+        public bool PasteFunctions => Project.PasteFunctions;
 
         [Hidden]
         public int? PreviousTaskId { get; init; }

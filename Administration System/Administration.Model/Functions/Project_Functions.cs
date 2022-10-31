@@ -141,8 +141,8 @@ namespace Model.Functions
                 PreviousTask = previousTask,
                 NextTaskId = null,
                 NextTask = null,
-                HiddenFunctionsFileId = project.CommonHiddenCodeFileId,
-                HiddenFunctionsFile = project.CommonHiddenCodeFile,
+                HiddenCodeFileId = project.CommonHiddenCodeFileId,
+                HiddenCodeFile = project.CommonHiddenCodeFile,
                 TestsFileId = project.CommonTestsFileId,
                 TestsFile = project.CommonTestsFile,
                 Hints = new List<Hint>(copyFrom.Hints)
@@ -177,8 +177,8 @@ namespace Model.Functions
                 Name = title,
                 PreviousTaskId = previousTask is null ? null : previousTask.Id,
                 PreviousTask = previousTask,
-                HiddenFunctionsFileId = previousTask is null ? null : previousTask.HiddenFunctionsFileId,
-                HiddenFunctionsFile = previousTask is null ? null : previousTask.HiddenFunctionsFile,
+                HiddenCodeFileId = previousTask is null ? null : previousTask.HiddenCodeFileId,
+                HiddenCodeFile = previousTask is null ? null : previousTask.HiddenCodeFile,
                 TestsFileId = previousTask is null ? null : previousTask.TestsFileId,
                 TestsFile = previousTask is null ? null : previousTask.TestsFile,
             };
