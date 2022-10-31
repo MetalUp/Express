@@ -72,6 +72,9 @@ namespace Model.Types
         [Hidden]
         public string Tests => TestsFile?.ContentsAsString();
 
+        [HideInClient]
+        public bool HasTests => TestsFileId != null;
+
         [Hidden]
         public int? TestsFileId { get; init; }
 
