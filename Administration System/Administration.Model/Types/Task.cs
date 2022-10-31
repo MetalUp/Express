@@ -40,8 +40,8 @@ namespace Model.Types
         [HideInClient]
         public string Title => ToString();
 
-        [MemberOrder(40)]
-        public Language Language => Project.Language;
+        [HideInClient]
+        public string Language => Project.Language.AlphaName;
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(60)]
@@ -130,6 +130,6 @@ namespace Model.Types
 
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
-        public override string ToString() => $"{Name} {Language}";
+        public override string ToString() => $"{Name} {Project.Language.Name}";
     }
 }
