@@ -35,6 +35,8 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   private canPaste = false;
 
+  private taskId = 0;
+
   nextTaskClears = true;
 
   get skeletonUnchanged() {
@@ -75,8 +77,9 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     this.validationFail = this.rulesService.checkRules(this.compileServer.selectedLanguage, Applicability.functions, this.functionDefinitions);
     if (!this.validationFail) {
       this.submitting = true;
-      const code = wrapFunctions(this.compileServer.selectedLanguage, this.functionDefinitions);
-      this.compileServer.submit_run(code, true).pipe(first()).subscribe(rr => {
+      //const code = wrapFunctions(this.compileServer.selectedLanguage, this.functionDefinitions);
+      //this.compileServer.submit_run(code, true).pipe(first()).subscribe(rr => {
+      this.compileServer.submitCode(this.taskId, this.functionDefinitions).pipe(first()).subscribe(rr => {
         this.result = rr;
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {
@@ -103,7 +106,8 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     this.sub = this.taskService.currentTask.subscribe(t => {
       this.canPaste = !!t.PasteFunctions;
       this.skeleton = t.SkeletonCode || '';
-      
+      this.taskId = t.Id;
+
       if (this.nextTaskClears) {
         this.functionDefinitions = this.skeleton;
         this.modelChanged();
