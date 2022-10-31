@@ -86,6 +86,19 @@ export class CompileServerService {
     return this.compileServer!.actionMember("Tests") as InvokableActionMember;
   }
 
+  get evaluateExpressionAction() {
+    return this.compileServer!.actionMember("EvaluateExpression") as InvokableActionMember;
+  }
+
+  get submitCodeAction() {
+    return this.compileServer!.actionMember("SubmitCode") as InvokableActionMember;
+  }
+
+  get runTestsAction() {
+    return this.compileServer!.actionMember("RunTests") as InvokableActionMember;
+  }
+
+
   params(code : string) {
     return this.run_spec(code);
   }
@@ -100,5 +113,30 @@ export class CompileServerService {
     return from(this.repLoader.invoke(action, this.params(code), this.urlParams)
       .then(ar => this.ToRunResult(ar)))
       .pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
+  }
+
+  private submit(action: InvokableActionMember, params: Dictionary<Value>) {
+    return from(this.repLoader.invoke(action, params, this.urlParams)
+      .then(ar => this.ToRunResult(ar)))
+      .pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
+  }
+
+  evaluateExpression(taskId: number, expression: string) {
+    const action = this.evaluateExpressionAction;
+    var params = { "taskId": new Value(taskId),  "expression": new Value(expression), "code": new Value(this.userDefinedFunction) } as Dictionary<Value>;
+
+    return this.submit(action, params);
+  }
+
+  submitCode(taskId: number, code: string) {
+    const action = this.submitCodeAction;
+    var params = { "taskId": new Value(taskId), "code": new Value(code) } as Dictionary<Value>;
+    return this.submit(action, params);
+  }
+
+  runTests(taskId: number) {
+    const action = this.runTestsAction;
+    var params = { "taskId": new Value(taskId), "code": new Value(this.userDefinedFunction) } as Dictionary<Value>;
+    return this.submit(action, params);
   }
 }
