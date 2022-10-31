@@ -65,9 +65,41 @@ public static class Compile {
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
+  
+
     public static (RunResult, IContext) Runs(string languageID, string code, IContext context) => Execute(languageID, code, $"{compileServer}/runs", context);
 
     public static (RunResult, IContext) Tests(string languageID, string code, IContext context) => Execute(languageID, code, $"{compileServer}/tests", context);
+
+    // new placeholder functions 
+
+    private static (RunResult, IContext) Execute((string languageId, string code) wrapped, string url, IContext context) {
+        var (languageId, code) = wrapped;
+        using var content = JsonContent.Create(RunSpec.FromParams(languageId, code), new MediaTypeHeaderValue("application/json"));
+        var request = CreateMessage(context, HttpMethod.Post, url, content);
+
+        using var response = Client.SendAsync(request).Result;
+
+        if (response.IsSuccessStatusCode) {
+            var apiRunResult = ReadAs<ApiRunResult>(response);
+            return (apiRunResult?.ToRunResult(), context);
+        }
+
+        throw new HttpRequestException("compile server request failed", null, response.StatusCode);
+    }
+
+    private static (string, string) WrapCode(int taskId, string code, string expression, IContext context) {
+        var task = context.Instances<Task>().Single(t => t.Id == taskId);
+        var language = task.Language.ToString();
+        // todo
+        return (language, code);
+    }
+
+    public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, string code, IContext context) => Execute(WrapCode(taskId, code, expression, context), $"{compileServer}/runs", context);
+
+    public static (RunResult, IContext) SubmitCode(int taskId, string languageID, string code, IContext context) => Execute(WrapCode(taskId, code, "", context), $"{compileServer}/runs", context);
+
+    public static (RunResult, IContext) RunTests(int taskId, string languageID, string code, IContext context) => Execute(WrapCode(taskId, code, "", context), $"{compileServer}/tests", context);
 
     private static T ReadAs<T>(HttpResponseMessage response) {
         using var sr = new StreamReader(response.Content.ReadAsStream());
