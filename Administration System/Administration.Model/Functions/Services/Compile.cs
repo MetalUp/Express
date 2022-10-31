@@ -54,13 +54,13 @@ public static class Compile {
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
-    private static (string, string) WrapCode(int taskId, string code, string expression, bool includeTests, IContext context) {
+    private static (string, string) WrapCode(IContext context, int taskId, string code, bool includeTests, string expression = null) {
         var task = context.Instances<Task>().Single(t => t.Id == taskId);
         var language = task.Language;
         var testCode = includeTests ? task.Tests : "";
 
         var wrappedCode = task.Wrapper
-                                  .Replace("<Expression>", expression)
+                                  .Replace("<Expression>", expression ?? "\"\"")
                                   .Replace("<StudentCode>", code)
                                   .Replace("<HiddenCode>", task.ReadyMadeFunctions)
                                   .Replace("<Helpers>", task.Helpers)
@@ -69,11 +69,11 @@ public static class Compile {
         return (language, wrappedCode);
     }
 
-    public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, [Optionally] string code, IContext context) => Execute(WrapCode(taskId, code, expression, false, context), $"{compileServer}/runs", context);
+    public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, [Optionally] string code, IContext context) => Execute(WrapCode(context, taskId, code, false, expression), $"{compileServer}/runs", context);
 
-    public static (RunResult, IContext) SubmitCode(int taskId, string code, IContext context) => Execute(WrapCode(taskId, code, "", false, context), $"{compileServer}/compiles", context);
+    public static (RunResult, IContext) SubmitCode(int taskId, string code, IContext context) => Execute(WrapCode(context, taskId, code, false), $"{compileServer}/compiles", context);
 
-    public static (RunResult, IContext) RunTests(int taskId, string code, IContext context) => Execute(WrapCode(taskId, code, "", true, context), $"{compileServer}/tests", context);
+    public static (RunResult, IContext) RunTests(int taskId, string code, IContext context) => Execute(WrapCode(context, taskId, code, true), $"{compileServer}/tests", context);
 
     private static T ReadAs<T>(HttpResponseMessage response) {
         using var sr = new StreamReader(response.Content.ReadAsStream());
