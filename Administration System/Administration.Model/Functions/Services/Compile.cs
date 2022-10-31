@@ -57,17 +57,16 @@ public static class Compile {
     private static (string, string) WrapCode(int taskId, string code, string expression, bool includeTests, IContext context) {
         var task = context.Instances<Task>().Single(t => t.Id == taskId);
         var language = task.Language;
-        var alphaName = language.AlphaName;
         var testCode = includeTests ? task.Tests : "";
 
-        var wrappedCode = language.Wrapper
+        var wrappedCode = task.Wrapper
                                   .Replace("<Expression>", expression)
                                   .Replace("<StudentCode>", code)
                                   .Replace("<HiddenCode>", task.ReadyMadeFunctions)
                                   .Replace("<Helpers>", task.Helpers)
                                   .Replace("<Tests>", testCode);
 
-        return (alphaName, wrappedCode);
+        return (language, wrappedCode);
     }
 
     public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, [Optionally] string code, IContext context) => Execute(WrapCode(taskId, code, expression, false, context), $"{compileServer}/runs", context);
