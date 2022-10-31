@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { wrapExpression } from '../language-helpers/language-helpers';
 import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../models/run-result';
@@ -35,7 +34,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   private canPaste = false;
 
-  private taskId = 0;
+  taskId = 0;
 
   get selectedLanguage() {
     return this.compileServer.selectedLanguage;
@@ -89,8 +88,6 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
       this.validationFail = this.rulesService.checkRules(this.selectedLanguage, Applicability.expressions, this.expression);
       if (!this.validationFail) {
         this.submitting = true;
-        //const code = wrapExpression(this.selectedLanguage, this.expression);
-        //this.compileServer.submit_run(code, true).pipe(first()).subscribe(rr => {
         this.compileServer.evaluateExpression(this.taskId, this.expression).pipe(first()).subscribe(rr => {
           this.result = rr;
           this.pushExpression();
