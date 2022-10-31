@@ -37,7 +37,7 @@
         public string Title { get; init; }
 
         [MemberOrder(20)]
-        public ProgrammingLanguage Language { get; init; }
+        public virtual Language Language { get; init; }
 
         [MemberOrder(30)]
         public bool PasteExpression { get; init; }

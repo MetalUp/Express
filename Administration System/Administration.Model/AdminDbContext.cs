@@ -12,6 +12,7 @@ namespace Model
         public DbSet<User> Teachers { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Language> Languages { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
@@ -23,27 +24,29 @@ namespace Model
             optionsBuilder.UseLazyLoadingProxies();
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder mb)
         {
-            modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedBy).WithMany().OnDelete(DeleteBehavior.NoAction); //Because cascading delete would be confused by the two FKs to User
-            modelBuilder.Entity<Assignment>().HasOne(e => e.AssignedTo).WithMany().OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Assignment>().HasOne(e => e.AssignedBy).WithMany().OnDelete(DeleteBehavior.NoAction); //Because cascading delete would be confused by the two FKs to User
+            mb.Entity<Assignment>().HasOne(e => e.AssignedTo).WithMany().OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Task>().Property(e => e.Name).HasColumnName("Title");
-            modelBuilder.Entity<Task>().HasOne(e => e.NextTask).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Task>().HasOne(e => e.PreviousTask).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Task>().HasOne(e => e.DescriptionFile).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Task>().HasOne(e => e.HiddenFunctionsFile).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Task>().HasOne(e => e.TestsFile).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Task>().HasOne(e => e.BaseRulesFile).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Task>().HasOne(e => e.ExtraRulesFile).WithMany().OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Task>().HasMany(e => e.Hints).WithMany(h => h.Tasks);
+            mb.Entity<Task>().Property(e => e.Name).HasColumnName("Title");
+            mb.Entity<Task>().HasOne(e => e.NextTask).WithMany().OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Task>().HasOne(e => e.PreviousTask).WithMany().OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Task>().HasOne(e => e.DescriptionFile).WithMany().OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Task>().HasOne(e => e.HiddenFunctionsFile).WithMany().OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Task>().HasOne(e => e.TestsFile).WithMany().OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Task>().HasMany(e => e.Hints).WithMany(h => h.Tasks);
 
-            modelBuilder.Entity<Hint>().Property(e => e.Name).HasColumnName("Title");
-            modelBuilder.Entity<Hint>().Property(e => e.Content).HasColumnName("FileContent");
+            mb.Entity<Hint>().Property(e => e.Name).HasColumnName("Title");
+            mb.Entity<Hint>().Property(e => e.Content).HasColumnName("FileContent");
 
-            modelBuilder.Entity<Organisation>().HasMany(e => e.Teachers).WithOne(e => e.Organisation).OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Language>().HasOne(e => e.WrapperFile).WithMany().OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Language>().HasOne(e => e.HelpersFile).WithMany().OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Language>().HasOne(e => e.RegExRulesFile).WithMany().OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<User>().HasMany(e => e.Groups).WithMany(e => e.Students).UsingEntity(j => j.ToTable("StudentGroups"));
+            mb.Entity<Organisation>().HasMany(e => e.Teachers).WithOne(e => e.Organisation).OnDelete(DeleteBehavior.NoAction);
+
+            mb.Entity<User>().HasMany(e => e.Groups).WithMany(e => e.Students).UsingEntity(j => j.ToTable("StudentGroups"));
 
 
              }
