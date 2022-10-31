@@ -129,7 +129,7 @@ namespace Model.Functions
         [MemberOrder(40)]
         public static IContext CopyNextTaskFromAnotherProject(
             this Project project,
-            [Optionally] Task previousTask,
+            [Optionally][Named("Previous Task (if relevant)")] Task previousTask,
             Task copyFrom,
             IContext context
             )
@@ -141,10 +141,10 @@ namespace Model.Functions
                 PreviousTask = previousTask,
                 NextTaskId = null,
                 NextTask = null,
-                HiddenFunctionsFileId = null,
-                HiddenFunctionsFile = null,
-                TestsFileId = null,
-                TestsFile = null,
+                HiddenFunctionsFileId = project.CommonHiddenCodeFileId,
+                HiddenFunctionsFile = project.CommonHiddenCodeFile,
+                TestsFileId = project.CommonTestsFileId,
+                TestsFile = project.CommonTestsFile,
                 Hints = new List<Hint>(copyFrom.Hints)
             };
             var p2 = new Project(project)
