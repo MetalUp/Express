@@ -52,7 +52,7 @@ describe('ExpressionEvaluationComponent', () => {
 
 
   beforeEach(async () => {
-    compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['submit_run'], { "selectedLanguage": "csharp" });
+    compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['evaluateExpression'], { "selectedLanguage": "csharp" });
     
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
     rulesServiceSpy.checkRules.and.returnValue('');
@@ -123,157 +123,159 @@ describe('ExpressionEvaluationComponent', () => {
 
   });
 
-  // it('should show error if no result', () => {
+  it('should show error if no result', () => {
 
-  //   expect(component.previousExpression).toEqual('');
-  //   expect(component.previousExpressionResult).toEqual('');
+    expect(component.previousExpression).toEqual('');
+    expect(component.previousExpressionResult).toEqual('');
 
-  //   component.result = testRunResultErr;
+    component.result = testRunResultErr;
 
-  //   expect(component.previousExpression).toEqual('');
-  //   expect(component.previousExpressionResult).toEqual('run error');
+    expect(component.previousExpression).toEqual('');
+    expect(component.previousExpressionResult).toEqual('run error');
 
-  //   component.result = testRunResultCmp;
+    component.result = testRunResultCmp;
 
-  //   expect(component.previousExpression).toEqual('');
-  //   expect(component.previousExpressionResult).toEqual('');
+    expect(component.previousExpression).toEqual('');
+    expect(component.previousExpressionResult).toEqual('');
 
-  //   component.validationFail = "validFail"
+    component.validationFail = "validFail"
 
-  //   expect(component.previousExpression).toEqual('');
-  //   expect(component.previousExpressionResult).toEqual('');
+    expect(component.previousExpression).toEqual('');
+    expect(component.previousExpressionResult).toEqual('');
 
-  //   component.result = EmptyRunResult;
-  // });
+    component.result = EmptyRunResult;
+  });
 
-  // it('should submit code on enter and show result', () => {
-  //   compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+  it('should submit code on enter and show result', () => {
+    compileServerServiceSpy.evaluateExpression.and.returnValue(of<RunResult>(testRunResultOK));
 
-  //   component.expression = 'test';
-  //   const wrapped = wrapExpression(component.selectedLanguage, component.expression);
+    component.taskId = 66;
+    component.expression = 'test';
 
-  //   component.onEnter();
-  //   expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
+    component.onEnter();
+    expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
-  //   expect(component.expression).toBe('test');
-  //   expect(component.previousExpression).toBe('test');
-  //   expect(component.previousExpressionResult).toBe('expression result');
-  //   expect(component.expressionError).toBe('');
+    expect(component.expression).toBe('test');
+    expect(component.previousExpression).toBe('test');
+    expect(component.previousExpressionResult).toBe('expression result');
+    expect(component.expressionError).toBe('');
 
-  // });
+  });
 
-  // it('should submit code on enter and show result without trimming', () => {
-  //   compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOKWhiteSpace));
+  it('should submit code on enter and show result without trimming', () => {
+    compileServerServiceSpy.evaluateExpression.and.returnValue(of<RunResult>(testRunResultOKWhiteSpace));
 
-  //   component.expression = 'test';
-  //   const wrapped = wrapExpression(component.selectedLanguage, component.expression);
+    component.taskId = 66;
+    component.expression = 'test';
+   
+    component.onEnter();
+    expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
-  //   component.onEnter();
-  //   expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
-
-  //   expect(component.expression).toBe('test');
-  //   expect(component.previousExpression).toBe('test');
-  //   expect(component.previousExpressionResult).toBe(' expression result');
-  //   expect(component.expressionError).toBe('');
-  // });
+    expect(component.expression).toBe('test');
+    expect(component.previousExpression).toBe('test');
+    expect(component.previousExpressionResult).toBe(' expression result');
+    expect(component.expressionError).toBe('');
+  });
 
 
-  // it('should submit code on enter and show compiler error', () => {
-  //   compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultCmp));
+  it('should submit code on enter and show compiler error', () => {
+    compileServerServiceSpy.evaluateExpression.and.returnValue(of<RunResult>(testRunResultCmp));
 
-  //   component.expression = 'test';
-  //   const wrapped = wrapExpression(component.selectedLanguage, component.expression);
+    component.taskId = 66;
+    component.expression = 'test';
+  
+    component.onEnter();
+    expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
-  //   component.onEnter();
-  //   expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
+    expect(component.expression).toBe('test');
+    expect(component.previousExpression).toBe('test');
+    expect(component.previousExpressionResult).toBe('');
+    expect(component.expressionError).toBe('compiler error');
+  });
 
-  //   expect(component.expression).toBe('test');
-  //   expect(component.previousExpression).toBe('test');
-  //   expect(component.previousExpressionResult).toBe('');
-  //   expect(component.expressionError).toBe('compiler error');
-  // });
+  it('should submit code on enter and show runtime error', () => {
+    compileServerServiceSpy.evaluateExpression.and.returnValue(of<RunResult>(testRunResultErr));
 
-  // it('should submit code on enter and show runtime error', () => {
-  //   compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultErr));
+    component.taskId = 66;
+    component.expression = 'test';
+   
+    component.onEnter();
+    expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
-  //   component.expression = 'test';
-  //   const wrapped = wrapExpression(component.selectedLanguage, component.expression);
+    expect(component.expression).toBe('test');
+    expect(component.previousExpression).toBe('test');
+    expect(component.previousExpressionResult).toBe('run error');
+    expect(component.expressionError).toBe('');
+  });
 
-  //   component.onEnter();
-  //   expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
+  it('should ignore empty expressions', () => {
 
-  //   expect(component.expression).toBe('test');
-  //   expect(component.previousExpression).toBe('test');
-  //   expect(component.previousExpressionResult).toBe('run error');
-  //   expect(component.expressionError).toBe('');
-  // });
+    compileServerServiceSpy.evaluateExpression.and.returnValue(of<RunResult>(testRunResultOK));
 
-  // it('should ignore empty expressions', () => {
+    component.taskId = 66;
+    component.expression = '';
+    component.onEnter();
+    expect(compileServerServiceSpy.evaluateExpression).not.toHaveBeenCalled();
+    expect(component.previousExpressionResult).toBe('');
+    expect(component.expressionError).toBe('');
+  });
 
-  //   compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+  it('should call checkRules on enter', () => {
 
-  //   component.expression = '';
-  //   component.onEnter();
-  //   expect(compileServerServiceSpy.submit_run).not.toHaveBeenCalled();
-  //   expect(component.previousExpressionResult).toBe('');
-  //   expect(component.expressionError).toBe('');
-  // });
+    compileServerServiceSpy.evaluateExpression.and.returnValue(of<RunResult>(testRunResultOK));
 
-  // it('should call checkRules on enter', () => {
+    component.taskId = 66;
+    component.expression = 'test';
+   
+    component.onEnter();
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
+    expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
-  //   compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
+    expect(component.expression).toBe('test');
+    expect(component.previousExpression).toBe('test');
+  });
 
-  //   component.expression = 'test';
-  //   const wrapped = wrapExpression(component.selectedLanguage, component.expression);
+  it('should not submit on checkRules error', () => {
 
-  //   component.onEnter();
-  //   expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
-  //   expect(compileServerServiceSpy.submit_run).toHaveBeenCalledWith(wrapped, true);
+    compileServerServiceSpy.evaluateExpression.and.returnValue(of<RunResult>(testRunResultOK));
+    rulesServiceSpy.checkRules.and.returnValue("rules fail");
 
-  //   expect(component.expression).toBe('test');
-  //   expect(component.previousExpression).toBe('test');
-  // });
+    component.taskId = 66;
+    component.expression = 'test';
 
-  // it('should not submit on checkRules error', () => {
+    component.onEnter();
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
+    expect(compileServerServiceSpy.evaluateExpression).not.toHaveBeenCalled();
 
-  //   compileServerServiceSpy.submit_run.and.returnValue(of<RunResult>(testRunResultOK));
-  //   rulesServiceSpy.checkRules.and.returnValue("rules fail");
+    expect(component.expression).toBe('test');
+    expect(component.previousExpression).toBe('test');
+    expect(component.previousExpressionResult).toBe('');
+    expect(component.expressionError).toBe('rules fail');
+  });
 
-  //   component.expression = 'test';
+  it('should disable paste by default', () => {
 
-  //   component.onEnter();
-  //   expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
-  //   expect(compileServerServiceSpy.submit_run).not.toHaveBeenCalled();
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
 
-  //   expect(component.expression).toBe('test');
-  //   expect(component.previousExpression).toBe('test');
-  //   expect(component.previousExpressionResult).toBe('');
-  //   expect(component.expressionError).toBe('rules fail');
-  // });
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).toHaveBeenCalled();
+  });
 
-  // it('should disable paste by default', () => {
+  it('should enable paste from task', () => {
 
-  //   let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    taskSubject.next({ PasteExpression: true } as ITask);
 
-  //   component.onPaste(eventSpy);
-  //   expect(eventSpy.preventDefault).toHaveBeenCalled();
-  // });
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).not.toHaveBeenCalled();
+  });
 
-  // it('should enable paste from task', () => {
+  it('should disable paste from task', () => {
 
-  //   let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-  //   taskSubject.next({ PasteExpression: true } as ITask);
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    taskSubject.next({ PasteExpression: false } as ITask);
 
-  //   component.onPaste(eventSpy);
-  //   expect(eventSpy.preventDefault).not.toHaveBeenCalled();
-  // });
-
-  // it('should disable paste from task', () => {
-
-  //   let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-  //   taskSubject.next({ PasteExpression: false } as ITask);
-
-  //   component.onPaste(eventSpy);
-  //   expect(eventSpy.preventDefault).toHaveBeenCalled();
-  // });
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).toHaveBeenCalled();
+  });
 });
