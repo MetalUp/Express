@@ -81,21 +81,21 @@ namespace Model.Types
         #region Wrapper
 
         [HideInClient]
-        public FileAttachment Wrapper => Project.Language.Wrapper;
+        public string Wrapper => Project.Language.Wrapper;
 
         #endregion
 
         #region Helpers
 
         [HideInClient]
-        public FileAttachment Helpers => Project.Language.Helpers;
+        public string Helpers => Project.Language.Helpers;
 
         #endregion
 
         #region RegExRules
 
         [HideInClient]
-        public FileAttachment RegExRules => Project.Language.RegExRules;
+        public string RegExRules => Project.Language.RegExRules;
 
         #endregion
 

@@ -1,4 +1,5 @@
 ﻿using NakedFramework.Value;
+using System.Text;
 
 namespace Model.Types;
 
@@ -28,6 +29,9 @@ public class Language
     [MemberOrder(10)]
     public string Name { get; init; }
 
+    [MemberOrder(15)]
+    public string AlphaName { get; init; }  // e.g. 'csharp'
+
     [MemberOrder(20)]
     public string Version { get; init; }
 
@@ -39,7 +43,7 @@ public class Language
 
     #region Wrapper
     [HideInClient]
-    public FileAttachment Wrapper => WrapperFile?.Details;
+    public string Wrapper => Encoding.Default.GetString(WrapperFile.Content);
 
     [Hidden]
     public int? WrapperFileId { get; init; }
@@ -52,7 +56,7 @@ public class Language
     #region Helpers
 
     [HideInClient]
-    public FileAttachment Helpers => HelpersFile?.Details;
+    public string Helpers => Encoding.Default.GetString(HelpersFile.Content);
 
     [Hidden]
     public int? HelpersFileId { get; init; }
@@ -65,7 +69,7 @@ public class Language
     #region RegExRules
 
     [HideInClient]
-    public FileAttachment RegExRules => RegExRulesFile?.Details;
+    public string RegExRules => Encoding.Default.GetString(RegExRulesFile.Content);
 
     [Hidden]
     public int? RegExRulesFileId { get; init; }

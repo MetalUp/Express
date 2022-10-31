@@ -4,11 +4,11 @@
     {
         #region Editing
         [Edit]
-        public static IContext EditWraperFile(
+        public static IContext EditWrapperFile(
          this Language language,
-         File wraperFile,
+         File wrapperFile,
          IContext context) =>
-             context.WithUpdated(language, new(language) { WrapperFileId = wraperFile.Id, WrapperFile = wraperFile});
+             context.WithUpdated(language, new(language) { WrapperFileId = wrapperFile.Id, WrapperFile = wrapperFile});
 
         [Edit]
         public static IContext EditHelpersFile(
