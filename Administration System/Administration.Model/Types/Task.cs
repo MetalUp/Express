@@ -1,4 +1,5 @@
 ﻿using NakedFramework.Value;
+using System.Text;
 
 namespace Model.Types
 {
@@ -57,8 +58,8 @@ namespace Model.Types
         #endregion
 
         #region Hidden Functions
-        [HideInClient]
-        public FileAttachment ReadyMadeFunctions => HiddenFunctionsFile is null ? null : HiddenFunctionsFile.Details;
+        [Hidden]
+        public string ReadyMadeFunctions => HiddenFunctionsFile is null ? null : Encoding.Default.GetString(HiddenFunctionsFile.Content);
 
         [Hidden]
         public int? HiddenFunctionsFileId { get; init; }
@@ -69,7 +70,9 @@ namespace Model.Types
 
         #region Tests
         [HideInClient]
-        public FileAttachment Tests => TestsFile is null ? null : TestsFile.Details;
+        public string Tests => TestsFile is null ? null : Encoding.Default.GetString(TestsFile.Content);
+
+        //Encoding.Default.GetString(WrapperFile.Content);
 
         [Hidden]
         public int? TestsFileId { get; init; }
