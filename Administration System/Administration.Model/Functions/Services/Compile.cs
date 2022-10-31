@@ -38,19 +38,6 @@ public static class Compile {
         return request;
     }
 
-    public static IQueryable<Language> Languages(IContext context) {
-        var httpRequest = CreateMessage(context, HttpMethod.Get, $"{compileServer}/languages");
-
-        using var response = Client.Send(httpRequest);
-
-        if (response.IsSuccessStatusCode) {
-            var languages = ReadAs<List<string[]>>(response);
-            return languages.Select(l => new Language { LanguageID = l[0], Version = l[1] }).AsQueryable();
-        }
-
-        throw new HttpRequestException("compile server request failed", null, response.StatusCode);
-    }
-
     private static (RunResult, IContext) Execute(string languageID, string code, string url, IContext context) {
         using var content = JsonContent.Create(RunSpec.FromParams(languageID, code), new MediaTypeHeaderValue("application/json"));
         var request = CreateMessage(context, HttpMethod.Post, url, content);

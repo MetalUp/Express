@@ -10,7 +10,10 @@ namespace Model.Types
         {
             Id = cloneFrom.Id;
             Name = cloneFrom.Name;
+            ContentType = cloneFrom.ContentType;
             Mime = cloneFrom.Mime;
+            LanguageId = cloneFrom.LanguageId;
+            Language = cloneFrom.Language;
             Content = cloneFrom.Content;
             AuthorId = cloneFrom.AuthorId;
             Author = cloneFrom.Author;
@@ -22,8 +25,17 @@ namespace Model.Types
         [Hidden]
         public string Name { get; init; }
 
+        [MemberOrder(1)]
+        public ContentType? ContentType { get; init; }
+
         [Hidden]
         public string Mime { get; init; }
+
+        [Hidden]
+        public string LanguageId { get; init; }
+
+        [MemberOrder(2)]
+        public virtual Language Language { get; init; }
 
         [Hidden]
         public byte[] Content { get; init; }

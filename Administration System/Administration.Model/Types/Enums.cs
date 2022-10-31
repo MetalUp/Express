@@ -24,4 +24,9 @@
     {
         UnderDevelopment, Assignable, Public
     }
+
+    public enum ContentType
+    {
+        Description, HiddenCode, Tests, Wrapper, Helpers, Rules
+    }
 }

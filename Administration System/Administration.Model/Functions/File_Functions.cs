@@ -14,5 +14,20 @@ namespace Model.Functions
         public static string Default1EditContentAsString(this File file) =>
             Encoding.Default.GetString(file.Content);
 
+        #region Editing
+        [Edit]
+        public static IContext EditLanguage(
+                 this File file,
+                 Language language,
+                 IContext context) =>
+                     context.WithUpdated(file, new(file) { LanguageId = language.LanguageID, Language = language});
+
+        [Edit]
+        public static IContext EditContentType(
+            this File file,
+            ContentType? contentType,
+            IContext context) =>
+                context.WithUpdated(file, new(file) { ContentType = contentType });
+        #endregion
     }
 }
