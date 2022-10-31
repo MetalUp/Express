@@ -22,7 +22,7 @@ public static class VisualBasicCompiler {
 
     public static string[] GetNameAndVersion() => new[] { "vb", GetVersion() };
 
-    public static (RunResult, byte[]) Compile(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(References, true));
+    public static (RunResult, byte[]) Compile(RunSpec runSpec, bool createExecutable) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(References, true));
 
     public static (RunResult, byte[]) CompileForTest(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(TestReferences, false));
 

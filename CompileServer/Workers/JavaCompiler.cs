@@ -14,7 +14,7 @@ public static class JavaCompiler {
 
     public static string[] GetNameAndVersion() => new[] { "java", GetVersion() };
 
-    public static (RunResult, string) Compile(RunSpec runSpec) {
+    public static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
         const string tempFileName = "temp.java";
         var file = $"{(string?)Path.GetTempPath()}{tempFileName}";
         var javaCompiler = $"{CompileServerController.JavaPath}\\bin\\javac.exe";

@@ -81,7 +81,7 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileOk() {
         var runSpec = VisualBasicRunSpec(SimpleCode);
-        var (rr, code) = VisualBasicCompiler.Compile(runSpec);
+        var (rr, code) = VisualBasicCompiler.Compile(runSpec, true);
 
         rr.AssertRunResult(Outcome.Ok);
 
@@ -99,7 +99,7 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileFailDivisionByZero() {
         var runSpec = VisualBasicRunSpec(DivZero);
-        var (rr, code) = VisualBasicCompiler.Compile(runSpec);
+        var (rr, code) = VisualBasicCompiler.Compile(runSpec, true);
 
         rr.AssertRunResult(Outcome.CompilationError, "(3) : error BC30542: Division by zero occurred while evaluating this expression.");
         Assert.AreEqual(0, code.Length);

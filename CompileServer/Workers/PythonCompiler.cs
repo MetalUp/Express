@@ -13,13 +13,13 @@ public static class PythonCompiler {
 
     public static string[] GetNameAndVersion() => new[] { "python", GetVersion() };
 
-    public static (RunResult, string) Compile(RunSpec runSpec) {
+    public static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
         const string tempFileName = "temp.py";
         var file = $"{Path.GetTempPath()}{tempFileName}";
         File.WriteAllText(file, runSpec.sourcecode);
         var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
         var args = $"-m py_compile {file}";
 
-        return Helpers.Compile(pythonExe, args, "", tempFileName);
+        return Helpers.Compile(pythonExe, args, createExecutable ? "" : tempFileName, tempFileName);
     }
 }

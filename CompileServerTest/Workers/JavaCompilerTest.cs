@@ -74,7 +74,7 @@ public class JavaCompilerTest {
     [TestMethod]
     public void TestCompileOk() {
         var runSpec = JavaRunSpec(SimpleCode);
-        var (rr, file) = JavaCompiler.Compile(runSpec);
+        var (rr, file) = JavaCompiler.Compile(runSpec, true);
 
         rr.AssertRunResult(Outcome.Ok);
 
@@ -92,7 +92,7 @@ public class JavaCompilerTest {
     [TestMethod]
     public void TestCompileFailMissingSemiColon() {
         var runSpec = JavaRunSpec(MissingSC);
-        var (rr, file) = JavaCompiler.Compile(runSpec);
+        var (rr, file) = JavaCompiler.Compile(runSpec, true);
 
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 

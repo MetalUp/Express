@@ -64,7 +64,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileOk() {
         var runSpec = PythonRunSpec(SimpleCode);
-        var (rr, file) = PythonCompiler.Compile(runSpec);
+        var (rr, file) = PythonCompiler.Compile(runSpec, true);
 
         rr.AssertRunResult(Outcome.Ok);
 
@@ -82,7 +82,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileFailMissingTerm() {
         var runSpec = PythonRunSpec(MissingTerm);
-        var (rr, file) = PythonCompiler.Compile(runSpec);
+        var (rr, file) = PythonCompiler.Compile(runSpec, true);
 
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
