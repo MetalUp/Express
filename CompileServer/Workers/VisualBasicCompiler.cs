@@ -16,15 +16,13 @@ public static class VisualBasicCompiler {
 
     private static readonly MetadataReference[] References = DotNetCompiler.DotNetReferences.Union(VisualBasicReferences).ToArray();
 
-    private static readonly MetadataReference[] TestReferences = References.Union(DotNetCompiler.TestReferences).ToArray();
-
     private static string GetVersion() => Options.LanguageVersion.ToString().Replace("VisualBasic", "");
 
     public static string[] GetNameAndVersion() => new[] { "vb", GetVersion() };
 
     public static (RunResult, byte[]) Compile(RunSpec runSpec, bool createExecutable) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(References, true));
 
-    public static (RunResult, byte[]) CompileForTest(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(TestReferences, false));
+    public static (RunResult, byte[]) CompileForTest(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(References, false));
 
     private static Func<string, VisualBasicCompilation> GenerateGenerateCode(MetadataReference[] references, bool console) =>
         sourceCode => GenerateCode(sourceCode, references, console);

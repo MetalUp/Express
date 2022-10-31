@@ -9,7 +9,8 @@ namespace CompileServerTest.Workers;
 [TestClass]
 public class VisualBasicCompilerTest {
     private const string SimpleCode =
-        @"Module Program
+        @"Imports Microsoft.VisualStudio.TestTools.UnitTesting
+          Module Program
           Sub Main(args As String())       
             Dim a = 1
             System.Console.Write(a)

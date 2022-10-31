@@ -77,9 +77,17 @@ public static class Compile {
 
     private static (string, string) WrapCode(int taskId, string code, string expression, IContext context) {
         var task = context.Instances<Task>().Single(t => t.Id == taskId);
-        var language = task.Language.ToString();
-        // todo
-        return (language, code);
+        var language = task.Language;
+        var alphaName = language.AlphaName;
+
+        var wrappedCode = language.Wrapper
+                                  .Replace("<Expression>", expression)
+                                  .Replace("<StudentCode>", code)
+                                  .Replace("<HiddenCode>", task.ReadyMadeFunctions)
+                                  .Replace("<Helpers>", task.Helpers)
+                                  .Replace("<Tests>", task.Tests);
+
+        return (alphaName, wrappedCode);
     }
 
     public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, [Optionally] string code, IContext context) => Execute(WrapCode(taskId, code, expression, context), $"{compileServer}/runs", context);
