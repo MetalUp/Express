@@ -275,7 +275,6 @@ describe('FunctionDefinitionComponent', () => {
 
   it('should set taskid from task', () => {
 
-    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
     taskSubject.next({ Id: 65 } as ITask);
 
     expect(component.taskId).toEqual(65);

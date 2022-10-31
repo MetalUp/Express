@@ -3,7 +3,6 @@ import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../models/run-result';
-import { wrapTests } from '../language-helpers/language-helpers';
 import { RulesService } from '../services/rules.service';
 import { ErrorType } from '../models/rules';
 import { CompileServerService } from '../services/compile-server.service';
@@ -84,8 +83,6 @@ export class TestingComponent implements OnInit, OnDestroy {
 
   onRunTests() {
     this.submitting = true;
-    // const code = wrapTests(this.compileServer.selectedLanguage, this.tests);
-    // this.compileServer.submit_run(code, false).pipe(first()).subscribe(rr => {
     this.compileServer.runTests(this.taskId).pipe(first()).subscribe(rr => {
       this.handleResult(rr);
       this.submitting = false;
