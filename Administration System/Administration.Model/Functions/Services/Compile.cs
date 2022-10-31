@@ -31,34 +31,13 @@ public static class Compile {
         if (token is not null) {
             request.Headers.Add("Authorization", token);
         }
+
         if (content is not null) {
             request.Content = content;
         }
 
         return request;
     }
-
-    private static (RunResult, IContext) Execute(string languageID, string code, string url, IContext context) {
-        using var content = JsonContent.Create(RunSpec.FromParams(languageID, code), new MediaTypeHeaderValue("application/json"));
-        var request = CreateMessage(context, HttpMethod.Post, url, content);
-
-        using var response = Client.SendAsync(request).Result;
-
-        if (response.IsSuccessStatusCode) {
-            var apiRunResult = ReadAs<ApiRunResult>(response);
-            return (apiRunResult?.ToRunResult(), context);
-        }
-
-        throw new HttpRequestException("compile server request failed", null, response.StatusCode);
-    }
-
-  
-
-    public static (RunResult, IContext) Runs(string languageID, string code, IContext context) => Execute(languageID, code, $"{compileServer}/runs", context);
-
-    public static (RunResult, IContext) Tests(string languageID, string code, IContext context) => Execute(languageID, code, $"{compileServer}/tests", context);
-
-    // new placeholder functions 
 
     private static (RunResult, IContext) Execute((string languageId, string code) wrapped, string url, IContext context) {
         var (languageId, code) = wrapped;
@@ -75,26 +54,27 @@ public static class Compile {
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
-    private static (string, string) WrapCode(int taskId, string code, string expression, IContext context) {
+    private static (string, string) WrapCode(int taskId, string code, string expression, bool includeTests, IContext context) {
         var task = context.Instances<Task>().Single(t => t.Id == taskId);
         var language = task.Language;
         var alphaName = language.AlphaName;
+        var testCode = includeTests ? task.Tests : "";
 
         var wrappedCode = language.Wrapper
                                   .Replace("<Expression>", expression)
                                   .Replace("<StudentCode>", code)
                                   .Replace("<HiddenCode>", task.ReadyMadeFunctions)
                                   .Replace("<Helpers>", task.Helpers)
-                                  .Replace("<Tests>", task.Tests);
+                                  .Replace("<Tests>", testCode);
 
         return (alphaName, wrappedCode);
     }
 
-    public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, [Optionally] string code, IContext context) => Execute(WrapCode(taskId, code, expression, context), $"{compileServer}/runs", context);
+    public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, [Optionally] string code, IContext context) => Execute(WrapCode(taskId, code, expression, false, context), $"{compileServer}/runs", context);
 
-    public static (RunResult, IContext) SubmitCode(int taskId, string code, IContext context) => Execute(WrapCode(taskId, code, "", context), $"{compileServer}/compiles", context);
+    public static (RunResult, IContext) SubmitCode(int taskId, string code, IContext context) => Execute(WrapCode(taskId, code, "", false, context), $"{compileServer}/compiles", context);
 
-    public static (RunResult, IContext) RunTests(int taskId, string code, IContext context) => Execute(WrapCode(taskId, code, "", context), $"{compileServer}/tests", context);
+    public static (RunResult, IContext) RunTests(int taskId, string code, IContext context) => Execute(WrapCode(taskId, code, "", true, context), $"{compileServer}/tests", context);
 
     private static T ReadAs<T>(HttpResponseMessage response) {
         using var sr = new StreamReader(response.Content.ReadAsStream());
