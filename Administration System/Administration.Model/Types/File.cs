@@ -22,19 +22,19 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
-        [Hidden]
+        [MemberOrder(1)]
         public string Name { get; init; }
 
-        [MemberOrder(1)]
+        [MemberOrder(2)]
         public ContentType? ContentType { get; init; }
 
-        [Hidden]
+        [MemberOrder(3)]
         public string Mime { get; init; }
 
         [Hidden]
         public string LanguageId { get; init; }
 
-        [MemberOrder(2)]
+        [MemberOrder(4)]
         public virtual Language Language { get; init; }
 
         [Hidden]
@@ -48,10 +48,6 @@ namespace Model.Types
 
         [MemberOrder(40)]
         public virtual User Author { get; init; }
-
-        //Display content as string
-
-        //Provide ViewInTab as FileAttachment
 
         public override string ToString() => Name;
     }
