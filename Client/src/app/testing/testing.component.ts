@@ -21,18 +21,16 @@ export class TestingComponent implements OnInit, OnDestroy {
     private rulesService: RulesService
   ) { }
 
-  hasTests() {
-    return !!this.tests;
-  }
+  hasTests = false;
 
   message() {
     if (this.canRunTests() && this.result.outcome === 0) {
       return 'Tests not yet run on current function definition.';
     }
-    if (this.hasTests() && this.result.outcome === 0) {
+    if (this.hasTests && this.result.outcome === 0) {
       return 'This task defines automated tests, which may be run once Function definition code has successfully compiled.';
     }
-    if (!this.hasTests()){
+    if (!this.hasTests){
       return 'There are no Tests defined for this task'; 
     }
     return this.currentResultMessage;
@@ -41,7 +39,7 @@ export class TestingComponent implements OnInit, OnDestroy {
   tests = ''
 
   canRunTests() {
-    if (!this.hasTests()){
+    if (!this.hasTests){
       return false;
     }
 
@@ -99,11 +97,7 @@ export class TestingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.taskId = task.Id;
-      if (task.Tests) {
-        this.taskService.getFile(task.Tests)
-        .then(h => this.tests = h)
-        .catch(_ => this.tests = '');
-      }
+      this.hasTests = task.HasTests;
     })
   }
 

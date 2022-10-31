@@ -7,6 +7,7 @@ export interface ITask {
     Title: string;
     Description: [string, string];
     Hints: IHint[];
+    HasTests: boolean;
     Messages?: IMessages;
     CodeMustMatch?: ICodeRulesBlock;
     CodeMustNotContain?: ICodeRulesBlock;
@@ -14,7 +15,6 @@ export interface ITask {
     SkeletonCode?: string;
     PasteExpression?: boolean;
     PasteFunctions?: boolean;
-    Tests?: [string, string];
     NextTask?: string;
     PreviousTask?: string;
     NextTaskClearsFunctions?: boolean;
@@ -38,6 +38,7 @@ export class Task implements ITask {
     Title: string = "";
     Description: [string, string] = ["", ""];
     Hints: IHint[] = [];
+    HasTests: boolean = false;
     Messages?: IMessages | undefined;
     CodeMustMatch?: ICodeRulesBlock;
     CodeMustNotContain?: ICodeRulesBlock;
