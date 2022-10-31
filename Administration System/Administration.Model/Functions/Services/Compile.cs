@@ -97,7 +97,7 @@ public static class Compile {
 
     public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, string code, IContext context) => Execute(WrapCode(taskId, code, expression, context), $"{compileServer}/runs", context);
 
-    public static (RunResult, IContext) SubmitCode(int taskId, string languageID, string code, IContext context) => Execute(WrapCode(taskId, code, "", context), $"{compileServer}/runs", context);
+    public static (RunResult, IContext) SubmitCode(int taskId, string languageID, string code, IContext context) => Execute(WrapCode(taskId, code, "", context), $"{compileServer}/compiles", context);
 
     public static (RunResult, IContext) RunTests(int taskId, string languageID, string code, IContext context) => Execute(WrapCode(taskId, code, "", context), $"{compileServer}/tests", context);
 
