@@ -8,8 +8,12 @@ namespace CompileServerTest.Workers;
 
 [TestClass]
 public class CSharpCompilerTest {
-    private const string SimpleCode = "var a = 1;System.Console.Write(a);";
+    private const string SimpleCode = @"
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    var a = 1;System.Console.Write(a);";
+    
     private const string DivZero = "var a = 1/0;";
+    
     private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
 
     private const string TestCodeOk =

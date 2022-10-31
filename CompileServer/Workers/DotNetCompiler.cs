@@ -28,11 +28,8 @@ public static class DotNetCompiler {
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Globalization").Location),
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections.Concurrent").Location),
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections.NonGeneric").Location),
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.CSharp").Location)
-    };
-
-    public static readonly MetadataReference[] TestReferences = {
-        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.VisualStudio.TestPlatform.TestFramework").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.CSharp").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.VisualStudio.TestPlatform.TestFramework").Location)
     };
 
     public static (RunResult, byte[]) Compile(RunSpec runSpec, Func<string, Compilation> generateCode) {
