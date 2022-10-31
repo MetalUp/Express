@@ -11,7 +11,14 @@ public class CSharpCompilerTest {
     private const string SimpleCode = @"
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     var a = 1;System.Console.Write(a);";
-    
+
+    private const string SimpleCodeWithMain = @"
+    public class Wrapper {
+        static void Main() {
+            System.Console.WriteLine(""1"");
+        }
+    }";
+
     private const string DivZero = "var a = 1/0;";
     
     private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
@@ -71,6 +78,16 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileOk() {
         var runSpec = CsharpRunSpec(SimpleCode);
+        var (rr, code) = CSharpCompiler.Compile(runSpec, true);
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok);
+        Assert.AreEqual(2048, code.Length);
+    }
+
+    [TestMethod]
+    public void TestCompileOkWithMain()
+    {
+        var runSpec = CsharpRunSpec(SimpleCodeWithMain);
         var (rr, code) = CSharpCompiler.Compile(runSpec, true);
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);

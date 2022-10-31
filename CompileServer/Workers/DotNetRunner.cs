@@ -44,7 +44,12 @@ public static class DotNetRunner {
         Console.SetError(consoleErr);
 
         try {
-            entry.Invoke(null, null);
+            if (entry.GetParameters().Any()) {
+                entry.Invoke(null, new object[] { Array.Empty<string>() });
+            }
+            else {
+                entry.Invoke(null, null);
+            }
 
             runResult = Helpers.SetRunResults(runResult, consoleOut, consoleErr);
         }
