@@ -83,23 +83,27 @@ namespace Model.Types
         #endregion
 
         #region BaseRules
-        [Hidden]
-        public FileAttachment BaseRules => BaseRules is null ? null : BaseRulesFile.Details;
+
+        [HideInClient]
+        public FileAttachment BaseRules => BaseRulesFile?.Details;
+
         [Hidden]
         public int? BaseRulesFileId { get; init; }
 
-        [Hidden]
         public virtual File BaseRulesFile { get; init; }
+
         #endregion
 
         #region ExtraRules
-        [Hidden]
-        public FileAttachment ExtraRules => ExtraRules is null ? null : ExtraRulesFile.Details;
+
+        [HideInClient]
+        public FileAttachment ExtraRules => ExtraRulesFile?.Details;
+
         [Hidden]
         public int? ExtraRulesFileId { get; init; }
 
-        [Hidden]
         public virtual File ExtraRulesFile { get; init; }
+
         #endregion
 
         [HideInClient]
