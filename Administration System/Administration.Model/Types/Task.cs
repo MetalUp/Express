@@ -18,10 +18,6 @@ namespace Model.Types
             HiddenFunctionsFile = cloneFrom.HiddenFunctionsFile;
             TestsFileId = cloneFrom.TestsFileId;
             TestsFile = cloneFrom.TestsFile;
-            BaseRulesFileId = cloneFrom.BaseRulesFileId;
-            BaseRulesFile = cloneFrom.BaseRulesFile;
-            ExtraRulesFileId = cloneFrom.ExtraRulesFileId;
-            ExtraRulesFile = cloneFrom.ExtraRulesFile;
             PreviousTaskId = cloneFrom.PreviousTaskId;
             PreviousTask = cloneFrom.PreviousTask;
             NextTaskId = cloneFrom.NextTaskId;
@@ -44,7 +40,7 @@ namespace Model.Types
         public string Title => ToString();
 
         [MemberOrder(40)]
-        public ProgrammingLanguage Language => Project.Language;
+        public Language Language => Project.Language;
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(60)]
@@ -82,29 +78,27 @@ namespace Model.Types
         public virtual File TestsFile { get; init; }
         #endregion
 
-        #region BaseRules
+        #region Wrapper
 
         [HideInClient]
-        public FileAttachment BaseRules => BaseRulesFile?.Details;
-
-        [Hidden]
-        public int? BaseRulesFileId { get; init; }
-
-        public virtual File BaseRulesFile { get; init; }
+        public FileAttachment Wrapper => Project.Language.Wrapper;
 
         #endregion
 
-        #region ExtraRules
+        #region Helpers
 
         [HideInClient]
-        public FileAttachment ExtraRules => ExtraRulesFile?.Details;
-
-        [Hidden]
-        public int? ExtraRulesFileId { get; init; }
-
-        public virtual File ExtraRulesFile { get; init; }
+        public FileAttachment Helpers => Project.Language.Helpers;
 
         #endregion
+
+        #region RegExRules
+
+        [HideInClient]
+        public FileAttachment RegExRules => Project.Language.RegExRules;
+
+        #endregion
+
 
         [HideInClient]
         public bool PasteExpression => Project.PasteExpression;

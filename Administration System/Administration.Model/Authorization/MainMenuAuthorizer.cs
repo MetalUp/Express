@@ -16,8 +16,9 @@ namespace Model.Authorization
                 nameof(Groups) => GroupsAuth(memberName, context),
                 nameof(Invitations) => InvitationsAuth(memberName, context),
                 nameof(Projects) => ProjectsAuth(memberName, context),
+                nameof(Languages) => LanguagesAuth(memberName, context),
                 nameof(Files) => FilesAuth(memberName, context),
-                nameof(Assignments) =>AssignmentsAuth(memberName, context),
+                nameof(Assignments) => AssignmentsAuth(memberName, context),
                 nameof(Activities) => ActivitiesAuth(memberName, context),
                 nameof(Compile) => CompileAuth(memberName, context),
                 _ => false
@@ -35,8 +36,8 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 >= Role.Teacher => Helpers.MatchesOneOf(memberName,
-                    nameof(Assignments.MyAssignments), 
-                    nameof(Assignments.AssignmentsCreatedByMe), 
+                    nameof(Assignments.MyAssignments),
+                    nameof(Assignments.AssignmentsCreatedByMe),
                     nameof(Assignments.NewAssignmentToIndividual),
                     nameof(Assignments.NewAssignmentToGroup)),
                 Role.Student => Helpers.MatchesOneOf(memberName,
@@ -78,7 +79,7 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Helpers.MatchesOneOf(memberName, 
+                >= Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Groups.AllOurGroups),
                     nameof(Groups.CreateNewGroup)),
                 Role.Student => false,
@@ -100,7 +101,7 @@ namespace Model.Authorization
                 Role.Root => true,
                 >= Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Users.Me),
-                    nameof(Users.OurStudents), 
+                    nameof(Users.OurStudents),
                     nameof(Users.StudentsPendingAcceptance),
                     nameof(Users.FindStudentByName),
                     nameof(Users.MyColleagues)),
@@ -110,5 +111,11 @@ namespace Model.Authorization
 
         private bool CompileAuth(string memberName, IContext context) => true;
 
+        private bool LanguagesAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                _ => false
+            };
     }
 }

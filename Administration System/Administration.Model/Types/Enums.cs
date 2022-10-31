@@ -5,11 +5,6 @@
         Guest, Student, Teacher, Author, Root
     }
 
-    public enum ProgrammingLanguage
-    {
-        Python, CSharp, VB, Java
-    }
-
     public enum ActivityType
     {
         AccessedTask, SubmitFail, SubmitSuccess, TestFail, TestSuccess, HintUsed, TeacherNote

@@ -76,7 +76,7 @@ namespace Model.Functions
             this Task task,
             [MultiLine(10)] string content,
             IContext context) =>
-                SaveDescriptionAsFile(task, $"Description{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
+                SaveDescriptionAsFile(task, $"Description{task.Project.Language.FileExtension}", Encoding.ASCII.GetBytes(content), context);
 
         public static string DisableAddDescriptionAsString(this Task task) => DisableAddDescriptionFromFile(task);
 
@@ -132,7 +132,7 @@ namespace Model.Functions
             this Task task,
             [MultiLine(10)] string content,
             IContext context) =>
-                SaveHiddenFunctionsAsFile(task, $"HiddenFunctions{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
+                SaveHiddenFunctionsAsFile(task, $"HiddenFunctions{task.Project.Language.FileExtension}", Encoding.ASCII.GetBytes(content), context);
 
         public static string DisableAddHiddenFunctionsAsString(this Task task) => DisableAddHiddenFunctionsFromFile(task);
 
@@ -186,7 +186,7 @@ namespace Model.Functions
             this Task task,
             [MultiLine(10)] string content,
             IContext context) =>
-                SaveTestsAsFile(task, $"Tests{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
+                SaveTestsAsFile(task, $"Tests{task.Project.Language.FileExtension}", Encoding.ASCII.GetBytes(content), context);
 
         public static string DisableAddTestsAsString(this Task task) => DisableAddTestsFromFile(task);
 
@@ -225,80 +225,7 @@ namespace Model.Functions
         public static string DisableClearTests(this Task task) => task.TestsFileId is null ? "No Tests specified" : null;
         #endregion
 
-        #region BaseRules
-        [Edit]
-        public static IContext EditBaseRules(
-            this Task task,
-            File baseRulesFile,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { BaseRulesFileId = baseRulesFile.Id, BaseRulesFile = baseRulesFile });
-
-        [MemberOrder(22)]
-        public static IContext ClearBaseRules(
-            this Task task,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { BaseRulesFileId = null, BaseRulesFile = null });
-
-
-        public static string DisableClearBaseRules(this Task task) => task.BaseRulesFileId is null ? "No Base Rules specified" : null;
-        #endregion
-
-        #region ExtraRules
-        [MemberOrder(20)]
-        public static IContext AddExtraRulesFromFile(
-            this Task task,
-            FileAttachment file,
-            IContext context) =>
-                SaveExtraRulesAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
-
-        public static string DisableAddExtraRulesFromFile(this Task task) =>
-            task.DescriptionFileId is null ? null : "Either go to Extra Rules file and reload/edit it, or Clear Extra Rules to create a new file here.";
-
-        [MemberOrder(21)]
-        public static IContext AddExtraRulesAsString(
-            this Task task,
-            [MultiLine(10)] string content,
-            IContext context) =>
-                SaveExtraRulesAsFile(task, $"ExtraRules{task.Project.LanguageAsFileExtension()}", Encoding.ASCII.GetBytes(content), context);
-
-        public static string DisableAddExtraRulesAsString(this Task task) => DisableAddExtraRulesFromFile(task);
-
-
-        private static IContext SaveExtraRulesAsFile(
-            this Task task,
-            string name,
-            byte[] content,
-            IContext context)
-        {
-            var author = Users.Me(context);
-            var f = new File() { Name = name, Content = content, Mime = "application/json", AuthorId = author.Id, Author = author };
-            return context
-                .WithNew(f)
-                .WithUpdated(task,
-                    new(task)
-                    {
-                        ExtraRulesFileId = f.Id,
-                        ExtraRulesFile = f,
-                    });
-        }
-
-        [Edit]
-        public static IContext EditExtraRules(
-            this Task task,
-            File extraRulesFile,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { ExtraRulesFileId = extraRulesFile.Id, ExtraRulesFile = extraRulesFile });
-
-        [MemberOrder(22)]
-        public static IContext ClearExtraRules(
-            this Task task,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { ExtraRulesFileId = null, ExtraRulesFile = null });
-
-
-        public static string DisableClearExtraRules(this Task task) => task.ExtraRulesFileId is null ? "No Extra Rules specified" : null;
-        #endregion
-        #endregion
+       #endregion
 
         #region Hints 
         [MemberOrder(50)]

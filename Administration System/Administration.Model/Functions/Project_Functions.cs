@@ -31,7 +31,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditLanguage(
              this Project proj,
-             ProgrammingLanguage language,
+             Language language,
              IContext context) =>
                  context.WithUpdated(proj, new(proj) { Language = language });
 
@@ -84,23 +84,13 @@ namespace Model.Functions
             var pid = project.Id;
             return context.Instances<Assignment>().Any(a => a.AssignedToId == myId && a.ProjectId == pid);
         }
-
-        internal static string LanguageAsFileExtension(this Project project) =>
-            project.Language switch
-            {
-                ProgrammingLanguage.Python => "_py.txt",
-                ProgrammingLanguage.CSharp => "_cs.txt",
-                ProgrammingLanguage.VB => "_vb.txt",
-                ProgrammingLanguage.Java => "_java.txt",
-                _ => ".txt"
-            };
         #endregion
 
         #region Copying
         [MemberOrder(30)]
         public static (Project, IContext) CopyProjectForNewLanguage(
             this Project project,
-            ProgrammingLanguage newLanguage,
+            Language newLanguage,
             IContext context
             )
         {
