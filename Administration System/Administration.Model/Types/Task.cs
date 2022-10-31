@@ -57,9 +57,9 @@ namespace Model.Types
         public virtual File DescriptionFile { get; init; }
         #endregion
 
-        #region Hidden Functions
+        #region Hidden Code
         [Hidden]
-        public string ReadyMadeFunctions => HiddenCodeFile?.ContentsAsString();
+        public string HiddenCode => HiddenCodeFile?.ContentsAsString();
 
         [Hidden]
         public int? HiddenCodeFileId { get; init; }

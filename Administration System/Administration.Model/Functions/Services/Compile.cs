@@ -62,7 +62,7 @@ public static class Compile {
         var wrappedCode = task.Wrapper
                                   .Replace("<Expression>", expression ?? "\"\"")
                                   .Replace("<StudentCode>", code)
-                                  .Replace("<HiddenCode>", task.ReadyMadeFunctions)
+                                  .Replace("<HiddenCode>", task.HiddenCode)
                                   .Replace("<Helpers>", task.Helpers)
                                   .Replace("<Tests>", testCode);
 
