@@ -55,6 +55,28 @@ namespace Model.Functions
             [MultiLine(10)] string description,
             IContext context) =>
              context.WithUpdated(proj, new(proj) { Description = description });
+
+        [Edit]
+        public static IContext EditCommonHiddenCodeFile(
+            this Project project,
+            File commonHiddenCodeFile,
+            IContext context) =>
+                context.WithUpdated(project, new Project(project) { 
+                    CommonHiddenCodeFileId = commonHiddenCodeFile.Id,
+                    CommonHiddenCodeFile = commonHiddenCodeFile
+                });
+
+        [Edit]
+        public static IContext EditCommonTestsFile(
+            this Project project,
+            File commonTestsFile,
+            IContext context) =>
+                context.WithUpdated(project, new Project(project)
+                {
+                    CommonTestsFileId = commonTestsFile.Id,
+                    CommonTestsFile = commonTestsFile
+                });
+
         #endregion
 
         #region AssignTo
