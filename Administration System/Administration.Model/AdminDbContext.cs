@@ -44,6 +44,11 @@ namespace Model
             mb.Entity<Language>().HasOne(e => e.HelpersFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             mb.Entity<Language>().HasOne(e => e.RegExRulesFile).WithMany().OnDelete(DeleteBehavior.NoAction);
 
+            mb.Entity<File>().HasOne(e => e.Language).WithMany().OnDelete(DeleteBehavior.NoAction);
+
+            mb.Entity<Project>().HasOne(e => e.Language).WithMany().OnDelete(DeleteBehavior.NoAction);
+            mb.Entity<Project>().HasOne(e => e.Language).WithMany().OnDelete(DeleteBehavior.NoAction);
+
             mb.Entity<Organisation>().HasMany(e => e.Teachers).WithOne(e => e.Organisation).OnDelete(DeleteBehavior.NoAction);
 
             mb.Entity<User>().HasMany(e => e.Groups).WithMany(e => e.Students).UsingEntity(j => j.ToTable("StudentGroups"));

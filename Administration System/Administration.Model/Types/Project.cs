@@ -1,4 +1,6 @@
-﻿namespace Model.Types
+﻿using NakedFramework.Value;
+
+namespace Model.Types
 {
     public class Project
     {
@@ -45,7 +47,23 @@
         [MemberOrder(40)]
         public bool PasteFunctions { get; init; }
 
-        [MemberOrder(50)]
+        #region Common Hidden Code
+        [Hidden]
+        public int? CommonHiddenCodeFileId { get; init; }
+
+        [MemberOrder(80)]
+        public virtual File CommonHiddenCodeFile { get; init; }
+        #endregion
+
+        #region CommonTests
+        [Hidden]
+        public int? CommonTestsFileId { get; init; }
+
+        [MemberOrder(90)]
+        public virtual File CommonTestsFile { get; init; }
+        #endregion
+
+        [MemberOrder(100)]
         [MultiLine(10)]
         public string Description { get; init; }
 
