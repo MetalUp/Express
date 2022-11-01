@@ -19,20 +19,41 @@ public class PythonCompilerTest {
         @"print (int(""invalid""))";
 
     private const string TestCodeOk =
-        @"def test_Ok():
-    assert sum([1, 2, 3]) == 6, ""Should be 6""
+        @"import unittest
+
+class Tests(unittest.TestCase):
+
+    def test_Ok(self):
+        assert sum([1, 2, 3]) == 6, ""Should be 6""
 
 if __name__ == ""__main__"":
-    test_Ok()
+    unittest.main()
     print(""Everything passed"")
 ";
 
     private const string TestCodeFail =
-        @"def test_Fail():
-    assert sum([1, 2, 4]) == 6, ""Should be 6""
+        @"import unittest
+
+class Tests(unittest.TestCase):
+
+    def test_Ok(self):
+        assert sum([1, 2, 4]) == 6, ""Should be 6""
 
 if __name__ == ""__main__"":
-    test_Fail()
+    unittest.main()
+    print(""Everything passed"")
+";
+
+    private const string TestCodeRTE =
+        @"import unittest
+
+class Tests(unittest.TestCase):
+
+    def test_Ok(self):
+        print (int(""invalid""))
+
+if __name__ == ""__main__"":
+    unittest.main()
     print(""Everything passed"")
 ";
 
@@ -109,7 +130,8 @@ if __name__ == ""__main__"":
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
-        Assert.IsTrue(rr.stdout.Contains("Everything passed"), rr.stdout);
+        Assert.IsTrue(rr.stdout.Contains("Ran 1 test in"), rr.stdout);
+        Assert.IsTrue(rr.stdout.Contains("OK"), rr.stdout);
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.run_id);
     }
@@ -119,10 +141,25 @@ if __name__ == ""__main__"":
         var runSpec = PythonRunSpec(TestCodeFail);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
-        Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
-        Assert.AreEqual("", rr.stdout);
-        Assert.IsTrue(rr.stderr.Contains("Should be 6"), rr.stderr);
+        Assert.IsTrue(rr.stdout.Contains("Ran 1 test in"), rr.stdout);
+        Assert.IsTrue(rr.stdout.Contains("Should be 6"), rr.stdout);
+        Assert.IsTrue(rr.stdout.Contains("FAIL"), rr.stdout);
+        Assert.AreEqual("", rr.run_id);
+    }
+
+    [TestMethod]
+    public void TestCompileAndTestRTE()
+    {
+        var runSpec = PythonRunSpec(TestCodeRTE);
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stdout.Contains("Ran 1 test in"), rr.stdout);
+        Assert.IsTrue(rr.stdout.Contains("invalid literal"), rr.stdout);
+        Assert.IsTrue(rr.stdout.Contains("ERROR"), rr.stdout);
         Assert.AreEqual("", rr.run_id);
     }
 

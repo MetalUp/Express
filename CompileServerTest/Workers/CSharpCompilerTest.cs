@@ -55,6 +55,22 @@ public class CSharpCompilerTest {
             }
         }";
 
+    private const string TestCodeRTE =
+        @"
+        using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+        namespace ExpressTests;
+
+        [TestClass]
+        public class Tests
+        {
+            [TestMethod]
+            public void ATest()
+            {
+                ((object)null).ToString();
+            }
+        }";
+
     private readonly ILogger testLogger = NullLogger.Instance;
 
     [TestMethod]
@@ -135,6 +151,19 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndTestFail() {
         var runSpec = CsharpRunSpec(TestCodeFail);
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
+        Assert.AreEqual("", rr.stderr);
+        Assert.AreEqual("", rr.run_id);
+    }
+
+    [TestMethod]
+    public void TestCompileAndTestRTE()
+    {
+        var runSpec = CsharpRunSpec(TestCodeRTE);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);

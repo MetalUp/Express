@@ -25,6 +25,17 @@ public static class Handler {
             })
         );
 
+    private static Task<ActionResult<RunResult>> PythonCompileAndTest(RunSpec runSpec) =>
+        Task.Run(Wrap(() => {
+                var (runResult, pyFile) = PythonCompiler.Compile(runSpec, true);
+                if (runResult.outcome == Outcome.Ok) {
+                    runResult = PythonTester.Execute(pyFile);
+                }
+
+                return new ActionResult<RunResult>(runResult);
+            })
+        );
+
     private static Task<ActionResult<RunResult>> PythonCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, _) = PythonCompiler.Compile(runSpec, false);
@@ -94,8 +105,7 @@ public static class Handler {
         };
 
     public static Task<ActionResult<RunResult>> Compile(RunSpec runSpec, ILogger logger) =>
-        runSpec.language_id switch
-        {
+        runSpec.language_id switch {
             "python" => PythonCompile(runSpec),
             "java" => JavaCompile(runSpec),
             "csharp" or "vb" => DotNetCompile(runSpec),
@@ -112,7 +122,7 @@ public static class Handler {
 
     public static Task<ActionResult<RunResult>> CompileAndTest(RunSpec runSpec, ILogger logger) =>
         runSpec.language_id switch {
-            "python" => PythonCompileAndRun(runSpec),
+            "python" => PythonCompileAndTest(runSpec),
             "csharp" or "vb" => DotNetCompileAndTest(runSpec),
             _ => Task.Run(() => new ActionResult<RunResult>(new RunResult { outcome = Outcome.IllegalSystemCall }))
         };
