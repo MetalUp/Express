@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmptyTask, ITask, Task } from '../models/task';
-import { EmptyHint, Hint, IHint } from '../models/hint';
+import { Hint, IHint } from '../models/hint';
 import { Subject } from 'rxjs';
 import { ConfigService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
 import * as Ro from '@nakedobjects/restful-objects';
 import { CollectionRepresentation, DomainObjectRepresentation, EntryType } from '@nakedobjects/restful-objects';
-import { HintComponent } from '../hint/hint.component';
 
 @Injectable({
   providedIn: 'root'

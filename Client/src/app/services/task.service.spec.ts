@@ -1,4 +1,4 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { TaskService } from './task.service';
 import { first } from 'rxjs';
