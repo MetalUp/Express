@@ -15,9 +15,15 @@ export enum Applicability {
     functions: [string, string][]
   }
   
+  export interface ITestRulesBlock {
+    stdout: string,
+    stderr: string
+  }
+
   export interface IFilterRulesBlock {
     cmpinfo: string,
-    stderr: string
+    stderr: string,
+    tests: [string, string]
   }
   
   export const MsgPrefix = "Messages.";

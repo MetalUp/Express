@@ -62,7 +62,7 @@ export class TestingComponent implements OnInit, OnDestroy {
 
     if (this.testedOk) {
       // all OK
-      this.currentResultMessage = result.stdout;
+      this.currentResultMessage = this.rulesService.filterAndReplace(result.stdout);
     }
     else if (result.stdout && result.stderr) {
       // expected test fail
