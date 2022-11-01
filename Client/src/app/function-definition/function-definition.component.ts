@@ -41,8 +41,8 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   get currentStatus() {
     return this.validationFail ||
-      this.rulesService.filter(this.compileServer.selectedLanguage, ErrorType.cmpinfo, this.result.cmpinfo) ||
-      this.rulesService.filter(this.compileServer.selectedLanguage, ErrorType.stderr, this.result.stderr) ||
+      this.rulesService.filter(ErrorType.cmpinfo, this.result.cmpinfo) ||
+      this.rulesService.filter(ErrorType.stderr, this.result.stderr) ||
       (this.compiledOK ? 'Compiled OK' : '');
   }
 
@@ -63,7 +63,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.compiledOK = false;
     this.pendingSubmit = false;
-    this.validationFail = this.rulesService.checkRules(this.compileServer.selectedLanguage, Applicability.functions, this.functionDefinitions);
+    this.validationFail = this.rulesService.checkRules(Applicability.functions, this.functionDefinitions);
     if (!this.validationFail) {
       this.submitting = true;
       this.compileServer.submitCode(this.taskId, this.functionDefinitions).pipe(first()).subscribe(rr => {

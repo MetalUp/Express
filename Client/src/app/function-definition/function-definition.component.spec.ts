@@ -47,7 +47,7 @@ describe('FunctionDefinitionComponent', () => {
 
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
     rulesServiceSpy.checkRules.and.returnValue('');
-    rulesServiceSpy.filter.and.callFake((_l, _e, tf) => tf);
+    rulesServiceSpy.filter.and.callFake((_e, tf) => tf);
 
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
 
@@ -220,7 +220,7 @@ describe('FunctionDefinitionComponent', () => {
     
 
     component.onSubmit();
-    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith(Applicability.functions, "test");
     expect(compileServerServiceSpy.submitCode).toHaveBeenCalledWith(67, 'test');
 
     expect(component.compiledOK).toBe(true);
@@ -239,7 +239,7 @@ describe('FunctionDefinitionComponent', () => {
     component.functionDefinitions = 'test';
 
     component.onSubmit();
-    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.functions, "test");
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith(Applicability.functions, "test");
     expect(compileServerServiceSpy.submitCode).not.toHaveBeenCalled();
 
     expect(component.compiledOK).toBe(false);

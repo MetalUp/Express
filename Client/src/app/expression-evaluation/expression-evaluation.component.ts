@@ -42,13 +42,13 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   filteredCmpinfo() {
     return this.result.cmpinfo
-      ? this.rulesService.filter(this.selectedLanguage, ErrorType.cmpinfo, this.result.cmpinfo)
+      ? this.rulesService.filter(ErrorType.cmpinfo, this.result.cmpinfo)
       : ''
   }
 
   filteredStderr() {
     return this.result.stderr
-      ? this.rulesService.filter(this.selectedLanguage, ErrorType.stderr, this.result.stderr)
+      ? this.rulesService.filter(ErrorType.stderr, this.result.stderr)
       : ''
   }
 
@@ -85,7 +85,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
     this.expression = this.expression.trim();
     if (this.expression !== "") {
       this.result = EmptyRunResult;
-      this.validationFail = this.rulesService.checkRules(this.selectedLanguage, Applicability.expressions, this.expression);
+      this.validationFail = this.rulesService.checkRules(Applicability.expressions, this.expression);
       if (!this.validationFail) {
         this.submitting = true;
         this.compileServer.evaluateExpression(this.taskId, this.expression).pipe(first()).subscribe(rr => {

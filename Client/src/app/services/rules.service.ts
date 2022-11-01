@@ -1,44 +1,34 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Applicability, ErrorType, IRules, ICodeRulesBlock, MsgPrefix, EmptyCodeRulesBlock, ITaskRules } from '../models/rules';
+import { Applicability, ErrorType, IRules, ICodeRulesBlock, MsgPrefix, EmptyCodeRulesBlock } from '../models/rules';
 import { TaskService } from './task.service';
-
-export function rulesFactory(rules: RulesService) {
-  return () => rules.load();
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class RulesService {
 
-  constructor(private http: HttpClient, taskService: TaskService) {
+  constructor(taskService: TaskService) {
     taskService.currentTask.subscribe(t => {
-      this.taskRules.Messages = t.Messages || {};
-      this.taskRules.CodeMustMatch = t.CodeMustMatch || EmptyCodeRulesBlock;
-      this.taskRules.CodeMustNotContain = t.CodeMustNotContain || EmptyCodeRulesBlock;
+      this.taskRules = t.RegExRules ? JSON.parse(t.RegExRules) : null;
     })
   }
 
-  rules: IRules = { "Messages": {}, "ServerResponseMessageFilters": {}, CodeMustMatch: {}, CodeMustNotContain: {} };
-  taskRules : ITaskRules  = {"Messages": {}, CodeMustMatch: EmptyCodeRulesBlock, CodeMustNotContain: EmptyCodeRulesBlock};
+  taskRules? : IRules;
 
-  private getRules(applicability: Applicability, rulesForLanguage: ICodeRulesBlock) {
-    const applicableRules = rulesForLanguage[applicability] || [];
-    const applicableBothRules = rulesForLanguage[Applicability.both] || [];
+  private getRules(applicability: Applicability, rules: ICodeRulesBlock) {
+    const applicableRules = rules[applicability] || [];
+    const applicableBothRules = rules[Applicability.both] || [];
     return applicableRules.concat(applicableBothRules);
   }
 
-  private getMustNotContainRules(language: string, applicability: Applicability) {
-    const rulesForLanguage = this.rules.CodeMustNotContain[language] || EmptyCodeRulesBlock;
-    const taskRules = this.taskRules.CodeMustNotContain || EmptyCodeRulesBlock;
-    return this.getRules(applicability, rulesForLanguage).concat(this.getRules(applicability, taskRules));
+  private getMustNotContainRules(applicability: Applicability) {
+    const rules = this.taskRules?.CodeMustNotContain || EmptyCodeRulesBlock;
+    return this.getRules(applicability, rules);
   }
 
-  private getMustMatchRules(language: string, applicability: Applicability) {
-    const rulesForLanguage = this.rules.CodeMustMatch[language] || EmptyCodeRulesBlock;
-    const taskRules = this.taskRules.CodeMustMatch || EmptyCodeRulesBlock;
-    return this.getRules(applicability, rulesForLanguage).concat(this.getRules(applicability, taskRules));
+  private getMustMatchRules(applicability: Applicability) {
+    const rules = this.taskRules?.CodeMustMatch || EmptyCodeRulesBlock;
+    return this.getRules(applicability, rules);
   }
 
   private format(toformat: string, groups: RegExpMatchArray) {
@@ -51,12 +41,12 @@ export class RulesService {
   }
 
   private get taskMessages() {
-    return this.taskRules.Messages;
+    return this.taskRules?.Messages;
   }
 
   private getMessage(origMessage: string) {
     return origMessage.startsWith(MsgPrefix)
-      ? this.rules.Messages[origMessage.replace(MsgPrefix, '')] || this.taskMessages[origMessage.replace(MsgPrefix, '')] || origMessage
+      ? this.taskMessages?.[origMessage.replace(MsgPrefix, '')] || origMessage
       : origMessage;
   }
 
@@ -69,7 +59,6 @@ export class RulesService {
     }
     return '';
   }
-
 
   private mustNotContainRule(rs: RulesService, toValidate: string, rule: [re: string, msg: string]) {
     try {
@@ -103,37 +92,30 @@ export class RulesService {
     return '';
   }
 
-  public mustNotContain(language: string, applicability: Applicability, toCheck: string) {
-    const rules = this.getMustNotContainRules(language, applicability);
+  public mustNotContain(applicability: Applicability, toCheck: string) {
+    const rules = this.getMustNotContainRules(applicability);
     return this.handle(rules, toCheck, this.mustNotContainRule);
   }
 
-  public mustMatch(language: string, applicability: Applicability, toCheck: string) {
-    const rules = this.getMustMatchRules(language, applicability);
+  public mustMatch(applicability: Applicability, toCheck: string) {
+    const rules = this.getMustMatchRules(applicability);
     return this.handle(rules, toCheck, this.mustMatchRule);
   }
 
-  public checkRules(language: string, applicability: Applicability, toCheck: string) {
-    return this.mustMatch(language, applicability, toCheck) ||
-           this.mustNotContain(language, applicability, toCheck);
+  public checkRules(applicability: Applicability, toCheck: string) {
+    return this.mustMatch(applicability, toCheck) ||
+           this.mustNotContain(applicability, toCheck);
   }
 
-  public filter(language: string, errorType: ErrorType, toFilter: string) {
+  public filter(errorType: ErrorType, toFilter: string) {
     if (toFilter) {
-      const rule = this.rules.ServerResponseMessageFilters[language][errorType];
-      const re = new RegExp(rule);
-      const m = re.exec(toFilter);
-      return m ? m[0] : toFilter;
+      const rule = this.taskRules?.ServerResponseMessageFilters[errorType];
+      if(rule) {
+        const re = new RegExp(rule);
+        const m = re.exec(toFilter);
+        return m ? m[0] : toFilter;
+      }
     }
     return toFilter;
-  }
-
-  load() {
-
-    const options = {
-      withCredentials: true,
-    }
-
-    this.http.get<IRules>('rules.json', options).subscribe(rules => this.rules = rules);
   }
 }

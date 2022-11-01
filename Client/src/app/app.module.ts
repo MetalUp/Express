@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { ExpressionEvaluationComponent } from './expression-evaluation/expression-evaluation.component';
 import { FunctionDefinitionComponent } from './function-definition/function-definition.component';
 import { HintComponent } from './hint/hint.component';
-import { rulesFactory, RulesService } from './services/rules.service';
+import { RulesService } from './services/rules.service';
 import { TaskViewComponent } from './task-view/task-view.component';
 import { TaskDescriptionComponent } from './task-description/task-description.component';
 import { TestingComponent } from './testing/testing.component';
@@ -38,9 +38,6 @@ import { LandingComponent } from './landing/landing.component';
         ServicesModule.forRoot(),
         ViewModelModule.forRoot(),
         GeminiModule.forRoot(),
-    ],
-    providers: [
-        { provide: APP_INITIALIZER, useFactory: rulesFactory, deps: [RulesService], multi: true },
     ],
     bootstrap: [AppComponent]
 })

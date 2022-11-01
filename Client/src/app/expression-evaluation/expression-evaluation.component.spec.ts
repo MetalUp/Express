@@ -56,7 +56,7 @@ describe('ExpressionEvaluationComponent', () => {
     
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
     rulesServiceSpy.checkRules.and.returnValue('');
-    rulesServiceSpy.filter.and.callFake((_l, _e, tf) => tf);
+    rulesServiceSpy.filter.and.callFake(( _e, tf) => tf);
 
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
 
@@ -228,7 +228,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.expression = 'test';
    
     component.onEnter();
-    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith(Applicability.expressions, "test");
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
     expect(component.expression).toBe('test');
@@ -244,7 +244,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.expression = 'test';
 
     component.onEnter();
-    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith("csharp", Applicability.expressions, "test");
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith( Applicability.expressions, "test");
     expect(compileServerServiceSpy.evaluateExpression).not.toHaveBeenCalled();
 
     expect(component.expression).toBe('test');

@@ -144,7 +144,7 @@ describe('TestingComponent', () => {
     component.hasTests = true;
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestErr));
     compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
-    rulesServiceSpy.filter.and.callFake((_l, _e, tf) => tf);
+    rulesServiceSpy.filter.and.callFake((_e, tf) => tf);
 
     component.taskId = 56
    

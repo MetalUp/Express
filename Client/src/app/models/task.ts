@@ -1,5 +1,5 @@
 import { IHint } from "./hint";
-import { ICodeRulesBlock, IMessages } from "./rules";
+import { ICodeRulesBlock, IMessages, IRules } from "./rules";
 
 export interface ITask {
     Id: number;
@@ -8,9 +8,7 @@ export interface ITask {
     Description: [string, string];
     Hints: IHint[];
     HasTests: boolean;
-    Messages?: IMessages;
-    CodeMustMatch?: ICodeRulesBlock;
-    CodeMustNotContain?: ICodeRulesBlock;
+    RegExRules?: string;
     PasteExpression?: boolean;
     PasteFunctions?: boolean;
     NextTask?: string;
@@ -37,9 +35,7 @@ export class Task implements ITask {
     Description: [string, string] = ["", ""];
     Hints: IHint[] = [];
     HasTests: boolean = false;
-    Messages?: IMessages | undefined;
-    CodeMustMatch?: ICodeRulesBlock;
-    CodeMustNotContain?: ICodeRulesBlock;
+    RegExRules?: string;
     PasteExpression?: boolean | undefined;
     PasteFunctions?: boolean | undefined;
     Tests?: [string, string];

@@ -21,26 +21,12 @@ export enum Applicability {
   }
   
   export const MsgPrefix = "Messages.";
-  
+
   export interface IRules {
     "Messages": IMessages,
-    "ServerResponseMessageFilters": IServerResponseMessageFilters,
-    "CodeMustMatch": ICodeRules,
-    "CodeMustNotContain": ICodeRules
-  }
-
-  export interface ITaskRules {
-    "Messages": IMessages,
+    "ServerResponseMessageFilters": IFilterRulesBlock,
     "CodeMustMatch": ICodeRulesBlock,
     "CodeMustNotContain": ICodeRulesBlock
-  }
-  
-  export interface IServerResponseMessageFilters {
-    [key: string]: IFilterRulesBlock
-  }
-  
-  export interface ICodeRules {
-    [key: string]: ICodeRulesBlock
   }
   
   export interface IMessages {

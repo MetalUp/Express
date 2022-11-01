@@ -70,7 +70,7 @@ export class TestingComponent implements OnInit, OnDestroy {
     }
     else if (result.stderr) {
       // unexpected runtime error
-      this.currentResultMessage = this.rulesService.filter(this.compileServer.selectedLanguage, ErrorType.stderr, result.stderr);
+      this.currentResultMessage = this.rulesService.filter(ErrorType.stderr, result.stderr);
     }
     else if (result.cmpinfo) {
       // compile error
