@@ -31,17 +31,11 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   submitting = false;
 
-  skeleton = '';
-
   private canPaste = false;
 
   taskId = 0;
 
   nextTaskClears = true;
-
-  get skeletonUnchanged() {
-    return this.functionDefinitions === this.skeleton;
-  };
 
   validationFail: string = '';
 
@@ -64,11 +58,6 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     if (!this.canPaste) {
       event.preventDefault();
     }
-  }
-
-  onReset() {
-    this.functionDefinitions = this.skeleton;
-    this.modelChanged();
   }
 
   onSubmit() {
@@ -103,11 +92,10 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
       this.canPaste = !!t.PasteFunctions;
-      this.skeleton = t.SkeletonCode || '';
       this.taskId = t.Id;
 
       if (this.nextTaskClears) {
-        this.functionDefinitions = this.skeleton;
+        this.functionDefinitions = "";
         this.modelChanged();
       }
 

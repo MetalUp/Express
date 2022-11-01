@@ -11,7 +11,6 @@ export interface ITask {
     Messages?: IMessages;
     CodeMustMatch?: ICodeRulesBlock;
     CodeMustNotContain?: ICodeRulesBlock;
-    SkeletonCode?: string;
     PasteExpression?: boolean;
     PasteFunctions?: boolean;
     NextTask?: string;
@@ -41,7 +40,6 @@ export class Task implements ITask {
     Messages?: IMessages | undefined;
     CodeMustMatch?: ICodeRulesBlock;
     CodeMustNotContain?: ICodeRulesBlock;
-    SkeletonCode?: string | undefined;
     PasteExpression?: boolean | undefined;
     PasteFunctions?: boolean | undefined;
     Tests?: [string, string];

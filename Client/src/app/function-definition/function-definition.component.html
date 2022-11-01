@@ -2,7 +2,6 @@
     <div class="pane-header">Functions
         <div class="button-bar">
             <button [disabled]="!pendingSubmit" (click)="onSubmit()">Submit</button>
-            <button *ngIf="!!skeleton" [disabled]="skeletonUnchanged" (click)="onReset()">Reset</button>
         </div>
     </div>
     <div class="one-column pane-body" [ngClass]="submitting ? 'in-progress' : ''">

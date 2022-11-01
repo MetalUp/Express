@@ -149,13 +149,16 @@ describe('FunctionDefinitionComponent', () => {
   it('should call model changed when changed', () => {
 
     component.taskId = 67;
-    component.functionDefinitions = '';
+    component.nextTaskClears = true;
+    component.functionDefinitions = 'something';
     
-    taskSubject.next({ PasteFunctions: true, SkeletonCode: 'test' } as ITask);
+    taskSubject.next({ Id: 1, PasteFunctions: true } as ITask);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('');
-    expect(component.pendingSubmit).toBe(true);
+    expect(component.pendingSubmit).toBe(false);
+    expect(component.functionDefinitions).toBe('');
+
 
     expect(compileServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
   });
@@ -167,7 +170,7 @@ describe('FunctionDefinitionComponent', () => {
     component.nextTaskClears = false;
     component.compiledOK = true;
     
-    taskSubject.next({ PasteFunctions: true, SkeletonCode: 'test' } as ITask);
+    taskSubject.next({ Id: 1, PasteFunctions: true } as ITask);
 
     expect(component.functionDefinitions).toBe('original');
     expect(component.compiledOK).toBe(true);
@@ -283,37 +286,6 @@ describe('FunctionDefinitionComponent', () => {
   it('should show no code by default and disable Reset button', () => {
 
     expect(component.functionDefinitions).toEqual('');
-    expect(component.skeleton).toEqual('');
-  });
-
-  it('should show skeleton code from task and enable Reset button', () => {
-
-    taskSubject.next({ SkeletonCode: 'demo skeleton code' } as ITask);
-
-    expect(component.functionDefinitions).toEqual('demo skeleton code');
-    expect(component.skeleton).toEqual('demo skeleton code');
-    expect(component.skeletonUnchanged).toBe(true);
-  });
-
-  it('should reset skeleton code on reset button', () => {
-
-    taskSubject.next({ SkeletonCode: 'demo skeleton code' } as ITask);
-
-    expect(component.functionDefinitions).toEqual('demo skeleton code');
-    expect(component.skeleton).toEqual('demo skeleton code');
-    expect(component.skeletonUnchanged).toBe(true);
-
-    component.functionDefinitions = 'updated code';
-
-    expect(component.functionDefinitions).toEqual('updated code');
-    expect(component.skeleton).toEqual('demo skeleton code');
-    expect(component.skeletonUnchanged).toBe(false);
-
-    component.onReset();
-
-    expect(component.functionDefinitions).toEqual('demo skeleton code');
-    expect(component.skeleton).toEqual('demo skeleton code');
-    expect(component.skeletonUnchanged).toBe(true);
   });
 
   it('gets the placeholder for the selected language', () => {
