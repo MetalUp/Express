@@ -23,15 +23,16 @@ export class TestingComponent implements OnInit, OnDestroy {
   hasTests = false;
 
   message() {
-    if (this.canRunTests() && this.result.outcome === 0) {
+    if (!this.hasTests){
+      return 'There are no Tests defined for this task'; 
+    }
+    if (this.canRunTests()) {
       return 'Tests not yet run on current function definition.';
     }
     if (this.hasTests && this.result.outcome === 0) {
       return 'This task defines automated tests, which may be run once Function definition code has successfully compiled.';
     }
-    if (!this.hasTests){
-      return 'There are no Tests defined for this task'; 
-    }
+    
     return this.currentResultMessage;
   }
 
@@ -58,15 +59,11 @@ export class TestingComponent implements OnInit, OnDestroy {
 
   private handleResult(result: RunResult) {
     this.result = result;
-    this.testedOk = !(result.cmpinfo || result.stderr) && result.outcome == 15;
+    this.testedOk = !(result.cmpinfo || result.stderr) && !!result.stdout;
 
     if (this.testedOk) {
       // all OK
       this.currentResultMessage = this.rulesService.filterAndReplace(result.stdout);
-    }
-    else if (result.stdout && result.stderr) {
-      // expected test fail
-      this.currentResultMessage = result.stdout;
     }
     else if (result.stderr) {
       // unexpected runtime error

@@ -86,6 +86,8 @@ describe('TestingComponent', () => {
     fixture.detectChanges();
     component.result = EmptyRunResult;
     component.tests = "tests";
+    rulesServiceSpy.filter.and.callFake((_e, tf) => tf);
+    rulesServiceSpy.filterAndReplace.and.callFake((_e) => _e);
   });
 
   it('should create', () => {
@@ -105,21 +107,21 @@ describe('TestingComponent', () => {
     expect(component.canRunTests()).toEqual(true);
   });
 
-  // it('should submit test code - test pass', () => {
-  //   component.hasTests = true;
-  //   compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestPass));
-  //   compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+  it('should submit test code - test pass', () => {
+    component.hasTests = true;
+    compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestPass));
+    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
 
-  //   component.taskId = 56;
+    component.taskId = 56;
 
-  //   component.onRunTests();
+    component.onRunTests();
 
-  //   expect(compileServerServiceSpy.runTests).toHaveBeenCalledWith(56);
+    expect(compileServerServiceSpy.runTests).toHaveBeenCalledWith(56);
 
-  //   //expect(component.currentResultMessage).toEqual('');
-  //   expect(component.message()).toEqual('');
-  //   expect(component.testedOk).toEqual(true);
-  // });
+    expect(component.currentResultMessage).toEqual('All tests passed.');
+    expect(component.message()).toEqual('All tests passed.');
+    expect(component.testedOk).toEqual(true);
+  });
 
   it('should submit test code - test fail', () => {
     component.hasTests = true;
@@ -133,8 +135,8 @@ describe('TestingComponent', () => {
 
     expect(compileServerServiceSpy.runTests).toHaveBeenCalledWith(56);
 
-    expect(component.currentResultMessage).toEqual('test failed');
-    expect(component.message()).toEqual('test failed');
+    expect(component.currentResultMessage).toEqual('test failed error');
+    expect(component.message()).toEqual('test failed error');
     expect(component.testedOk).toEqual(false);
   });
 
@@ -142,7 +144,7 @@ describe('TestingComponent', () => {
     component.hasTests = true;
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestErr));
     compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
-    rulesServiceSpy.filter.and.callFake((_e, tf) => tf);
+    
 
     component.taskId = 56
    
