@@ -99,7 +99,7 @@ export class CompileServerService {
   }
 
 
-  params(code : string) {
+  params1(code : string) {
     return this.run_spec(code);
   }
 
@@ -110,7 +110,7 @@ export class CompileServerService {
   submit_run(code: string, run: boolean) {
     const action = run ? this.runAction : this.testAction;
 
-    return from(this.repLoader.invoke(action, this.params(code), this.urlParams)
+    return from(this.repLoader.invoke(action, this.params1(code), this.urlParams)
       .then(ar => this.ToRunResult(ar)))
       .pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
   }
@@ -121,22 +121,33 @@ export class CompileServerService {
       .pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
   }
 
+  params(taskId: number, expression?: string, code?: string) {
+    const dict = { "taskId": new Value(taskId) } as Dictionary<Value>;
+
+    if (expression) {
+      dict["expression"] = new Value(expression);
+    }
+
+    dict["code"] = new Value(code || this.userDefinedFunction);
+
+    return dict;
+  }
+
   evaluateExpression(taskId: number, expression: string) {
     const action = this.evaluateExpressionAction;
-    var params = { "taskId": new Value(taskId),  "expression": new Value(expression), "code": new Value(this.userDefinedFunction) } as Dictionary<Value>;
-
+    var params = this.params(taskId, expression);
     return this.submit(action, params);
   }
 
   submitCode(taskId: number, code: string) {
     const action = this.submitCodeAction;
-    var params = { "taskId": new Value(taskId), "code": new Value(code) } as Dictionary<Value>;
+    var params = this.params(taskId, undefined, code);
     return this.submit(action, params);
   }
 
   runTests(taskId: number) {
     const action = this.runTestsAction;
-    var params = { "taskId": new Value(taskId), "code": new Value(this.userDefinedFunction) } as Dictionary<Value>;
+    var params = this.params(taskId);
     return this.submit(action, params);
   }
 }

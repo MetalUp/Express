@@ -17,7 +17,6 @@ describe('CompileServerService', () => {
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let taskSubject = new Subject<ITask>();
 
-  let testRunSpec: Dictionary<Value>;
   let testRunResult: RunResult = {
     run_id: 'a',
     outcome: 66,
@@ -32,7 +31,6 @@ describe('CompileServerService', () => {
       scalar: () => this.val
     })
   }
-
 
   let mockAR = {
     result : () => ({
@@ -76,80 +74,106 @@ describe('CompileServerService', () => {
     service = new CompileServerService(taskServiceSpy, repLoaderSpy, contextServiceSpy);
     tick();
     service.selectedLanguage = 'stub language';
-    testRunSpec = service.run_spec('stub code');
+    service.clearFunctionDefinitions();
   }));
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should call post on /runs', fakeAsync(() => {
+  it('should call evaluateExpression', fakeAsync(() => {
     tick();
     const promise = Promise.resolve(mockAR);
     repLoaderSpy.invoke.and.returnValue(promise);
-    service.selectedLanguage = 'stub language';
-    service.submit_run("stub code", true).subscribe(o => expect(o).toEqual(testRunResult));
+    service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
+    var params = { "taskId": new Value(46), "expression": new Value("stub code"), "code": new Value("") } as Dictionary<Value>;
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("stub code"), service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, params, service.urlParams);
   }));
 
-  it('should call post on /runs including any function definitions', fakeAsync(() => {
-    const promise = Promise.resolve(mockAR);
-    repLoaderSpy.invoke.and.returnValue(promise);
-    service.selectedLanguage = 'stub language';
-    service.setFunctionDefinitions('test definitions ');
-    service.submit_run(`${UserDefinedFunctionPlaceholder}stub code`, false).subscribe(o => expect(o).toEqual(testRunResult));
-
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("test definitions stub code"), service.urlParams);
-  }));
-
-  it('should call post on /runs excluding empty function definitions', fakeAsync(() => {
-    const promise = Promise.resolve(mockAR);
-    repLoaderSpy.invoke.and.returnValue(promise);
-    service.selectedLanguage = 'stub language';
-    service.clearFunctionDefinitions();
-    service.submit_run(`${UserDefinedFunctionPlaceholder}stub code`, false).subscribe(o => expect(o).toEqual(testRunResult));
-
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("stub code"), service.urlParams);
-  }));
-
-  it('should call post on /runs including any task wrapping code', fakeAsync(() => {
-    const promise = Promise.resolve(mockAR);
-    repLoaderSpy.invoke.and.returnValue(promise);
-   
-
-    taskSubject.next({ ReadyMadeFunctions: ["codeUrl", "codeMt"], Language: '' } as ITask);
-
-    expect(taskServiceSpy.getFile).toHaveBeenCalledOnceWith(["codeUrl", "codeMt"]);
-    service.selectedLanguage = 'stub language';
-    service.setFunctionDefinitions('test definitions ');
+  it('should call evaluateExpression and include user functions', fakeAsync(() => {
     tick();
-    service.submit_run(`${UserDefinedFunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`, false).subscribe(o => expect(o).toEqual(testRunResult));
-
-
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("test definitions additional task codestub code"), service.urlParams);
-  }));
-
-
-  it('should call post on /runs excluding empty task wrapping code', fakeAsync(() => {
     const promise = Promise.resolve(mockAR);
     repLoaderSpy.invoke.and.returnValue(promise);
-    service.selectedLanguage = 'stub language';
-    service.clearFunctionDefinitions();
-    service.submit_run(`${UserDefinedFunctionPlaceholder}${ReadyMadeFunctionsPlaceholder}stub code`, false).subscribe(o => expect(o).toEqual(testRunResult));
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("stub code"), service.urlParams);
+    service.setFunctionDefinitions("extra code");
+    service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
+    var params = { "taskId": new Value(46), "expression": new Value("stub code"), "code": new Value("extra code") } as Dictionary<Value>;
+
+    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, params, service.urlParams);
   }));
 
+  it('should call submitCode', fakeAsync(() => {
+    tick();
+    const promise = Promise.resolve(mockAR);
+    repLoaderSpy.invoke.and.returnValue(promise);
+    service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
 
-  it('should call post on /runs and return an empty result on error', fakeAsync(() => {
+    var params = { "taskId": new Value(46), "code": new Value("stub code") } as Dictionary<Value>;
+
+    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.submitCodeAction, params, service.urlParams);
+  }));
+
+  it('should call submitCode and not include user code', fakeAsync(() => {
+    tick();
+    const promise = Promise.resolve(mockAR);
+    service.setFunctionDefinitions("extra code");
+    repLoaderSpy.invoke.and.returnValue(promise);
+    service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
+
+    var params = { "taskId": new Value(46), "code": new Value("stub code") } as Dictionary<Value>;
+
+    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.submitCodeAction, params, service.urlParams);
+  }));
+
+  it('should call runTests', fakeAsync(() => {
+    tick();
+    const promise = Promise.resolve(mockAR);
+    repLoaderSpy.invoke.and.returnValue(promise);
+    service.runTests(46).subscribe(o => expect(o).toEqual(testRunResult));
+
+    var params = { "taskId": new Value(46), "code": new Value("") } as Dictionary<Value>;
+
+    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runTestsAction, params, service.urlParams);
+  }));
+
+  it('should call runTests and include user code', fakeAsync(() => {
+    tick();
+    const promise = Promise.resolve(mockAR);
+
+    service.setFunctionDefinitions("extra code");
+    repLoaderSpy.invoke.and.returnValue(promise);
+    service.runTests(46).subscribe(o => expect(o).toEqual(testRunResult));
+
+    var params = { "taskId": new Value(46), "code": new Value("extra code") } as Dictionary<Value>;
+
+    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runTestsAction, params, service.urlParams);
+  }));
+
+  it('should call evaluateExpression and return an empty result on error', fakeAsync(() => {
     repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404 }));
     const unknownError = errorRunResult(null);
 
-    service.selectedLanguage = 'stub language';
+    service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
 
-    service.submit_run("stub code", true).subscribe(o => expect(o).toEqual(unknownError));
+    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, service.params(46, "stub code"), service.urlParams);
+  }));
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runAction, service.params("stub code"), service.urlParams);
+  it('should call submitCode and return an empty result on error', fakeAsync(() => {
+    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404 }));
+    const unknownError = errorRunResult(null);
+
+    service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
+
+    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, service.params(46, undefined, "stub code"), service.urlParams);
+  }));
+
+  it('should call runTests and return an empty result on error', fakeAsync(() => {
+    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404 }));
+    const unknownError = errorRunResult(null);
+
+    service.runTests(46).subscribe(o => expect(o).toEqual(unknownError));
+
+    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, service.params(46, ""), service.urlParams);
   }));
 });
