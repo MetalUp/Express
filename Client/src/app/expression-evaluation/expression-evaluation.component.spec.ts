@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExpressionEvaluationComponent } from './expression-evaluation.component';
 import { of, Subject } from 'rxjs';
 import { EmptyRunResult, RunResult } from '../models/run-result';
-import { wrapExpression } from '../language-helpers/language-helpers';
 import { RulesService } from '../services/rules.service';
 import { Applicability } from '../models/rules';
 import { TaskService } from '../services/task.service';

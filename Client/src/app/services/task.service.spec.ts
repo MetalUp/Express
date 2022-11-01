@@ -28,7 +28,7 @@ describe('TaskService', () => {
    
     const object = new DomainObjectRepresentation();
     object.hateoasUrl = `testPath/objects/Model.Types.Task/testTask`;
-    const pm = new PropertyMember({value : 'test language'} as any, object, 'Language');
+    const pm = new PropertyMember({value : 'testlanguage'} as any, object, 'Language');
     const cm = new CollectionMember({value : []} as any, object, 'Hints');
     pm.entryType = () => EntryType.FreeForm;
     pm.isScalar = () => true;

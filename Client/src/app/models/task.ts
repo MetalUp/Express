@@ -18,21 +18,10 @@ export interface ITask {
 
 export class Task implements ITask {
   
-    constructor(public Id: number) {
-    }
-
-    private language = "";
-    
-    get Language() {
-        return this.language;
-    }
-
-    set Language(l : string) {
-        this.language = l.replace(' ', '').toLowerCase(); // to fix 'C Sharp'
-    }
-   
+    constructor(public Id: number) {}
     Title: string = "";
     Description: [string, string] = ["", ""];
+    Language: string = "";
     Hints: IHint[] = [];
     HasTests: boolean = false;
     RegExRules?: string;

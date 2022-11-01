@@ -1,6 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService, ContextService } from '@nakedobjects/services';
-import { Subscription } from 'rxjs';
+import { Component,  OnInit } from '@angular/core';
+import { ContextService } from '@nakedobjects/services';
 
 @Component({
   selector: 'app-user',

@@ -2,9 +2,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserRepresentation } from '@nakedobjects/restful-objects';
 import { ContextService } from '@nakedobjects/services';
-//import { AuthService, User } from '@auth0/auth0-angular';
-import { Subject } from 'rxjs';
-
 import { UserComponent } from './user.component';
 
 describe('UserComponent', () => {

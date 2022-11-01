@@ -21,9 +21,7 @@
             "assets": [
               "src/favicon.png",
               "src/assets",
-              "src/rules.json",
               "src/config.json",
-              "src/content",
               "src/.htaccess"
             ],
             "styles": [
@@ -93,9 +91,7 @@
             "assets": [
               "src/favicon.png",
               "src/assets",
-              "src/rules.json",
               "src/config.json",
-              "src/content",
               "src/.htaccess"
             ],
             "styles": [

@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { wrapFunctions } from '../language-helpers/language-helpers';
 import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../models/run-result';
