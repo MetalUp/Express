@@ -3,7 +3,6 @@ import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesR
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { Subject } from 'rxjs';
-import { UserDefinedFunctionPlaceholder, ReadyMadeFunctionsPlaceholder } from '../language-helpers/language-helpers';
 import { RunResult, errorRunResult } from '../models/run-result';
 import { ITask } from '../models/task';
 
