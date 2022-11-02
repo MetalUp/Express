@@ -19,11 +19,16 @@ describe('RulesService', () => {
         "NotPermitted": "Use of '{1}' is not permitted",
         "ExternalDependency": "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter",
         "MutatingMethod": "Use of '{1}', or any other method that mutates a List is not permitted",
-        "Assignment": "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
+        "Assignment": "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')",
+        "TestResult": "Result is: {1}"
     },
     "ServerResponseMessageFilters": {
         "cmpinfo": "CS.*",
-        "stderr": "\\w+Exception"
+        "stderr": "\\w+Exception",
+        "tests": [
+          ["(Failed)", "Messages.TestResult"],
+          ["Passed", "All OK"]
+        ]
     },
     "CodeMustMatch": {
         "both": [],
@@ -188,4 +193,20 @@ describe('RulesService', () => {
     const validated = service.mustMatch(Applicability.functions, "static int Sq(int x) return x*x");
     expect(validated).toEqual("Functions must include the symbol '=>'");
   });
+
+  it('should filter and replace test results first regex', () => {
+    const filtered = service.filterAndReplace("something Failed something");
+    expect(filtered).toEqual('Result is: Failed')
+  });
+
+  it('should filter and replace test results second regex', () => {
+    const filtered = service.filterAndReplace("something Passed something");
+    expect(filtered).toEqual('All OK')
+  });
+
+  it('should not filter is no match', () => {
+    const filtered = service.filterAndReplace("something something");
+    expect(filtered).toEqual('something something')
+  });
+
 });
