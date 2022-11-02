@@ -15,7 +15,7 @@ namespace Model.Types
             Title = cloneFrom.Title;
             Language = cloneFrom.Language;
             PasteExpression = cloneFrom.PasteExpression;
-            PasteFunctions = cloneFrom.PasteFunctions;
+            PasteCode = cloneFrom.PasteCode;
             Description = cloneFrom.Description;
             Tasks = new List<Task>(cloneFrom.Tasks);
         }
@@ -45,7 +45,7 @@ namespace Model.Types
         public bool PasteExpression { get; init; }
 
         [MemberOrder(40)]
-        public bool PasteFunctions { get; init; }
+        public bool PasteCode { get; init; }
 
         #region Common Hidden Code
         [Hidden]
