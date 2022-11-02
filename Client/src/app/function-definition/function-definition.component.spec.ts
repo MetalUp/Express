@@ -152,7 +152,7 @@ describe('FunctionDefinitionComponent', () => {
     component.nextTaskClears = true;
     component.functionDefinitions = 'something';
     
-    taskSubject.next({ Id: 1, PasteFunctions: true } as ITask);
+    taskSubject.next({ Id: 1, PasteCode: true } as ITask);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('');
@@ -170,7 +170,7 @@ describe('FunctionDefinitionComponent', () => {
     component.nextTaskClears = false;
     component.compiledOK = true;
     
-    taskSubject.next({ Id: 1, PasteFunctions: true } as ITask);
+    taskSubject.next({ Id: 1, PasteCode: true } as ITask);
 
     expect(component.functionDefinitions).toBe('original');
     expect(component.compiledOK).toBe(true);
@@ -261,7 +261,7 @@ describe('FunctionDefinitionComponent', () => {
   it('should enable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteFunctions: true } as ITask);
+    taskSubject.next({ PasteCode: true } as ITask);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).not.toHaveBeenCalled();
@@ -270,7 +270,7 @@ describe('FunctionDefinitionComponent', () => {
   it('should disable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteFunctions: false } as ITask);
+    taskSubject.next({ PasteCode: false } as ITask);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();

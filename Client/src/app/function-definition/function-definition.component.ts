@@ -90,7 +90,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
-      this.canPaste = !!t.PasteFunctions;
+      this.canPaste = !!t.PasteCode;
       this.taskId = t.Id;
 
       if (this.nextTaskClears) {

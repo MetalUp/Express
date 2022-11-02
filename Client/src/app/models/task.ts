@@ -10,7 +10,7 @@ export interface ITask {
     HasTests: boolean;
     RegExRules?: string;
     PasteExpression?: boolean;
-    PasteFunctions?: boolean;
+    PasteCode?: boolean;
     NextTask?: string;
     PreviousTask?: string;
     NextTaskClearsFunctions?: boolean;
@@ -26,7 +26,7 @@ export class Task implements ITask {
     HasTests: boolean = false;
     RegExRules?: string;
     PasteExpression?: boolean | undefined;
-    PasteFunctions?: boolean | undefined;
+    PasteCode?: boolean | undefined;
     Tests?: [string, string];
     NextTask?: string | undefined;
     PreviousTask?: string | undefined;

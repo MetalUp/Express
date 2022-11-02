@@ -108,7 +108,7 @@ namespace Model.Types
         public bool PasteExpression => Project.PasteExpression;
 
         [HideInClient]
-        public bool PasteFunctions => Project.PasteCode;
+        public bool PasteCode => Project.PasteCode;
 
         [Hidden]
         public int? PreviousTaskId { get; init; }
