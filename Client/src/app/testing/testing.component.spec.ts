@@ -58,7 +58,7 @@ describe('TestingComponent', () => {
   let taskSubject = new Subject<ITask>();
 
   beforeEach(async () => {
-    compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['runTests', 'hasFunctionDefinitions'], { "selectedLanguage": "csharp" });
+    compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['runTests', 'hasUserDefinedCode'], { "selectedLanguage": "csharp" });
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile'], { currentTask: taskSubject });
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'filterAndReplace']);
 
@@ -97,20 +97,20 @@ describe('TestingComponent', () => {
   it('should disable run tests until code compiled', () => {
 
     component.hasTests = true;
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(false);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(false);
     expect(component.canRunTests()).toEqual(false);
   });
 
   it('should enable run tests when code compiled', () => {
     component.hasTests = true;
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
     expect(component.canRunTests()).toEqual(true);
   });
 
   it('should submit test code - test pass', () => {
     component.hasTests = true;
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestPass));
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
 
     component.taskId = 56;
 
@@ -126,7 +126,7 @@ describe('TestingComponent', () => {
   it('should submit test code - test fail', () => {
     component.hasTests = true;
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestFail));
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
 
     component.taskId = 56
   
@@ -143,7 +143,7 @@ describe('TestingComponent', () => {
   it('should submit test code - test error', () => {
     component.hasTests = true;
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestErr));
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
     
 
     component.taskId = 56
@@ -161,7 +161,7 @@ describe('TestingComponent', () => {
   it('should submit test code - test compile error', () => {
     component.hasTests = true;
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestCmp));
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
 
     component.taskId = 56
    
@@ -178,7 +178,7 @@ describe('TestingComponent', () => {
   it('should submit test code - test outcome error', () => {
     component.hasTests = true;
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestOutcome));
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
 
     component.taskId = 56
    
@@ -195,7 +195,7 @@ describe('TestingComponent', () => {
   it('should allow testing when jobe server has test functions', () => {
     
     component.hasTests = true;
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
     component.testedOk = true;
     component.result = EmptyRunResult;
 
@@ -208,7 +208,7 @@ describe('TestingComponent', () => {
   it('should not allow testing when jobe server has no test functions', () => {
     
     component.hasTests = true;
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(false);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(false);
 
     component.testedOk = true;
     component.result = EmptyRunResult;
@@ -222,7 +222,7 @@ describe('TestingComponent', () => {
   it('should not allow testing when tests run', () => {
     
     component.hasTests = true;
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(false);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(false);
     component.testedOk = true;
     component.result = testRunResultTestOutcome;
 
@@ -235,7 +235,7 @@ describe('TestingComponent', () => {
   it('should not allow testing when no tests', () => {
     
     component.hasTests = false;
-    compileServerServiceSpy.hasFunctionDefinitions.and.returnValue(true);
+    compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
 
     component.testedOk = true;
     component.result = EmptyRunResult;

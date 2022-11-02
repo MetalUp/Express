@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RunResult } from '../models/run-result';
 import { of, Subject } from 'rxjs';
-import { FunctionDefinitionComponent } from './function-definition.component';
+import { CodeDefinitionComponent } from './code-definition.component';
 import { RulesService } from '../services/rules.service';
 import { Applicability } from '../models/rules';
 import { TaskService } from '../services/task.service';
@@ -9,9 +9,9 @@ import { ITask } from '../models/task';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CompileServerService } from '../services/compile-server.service';
 
-describe('FunctionDefinitionComponent', () => {
-  let component: FunctionDefinitionComponent;
-  let fixture: ComponentFixture<FunctionDefinitionComponent>;
+describe('CodeDefinitionComponent', () => {
+  let component: CodeDefinitionComponent;
+  let fixture: ComponentFixture<CodeDefinitionComponent>;
   let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
@@ -43,7 +43,7 @@ describe('FunctionDefinitionComponent', () => {
 
 
   beforeEach(async () => {
-    compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['submitCode', 'clearFunctionDefinitions', 'setFunctionDefinitions'], { "selectedLanguage": "csharp" });
+    compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['submitCode', 'clearUserDefinedCode', 'setUserDefinedCode'], { "selectedLanguage": "csharp" });
 
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
     rulesServiceSpy.checkRules.and.returnValue('');
@@ -52,7 +52,7 @@ describe('FunctionDefinitionComponent', () => {
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
 
     await TestBed.configureTestingModule({
-      declarations: [FunctionDefinitionComponent],
+      declarations: [CodeDefinitionComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
@@ -71,7 +71,7 @@ describe('FunctionDefinitionComponent', () => {
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(FunctionDefinitionComponent);
+    fixture = TestBed.createComponent(CodeDefinitionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -85,7 +85,7 @@ describe('FunctionDefinitionComponent', () => {
     compileServerServiceSpy.submitCode.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.taskId = 67;
-    component.functionDefinitions = 'test';
+    component.codeDefinitions = 'test';
     
 
     component.onSubmit();
@@ -95,7 +95,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(compileServerServiceSpy.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setUserDefinedCode).toHaveBeenCalledWith(component.codeDefinitions);
 
   });
 
@@ -103,7 +103,7 @@ describe('FunctionDefinitionComponent', () => {
     compileServerServiceSpy.submitCode.and.returnValue(of<RunResult>(testRunResultCmp));
 
     component.taskId = 67;
-    component.functionDefinitions = 'test';
+    component.codeDefinitions = 'test';
    
 
     component.onSubmit();
@@ -113,7 +113,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('compiler error');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(compileServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setUserDefinedCode).not.toHaveBeenCalledWith(component.codeDefinitions);
 
   });
 
@@ -121,7 +121,7 @@ describe('FunctionDefinitionComponent', () => {
     compileServerServiceSpy.submitCode.and.returnValue(of<RunResult>(testRunResultErr));
 
     component.taskId = 67;
-    component.functionDefinitions = 'test';
+    component.codeDefinitions = 'test';
 
     component.onSubmit();
     expect(compileServerServiceSpy.submitCode).toHaveBeenCalledWith(67, 'test');
@@ -130,54 +130,54 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('run error');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(compileServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setUserDefinedCode).not.toHaveBeenCalledWith(component.codeDefinitions);
   });
 
   it('should clear code when changed', () => {
 
     component.taskId = 67;
-    component.functionDefinitions = 'test';
+    component.codeDefinitions = 'test';
     component.modelChanged();
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('');
     expect(component.pendingSubmit).toBe(true);
 
-    expect(compileServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
+    expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
   });
 
   it('should call model changed when changed', () => {
 
     component.taskId = 67;
     component.nextTaskClears = true;
-    component.functionDefinitions = 'something';
+    component.codeDefinitions = 'something';
     
     taskSubject.next({ Id: 1, PasteCode: true } as ITask);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('');
     expect(component.pendingSubmit).toBe(false);
-    expect(component.functionDefinitions).toBe('');
+    expect(component.codeDefinitions).toBe('');
 
 
-    expect(compileServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
+    expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
   });
 
   it('should not call model changed when changed in nextClassClears flag unset', () => {
 
     component.taskId = 67;
-    component.functionDefinitions = 'original';
+    component.codeDefinitions = 'original';
     component.nextTaskClears = false;
     component.compiledOK = true;
     
     taskSubject.next({ Id: 1, PasteCode: true } as ITask);
 
-    expect(component.functionDefinitions).toBe('original');
+    expect(component.codeDefinitions).toBe('original');
     expect(component.compiledOK).toBe(true);
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(compileServerServiceSpy.clearFunctionDefinitions).not.toHaveBeenCalled();
+    expect(compileServerServiceSpy.clearUserDefinedCode).not.toHaveBeenCalled();
   });
 
   it('should default nextClassClears flag', () => {
@@ -208,7 +208,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(compileServerServiceSpy.clearFunctionDefinitions).toHaveBeenCalled();
+    expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
   });
 
   it('should call checkRules on enter', () => {
@@ -216,7 +216,7 @@ describe('FunctionDefinitionComponent', () => {
     compileServerServiceSpy.submitCode.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.taskId = 67;
-    component.functionDefinitions = 'test';
+    component.codeDefinitions = 'test';
     
 
     component.onSubmit();
@@ -227,7 +227,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(compileServerServiceSpy.setFunctionDefinitions).toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setUserDefinedCode).toHaveBeenCalledWith(component.codeDefinitions);
   });
 
   it('should not submit on checkRules error', () => {
@@ -236,7 +236,7 @@ describe('FunctionDefinitionComponent', () => {
     rulesServiceSpy.checkRules.and.returnValue("rules fail");
 
     component.taskId = 67;
-    component.functionDefinitions = 'test';
+    component.codeDefinitions = 'test';
 
     component.onSubmit();
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith(Applicability.functions, "test");
@@ -246,7 +246,7 @@ describe('FunctionDefinitionComponent', () => {
     expect(component.currentStatus).toBe('rules fail');
     expect(component.pendingSubmit).toBe(false);
 
-    expect(compileServerServiceSpy.setFunctionDefinitions).not.toHaveBeenCalledWith(component.functionDefinitions);
+    expect(compileServerServiceSpy.setUserDefinedCode).not.toHaveBeenCalledWith(component.codeDefinitions);
   });
 
 
@@ -285,7 +285,7 @@ describe('FunctionDefinitionComponent', () => {
 
   it('should show no code by default and disable Reset button', () => {
 
-    expect(component.functionDefinitions).toEqual('');
+    expect(component.codeDefinitions).toEqual('');
   });
 
   it('gets the placeholder for the selected language', () => {

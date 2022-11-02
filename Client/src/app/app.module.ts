@@ -8,7 +8,7 @@ import { LibModule as ViewModelModule } from '@nakedobjects/view-models';
 import { RoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ExpressionEvaluationComponent } from './expression-evaluation/expression-evaluation.component';
-import { FunctionDefinitionComponent } from './function-definition/function-definition.component';
+import { CodeDefinitionComponent } from './code-definition/code-definition.component';
 import { HintComponent } from './hint/hint.component';
 import { RulesService } from './services/rules.service';
 import { TaskViewComponent } from './task-view/task-view.component';
@@ -21,7 +21,7 @@ import { LandingComponent } from './landing/landing.component';
     declarations: [
         AppComponent,
         ExpressionEvaluationComponent,
-        FunctionDefinitionComponent,
+        CodeDefinitionComponent,
         UserComponent,
         TaskDescriptionComponent,
         TestingComponent,

@@ -43,7 +43,7 @@ export class TestingComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    if (this.compileServer.hasFunctionDefinitions()) {
+    if (this.compileServer.hasUserDefinedCode()) {
       return this.result.outcome === 0;
     }
     this.testedOk = false;

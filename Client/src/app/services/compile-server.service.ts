@@ -34,19 +34,19 @@ export class CompileServerService {
 
   selectedLanguage: string = '';
 
-  private userDefinedFunction: string = '';
+  private userDefinedCode: string = '';
 
   // easier to test functions
-  setFunctionDefinitions(functionDefinitions: string) {
-    this.userDefinedFunction = functionDefinitions;
+  setUserDefinedCode(userCode: string) {
+    this.userDefinedCode = userCode;
   }
 
-  clearFunctionDefinitions() {
-    this.userDefinedFunction = '';
+  clearUserDefinedCode() {
+    this.userDefinedCode = '';
   }
 
-  hasFunctionDefinitions() {
-    return !!this.userDefinedFunction;
+  hasUserDefinedCode() {
+    return !!this.userDefinedCode;
   }
 
   private ToRunResult(ar: ActionResultRepresentation) : RunResult {
@@ -90,7 +90,7 @@ export class CompileServerService {
     if (expression) {
       dict["expression"] = new Value(expression);
     }
-    dict["code"] = new Value(code || this.userDefinedFunction);
+    dict["code"] = new Value(code || this.userDefinedCode);
     return dict;
   }
 

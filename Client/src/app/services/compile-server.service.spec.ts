@@ -73,7 +73,7 @@ describe('CompileServerService', () => {
     service = new CompileServerService(taskServiceSpy, repLoaderSpy, contextServiceSpy);
     tick();
     service.selectedLanguage = 'stub language';
-    service.clearFunctionDefinitions();
+    service.clearUserDefinedCode();
   }));
 
   it('should be created', () => {
@@ -95,7 +95,7 @@ describe('CompileServerService', () => {
     const promise = Promise.resolve(mockAR);
     repLoaderSpy.invoke.and.returnValue(promise);
 
-    service.setFunctionDefinitions("extra code");
+    service.setUserDefinedCode("extra code");
     service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
     var params = { "taskId": new Value(46), "expression": new Value("stub code"), "code": new Value("extra code") } as Dictionary<Value>;
 
@@ -116,7 +116,7 @@ describe('CompileServerService', () => {
   it('should call submitCode and not include user code', fakeAsync(() => {
     tick();
     const promise = Promise.resolve(mockAR);
-    service.setFunctionDefinitions("extra code");
+    service.setUserDefinedCode("extra code");
     repLoaderSpy.invoke.and.returnValue(promise);
     service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
 
@@ -140,7 +140,7 @@ describe('CompileServerService', () => {
     tick();
     const promise = Promise.resolve(mockAR);
 
-    service.setFunctionDefinitions("extra code");
+    service.setUserDefinedCode("extra code");
     repLoaderSpy.invoke.and.returnValue(promise);
     service.runTests(46).subscribe(o => expect(o).toEqual(testRunResult));
 

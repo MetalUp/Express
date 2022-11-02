@@ -5,9 +5,9 @@
         </div>
     </div>
     <div class="one-column pane-body" [ngClass]="submitting ? 'in-progress' : ''">
-        <div class="function-definition code">
+        <div class="code-definition code">
             <textarea 
-                [(ngModel)]="functionDefinitions" 
+                [(ngModel)]="codeDefinitions" 
                 (ngModelChange)="modelChanged()" 
                 placeholder="{{placeholder}}"
                 spellcheck="false" 

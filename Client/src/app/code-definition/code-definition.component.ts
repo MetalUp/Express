@@ -8,11 +8,11 @@ import { first } from 'rxjs/operators';
 import { CompileServerService } from '../services/compile-server.service';
 
 @Component({
-  selector: 'app-function-definition',
-  templateUrl: './function-definition.component.html',
-  styleUrls: ['./function-definition.component.css']
+  selector: 'app-code-definition',
+  templateUrl: './code-definition.component.html',
+  styleUrls: ['./code-definition.component.css']
 })
-export class FunctionDefinitionComponent implements OnInit, OnDestroy {
+export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   constructor(
     private compileServer: CompileServerService,
@@ -24,7 +24,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
 
   compiledOK = false;
 
-  functionDefinitions = '';
+  codeDefinitions = '';
 
   pendingSubmit = false;
 
@@ -49,8 +49,8 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
     this.validationFail = '';
     this.compiledOK = false;
     this.result = EmptyRunResult;
-    this.pendingSubmit = !!(this.functionDefinitions.trim());
-    this.compileServer.clearFunctionDefinitions();
+    this.pendingSubmit = !!(this.codeDefinitions.trim());
+    this.compileServer.clearUserDefinedCode();
   }
 
   onPaste(event: ClipboardEvent) {
@@ -62,14 +62,14 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.compiledOK = false;
     this.pendingSubmit = false;
-    this.validationFail = this.rulesService.checkRules(Applicability.functions, this.functionDefinitions);
+    this.validationFail = this.rulesService.checkRules(Applicability.functions, this.codeDefinitions);
     if (!this.validationFail) {
       this.submitting = true;
-      this.compileServer.submitCode(this.taskId, this.functionDefinitions).pipe(first()).subscribe(rr => {
+      this.compileServer.submitCode(this.taskId, this.codeDefinitions).pipe(first()).subscribe(rr => {
         this.result = rr;
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {
-          this.compileServer.setFunctionDefinitions(this.functionDefinitions);
+          this.compileServer.setUserDefinedCode(this.codeDefinitions);
         }
         this.submitting = false;
       });
@@ -94,7 +94,7 @@ export class FunctionDefinitionComponent implements OnInit, OnDestroy {
       this.taskId = t.Id;
 
       if (this.nextTaskClears) {
-        this.functionDefinitions = "";
+        this.codeDefinitions = "";
         this.modelChanged();
       }
 

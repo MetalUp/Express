@@ -2,6 +2,6 @@ div.pane-body {
     grid-template-rows: minmax(min-content, 100%) min-content;
 }
 
-div.function-definition {
+div.code-definition {
     width: 100%;
 }
