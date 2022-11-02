@@ -157,9 +157,9 @@ namespace Model.Functions
         [Edit]
         public static IContext EditHiddenCode(
             this Task task,
-            File hiddenFunctionsfile,
+            File hiddenCodefile,
             IContext context) =>
-                context.WithUpdated(task, new Task(task) { HiddenCodeFileId = hiddenFunctionsfile.Id, HiddenCodeFile = hiddenFunctionsfile });
+                context.WithUpdated(task, new Task(task) { HiddenCodeFileId = hiddenCodefile.Id, HiddenCodeFile = hiddenCodefile });
 
         [MemberOrder(32)]
         public static IContext ClearHiddenCode(
