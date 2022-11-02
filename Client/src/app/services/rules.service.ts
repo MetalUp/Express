@@ -121,15 +121,9 @@ export class RulesService {
 
   public filterAndReplace(toFilter: string) {
     if (toFilter) {
-      const rule = this.taskRules?.ServerResponseMessageFilters["tests"];
-      if (rule) {
-        const re = new RegExp(rule[0]);
-        const rep = rule[1];
-        if (rep) {
-          return toFilter.replace(re, rep);
-        }
-        const m = re.exec(toFilter);
-        return m ? m[0] : toFilter;
+      const rules = this.taskRules?.ServerResponseMessageFilters["tests"];
+      if (rules) {
+        return this.handle(rules, toFilter, this.mustNotContainRule) || toFilter;
       }
     }
     return toFilter;

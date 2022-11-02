@@ -23,7 +23,7 @@ export enum Applicability {
   export interface IFilterRulesBlock {
     cmpinfo: string,
     stderr: string,
-    tests: [string, string]
+    tests: [string, string][]
   }
   
   export const MsgPrefix = "Messages.";
