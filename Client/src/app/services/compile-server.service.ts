@@ -22,7 +22,7 @@ export class CompileServerService {
   private getService() {
     this.contextService.getServices()
         .then((services: DomainServicesRepresentation) => {
-          const service = services.getService("Model");
+          const service = services.getService("Model.Functions.Services.Compile");
           return this.repLoader.populate(service);
         })
         .then((service : IHateoasModel) => {
