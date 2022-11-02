@@ -43,11 +43,11 @@ namespace Model.Functions
         context.WithUpdated(proj, new(proj) { PasteExpression = pasteExpression });
 
         [Edit]
-        public static IContext EditPasteFunctions(
+        public static IContext EditPasteCode(
             this Project proj,
-            bool pasteFunctions,
+            bool pasteCode,
             IContext context) =>
-                context.WithUpdated(proj, new(proj) { PasteFunctions = pasteFunctions });
+                context.WithUpdated(proj, new(proj) { PasteCode = pasteCode });
 
         [Edit]
         public static IContext EditDescription(
