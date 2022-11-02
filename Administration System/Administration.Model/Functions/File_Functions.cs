@@ -1,5 +1,6 @@
 ﻿using NakedFramework.Value;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Model.Functions
 {
@@ -9,14 +10,16 @@ namespace Model.Functions
             context.WithUpdated(file, new File(file) { Content = externalFile.GetResourceAsByteArray(), Name=externalFile.Name, Mime = externalFile.MimeType });
 
         public static IContext EditContentAsString(this File file, [MultiLine(20)] string content, IContext context) =>
-            context.WithUpdated(file, new File(file) {Content = Encoding.ASCII.GetBytes(content)});
+            context.WithUpdated(file, new File(file) {Content =content.AsByteArray()});
 
-        public static string Default1EditContentAsString(this File file) =>
-            Encoding.Default.GetString(file.Content);
+        public static string Default1EditContentAsString(this File file) => file.ContentsAsString();
 
+        internal static string ContentsAsString(this File file) => file.Content.AsASCIIonly();
 
-        internal static string ContentsAsString(this File file) =>
-            Encoding.Default.GetString(file.Content);
+        internal static string AsASCIIonly(this byte[] bytes) =>
+            Regex.Replace(Encoding.Default.GetString(bytes), @"[^\u0000-\u007F]+", string.Empty);
+
+        internal static byte[] AsByteArray(this string str) => Encoding.ASCII.GetBytes(str);
 
         #region Editing
         [Edit]

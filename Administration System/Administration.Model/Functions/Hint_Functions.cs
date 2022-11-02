@@ -24,10 +24,10 @@ namespace Model.Functions
             context.WithUpdated(hint, new Hint(hint) { Name = externalFile.Name, Content = externalFile.GetResourceAsByteArray() });
 
         public static IContext EditContentAsString(this Hint hint, [MultiLine(20)] string content, IContext context) =>
-            context.WithUpdated(hint, new Hint(hint) { Content = Encoding.ASCII.GetBytes(content) });
+            context.WithUpdated(hint, new Hint(hint) { Content = content.AsByteArray() });
 
         public static string Default1EditContentAsString(this Hint hint) =>
-            Encoding.Default.GetString(hint.Content);
+            hint.Content.AsASCIIonly();
     }
 
 }

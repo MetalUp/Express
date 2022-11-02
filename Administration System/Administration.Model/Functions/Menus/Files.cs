@@ -18,7 +18,7 @@ namespace Model.Functions.Menus
 
         [CreateNew]
         public static (File, IContext) CreateNewFileAsString(string name, string mimeType, [MultiLine(20)] string content, IContext context) =>
-            CreateNewFile(name, mimeType, Encoding.ASCII.GetBytes(content), context);
+            CreateNewFile(name, mimeType, content.AsByteArray(), context);
 
         public static List<string> Choices1CreateNewFileAsString() => new List<string> { "text/plain", "text/html", "application/json" };
 

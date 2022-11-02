@@ -76,7 +76,7 @@ namespace Model.Functions
             this Task task,
             [MultiLine(10)] string content,
             IContext context) =>
-                SaveDescriptionAsFile(task, $"Description{task.Project.Language.FileExtension}", Encoding.ASCII.GetBytes(content), context);
+                SaveDescriptionAsFile(task, $"Description{task.Project.Language.FileExtension}", content.AsByteArray(), context);
 
         public static string DisableAddDescriptionAsString(this Task task) => DisableAddDescriptionFromFile(task);
 
@@ -132,7 +132,7 @@ namespace Model.Functions
             this Task task,
             [MultiLine(10)] string content,
             IContext context) =>
-                SaveHiddenCodeAsFile(task, $"HiddenCode{task.Project.Language.FileExtension}", Encoding.ASCII.GetBytes(content), context);
+                SaveHiddenCodeAsFile(task, $"HiddenCode{task.Project.Language.FileExtension}", content.AsByteArray(), context);
 
         public static string DisableAddHiddenCodeAsString(this Task task) => DisableAddHiddenCodeFromFile(task);
 
@@ -186,7 +186,7 @@ namespace Model.Functions
             this Task task,
             [MultiLine(10)] string content,
             IContext context) =>
-                SaveTestsAsFile(task, $"Tests{task.Project.Language.FileExtension}", Encoding.ASCII.GetBytes(content), context);
+                SaveTestsAsFile(task, $"Tests{task.Project.Language.FileExtension}", content.AsByteArray(), context);
 
         public static string DisableAddTestsAsString(this Task task) => DisableAddTestsFromFile(task);
 
