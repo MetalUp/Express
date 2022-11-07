@@ -26,7 +26,8 @@ export class AppComponent implements OnInit, OnDestroy {
         return {
             'gemini': this.isDashboard(),
             'metalup': !this.isDashboard(),
-            'in-progress': this.loading
+            'in-progress': this.loading,
+            'not-in-progress': !this.loading
         }
     }
 
