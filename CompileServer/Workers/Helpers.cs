@@ -12,8 +12,7 @@ public static class Helpers {
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            WorkingDirectory = Path.GetTempPath(),
-            StandardOutputEncoding = Encoding.UTF8
+            WorkingDirectory = Path.GetTempPath()
         };
 
         return Process.Start(start) ?? throw new NullReferenceException("Process failed to start");

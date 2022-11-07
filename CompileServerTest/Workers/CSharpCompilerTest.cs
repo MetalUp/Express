@@ -1,4 +1,4 @@
-using CompileServer.Models;
+﻿using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -11,6 +11,10 @@ public class CSharpCompilerTest {
     private const string SimpleCode = @"
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     var a = 1;System.Console.Write(a);";
+
+    private const string SimpleCodeWithChar = @"
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    System.Console.Write(""\u25A0"");";
 
     private const string SimpleCodeWithMain = @"
     public class Wrapper {
@@ -135,6 +139,14 @@ public class CSharpCompilerTest {
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
+    }
+
+    [TestMethod]
+    public void TestCompileAndRunOkWithChar() {
+        var runSpec = CsharpRunSpec(SimpleCodeWithChar);
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok, "", "■");
     }
 
     [TestMethod]
