@@ -4,7 +4,7 @@
             <button [disabled]="!pendingSubmit" (click)="onSubmit()">Submit</button>
         </div>
     </div>
-    <div class="one-column pane-body" [ngClass]="submitting ? 'in-progress' : ''">
+    <div class="one-column pane-body">
         <div class="code-definition code">
             <textarea 
                 [(ngModel)]="codeDefinitions" 

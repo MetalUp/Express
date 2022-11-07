@@ -309,8 +309,8 @@ gemini {
     content: '\00BB ';
 }
 
-.metalup .in-progress * {
-    cursor: progress;
+.in-progress * {
+    cursor: progress !important;
 }
 
 .metalup .field {

@@ -20,8 +20,6 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
     private taskService: TaskService) {
   }
 
-  submitting = false;
-
   previousExpressionIndex = 0;
 
   previousExpressions: [expr: string, result: string][] = [];
@@ -87,11 +85,9 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
       this.result = EmptyRunResult;
       this.validationFail = this.rulesService.checkRules(Applicability.expressions, this.expression);
       if (!this.validationFail) {
-        this.submitting = true;
         this.compileServer.evaluateExpression(this.taskId, this.expression).pipe(first()).subscribe(rr => {
           this.result = rr;
           this.pushExpression();
-          this.submitting = false;
         });
       }
       else {

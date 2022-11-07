@@ -4,7 +4,7 @@
             <button [disabled]="!canRunTests()" (click)="onRunTests()">Run Tests</button>
         </div>
     </div>
-    <div class="one-column pane-body" [ngClass]="submitting ? 'in-progress' : ''">
+    <div class="one-column pane-body">
         <textarea readonly>{{message()}}</textarea>
     </div>
 </div>

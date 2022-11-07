@@ -51,7 +51,6 @@ export class TestingComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  submitting = false;
   result: RunResult = EmptyRunResult;
   testedOk = false;
   currentResultMessage = '';
@@ -79,10 +78,8 @@ export class TestingComponent implements OnInit, OnDestroy {
   }
 
   onRunTests() {
-    this.submitting = true;
     this.compileServer.runTests(this.taskId).pipe(first()).subscribe(rr => {
       this.handleResult(rr);
-      this.submitting = false;
     });
   }
 

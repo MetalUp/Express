@@ -28,8 +28,6 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   pendingSubmit = false;
 
-  submitting = false;
-
   private canPaste = false;
 
   taskId = 0;
@@ -64,14 +62,12 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     this.pendingSubmit = false;
     this.validationFail = this.rulesService.checkRules(Applicability.functions, this.codeDefinitions);
     if (!this.validationFail) {
-      this.submitting = true;
       this.compileServer.submitCode(this.taskId, this.codeDefinitions).pipe(first()).subscribe(rr => {
         this.result = rr;
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {
           this.compileServer.setUserDefinedCode(this.codeDefinitions);
         }
-        this.submitting = false;
       });
     }
   }
