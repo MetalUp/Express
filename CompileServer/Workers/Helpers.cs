@@ -67,7 +67,9 @@ public static class Helpers {
 
         try {
             using var process = CreateProcess(exe, args);
-            process.WaitForExit();
+            if (!process.WaitForExit(30000)) {
+                process.Kill();
+            }
             runResult = SetRunResults(process, runResult);
         }
         catch (Exception e) {

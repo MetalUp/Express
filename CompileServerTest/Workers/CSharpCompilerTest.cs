@@ -74,6 +74,22 @@ public class CSharpCompilerTest {
             }
         }";
 
+    private const string TestCodeStackOverflow =
+        @"
+        using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+        namespace ExpressTests;
+
+        [TestClass]
+        public class Tests
+        {
+            [TestMethod]
+            public void ATest()
+            {
+                ATest();
+            }
+        }";
+
     private readonly ILogger testLogger = NullLogger.Instance;
 
     [TestMethod]
@@ -183,6 +199,19 @@ public class CSharpCompilerTest {
         Assert.AreEqual("", rr.cmpinfo);
         Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
         Assert.AreEqual("", rr.stderr);
+        Assert.AreEqual("", rr.run_id);
+    }
+
+    [TestMethod]
+    public void TestCompileAndTestStackOverflow()
+    {
+        var runSpec = CsharpRunSpec(TestCodeStackOverflow);
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stderr.Contains("Stack overflow"));
+        //Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
         Assert.AreEqual("", rr.run_id);
     }
 

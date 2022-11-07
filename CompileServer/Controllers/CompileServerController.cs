@@ -4,14 +4,15 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace CompileServer.Controllers;
 
-public class CompileServerController : ControllerBase {
+public abstract class CompileServerController : ControllerBase {
     private const string CompileServerName = "CompileServer";
     private const string PythonPathName = "PythonPath";
     private const string JavaPathName = "JavaPath";
     private const string CSharpVersionName = "CSharpVersion";
     private const string VisualBasicVersionName = "VisualBasicVersion";
+    private const string ProcessTimeoutName = "ProcessTimeout";
 
-    public CompileServerController(ILogger logger, IConfiguration configuration) {
+    protected CompileServerController(ILogger logger, IConfiguration configuration) {
         Logger = logger;
 
         PythonPath = Environment.GetEnvironmentVariable(PythonPathName) ?? configuration.GetSection(CompileServerName).GetSection(PythonPathName).Value;
@@ -22,6 +23,12 @@ public class CompileServerController : ControllerBase {
 
         CSharpVersion = Parse<LanguageVersion>(csVersion);
         VisualBasicVersion = Parse<Microsoft.CodeAnalysis.VisualBasic.LanguageVersion>(vbVersion);
+
+        var pto = Environment.GetEnvironmentVariable(ProcessTimeoutName) ?? configuration.GetSection(CompileServerName).GetSection(ProcessTimeoutName).Value;
+
+        if (int.TryParse(pto, out var r)) {
+            ProcessTimeout = r;
+        }
     }
 
     protected ILogger Logger { get; }
@@ -30,6 +37,8 @@ public class CompileServerController : ControllerBase {
     public static string JavaPath { get; set; } = "";
     public static LanguageVersion CSharpVersion { get; private set; } = 0;
     public static Microsoft.CodeAnalysis.VisualBasic.LanguageVersion VisualBasicVersion { get; private set; } = 0;
+
+    public static int ProcessTimeout { get; set; } = 30000;
 
     private T Parse<T>(string val) where T : struct {
         try {

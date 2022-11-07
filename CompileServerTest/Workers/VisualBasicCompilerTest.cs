@@ -70,6 +70,20 @@ public class VisualBasicCompilerTest {
             End Class
         End Namespace";
 
+    private const string TestCodeStackOverflow =
+        @"
+        Imports Microsoft.VisualStudio.TestTools.UnitTesting
+
+        Namespace ExpressTests
+            <TestClass>
+            Public Class Tests
+                <TestMethod>
+                Public Sub ATest()
+                    ATest()
+                End Sub
+            End Class
+        End Namespace";
+
     private readonly ILogger testLogger = NullLogger.Instance;
 
     [TestMethod]
@@ -157,6 +171,19 @@ public class VisualBasicCompilerTest {
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
         Assert.IsNotNull(rr);
         rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Stack overflow");
+    }
+
+    [TestMethod]
+    public void TestCompileAndTestStackOverflow()
+    {
+        var runSpec = VisualBasicRunSpec(TestCodeStackOverflow);
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stderr.Contains("Stack overflow"));
+        //Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
+        Assert.AreEqual("", rr.run_id);
     }
 
 
