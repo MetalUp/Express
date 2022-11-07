@@ -13,7 +13,7 @@ public static class Helpers {
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             WorkingDirectory = Path.GetTempPath(),
-            StandardOutputEncoding = Encoding.Unicode
+            StandardOutputEncoding = Encoding.UTF8
         };
 
         return Process.Start(start) ?? throw new NullReferenceException("Process failed to start");
