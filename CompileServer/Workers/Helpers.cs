@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using CompileServer.Models;
 
 namespace CompileServer.Workers;
@@ -11,7 +12,8 @@ public static class Helpers {
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            WorkingDirectory = Path.GetTempPath()
+            WorkingDirectory = Path.GetTempPath(),
+            StandardOutputEncoding = Encoding.UTF8
         };
 
         return Process.Start(start) ?? throw new NullReferenceException("Process failed to start");
