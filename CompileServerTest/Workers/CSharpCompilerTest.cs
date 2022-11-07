@@ -23,6 +23,9 @@ public class CSharpCompilerTest {
     
     private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
 
+    private const string StackOverFlowFail = @"static int f(int i) => f(i+1);var a = f(1);";
+
+
     private const string TestCodeOk =
         @"
         using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -133,7 +136,17 @@ public class CSharpCompilerTest {
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
 
         Assert.IsNotNull(rr);
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
+        rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
+    }
+
+    [TestMethod]
+    public void TestCompileAndRunStackOverflow()
+    {
+        var runSpec = CsharpRunSpec(StackOverFlowFail);
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+
+        Assert.IsNotNull(rr);
+        rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Stack overflow");
     }
 
     [TestMethod]

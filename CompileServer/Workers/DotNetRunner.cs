@@ -1,40 +1,9 @@
-﻿using System.Runtime.CompilerServices;
-using CompileServer.Models;
+﻿using CompileServer.Models;
 
 namespace CompileServer.Workers;
 
 public static class DotNetRunner {
-    public static RunResult Execute(byte[] compiledAssembly, RunResult runResult, ILogger logger) {
-        var assemblyLoadContextWeakRef = LoadAndExecute(compiledAssembly, runResult);
-
-        Task.Run(() => {
-            for (var i = 0; i < 8 && assemblyLoadContextWeakRef.IsAlive; i++) {
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-            }
-
-            if (assemblyLoadContextWeakRef.IsAlive) {
-                logger.LogWarning("Unloading failed!");
-            }
-        });
-        return runResult;
-    }
-
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private static WeakReference LoadAndExecute(byte[] compiledAssembly, RunResult runResult) {
-        using var asm = new MemoryStream(compiledAssembly);
-        var assemblyLoadContext = new SimpleUnloadableAssemblyLoadContext();
-
-        var assembly = assemblyLoadContext.LoadFromStream(asm);
-
-        var entry = assembly.EntryPoint;
-
-        if (entry is null) {
-            runResult.outcome = Outcome.InternalError;
-            runResult.stderr = "No entry point on compiled module";
-            return new WeakReference(assemblyLoadContext);
-        }
-
+    public static RunResult ExecuteAsProcess(byte[] compiledAssembly, RunResult runResult, ILogger logger) {
         var consoleOut = new StringWriter();
         var consoleErr = new StringWriter();
         var oldOut = Console.Out;
@@ -44,24 +13,35 @@ public static class DotNetRunner {
         Console.SetError(consoleErr);
 
         try {
-            if (entry.GetParameters().Any()) {
-                entry.Invoke(null, new object[] { Array.Empty<string>() });
-            }
-            else {
-                entry.Invoke(null, null);
+            const string tempFileName = "compiled.dll";
+            var file = $"{Path.GetTempPath()}{tempFileName}";
+
+            File.WriteAllBytes(file, compiledAssembly);
+
+            if (!File.Exists($"{Path.GetTempPath()}compiled.runtimeconfig.json")) {
+                var rtg = @"{
+                          ""runtimeOptions"": {
+                            ""tfm"": ""net6.0"",
+                            ""framework"": {
+                              ""name"": ""Microsoft.NETCore.App"",
+                              ""version"": ""6.0.0""
+                            }
+                          }
+                        }";
+
+                File.WriteAllText($"{Path.GetTempPath()}compiled.runtimeconfig.json", rtg);
             }
 
-            runResult = Helpers.SetRunResults(runResult, consoleOut, consoleErr);
+            var args = $"{file}";
+
+            return Helpers.Execute("dotnet", args, file);
         }
         catch (Exception e) {
-            runResult = Helpers.SetRunResults(runResult, consoleOut, consoleErr, e);
+            return Helpers.SetRunResults(runResult, consoleOut, consoleErr, e);
         }
-
-        Console.SetOut(oldOut);
-        Console.SetError(oldErr);
-
-        assemblyLoadContext.Unload();
-
-        return new WeakReference(assemblyLoadContext);
+        finally {
+            Console.SetOut(oldOut);
+            Console.SetError(oldErr);
+        }
     }
 }

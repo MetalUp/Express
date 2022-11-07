@@ -31,6 +31,17 @@ public class VisualBasicCompilerTest {
             End Sub 
           End Module";
 
+    private const string StackOverFlowFail =
+        @"Module Program
+            Private Function F(ByVal i As Integer) As Integer
+                Return F(i + 1)
+            End Function
+
+            Sub Main(args As String())
+                Dim a = F(1)   
+            End Sub
+        End Module";
+
     private const string TestCodeOk =
         @"
         Imports Microsoft.VisualStudio.TestTools.UnitTesting
@@ -112,7 +123,7 @@ public class VisualBasicCompilerTest {
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
 
         Assert.IsNotNull(rr);
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
+        rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
     }
 
     [TestMethod]
@@ -138,6 +149,16 @@ public class VisualBasicCompilerTest {
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.run_id);
     }
+
+    [TestMethod]
+    public void TestCompileAndRunStackOverflow()
+    {
+        var runSpec = VisualBasicRunSpec(StackOverFlowFail);
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Stack overflow");
+    }
+
 
     //[TestMethod]
     //public void TestCompileAndRunInParallel() {

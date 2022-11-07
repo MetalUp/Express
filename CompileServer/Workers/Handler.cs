@@ -65,7 +65,7 @@ public static class Handler {
         Task.Run(Wrap(() => {
                 var (runResult, assembly) = DotNetCompile(runSpec, true);
                 if (runResult.outcome == Outcome.Ok) {
-                    runResult = DotNetRunner.Execute(assembly, runResult, logger);
+                    runResult = DotNetRunner.ExecuteAsProcess(assembly, runResult, logger);
                 }
 
                 return new ActionResult<RunResult>(runResult);
