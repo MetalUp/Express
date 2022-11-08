@@ -49,6 +49,8 @@ namespace Model.Types
 
         #region Common Hidden Code
         [Hidden]
+        public string CommonHiddenCode => CommonHiddenCodeFile?.ContentsAsString();
+        [Hidden]
         public int? CommonHiddenCodeFileId { get; init; }
 
         [MemberOrder(80)]
@@ -56,6 +58,9 @@ namespace Model.Types
         #endregion
 
         #region CommonTests
+        [Hidden]
+        public string CommonTests => CommonTestsFile?.ContentsAsString();
+
         [Hidden]
         public int? CommonTestsFileId { get; init; }
 

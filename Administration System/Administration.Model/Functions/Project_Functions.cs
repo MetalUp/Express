@@ -141,10 +141,6 @@ namespace Model.Functions
                 PreviousTask = previousTask,
                 NextTaskId = null,
                 NextTask = null,
-                HiddenCodeFileId = project.CommonHiddenCodeFileId,
-                HiddenCodeFile = project.CommonHiddenCodeFile,
-                TestsFileId = project.CommonTestsFileId,
-                TestsFile = project.CommonTestsFile,
                 Hints = new List<Hint>(copyFrom.Hints)
             };
             var p2 = new Project(project)
@@ -177,10 +173,6 @@ namespace Model.Functions
                 Name = title,
                 PreviousTaskId = previousTask is null ? null : previousTask.Id,
                 PreviousTask = previousTask,
-                HiddenCodeFileId = previousTask is null ? null : previousTask.HiddenCodeFileId,
-                HiddenCodeFile = previousTask is null ? null : previousTask.HiddenCodeFile,
-                TestsFileId = previousTask is null ? null : previousTask.TestsFileId,
-                TestsFile = previousTask is null ? null : previousTask.TestsFile,
             };
             var updatedPrevious = previousTask is null ? null :
                 new Task(previousTask) { NextTask = t };
