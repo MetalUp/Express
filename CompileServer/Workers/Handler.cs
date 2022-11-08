@@ -5,18 +5,17 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 namespace CompileServer.Workers;
 
 public static class Handler {
-    private static Func<ObjectResult> Wrap(Func<RunResult> f) =>
+    private static Func<JsonResult> Wrap(Func<RunResult> f) =>
         () => {
             try {
-                var mt = new MediaTypeCollection { "text/plain; charset=utf-8" };
-                return new ObjectResult(f()) { ContentTypes = mt };
+                return new JsonResult(f());
             }
             catch (Exception ex) {
-                return new ObjectResult(new RunResult { outcome = Outcome.IllegalSystemCall, stderr = ex.Message });
+                return new JsonResult(new RunResult { outcome = Outcome.IllegalSystemCall, stderr = ex.Message });
             }
         };
 
-    private static Task<ObjectResult> PythonCompileAndRun(RunSpec runSpec) =>
+    private static Task<JsonResult> PythonCompileAndRun(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, pyFile) = PythonCompiler.Compile(runSpec, true);
                 if (runResult.outcome == Outcome.Ok) {
@@ -27,7 +26,7 @@ public static class Handler {
             })
         );
 
-    private static Task<ObjectResult> PythonCompileAndTest(RunSpec runSpec) =>
+    private static Task<JsonResult> PythonCompileAndTest(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, pyFile) = PythonCompiler.Compile(runSpec, true);
                 if (runResult.outcome == Outcome.Ok) {
@@ -38,14 +37,14 @@ public static class Handler {
             })
         );
 
-    private static Task<ObjectResult> PythonCompile(RunSpec runSpec) =>
+    private static Task<JsonResult> PythonCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, _) = PythonCompiler.Compile(runSpec, false);
                 return runResult;
             })
         );
 
-    private static Task<ObjectResult> JavaCompileAndRun(RunSpec runSpec) =>
+    private static Task<JsonResult> JavaCompileAndRun(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, classFile) = JavaCompiler.Compile(runSpec, true);
                 if (runResult.outcome == Outcome.Ok) {
@@ -56,14 +55,14 @@ public static class Handler {
             })
         );
 
-    private static Task<ObjectResult> JavaCompile(RunSpec runSpec) =>
+    private static Task<JsonResult> JavaCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, _) = JavaCompiler.Compile(runSpec, false);
                 return runResult;
             })
         );
 
-    private static Task<ObjectResult> DotNetCompileAndRun(RunSpec runSpec, ILogger logger) =>
+    private static Task<JsonResult> DotNetCompileAndRun(RunSpec runSpec, ILogger logger) =>
         Task.Run(Wrap(() => {
                 var (runResult, assembly) = DotNetCompile(runSpec, true);
                 if (runResult.outcome == Outcome.Ok) {
@@ -74,7 +73,7 @@ public static class Handler {
             })
         );
 
-    private static Task<ObjectResult> DotNetCompileAndTest(RunSpec runSpec) =>
+    private static Task<JsonResult> DotNetCompileAndTest(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, assembly) = DotNetCompileForTest(runSpec);
                 if (runResult.outcome == Outcome.Ok) {
@@ -85,7 +84,7 @@ public static class Handler {
             })
         );
 
-    private static Task<ObjectResult> DotNetCompile(RunSpec runSpec) =>
+    private static Task<JsonResult> DotNetCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, _) = DotNetCompile(runSpec, false);
                 return runResult;
@@ -106,7 +105,7 @@ public static class Handler {
             _ => (new RunResult { outcome = Outcome.IllegalSystemCall, cmpinfo = $"Unknown language: {runSpec.language_id}" }, Array.Empty<byte>())
         };
 
-    public static Task<ObjectResult> Compile(RunSpec runSpec, ILogger logger) =>
+    public static Task<JsonResult> Compile(RunSpec runSpec, ILogger logger) =>
         runSpec.language_id switch {
             "python" => PythonCompile(runSpec),
             "java" => JavaCompile(runSpec),
@@ -114,7 +113,7 @@ public static class Handler {
             _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall }))
         };
 
-    public static Task<ObjectResult> CompileAndRun(RunSpec runSpec, ILogger logger) =>
+    public static Task<JsonResult> CompileAndRun(RunSpec runSpec, ILogger logger) =>
         runSpec.language_id switch {
             "python" => PythonCompileAndRun(runSpec),
             "java" => JavaCompileAndRun(runSpec),
@@ -122,7 +121,7 @@ public static class Handler {
             _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall }))
         };
 
-    public static Task<ObjectResult> CompileAndTest(RunSpec runSpec, ILogger logger) =>
+    public static Task<JsonResult> CompileAndTest(RunSpec runSpec, ILogger logger) =>
         runSpec.language_id switch {
             "python" => PythonCompileAndTest(runSpec),
             "csharp" or "vb" => DotNetCompileAndTest(runSpec),
