@@ -136,7 +136,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndRunOk() {
         var runSpec = CsharpRunSpec(SimpleCode);
-        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
     }
@@ -144,7 +144,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndRunOkWithChar() {
         var runSpec = CsharpRunSpec(SimpleCodeWithChar);
-        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "■");
     }
@@ -161,7 +161,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndRunFail() {
         var runSpec = CsharpRunSpec(RunTimeFail);
-        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
         Assert.IsNotNull(rr);
         rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
@@ -171,7 +171,7 @@ public class CSharpCompilerTest {
     public void TestCompileAndRunStackOverflow()
     {
         var runSpec = CsharpRunSpec(StackOverFlowFail);
-        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
         Assert.IsNotNull(rr);
         rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Stack overflow");
@@ -180,7 +180,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndTestOk() {
         var runSpec = CsharpRunSpec(TestCodeOk);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -192,7 +192,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndTestFail() {
         var runSpec = CsharpRunSpec(TestCodeFail);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -205,7 +205,7 @@ public class CSharpCompilerTest {
     public void TestCompileAndTestRTE()
     {
         var runSpec = CsharpRunSpec(TestCodeRTE);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -218,7 +218,7 @@ public class CSharpCompilerTest {
     public void TestCompileAndTestStackOverflow()
     {
         var runSpec = CsharpRunSpec(TestCodeStackOverflow);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);

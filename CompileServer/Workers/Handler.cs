@@ -1,92 +1,94 @@
 ﻿using CompileServer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace CompileServer.Workers;
 
 public static class Handler {
-    private static Func<ActionResult<RunResult>> Wrap(Func<ActionResult<RunResult>> f) =>
+    private static Func<ObjectResult> Wrap(Func<RunResult> f) =>
         () => {
             try {
-                return f();
+                var mt = new MediaTypeCollection { "text/plain; charset=utf-8" };
+                return new ObjectResult(f()) { ContentTypes = mt };
             }
             catch (Exception ex) {
-                return new ActionResult<RunResult>(new RunResult { outcome = Outcome.IllegalSystemCall, stderr = ex.Message });
+                return new ObjectResult(new RunResult { outcome = Outcome.IllegalSystemCall, stderr = ex.Message });
             }
         };
 
-    private static Task<ActionResult<RunResult>> PythonCompileAndRun(RunSpec runSpec) =>
+    private static Task<ObjectResult> PythonCompileAndRun(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, pyFile) = PythonCompiler.Compile(runSpec, true);
                 if (runResult.outcome == Outcome.Ok) {
                     runResult = PythonRunner.Execute(pyFile);
                 }
 
-                return new ActionResult<RunResult>(runResult);
+                return runResult;
             })
         );
 
-    private static Task<ActionResult<RunResult>> PythonCompileAndTest(RunSpec runSpec) =>
+    private static Task<ObjectResult> PythonCompileAndTest(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, pyFile) = PythonCompiler.Compile(runSpec, true);
                 if (runResult.outcome == Outcome.Ok) {
                     runResult = PythonTester.Execute(pyFile);
                 }
 
-                return new ActionResult<RunResult>(runResult);
+                return runResult;
             })
         );
 
-    private static Task<ActionResult<RunResult>> PythonCompile(RunSpec runSpec) =>
+    private static Task<ObjectResult> PythonCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, _) = PythonCompiler.Compile(runSpec, false);
-                return new ActionResult<RunResult>(runResult);
+                return runResult;
             })
         );
 
-    private static Task<ActionResult<RunResult>> JavaCompileAndRun(RunSpec runSpec) =>
+    private static Task<ObjectResult> JavaCompileAndRun(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, classFile) = JavaCompiler.Compile(runSpec, true);
                 if (runResult.outcome == Outcome.Ok) {
                     runResult = JavaRunner.Execute(classFile);
                 }
 
-                return new ActionResult<RunResult>(runResult);
+                return runResult;
             })
         );
 
-    private static Task<ActionResult<RunResult>> JavaCompile(RunSpec runSpec) =>
+    private static Task<ObjectResult> JavaCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, _) = JavaCompiler.Compile(runSpec, false);
-                return new ActionResult<RunResult>(runResult);
+                return runResult;
             })
         );
 
-    private static Task<ActionResult<RunResult>> DotNetCompileAndRun(RunSpec runSpec, ILogger logger) =>
+    private static Task<ObjectResult> DotNetCompileAndRun(RunSpec runSpec, ILogger logger) =>
         Task.Run(Wrap(() => {
                 var (runResult, assembly) = DotNetCompile(runSpec, true);
                 if (runResult.outcome == Outcome.Ok) {
                     runResult = DotNetRunner.ExecuteAsProcess(assembly, runResult, logger);
                 }
 
-                return new ActionResult<RunResult>(runResult);
+                return runResult;
             })
         );
 
-    private static Task<ActionResult<RunResult>> DotNetCompileAndTest(RunSpec runSpec) =>
+    private static Task<ObjectResult> DotNetCompileAndTest(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, assembly) = DotNetCompileForTest(runSpec);
                 if (runResult.outcome == Outcome.Ok) {
                     runResult = DotNetTester.Execute(assembly, runResult);
                 }
 
-                return new ActionResult<RunResult>(runResult);
+                return runResult;
             })
         );
 
-    private static Task<ActionResult<RunResult>> DotNetCompile(RunSpec runSpec) =>
+    private static Task<ObjectResult> DotNetCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, _) = DotNetCompile(runSpec, false);
-                return new ActionResult<RunResult>(runResult);
+                return runResult;
             })
         );
 
@@ -104,26 +106,26 @@ public static class Handler {
             _ => (new RunResult { outcome = Outcome.IllegalSystemCall, cmpinfo = $"Unknown language: {runSpec.language_id}" }, Array.Empty<byte>())
         };
 
-    public static Task<ActionResult<RunResult>> Compile(RunSpec runSpec, ILogger logger) =>
+    public static Task<ObjectResult> Compile(RunSpec runSpec, ILogger logger) =>
         runSpec.language_id switch {
             "python" => PythonCompile(runSpec),
             "java" => JavaCompile(runSpec),
             "csharp" or "vb" => DotNetCompile(runSpec),
-            _ => Task.Run(() => new ActionResult<RunResult>(new RunResult { outcome = Outcome.IllegalSystemCall }))
+            _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall }))
         };
 
-    public static Task<ActionResult<RunResult>> CompileAndRun(RunSpec runSpec, ILogger logger) =>
+    public static Task<ObjectResult> CompileAndRun(RunSpec runSpec, ILogger logger) =>
         runSpec.language_id switch {
             "python" => PythonCompileAndRun(runSpec),
             "java" => JavaCompileAndRun(runSpec),
             "csharp" or "vb" => DotNetCompileAndRun(runSpec, logger),
-            _ => Task.Run(() => new ActionResult<RunResult>(new RunResult { outcome = Outcome.IllegalSystemCall }))
+            _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall }))
         };
 
-    public static Task<ActionResult<RunResult>> CompileAndTest(RunSpec runSpec, ILogger logger) =>
+    public static Task<ObjectResult> CompileAndTest(RunSpec runSpec, ILogger logger) =>
         runSpec.language_id switch {
             "python" => PythonCompileAndTest(runSpec),
             "csharp" or "vb" => DotNetCompileAndTest(runSpec),
-            _ => Task.Run(() => new ActionResult<RunResult>(new RunResult { outcome = Outcome.IllegalSystemCall }))
+            _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall }))
         };
 }

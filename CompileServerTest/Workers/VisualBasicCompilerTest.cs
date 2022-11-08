@@ -117,7 +117,7 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileAndRunOk() {
         var runSpec = VisualBasicRunSpec(SimpleCode);
-        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
     }
@@ -134,7 +134,7 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileAndRunFail() {
         var runSpec = VisualBasicRunSpec(RunTimeFail);
-        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
         Assert.IsNotNull(rr);
         rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Input string was not in a correct format.");
@@ -143,7 +143,7 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileAndTestOk() {
         var runSpec = VisualBasicRunSpec(TestCodeOk);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -155,7 +155,7 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileAndTestFail() {
         var runSpec = VisualBasicRunSpec(TestCodeFail);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -168,7 +168,7 @@ public class VisualBasicCompilerTest {
     public void TestCompileAndRunStackOverflow()
     {
         var runSpec = VisualBasicRunSpec(StackOverFlowFail);
-        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Stack overflow");
     }
@@ -177,7 +177,7 @@ public class VisualBasicCompilerTest {
     public void TestCompileAndTestStackOverflow()
     {
         var runSpec = VisualBasicRunSpec(TestCodeStackOverflow);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);

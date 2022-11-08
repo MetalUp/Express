@@ -84,7 +84,7 @@ public class JavaCompilerTest {
     [TestMethod]
     public void TestCompileAndRunOk() {
         var runSpec = JavaRunSpec(SimpleCode);
-        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
     }
@@ -105,7 +105,7 @@ public class JavaCompilerTest {
     public void TestCompileAndRunFail()
     {
         var runSpec = JavaRunSpec(RunTimeFail);
-        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value;
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
