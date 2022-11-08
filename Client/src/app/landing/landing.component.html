@@ -1,8 +1,8 @@
 <ng-container *ngIf="!userChecked">
     <p>Validating user......</p>
 </ng-container>
-<h1>Welcome to MetalUp Express</h1>
 <ng-container *ngIf="userChecked">
+    <h1>Welcome to MetalUp Express</h1>
     <ng-container *ngIf="userLoggedOn">
         <p>Text here for a user who is logged on but not registered</p>
         <button class="btn btn-primary btn-margin" (click)="registeredService.logout()">Log Out</button>

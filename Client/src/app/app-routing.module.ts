@@ -119,7 +119,7 @@ const routes: Routes = [
     { path: 'task/logoff',  redirectTo: 'dashboard/logoff', pathMatch: 'full'},
     { path: 'task/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'task/:id', component: TaskViewComponent, canActivate: [RegisteredService] },
-    { path: 'task',  redirectTo: 'task/30', pathMatch: 'full'},
+    { path: 'task',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: '**', redirectTo: 'landing', pathMatch: 'full' }
 ];

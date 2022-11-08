@@ -25,10 +25,13 @@ export class LandingComponent implements OnInit {
         // known user go to home
         this.router.navigate([`/dashboard`]);
       }
-      this.userChecked = true;
+      else {
+        this.userChecked = true;
+      }
     })
     .catch(e => {
       // something wrong  stay here
+      this.userChecked = true;
     });
   }
 
