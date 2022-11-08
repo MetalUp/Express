@@ -59,7 +59,7 @@ namespace Model.Types
 
         #region Hidden Code
         [Hidden]
-        public string HiddenCode => HiddenCodeFile?.ContentsAsString();
+        public string HiddenCode => HiddenCodeFile is null ?  Project.CommonHiddenCode :HiddenCodeFile.ContentsAsString();
 
         [Hidden]
         public int? HiddenCodeFileId { get; init; }
@@ -70,7 +70,7 @@ namespace Model.Types
 
         #region Tests
         [Hidden]
-        public string Tests => TestsFile?.ContentsAsString();
+        public string Tests => TestsFile is null ? Project.CommonTests : TestsFile.ContentsAsString();
 
         [HideInClient]
         public bool HasTests => TestsFileId != null;
