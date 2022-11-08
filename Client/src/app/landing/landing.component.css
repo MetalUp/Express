@@ -1,9 +1,12 @@
 :host {
     color: white;
-    margin-left: 150px;
+    
 }
 
-
+.metalup {
+    font-family: var(--font-text-family);
+    margin-left: 150px;
+}
 
 button   {
     color: var(--default-text-color);
