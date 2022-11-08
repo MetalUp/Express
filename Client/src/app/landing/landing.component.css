@@ -1,6 +1,9 @@
 :host {
     color: white;
+    margin-left: 150px;
 }
+
+
 
 button   {
     color: var(--default-text-color);

@@ -18,7 +18,7 @@ nof-object {
 }
 
 
-.gemini {
+.gemini, .metalup {
     font-family: var(--font-text-family);
 }
 
