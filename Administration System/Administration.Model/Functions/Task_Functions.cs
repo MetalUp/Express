@@ -5,8 +5,6 @@ namespace Model.Functions
 {
     public static class Task_Functions
     {
-        internal static bool IsDefault(this Task task) => task.Project.Status == ProjectStatus.Public;
-
         #region Editing Task properties
         [Edit]
         public static IContext EditName(
@@ -68,6 +66,11 @@ namespace Model.Functions
             IContext context) =>
                 SaveDescriptionAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
 
+        public static string ValidateAddDescriptionFromFile(
+          this Task task,
+          FileAttachment file) =>
+            file.Name.EndsWith(".html") ? null : "The file name must have extension '.html'";
+
         public static string DisableAddDescriptionFromFile(this Task task) =>
             task.DescriptionFileId is null ? null : "Either go to Description file and reload/edit it, or Clear Description to create a new file here.";
 
@@ -106,6 +109,10 @@ namespace Model.Functions
             IContext context) =>
                 context.WithUpdated(task, new Task(task) { DescriptionFileId = descriptionFile.Id, DescriptionFile = descriptionFile });
 
+        public static string ValidateEditDescription(this Task task, File file) =>
+          file.ContentType == ContentType.Description ? null :
+            "The file's Content Type must be 'Description'";
+
         [MemberOrder(22)]
         public static IContext ClearDesciption(
             this Task task,
@@ -123,6 +130,11 @@ namespace Model.Functions
             FileAttachment file,
             IContext context) =>
                 SaveHiddenCodeAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+
+        public static string ValidateAddHiddenCodeFromFile(
+            this Task task,
+            FileAttachment file) =>
+            task.Project.ValidateFileExtension(file);
 
         public static string DisableAddHiddenCodeFromFile(this Task task) =>
             task.HiddenCodeFileId is null ? null : "Either go to Hidden Code file and reload/edit it, or Clear Hidden Code to create a new file here.";
@@ -157,17 +169,12 @@ namespace Model.Functions
         [Edit]
         public static IContext EditHiddenCode(
             this Task task,
-            File hiddenCodefile,
+            [Optionally] File hiddenCodefile,
             IContext context) =>
                 context.WithUpdated(task, new Task(task) { HiddenCodeFileId = hiddenCodefile.Id, HiddenCodeFile = hiddenCodefile });
 
-        [MemberOrder(32)]
-        public static IContext ClearHiddenCode(
-            this Task task,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { HiddenCodeFileId = null, HiddenCodeFile = null });
-
-        public static string DisableClearHiddenCode(this Task task) => task.HiddenCodeFileId is null ? "No Hidden Functions specified" : null;
+        public static string ValidateEditHiddenCode(this Task task, File f) =>
+            task.Project.ValidateEditCommonHiddenCodeFile(f);
         #endregion
 
         #region Tests
@@ -177,6 +184,11 @@ namespace Model.Functions
             FileAttachment file,
             IContext context) =>
                 SaveTestsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+
+        public static string ValidateAddTestsFromFile(
+            this Task task,
+            FileAttachment file) =>
+            task.Project.ValidateFileExtension(file);
 
         public static string DisableAddTestsFromFile(this Task task) =>
             task.TestsFileId is null ? null : "Either go to Tests file and reload/edit it, or Clear Tests to create a new file here.";
@@ -211,21 +223,16 @@ namespace Model.Functions
         [Edit]
         public static IContext EditTests(
             this Task task,
-            File testsFile,
+            [Optionally] File testsFile,
             IContext context) =>
                 context.WithUpdated(task, new Task(task) { TestsFileId = testsFile.Id, TestsFile = testsFile });
 
+        public static string ValidateEditTests(this Task task, File f) =>
+                 task.Project.ValidateEditCommonHiddenCodeFile(f);
 
-        [MemberOrder(42)]
-        public static IContext ClearTests(
-            this Task task,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { TestsFileId = null, TestsFile = null });
-
-        public static string DisableClearTests(this Task task) => task.TestsFileId is null ? "No Tests specified" : null;
         #endregion
 
-       #endregion
+        #endregion
 
         #region Hints 
         [MemberOrder(50)]

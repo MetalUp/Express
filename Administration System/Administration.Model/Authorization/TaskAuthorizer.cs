@@ -13,18 +13,15 @@ namespace Model.Authorization
                     Role.Author => IsTaskProperty(memberName) || UserIsAuthor(task, context),//TODO: actions only for the author
                     Role.Teacher => IsTaskProperty(memberName),
                     Role.Student => StudentAuthorization(task, memberName, context),
-                    _ => GuestAuthorization(task, memberName, context)
+                    _ => false
                 };
 
 
         internal static bool StudentAuthorization(Task task, string memberName, IContext context) =>
-            TaskIsDefaultOrAssignedToUser(task, context) && IsTaskProperty(memberName);
+            TaskIsAssignedToUser(task, context) && IsTaskProperty(memberName);
 
-        internal static bool TaskIsDefaultOrAssignedToUser(Task task, IContext context) =>
-            task.IsDefault() || task.Project.IsAssignedToCurrentUser(context);
-
-        internal static bool GuestAuthorization(Task task, string memberName, IContext context) =>
-            task.IsDefault() && IsTaskProperty(memberName);
+        internal static bool TaskIsAssignedToUser(Task task, IContext context) =>
+            task.Project.IsAssignedToCurrentUser(context);
 
         private static bool IsTaskProperty(string memberName) => IsProperty<Task>(memberName);
 

@@ -56,6 +56,7 @@ namespace Model.Functions
             IContext context) =>
              context.WithUpdated(proj, new(proj) { Description = description });
 
+
         [Edit]
         public static IContext EditCommonHiddenCodeFile(
             this Project project,
@@ -65,6 +66,15 @@ namespace Model.Functions
                     CommonHiddenCodeFileId = commonHiddenCodeFile.Id,
                     CommonHiddenCodeFile = commonHiddenCodeFile
                 });
+
+
+        public static string ValidateEditCommonHiddenCodeFile(this Project project, File commonHiddenCodeFile) =>
+            ValidateLanguageAndContentType(project, commonHiddenCodeFile, ContentType.HiddenCode);
+
+        internal static string ValidateLanguageAndContentType(Project project, File commonHiddenCodeFile, ContentType required) =>
+    commonHiddenCodeFile.LanguageId == project.LanguageId &&
+    commonHiddenCodeFile.ContentType == required
+    ? null : $"Either the programming language or content type of the file is incompatible with this property.";
 
         [Edit]
         public static IContext EditCommonTestsFile(
@@ -77,19 +87,30 @@ namespace Model.Functions
                     CommonTestsFile = commonTestsFile
                 });
 
+        public static string ValidateEditCommonTestsFile(this Project project, File commonHiddenCodeFile) =>
+                ValidateLanguageAndContentType(project, commonHiddenCodeFile, ContentType.Tests);
+
         #endregion
 
         #region Common files
 
         #region Hidden Code
         [MemberOrder(30)]
-        public static IContext AddHiddenCodeFromFile(
+        public static IContext AddCommonHiddenCodeFromFile(
             this Project proj,
             FileAttachment file,
             IContext context)
         {                 
                 var author = Users.Me(context);
-                var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = "text/plain", AuthorId = author.Id, Author = author };
+                var f = new File() { Name = file.Name,
+                    Content = file.GetResourceAsByteArray(),
+                    ContentType = ContentType.HiddenCode,
+                    LanguageId = proj.LanguageId,
+                    Language = proj.Language,
+                    Mime = "text/plain", 
+                    AuthorId = author.Id, 
+                    Author = author, 
+                };
                 return context
                     .WithNew(f)
                     .WithUpdated(proj,
@@ -100,19 +121,36 @@ namespace Model.Functions
                         });
             }
 
-        public static string DisableAddHiddenCodeFromFile(this Project proj) =>
+        public static string ValidateAddCommonAddHiddenCodeFromFile(
+            this Project proj,
+            FileAttachment file) =>
+            proj.ValidateFileExtension(file);
+
+        internal static string ValidateFileExtension(this Project proj, FileAttachment file) =>
+            file.Name.EndsWith(proj.Language.FileExtension) ? null : $"File's name must have extension. {proj.Language.FileExtension}";
+
+
+        public static string DisableAddCommonHiddenCodeFromFile(this Project proj) =>
     proj.CommonHiddenCodeFileId is null ? null : "Either go to Commoon Hidden Code file and reload/edit it, or clear Common Hidden Code to create a new file here.";
         #endregion
 
         #region Tests
         [MemberOrder(40)]
-        public static IContext AddTestsFromFile(
+        public static IContext AddCommonTestsFromFile(
             this Project proj,
             FileAttachment file,
             IContext context)
         { 
             var author = Users.Me(context);
-            var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = "text/plain", AuthorId = author.Id, Author = author };
+            var f = new File() { 
+                Name = file.Name, 
+                Content = file.GetResourceAsByteArray(),
+                ContentType = ContentType.Tests,
+                LanguageId = proj.LanguageId,
+                Language = proj.Language,
+                Mime = "text/plain", 
+                AuthorId = author.Id, 
+                Author = author };
             return context
                 .WithNew(f)
                 .WithUpdated(proj,
@@ -123,7 +161,13 @@ namespace Model.Functions
                     });
         }
 
-        public static string DisableAddTestsFromFile(this Project proj) =>
+        public static string ValidateAddCommonTestsFromFile(
+            this Project proj,
+            FileAttachment file) =>
+                proj.ValidateFileExtension(file);
+
+
+        public static string DisableAddCommonTestsFromFile(this Project proj) =>
     proj.CommonTestsFileId is null ? null : "Either go to Common Tests file and reload/edit it, or clear Common Tests to create a new file here.";
 
         #endregion

@@ -13,6 +13,7 @@ namespace Model.Types
             Author = cloneFrom.Author;
             Status = cloneFrom.Status;
             Title = cloneFrom.Title;
+            LanguageId = cloneFrom.LanguageId;
             Language = cloneFrom.Language;
             PasteExpression = cloneFrom.PasteExpression;
             PasteCode = cloneFrom.PasteCode;
@@ -41,6 +42,9 @@ namespace Model.Types
 
         [MemberOrder(10)]
         public string Title { get; init; }
+
+        [Hidden]
+        public virtual string LanguageId { get; init; }
 
         [MemberOrder(20)]
         public virtual Language Language { get; init; }
