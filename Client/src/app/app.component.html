@@ -2,22 +2,24 @@
   <p class="startup-message">Loading configuration...</p>
 </ng-container>
 <ng-container *ngIf="config.loadingStatus === 1">
-  <ng-container >
+  <ng-container>
     <div class="view-area">
       <div></div>
       <div [ngClass]="classes">
-        <router-outlet></router-outlet>
+        <router-outlet *ngIf="auth.isAuthenticated()"></router-outlet>
+        <app-landing *ngIf="!auth.isAuthenticated()"></app-landing>
         <ng-container *ngIf="registeredService.registered">
-        <div class="composite-footer">
-          <nof-footer></nof-footer>
-          <app-user></app-user>
-          <div class="masthead"><b>MetalUp</b>.Express</div>
-        </div>
-      </ng-container>
+          <div class="composite-footer">
+            <nof-footer></nof-footer>
+            <app-user></app-user>
+            <div class="masthead"><b>MetalUp</b>.Express</div>
+          </div>
+        </ng-container>
       </div>
     </div>
   </ng-container>
 </ng-container>
 <ng-container *ngIf="config.loadingStatus === 2">
-  <p class="startup-message">Application configuration failed to load, trying refreshing the page, if that fails please contact the application administrator.</p>
+  <p class="startup-message">Application configuration failed to load, trying refreshing the page, if that fails please
+    contact the application administrator.</p>
 </ng-container>
