@@ -1,1 +1,36 @@
-<p>Validating user....</p>
+<ng-container *ngIf="!userChecked">
+    <p>Validating user......</p>
+</ng-container>
+<ng-container *ngIf="userChecked">
+    <h1>Welcome to MetalUp Express</h1>
+    <ng-container *ngIf="userLoggedOn">
+        <p>Text here for a user who is logged on but not registered</p>
+        <button class="btn btn-primary btn-margin" (click)="registeredService.logout()">Log Out</button>
+    </ng-container>
+    <ng-container *ngIf="!userLoggedOn">
+        <p>Explains what Express is and does</p>
+        <p>Explains that you need to be registered either as a Teacher or as a Student.
+            If you already are, then please log in here.; if you are not already registered and you log in you won't be
+            able to access any of the system's functionality.</p>
+        <p>Clicking the login button will generate a pop-up managed by the 'Auth0 service.</p>
+        <p>This will allow you to login using your Google, or other recognised account.</p>
+        <button class="btn btn-primary btn-margin" (click)="registeredService.login()">Log In</button>
+    </ng-container>
+
+    <h2>How to register</h2>
+
+    <p>If you are a Student, you need to have an invitation (by email) from a teacher already registered on Express.
+        Just follow the link in the email the teacher sends you.</p>
+
+    <p>If you are a Teacher, and would like to be able to use MetalUp with your students please complete and submit this
+        form. There is no charge for this,
+        but you will be asked to submit evidence of your status as a teacher at a school, college, or university. Please
+        note that this information is manually reviewed
+        and while we typically respond the same day, it can take a few days depending upon our availability. If your
+        application is successful you will be emailed with instructions
+        on how to explore the projects available on MetalpUp.Express, invite students and/or other teacher colleagues to
+        participate, assign projects to students,
+        track their progress, and administer your own organisational and student data.</p>
+
+    <p>(Footnote about privacy policy).</p>
+</ng-container>

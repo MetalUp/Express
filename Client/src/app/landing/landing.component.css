@@ -1,0 +1,19 @@
+:host {
+    color: white;
+}
+
+button   {
+    color: var(--default-text-color);
+    background-color: var(--default-background-color);
+    border: none;
+    outline-width: 1px;
+    outline-color: var(--default-outline-color);
+    height: fit-content;
+   
+    font-size: var(--font-size-3);
+    font-weight: var(--font-weight-2);
+}
+
+button:hover {
+    outline-width: 2px;
+}

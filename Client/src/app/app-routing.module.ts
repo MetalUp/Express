@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import {
     ApplicationPropertiesComponent,
     AttachmentComponent,
-    CallbackComponent,
     DynamicErrorComponent,
     DynamicListComponent,
     DynamicObjectComponent,
@@ -12,8 +11,9 @@ import {
     MultiLineDialogComponent,
     RecentComponent
 } from '@nakedobjects/gemini';
-import { AuthService, ViewType } from '@nakedobjects/services';
+import { ViewType } from '@nakedobjects/services';
 import { LandingComponent } from './landing/landing.component';
+import { RegisteredService } from './services/registered.service';
 import { TaskViewComponent } from './task-view/task-view.component';
 
 const routes: Routes = [
@@ -21,7 +21,7 @@ const routes: Routes = [
     {
         path: 'dashboard/home',
         component: HomeComponent,
-        canActivate: [AuthService],
+        canActivate: [RegisteredService],
         data: { pane: 1, paneType: 'single' },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -34,7 +34,7 @@ const routes: Routes = [
     {
         path: 'dashboard/object',
         component: DynamicObjectComponent,
-        canActivate: [AuthService],
+        canActivate: [RegisteredService],
         data: { pane: 1, paneType: 'single', dynamicType: ViewType.Object },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -47,7 +47,7 @@ const routes: Routes = [
     {
         path: 'dashboard/list',
         component: DynamicListComponent,
-        canActivate: [AuthService],
+        canActivate: [RegisteredService],
         data: { pane: 1, paneType: 'single' },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -60,7 +60,7 @@ const routes: Routes = [
     {
         path: 'dashboard/attachment',
         component: AttachmentComponent,
-        canActivate: [AuthService],
+        canActivate: [RegisteredService],
         data: { pane: 1, paneType: 'single' },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -73,7 +73,7 @@ const routes: Routes = [
     {
         path: 'dashboard/recent',
         component: RecentComponent,
-        canActivate: [AuthService],
+        canActivate: [RegisteredService],
         data: { pane: 1, paneType: 'single' },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -86,31 +86,31 @@ const routes: Routes = [
     {
         path: 'dashboard/error',
         component: DynamicErrorComponent,
-        canActivate: [AuthService],
+        canActivate: [RegisteredService],
         data: { pane: 1, paneType: 'single' }
     },
     {
         path: 'dashboard/applicationProperties',
         component: ApplicationPropertiesComponent,
-        canActivate: [AuthService],
+        canActivate: [RegisteredService],
         data: { pane: 1, paneType: 'single' }
     },
     {
         path: 'dashboard/multiLineDialog',
         component: MultiLineDialogComponent,
-        canActivate: [AuthService],
+        canActivate: [RegisteredService],
         data: { pane: 1, paneType: 'single' }
     },
     {
         path: 'dashboard/logoff',
         component: LogoffComponent,
-        canActivate: [AuthService],
-        canDeactivate: [AuthService],
+        canActivate: [RegisteredService],
+        canDeactivate: [RegisteredService],
         data: { pane: 1, paneType: 'single' }
     },
     {
-        path: 'dashboard/callback',
-        component: CallbackComponent
+        path: 'gemini/callback',
+        component: LandingComponent
     },
     {
         path: 'landing',
@@ -118,8 +118,8 @@ const routes: Routes = [
     },
     { path: 'task/logoff',  redirectTo: 'dashboard/logoff', pathMatch: 'full'},
     { path: 'task/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
-    { path: 'task/:id', component: TaskViewComponent, canActivate: [AuthService] },
-    { path: 'task',  redirectTo: 'task/30', pathMatch: 'full'},
+    { path: 'task/:id', component: TaskViewComponent, canActivate: [RegisteredService] },
+    { path: 'task',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: '**', redirectTo: 'landing', pathMatch: 'full' }
 ];
