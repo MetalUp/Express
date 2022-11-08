@@ -2,18 +2,20 @@
   <p class="startup-message">Loading configuration...</p>
 </ng-container>
 <ng-container *ngIf="config.loadingStatus === 1">
-  <ng-container *ngIf="!$any(auth).authenticate || auth.isAuthenticated()">
+  <ng-container >
     <div class="view-area">
       <div></div>
       <div [ngClass]="classes">
         <router-outlet></router-outlet>
-        <div class="composite-footer"><nof-footer></nof-footer><app-user></app-user><div class="masthead"><b>MetalUp</b>.Express</div></div>
+        <ng-container *ngIf="registeredService.registered">
+        <div class="composite-footer">
+          <nof-footer></nof-footer>
+          <app-user></app-user>
+          <div class="masthead"><b>MetalUp</b>.Express</div>
+        </div>
+      </ng-container>
       </div>
     </div>
-    
-  </ng-container>
-  <ng-container *ngIf="$any(auth).authenticate && !auth.isAuthenticated()">
-    <nof-login></nof-login>
   </ng-container>
 </ng-container>
 <ng-container *ngIf="config.loadingStatus === 2">

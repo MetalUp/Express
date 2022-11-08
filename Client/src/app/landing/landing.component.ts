@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ContextService } from '@nakedobjects/services';
+import { RegisteredService } from '../services/registered.service';
 
 @Component({
   selector: 'app-landing',
@@ -9,24 +9,26 @@ import { ContextService } from '@nakedobjects/services';
 })
 export class LandingComponent implements OnInit {
 
-  constructor(private contextService: ContextService, private router : Router) { }
+  constructor(public registeredService: RegisteredService, private router : Router) { }
+
+  userChecked = false;
+  
+  get userLoggedOn() {
+    return this.registeredService.isLoggedOn();
+  }
 
   ngOnInit(): void {
 
-    this.contextService.getUser()
+    this.registeredService.isRegistered()
     .then(u => {
-      if (u.userName()) {
+      if (u) {
         // known user go to home
         this.router.navigate([`/dashboard`]);
       }
-      else {
-        // go to task
-        this.router.navigate([`/task`]);
-      }
+      this.userChecked = true;
     })
     .catch(e => {
-      // something wrong go to task
-      this.router.navigate([`/task`]);
+      // something wrong  stay here
     });
   }
 
