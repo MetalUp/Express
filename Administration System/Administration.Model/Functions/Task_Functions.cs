@@ -116,7 +116,7 @@ namespace Model.Functions
         public static string DisableClearDescription(this Task task) => task.DescriptionFileId is null ? "No Description specified" : null;
         #endregion
 
-        #region Hidden Functions
+        #region Hidden Code
         [MemberOrder(30)]
         public static IContext AddHiddenCodeFromFile(
             this Task task,

@@ -17,6 +17,10 @@ namespace Model.Types
             PasteExpression = cloneFrom.PasteExpression;
             PasteCode = cloneFrom.PasteCode;
             Description = cloneFrom.Description;
+            CommonHiddenCodeFileId = cloneFrom.CommonHiddenCodeFileId;
+            CommonHiddenCodeFile = cloneFrom.CommonHiddenCodeFile;
+            CommonTestsFileId = cloneFrom.CommonTestsFileId;
+            CommonTestsFile = cloneFrom.CommonTestsFile;    
             Tasks = new List<Task>(cloneFrom.Tasks);
         }
 

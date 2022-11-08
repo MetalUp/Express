@@ -59,7 +59,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditCommonHiddenCodeFile(
             this Project project,
-            File commonHiddenCodeFile,
+            [Optionally] File commonHiddenCodeFile,
             IContext context) =>
                 context.WithUpdated(project, new Project(project) { 
                     CommonHiddenCodeFileId = commonHiddenCodeFile.Id,
@@ -69,13 +69,64 @@ namespace Model.Functions
         [Edit]
         public static IContext EditCommonTestsFile(
             this Project project,
-            File commonTestsFile,
+            [Optionally] File commonTestsFile,
             IContext context) =>
                 context.WithUpdated(project, new Project(project)
                 {
                     CommonTestsFileId = commonTestsFile.Id,
                     CommonTestsFile = commonTestsFile
                 });
+
+        #endregion
+
+        #region Common files
+
+        #region Hidden Code
+        [MemberOrder(30)]
+        public static IContext AddHiddenCodeFromFile(
+            this Project proj,
+            FileAttachment file,
+            IContext context)
+        {                 
+                var author = Users.Me(context);
+                var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = "text/plain", AuthorId = author.Id, Author = author };
+                return context
+                    .WithNew(f)
+                    .WithUpdated(proj,
+                        new(proj)
+                        {
+                            CommonHiddenCodeFileId = f.Id,
+                            CommonHiddenCodeFile = f,
+                        });
+            }
+
+        public static string DisableAddHiddenCodeFromFile(this Project proj) =>
+    proj.CommonHiddenCodeFileId is null ? null : "Either go to Commoon Hidden Code file and reload/edit it, or clear Common Hidden Code to create a new file here.";
+        #endregion
+
+        #region Tests
+        [MemberOrder(40)]
+        public static IContext AddTestsFromFile(
+            this Project proj,
+            FileAttachment file,
+            IContext context)
+        { 
+            var author = Users.Me(context);
+            var f = new File() { Name = file.Name, Content = file.GetResourceAsByteArray(), Mime = "text/plain", AuthorId = author.Id, Author = author };
+            return context
+                .WithNew(f)
+                .WithUpdated(proj,
+                    new(proj)
+                    {
+                        CommonTestsFileId = f.Id,
+                        CommonTestsFile = f,
+                    });
+        }
+
+        public static string DisableAddTestsFromFile(this Project proj) =>
+    proj.CommonTestsFileId is null ? null : "Either go to Common Tests file and reload/edit it, or clear Common Tests to create a new file here.";
+
+        #endregion
 
         #endregion
 
