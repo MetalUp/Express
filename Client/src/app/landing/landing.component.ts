@@ -18,10 +18,9 @@ export class LandingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.registeredService.isRegistered()
-    .then(u => {
-      if (u) {
+    .then(b => {
+      if (b) {
         // known user go to home
         this.router.navigate([`/dashboard`]);
       }
