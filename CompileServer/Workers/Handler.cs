@@ -8,7 +8,7 @@ public static class Handler {
     private static Func<JsonResult> Wrap(Func<RunResult> f) =>
         () => {
             try {
-                return new JsonResult(f());
+                return new JsonResult(f()) { ContentType = "application/json;charset=utf-16" };
             }
             catch (Exception ex) {
                 return new JsonResult(new RunResult { outcome = Outcome.IllegalSystemCall, stderr = ex.Message });
