@@ -4,9 +4,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService, ConfigService, RepLoaderService } from '@nakedobjects/services';
 import { Subject } from 'rxjs';
 import { AppComponent } from './app.component';
+import { RegisteredService } from './services/registered.service';
 
 describe('AppComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let registeredServiceSpy: jasmine.SpyObj<RegisteredService>;
   let routerSpy: jasmine.SpyObj<Router>;
   let configServiceSpy: jasmine.SpyObj<ConfigService>;
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
@@ -18,6 +20,7 @@ describe('AppComponent', () => {
     routerSpy = jasmine.createSpyObj('Router', [], { url: "/dashboard/home" });
     configServiceSpy = jasmine.createSpyObj('ConfigService', [], { loading: 0 });
     repLoaderSpy = jasmine.createSpyObj('RepLoaderService', [], { loadingCount$: loadingSubj })
+    registeredServiceSpy = jasmine.createSpyObj('RegisteredService', [], {registered: true  })
 
     await TestBed.configureTestingModule({
       imports: [
@@ -30,6 +33,10 @@ describe('AppComponent', () => {
         {
           provide: AuthService,
           useValue: authServiceSpy
+        },
+        {
+          provide: RegisteredService,
+          useValue: registeredServiceSpy
         },
         {
           provide: Router,
