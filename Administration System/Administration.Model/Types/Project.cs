@@ -76,7 +76,45 @@ namespace Model.Types
         public virtual File CommonTestsFile { get; init; }
         #endregion
 
+        #region Wrapper
+
+        [HideInClient]
+        public string Wrapper => WrapperFileId == null ? Language.Wrapper : WrapperFile.ContentsAsString();
+
+        [Hidden]
+        public int? WrapperFileId { get; init; }
+
         [MemberOrder(100)]
+        public virtual File WrapperFile { get; init; }
+
+        #endregion
+
+        #region Helpers
+
+        [HideInClient]
+        public string Helpers => HelpersFileId == null ? Language.Helpers : HelpersFile.ContentsAsString();
+
+        [Hidden]
+        public int? HelpersFileId { get; init; }
+
+        [MemberOrder(110)]
+        public virtual File HelpersFile { get; init; }
+
+        #endregion
+
+        #region RegExRules
+        [HideInClient]
+        public string RegExRules => RegExRulesFileId == null ? Language.RegExRules  : RegExRulesFile.ContentsAsString();
+
+        [Hidden]
+        public int? RegExRulesFileId { get; init; }
+
+        [MemberOrder(110)]
+        public virtual File RegExRulesFile { get; init; }
+
+        #endregion
+
+        [MemberOrder(120)]
         [MultiLine(10)]
         public string Description { get; init; }
 

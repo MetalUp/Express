@@ -85,21 +85,21 @@ namespace Model.Types
         #region Wrapper
 
         [HideInClient]
-        public string Wrapper => Project.Language.Wrapper;
+        public string Wrapper => Project.Wrapper;
 
         #endregion
 
         #region Helpers
 
         [HideInClient]
-        public string Helpers => Project.Language.Helpers;
+        public string Helpers => Project.Helpers;
 
         #endregion
 
         #region RegExRules
 
         [HideInClient]
-        public string RegExRules => Project.Language.RegExRules;
+        public string RegExRules => Project.RegExRules;
 
         #endregion
 
