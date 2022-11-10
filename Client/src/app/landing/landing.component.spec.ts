@@ -44,8 +44,7 @@ describe('LandingComponent', () => {
   });
 
   it('should navigate home if registered', () => {
-    component.ngOnInit();
-
+   
     registeredSub.next(true);
 
     expect(routerSpy.navigate).toHaveBeenCalledWith([`/dashboard`]);
@@ -53,8 +52,7 @@ describe('LandingComponent', () => {
   });
 
   it('should not navigate home if not registered', () => {
-    component.ngOnInit();
-
+    
     registeredSub.next(false);
 
     expect(routerSpy.navigate).not.toHaveBeenCalled();
