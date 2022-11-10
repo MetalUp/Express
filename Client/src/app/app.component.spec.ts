@@ -1,7 +1,8 @@
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AuthService, ConfigService, RepLoaderService } from '@nakedobjects/services';
+import { AuthService } from '@auth0/auth0-angular';
+import { ConfigService, RepLoaderService } from '@nakedobjects/services';
 import { Subject } from 'rxjs';
 import { AppComponent } from './app.component';
 import { RegisteredService } from './services/registered.service';
@@ -59,12 +60,6 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
-
-  // it(`should call authenticate`, () => {
-  //   TestBed.createComponent(AppComponent);
-
-  //   expect(authServiceSpy.handleAuthentication).toHaveBeenCalled();
-  // });
 
   it('should indicate dashboard', () => {
     const fixture = TestBed.createComponent(AppComponent);

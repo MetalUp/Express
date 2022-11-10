@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AuthService, User } from '@auth0/auth0-angular';
+import { AuthService } from '@auth0/auth0-angular';
 import { UserRepresentation } from '@nakedobjects/restful-objects';
 import { ConfigService, ContextService } from '@nakedobjects/services';
 

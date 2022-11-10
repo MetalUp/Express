@@ -11,7 +11,7 @@ import { of, Subject } from 'rxjs';
 export class RegisteredService implements CanActivate {
   
   registered$ = new Subject<boolean>();
-  private registered? : boolean;
+  registered? : boolean;
 
   private setRegistered(registered : boolean) {
     this.registered = registered;

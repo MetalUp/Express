@@ -1,7 +1,8 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { TimePickerComponent } from '@nakedobjects/gemini';
+import { AuthService } from '@auth0/auth0-angular';
 import { UserRepresentation } from '@nakedobjects/restful-objects';
-import { AuthService, ContextService } from '@nakedobjects/services';
+import { ContextService } from '@nakedobjects/services';
+import { Subject } from 'rxjs';
 
 import { RegisteredService } from './registered.service';
 
@@ -9,26 +10,29 @@ describe('RegisteredService', () => {
   let service: RegisteredService;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
+  let authSubj = new Subject<boolean>();
+
 
   beforeEach(() => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['canActivate'], {});
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['loginWithRedirect'], {isAuthenticated$: authSubj});
     contextServiceSpy = jasmine.createSpyObj('ContextService', ['getUser'], {});
 
     TestBed.configureTestingModule({});
-    //service = new RegisteredService(authServiceSpy, contextServiceSpy);
+    service = new RegisteredService(authServiceSpy, contextServiceSpy);
 
-    authServiceSpy.canActivate.and.returnValue(true);
     contextServiceSpy.getUser.and.returnValue(Promise.resolve({ userName: () => "name"} as UserRepresentation));
   });
 
   it('should be created', () => {
-   // expect(service).toBeTruthy();
+    expect(service).toBeTruthy();
   });
 
-  it('should handle canActivate', fakeAsync(() => {
-    // service.canActivate().then(b => expect(b).toBeTrue());
-    // tick();
-    // expect(service.registered).toBeTrue();
+  it('should register', fakeAsync(() => {
+    authSubj.next(true);
+    tick();
+
+    expect(contextServiceSpy.getUser).toHaveBeenCalled();
+    expect(service.registered).toBeTrue();
 
   }));
 
