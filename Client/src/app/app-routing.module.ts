@@ -7,12 +7,12 @@ import {
     DynamicListComponent,
     DynamicObjectComponent,
     HomeComponent,
-    LogoffComponent,
     MultiLineDialogComponent,
     RecentComponent
 } from '@nakedobjects/gemini';
 import { ViewType } from '@nakedobjects/services';
 import { LandingComponent } from './landing/landing.component';
+import { LogoffComponent } from './logoff/logoff.component';
 import { RegisteredService } from './services/registered.service';
 import { TaskViewComponent } from './task-view/task-view.component';
 

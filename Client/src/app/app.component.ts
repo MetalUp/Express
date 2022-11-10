@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, ConfigService, RepLoaderService } from '@nakedobjects/services';
+import { ConfigService, RepLoaderService } from '@nakedobjects/services';
 import { Subscription } from 'rxjs';
 import { RegisteredService } from './services/registered.service';
 
@@ -12,12 +12,12 @@ import { RegisteredService } from './services/registered.service';
 })
 
 export class AppComponent implements OnInit, OnDestroy {
-    constructor(public readonly auth: AuthService,
+    constructor(
         public readonly registeredService: RegisteredService,
         private readonly router: Router,
         private readonly repLoader: RepLoaderService,
         public readonly config: ConfigService) {
-        auth.handleAuthentication();
+        
     }
 
     sub?: Subscription;

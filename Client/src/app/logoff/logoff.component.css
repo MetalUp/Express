@@ -1,0 +1,52 @@
+:host {
+    display: block;
+    padding-left: var(--space-5);
+    height: 100%;
+    overflow-y: auto;
+    color: white;
+    font-size: var(--font-size-2);
+    font-weight: var(--font-weight-1);
+}
+
+.header {
+    display: block;
+    margin-bottom: var(--space-5);
+    overflow: hidden;
+    color: var(--contrast-text-color);
+    font-size: var(--font-size-4);
+    font-weight: var(--font-weight-2);
+    background-image: var(--header-background-color);
+}
+
+.title {
+    position: relative;
+    font-weight: var(--font-weight-2);
+    font-size: var(--font-size-4);
+    line-height: 38pt;
+    margin-left: var(--space-1); /*Make room for focus outline */
+    padding-left: var(--space-3);
+    padding-right: var(--space-3);
+    margin-right: var(--space-5);
+    margin-top: var(--space-1);
+    display: block;
+}
+
+button   {
+    color: var(--default-text-color);
+    background-color: var(--default-background-color);
+    border: none;
+    outline-width: 1px;
+    outline-color: var(--default-outline-color);
+    margin-right: var(--space-5);
+    display: block;
+    float: left;
+    margin-left: var(--space-1); /*Else hover outline is hidden on the left-most menu*/
+    margin-right: var(--space-4);
+    margin-bottom: var(--space-3); /*Else hover outline is hidden on the bottom*/
+    font-size: var(--font-size-3);
+    font-weight: var(--font-weight-2);
+}
+
+button:hover {
+    outline-width: 2px;
+}

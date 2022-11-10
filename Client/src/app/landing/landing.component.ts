@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { RegisteredService } from '../services/registered.service';
 
 @Component({
@@ -7,31 +8,29 @@ import { RegisteredService } from '../services/registered.service';
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.css']
 })
-export class LandingComponent implements OnInit {
+export class LandingComponent implements OnInit, OnDestroy {
 
-  constructor(public registeredService: RegisteredService, private router : Router) { }
+  constructor(public registeredService: RegisteredService, private router: Router) { }
 
   userChecked = false;
-  
+  sub?: Subscription;
+
   get userLoggedOn() {
     return this.registeredService.isLoggedOn();
   }
 
   ngOnInit(): void {
-    this.registeredService.isRegistered()
-    .then(b => {
+    this.sub = this.registeredService.registered$.subscribe(b => {
       if (b) {
-        // known user go to home
-        this.router.navigate([`/dashboard`]);
+        this.router.navigate(['/dashboard']);
       }
-      else {
-        this.userChecked = true;
-      }
-    })
-    .catch(e => {
-      // something wrong  stay here
       this.userChecked = true;
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
+  }
 }

@@ -1,15 +1,12 @@
 <div class="metalup">
-    <ng-container *ngIf="!userChecked">
-        <p>Validating user......</p>
-    </ng-container>
-    <ng-container *ngIf="userChecked">
+    <ng-container>
         <h1>Welcome to MetalUp Express</h1>
-        <ng-container *ngIf="userLoggedOn">
+        <ng-container *ngIf="(userLoggedOn | async) === true && (registeredService.registered$ | async) === false">
             <p>Although you are technically logged on, you are not a registered user, so the capabilities of
                 MetalUp.Express are not available to you.</p>
             <button class="btn btn-primary btn-margin" (click)="registeredService.logout()">Log Out</button>
         </ng-container>
-        <ng-container *ngIf="!userLoggedOn">
+        <ng-container *ngIf="(userLoggedOn | async) === false">
             <p>MetalUp.Express is an online 'Integrated Learning Environment' for programming, in several different
                 programming languages,
                 designed specifically for use within schools, collegues, and universities.

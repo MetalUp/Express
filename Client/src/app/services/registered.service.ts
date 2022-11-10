@@ -1,48 +1,63 @@
 
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { AuthService, ContextService } from '@nakedobjects/services';
+import { ContextService } from '@nakedobjects/services';
+import { AuthService } from '@auth0/auth0-angular';
+import { of, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisteredService implements CanActivate {
+  
+  registered$ = new Subject<boolean>();
+  private registered? : boolean;
 
-  constructor(private auth: AuthService, private contextService : ContextService) { }
+  private setRegistered(registered : boolean) {
+    this.registered = registered;
+    this.registered$.next(registered);
+  }
 
-  public registered = false;
-
-  isRegistered() {
-    return this.canActivate();
+  constructor(private auth: AuthService, private contextService: ContextService) {
+    
+    auth.isAuthenticated$.subscribe(b => {
+      if (b) {
+          this.contextService.getUser()
+            .then(u => {
+              this.setRegistered (!!u.userName());
+            })
+            .catch(e => {
+              this.setRegistered(false);
+            })
+      }
+      else {
+        this.setRegistered(false);
+      }
+    })
   }
 
   isLoggedOn() {
-    return this.auth.canActivate();
+    return this.auth.isAuthenticated$
   }
 
   canActivate() {
-    if (this.auth.canActivate()) {
-      if (this.registered) {
-        return Promise.resolve(true);
-      }
-      return this.contextService.getUser()
-        .then(u => this.registered = !!u.userName())
-        .catch(e => this.registered = false);
+    if (this.registered === true || this.registered === false){
+      return of(this.registered);
     }
-    this.registered = false;
-    return Promise.resolve(false);
+    return this.registered$;
   }
 
   canDeactivate(c : any) {
-    return this.auth.canDeactivate(c);
+    return true;
   }
 
   login() {
-    this.auth.login();
+    const url = (window as any).location.origin;
+    const callbackUrl = `${url}/landing`;
+    this.auth.loginWithRedirect({redirect_uri : callbackUrl,  scope: 'openid email profile', response_type: 'code'});
   } 
 
   logout() {
     this.auth.logout();
   } 
-
 }

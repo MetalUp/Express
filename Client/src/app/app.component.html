@@ -6,9 +6,8 @@
     <div class="view-area">
       <div></div>
       <div [ngClass]="classes">
-        <router-outlet *ngIf="auth.isAuthenticated()"></router-outlet>
-        <app-landing *ngIf="!auth.isAuthenticated()"></app-landing>
-        <ng-container *ngIf="registeredService.registered">
+        <router-outlet></router-outlet>
+        <ng-container *ngIf="registeredService.registered$ | async">
           <div class="composite-footer">
             <nof-footer></nof-footer>
             <app-user></app-user>

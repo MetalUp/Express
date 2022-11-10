@@ -11,8 +11,8 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/cdk": "^14.2.1",
     "@angular/animations": "^14.1.0",
+    "@angular/cdk": "^14.2.1",
     "@angular/common": "^14.1.0",
     "@angular/compiler": "^14.1.0",
     "@angular/core": "^14.1.0",
@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "@auth0/auth0-angular": "^1.11.0",
     "@nakedobjects/gemini": "file:./temp_no/nakedobjects-gemini-v13.1.0.tgz",
     "@nakedobjects/restful-objects": "file:./temp_no/nakedobjects-restful-objects-v13.1.0.tgz",
     "@nakedobjects/services": "file:./temp_no/nakedobjects-services-v13.1.0.tgz",

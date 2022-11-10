@@ -60,11 +60,11 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should call authenticate`, () => {
-    TestBed.createComponent(AppComponent);
+  // it(`should call authenticate`, () => {
+  //   TestBed.createComponent(AppComponent);
 
-    expect(authServiceSpy.handleAuthentication).toHaveBeenCalled();
-  });
+  //   expect(authServiceSpy.handleAuthentication).toHaveBeenCalled();
+  // });
 
   it('should indicate dashboard', () => {
     const fixture = TestBed.createComponent(AppComponent);
