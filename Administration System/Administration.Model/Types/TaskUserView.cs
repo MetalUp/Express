@@ -3,12 +3,14 @@
 [ViewModel(typeof(TaskUserView_Functions))]
 public class TaskUserView
 {
-    public TaskUserView(Task task, bool completed, string codeLastSubmitted,
+    public TaskUserView(Task task, string title, bool nextTaskEnabled, string codeLastSubmitted,
         int currentHintNo, string currentHintTitle, string currentHintContent, 
         int? previousHintNo, int? nextHintNo, int costOfNextHint)
     {
         Task = task;
         Project = task.Project;
+        Title = title;
+        NextTaskEnabled = nextTaskEnabled;
         CodeLastSubmitted = codeLastSubmitted;
         PreviousHintNo = previousHintNo;
         CurrentHintNo = currentHintNo;
@@ -21,7 +23,7 @@ public class TaskUserView
 
     internal Project Project { get; init; }
 
-    public string Title => ""; //TODO: Task title, whether completed and marks (Max, then remaining, then final score)
+    public string Title { get; init; }
 
     public string Language => Task.Language;
 
@@ -39,7 +41,7 @@ public class TaskUserView
 
     public bool NextTaskClearsFunctions => Task.NextTaskClearsFunctions;
 
-    public bool Completed { get; init; } //Derrived from Activities
+    public bool NextTaskEnabled { get; init; }
 
     public string CodeLastSubmitted { get; init; }  //Derrived from Activities
 
