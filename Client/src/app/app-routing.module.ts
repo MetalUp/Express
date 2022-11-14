@@ -109,10 +109,6 @@ const routes: Routes = [
         data: { pane: 1, paneType: 'single' }
     },
     {
-        path: 'gemini/callback',
-        component: LandingComponent
-    },
-    {
         path: 'landing',
         component: LandingComponent
     },

@@ -1,9 +1,9 @@
 
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { ContextService } from '@nakedobjects/services';
 import { AuthService } from '@auth0/auth0-angular';
-import { of, Subject } from 'rxjs';
+import { first, of, pipe, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class RegisteredService implements CanActivate {
     this.registered$.next(registered);
   }
 
-  constructor(private auth: AuthService, private contextService: ContextService) {
+  constructor(public auth: AuthService, private contextService: ContextService, private router: Router) {
     
     auth.isAuthenticated$.subscribe(b => {
       if (b) {
@@ -41,9 +41,16 @@ export class RegisteredService implements CanActivate {
   }
 
   canActivate() {
-    if (this.registered === true || this.registered === false){
+    if (this.registered === true || this.registered === false) {
       return of(this.registered);
     }
+
+    this.registered$.pipe(first()).subscribe(b => {
+      if (b === false){
+        this.router.navigate(['/landing']);
+      }
+    })
+
     return this.registered$;
   }
 

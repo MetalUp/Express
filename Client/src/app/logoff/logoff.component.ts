@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { ConfigService, ContextService } from '@nakedobjects/services';
+import { RegisteredService } from '../services/registered.service';
 
 @Component({
     selector: 'app-logoff',
@@ -12,7 +13,7 @@ export class LogoffComponent implements OnInit {
 
     constructor(
         private readonly context: ContextService,
-        private readonly authService: AuthService,
+        private readonly registeredService: RegisteredService,
         readonly configService: ConfigService,
         private readonly location: Location,
     ) { }
@@ -20,7 +21,7 @@ export class LogoffComponent implements OnInit {
     userId: string = "";
 
     userIsLoggedIn() {
-        return this.authService.isAuthenticated$;
+        return this.registeredService.auth.isAuthenticated$;
     }
 
     cancel() {
@@ -28,7 +29,7 @@ export class LogoffComponent implements OnInit {
     }
 
     logoff() {
-        this.authService.logout();
+        this.registeredService.logout();
     }
 
     ngOnInit() {
