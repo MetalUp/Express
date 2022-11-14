@@ -58,6 +58,8 @@ export class RegisteredService implements CanActivate {
   } 
 
   logout() {
-    this.auth.logout();
+    const url = (window as any).location.origin;
+    const callbackUrl = `${url}/landing`;
+    this.auth.logout({returnTo: callbackUrl});
   } 
 }
