@@ -27,7 +27,9 @@ namespace Model.Functions
             context.WithUpdated(hint, new Hint(hint) { Content = content.AsByteArray() });
 
         public static string Default1EditContentAsString(this Hint hint) =>
-            hint.Content.AsASCIIonly();
+            hint.ContentsAsString();
+
+        internal static string ContentsAsString(this Hint hint) => hint.Content.AsASCIIonly();
     }
 
 }
