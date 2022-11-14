@@ -1,6 +1,4 @@
-﻿using NakedFramework.Value;
-
-namespace Model.Types
+﻿namespace Model.Types
 {
     public class Project
     {
