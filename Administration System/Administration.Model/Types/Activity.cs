@@ -8,9 +8,13 @@
             Id = cloneFrom.Id;
             AssignmentId = cloneFrom.AssignmentId;
             Assignment = cloneFrom.Assignment;
-            Type = cloneFrom.Type;
+            TaskId = cloneFrom.TaskId;
+            Task = cloneFrom.Task;
+            ActivityType = cloneFrom.ActivityType;
             TimeStamp = cloneFrom.TimeStamp;
-            Details = cloneFrom.Details;
+            HighestHintUsed = cloneFrom.HighestHintUsed;
+            LastCodeSubmitted = cloneFrom.LastCodeSubmitted;
+            ErrorMessage = cloneFrom.ErrorMessage;
         }
 
         [Hidden]
@@ -21,16 +25,27 @@
         [MemberOrder(2)]
         public virtual Assignment Assignment { get; init; }
 
+        [Hidden]
+        public int TaskId { get; init; }
+        [MemberOrder(3)]
+        public virtual Task Task { get; init; }
+
         [MemberOrder(4)]
-        public ActivityType Type { get; init; }
+        public ActivityType ActivityType { get; init; }
 
         [MemberOrder(6)]
         public DateTime TimeStamp { get; init; }
 
-        [MemberOrder(8)]
-        public string Details { get; init; }    
+        [MemberOrder(7)]
+        public int HighestHintUsed { get; init; }
 
-        public override string ToString() => Type.ToString();
+        [MemberOrder(8)]
+        public string LastCodeSubmitted { get; init; }
+
+        [MemberOrder(8)]
+        public string ErrorMessage { get; init; }
+
+        public override string ToString() => $"{TimeStamp} {ActivityType}";
     }
 
 

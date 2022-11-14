@@ -8,19 +8,17 @@
             int assigId = assignment.Id;
             return context.Instances<Activity>().Where(a => a.AssignmentId == assigId).OrderByDescending(a => a.TimeStamp);
         }
-
         #endregion
 
-        public static IContext MarkNotCompleted(this Assignment a, string teacherNote, IContext context) =>
-            context.WithNew(new Activity() { Assignment = a, TimeStamp = context.Now(), Type = ActivityType.TeacherNote, Details = teacherNote })
-            .WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.NotCompleted });
+        [Edit]
+        public static IContext EditTeacherNotes(this Assignment assignment, string notes, IContext context) =>
+            context.WithUpdated(assignment, new Assignment(assignment) { TeacherNotes = notes });
+        
+        public static string Default1EditTeacherNotes(this Assignment a) => a.TeacherNotes;
 
+        public static IContext MarkNotCompleted(this Assignment a, string notes, IContext context) =>
+            context.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.NotCompleted, TeacherNotes = notes });
 
-
-        //    Called when the assignee navigates from the assignment to view of the task itself
-        //    public static IContext StartAssigment(this Assignment a, IContext context) =>
-        //        context.WithNew(new Activity() { Assignment = a, TimeStamp = context.Now(), Type = ActivityType.Started })
-        //        .WithUpdated(a, new Assignment(a) { Status = ActivityType.Started });
-
+        public static string Default1MarkNotCompleted(this Assignment a) => a.TeacherNotes;
     }
 }

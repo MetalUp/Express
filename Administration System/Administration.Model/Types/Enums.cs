@@ -7,7 +7,7 @@
 
     public enum ActivityType
     {
-        AccessedTask, SubmitFail, SubmitSuccess, TestFail, TestSuccess, HintUsed, TeacherNote
+        SubmitCodeFail, SubmitCodeSuccess, RunTestsFail, RunTestsSuccess, HintUsed
     }
 
     public enum UserStatus

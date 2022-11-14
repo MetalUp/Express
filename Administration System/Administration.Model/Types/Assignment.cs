@@ -47,6 +47,9 @@ namespace Model.Types
         [MemberOrder(14)]
         public virtual User AssignedBy { get; init; }
 
+        [MemberOrder(16)]
+        [MultiLine(10)]
+        public string TeacherNotes { get; init; }
 
         public override string ToString() => $"{Project}";
     }
