@@ -22,7 +22,7 @@
 
     public enum ProjectStatus
     {
-        UnderDevelopment, Assignable, Public, Retired
+        UnderDevelopment, Assignable, Retired
     }
 
     public enum ContentType
