@@ -1,4 +1,3 @@
-using CompileServer.Workers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +12,6 @@ builder.Services.AddAuthentication(options => {
     options.Audience = builder.Configuration["Auth0:Audience"];
     options.TokenValidationParameters.NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
 });
-
 
 builder.Services.AddControllers();
 
@@ -30,7 +28,6 @@ builder.Services.AddCors(options => {
             .AllowCredentials();
     });
 });
-
 
 var app = builder.Build();
 

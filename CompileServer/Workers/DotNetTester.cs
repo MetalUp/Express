@@ -4,11 +4,11 @@ namespace CompileServer.Workers;
 
 public static class DotNetTester {
     private static void LoadIfNotInTemp(string file, RunResult runResult) {
-        var binPath = @$"D:\home\site\wwwroot\TestPlatform\";
+        var binPath = @"D:\home\site\wwwroot\TestPlatform\";
 
         if (!Directory.Exists(binPath)) {
             // for tests
-            binPath = @$"..\..\..\..\CompileServerTest\bin\Debug\net6.0\";
+            binPath = @"..\..\..\..\CompileServerTest\bin\Debug\net6.0\";
         }
 
         if (!File.Exists($"{runResult.TempDir}{file}")) {

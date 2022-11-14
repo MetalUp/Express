@@ -1,11 +1,9 @@
 ﻿namespace CompileServer.Models;
 
 public class RunResult {
-    internal string TempDir { get; }
+    public RunResult(string tempDir) => TempDir = tempDir;
 
-    public RunResult(string tempDir) {
-        this.TempDir = tempDir;
-    }
+    internal string TempDir { get; }
 
     public string run_id { get; set; } = "";
     public Outcome outcome { get; set; }

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text;
 using CompileServer.Models;
 
 namespace CompileServer.Workers;
@@ -69,6 +68,7 @@ public static class Helpers {
             if (!process.WaitForExit(30000)) {
                 process.Kill();
             }
+
             runResult = SetRunResults(process, runResult);
         }
         catch (Exception e) {

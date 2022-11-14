@@ -29,10 +29,10 @@ public static class TestHelpers {
     }
 
     public class TestRunSpec : RunSpec, IDisposable {
+        public void Dispose() => base.CleanUp();
+
         public override void CleanUp() {
             // do nothing
         }
-
-        public void Dispose() => base.CleanUp();
     }
 }

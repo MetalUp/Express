@@ -32,7 +32,7 @@ public static class CSharpCompiler {
         return CSharpCompilation.Create("compiled",
                                         new[] { parsedSyntaxTree },
                                         references,
-                                        new CSharpCompilationOptions(console ?  OutputKind.ConsoleApplication : OutputKind.DynamicallyLinkedLibrary,
+                                        new CSharpCompilationOptions(console ? OutputKind.ConsoleApplication : OutputKind.DynamicallyLinkedLibrary,
                                                                      optimizationLevel: OptimizationLevel.Release,
                                                                      assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default));
     }
