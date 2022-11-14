@@ -4,10 +4,10 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class PythonRunner {
-    public static RunResult Execute(string pyFile) {
-        var file = $"{Path.GetTempPath()}{pyFile}";
+    internal static RunResult Execute(string pyFile, RunResult runResult) {
+        var file = $"{runResult.TempDir}{pyFile}";
         var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
 
-        return Helpers.Execute(pythonExe, file, file);
+        return Helpers.Execute(pythonExe, file, runResult);
     }
 }

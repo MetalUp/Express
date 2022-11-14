@@ -4,22 +4,22 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class PythonCompiler {
-    private static string GetVersion() {
+    private static string GetVersion(RunSpec runSpec) {
         var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
-        var version = Helpers.GetVersion(pythonExe, "--version");
+        var version = Helpers.GetVersion(pythonExe, "--version", runSpec);
 
         return string.IsNullOrEmpty(version) ? "not found" : version.Replace("Python ", "").Trim();
     }
 
-    public static string[] GetNameAndVersion() => new[] { "python", GetVersion() };
+    internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "python", GetVersion(runSpec) };
 
-    public static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
+    internal static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
         const string tempFileName = "temp.py";
-        var file = $"{Path.GetTempPath()}{tempFileName}";
+        var file = $"{runSpec.TempDir}{tempFileName}";
         File.WriteAllText(file, runSpec.sourcecode);
         var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
         var args = $"-m py_compile {file}";
 
-        return Helpers.Compile(pythonExe, args, createExecutable ? "" : tempFileName, tempFileName);
+        return Helpers.Compile(pythonExe, args, createExecutable ? tempFileName : "", runSpec);
     }
 }

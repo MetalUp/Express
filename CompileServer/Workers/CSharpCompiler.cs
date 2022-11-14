@@ -17,11 +17,11 @@ public static class CSharpCompiler {
 
     private static string GetVersion() => Options.LanguageVersion.ToString().Replace("CSharp", "");
 
-    public static string[] GetNameAndVersion() => new[] { "csharp", GetVersion() };
+    internal static string[] GetNameAndVersion() => new[] { "csharp", GetVersion() };
 
-    public static (RunResult, byte[]) Compile(RunSpec runSpec, bool createExecutable) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(References, true));
+    internal static (RunResult, byte[]) Compile(RunSpec runSpec, bool createExecutable) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(References, true));
 
-    public static (RunResult, byte[]) CompileForTest(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(References, false));
+    internal static (RunResult, byte[]) CompileForTest(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(References, false));
 
     private static Func<string, CSharpCompilation> GenerateGenerateCode(MetadataReference[] references, bool console) =>
         sourceCode => GenerateCode(sourceCode, references, console);

@@ -5,33 +5,33 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class Helpers {
-    public static Process CreateProcess(string file, string args) {
+    private static Process CreateProcess(string file, string args, RunResult runResult) {
         var start = new ProcessStartInfo {
             FileName = file,
             Arguments = args,
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            WorkingDirectory = Path.GetTempPath()
+            WorkingDirectory = runResult.TempDir
         };
 
         return Process.Start(start) ?? throw new NullReferenceException("Process failed to start");
     }
 
-    public static RunResult SetCompileResults(Process process, RunResult runResult) {
+    private static RunResult SetCompileResults(Process process, RunResult runResult) {
         using var stdErr = process.StandardError;
         runResult.cmpinfo = stdErr.ReadToEnd();
         runResult.outcome = string.IsNullOrEmpty(runResult.cmpinfo) ? Outcome.Ok : Outcome.CompilationError;
         return runResult;
     }
 
-    public static RunResult SetCompileResults(RunResult runResult, Exception e) {
+    private static RunResult SetCompileResults(RunResult runResult, Exception e) {
         runResult.outcome = Outcome.CompilationError;
         runResult.stderr = e.Message;
         return runResult;
     }
 
-    public static RunResult SetRunResults(Process process, RunResult runResult) {
+    private static RunResult SetRunResults(Process process, RunResult runResult) {
         using var stdOutput = process.StandardOutput;
         using var stdErr = process.StandardError;
         runResult.stdout = stdOutput.ReadToEnd();
@@ -47,7 +47,7 @@ public static class Helpers {
         return runResult;
     }
 
-    public static RunResult SetRunResults(RunResult runResult, Exception e) {
+    private static RunResult SetRunResults(RunResult runResult, Exception e) {
         runResult.outcome = Outcome.RunTimeError;
         runResult.stderr = e.Message;
         return runResult;
@@ -63,11 +63,9 @@ public static class Helpers {
         return runResult;
     }
 
-    public static RunResult Execute(string exe, string args, string cleanUp) {
-        var runResult = new RunResult();
-
+    public static RunResult Execute(string exe, string args, RunResult runResult) {
         try {
-            using var process = CreateProcess(exe, args);
+            using var process = CreateProcess(exe, args, runResult);
             if (!process.WaitForExit(30000)) {
                 process.Kill();
             }
@@ -76,46 +74,40 @@ public static class Helpers {
         catch (Exception e) {
             runResult = SetRunResults(runResult, e);
         }
-        finally {
-            if (!string.IsNullOrEmpty(cleanUp)) {
-                File.Delete(cleanUp);
-            }
-        }
 
         return runResult;
     }
 
-    public static (RunResult, string) Compile(string exe, string args, string cleanUp, string returnFileName) {
-        var runResult = new RunResult();
+    public static (RunResult, string) Compile(string exe, string args, string returnFileName, RunSpec runSpec) {
+        var runResult = new RunResult(runSpec.TempDir);
 
         try {
-            using var process = CreateProcess(exe, args);
+            using var process = CreateProcess(exe, args, runResult);
             process.WaitForExit();
             runResult = SetCompileResults(process, runResult);
         }
         catch (Exception e) {
             runResult = SetCompileResults(runResult, e);
         }
-        finally {
-            if (!string.IsNullOrEmpty(cleanUp)) {
-                File.Delete(cleanUp);
-            }
-        }
 
         return (runResult, returnFileName);
     }
 
-    public static string GetVersion(string exe, string args) {
+    public static string GetVersion(string exe, string args, RunSpec runSpec) {
         string version;
 
         try {
-            using var process = CreateProcess(exe, args);
+            runSpec.SetUp();
+            using var process = CreateProcess(exe, args, new RunResult(runSpec.TempDir));
             process.WaitForExit();
             using var stdOutput = process.StandardOutput;
             version = stdOutput.ReadToEnd();
         }
         catch (Exception e) {
             version = e.Message;
+        }
+        finally {
+            Task.Run(() => Directory.Delete(runSpec.TempDir, true));
         }
 
         return version;

@@ -1,3 +1,4 @@
+using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -11,10 +12,5 @@ public class LanguagesController : CompileServerController {
     public LanguagesController(ILogger<LanguagesController> logger, IConfiguration configuration) : base(logger, configuration) { }
 
     [HttpGet]
-    public IEnumerable<string[]> Get() => new[] {
-        CSharpCompiler.GetNameAndVersion(),
-        PythonCompiler.GetNameAndVersion(),
-        VisualBasicCompiler.GetNameAndVersion(),
-        JavaCompiler.GetNameAndVersion()
-    };
+    public IEnumerable<string[]> Get() => new[] { "csharp", "vb", "python", "java" }.Select(l => Handler.GetNameAndVersion(new RunSpec { language_id = l }, Logger));
 }

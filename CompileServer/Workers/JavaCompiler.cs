@@ -5,22 +5,22 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class JavaCompiler {
-    private static string GetVersion() {
+    private static string GetVersion(RunSpec runSpec) {
         var java = $"{CompileServerController.JavaPath}\\bin\\javac.exe";
-        var version = Helpers.GetVersion(java, "-version");
+        var version = Helpers.GetVersion(java, "-version", runSpec);
 
         return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "javac ([\\d\\.]+)").Groups[1].Value;
     }
 
-    public static string[] GetNameAndVersion() => new[] { "java", GetVersion() };
+    internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "java", GetVersion(runSpec) };
 
-    public static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
+    internal static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
         const string tempFileName = "temp.java";
-        var file = $"{(string?)Path.GetTempPath()}{tempFileName}";
+        var file = $"{runSpec.TempDir}{tempFileName}";
         var javaCompiler = $"{CompileServerController.JavaPath}\\bin\\javac.exe";
 
         File.WriteAllText(file, runSpec.sourcecode);
 
-        return Helpers.Compile(javaCompiler, file, file, "temp");
+        return Helpers.Compile(javaCompiler, file, "temp", runSpec);
     }
 }

@@ -24,11 +24,10 @@ public class CSharpCompilerTest {
     }";
 
     private const string DivZero = "var a = 1/0;";
-    
+
     private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
 
     private const string StackOverFlowFail = @"static int f(int i) => f(i+1);var a = f(1);";
-
 
     private const string TestCodeOk =
         @"
@@ -98,7 +97,8 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestVersion() {
-        var csv = CSharpCompiler.GetNameAndVersion();
+        var runSpec = CsharpRunSpec("");
+        var csv = Handler.GetNameAndVersion(runSpec, testLogger);
 
         Assert.AreEqual("csharp", csv[0]);
         Assert.AreEqual("10", csv[1]);
@@ -106,7 +106,7 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestVersionInParallel() {
-        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => CSharpCompiler.GetNameAndVersion()).ToArray();
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(CsharpRunSpec(""), testLogger)).ToArray();
 
         foreach (var csv in csvs) {
             Assert.AreEqual("csharp", csv[0]);
@@ -116,26 +116,23 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = CsharpRunSpec(SimpleCode);
-        var (rr, code) = CSharpCompiler.Compile(runSpec, true);
+        using var runSpec = CsharpRunSpec(SimpleCode);
+        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
-        Assert.AreEqual(2048, code.Length);
     }
 
     [TestMethod]
-    public void TestCompileOkWithMain()
-    {
-        var runSpec = CsharpRunSpec(SimpleCodeWithMain);
-        var (rr, code) = CSharpCompiler.Compile(runSpec, true);
+    public void TestCompileOkWithMain() {
+        using var runSpec = CsharpRunSpec(SimpleCodeWithMain);
+        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
-        Assert.AreEqual(2048, code.Length);
     }
 
     [TestMethod]
     public void TestCompileAndRunOk() {
-        var runSpec = CsharpRunSpec(SimpleCode);
+        using var runSpec = CsharpRunSpec(SimpleCode);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
@@ -143,7 +140,7 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestCompileAndRunOkWithChar() {
-        var runSpec = CsharpRunSpec(SimpleCodeWithChar);
+        using var runSpec = CsharpRunSpec(SimpleCodeWithChar);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "■");
@@ -151,16 +148,15 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestCompileFailDivisionByZero() {
-        var runSpec = CsharpRunSpec(DivZero);
-        var (rr, code) = CSharpCompiler.Compile(runSpec, true);
+        using var runSpec = CsharpRunSpec(DivZero);
+        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.CompilationError, "(1,9): error CS0020: Division by constant zero");
-        Assert.AreEqual(0, code.Length);
     }
 
     [TestMethod]
     public void TestCompileAndRunFail() {
-        var runSpec = CsharpRunSpec(RunTimeFail);
+        using var runSpec = CsharpRunSpec(RunTimeFail);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
         Assert.IsNotNull(rr);
@@ -168,9 +164,8 @@ public class CSharpCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndRunStackOverflow()
-    {
-        var runSpec = CsharpRunSpec(StackOverFlowFail);
+    public void TestCompileAndRunStackOverflow() {
+        using var runSpec = CsharpRunSpec(StackOverFlowFail);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
         Assert.IsNotNull(rr);
@@ -179,7 +174,7 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestCompileAndTestOk() {
-        var runSpec = CsharpRunSpec(TestCodeOk);
+        using var runSpec = CsharpRunSpec(TestCodeOk);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -191,7 +186,7 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestCompileAndTestFail() {
-        var runSpec = CsharpRunSpec(TestCodeFail);
+        using var runSpec = CsharpRunSpec(TestCodeFail);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -202,9 +197,8 @@ public class CSharpCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndTestRTE()
-    {
-        var runSpec = CsharpRunSpec(TestCodeRTE);
+    public void TestCompileAndTestRTE() {
+        using var runSpec = CsharpRunSpec(TestCodeRTE);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -215,9 +209,8 @@ public class CSharpCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndTestStackOverflow()
-    {
-        var runSpec = CsharpRunSpec(TestCodeStackOverflow);
+    public void TestCompileAndTestStackOverflow() {
+        using var runSpec = CsharpRunSpec(TestCodeStackOverflow);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
@@ -227,35 +220,43 @@ public class CSharpCompilerTest {
         Assert.AreEqual("", rr.run_id);
     }
 
-    //[TestMethod]
-    //public void TestCompileAndRunInParallel() {
-    //    var runSpecs = Enumerable.Range(1, 10).Select(i => CsharpRunSpec(SimpleCode));
+    [TestMethod]
+    public void TestCompileAndRunInParallel() {
+        var runSpecs = Enumerable.Range(1, 10).Select(i => CsharpRunSpec(SimpleCode));
 
-    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).ToArray();
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
 
-    //    foreach (var rr in rrs) {
-    //        Assert.IsNotNull(rr);
-    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
-    //        Assert.AreEqual("", rr.cmpinfo);
-    //        Assert.AreEqual("1", rr.stdout);
-    //        Assert.AreEqual("", rr.stderr);
-    //        Assert.AreEqual("", rr.run_id);
-    //    }
-    //}
+        foreach (var rr in rrs) {
+            Assert.IsNotNull(rr);
+            Assert.AreEqual(Outcome.Ok, rr.outcome);
+            Assert.AreEqual("", rr.cmpinfo);
+            Assert.AreEqual("1", rr.stdout);
+            Assert.AreEqual("", rr.stderr);
+            Assert.AreEqual("", rr.run_id);
+        }
 
-    //[TestMethod]
-    //public void TestCompileAndTestInParallel() {
-    //    var runSpecs = Enumerable.Range(1, 10).Select(i => CsharpRunSpec(TestCodeOk));
+        foreach (var testRunSpec in runSpecs) {
+            testRunSpec.Dispose();
+        }
+    }
 
-    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).ToArray();
+    [TestMethod]
+    public void TestCompileAndTestInParallel() {
+        var runSpecs = Enumerable.Range(1, 10).Select(i => CsharpRunSpec(TestCodeOk));
 
-    //    foreach (var rr in rrs) {
-    //        Assert.IsNotNull(rr);
-    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
-    //        Assert.AreEqual("", rr.cmpinfo);
-    //        Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
-    //        Assert.AreEqual("", rr.stderr);
-    //        Assert.AreEqual("", rr.run_id);
-    //    }
-    //}
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
+
+        foreach (var rr in rrs) {
+            Assert.IsNotNull(rr);
+            Assert.AreEqual(Outcome.Ok, rr.outcome);
+            Assert.AreEqual("", rr.cmpinfo);
+            Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
+            Assert.AreEqual("", rr.stderr);
+            Assert.AreEqual("", rr.run_id);
+        }
+
+        foreach (var testRunSpec in runSpecs) {
+            testRunSpec.Dispose();
+        }
+    }
 }

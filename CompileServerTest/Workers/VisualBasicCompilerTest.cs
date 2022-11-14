@@ -88,7 +88,7 @@ public class VisualBasicCompilerTest {
 
     [TestMethod]
     public void TestVersion() {
-        var csv = VisualBasicCompiler.GetNameAndVersion();
+        var csv = Handler.GetNameAndVersion(VisualBasicRunSpec(""), testLogger);
 
         Assert.AreEqual("vb", csv[0]);
         Assert.AreEqual("16_9", csv[1]);
@@ -96,7 +96,7 @@ public class VisualBasicCompilerTest {
 
     [TestMethod]
     public void TestVersionInParallel() {
-        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => VisualBasicCompiler.GetNameAndVersion()).ToArray();
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(VisualBasicRunSpec(""), testLogger)).ToArray();
 
         foreach (var csv in csvs) {
             Assert.AreEqual("vb", csv[0]);
@@ -106,17 +106,15 @@ public class VisualBasicCompilerTest {
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = VisualBasicRunSpec(SimpleCode);
-        var (rr, code) = VisualBasicCompiler.Compile(runSpec, true);
+        using var runSpec = VisualBasicRunSpec(SimpleCode);
+        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
 
         rr.AssertRunResult(Outcome.Ok);
-
-        Assert.AreEqual(2560, code.Length);
     }
 
     [TestMethod]
     public void TestCompileAndRunOk() {
-        var runSpec = VisualBasicRunSpec(SimpleCode);
+        using var runSpec = VisualBasicRunSpec(SimpleCode);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
@@ -124,16 +122,15 @@ public class VisualBasicCompilerTest {
 
     [TestMethod]
     public void TestCompileFailDivisionByZero() {
-        var runSpec = VisualBasicRunSpec(DivZero);
-        var (rr, code) = VisualBasicCompiler.Compile(runSpec, true);
+        using var runSpec = VisualBasicRunSpec(DivZero);
+        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
 
         rr.AssertRunResult(Outcome.CompilationError, "(3) : error BC30542: Division by zero occurred while evaluating this expression.");
-        Assert.AreEqual(0, code.Length);
     }
 
     [TestMethod]
     public void TestCompileAndRunFail() {
-        var runSpec = VisualBasicRunSpec(RunTimeFail);
+        using var runSpec = VisualBasicRunSpec(RunTimeFail);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
         Assert.IsNotNull(rr);
@@ -142,7 +139,7 @@ public class VisualBasicCompilerTest {
 
     [TestMethod]
     public void TestCompileAndTestOk() {
-        var runSpec = VisualBasicRunSpec(TestCodeOk);
+        using var runSpec = VisualBasicRunSpec(TestCodeOk);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -154,7 +151,7 @@ public class VisualBasicCompilerTest {
 
     [TestMethod]
     public void TestCompileAndTestFail() {
-        var runSpec = VisualBasicRunSpec(TestCodeFail);
+        using var runSpec = VisualBasicRunSpec(TestCodeFail);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -165,18 +162,16 @@ public class VisualBasicCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndRunStackOverflow()
-    {
-        var runSpec = VisualBasicRunSpec(StackOverFlowFail);
+    public void TestCompileAndRunStackOverflow() {
+        using var runSpec = VisualBasicRunSpec(StackOverFlowFail);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResultContains(Outcome.RunTimeError, "", "", "Stack overflow");
     }
 
     [TestMethod]
-    public void TestCompileAndTestStackOverflow()
-    {
-        var runSpec = VisualBasicRunSpec(TestCodeStackOverflow);
+    public void TestCompileAndTestStackOverflow() {
+        using var runSpec = VisualBasicRunSpec(TestCodeStackOverflow);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
@@ -186,36 +181,43 @@ public class VisualBasicCompilerTest {
         Assert.AreEqual("", rr.run_id);
     }
 
+    [TestMethod]
+    public void TestCompileAndRunInParallel() {
+        var runSpecs = Enumerable.Range(1, 10).Select(i => VisualBasicRunSpec(SimpleCode));
 
-    //[TestMethod]
-    //public void TestCompileAndRunInParallel() {
-    //    var runSpecs = Enumerable.Range(1, 10).Select(i => VisualBasicRunSpec(SimpleCode));
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
 
-    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).ToArray();
+        foreach (var rr in rrs) {
+            Assert.IsNotNull(rr);
+            Assert.AreEqual(Outcome.Ok, rr.outcome);
+            Assert.AreEqual("", rr.cmpinfo);
+            Assert.AreEqual("1", rr.stdout);
+            Assert.AreEqual("", rr.stderr);
+            Assert.AreEqual("", rr.run_id);
+        }
 
-    //    foreach (var rr in rrs) {
-    //        Assert.IsNotNull(rr);
-    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
-    //        Assert.AreEqual("", rr.cmpinfo);
-    //        Assert.AreEqual("1", rr.stdout);
-    //        Assert.AreEqual("", rr.stderr);
-    //        Assert.AreEqual("", rr.run_id);
-    //    }
-    //}
+        foreach (var testRunSpec in runSpecs) {
+            testRunSpec.Dispose();
+        }
+    }
 
-    //[TestMethod]
-    //public void TestCompileAndTestInParallel() {
-    //    var runSpecs = Enumerable.Range(1, 10).Select(i => VisualBasicRunSpec(TestCodeOk));
+    [TestMethod]
+    public void TestCompileAndTestInParallel() {
+        var runSpecs = Enumerable.Range(1, 10).Select(i => VisualBasicRunSpec(TestCodeOk));
 
-    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).ToArray();
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
 
-    //    foreach (var rr in rrs) {
-    //        Assert.IsNotNull(rr);
-    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
-    //        Assert.AreEqual("", rr.cmpinfo);
-    //        Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
-    //        Assert.AreEqual("", rr.stderr);
-    //        Assert.AreEqual("", rr.run_id);
-    //    }
-    //}
+        foreach (var rr in rrs) {
+            Assert.IsNotNull(rr);
+            Assert.AreEqual(Outcome.Ok, rr.outcome);
+            Assert.AreEqual("", rr.cmpinfo);
+            Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
+            Assert.AreEqual("", rr.stderr);
+            Assert.AreEqual("", rr.run_id);
+        }
+
+        foreach (var testRunSpec in runSpecs) {
+            testRunSpec.Dispose();
+        }
+    }
 }

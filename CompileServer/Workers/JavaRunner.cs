@@ -4,9 +4,8 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class JavaRunner {
-    public static RunResult Execute(string classFile) {
+    internal static RunResult Execute(string classFile, RunResult runResult) {
         var java = $"{CompileServerController.JavaPath}\\bin\\java.exe";
-        var file = $"{Path.GetTempPath()}{classFile}.class";
-        return Helpers.Execute(java, classFile, file);
+        return Helpers.Execute(java, classFile, runResult);
     }
 }

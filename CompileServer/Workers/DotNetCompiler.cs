@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CompileServer.Workers;
 
 public static class DotNetCompiler {
-    public static readonly MetadataReference[] DotNetReferences = {
+    internal static readonly MetadataReference[] DotNetReferences = {
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections").Location), // System.Collections
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Private.CoreLib").Location),
@@ -32,7 +32,7 @@ public static class DotNetCompiler {
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.VisualStudio.TestPlatform.TestFramework").Location)
     };
 
-    public static (RunResult, byte[]) Compile(RunSpec runSpec, Func<string, Compilation> generateCode) {
+    internal static (RunResult, byte[]) Compile(RunSpec runSpec, Func<string, Compilation> generateCode) {
         var code = runSpec.sourcecode;
 
         using var peStream = new MemoryStream();
@@ -41,7 +41,7 @@ public static class DotNetCompiler {
 
         if (!result.Success) {
             var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
-            return (new RunResult {
+            return (new RunResult(runSpec.TempDir) {
                 cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
                 outcome = Outcome.CompilationError
             }, Array.Empty<byte>());
@@ -49,6 +49,6 @@ public static class DotNetCompiler {
 
         peStream.Seek(0, SeekOrigin.Begin);
 
-        return (new RunResult { outcome = Outcome.Ok }, peStream.ToArray());
+        return (new RunResult(runSpec.TempDir) { outcome = Outcome.Ok }, peStream.ToArray());
     }
 }

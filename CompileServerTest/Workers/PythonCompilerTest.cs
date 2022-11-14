@@ -66,7 +66,7 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestVersion() {
-        var csv = PythonCompiler.GetNameAndVersion();
+        var csv = Handler.GetNameAndVersion(PythonRunSpec(""), testLogger);
 
         Assert.AreEqual("python", csv[0]);
         Assert.IsTrue(csv[1].StartsWith("3.10."));
@@ -74,7 +74,7 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestVersionInParallel() {
-        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => PythonCompiler.GetNameAndVersion()).ToArray();
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(PythonRunSpec(""), testLogger)).ToArray();
 
         foreach (var csv in csvs) {
             Assert.AreEqual("python", csv[0]);
@@ -84,17 +84,14 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestCompileOk() {
-        var runSpec = PythonRunSpec(SimpleCode);
-        var (rr, file) = PythonCompiler.Compile(runSpec, true);
-
+        using var runSpec = PythonRunSpec(SimpleCode);
+        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
         rr.AssertRunResult(Outcome.Ok);
-
-        Assert.AreEqual("temp.py", file);
     }
 
     [TestMethod]
     public void TestCompileAndRunOk() {
-        var runSpec = PythonRunSpec(SimpleCode);
+        using var runSpec = PythonRunSpec(SimpleCode);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1\r\n");
@@ -102,30 +99,28 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestCompileFailMissingTerm() {
-        var runSpec = PythonRunSpec(MissingTerm);
-        var (rr, file) = PythonCompiler.Compile(runSpec, true);
+        using var runSpec = PythonRunSpec(MissingTerm);
+        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
 
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @$"File""{Path.GetTempPath()}temp.py"",line1print(str(1/))^SyntaxError:invalidsyntax");
-
-        Assert.AreEqual("temp.py", file);
+        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line1print(str(1/))^SyntaxError:invalidsyntax");
     }
 
     [TestMethod]
     public void TestCompileAndRunFail() {
-        var runSpec = PythonRunSpec(RunTimeFail);
+        using var runSpec = PythonRunSpec(RunTimeFail);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
 
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{Path.GetTempPath()}temp.py"",line1,in<module>print(int(""invalid""))ValueError:invalidliteralforint()withbase10:'invalid'");
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line1,in<module>print(int(""invalid""))ValueError:invalidliteralforint()withbase10:'invalid'");
     }
 
     [TestMethod]
     public void TestCompileAndTestOk() {
-        var runSpec = PythonRunSpec(TestCodeOk);
+        using var runSpec = PythonRunSpec(TestCodeOk);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -138,7 +133,7 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestCompileAndTestFail() {
-        var runSpec = PythonRunSpec(TestCodeFail);
+        using var runSpec = PythonRunSpec(TestCodeFail);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -150,9 +145,8 @@ if __name__ == ""__main__"":
     }
 
     [TestMethod]
-    public void TestCompileAndTestRTE()
-    {
-        var runSpec = PythonRunSpec(TestCodeRTE);
+    public void TestCompileAndTestRTE() {
+        using var runSpec = PythonRunSpec(TestCodeRTE);
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -163,31 +157,40 @@ if __name__ == ""__main__"":
         Assert.AreEqual("", rr.run_id);
     }
 
-    //[TestMethod]
-    //public void TestCompileAndRunInParallel() {
-    //    var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(SimpleCode));
+    [TestMethod]
+    public void TestCompileAndRunInParallel() {
+        var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(SimpleCode));
 
-    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).ToArray();
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
 
-    //    foreach (var rr in rrs) {
-    //        Assert.IsNotNull(rr);
-    //        rr.AssertRunResult(Outcome.Ok, "", "1\r\n");
-    //    }
-    //}
+        foreach (var rr in rrs) {
+            Assert.IsNotNull(rr);
+            rr.AssertRunResult(Outcome.Ok, "", "1\r\n");
+        }
 
-    //[TestMethod]
-    //public void TestCompileAndTestInParallel() {
-    //    var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(TestCodeOk));
+        foreach (var testRunSpec in runSpecs) {
+            testRunSpec.Dispose();
+        }
+    }
 
-    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).ToArray();
+    [TestMethod]
+    public void TestCompileAndTestInParallel() {
+        var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(TestCodeOk));
 
-    //    foreach (var rr in rrs) {
-    //        Assert.IsNotNull(rr);
-    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
-    //        Assert.AreEqual("", rr.cmpinfo);
-    //        Assert.IsTrue(rr.stdout.Contains("Everything passed"), rr.stdout);
-    //        Assert.AreEqual("", rr.stderr);
-    //        Assert.AreEqual("", rr.run_id);
-    //    }
-    //}
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
+
+        foreach (var rr in rrs) {
+            Assert.IsNotNull(rr);
+            Assert.AreEqual(Outcome.Ok, rr.outcome);
+            Assert.AreEqual("", rr.cmpinfo);
+            Assert.IsTrue(rr.stdout.Contains("Ran 1 test in"), rr.stdout);
+            Assert.IsTrue(rr.stdout.Contains("OK"), rr.stdout);
+            Assert.AreEqual("", rr.stderr);
+            Assert.AreEqual("", rr.run_id);
+        }
+
+        foreach (var testRunSpec in runSpecs) {
+            testRunSpec.Dispose();
+        }
+    }
 }

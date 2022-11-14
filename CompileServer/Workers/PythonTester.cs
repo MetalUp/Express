@@ -4,12 +4,12 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class PythonTester {
-    public static RunResult Execute(string pyFile) {
-        var file = $"{Path.GetTempPath()}{pyFile}";
+    internal static RunResult Execute(string pyFile, RunResult runResult) {
+        var file = $"{runResult.TempDir}{pyFile}";
         var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
         var args = $"-m unittest {file}";
 
-        var rr = Helpers.Execute(pythonExe, args, file);
+        var rr = Helpers.Execute(pythonExe, args, runResult);
 
         // since python tester writes by default to stderr swap to stdout
         rr.stdout = rr.stderr;
