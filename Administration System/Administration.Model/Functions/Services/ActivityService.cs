@@ -21,7 +21,7 @@
             }
             else
             {
-                var a = GetAssignment(taskId, context);
+                var a = Assignments.GetAssignmentForCurrentUser(taskId, context);
                 return context2.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Completed });
             }
         }
@@ -41,7 +41,7 @@
         #region private helpers
         private IContext RecordActivity(int taskId, ActivityType type, string code, string errorMessage, int? hintUsed, IContext context)
         {
-            var aId = GetAssignment(taskId, context).Id;
+            var aId = Assignments.GetAssignmentForCurrentUser(taskId, context).Id;
             var act = new Activity()
             {
                 AssignmentId = aId,
@@ -53,20 +53,14 @@
             return context.WithNew(act);
         }
 
-        private Assignment GetAssignment(int taskId, IContext context)
-        {
-            int pId = GetTask(taskId, context).ProjectId.Value;
-            int uId = Users.Me(context).Id;
-            return context.Instances<Assignment>().SingleOrDefault(a => a.ProjectId == pId && a.AssignedToId == uId);
-        }
 
         private IQueryable<Activity> GetActivitiesOnTask(int taskId, IContext context)
         {
-            var aId = GetAssignment(taskId, context).Id;
+            var aId = Assignments.GetAssignmentForCurrentUser(taskId, context).Id;
             return context.Instances<Activity>().Where(act => act.AssignmentId == aId && act.TaskId == taskId);
         }
 
-        private Task GetTask(int taskId, IContext context) => context.Instances<Task>().Single(t => t.Id == taskId);
+
         #endregion {
 
     }

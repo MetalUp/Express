@@ -42,12 +42,24 @@
         }
 
         public static IContext NewAssignmentToGroup(Group group, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
-            group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, project, dueBy, c)); 
+            group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, project, dueBy, c));
 
         public static List<Group> Choices0NewAssignmentToGroup(Group group, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
             Groups.AllOurGroups(context).ToList();
 
         public static IContext MarkTasksNotCompleted(this IQueryable<Assignment> assignments, string teacherNote, IContext context) =>
           assignments.Aggregate(context, (c, a) => a.MarkNotCompleted(teacherNote, c));
+
+
+
+        internal static Assignment GetAssignmentForCurrentUser(int taskId, IContext context)
+        {
+            int pId = Tasks.GetTask(taskId, context).ProjectId.Value;
+            int uId = Users.Me(context).Id;
+            return context.Instances<Assignment>().SingleOrDefault(a => a.ProjectId == pId && a.AssignedToId == uId);
+        }
+
+
+
     }
 }
