@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { RegisteredService } from '../services/registered.service';
+import { RegistrationService } from '../services/registration.service';
 
 @Component({
   selector: 'app-landing',
@@ -10,7 +10,7 @@ import { RegisteredService } from '../services/registered.service';
 })
 export class LandingComponent implements OnInit, OnDestroy {
 
-  constructor(public registeredService: RegisteredService, private router: Router) { }
+  constructor(public registeredService: RegistrationService, private router: Router) { }
 
   userChecked = false;
   sub?: Subscription;

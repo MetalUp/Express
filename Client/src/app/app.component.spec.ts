@@ -5,11 +5,11 @@ import { AuthService } from '@auth0/auth0-angular';
 import { ConfigService, RepLoaderService } from '@nakedobjects/services';
 import { Subject } from 'rxjs';
 import { AppComponent } from './app.component';
-import { RegisteredService } from './services/registered.service';
+import { RegistrationService } from './services/registration.service';
 
 describe('AppComponent', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let registeredServiceSpy: jasmine.SpyObj<RegisteredService>;
+  let registeredServiceSpy: jasmine.SpyObj<RegistrationService>;
   let routerSpy: jasmine.SpyObj<Router>;
   let configServiceSpy: jasmine.SpyObj<ConfigService>;
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
@@ -36,7 +36,7 @@ describe('AppComponent', () => {
           useValue: authServiceSpy
         },
         {
-          provide: RegisteredService,
+          provide: RegistrationService,
           useValue: registeredServiceSpy
         },
         {

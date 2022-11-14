@@ -8,7 +8,7 @@ import { first, of, pipe, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class RegisteredService implements CanActivate {
+export class RegistrationService implements CanActivate {
   
   registered$ = new Subject<boolean>();
   registered? : boolean;
@@ -58,15 +58,16 @@ export class RegisteredService implements CanActivate {
     return true;
   }
 
-  login() {
+  private get callbackUrl() {
     const url = (window as any).location.origin;
-    const callbackUrl = `${url}/landing`;
-    this.auth.loginWithRedirect({redirect_uri : callbackUrl,  scope: 'openid email profile', response_type: 'code'});
+    return `${url}/landing`;
+  }
+
+  login() {
+    this.auth.loginWithRedirect({redirect_uri : this.callbackUrl,  scope: 'openid email profile', response_type: 'code'});
   } 
 
   logout() {
-    const url = (window as any).location.origin;
-    const callbackUrl = `${url}/landing`;
-    this.auth.logout({returnTo: callbackUrl});
+    this.auth.logout({returnTo: this.callbackUrl});
   } 
 }

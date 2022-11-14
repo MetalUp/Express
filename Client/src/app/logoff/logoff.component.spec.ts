@@ -4,7 +4,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { UserRepresentation } from '@nakedobjects/restful-objects';
 import { ConfigService, ContextService } from '@nakedobjects/services';
 import { of } from 'rxjs';
-import { RegisteredService } from '../services/registered.service';
+import { RegistrationService } from '../services/registration.service';
 
 import { LogoffComponent } from './logoff.component';
 
@@ -13,7 +13,7 @@ describe('LogoffComponent', () => {
   let fixture: ComponentFixture<LogoffComponent>;
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let registeredServiceSpy: jasmine.SpyObj<RegisteredService>;
+  let registeredServiceSpy: jasmine.SpyObj<RegistrationService>;
   let configServiceSpy: jasmine.SpyObj<ConfigService>;
   let locationSpy: jasmine.SpyObj<Location>;
 
@@ -35,7 +35,7 @@ describe('LogoffComponent', () => {
           useValue: contextServiceSpy
         },
         {
-          provide: RegisteredService,
+          provide: RegistrationService,
           useValue: registeredServiceSpy
         },
         {

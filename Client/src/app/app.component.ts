@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfigService, RepLoaderService } from '@nakedobjects/services';
 import { Subscription } from 'rxjs';
-import { RegisteredService } from './services/registered.service';
+import { RegistrationService } from './services/registration.service';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -13,7 +13,7 @@ import { RegisteredService } from './services/registered.service';
 
 export class AppComponent implements OnInit, OnDestroy {
     constructor(
-        public readonly registeredService: RegisteredService,
+        public readonly registeredService: RegistrationService,
         private readonly router: Router,
         private readonly repLoader: RepLoaderService,
         public readonly config: ConfigService) {

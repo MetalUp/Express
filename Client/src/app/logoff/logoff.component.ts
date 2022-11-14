@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ConfigService, ContextService } from '@nakedobjects/services';
-import { RegisteredService } from '../services/registered.service';
+import { RegistrationService } from '../services/registration.service';
 
 @Component({
     selector: 'app-logoff',
@@ -12,7 +12,7 @@ export class LogoffComponent implements OnInit {
 
     constructor(
         private readonly context: ContextService,
-        private readonly registeredService: RegisteredService,
+        private readonly registeredService: RegistrationService,
         readonly configService: ConfigService,
         private readonly location: Location,
     ) { }

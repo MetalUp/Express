@@ -13,7 +13,7 @@ import {
 import { ViewType } from '@nakedobjects/services';
 import { LandingComponent } from './landing/landing.component';
 import { LogoffComponent } from './logoff/logoff.component';
-import { RegisteredService } from './services/registered.service';
+import { RegistrationService } from './services/registration.service';
 import { TaskViewComponent } from './task-view/task-view.component';
 
 const routes: Routes = [
@@ -21,7 +21,7 @@ const routes: Routes = [
     {
         path: 'dashboard/home',
         component: HomeComponent,
-        canActivate: [RegisteredService],
+        canActivate: [RegistrationService],
         data: { pane: 1, paneType: 'single' },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -34,7 +34,7 @@ const routes: Routes = [
     {
         path: 'dashboard/object',
         component: DynamicObjectComponent,
-        canActivate: [RegisteredService],
+        canActivate: [RegistrationService],
         data: { pane: 1, paneType: 'single', dynamicType: ViewType.Object },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -47,7 +47,7 @@ const routes: Routes = [
     {
         path: 'dashboard/list',
         component: DynamicListComponent,
-        canActivate: [RegisteredService],
+        canActivate: [RegistrationService],
         data: { pane: 1, paneType: 'single' },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -60,7 +60,7 @@ const routes: Routes = [
     {
         path: 'dashboard/attachment',
         component: AttachmentComponent,
-        canActivate: [RegisteredService],
+        canActivate: [RegistrationService],
         data: { pane: 1, paneType: 'single' },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -73,7 +73,7 @@ const routes: Routes = [
     {
         path: 'dashboard/recent',
         component: RecentComponent,
-        canActivate: [RegisteredService],
+        canActivate: [RegistrationService],
         data: { pane: 1, paneType: 'single' },
         children: [
             { path: 'home', component: HomeComponent, data: { pane: 2, paneType: 'split' } },
@@ -86,26 +86,26 @@ const routes: Routes = [
     {
         path: 'dashboard/error',
         component: DynamicErrorComponent,
-        canActivate: [RegisteredService],
+        canActivate: [RegistrationService],
         data: { pane: 1, paneType: 'single' }
     },
     {
         path: 'dashboard/applicationProperties',
         component: ApplicationPropertiesComponent,
-        canActivate: [RegisteredService],
+        canActivate: [RegistrationService],
         data: { pane: 1, paneType: 'single' }
     },
     {
         path: 'dashboard/multiLineDialog',
         component: MultiLineDialogComponent,
-        canActivate: [RegisteredService],
+        canActivate: [RegistrationService],
         data: { pane: 1, paneType: 'single' }
     },
     {
         path: 'dashboard/logoff',
         component: LogoffComponent,
-        canActivate: [RegisteredService],
-        canDeactivate: [RegisteredService],
+        canActivate: [RegistrationService],
+        canDeactivate: [RegistrationService],
         data: { pane: 1, paneType: 'single' }
     },
     {
@@ -114,7 +114,7 @@ const routes: Routes = [
     },
     { path: 'task/logoff',  redirectTo: 'dashboard/logoff', pathMatch: 'full'},
     { path: 'task/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
-    { path: 'task/:id', component: TaskViewComponent, canActivate: [RegisteredService] },
+    { path: 'task/:id', component: TaskViewComponent, canActivate: [RegistrationService] },
     { path: 'task',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: '**', redirectTo: 'landing', pathMatch: 'full' }
