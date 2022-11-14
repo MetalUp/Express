@@ -3,18 +3,38 @@ import { Router } from '@angular/router';
 import { EmptyTask, ITask, Task } from '../models/task';
 import { Hint, IHint } from '../models/hint';
 import { Subject } from 'rxjs';
-import { ConfigService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
+import { ContextService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
 import * as Ro from '@nakedobjects/restful-objects';
-import { CollectionRepresentation, DomainObjectRepresentation, EntryType } from '@nakedobjects/restful-objects';
+import { CollectionRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
+import { Dictionary } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
+  
   constructor(private router: Router,
-              private configService: ConfigService,
-              private repLoader: RepLoaderService) {
+    private contextService: ContextService,
+    private repLoader: RepLoaderService) { 
   }
+
+  private getService() {
+    if (this.taskAccess){
+      return Promise.resolve(this.taskAccess);
+    }
+
+    return this.contextService.getServices()
+      .then((services: DomainServicesRepresentation) => {
+        const service = services.getService("Model.Functions.Services.TaskAccess");
+        return this.repLoader.populate(service);
+      })
+      .then((service: IHateoasModel) => {
+        this.taskAccess = service as DomainObjectRepresentation;
+        return this.taskAccess;
+      })
+  }
+
+  taskAccess?: Ro.DomainObjectRepresentation;
 
   get currentTask() {
     return this.currentTaskAsSubject;
@@ -108,18 +128,21 @@ export class TaskService {
   }
 
   loadTask(taskId: string) {
-    const object = new DomainObjectRepresentation();
-    object.hateoasUrl = `${this.configService.config.appPath}/objects/Model.Types.Task/${taskId}`;
 
-    this.repLoader.populate<Ro.DomainObjectRepresentation>(object, true)
-      .then((obj: Ro.DomainObjectRepresentation) => {
-        const task = this.convertToTask(obj, parseInt(taskId));
-        this.currentTaskAsSubject.next(task);
-      })
-      .catch((e: ErrorWrapper) => {
-        console.log(`${e.title}:${e.description}`);
-        this.currentTaskAsSubject.next(EmptyTask);
-      });
+    this.getService().then(s => {
+      const action = s.actionMember("GetTask") as InvokableActionMember;
+
+      this.repLoader.invoke(action, { "taskId": new Value(taskId) } as Dictionary<Value>, {} as Dictionary<Object>)
+        .then((ar: Ro.ActionResultRepresentation) => {
+          var obj = ar.result().object()!;
+          const task = this.convertToTask(obj, parseInt(taskId));
+          this.currentTaskAsSubject.next(task);
+        })
+        .catch((e: ErrorWrapper) => {
+          console.log(`${e.title}:${e.description}`);
+          this.currentTaskAsSubject.next(EmptyTask);
+        });
+    });
   }
 
   gotoTask(taskUrl: string) {

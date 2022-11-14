@@ -22,9 +22,10 @@ namespace Model
         public static Type[] MainMenus() =>
             PublicStaticClasses("Model.Functions.Menus").ToArray();
 
-        public static Type[] DomainServices() => new[] { typeof(Compile) };
+        public static Type[] DomainServices() => 
+            PublicStaticClasses("Model.Functions.Services").ToArray();
 
-    #region Helpers
+        #region Helpers
 
         private static IEnumerable<Type> PublicStaticClasses(string nameSpace) =>
             PublicClasses(nameSpace).Where(t => t.IsAbstract && t.IsSealed);

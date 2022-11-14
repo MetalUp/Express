@@ -21,6 +21,7 @@ namespace Model.Authorization
                 nameof(Assignments) => AssignmentsAuth(memberName, context),
                 nameof(Activities) => ActivitiesAuth(memberName, context),
                 nameof(Compile) => CompileAuth(memberName, context),
+                nameof(TaskAccess) => TaskAccessAuth(memberName, context),
                 _ => false
             };
 
@@ -110,6 +111,8 @@ namespace Model.Authorization
             };
 
         private bool CompileAuth(string memberName, IContext context) => true;
+
+        private bool TaskAccessAuth(string memberName, IContext context) => true;
 
         private bool LanguagesAuth(string memberName, IContext context) =>
             Users.UserRole(context) switch
