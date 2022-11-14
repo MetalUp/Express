@@ -58,4 +58,8 @@ describe('LogoffComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should get the user id', () => {
+    expect(contextServiceSpy.getUser).toHaveBeenCalled();
+  });
 });

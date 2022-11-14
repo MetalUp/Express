@@ -1,6 +1,5 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@auth0/auth0-angular';
 import { ConfigService, ContextService } from '@nakedobjects/services';
 import { RegisteredService } from '../services/registered.service';
 
