@@ -10,6 +10,8 @@ public static class TaskAccess
         if (hintNumber == 0)
         {
             var huv = new HintUserView(
+                taskId,
+                hintNumber,
                 task.Hints.Any() ? $"{task.Hints.Count} hints available" : "No hints for this task",
                 null,
                 null,
@@ -23,6 +25,8 @@ public static class TaskAccess
             var hint = task.GetHintNo(hintNumber);
             var activities = asgn.ListActivity(context);
             var huv = new HintUserView(
+                taskId, 
+                hintNumber,
                 hint.ToString(),
                 hint.ContentsAsString(),
                 hintNumber - 1,

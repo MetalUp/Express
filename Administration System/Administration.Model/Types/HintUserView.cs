@@ -4,9 +4,10 @@ namespace Model.Types
     [ViewModel(typeof(HintUserView_Functions))]
     public class HintUserView
     {
-        public HintUserView(string title, string contents, int? previousHintNo, int? nextHintNo, int costOfNextHint)
+        public HintUserView(int taskId, int hintNo, string title, string contents, int? previousHintNo, int? nextHintNo, int costOfNextHint)
         {
-
+            TaskId = taskId;
+            HintNo = hintNo;
             Title = title;
             Contents = contents;
             PreviousHintNo = previousHintNo;
@@ -14,14 +15,18 @@ namespace Model.Types
             CostOfNextHint = costOfNextHint;
         }
 
-        string Title { get; init; }
+        public int TaskId { get; init; }
 
-        string Contents { get; init; }
+        public int HintNo { get; init; }
 
-        int? PreviousHintNo { get; init; } //Null indicates there is no previous hint
+        public string Title { get; init; }
 
-        int? NextHintNo { get; init; } //Null indicates there is no next hint
+        public string Contents { get; init; }
 
-        int CostOfNextHint { get; init; }  //If zero means that the user can just navigate to it (because they have seen it before)
+        public int? PreviousHintNo { get; init; } //Null indicates there is no previous hint
+
+        public int? NextHintNo { get; init; } //Null indicates there is no next hint
+
+        public int CostOfNextHint { get; init; }  //If zero means that the user can just navigate to it (because they have seen it before)
     }
 }
