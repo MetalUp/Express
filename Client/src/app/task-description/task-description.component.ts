@@ -28,7 +28,7 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   }
 
   canViewNextTask() {
-    return this.currentTask.Completed && this.currentTask.NextTaskEnabled  && !!this.currentTask.NextTaskId;
+    return this.currentTask.IsCompleted && this.currentTask.NextTaskEnabled  && !!this.currentTask.NextTaskId;
   }
 
   viewNextTask() {
@@ -36,7 +36,7 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   }
 
   canReturnToAssignment() {
-    return this.currentTask.Completed && !this.currentTask.NextTaskId;
+    return this.currentTask.IsCompleted && !this.currentTask.NextTaskId;
   }
 
   returnToAssignment() {
