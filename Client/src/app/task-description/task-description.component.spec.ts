@@ -47,13 +47,13 @@ describe('TaskDescriptionComponent', () => {
   //   expect(component.taskHtml).toEqual('test html');
   // }));
 
-  it('should disable next task if no next task', () => {
+  // it('should disable next task if no next task', () => {
 
-    const testTask = { NextTask: ""} as unknown as ITaskUserView;
-    taskSubject.next(testTask);
+  //   const testTask = { NextTask: ""} as unknown as ITaskUserView;
+  //   taskSubject.next(testTask);
 
-    expect(component.hasNextTask()).toEqual(false);   
-  });
+  //   expect(component.hasNextTask()).toEqual(false);   
+  // });
 
 
   // it('should get the next task', () => {
@@ -65,13 +65,13 @@ describe('TaskDescriptionComponent', () => {
   //   expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('nexttask.json');
   // });
 
-  it('should disable previous task if no previous task', () => {
+  // it('should disable previous task if no previous task', () => {
 
-    const testTask = { PreviousTask: ""} as unknown as ITaskUserView;
-    taskSubject.next(testTask);
+  //   const testTask = { PreviousTask: ""} as unknown as ITaskUserView;
+  //   taskSubject.next(testTask);
 
-    expect(component.hasPreviousTask()).toEqual(false);   
-  });
+  //   expect(component.hasPreviousTask()).toEqual(false);   
+  // });
 
   // it('should get the previous task', () => {
 

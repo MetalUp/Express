@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {  EmptyTaskUserView, ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-task-description',
@@ -14,25 +15,42 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
 
   taskHtml = '';
 
-  constructor(private taskService: TaskService) { }
+  constructor(private taskService: TaskService, private router: Router) { }
 
   private sub?: Subscription;
 
-  hasPreviousTask() {
+  canViewPreviousTask() {
     return !!this.currentTask.PreviousTaskId;
   }
 
-  onPreviousTask() {
-    this.taskService.gotoTask(this.currentTask.Id!, 0);
+  viewPreviousTask() {
+    this.taskService.gotoTask(this.currentTask.PreviousTaskId!, 0);
   }
 
-  hasNextTask() {
-    return !!this.currentTask.NextTaskId;
+  canViewNextTask() {
+    return this.currentTask.NextTaskEnabled  && !!this.currentTask.NextTaskId;
   }
 
-  onNextTask() {
+  canGetNextTask() {
+    return this.currentTask.Completed && !!this.currentTask.NextTaskId;
+  }
+
+  getNextTask() {
     this.taskService.gotoTask(this.currentTask.NextTaskId!, 0);
   }
+
+  viewNextTask() {
+    return this.taskService.gotoTask(this.currentTask.NextTaskId!, 0);
+  }
+
+  canReturnToAssignment() {
+    return this.currentTask.Completed && !this.currentTask.NextTaskId;
+  }
+
+  returnToAssignment() {
+    // todo
+  }
+
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {

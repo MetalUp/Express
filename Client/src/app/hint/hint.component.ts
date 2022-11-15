@@ -33,11 +33,15 @@ export class HintComponent implements OnInit, OnDestroy {
     return this.currentTask.CurrentHintTitle;
   }
 
-  hasNextHint() {
+  canGetNextHint() {
     return !!this.currentTask.NextHintNo;
   }
 
-  hasPreviousHint() {
+  canViewNextHint() {
+    return !!this.currentTask.NextHintNo;
+  }
+
+  canViewPreviousHint() {
     return !!this.currentTask.PreviousHintNo;
   }
 
@@ -46,11 +50,15 @@ export class HintComponent implements OnInit, OnDestroy {
     //this.message = 'error getting hint';
   }
 
-  onPreviousHint() {
+  viewPreviousHint() {
     this.taskService.loadTask(this.currentTask.Id, this.currentTask.PreviousHintNo!);
   }
 
-  onNextHint() {
+  viewNextHint() {
+    this.taskService.loadTask(this.currentTask.Id, this.currentTask.NextHintNo!);
+  }
+
+  getNextHint() {
     this.taskService.loadTask(this.currentTask.Id, this.currentTask.NextHintNo!);
   }
 

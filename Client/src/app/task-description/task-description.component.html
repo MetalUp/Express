@@ -1,8 +1,10 @@
 <div class="one-column pane">
     <div class="pane-header">Task Description: {{currentTask.Title}}
         <div class="button-bar">
-            <button [disabled]="!hasNextTask()" (click)="onNextTask()">Next Task</button>
-            <button [disabled]="!hasPreviousTask()" (click)="onPreviousTask()">Previous Task</button>
+            <button *ngIf="canReturnToAssignment()" (click)="returnToAssignment()">Return To Assignment</button>
+            <button *ngIf="canGetNextTask()" (click)="getNextTask()">Next Task</button>
+            <button [disabled]="!canViewNextTask()" (click)="viewNextTask()">></button>
+            <button [disabled]="!canViewPreviousTask()" (click)="viewPreviousTask()"><</button>
         </div>
     </div>
     <div class="one-column pane-body">
