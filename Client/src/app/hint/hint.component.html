@@ -1,7 +1,7 @@
 <div class="one-column pane">
     <div class="pane-header">{{title}}
         <div class="button-bar">
-            <button tittle="Get a new hint"  *ngIf="canGetNextHint()" (click)="getNextHint()">Next Hint</button>
+            <button title="Get a new hint" *ngIf="canGetNextHint()" (click)="getNextHint()">Next Hint</button>
             <button title="Next hint" [disabled]="!canViewNextHint()" (click)="viewNextHint()">></button>
             <button title="Previous hint" [disabled]="!canViewPreviousHint()" (click)="viewPreviousHint()"><</button>
         </div>
