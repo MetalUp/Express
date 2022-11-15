@@ -47,8 +47,11 @@ public static class TaskAccess
     private static int MarksAvailable(Task task, IQueryable<Activity> activities) =>
         task.MaxMarks - TotalMarksDeducted(task, activities);
 
-    internal static bool IsCompleted(Task task, IQueryable<Activity> activities) =>
-        activities.Last().ActivityType == ActivityType.RunTestsSuccess;
+    internal static bool IsCompleted(Task task, IQueryable<Activity> activities)
+    {
+        var last = activities.LastOrDefault();
+        return last == null ? false : last.ActivityType == ActivityType.RunTestsSuccess;
+    }
 
     internal static bool NextTaskEnabled(Task task, IQueryable<Activity> activities) =>
         IsCompleted(task, activities);
