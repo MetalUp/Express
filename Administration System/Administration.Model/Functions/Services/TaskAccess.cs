@@ -60,12 +60,12 @@ public static class TaskAccess
         activities.Where(a => a.CodeSubmitted != null).LastOrDefault()?.CodeSubmitted;
 
     internal static int HighestHintNoUsed(Task task, IQueryable<Activity> activities) =>
-        activities.Select(a => a.HintUsed).DefaultIfEmpty(0).Max();
+        activities.Select(a => a.HintUsed).ToList().DefaultIfEmpty(0).Max();
 
     internal static int TotalMarksDeducted(Task task, IQueryable<Activity> activities)
     {
         var highest = HighestHintNoUsed(task, activities);
-        return task.Hints.Where(h => h.Number <= highest).Select(h => h.Number).DefaultIfEmpty(0).Sum();
+        return task.Hints.Where(h => h.Number <= highest).Select(h => h.Number).ToList().DefaultIfEmpty(0).Sum();
     }
 
     internal static IContext UseHintNo(Task task, int hintNo, Assignment asgn, IContext context)
