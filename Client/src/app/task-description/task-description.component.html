@@ -2,9 +2,8 @@
     <div class="pane-header">Task Description: {{currentTask.Title}}
         <div class="button-bar">
             <button *ngIf="canReturnToAssignment()" (click)="returnToAssignment()">Return To Assignment</button>
-            <button *ngIf="canGetNextTask()" (click)="getNextTask()">Next Task</button>
-            <button [disabled]="!canViewNextTask()" (click)="viewNextTask()">></button>
-            <button [disabled]="!canViewPreviousTask()" (click)="viewPreviousTask()"><</button>
+            <button title="Next task"  [disabled]="!canViewNextTask()" (click)="viewNextTask()">></button>
+            <button title="Previous task"  [disabled]="!canViewPreviousTask()" (click)="viewPreviousTask()"><</button>
         </div>
     </div>
     <div class="one-column pane-body">

@@ -32,7 +32,7 @@ export class HintComponent implements OnInit, OnDestroy {
   private sub?: Subscription;
 
   get title() {
-    return this.currentHint.Title;
+    return this.currentHint.Title || "Hint";
   }
 
   canGetNextHint() {

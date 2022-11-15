@@ -130,8 +130,8 @@ export class TaskService {
   private params(taskId: number, currentHintNo?: number) {
     const params = { "taskId": new Value(taskId) } as Dictionary<Value>;
 
-    if (currentHintNo) {
-      params['currentHintNo'] = new Value(currentHintNo);
+    if (currentHintNo != undefined) {
+      params['hintNumber'] = new Value(currentHintNo);
     }
 
     return params;
@@ -172,8 +172,8 @@ export class TaskService {
     });
   }
 
-  gotoTask(taskId: number, hintNo: number) {
-    this.router.navigate([`/task/${taskId}-${hintNo}`]);
+  gotoTask(taskId: number) {
+    this.router.navigate([`/task/${taskId}`]);
   }
 
 
