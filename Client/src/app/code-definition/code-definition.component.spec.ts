@@ -180,11 +180,11 @@ describe('CodeDefinitionComponent', () => {
     expect(compileServerServiceSpy.clearUserDefinedCode).not.toHaveBeenCalled();
   });
 
-  it('should default nextClassClears flag', () => {
-    expect(component.nextTaskClears).toBe(true);
-    taskSubject.next({ } as ITask);
-    expect(component.nextTaskClears).toBe(false);
-  });
+  // it('should default nextClassClears flag', () => {
+  //   expect(component.nextTaskClears).toBe(true);
+  //   taskSubject.next({ } as ITask);
+  //   expect(component.nextTaskClears).toBe(false);
+  // });
 
   it('should unset nextClassClears flag from task', () => {
     expect(component.nextTaskClears).toBe(true);

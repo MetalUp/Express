@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EmptyTask, ITask } from '../models/task';
+import { EmptyTask, EmptyTaskUserView, ITask, ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { EmptyHint, IHint } from '../models/hint';
@@ -11,20 +11,20 @@ import { EmptyHint, IHint } from '../models/hint';
 })
 export class HintComponent implements OnInit, OnDestroy {
 
-  currentTask: ITask = EmptyTask;
+  currentTask: ITaskUserView = EmptyTaskUserView;
   currentHint: IHint = EmptyHint;
   message: string = '';
 
   get hintHtml() {
-    if (this.currentHint.HtmlContent){
-      return this.currentHint.HtmlContent;
+    if (this.currentTask.CurrentHintContent){
+      return this.currentTask.CurrentHintContent;
     }
 
     if (this.message) {
       return this.message;
     }
 
-    if (this.currentTask.Hints.length > 0) {
+    if (this.currentTask.CurrentHintNo === 0) {
       return 'Click Next to use the first Hint';
     }
    
@@ -42,19 +42,15 @@ export class HintComponent implements OnInit, OnDestroy {
   }
 
   get title() {
-    if(this.hintIndex === -1){
-      return "Hint";
-    }
-
-    return `Hint ${this.hintIndex + 1}/${this.currentTask.Hints.length} -${this.currentHint.CostInMarks} ${this.marks}`;
+    return this.currentTask.CurrentHintTitle;
   }
 
   hasNextHint() {
-    return this.hintIndex + 1 < this.currentTask.Hints.length;
+    return !!this.currentTask.NextHintNo;
   }
 
   hasPreviousHint() {
-    return this.hintIndex - 1 >= 0;
+    return !!this.currentTask.PreviousHintNo;
   }
 
   handleError(e : unknown) {
@@ -63,14 +59,14 @@ export class HintComponent implements OnInit, OnDestroy {
   }
 
   onHint() {
-    this.currentHint = this.currentTask.Hints[this.hintIndex];
+    // this.currentHint = this.currentTask.Hints[this.hintIndex];
 
-    if (this.currentHint.HtmlFile[0] && !this.currentHint.HtmlContent) {
-      this.message = "";
-      this.taskService.getFile(this.currentHint.HtmlFile)
-        .then(h => this.currentHint.HtmlContent = h)
-        .catch(e => this.handleError(e));
-    }
+    // if (this.currentHint.HtmlFile[0] && !this.currentHint.HtmlContent) {
+    //   this.message = "";
+    //   this.taskService.getFile(this.currentHint.HtmlFile)
+    //     .then(h => this.currentHint.HtmlContent = h)
+    //     .catch(e => this.handleError(e));
+    // }
   }
 
   onPreviousHint() {

@@ -36,16 +36,16 @@ describe('TaskDescriptionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get the task html file', fakeAsync(() => {
+  // it('should get the task html file', fakeAsync(() => {
 
-    const testTask = { Description: ['testUrl', 'testMediaType'] } as unknown as ITask;
-    taskSubject.next(testTask);
+  //   const testTask = { Description: ['testUrl', 'testMediaType'] } as unknown as ITask;
+  //   taskSubject.next(testTask);
 
-    expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['testUrl', 'testMediaType']);
-    expect(component.currentTask).toEqual(testTask);
-    tick();
-    expect(component.taskHtml).toEqual('test html');
-  }));
+  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['testUrl', 'testMediaType']);
+  //   expect(component.currentTask).toEqual(testTask);
+  //   tick();
+  //   expect(component.taskHtml).toEqual('test html');
+  // }));
 
   it('should disable next task if no next task', () => {
 
@@ -56,14 +56,14 @@ describe('TaskDescriptionComponent', () => {
   });
 
 
-  it('should get the next task', () => {
+  // it('should get the next task', () => {
 
-    const testTask = { NextTask: "nexttask.json"} as unknown as ITask;
-    taskSubject.next(testTask);
-    expect(component.hasNextTask()).toEqual(true);
-    component.onNextTask();
-    expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('nexttask.json');
-  });
+  //   const testTask = { NextTask: "nexttask.json"} as unknown as ITask;
+  //   taskSubject.next(testTask);
+  //   expect(component.hasNextTask()).toEqual(true);
+  //   component.onNextTask();
+  //   expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('nexttask.json');
+  // });
 
   it('should disable previous task if no previous task', () => {
 
@@ -73,24 +73,24 @@ describe('TaskDescriptionComponent', () => {
     expect(component.hasPreviousTask()).toEqual(false);   
   });
 
-  it('should get the previous task', () => {
+  // it('should get the previous task', () => {
 
-    const testTask = { PreviousTask: "previoustask.json"} as unknown as ITask;
-    taskSubject.next(testTask);
-    expect(component.hasPreviousTask()).toEqual(true);
-    component.onPreviousTask();
-    expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('previoustask.json');
-  });
+  //   const testTask = { PreviousTask: "previoustask.json"} as unknown as ITask;
+  //   taskSubject.next(testTask);
+  //   expect(component.hasPreviousTask()).toEqual(true);
+  //   component.onPreviousTask();
+  //   expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('previoustask.json');
+  // });
 
-  it('should handle errors when getting task html file', () => {
+  // it('should handle errors when getting task html file', () => {
 
-    taskServiceSpy.getFile.and.returnValue(Promise.reject(() => { status: 404 }));
+  //   taskServiceSpy.getFile.and.returnValue(Promise.reject(() => { status: 404 }));
 
-    const testTask = { Description: ['testUrl', 'testMediaType'] } as unknown as ITask;
-    taskSubject.next(testTask);
+  //   const testTask = { Description: ['testUrl', 'testMediaType'] } as unknown as ITask;
+  //   taskSubject.next(testTask);
 
-    expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['testUrl', 'testMediaType']);
-    expect(component.currentTask).toEqual(testTask);
-    expect(component.taskHtml).toEqual('');
-  });
+  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['testUrl', 'testMediaType']);
+  //   expect(component.currentTask).toEqual(testTask);
+  //   expect(component.taskHtml).toEqual('');
+  // });
 });

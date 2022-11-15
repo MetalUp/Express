@@ -84,8 +84,8 @@ describe('TaskService', () => {
       expect(t.Language).toEqual('testlanguage')
     );
 
-    service.gotoTask('task/newTask');
+    service.gotoTask(9, 0);
 
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/task/newTask']);
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/task/9-0']);
   });
 });

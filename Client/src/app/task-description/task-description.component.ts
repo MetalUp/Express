@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EmptyTask, ITask } from '../models/task';
+import { EmptyTask, EmptyTaskUserView, ITask, ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 })
 export class TaskDescriptionComponent implements OnInit, OnDestroy {
 
-  currentTask: ITask = EmptyTask;
+  currentTask: ITaskUserView = EmptyTaskUserView;
 
   taskHtml = '';
 
@@ -19,27 +19,25 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   private sub?: Subscription;
 
   hasPreviousTask() {
-    return !!this.currentTask.PreviousTask;
+    return !!this.currentTask.PreviousTaskId;
   }
 
   onPreviousTask() {
-    this.taskService.gotoTask(this.currentTask.PreviousTask!);
+    this.taskService.gotoTask(this.currentTask.Id!, 0);
   }
 
   hasNextTask() {
-    return !!this.currentTask.NextTask;
+    return !!this.currentTask.NextTaskId;
   }
 
   onNextTask() {
-    this.taskService.gotoTask(this.currentTask.NextTask!);
+    this.taskService.gotoTask(this.currentTask.NextTaskId!, 0);
   }
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.taskService.getFile(this.currentTask.Description)
-        .then(h => this.taskHtml = h)
-        .catch(_ => this.taskHtml = '');
+      this.taskHtml = this.currentTask.Description;
     })
   }
 

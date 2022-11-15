@@ -86,7 +86,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
-      this.canPaste = !!t.PasteCode;
+      this.canPaste = t.PasteCode;
       this.taskId = t.Id;
 
       if (this.nextTaskClears) {
@@ -94,7 +94,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
         this.modelChanged();
       }
 
-      this.nextTaskClears = !!t.NextTaskClearsFunctions;
+      this.nextTaskClears = t.NextTaskClearsFunctions;
     })
   }
 

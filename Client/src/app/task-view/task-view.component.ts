@@ -22,9 +22,12 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub1 = this.route.paramMap.subscribe(pm => {
-      const taskId = pm.get('id');
-      if (taskId) {
-        this.taskService.loadTask(taskId);
+      const id = pm.get('id') || "";
+      let [tId, hId] = id.split('-');
+
+      if (tId) {
+        hId = hId || "0";
+        this.taskService.loadTask(tId, hId);
       }
     });
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { EmptyTask, ITask, Task } from '../models/task';
+import { EmptyTaskUserView, ITaskUserView, TaskUserView } from '../models/task';
 import { Hint, IHint } from '../models/hint';
 import { Subject } from 'rxjs';
 import { ContextService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
@@ -40,7 +40,7 @@ export class TaskService {
     return this.currentTaskAsSubject;
   }
 
-  private currentTaskAsSubject = new Subject<ITask>()
+  private currentTaskAsSubject = new Subject<ITaskUserView>()
 
   private getChoicesValue(member: Ro.PropertyMember) {
     const raw = member.value().scalar() as number;
@@ -100,14 +100,14 @@ export class TaskService {
     }
   }
 
-  private convertTo<T extends ITask | IHint>(toObj: Task | Hint, rep: DomainObjectRepresentation) {
+  private convertTo<T extends ITaskUserView | IHint>(toObj: TaskUserView | Hint, rep: DomainObjectRepresentation) {
     if (rep && Object.keys(rep.propertyMembers()).length > 0) {
       const pMembers = rep.propertyMembers()
       for (const k in pMembers) {
         const member = pMembers[k];
         this.setPropertyValue(toObj, member);
       }
-      if (toObj instanceof Task) {
+      if (toObj instanceof TaskUserView) {
         // only get collections on task 
         const cMembers = rep.collectionMembers()
         for (const k in cMembers) {
@@ -120,19 +120,23 @@ export class TaskService {
   }
 
   private convertToTask(rep: DomainObjectRepresentation, id: number) {
-    return this.convertTo<ITask>(new Task(id), rep);
+    return this.convertTo<ITaskUserView>(new TaskUserView(id), rep);
   }
 
   private convertToHint(rep: DomainObjectRepresentation) {
     return this.convertTo<IHint>(new Hint(), rep);
   }
 
-  loadTask(taskId: string) {
+  private params(taskId: string, currentHintNo: string) {
+    return { "taskId": new Value(taskId), "currentHintNo": new Value(currentHintNo) } as Dictionary<Value>
+  }
+
+  loadTask(taskId: string, hintId: string) {
 
     this.getService().then(s => {
       const action = s.actionMember("GetTask") as InvokableActionMember;
 
-      this.repLoader.invoke(action, { "taskId": new Value(taskId) } as Dictionary<Value>, {} as Dictionary<Object>)
+      this.repLoader.invoke(action, this.params(taskId, hintId), {} as Dictionary<Object>)
         .then((ar: Ro.ActionResultRepresentation) => {
           var obj = ar.result().object()!;
           const task = this.convertToTask(obj, parseInt(taskId));
@@ -140,16 +144,13 @@ export class TaskService {
         })
         .catch((e: ErrorWrapper) => {
           console.log(`${e.title}:${e.description}`);
-          this.currentTaskAsSubject.next(EmptyTask);
+          this.currentTaskAsSubject.next(EmptyTaskUserView);
         });
     });
   }
 
-  gotoTask(taskUrl: string) {
-    var segments = taskUrl.split('/');
-    var key = segments[segments.length - 1];
-
-    this.router.navigate([`/task/${key}`]);
+  gotoTask(taskId: number, hintNo: number) {
+    this.router.navigate([`/task/${taskId}-${hintNo}`]);
   }
 
 

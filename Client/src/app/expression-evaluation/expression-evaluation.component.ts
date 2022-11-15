@@ -137,7 +137,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
-      this.canPaste = !!t.PasteExpression;
+      this.canPaste = t.PasteExpression;
       this.taskId = t.Id;
     })
   }

@@ -50,50 +50,50 @@ describe('HintComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get the hint html file', fakeAsync(() => {
+  // it('should get the hint html file', fakeAsync(() => {
 
-    taskServiceSpy.getFile.and.returnValue(Promise.resolve('hint1 html'));
+  //   taskServiceSpy.getFile.and.returnValue(Promise.resolve('hint1 html'));
     
-    taskSubject.next(testTask);
+  //   taskSubject.next(testTask);
 
-    expect(component.hasNextHint()).toEqual(true);
+  //   expect(component.hasNextHint()).toEqual(true);
 
-    expect(component.title).toEqual("Hint");
-    expect(component.hintHtml).toEqual('Click Next to use the first Hint');
+  //   expect(component.title).toEqual("Hint");
+  //   expect(component.hintHtml).toEqual('Click Next to use the first Hint');
 
-    component.onNextHint(); 
+  //   component.onNextHint(); 
 
-    expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
-    expect(component.hintIndex).toEqual(0);
-    tick();
-    expect(component.title).toEqual("Hint 1/2 -1 mark");
-    expect(component.hintHtml).toEqual('hint1 html');
-    expect(component.hasPreviousHint()).toEqual(false);
-    expect(component.hasNextHint()).toEqual(true);
+  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
+  //   expect(component.hintIndex).toEqual(0);
+  //   tick();
+  //   expect(component.title).toEqual("Hint 1/2 -1 mark");
+  //   expect(component.hintHtml).toEqual('hint1 html');
+  //   expect(component.hasPreviousHint()).toEqual(false);
+  //   expect(component.hasNextHint()).toEqual(true);
 
-    taskServiceSpy.getFile.and.returnValue(Promise.resolve('hint2 html'));
+  //   taskServiceSpy.getFile.and.returnValue(Promise.resolve('hint2 html'));
 
-    component.onNextHint(); 
+  //   component.onNextHint(); 
 
-    expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint2url', 'hint2mt']);
-    expect(component.hintIndex).toEqual(1);
-    tick();
-    expect(component.title).toEqual("Hint 2/2 -2 marks");
-    expect(component.hintHtml).toEqual('hint2 html');
-    expect(component.hasPreviousHint()).toEqual(true);
-    expect(component.hasNextHint()).toEqual(false);
+  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint2url', 'hint2mt']);
+  //   expect(component.hintIndex).toEqual(1);
+  //   tick();
+  //   expect(component.title).toEqual("Hint 2/2 -2 marks");
+  //   expect(component.hintHtml).toEqual('hint2 html');
+  //   expect(component.hasPreviousHint()).toEqual(true);
+  //   expect(component.hasNextHint()).toEqual(false);
 
-    taskServiceSpy.getFile.and.returnValue(Promise.resolve('hint1 html'));
+  //   taskServiceSpy.getFile.and.returnValue(Promise.resolve('hint1 html'));
 
-    component.onPreviousHint(); 
+  //   component.onPreviousHint(); 
 
-    expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
-    expect(component.hintIndex).toEqual(0);
-    tick();
-    expect(component.title).toEqual("Hint 1/2 -1 mark");
-    expect(component.hintHtml).toEqual('hint1 html');
-    expect(component.hasPreviousHint()).toEqual(false);
-    expect(component.hasNextHint()).toEqual(true);
+  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
+  //   expect(component.hintIndex).toEqual(0);
+  //   tick();
+  //   expect(component.title).toEqual("Hint 1/2 -1 mark");
+  //   expect(component.hintHtml).toEqual('hint1 html');
+  //   expect(component.hasPreviousHint()).toEqual(false);
+  //   expect(component.hasNextHint()).toEqual(true);
 
-  }));
+  // }));
 });
