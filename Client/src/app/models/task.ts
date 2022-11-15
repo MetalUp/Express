@@ -1,6 +1,6 @@
 export interface ITaskUserView {
     Id: number;
-    Completed: boolean;
+    IsCompleted: boolean;
     Title: string;
     Language: string;
     Description: string;
@@ -17,7 +17,7 @@ export interface ITaskUserView {
 export class TaskUserView implements ITaskUserView {
   
     constructor(public Id: number) {}
-    Completed = false;
+    IsCompleted = false;
     Title = "";
     Language = "";
     Description = "";
