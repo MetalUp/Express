@@ -6,6 +6,7 @@
             context.Instances<Activity>().OrderByDescending(a => a.TimeStamp);
 
 
+        #region Methods to record an Activity
         internal static IContext SubmitCodeFail(int taskId, string code, string errorMessage, IContext context) =>
      RecordActivity(taskId, ActivityType.SubmitCodeFail, code, errorMessage, null, context);
 
@@ -32,6 +33,8 @@
 
         internal static IContext HintUsed(int taskId, int hintNo, IContext context) =>
             RecordActivity(taskId, ActivityType.HintUsed, null, null, null, context);
+        #endregion
+
 
         internal static Activity GetLastCodeSubmittedSuccess(int taskId, IContext context) =>
             GetActivitiesOnTask(taskId, context).LastOrDefault(a => a.ActivityType == ActivityType.SubmitCodeSuccess);
@@ -43,7 +46,7 @@
             GetActivitiesOnTask(taskId, context).LastOrDefault(a => a.ActivityType == ActivityType.RunTestsSuccess);
 
         #region private helpers
-        internal static IContext RecordActivity(int taskId, ActivityType type, string code, string errorMessage, int? hintUsed, IContext context)
+        internal static IContext RecordActivity(int taskId, ActivityType type, string code, string message, int? hintUsed, IContext context)
         {
             var aId = Assignments.GetAssignmentForCurrentUser(taskId, context).Id;
             var act = new Activity()
@@ -51,7 +54,7 @@
                 AssignmentId = aId,
                 TaskId = taskId,
                 ActivityType = type,
-                ErrorMessage = errorMessage,
+                Message = message,
                 TimeStamp = context.Now()
             };
             return context.WithNew(act);

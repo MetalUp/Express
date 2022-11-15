@@ -12,9 +12,20 @@
             Task = cloneFrom.Task;
             ActivityType = cloneFrom.ActivityType;
             TimeStamp = cloneFrom.TimeStamp;
-            HighestHintUsed = cloneFrom.HighestHintUsed;
-            LastCodeSubmitted = cloneFrom.LastCodeSubmitted;
-            ErrorMessage = cloneFrom.ErrorMessage;
+            HintUsed = cloneFrom.HintUsed;
+            CodeSubmitted = cloneFrom.CodeSubmitted;
+            Message = cloneFrom.Message;
+        }
+
+        public Activity(int assignmentId, int taskId, ActivityType activityType, int? hintUsed, string codeSubmitted, string message, IContext context)
+        {
+            AssignmentId = assignmentId;
+            TaskId = taskId;
+            ActivityType = activityType;
+            TimeStamp = context.Now();
+            HintUsed = hintUsed??hintUsed.Value;
+            CodeSubmitted = codeSubmitted;
+            Message = message;
         }
 
         [Hidden]
@@ -37,13 +48,13 @@
         public DateTime TimeStamp { get; init; }
 
         [MemberOrder(7)]
-        public int HighestHintUsed { get; init; }
+        public int HintUsed { get; init; }
 
         [MemberOrder(8)]
-        public string LastCodeSubmitted { get; init; }
+        public string CodeSubmitted { get; init; }
 
-        [MemberOrder(8)]
-        public string ErrorMessage { get; init; }
+        [MemberOrder(9)]
+        public string Message { get; init; }
 
         public override string ToString() => $"{TimeStamp} {ActivityType}";
     }

@@ -263,6 +263,8 @@ namespace Model.Functions
             IContext context) =>
             context.WithUpdated(thisTask, new Task(thisTask) { Hints = new List<Hint>(otherTask.Hints) });
 
+        internal static Hint GetHintNo(this Task task, int hintNo) => task.Hints.Single(h => h.Number == hintNo);
+
         #endregion
     }
 }

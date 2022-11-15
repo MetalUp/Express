@@ -8,5 +8,5 @@ public static class TaskUserView_Functions
         new[] { target.Task.Id.ToString(), target.CurrentHintNo.ToString()};
 
     public static TaskUserView CreateFromKeys(string[] keys, IContext context) => 
-        TaskAccess.GetTask(Convert.ToInt32(keys[0]), Convert.ToInt32(keys[1]), context);
+        TaskAccess.CreateTaskUserView(Convert.ToInt32(keys[0]), Convert.ToInt32(keys[1]), context);
 }

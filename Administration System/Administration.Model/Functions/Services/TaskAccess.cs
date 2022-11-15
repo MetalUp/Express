@@ -3,60 +3,83 @@
 public static class TaskAccess
 {
 
-    public static TaskUserView GetTask(int taskId, int currentHintNo, IContext context)
+    public static (TaskUserView, IContext) GetTask(int taskId, int currentHintNo, IContext context)
     {
-        var task = Tasks.GetTask(taskId, context);
-        var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
-        var activities = asgn.ListActivity(context);
-        if (asgn == null) return null;
-        var hint = GetHintNo(task, activities, currentHintNo);
-        return new TaskUserView(
-            task,
-            Title(task, activities),
-            NextTaskEnabled(task, activities),
-            CodeLastSubmitted(task, activities),
-            currentHintNo,
-            CurrentHintTitle(task, activities),
-            hint.ContentsAsString(),
-            PreviousHintNo(task, currentHintNo),
-            NextHintNo(task, currentHintNo),
-            CostOfNextHint(task, currentHintNo)
-            );
+       var context2 = UseHintNo(taskId,currentHintNo, context);
+        var tuv = CreateTaskUserView(taskId, currentHintNo, context);
+        return (tuv, context2); 
     }
 
-    //public TaskUserView(Task task, bool completed, string codeLastSubmitted,
-    // int currentHintNo, string currentHintTitle, string currentHintContent,
-    // int? previousHintNo, int? nextHintNo, int costOfNextHint)
-    //{
+    public static TaskUserView CreateTaskUserView(int taskId, int hintNo, IContext context)
+    {
+        var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
+        if (asgn == null) return null;
+        var activities = asgn.ListActivity(context);
+        var task = Tasks.GetTask(taskId, context);
+        var hint = task.GetHintNo(hintNo);
+        return new TaskUserView(
+           task,
+           Title(task, activities),
+           NextTaskEnabled(task, activities),
+           CodeLastSubmitted(task, activities),
+           hintNo,
+           hint.Title,
+           hint.ContentsAsString(),
+           PreviousHintNo(task, hintNo),
+           NextHintNo(task, hintNo),
+           CostOfNextHint(task, activities, hintNo)
+           );
+    }
 
-    internal static string Title(Task task, IQueryable<Activity> activities) => "";
+    internal static string Title(Task task, IQueryable<Activity> activities) =>
+        task.Title + IsCompleted(task, activities);
 
-    internal static bool NextTaskEnabled(Task task, IQueryable<Activity> activities) => false;
+    internal static bool IsCompleted(Task task, IQueryable<Activity> activities) =>
+        activities.Last().ActivityType == ActivityType.RunTestsSuccess;
 
-    internal static int HighestHintNoUsed(Task task, IQueryable<Activity> activities) => 0;
+    internal static bool NextTaskEnabled(Task task, IQueryable<Activity> activities) =>
+        IsCompleted(task, activities);
 
-    internal static int TotalMarksDeducted(Task task, IQueryable<Activity> activities) => 0;
+    internal static int HighestHintNoUsed(Task task, IQueryable<Activity> activities) =>
+        activities.Max(a => a.HintUsed);
 
-    internal static Hint GetHintNo(Task task, IQueryable<Activity> activities, int hintNo) => null;
-    //Needs to check if user has previously accessed this hint no. If not record the hint access
+    internal static int TotalMarksDeducted(Task task, IQueryable<Activity> activities)
+    {
+        var highest = HighestHintNoUsed(task, activities);
+        return task.Hints.Where(h => h.Number <= highest).Sum(h => h.CostInMarks);
+    }
 
-    internal static string CurrentHintTitle(Task task, IQueryable<Activity> activities) => "";
+    internal static IContext UseHintNo(int taskId, int hintNo, IContext context)
+    {
+        var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
+        if (asgn == null) return context;
+        var activities = asgn.ListActivity(context);
+        var task = Tasks.GetTask(taskId, context);
+        if ( hintNo <= HighestHintNoUsed(task, activities))
+        {
+            return context;
+        } else
+        {
+            var act = new Activity(asgn.Id, task.Id, ActivityType.HintUsed, hintNo, null, null, context);
+            return context.WithNew(act);
+        }
+          
+    }
 
-    internal static string CodeLastSubmitted(Task task, IQueryable<Activity> activities) => null;
 
-    internal static int PreviousHintNo(Task task, int currentHintNumber) => 0;
+    internal static string CodeLastSubmitted(Task task, IQueryable<Activity> activities) =>
+        activities.Last(a => a.CodeSubmitted != null).CodeSubmitted;
 
-    internal static int NextHintNo(Task task, int currentHintNumber) => 0;
+    internal static int PreviousHintNo(Task task, int currentHintNumber) =>
+        currentHintNumber > 1 ? currentHintNumber - 1 : 0;
 
-    internal static int CostOfNextHint(Task task, int currentHintNumber) => 0;
+    internal static int NextHintNo(Task task, int currentHintNumber) =>
+        currentHintNumber < task.Hints.Count ? currentHintNumber + 1 : 0;
 
+    internal static int CostOfNextHint(Task task, IQueryable<Activity> activities, int currentHintNumber)
+    {
+        var next = NextHintNo(task, currentHintNumber);
+        return next > HighestHintNoUsed(task, activities) ? task.GetHintNo(next).CostInMarks : 0;
 
-
-
-
-
-
-
-
-
+    }
 }
