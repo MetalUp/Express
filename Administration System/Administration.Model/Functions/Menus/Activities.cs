@@ -6,15 +6,15 @@
             context.Instances<Activity>().OrderByDescending(a => a.TimeStamp);
 
 
-        #region Methods to record an Activity
-        internal static IContext SubmitCodeFail(int taskId, string code, string errorMessage, IContext context) =>
-     RecordActivity(taskId, ActivityType.SubmitCodeFail, code, errorMessage, null, context);
+        #region Methods to record an Activity involving code
+        internal static IContext SubmitCodeFail(int taskId, string code, string message, IContext context) =>
+     RecordActivity(taskId, ActivityType.SubmitCodeFail, code, message, null, context);
 
         internal static IContext SubmitCodeSuccess(int taskId, string code, IContext context) =>
             RecordActivity(taskId, ActivityType.SubmitCodeSuccess, code, null, null, context);
 
-        internal static IContext RunTestsFail(int taskId, string errorMessage, IContext context) =>
-            RecordActivity(taskId, ActivityType.RunTestsFail, null, errorMessage, null, context);
+        internal static IContext RunTestsFail(int taskId, string message, IContext context) =>
+            RecordActivity(taskId, ActivityType.RunTestsFail, null, message, null, context);
 
         internal static IContext RunTestsSuccess(int taskId, IContext context)
         {
@@ -31,22 +31,7 @@
             }
         }
 
-        internal static IContext HintUsed(int taskId, int hintNo, IContext context) =>
-            RecordActivity(taskId, ActivityType.HintUsed, null, null, null, context);
-        #endregion
-
-
-        internal static Activity GetLastCodeSubmittedSuccess(int taskId, IContext context) =>
-            GetActivitiesOnTask(taskId, context).LastOrDefault(a => a.ActivityType == ActivityType.SubmitCodeSuccess);
-
-        internal static Activity GetLastHintUsed(int taskId, IContext context) =>
-            GetActivitiesOnTask(taskId, context).LastOrDefault(a => a.ActivityType == ActivityType.HintUsed);
-
-        internal static Activity GetLastRunTestsSuccess(int taskId, IContext context) =>
-            GetActivitiesOnTask(taskId, context).LastOrDefault(a => a.ActivityType == ActivityType.RunTestsSuccess);
-
-        #region private helpers
-        internal static IContext RecordActivity(int taskId, ActivityType type, string code, string message, int? hintUsed, IContext context)
+        private static IContext RecordActivity(int taskId, ActivityType type, string code, string message, int? hintUsed, IContext context)
         {
             var aId = Assignments.GetAssignmentForCurrentUser(taskId, context).Id;
             var act = new Activity()
@@ -58,12 +43,6 @@
                 TimeStamp = context.Now()
             };
             return context.WithNew(act);
-        }
-
-        internal static IQueryable<Activity> GetActivitiesOnTask(int taskId, IContext context)
-        {
-            var aId = Assignments.GetAssignmentForCurrentUser(taskId, context).Id;
-            return context.Instances<Activity>().Where(act => act.AssignmentId == aId && act.TaskId == taskId);
         }
         #endregion 
     }

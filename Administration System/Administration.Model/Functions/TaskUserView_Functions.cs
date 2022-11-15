@@ -5,8 +5,8 @@ namespace Model.Functions;
 public static class TaskUserView_Functions
 {
     public static string[] DeriveKeys(this TaskUserView target) => 
-        new[] { target.Task.Id.ToString(), target.CurrentHintNo.ToString()};
+        new[] { target.Task.Id.ToString()};
 
     public static TaskUserView CreateFromKeys(string[] keys, IContext context) => 
-        TaskAccess.CreateTaskUserView(Convert.ToInt32(keys[0]), Convert.ToInt32(keys[1]), context);
+        TaskAccess.GetTask(Convert.ToInt32(keys[0]), context);
 }

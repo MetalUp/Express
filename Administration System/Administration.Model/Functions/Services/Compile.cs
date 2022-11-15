@@ -69,11 +69,22 @@ public static class Compile {
         return (language, wrappedCode);
     }
 
-    public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, [Optionally] string code, IContext context) => Execute(WrapCode(context, taskId, code, false, expression), $"{compileServer}/runs", context);
+    public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, [Optionally] string code, IContext context) => 
+        Execute(WrapCode(context, taskId, code, false, expression), $"{compileServer}/runs", context);
 
-    public static (RunResult, IContext) SubmitCode(int taskId, string code, IContext context) => Execute(WrapCode(context, taskId, code, false), $"{compileServer}/compiles", context);
+    public static (RunResult, IContext) SubmitCode(int taskId, string code, IContext context)
+    {
+        (var result, var context2) =  Execute(WrapCode(context, taskId, code, false), $"{compileServer}/compiles", context);
+        //TODO: Record activity
+        return (result, context2);
+    }
 
-    public static (RunResult, IContext) RunTests(int taskId, string code, IContext context) => Execute(WrapCode(context, taskId, code, true), $"{compileServer}/tests", context);
+    public static (RunResult, IContext) RunTests(int taskId, string code, IContext context)
+    {
+        (var result, var context2) = Execute(WrapCode(context, taskId, code, true), $"{compileServer}/tests", context);
+        //TODO: Record activity
+        return (result, context2);
+    }
 
     private static T ReadAs<T>(HttpResponseMessage response) {
         using var sr = new StreamReader(response.Content.ReadAsStream());
