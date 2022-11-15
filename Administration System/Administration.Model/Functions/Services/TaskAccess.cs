@@ -2,37 +2,28 @@
 
 public static class TaskAccess
 {
-
-    public static (TaskUserView, IContext) GetTask(int taskId, int currentHintNo, IContext context)
+    //If hintNumber is 0, will return EITHER an empty HintUserView, OR the highest level hint that the user previously accessed.
+    public static (HintUserView, IContext) GetHint(int taskId, int hintNumber)
     {
-       var context2 = UseHintNo(taskId,currentHintNo, context);
-        var tuv = CreateTaskUserView(taskId, currentHintNo, context);
-        return (tuv, context2); 
+        throw new NotImplementedException();
     }
 
-    public static TaskUserView CreateTaskUserView(int taskId, int hintNo, IContext context)
+    public static TaskUserView GetTask(int taskId, IContext context)
     {
         var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
         if (asgn == null) return null;
         var activities = asgn.ListActivity(context);
         var task = Tasks.GetTask(taskId, context);
-        var hint = task.GetHintNo(hintNo);
         return new TaskUserView(
            task,
            Title(task, activities),
            NextTaskEnabled(task, activities),
-           CodeLastSubmitted(task, activities),
-           hintNo,
-           hint.Title,
-           hint.ContentsAsString(),
-           PreviousHintNo(task, hintNo),
-           NextHintNo(task, hintNo),
-           CostOfNextHint(task, activities, hintNo)
+           CodeLastSubmitted(task, activities)
            );
     }
 
     internal static string Title(Task task, IQueryable<Activity> activities) =>
-        task.Title + IsCompleted(task, activities);
+        task.Title + (IsCompleted(task, activities) ? " COMPLETED" : "");
 
     internal static bool IsCompleted(Task task, IQueryable<Activity> activities) =>
         activities.Last().ActivityType == ActivityType.RunTestsSuccess;
@@ -65,7 +56,6 @@ public static class TaskAccess
         }
           
     }
-
 
     internal static string CodeLastSubmitted(Task task, IQueryable<Activity> activities) =>
         activities.Last(a => a.CodeSubmitted != null).CodeSubmitted;
