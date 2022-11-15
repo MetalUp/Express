@@ -47,17 +47,14 @@ public static class TaskAccess
     private static int MarksAvailable(Task task, IQueryable<Activity> activities) =>
         task.MaxMarks - TotalMarksDeducted(task, activities);
 
-    internal static bool IsCompleted(Task task, IQueryable<Activity> activities)
-    {
-        var last = activities.LastOrDefault();
-        return last == null ? false : last.ActivityType == ActivityType.RunTestsSuccess;
-    }
+    internal static bool IsCompleted(Task task, IQueryable<Activity> activities) =>
+      activities.LastOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
 
     internal static bool NextTaskEnabled(Task task, IQueryable<Activity> activities) =>
         IsCompleted(task, activities);
 
     internal static string CodeLastSubmitted(Task task, IQueryable<Activity> activities) =>
-    activities.Last(a => a.CodeSubmitted != null).CodeSubmitted;
+        activities.Where(a => a.CodeSubmitted != null).LastOrDefault()?.CodeSubmitted;
 
     internal static int HighestHintNoUsed(Task task, IQueryable<Activity> activities) =>
         activities.Select(a => a.HintUsed).DefaultIfEmpty(0).Max();
@@ -84,10 +81,6 @@ public static class TaskAccess
     internal static int NextHintNo(Task task, int currentHintNumber) =>
         currentHintNumber < task.Hints.Count ? currentHintNumber + 1 : 0;
 
-    internal static int CostOfNextHint(Task task, IQueryable<Activity> activities, int currentHintNumber)
-    {
-        var next = NextHintNo(task, currentHintNumber);
-        return next > HighestHintNoUsed(task, activities) ? task.GetHintNo(next).CostInMarks : 0;
-
-    }
+    internal static int CostOfNextHint(Task task, IQueryable<Activity> activities, int currentHintNo) =>
+        currentHintNo == HighestHintNoUsed(task, activities) ? task.GetHintNo(NextHintNo(task, currentHintNo)).CostInMarks : 0;
 }
