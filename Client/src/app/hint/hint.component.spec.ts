@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import { EmptyHint } from '../models/hint';
+import { EmptyHintUserView } from '../models/hint';
 import { EmptyTaskUserView, ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 
@@ -14,15 +14,15 @@ describe('HintComponent', () => {
   let taskSubject = new Subject<ITaskUserView>();
   const testTask = structuredClone(EmptyTaskUserView);
 
-  const hint1 = structuredClone(EmptyHint);
+  const hint1 = structuredClone(EmptyHintUserView);
   hint1.Title = 'hint1 title';
-  hint1.HtmlFile = ['hint1url', 'hint1mt'];
-  hint1.CostInMarks = 1;
+  // hint1.HtmlFile = ['hint1url', 'hint1mt'];
+  // hint1.CostInMarks = 1;
 
-  const hint2 = structuredClone(EmptyHint);
+  const hint2 = structuredClone(EmptyHintUserView);
   hint2.Title = 'hint2 title';
-  hint2.HtmlFile = ['hint2url', 'hint2mt'];
-  hint2.CostInMarks = 2;
+  // hint2.HtmlFile = ['hint2url', 'hint2mt'];
+  // hint2.CostInMarks = 2;
 
   //testTask.Hints = [hint1, hint2];
 

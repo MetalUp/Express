@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmptyTaskUserView, ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
+import { EmptyHintUserView, IHintUserView } from '../models/hint';
 
 
 @Component({
@@ -12,16 +13,17 @@ import { Subscription } from 'rxjs';
 export class HintComponent implements OnInit, OnDestroy {
 
   currentTask: ITaskUserView = EmptyTaskUserView;
- 
+  currentHint: IHintUserView = EmptyHintUserView;
+
   get hintHtml() {
-    if (this.currentTask.CurrentHintContent){
-      return this.currentTask.CurrentHintContent;
+    if (this.currentHint.Contents) {
+      return this.currentHint.Contents;
     }
 
-    if (this.currentTask.CurrentHintNo === 0) {
-      return 'Click Next to use the first Hint';
+    if (this.currentHint.NextHintNo && this.currentHint.CostOfNextHint > 0) {
+      return 'Click Next Hint to use the next Hint';
     }
-   
+
     return 'There are no Hints for this task.'
   }
 
@@ -30,41 +32,48 @@ export class HintComponent implements OnInit, OnDestroy {
   private sub?: Subscription;
 
   get title() {
-    return this.currentTask.CurrentHintTitle;
+    return this.currentHint.Title;
   }
 
   canGetNextHint() {
-    return !!this.currentTask.NextHintNo;
+    return !!this.currentHint.NextHintNo && this.currentHint.CostOfNextHint > 0;
   }
 
   canViewNextHint() {
-    return !!this.currentTask.NextHintNo;
+    return !!this.currentHint.NextHintNo && this.currentHint.CostOfNextHint === 0;
   }
 
   canViewPreviousHint() {
-    return !!this.currentTask.PreviousHintNo;
+    return !!this.currentHint.PreviousHintNo;
   }
 
-  handleError(e : unknown) {
+  handleError(e: unknown) {
     console.log("error getting hint ");
     //this.message = 'error getting hint';
   }
 
   viewPreviousHint() {
-    this.taskService.loadTask(this.currentTask.Id, this.currentTask.PreviousHintNo!);
+    this.getHint(this.currentHint.PreviousHintNo!);
   }
 
   viewNextHint() {
-    this.taskService.loadTask(this.currentTask.Id, this.currentTask.NextHintNo!);
+    this.getHint(this.currentHint.NextHintNo!);
   }
 
   getNextHint() {
-    this.taskService.loadTask(this.currentTask.Id, this.currentTask.NextHintNo!);
+    this.getHint(this.currentHint.NextHintNo!);
+  }
+
+  getHint(hintNo: number) {
+    this.taskService.loadHint(this.currentTask.Id, hintNo).then(h => {
+      this.currentHint = h;
+    });
   }
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
+      this.getHint(0);
     })
   }
 
@@ -74,4 +83,3 @@ export class HintComponent implements OnInit, OnDestroy {
     }
   }
 }
-

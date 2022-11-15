@@ -1,19 +1,16 @@
-export interface IHint {
-    Number: number;
+export interface IHintUserView {
     Title: string;
-    CostInMarks: number;
-    HtmlFile: [string, string];
-    HtmlContent?: string;
-    Task: string;
+    Contents: string;
+    PreviousHintNo?: number;//Null indicates there is no previous hint
+    NextHintNo?: number;//Null indicates there is no next hint
+    CostOfNextHint: number; //If zero means that the user can just navigate to it (because they have seen it before)
 }
 
-export class Hint implements IHint
-{
-    Number = 0;
-    Title = ''
-    CostInMarks = 0;
-    HtmlFile = ["", ""] as [string, string];
-    Task = '';
+export class HintUserView implements IHintUserView {
+
+    Title = '';
+    Contents = '';
+    CostOfNextHint = 0;
 }
 
-export const EmptyHint = new Hint();
+export const EmptyHintUserView = new HintUserView();

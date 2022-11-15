@@ -12,11 +12,6 @@ export interface ITaskUserView {
     NextTaskClearsFunctions: boolean
     NextTaskEnabled: boolean;
     CodeLastSubmitted: string;
-    PreviousHintNo?: number;
-    CurrentHintNo: number;
-    CurrentHintTitle: string;
-    CurrentHintContent: string;
-    NextHintNo?: number;
 }
 
 export class TaskUserView implements ITaskUserView {
@@ -32,9 +27,6 @@ export class TaskUserView implements ITaskUserView {
     NextTaskClearsFunctions = false;
     NextTaskEnabled = false;
     CodeLastSubmitted = "";
-    CurrentHintNo = 0;
-    CurrentHintTitle = "";
-    CurrentHintContent = "";  
 }
 
 export const EmptyTaskUserView = new TaskUserView(0);
