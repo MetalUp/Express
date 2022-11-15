@@ -42,7 +42,7 @@ public static class TaskAccess
     }
 
     internal static string Title(Task task, IQueryable<Activity> activities) =>
-        task.Title + (IsCompleted(task, activities) ? $" COMPLETED Final mark " : "Marks Available") + $"{MarksAvailable}/{task.MaxMarks}";
+        task.Title + (IsCompleted(task, activities) ? $" COMPLETED Final mark " : "Marks Available") + $"{MarksAvailable(task, activities)}/{task.MaxMarks}";
     
     private static int MarksAvailable(Task task, IQueryable<Activity> activities) =>
         task.MaxMarks - TotalMarksDeducted(task, activities);
