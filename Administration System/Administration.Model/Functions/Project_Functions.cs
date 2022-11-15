@@ -9,7 +9,7 @@ namespace Model.Functions
     {
         #region Display
 
-        public static bool HideLink(this Project project) => !project.Tasks.Any();
+        public static bool HideLink(this Project project, IContext context) => !project.IsAssignedToMe(context);
 
         #endregion
 
@@ -174,7 +174,12 @@ namespace Model.Functions
 
         #endregion
 
-        #region AssignTo
+        #region Assignment
+
+        [MemberOrder(5)]
+        public static IContext AssignToMe(this Project project, DateTime dueBy, IContext context) =>
+            AssignToIndividual(project, Users.Me(context), dueBy, context);
+
         [MemberOrder(10)]
         public static IContext AssignToIndividual(this Project project, User singleUser, DateTime dueBy, IContext context) =>
             Assignments.NewAssignmentToIndividual(singleUser, project, dueBy, context);
@@ -195,7 +200,7 @@ namespace Model.Functions
         #region internal functions
         internal static bool IsAssignable(this Project project) => project.Status == ProjectStatus.Assignable;
 
-        internal static bool IsAssignedToCurrentUser(this Project project, IContext context)
+        internal static bool IsAssignedToMe(this Project project, IContext context)
         {
             var myId = Users.Me(context).Id;
             var pid = project.Id;

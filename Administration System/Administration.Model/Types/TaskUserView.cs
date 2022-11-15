@@ -3,13 +3,13 @@
 [ViewModel(typeof(TaskUserView_Functions))]
 public class TaskUserView
 {
-    public TaskUserView(Task task, string title, bool nextTaskEnabled, string codeLastSubmitted)
+    public TaskUserView(Task task, string title, string codeLastSubmitted, bool isCompleted)
     {
         Task = task;
         Project = task.Project;
         Title = title;
-        NextTaskEnabled = nextTaskEnabled;
         CodeLastSubmitted = codeLastSubmitted;
+        IsCompleted = isCompleted;
     }
 
     internal Task Task { get; init; }
@@ -28,13 +28,15 @@ public class TaskUserView
 
     public bool PasteCode => Task.Project.PasteCode;
 
+    public bool IsCompleted { get; init; }
+
     public int? PreviousTaskId => Task.PreviousTaskId;
 
     public int? NextTaskId => Task.NextTaskId;
 
     public bool NextTaskClearsFunctions => Task.NextTaskClearsFunctions;
 
-    public bool NextTaskEnabled { get; init; }
 
-    public string CodeLastSubmitted { get; init; }  //Derrived from Activities
+    public string CodeLastSubmitted { get; init; }
+
 }

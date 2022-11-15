@@ -30,10 +30,6 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
-        [MemberOrder(10)]
-        [UrlLink("Try out the Task")]
-        public string Link => $"https://express.metalup.org/task/{Id}";
-
         [MemberOrder(30)]
         public string Name { get; init; }
 

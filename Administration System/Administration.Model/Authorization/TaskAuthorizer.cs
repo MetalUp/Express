@@ -21,7 +21,7 @@ namespace Model.Authorization
             TaskIsAssignedToUser(task, context) && IsTaskProperty(memberName);
 
         internal static bool TaskIsAssignedToUser(Task task, IContext context) =>
-            task.Project.IsAssignedToCurrentUser(context);
+            task.Project.IsAssignedToMe(context);
 
         private static bool IsTaskProperty(string memberName) => IsProperty<Task>(memberName);
 
