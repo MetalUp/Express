@@ -12,16 +12,10 @@ import { EmptyHint, IHint } from '../models/hint';
 export class HintComponent implements OnInit, OnDestroy {
 
   currentTask: ITaskUserView = EmptyTaskUserView;
-  currentHint: IHint = EmptyHint;
-  message: string = '';
-
+ 
   get hintHtml() {
     if (this.currentTask.CurrentHintContent){
       return this.currentTask.CurrentHintContent;
-    }
-
-    if (this.message) {
-      return this.message;
     }
 
     if (this.currentTask.CurrentHintNo === 0) {
@@ -34,12 +28,6 @@ export class HintComponent implements OnInit, OnDestroy {
   constructor(private taskService: TaskService) { }
 
   private sub?: Subscription;
-
-  hintIndex = -1;
-
-  get marks() {
-    return this.currentHint.CostInMarks === 1 ? "mark" : "marks";
-  }
 
   get title() {
     return this.currentTask.CurrentHintTitle;
@@ -55,35 +43,20 @@ export class HintComponent implements OnInit, OnDestroy {
 
   handleError(e : unknown) {
     console.log("error getting hint ");
-    this.message = 'error getting hint';
-  }
-
-  onHint() {
-    // this.currentHint = this.currentTask.Hints[this.hintIndex];
-
-    // if (this.currentHint.HtmlFile[0] && !this.currentHint.HtmlContent) {
-    //   this.message = "";
-    //   this.taskService.getFile(this.currentHint.HtmlFile)
-    //     .then(h => this.currentHint.HtmlContent = h)
-    //     .catch(e => this.handleError(e));
-    // }
+    //this.message = 'error getting hint';
   }
 
   onPreviousHint() {
-    this.hintIndex--;
-    return this.onHint();
+    this.taskService.loadTask(this.currentTask.Id, this.currentTask.PreviousHintNo!);
   }
 
   onNextHint() {
-    this.hintIndex++;
-    return this.onHint();
+    this.taskService.loadTask(this.currentTask.Id, this.currentTask.NextHintNo!);
   }
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
-      this.hintIndex = -1;
-      this.currentHint = EmptyHint;
     })
   }
 

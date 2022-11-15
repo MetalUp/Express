@@ -127,11 +127,11 @@ export class TaskService {
     return this.convertTo<IHint>(new Hint(), rep);
   }
 
-  private params(taskId: string, currentHintNo: string) {
+  private params(taskId: number, currentHintNo: number) {
     return { "taskId": new Value(taskId), "currentHintNo": new Value(currentHintNo) } as Dictionary<Value>
   }
 
-  loadTask(taskId: string, hintId: string) {
+  loadTask(taskId: number, hintId: number) {
 
     this.getService().then(s => {
       const action = s.actionMember("GetTask") as InvokableActionMember;
@@ -139,7 +139,7 @@ export class TaskService {
       this.repLoader.invoke(action, this.params(taskId, hintId), {} as Dictionary<Object>)
         .then((ar: Ro.ActionResultRepresentation) => {
           var obj = ar.result().object()!;
-          const task = this.convertToTask(obj, parseInt(taskId));
+          const task = this.convertToTask(obj, taskId);
           this.currentTaskAsSubject.next(task);
         })
         .catch((e: ErrorWrapper) => {

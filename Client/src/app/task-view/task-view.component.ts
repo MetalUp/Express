@@ -26,8 +26,9 @@ export class TaskViewComponent implements OnInit, OnDestroy {
       let [tId, hId] = id.split('-');
 
       if (tId) {
-        hId = hId || "0";
-        this.taskService.loadTask(tId, hId);
+        const taskId = parseInt(tId);
+        const hintId = parseInt(hId) || 0;
+        this.taskService.loadTask(taskId, hintId);
       }
     });
 
