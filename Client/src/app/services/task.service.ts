@@ -172,8 +172,8 @@ export class TaskService {
     });
   }
 
-  gotoTask(taskId: number, hintNo: number) {
-    this.router.navigate([`/task/${taskId}-${hintNo}`]);
+  gotoTask(taskId: number) {
+    this.router.navigate([`/task/${taskId}`]);
   }
 
 
