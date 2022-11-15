@@ -21,7 +21,7 @@ export class HintComponent implements OnInit, OnDestroy {
     }
 
     if (this.currentHint.NextHintNo && this.currentHint.CostOfNextHint > 0) {
-      return 'Click Next Hint to use the next Hint';
+      return "Click 'Next Hint' to use the first Hint";
     }
 
     return 'There are no Hints for this task.'
