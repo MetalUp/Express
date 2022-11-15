@@ -146,22 +146,22 @@ describe('CodeDefinitionComponent', () => {
     expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
   });
 
-  it('should call model changed when changed', () => {
+  // it('should call model changed when changed', () => {
 
-    component.taskId = 67;
-    component.nextTaskClears = true;
-    component.codeDefinitions = 'something';
+  //   component.taskId = 67;
+  //   component.nextTaskClears = true;
+  //   component.codeDefinitions = 'something';
     
-    taskSubject.next({ Id: 1, PasteCode: true } as ITaskUserView);
+  //   taskSubject.next({ Id: 1, PasteCode: true } as ITaskUserView);
 
-    expect(component.compiledOK).toBe(false);
-    expect(component.currentStatus).toBe('');
-    expect(component.pendingSubmit).toBe(false);
-    expect(component.codeDefinitions).toBe('');
+  //   expect(component.compiledOK).toBe(false);
+  //   expect(component.currentStatus).toBe('');
+  //   expect(component.pendingSubmit).toBe(false);
+  //   expect(component.codeDefinitions).toBe('');
 
 
-    expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
-  });
+  //   expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
+  // });
 
   it('should not call model changed when changed in nextClassClears flag unset', () => {
 

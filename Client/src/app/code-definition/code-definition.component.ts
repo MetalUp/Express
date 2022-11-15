@@ -34,6 +34,8 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   nextTaskClears = true;
 
+
+
   validationFail: string = '';
 
   get currentStatus() {
@@ -86,14 +88,22 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
-      this.canPaste = t.PasteCode;
-      this.taskId = t.Id;
-
-      if (this.nextTaskClears) {
-        this.codeDefinitions = "";
-        this.modelChanged();
+     
+      if(this.taskId !== t.Id){
+        // task not hint has changed
+        if (t.CodeLastSubmitted) {
+          this.codeDefinitions = t.CodeLastSubmitted;
+          this.modelChanged();
+        }
       }
 
+      // if (this.nextTaskClears && t.Id > this.taskId) {
+      //   this.codeDefinitions = "";
+      //   this.modelChanged();
+      // }
+
+      this.taskId = t.Id;
+      this.canPaste = t.PasteCode;
       this.nextTaskClears = t.NextTaskClearsFunctions;
     })
   }
