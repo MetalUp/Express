@@ -14,7 +14,7 @@ public static class TaskAccess
                 null,
                 null,
                 NextHintNo(task, 0),
-                task.GetHintNo(1).CostInMarks);
+                task.Hints.Any() ? task.GetHintNo(1).CostInMarks : 0);
             return (huv, context);
         }
         else
