@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EmptyTask, EmptyTaskUserView, ITask, ITaskUserView } from '../models/task';
+import {  EmptyTaskUserView, ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 

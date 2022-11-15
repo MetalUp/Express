@@ -4,11 +4,11 @@ import { Subject} from 'rxjs'
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TaskViewComponent } from './task-view.component';
 import { TaskService } from '../services/task.service';
-import { ITask } from '../models/task';
+import { ITaskUserView } from '../models/task';
 
 describe('TaskViewComponent', () => {
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITask>();
+  let taskSubject = new Subject<ITaskUserView>();
 
   beforeEach(async () => {
 
@@ -37,7 +37,7 @@ describe('TaskViewComponent', () => {
 
     app.ngOnInit();
 
-    taskSubject.next({Language: 'testlanguage'} as ITask);
+    taskSubject.next({Language: 'testlanguage'} as ITaskUserView);
 
     expect(app.language).toEqual('testlanguage');
   });

@@ -4,7 +4,7 @@ import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { Subject } from 'rxjs';
 import { RunResult, errorRunResult } from '../models/run-result';
-import { ITask } from '../models/task';
+import { ITaskUserView } from '../models/task';
 
 import { CompileServerService } from './compile-server.service';
 import { TaskService } from './task.service';
@@ -14,7 +14,7 @@ describe('CompileServerService', () => {
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITask>();
+  let taskSubject = new Subject<ITaskUserView>();
 
   let testRunResult: RunResult = {
     run_id: 'a',

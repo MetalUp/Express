@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { RulesService } from './rules.service';
 import { ErrorType, Applicability } from '../models/rules';
 import { TaskService } from './task.service';
-import { ITask } from '../models/task';
+import { ITaskUserView } from '../models/task';
 import { Subject } from 'rxjs';
 
 
@@ -10,7 +10,7 @@ describe('RulesService', () => {
   let service: RulesService;
  
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITask>();
+  let taskSubject = new Subject<ITaskUserView>();
 
   let regex = 
   {
@@ -97,7 +97,7 @@ describe('RulesService', () => {
 
     TestBed.configureTestingModule({});
     service = new RulesService(taskServiceSpy);
-    taskSubject.next( {RegExRules : JSON.stringify(regex)} as ITask);
+    taskSubject.next( {RegExRules : JSON.stringify(regex)} as ITaskUserView);
   });
 
   it('should be created', () => {

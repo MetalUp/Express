@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { EmptyHint } from '../models/hint';
-import { EmptyTask, ITask } from '../models/task';
+import { EmptyTaskUserView, ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 
 import { HintComponent } from './hint.component';
@@ -11,8 +11,8 @@ describe('HintComponent', () => {
   let component: HintComponent;
   let fixture: ComponentFixture<HintComponent>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITask>();
-  const testTask = structuredClone(EmptyTask);
+  let taskSubject = new Subject<ITaskUserView>();
+  const testTask = structuredClone(EmptyTaskUserView);
 
   const hint1 = structuredClone(EmptyHint);
   hint1.Title = 'hint1 title';
@@ -24,7 +24,7 @@ describe('HintComponent', () => {
   hint2.HtmlFile = ['hint2url', 'hint2mt'];
   hint2.CostInMarks = 2;
 
-  testTask.Hints = [hint1, hint2];
+  //testTask.Hints = [hint1, hint2];
 
   beforeEach(async () => {
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile', 'gotoTask'], { currentTask: taskSubject });

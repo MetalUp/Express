@@ -5,7 +5,7 @@ import { EmptyRunResult, RunResult } from '../models/run-result';
 import { RulesService } from '../services/rules.service';
 import { Applicability } from '../models/rules';
 import { TaskService } from '../services/task.service';
-import { ITask } from '../models/task';
+import { ITaskUserView } from '../models/task';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CompileServerService } from '../services/compile-server.service';
 
@@ -15,7 +15,7 @@ describe('ExpressionEvaluationComponent', () => {
   let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITask>();
+  let taskSubject = new Subject<ITaskUserView>();
 
   let testRunResultOK: RunResult = {
     run_id: 'a',
@@ -263,7 +263,7 @@ describe('ExpressionEvaluationComponent', () => {
   it('should enable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteExpression: true } as ITask);
+    taskSubject.next({ PasteExpression: true } as ITaskUserView);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).not.toHaveBeenCalled();
@@ -272,7 +272,7 @@ describe('ExpressionEvaluationComponent', () => {
   it('should disable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteExpression: false } as ITask);
+    taskSubject.next({ PasteExpression: false } as ITaskUserView);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();

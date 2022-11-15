@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ITask } from '../models/task';
+import { ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { of, Subject } from 'rxjs';
 import { TestingComponent } from './testing.component';
@@ -55,7 +55,7 @@ describe('TestingComponent', () => {
   let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
-  let taskSubject = new Subject<ITask>();
+  let taskSubject = new Subject<ITaskUserView>();
 
   beforeEach(async () => {
     compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['runTests', 'hasUserDefinedCode'], { "selectedLanguage": "csharp" });

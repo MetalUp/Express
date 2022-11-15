@@ -5,7 +5,7 @@ import { CodeDefinitionComponent } from './code-definition.component';
 import { RulesService } from '../services/rules.service';
 import { Applicability } from '../models/rules';
 import { TaskService } from '../services/task.service';
-import { ITask } from '../models/task';
+import { ITaskUserView } from '../models/task';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CompileServerService } from '../services/compile-server.service';
 
@@ -15,7 +15,7 @@ describe('CodeDefinitionComponent', () => {
   let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITask>();
+  let taskSubject = new Subject<ITaskUserView>();
 
   let testRunResultOK: RunResult = {
     run_id: 'a',
@@ -152,7 +152,7 @@ describe('CodeDefinitionComponent', () => {
     component.nextTaskClears = true;
     component.codeDefinitions = 'something';
     
-    taskSubject.next({ Id: 1, PasteCode: true } as ITask);
+    taskSubject.next({ Id: 1, PasteCode: true } as ITaskUserView);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('');
@@ -170,7 +170,7 @@ describe('CodeDefinitionComponent', () => {
     component.nextTaskClears = false;
     component.compiledOK = true;
     
-    taskSubject.next({ Id: 1, PasteCode: true } as ITask);
+    taskSubject.next({ Id: 1, PasteCode: true } as ITaskUserView);
 
     expect(component.codeDefinitions).toBe('original');
     expect(component.compiledOK).toBe(true);
@@ -188,14 +188,14 @@ describe('CodeDefinitionComponent', () => {
 
   it('should unset nextClassClears flag from task', () => {
     expect(component.nextTaskClears).toBe(true);
-    taskSubject.next({ NextTaskClearsFunctions: true} as ITask);
+    taskSubject.next({ NextTaskClearsFunctions: true} as ITaskUserView);
     expect(component.nextTaskClears).toBe(true);
   });
 
   it('should set nextClassClears flag from task', () => {
     component.nextTaskClears = false;
     expect(component.nextTaskClears).toBe(false);
-    taskSubject.next({ NextTaskClearsFunctions: false} as ITask);
+    taskSubject.next({ NextTaskClearsFunctions: false} as ITaskUserView);
     expect(component.nextTaskClears).toBe(false);
   });
 
@@ -261,7 +261,7 @@ describe('CodeDefinitionComponent', () => {
   it('should enable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteCode: true } as ITask);
+    taskSubject.next({ PasteCode: true } as ITaskUserView);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).not.toHaveBeenCalled();
@@ -270,7 +270,7 @@ describe('CodeDefinitionComponent', () => {
   it('should disable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteCode: false } as ITask);
+    taskSubject.next({ PasteCode: false } as ITaskUserView);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();
@@ -278,7 +278,7 @@ describe('CodeDefinitionComponent', () => {
 
   it('should set taskid from task', () => {
 
-    taskSubject.next({ Id: 65 } as ITask);
+    taskSubject.next({ Id: 65 } as ITaskUserView);
 
     expect(component.taskId).toEqual(65);
   });

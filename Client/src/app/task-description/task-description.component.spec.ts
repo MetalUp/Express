@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import { ITask } from '../models/task';
+import { ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 
 import { TaskDescriptionComponent } from './task-description.component';
@@ -10,7 +10,7 @@ describe('TaskDescriptionComponent', () => {
   let component: TaskDescriptionComponent;
   let fixture: ComponentFixture<TaskDescriptionComponent>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITask>();
+  let taskSubject = new Subject<ITaskUserView>();
 
   beforeEach(async () => {
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile', 'gotoTask'], { currentTask: taskSubject });
@@ -49,7 +49,7 @@ describe('TaskDescriptionComponent', () => {
 
   it('should disable next task if no next task', () => {
 
-    const testTask = { NextTask: ""} as unknown as ITask;
+    const testTask = { NextTask: ""} as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     expect(component.hasNextTask()).toEqual(false);   
@@ -67,7 +67,7 @@ describe('TaskDescriptionComponent', () => {
 
   it('should disable previous task if no previous task', () => {
 
-    const testTask = { PreviousTask: ""} as unknown as ITask;
+    const testTask = { PreviousTask: ""} as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     expect(component.hasPreviousTask()).toEqual(false);   
