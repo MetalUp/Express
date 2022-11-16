@@ -46,8 +46,8 @@ public static class TaskAccess
         return new TaskUserView(
            task,
            Title(task, activities),
-           CodeLastSubmitted(task, activities),
-           IsCompleted(task, activities) || task.Tests is null,
+           CodeForTask(task, activities, context),
+           IsCompleted(task, activities) || !task.HasTests(),
            task.Tests is not null
            );
     }
@@ -59,24 +59,22 @@ public static class TaskAccess
         task.MaxMarks - TotalMarksDeducted(task, activities);
 
     internal static bool IsCompleted(Task task, IQueryable<Activity> activities) =>
-       activities.LastOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
+       task.HasTests && activities.LastOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
 
-    internal static string CodeLastSubmitted(Task task, IQueryable<Activity> activities) =>
-        activities.Where(a => a.CodeSubmitted != null).LastOrDefault()?.CodeSubmitted;
-
-    //TODO: Refactor - too complex. Delegate more.
-    internal static string CodeForTask(Task task, IQueryable<Activity> activities) =>
+    internal static string CodeForTask(Task task, IQueryable<Activity> activities, IContext context) =>
         IsCompleted(task, activities) ?
-            CodeLastSubmitted(task, activities)
+            CodeLastSubmitted(task, context)
             : task.PreviousTaskId is null ?
                 null
                 : task.PreviousTask.CodeCarriedForwardToNextTask() ?
-                    CodeLastSubmittedForPreviousTask(task) 
+                    CodeLastSubmitted(task.PreviousTask, context) 
                     : null;
 
-    private static string CodeLastSubmittedForPreviousTask(Task task)
+    private static string CodeLastSubmitted(Task task, IContext context)
     {
-        return null;
+        var asgn = Assignments.GetAssignmentForCurrentUser(task.Id, context);
+        var activities = asgn.ListActivity(context);
+        return activities.Where(a => a.CodeSubmitted != null).LastOrDefault()?.CodeSubmitted;
     }
 
 

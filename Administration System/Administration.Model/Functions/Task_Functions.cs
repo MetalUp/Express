@@ -269,6 +269,8 @@ namespace Model.Functions
 
         #region Helpers
         public static bool CodeCarriedForwardToNextTask(this Task task) => !task.NextTaskClearsFunctions;
+
+        public static bool HasTests(this Task task) => task.Tests is not null;
         #endregion
     }
 }
