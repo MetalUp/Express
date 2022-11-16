@@ -21,17 +21,17 @@ public static class TaskAccess
         }
         else
         {
-            var context2 = UseHintNo(task, hintNumber, asgn, context);
+            var context2 = UseHintNo(task, hintNumber, context);
             var hint = task.GetHintNo(hintNumber);
             var activities = asgn.ListActivity(context);
             var huv = new HintUserView(
-                taskId, 
+                taskId,
                 hintNumber,
                 hint.ToString(),
                 hint.ContentsAsString(),
                 hintNumber - 1,
                 NextHintNo(task, hintNumber),
-                CostOfNextHint(task, activities, hintNumber)
+                CostOfNextHint(task, hintNumber, context)
             );
             return (huv, context2);
         }
@@ -45,29 +45,31 @@ public static class TaskAccess
         var task = Tasks.GetTask(taskId, context);
         return new TaskUserView(
            task,
-           Title(task, activities),
-           CodeForTask(task, activities, context),
-           IsCompleted(task, activities) || !task.HasTests(),
+           Title(task, context),
+           CodeForTask(task, context),
+           !task.HasTests() ||IsCompleted(task, context),
            task.Tests is not null
            );
     }
 
-    internal static string Title(Task task, IQueryable<Activity> activities) =>
-        task.Title + (IsCompleted(task, activities) ? $" COMPLETED Final mark " : "Marks Available") + $"{MarksAvailable(task, activities)}/{task.MaxMarks}";
+    internal static string Title(Task task, IContext context) =>
+        task.Title +
+            (IsCompleted(task, context) ? $" COMPLETED Final mark " : "Marks Available") +
+                $"{MarksAvailable(task, context)}/{task.MaxMarks}";
 
-    private static int MarksAvailable(Task task, IQueryable<Activity> activities) =>
-        task.MaxMarks - TotalMarksDeducted(task, activities);
+    private static int MarksAvailable(Task task, IContext context) =>
+        task.MaxMarks - TotalMarksDeducted(task, context);
 
-    internal static bool IsCompleted(Task task, IQueryable<Activity> activities) =>
-       task.HasTests && activities.LastOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
+    internal static bool IsCompleted(Task task, IContext context) =>
+       task.HasTests && Activities.ActivitiesOfCurrentUser(task.Id, context).LastOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
 
-    internal static string CodeForTask(Task task, IQueryable<Activity> activities, IContext context) =>
-        IsCompleted(task, activities) ?
+    internal static string CodeForTask(Task task, IContext context) =>
+        IsCompleted(task, context) ?
             CodeLastSubmitted(task, context)
             : task.PreviousTaskId is null ?
                 null
                 : task.PreviousTask.CodeCarriedForwardToNextTask() ?
-                    CodeLastSubmitted(task.PreviousTask, context) 
+                    CodeLastSubmitted(task.PreviousTask, context)
                     : null;
 
     private static string CodeLastSubmitted(Task task, IContext context)
@@ -77,25 +79,19 @@ public static class TaskAccess
         return activities.Where(a => a.CodeSubmitted != null).LastOrDefault()?.CodeSubmitted;
     }
 
+    internal static int HighestHintNoUsed(Task task, IContext context) =>
+        Activities.ActivitiesOfCurrentUser(task.Id, context).Select(a => a.HintUsed).ToList().DefaultIfEmpty(0).Max();
 
-
-    //Rename to StartingCodeForTask
-    // If task is completed, it is the code last submitted. If Task not completed, and no code submitted, and Task says carry forward the code,
-    //then code last submitted from previous task
-
-    internal static int HighestHintNoUsed(Task task, IQueryable<Activity> activities) =>
-        activities.Select(a => a.HintUsed).ToList().DefaultIfEmpty(0).Max();
-
-    internal static int TotalMarksDeducted(Task task, IQueryable<Activity> activities)
+    internal static int TotalMarksDeducted(Task task, IContext context)
     {
-        var highest = HighestHintNoUsed(task, activities);
+        var highest = HighestHintNoUsed(task, context);
         return task.Hints.Where(h => h.Number <= highest).Select(h => h.Number).ToList().DefaultIfEmpty(0).Sum();
     }
 
-    internal static IContext UseHintNo(Task task, int hintNo, Assignment asgn, IContext context)
+    internal static IContext UseHintNo(Task task, int hintNo, IContext context)
     {
-        var activities = asgn.ListActivity(context);
-        if (hintNo <= HighestHintNoUsed(task, activities))
+        var asgn = Assignments.GetAssignmentForCurrentUser(task.Id, context);
+        if (hintNo <= HighestHintNoUsed(task, context))
         {
             return context;
         }
@@ -109,6 +105,10 @@ public static class TaskAccess
     internal static int NextHintNo(Task task, int currentHintNumber) =>
         currentHintNumber < task.Hints.Count ? currentHintNumber + 1 : 0;
 
-    internal static int CostOfNextHint(Task task, IQueryable<Activity> activities, int currentHintNo) =>
-        currentHintNo == HighestHintNoUsed(task, activities) ? task.GetHintNo(NextHintNo(task, currentHintNo)).CostInMarks : 0;
+    internal static int CostOfNextHint(Task task, int currentHintNo, IContext context) =>
+        NextHintNo(task, currentHintNo) == 0 ?
+            0
+            : currentHintNo == HighestHintNoUsed(task, context) ?
+                task.GetHintNo(NextHintNo(task, currentHintNo)).CostInMarks
+                : 0;
 }
