@@ -29,4 +29,16 @@
     {
         Description, HiddenCode, Tests, Wrapper, Helpers, Rules
     }
+
+    public enum CompilerOutcome //Duplication of Outcome enum in CompileServer project
+    {
+        CompilationError = 11,
+        RunTimeError = 12,
+        TimeLimitExceeded = 13,
+        Ok = 15,
+        MemoryLimitExceeded = 17,
+        IllegalSystemCall = 19,
+        InternalError = 20,
+        ServerOverload = 21
+    }
 }
