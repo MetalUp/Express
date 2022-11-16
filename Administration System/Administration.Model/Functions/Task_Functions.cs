@@ -266,5 +266,9 @@ namespace Model.Functions
         internal static Hint GetHintNo(this Task task, int hintNo) => task.Hints.Single(h => h.Number == hintNo);
 
         #endregion
+
+        #region Helpers
+        public static bool CodeCarriedForwardToNextTask(this Task task) => !task.NextTaskClearsFunctions;
+        #endregion
     }
 }

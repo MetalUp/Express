@@ -64,6 +64,27 @@ public static class TaskAccess
     internal static string CodeLastSubmitted(Task task, IQueryable<Activity> activities) =>
         activities.Where(a => a.CodeSubmitted != null).LastOrDefault()?.CodeSubmitted;
 
+    //TODO: Refactor - too complex. Delegate more.
+    internal static string CodeForTask(Task task, IQueryable<Activity> activities) =>
+        IsCompleted(task, activities) ?
+            CodeLastSubmitted(task, activities)
+            : task.PreviousTaskId is null ?
+                null
+                : task.PreviousTask.CodeCarriedForwardToNextTask() ?
+                    CodeLastSubmittedForPreviousTask(task) 
+                    : null;
+
+    private static string CodeLastSubmittedForPreviousTask(Task task)
+    {
+        return null;
+    }
+
+
+
+    //Rename to StartingCodeForTask
+    // If task is completed, it is the code last submitted. If Task not completed, and no code submitted, and Task says carry forward the code,
+    //then code last submitted from previous task
+
     internal static int HighestHintNoUsed(Task task, IQueryable<Activity> activities) =>
         activities.Select(a => a.HintUsed).ToList().DefaultIfEmpty(0).Max();
 
