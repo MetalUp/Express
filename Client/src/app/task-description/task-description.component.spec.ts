@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
@@ -11,6 +12,9 @@ describe('TaskDescriptionComponent', () => {
   let fixture: ComponentFixture<TaskDescriptionComponent>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let taskSubject = new Subject<ITaskUserView>();
+  let routerSpy: jasmine.SpyObj<Router>;
+
+  routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(async () => {
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile', 'gotoTask'], { currentTask: taskSubject });
@@ -23,7 +27,11 @@ describe('TaskDescriptionComponent', () => {
         {
           provide: TaskService,
           useValue: taskServiceSpy
-        }
+        },
+        {
+          provide: Router,
+          useValue: routerSpy
+        },
       ]
     }).compileComponents();
 
@@ -36,61 +44,71 @@ describe('TaskDescriptionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should get the task html file', fakeAsync(() => {
+  it('should get the task html file', fakeAsync(() => {
 
-  //   const testTask = { Description: ['testUrl', 'testMediaType'] } as unknown as ITask;
-  //   taskSubject.next(testTask);
+    const testTask = { Description: 'test html' } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
 
-  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['testUrl', 'testMediaType']);
-  //   expect(component.currentTask).toEqual(testTask);
-  //   tick();
-  //   expect(component.taskHtml).toEqual('test html');
-  // }));
+    expect(component.currentTask).toEqual(testTask);
+    tick();
+    expect(component.taskHtml).toEqual('test html');
+  }));
 
-  // it('should disable next task if no next task', () => {
+  it('should disable next task if no next task', () => {
 
-  //   const testTask = { NextTask: ""} as unknown as ITaskUserView;
-  //   taskSubject.next(testTask);
+    const testTask = { NextTaskId: undefined, NextTaskEnabled: true } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
 
-  //   expect(component.hasNextTask()).toEqual(false);   
-  // });
+    expect(component.canViewNextTask()).toEqual(false);
+  });
 
+  it('should disable next task if not enabled', () => {
 
-  // it('should get the next task', () => {
+    const testTask = { NextTaskId: 1, NextTaskEnabled: false } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
 
-  //   const testTask = { NextTask: "nexttask.json"} as unknown as ITask;
-  //   taskSubject.next(testTask);
-  //   expect(component.hasNextTask()).toEqual(true);
-  //   component.onNextTask();
-  //   expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('nexttask.json');
-  // });
+    expect(component.canViewNextTask()).toEqual(false);
+  });
 
-  // it('should disable previous task if no previous task', () => {
+  it('should enable next task', () => {
 
-  //   const testTask = { PreviousTask: ""} as unknown as ITaskUserView;
-  //   taskSubject.next(testTask);
+    const testTask = { NextTaskId: 1, NextTaskEnabled: true } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
 
-  //   expect(component.hasPreviousTask()).toEqual(false);   
-  // });
+    expect(component.canViewNextTask()).toEqual(true);
+  });
 
-  // it('should get the previous task', () => {
+  it('should get the next task', () => {
 
-  //   const testTask = { PreviousTask: "previoustask.json"} as unknown as ITask;
-  //   taskSubject.next(testTask);
-  //   expect(component.hasPreviousTask()).toEqual(true);
-  //   component.onPreviousTask();
-  //   expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith('previoustask.json');
-  // });
+    const testTask = { NextTaskId: 55, NextTaskEnabled: true } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+    expect(component.canViewNextTask()).toEqual(true);
+    component.viewNextTask();
+    expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith(55);
+  });
 
-  // it('should handle errors when getting task html file', () => {
+  it('should disable previous task if no previous task', () => {
 
-  //   taskServiceSpy.getFile.and.returnValue(Promise.reject(() => { status: 404 }));
+    const testTask = { PreviousTaskId: undefined } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
 
-  //   const testTask = { Description: ['testUrl', 'testMediaType'] } as unknown as ITask;
-  //   taskSubject.next(testTask);
+    expect(component.canViewPreviousTask()).toEqual(false);
+  });
 
-  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['testUrl', 'testMediaType']);
-  //   expect(component.currentTask).toEqual(testTask);
-  //   expect(component.taskHtml).toEqual('');
-  // });
+  it('should enable previous task', () => {
+
+    const testTask = { PreviousTaskId: 1 } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canViewPreviousTask()).toEqual(true);
+  });
+
+  it('should get the previous task', () => {
+
+    const testTask = { PreviousTaskId: 44 } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+    expect(component.canViewPreviousTask()).toEqual(true);
+    component.viewPreviousTask();
+    expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith(44);
+  });
 });

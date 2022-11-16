@@ -43,7 +43,6 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
     // todo
   }
 
-
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.currentTask = task;
