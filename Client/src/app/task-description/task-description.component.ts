@@ -40,7 +40,9 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   }
 
   returnToAssignment() {
-    // todo
+    const asn = `Model.Types.Assignment--${this.currentTask.AssignmentId}`;
+    const tree = this.router.createUrlTree(['/dashboard/object'], { queryParams: { "o1": asn } });
+    this.router.navigateByUrl(tree);
   }
 
   ngOnInit(): void {

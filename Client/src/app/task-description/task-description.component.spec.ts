@@ -14,7 +14,7 @@ describe('TaskDescriptionComponent', () => {
   let taskSubject = new Subject<ITaskUserView>();
   let routerSpy: jasmine.SpyObj<Router>;
 
-  routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+  routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl', 'createUrlTree']);
 
   beforeEach(async () => {
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'gotoTask'], { currentTask: taskSubject });
@@ -109,5 +109,40 @@ describe('TaskDescriptionComponent', () => {
     expect(component.canViewPreviousTask()).toEqual(true);
     component.viewPreviousTask();
     expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith(44);
+  });
+
+  it('should disable return to assignment next task', () => {
+
+    const testTask = { NextTaskId: 1, NextTaskEnabled: true } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canReturnToAssignment()).toEqual(false);
+  });
+
+  it('should disable return to assignment not complete', () => {
+
+    const testTask = { NextTaskId: 0, NextTaskEnabled: false } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canReturnToAssignment()).toEqual(false);
+  });
+
+  it('should enable return to assignment', () => {
+
+    const testTask = { NextTaskId: 0, NextTaskEnabled: true } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canReturnToAssignment()).toEqual(true);
+  });
+
+  it('should navigate to assignment', () => {
+
+    const testTask = { NextTaskId: 0, NextTaskEnabled: true, AssignmentId : 77 } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    component.returnToAssignment();
+
+    expect(routerSpy.createUrlTree).toHaveBeenCalledWith([ '/dashboard/object'], { queryParams: Object({ o1: 'Model.Types.Assignment--77' })});
+    expect(routerSpy.navigateByUrl).toHaveBeenCalled();
   });
 });

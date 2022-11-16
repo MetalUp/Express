@@ -11,6 +11,7 @@ export interface ITaskUserView {
     NextTaskId?: number;
     Code?: string;
     HasTests: boolean;
+    AssignmentId: number;
 }
 
 export class TaskUserView implements ITaskUserView {
@@ -26,6 +27,7 @@ export class TaskUserView implements ITaskUserView {
     NextTaskClearsFunctions = false;
     Code = "";
     HasTests = false;
+    AssignmentId = 0;
 }
 
 export const EmptyTaskUserView = new TaskUserView(0);
