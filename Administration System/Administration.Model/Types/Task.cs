@@ -33,10 +33,10 @@ namespace Model.Types
         [MemberOrder(30)]
         public string Name { get; init; }
 
-        [HideInClient]
+        [Hidden]
         public string Title => ToString();
 
-        [HideInClient]
+        [Hidden]
         public string Language => Project.Language.AlphaName;
 
         //Marks awarded for completing the task with no hints taken
@@ -44,7 +44,7 @@ namespace Model.Types
         public int MaxMarks { get; init; }
 
         #region Description
-        [HideInClient]
+        [Hidden]
         public FileAttachment Description => DescriptionFile?.Details;
         [Hidden]
         public int? DescriptionFileId { get; init; }
@@ -68,7 +68,7 @@ namespace Model.Types
         [Hidden]
         public string Tests => TestsFile is null ? Project.CommonTests : TestsFile.ContentsAsString();
 
-        [HideInClient]
+        [Hidden]
         public bool HasTests => TestsFileId != null;
 
         [Hidden]
@@ -80,30 +80,30 @@ namespace Model.Types
 
         #region Wrapper
 
-        [HideInClient]
+        [Hidden]
         public string Wrapper => Project.Wrapper;
 
         #endregion
 
         #region Helpers
 
-        [HideInClient]
+        [Hidden]
         public string Helpers => Project.Helpers;
 
         #endregion
 
         #region RegExRules
 
-        [HideInClient]
+        [Hidden]
         public string RegExRules => Project.RegExRules;
 
         #endregion
 
 
-        [HideInClient]
+        [Hidden]
         public bool PasteExpression => Project.PasteExpression;
 
-        [HideInClient]
+        [Hidden]
         public bool PasteCode => Project.PasteCode;
 
         [Hidden]

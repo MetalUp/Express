@@ -76,7 +76,7 @@
 
         #region Wrapper
 
-        [HideInClient]
+        [Hidden]
         public string Wrapper => WrapperFileId == null ? Language.Wrapper : WrapperFile.ContentsAsString();
 
         [Hidden]
@@ -89,7 +89,7 @@
 
         #region Helpers
 
-        [HideInClient]
+        [Hidden]
         public string Helpers => HelpersFileId == null ? Language.Helpers : HelpersFile.ContentsAsString();
 
         [Hidden]
@@ -101,7 +101,7 @@
         #endregion
 
         #region RegExRules
-        [HideInClient]
+        [Hidden]
         public string RegExRules => RegExRulesFileId == null ? Language.RegExRules  : RegExRulesFile.ContentsAsString();
 
         [Hidden]

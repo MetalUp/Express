@@ -44,6 +44,13 @@
             };
             return context.WithNew(act);
         }
-        #endregion 
+        #endregion
+
+
+        #region other internal methods
+
+        internal static IQueryable<Activity> ActivitiesOfCurrentUser(int taskId, IContext context) =>
+            Assignments.GetAssignmentForCurrentUser(taskId, context).ListActivity(context);
+        #endregion
     }
 }
