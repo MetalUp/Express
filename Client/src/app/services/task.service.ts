@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { EmptyTaskUserView, ITaskUserView, TaskUserView } from '../models/task';
-import { HintUserView, IHintUserView } from '../models/hint';
+import { EmptyHintUserView, HintUserView, IHintUserView } from '../models/hint';
 import { Subject } from 'rxjs';
 import { ContextService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
 import * as Ro from '@nakedobjects/restful-objects';
@@ -167,7 +167,7 @@ export class TaskService {
         })
         .catch((e: ErrorWrapper) => {
           console.log(`${e.title}:${e.description}`);
-          return {} as IHintUserView;
+          return EmptyHintUserView;
         });
     });
   }

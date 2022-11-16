@@ -10,7 +10,7 @@ export class HintUserView implements IHintUserView {
 
     Title = '';
     Contents = '';
-    CostOfNextHint = 0;
+    CostOfNextHint = -1;
 }
 
 export const EmptyHintUserView = new HintUserView();

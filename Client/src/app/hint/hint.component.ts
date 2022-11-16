@@ -66,7 +66,12 @@ export class HintComponent implements OnInit, OnDestroy {
 
   getHint(hintNo: number) {
     this.taskService.loadHint(this.currentTask.Id, hintNo).then(h => {
-      this.currentHint = h;
+      if (h.CostOfNextHint >= 0){
+        this.currentHint = h;
+      }
+      else {
+        console.log(`error getting hint ${hintNo} for task ${this.currentTask.Id}`);
+      }
     });
   }
 

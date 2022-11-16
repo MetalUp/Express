@@ -32,10 +32,6 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   taskId = 0;
 
-  nextTaskClears = true;
-
-
-
   validationFail: string = '';
 
   get currentStatus() {
@@ -79,7 +75,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
       ['csharp', 'static <returnType> Name(<parameter definitions>) => <expression>;'],
       ['python', 'def name(<parameter definitions>) : return <expression>']
     ]);
-    
+
   get placeholder() {
     return this.placeholderMap.get(this.compileServer.selectedLanguage) || '';
   }
@@ -88,23 +84,10 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
-     
-      if(this.taskId !== t.Id){
-        // task not hint has changed
-        if (t.CodeLastSubmitted) {
-          this.codeDefinitions = t.CodeLastSubmitted;
-          this.modelChanged();
-        }
-      }
-
-      // if (this.nextTaskClears && t.Id > this.taskId) {
-      //   this.codeDefinitions = "";
-      //   this.modelChanged();
-      // }
-
+      this.codeDefinitions = t.Code || "";
+      this.modelChanged();
       this.taskId = t.Id;
       this.canPaste = t.PasteCode;
-      this.nextTaskClears = t.NextTaskClearsFunctions;
     })
   }
 
