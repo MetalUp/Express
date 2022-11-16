@@ -1,6 +1,6 @@
 export interface ITaskUserView {
     Id: number;
-    IsCompleted: boolean;
+    NextTaskEnabled: boolean;
     Title: string;
     Language: string;
     Description: string;
@@ -9,15 +9,14 @@ export interface ITaskUserView {
     PasteCode: boolean;
     PreviousTaskId?: number;
     NextTaskId?: number;
-    NextTaskClearsFunctions: boolean
-    NextTaskEnabled: boolean;
-    CodeLastSubmitted: string;
+    Code: string;
+    HasTests: boolean;
 }
 
 export class TaskUserView implements ITaskUserView {
   
     constructor(public Id: number) {}
-    IsCompleted = false;
+    NextTaskEnabled = false;
     Title = "";
     Language = "";
     Description = "";
@@ -25,8 +24,8 @@ export class TaskUserView implements ITaskUserView {
     PasteExpression= false;
     PasteCode = false;
     NextTaskClearsFunctions = false;
-    NextTaskEnabled = false;
-    CodeLastSubmitted = "";
+    Code = "";
+    HasTests = false;
 }
 
 export const EmptyTaskUserView = new TaskUserView(0);
