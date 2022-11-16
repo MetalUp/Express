@@ -63,14 +63,16 @@ public static class TaskAccess
     internal static bool IsCompleted(Task task, IContext context) =>
        task.HasTests && Activities.ActivitiesOfCurrentUser(task.Id, context).FirstOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
 
-    internal static string CodeForTask(Task task, IContext context) =>
-        IsCompleted(task, context) ?
-            CodeLastSubmitted(task, context)
+    internal static string CodeForTask(Task task, IContext context) {
+        var code = CodeLastSubmitted(task, context);
+        return code is not null ? 
+            code
             : task.PreviousTaskId is null ?
                 null
                 : task.PreviousTask.CodeCarriedForwardToNextTask() ?
                     CodeLastSubmitted(task.PreviousTask, context)
                     : null;
+    }
 
     private static string CodeLastSubmitted(Task task, IContext context)
     {
