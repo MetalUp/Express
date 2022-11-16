@@ -3,13 +3,14 @@
 [ViewModel(typeof(TaskUserView_Functions))]
 public class TaskUserView
 {
-    public TaskUserView(Task task, string title, string codeLastSubmitted, bool isCompleted)
+    public TaskUserView(Task task, string title, string codeLastSubmitted, bool nextTaskEnabled, bool hasTests)
     {
         Task = task;
         Project = task.Project;
         Title = title;
-        CodeLastSubmitted = codeLastSubmitted;
-        IsCompleted = isCompleted;
+        Code = codeLastSubmitted;
+        NextTaskEnabled = nextTaskEnabled;
+        HasTests = hasTests;
     }
 
     internal Task Task { get; init; }
@@ -28,15 +29,14 @@ public class TaskUserView
 
     public bool PasteCode => Task.Project.PasteCode;
 
-    public bool IsCompleted { get; init; }
+    public bool NextTaskEnabled { get; init; } //Rename to NextTask is navigable or somesuch
 
     public int? PreviousTaskId => Task.PreviousTaskId;
 
     public int? NextTaskId => Task.NextTaskId;
 
-    public bool NextTaskClearsFunctions => Task.NextTaskClearsFunctions;
+    public string Code { get; init; } //Might be carried forward from previous, or 
 
-
-    public string CodeLastSubmitted { get; init; }
+    public bool HasTests { get; init; }
 
 }
