@@ -9,7 +9,7 @@ export interface ITaskUserView {
     PasteCode: boolean;
     PreviousTaskId?: number;
     NextTaskId?: number;
-    Code: string;
+    Code?: string;
     HasTests: boolean;
 }
 
