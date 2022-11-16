@@ -21,6 +21,15 @@ describe('HintComponent', () => {
   hint0.CostOfNextHint = 1;
   hint0.NextHintNo = 1;
   hint0.PreviousHintNo = undefined;
+
+  const hint0bis = structuredClone(EmptyHintUserView) as IHintUserView;
+  hint0bis.Title = 'hint0 title';
+  hint0bis.Contents = '';
+  hint0bis.CostOfNextHint = 0;
+  hint0bis.NextHintNo = undefined;
+  hint0bis.PreviousHintNo = undefined;
+
+  const hintError = structuredClone(EmptyHintUserView);
   
   const hint1 = structuredClone(EmptyHintUserView) as IHintUserView;
   hint1.Title = 'hint1 title';
@@ -116,5 +125,34 @@ describe('HintComponent', () => {
     expect(component.title).toEqual("hint1 title");
     expect(component.hintHtml).toEqual('hint1 contents');
 
+  }));
+
+  it('should display message if no hints', fakeAsync(() => {
+    taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint0bis));
+
+    // hint 0
+    taskSubject.next(testTask);
+    expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 0);
+    tick();
+    
+    expect(component.canGetNextHint()).toEqual(false);
+    expect(component.canViewNextHint()).toEqual(false);
+    expect(component.canViewPreviousHint()).toEqual(false);
+    expect(component.title).toEqual("hint0 title");
+    expect(component.hintHtml).toEqual("There are no Hints for this task.");
+  }));
+
+  it('should handle error', fakeAsync(() => {
+    taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hintError));
+
+    taskSubject.next(testTask);
+    expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 0);
+    tick();
+    
+    expect(component.canGetNextHint()).toEqual(false);
+    expect(component.canViewNextHint()).toEqual(false);
+    expect(component.canViewPreviousHint()).toEqual(false);
+    expect(component.title).toEqual("Hint");
+    expect(component.hintHtml).toEqual("There are no Hints for this task.");
   }));
 });

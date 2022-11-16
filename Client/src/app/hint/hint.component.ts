@@ -47,11 +47,6 @@ export class HintComponent implements OnInit, OnDestroy {
     return !!this.currentHint.PreviousHintNo;
   }
 
-  handleError(e: unknown) {
-    console.log("error getting hint ");
-    //this.message = 'error getting hint';
-  }
-
   viewPreviousHint() {
     this.getHint(this.currentHint.PreviousHintNo!);
   }
