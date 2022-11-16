@@ -39,6 +39,7 @@
                 AssignmentId = aId,
                 TaskId = taskId,
                 ActivityType = type,
+                CodeSubmitted = code,
                 Message = message,
                 TimeStamp = context.Now()
             };
@@ -50,7 +51,7 @@
         #region other internal methods
 
         internal static IQueryable<Activity> ActivitiesOfCurrentUser(int taskId, IContext context) =>
-            Assignments.GetAssignmentForCurrentUser(taskId, context).ListActivity(context);
+            Assignments.GetAssignmentForCurrentUser(taskId, context).ListActivity(taskId, context);
         #endregion
     }
 }

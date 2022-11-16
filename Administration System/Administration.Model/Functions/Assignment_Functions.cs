@@ -8,6 +8,9 @@
             int assigId = assignment.Id;
             return context.Instances<Activity>().Where(a => a.AssignmentId == assigId).OrderByDescending(a => a.TimeStamp);
         }
+
+        internal static IQueryable<Activity> ListActivity(this Assignment assignment, int taskId, IContext context) =>
+            ListActivity(assignment, context).Where(a => a.TaskId == taskId);
         #endregion
 
         [Edit]

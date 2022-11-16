@@ -47,7 +47,7 @@ public static class TaskAccess
            Title(task, context),
            CodeForTask(task, context),
            !task.HasTests() ||IsCompleted(task, context),
-           task.Tests is not null,
+           task.HasTests(),
            asgn.Id
            );
     }
@@ -61,7 +61,7 @@ public static class TaskAccess
         task.MaxMarks - TotalMarksDeducted(task, context);
 
     internal static bool IsCompleted(Task task, IContext context) =>
-       task.HasTests && Activities.ActivitiesOfCurrentUser(task.Id, context).LastOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
+       task.HasTests && Activities.ActivitiesOfCurrentUser(task.Id, context).FirstOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
 
     internal static string CodeForTask(Task task, IContext context) =>
         IsCompleted(task, context) ?
@@ -75,8 +75,8 @@ public static class TaskAccess
     private static string CodeLastSubmitted(Task task, IContext context)
     {
         var asgn = Assignments.GetAssignmentForCurrentUser(task.Id, context);
-        var activities = asgn.ListActivity(context);
-        return activities.Where(a => a.CodeSubmitted != null).LastOrDefault()?.CodeSubmitted;
+        var activities = asgn.ListActivity(task.Id, context);
+        return activities.Where(a => a.CodeSubmitted != null).FirstOrDefault()?.CodeSubmitted;
     }
 
     internal static int HighestHintNoUsed(Task task, IContext context) =>

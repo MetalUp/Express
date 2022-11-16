@@ -69,7 +69,7 @@ namespace Model.Types
         public string Tests => TestsFile is null ? Project.CommonTests : TestsFile.ContentsAsString();
 
         [Hidden]
-        public bool HasTests => TestsFileId != null;
+        public bool HasTests => Tests is not null;
 
         [Hidden]
         public int? TestsFileId { get; init; }
