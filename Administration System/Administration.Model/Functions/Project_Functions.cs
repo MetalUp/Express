@@ -177,8 +177,8 @@ namespace Model.Functions
         #region Assignment
 
         [MemberOrder(5)]
-        public static IContext AssignToMe(this Project project, DateTime dueBy, IContext context) =>
-            AssignToIndividual(project, Users.Me(context), dueBy, context);
+        public static IContext AssignToMe(this Project project, IContext context) =>
+            AssignToIndividual(project, Users.Me(context), context.Today(), context);
 
         [MemberOrder(10)]
         public static IContext AssignToIndividual(this Project project, User singleUser, DateTime dueBy, IContext context) =>
