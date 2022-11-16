@@ -17,9 +17,8 @@ describe('TaskDescriptionComponent', () => {
   routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(async () => {
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile', 'gotoTask'], { currentTask: taskSubject });
-    taskServiceSpy.getFile.and.returnValue(Promise.resolve('test html'));
-
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'gotoTask'], { currentTask: taskSubject });
+   
     await TestBed.configureTestingModule({
       declarations: [TaskDescriptionComponent],
       schemas: [NO_ERRORS_SCHEMA],

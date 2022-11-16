@@ -4,8 +4,7 @@ import { EmptyTaskUserView, ITaskUserView, TaskUserView } from '../models/task';
 import { EmptyHintUserView, HintUserView, IHintUserView } from '../models/hint';
 import { Subject } from 'rxjs';
 import { ContextService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
-import * as Ro from '@nakedobjects/restful-objects';
-import { DomainObjectRepresentation, DomainServicesRepresentation, EntryType, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
+import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, IHateoasModel, InvokableActionMember, PropertyMember, Value } from '@nakedobjects/restful-objects';
 import { Dictionary } from 'lodash';
 
 @Injectable({
@@ -18,7 +17,7 @@ export class TaskService {
     private repLoader: RepLoaderService) { 
   }
 
-  private getService() {
+  getService() {
     if (this.taskAccess){
       return Promise.resolve(this.taskAccess);
     }
@@ -34,7 +33,7 @@ export class TaskService {
       })
   }
 
-  taskAccess?: Ro.DomainObjectRepresentation;
+  taskAccess?: DomainObjectRepresentation;
 
   get currentTask() {
     return this.currentTaskAsSubject;
@@ -42,7 +41,7 @@ export class TaskService {
 
   private currentTaskAsSubject = new Subject<ITaskUserView>()
 
-  private getChoicesValue(member: Ro.PropertyMember) {
+  private getChoicesValue(member: PropertyMember) {
     const raw = member.value().scalar() as number;
     const choices = member.choices();
     for (const k in choices) {
@@ -54,7 +53,7 @@ export class TaskService {
     return undefined;
   }
 
-  private setPropertyValue(toObj: any, member: Ro.PropertyMember) {
+  private setPropertyValue(toObj: any, member: PropertyMember) {
     const attachmentLink = member.attachmentLink();
     if (attachmentLink) {
       const href = attachmentLink.href();
@@ -71,8 +70,6 @@ export class TaskService {
       toObj[member.id()] = member.value().getHref();
     }
   }
-
-  
 
   private convertTo<T extends ITaskUserView | IHintUserView>(toObj: TaskUserView | HintUserView, rep: DomainObjectRepresentation) {
     if (rep && Object.keys(rep.propertyMembers()).length > 0) {
@@ -93,7 +90,7 @@ export class TaskService {
     return this.convertTo<IHintUserView>(new HintUserView(), rep);
   }
 
-  private params(taskId: number, currentHintNo?: number) {
+  params(taskId: number, currentHintNo?: number) {
     const params = { "taskId": new Value(taskId) } as Dictionary<Value>;
 
     if (currentHintNo != undefined) {
@@ -109,7 +106,7 @@ export class TaskService {
       const action = s.actionMember("GetTask") as InvokableActionMember;
 
       this.repLoader.invoke(action, this.params(taskId), {} as Dictionary<Object>)
-        .then((ar: Ro.ActionResultRepresentation) => {
+        .then((ar: ActionResultRepresentation) => {
           var obj = ar.result().object()!;
           const task = this.convertToTask(obj, taskId);
           this.currentTaskAsSubject.next(task);
@@ -127,7 +124,7 @@ export class TaskService {
       const action = s.actionMember("GetHint") as InvokableActionMember;
 
       return this.repLoader.invoke(action, this.params(taskId, hintId), {} as Dictionary<Object>)
-        .then((ar: Ro.ActionResultRepresentation) => {
+        .then((ar: ActionResultRepresentation) => {
           var obj = ar.result().object()!;
           return this.convertToHint(obj);
         })
@@ -140,15 +137,5 @@ export class TaskService {
 
   gotoTask(taskId: number) {
     this.router.navigate([`/task/${taskId}`]);
-  }
-
-
-  getFile(urlAndMediaType: [string, string]) {
-    return this.repLoader.getFile(urlAndMediaType[0], urlAndMediaType[1], true)
-      .then(b => b.text())
-      .catch((e: ErrorWrapper) => {
-        //console.log(`${e.title}:${e.description}`);
-        return "";
-      });
   }
 }

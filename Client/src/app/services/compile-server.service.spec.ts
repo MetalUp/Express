@@ -63,7 +63,6 @@ describe('CompileServerService', () => {
     contextServiceSpy = jasmine.createSpyObj('ContextService', ['getServices']);
     repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['invoke', 'populate']);
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile'], { currentTask: taskSubject });
-    taskServiceSpy.getFile.and.returnValue(Promise.resolve('additional task code'));
     contextServiceSpy.getServices.and.returnValue(Promise.resolve(mockServices));
     repLoaderSpy.invoke.and.returnValue(Promise.resolve(mockAR));
     repLoaderSpy.populate.and.returnValue(Promise.resolve(mockService));
