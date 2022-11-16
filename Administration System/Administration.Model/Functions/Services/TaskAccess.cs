@@ -53,7 +53,7 @@ public static class TaskAccess
 
     internal static string Title(Task task, IContext context) =>
         task.Title +
-            (IsCompleted(task, context) ? $" COMPLETED Final mark " : "Marks Available") +
+            (IsCompleted(task, context) ? $" COMPLETED Final mark " : " Marks Available ") +
                 $"{MarksAvailable(task, context)}/{task.MaxMarks}";
 
     private static int MarksAvailable(Task task, IContext context) =>
@@ -84,7 +84,7 @@ public static class TaskAccess
     internal static int TotalMarksDeducted(Task task, IContext context)
     {
         var highest = HighestHintNoUsed(task, context);
-        return task.Hints.Where(h => h.Number <= highest).Select(h => h.Number).ToList().DefaultIfEmpty(0).Sum();
+        return task.Hints.Where(h => h.Number <= highest).Select(h => h.CostInMarks).ToList().DefaultIfEmpty(0).Sum();
     }
 
     internal static IContext UseHintNo(Task task, int hintNo, IContext context)
