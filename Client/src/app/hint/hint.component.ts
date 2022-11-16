@@ -12,6 +12,8 @@ import { EmptyHintUserView, IHintUserView } from '../models/hint';
 })
 export class HintComponent implements OnInit, OnDestroy {
 
+  constructor(private taskService: TaskService) { }
+
   currentTask: ITaskUserView = EmptyTaskUserView;
   currentHint: IHintUserView = EmptyHintUserView;
 
@@ -26,8 +28,6 @@ export class HintComponent implements OnInit, OnDestroy {
 
     return 'There are no Hints for this task.'
   }
-
-  constructor(private taskService: TaskService) { }
 
   private sub?: Subscription;
 

@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Subject } from 'rxjs';
-import { EmptyHintUserView } from '../models/hint';
+import { EmptyHintUserView, IHintUserView } from '../models/hint';
 import { EmptyTaskUserView, ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 
@@ -13,22 +13,39 @@ describe('HintComponent', () => {
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let taskSubject = new Subject<ITaskUserView>();
   const testTask = structuredClone(EmptyTaskUserView);
+  testTask.Id = 66;
 
-  const hint1 = structuredClone(EmptyHintUserView);
+  const hint0 = structuredClone(EmptyHintUserView) as IHintUserView;
+  hint0.Title = 'hint0 title';
+  hint0.Contents = '';
+  hint0.CostOfNextHint = 1;
+  hint0.NextHintNo = 1;
+  hint0.PreviousHintNo = undefined;
+  
+  const hint1 = structuredClone(EmptyHintUserView) as IHintUserView;
   hint1.Title = 'hint1 title';
-  // hint1.HtmlFile = ['hint1url', 'hint1mt'];
-  // hint1.CostInMarks = 1;
+  hint1.Contents = 'hint1 contents';
+  hint1.CostOfNextHint = 1;
+  hint1.NextHintNo = 2;
+  hint1.PreviousHintNo = 0;
 
-  const hint2 = structuredClone(EmptyHintUserView);
+  const hint1bis = structuredClone(EmptyHintUserView) as IHintUserView;
+  hint1bis.Title = 'hint1 title';
+  hint1bis.Contents = 'hint1 contents';
+  hint1bis.CostOfNextHint = 0;
+  hint1bis.NextHintNo = 2;
+  hint1bis.PreviousHintNo = 0;
+
+  const hint2 = structuredClone(EmptyHintUserView) as IHintUserView;
   hint2.Title = 'hint2 title';
-  // hint2.HtmlFile = ['hint2url', 'hint2mt'];
-  // hint2.CostInMarks = 2;
-
-  //testTask.Hints = [hint1, hint2];
+  hint2.Contents = 'hint2 contents';
+  hint2.CostOfNextHint = 0;
+  hint2.NextHintNo = undefined;
+  hint2.PreviousHintNo = 1;
 
   beforeEach(async () => {
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile', 'gotoTask'], { currentTask: taskSubject });
-    taskServiceSpy.getFile.and.returnValue(Promise.resolve('test html'));
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['loadHint'], { currentTask: taskSubject });
+    taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint0));
 
     await TestBed.configureTestingModule({
       declarations: [HintComponent],
@@ -50,50 +67,54 @@ describe('HintComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should get the hint html file', fakeAsync(() => {
-
-  //   taskServiceSpy.getFile.and.returnValue(Promise.resolve('hint1 html'));
+  it('should get the hint', fakeAsync(() => {
     
-  //   taskSubject.next(testTask);
+    // hint 0
+    taskSubject.next(testTask);
+    expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 0);
+    tick();
+    
+    expect(component.canGetNextHint()).toEqual(true);
+    expect(component.canViewNextHint()).toEqual(false);
+    expect(component.canViewPreviousHint()).toEqual(false);
+    expect(component.title).toEqual("hint0 title");
+    expect(component.hintHtml).toEqual("Click 'Next Hint' to use the first Hint");
 
-  //   expect(component.hasNextHint()).toEqual(true);
+    // hint 1
+    taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint1));
+    component.getNextHint(); 
+    expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 1);
+    tick();
+    
+    expect(component.canGetNextHint()).toEqual(true);
+    expect(component.canViewNextHint()).toEqual(false);
+    expect(component.canViewPreviousHint()).toEqual(false);
+    expect(component.title).toEqual("hint1 title");
+    expect(component.hintHtml).toEqual('hint1 contents');
 
-  //   expect(component.title).toEqual("Hint");
-  //   expect(component.hintHtml).toEqual('Click Next to use the first Hint');
+    // hint2
+    taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint2));
+    component.getNextHint(); 
+    expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 2);
+    tick();
+    
+    expect(component.canGetNextHint()).toEqual(false);
+    expect(component.canViewNextHint()).toEqual(false);
+    expect(component.canViewPreviousHint()).toEqual(true);
+    expect(component.title).toEqual("hint2 title");
+    expect(component.hintHtml).toEqual('hint2 contents');
 
-  //   component.onNextHint(); 
+    // back to 1
+    taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint1bis));
+    component.viewPreviousHint(); 
+    expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 1);
+    tick();
 
-  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
-  //   expect(component.hintIndex).toEqual(0);
-  //   tick();
-  //   expect(component.title).toEqual("Hint 1/2 -1 mark");
-  //   expect(component.hintHtml).toEqual('hint1 html');
-  //   expect(component.hasPreviousHint()).toEqual(false);
-  //   expect(component.hasNextHint()).toEqual(true);
+    expect(component.canGetNextHint()).toEqual(false);
+    expect(component.canViewNextHint()).toEqual(true);
+    expect(component.canViewPreviousHint()).toEqual(false);
+    expect(component.title).toEqual("hint1 title");
+    expect(component.hintHtml).toEqual('hint1 contents');
 
-  //   taskServiceSpy.getFile.and.returnValue(Promise.resolve('hint2 html'));
-
-  //   component.onNextHint(); 
-
-  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint2url', 'hint2mt']);
-  //   expect(component.hintIndex).toEqual(1);
-  //   tick();
-  //   expect(component.title).toEqual("Hint 2/2 -2 marks");
-  //   expect(component.hintHtml).toEqual('hint2 html');
-  //   expect(component.hasPreviousHint()).toEqual(true);
-  //   expect(component.hasNextHint()).toEqual(false);
-
-  //   taskServiceSpy.getFile.and.returnValue(Promise.resolve('hint1 html'));
-
-  //   component.onPreviousHint(); 
-
-  //   expect(taskServiceSpy.getFile).toHaveBeenCalledWith(['hint1url', 'hint1mt']);
-  //   expect(component.hintIndex).toEqual(0);
-  //   tick();
-  //   expect(component.title).toEqual("Hint 1/2 -1 mark");
-  //   expect(component.hintHtml).toEqual('hint1 html');
-  //   expect(component.hasPreviousHint()).toEqual(false);
-  //   expect(component.hasNextHint()).toEqual(true);
-
-  // }));
+  }));
 });
