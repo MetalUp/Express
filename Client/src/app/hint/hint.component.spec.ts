@@ -20,14 +20,14 @@ describe('HintComponent', () => {
   hint0.Contents = '';
   hint0.CostOfNextHint = 1;
   hint0.NextHintNo = 1;
-  hint0.PreviousHintNo = undefined;
+  hint0.PreviousHintNo = 0;
 
   const hint0bis = structuredClone(EmptyHintUserView) as IHintUserView;
   hint0bis.Title = 'hint0 title';
   hint0bis.Contents = '';
   hint0bis.CostOfNextHint = 0;
-  hint0bis.NextHintNo = undefined;
-  hint0bis.PreviousHintNo = undefined;
+  hint0bis.NextHintNo = 0;
+  hint0bis.PreviousHintNo = 0;
 
   const hintError = structuredClone(EmptyHintUserView);
   
@@ -49,7 +49,7 @@ describe('HintComponent', () => {
   hint2.Title = 'hint2 title';
   hint2.Contents = 'hint2 contents';
   hint2.CostOfNextHint = 0;
-  hint2.NextHintNo = undefined;
+  hint2.NextHintNo = 0;
   hint2.PreviousHintNo = 1;
 
   beforeEach(async () => {

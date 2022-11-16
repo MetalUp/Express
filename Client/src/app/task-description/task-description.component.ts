@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {  EmptyTaskUserView, ITaskUserView } from '../models/task';
+import { EmptyTaskUserView, ITaskUserView } from '../models/task';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -28,7 +28,7 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   }
 
   canViewNextTask() {
-    return this.currentTask.NextTaskEnabled  && !!this.currentTask.NextTaskId;
+    return this.currentTask.NextTaskEnabled && !!this.currentTask.NextTaskId;
   }
 
   viewNextTask() {
@@ -42,7 +42,6 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   returnToAssignment() {
     // todo
   }
-
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
