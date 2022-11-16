@@ -86,11 +86,11 @@ public static class Compile
         (var result, var context2) = Execute(WrapCode(context, taskId, code, false), $"{compileServer}/compiles", context);
         if (result.Outcome == (int)CompilerOutcome.CompilationError)
         {
-            Activities.SubmitCodeFail(taskId, code, result.Cmpinfo, context);
+            return (result, Activities.SubmitCodeFail(taskId, code, result.Cmpinfo, context));
         }
         else if (result.Outcome == (int)CompilerOutcome.Ok)
         {
-            Activities.SubmitCodeSuccess(taskId, code, context);
+            return (result, Activities.SubmitCodeSuccess(taskId, code, context));
         }
         return (result, context2);
     }
@@ -103,11 +103,11 @@ public static class Compile
             //TODO: Temporary solution, pending moving RegEx rules server side.
             if (result.Stdout.Contains("Failed!") || result.Stdout.Contains("FAIL")) // C#/VB and Python, respectively {
             {
-                Activities.RunTestsFail(taskId, result.Stdout, context);
+               return (result, Activities.RunTestsFail(taskId, result.Stdout, context2));
             }
             else
             {
-                Activities.RunTestsSuccess(taskId, context);
+                return (result, Activities.RunTestsSuccess(taskId, context2));
             }
         }
         return (result, context2);
