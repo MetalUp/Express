@@ -28,7 +28,7 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   }
 
   canViewNextTask() {
-    return this.currentTask.IsCompleted && this.currentTask.NextTaskEnabled  && !!this.currentTask.NextTaskId;
+    return this.currentTask.IsCompleted  && !!this.currentTask.NextTaskId;
   }
 
   viewNextTask() {
