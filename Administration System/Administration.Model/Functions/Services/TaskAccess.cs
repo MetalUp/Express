@@ -47,7 +47,8 @@ public static class TaskAccess
            task,
            Title(task, activities),
            CodeLastSubmitted(task, activities),
-           IsCompleted(task, activities)
+           IsCompleted(task, activities) || task.Tests is null,
+           task.Tests is not null
            );
     }
 
@@ -58,7 +59,7 @@ public static class TaskAccess
         task.MaxMarks - TotalMarksDeducted(task, activities);
 
     internal static bool IsCompleted(Task task, IQueryable<Activity> activities) =>
-      task.Tests is null || activities.LastOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
+       activities.LastOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
 
     internal static string CodeLastSubmitted(Task task, IQueryable<Activity> activities) =>
         activities.Where(a => a.CodeSubmitted != null).LastOrDefault()?.CodeSubmitted;

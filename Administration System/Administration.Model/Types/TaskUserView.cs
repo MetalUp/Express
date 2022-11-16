@@ -29,7 +29,7 @@ public class TaskUserView
 
     public bool PasteCode => Task.Project.PasteCode;
 
-    public bool NextTaskEnabled { get; init; } //Rename to NextTask is navigable or somesuch
+    public bool NextTaskEnabled { get; init; }
 
     public int? PreviousTaskId => Task.PreviousTaskId;
 
