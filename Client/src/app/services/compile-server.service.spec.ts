@@ -1,5 +1,5 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, IActionInvokeRepresentation, PropertyMember, Result, Value } from '@nakedobjects/restful-objects';
+import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, IActionInvokeRepresentation, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { Subject } from 'rxjs';

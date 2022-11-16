@@ -2,9 +2,8 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { TaskService } from './task.service';
 import { first } from 'rxjs';
-import { ConfigService, ContextService, RepLoaderService } from '@nakedobjects/services';
-import { ActionResultRepresentation, CollectionMember, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, InvokableActionMember, PropertyMember } from '@nakedobjects/restful-objects';
-import { TimePickerComponent } from '@nakedobjects/gemini';
+import { ContextService, RepLoaderService } from '@nakedobjects/services';
+import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, InvokableActionMember, PropertyMember } from '@nakedobjects/restful-objects';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -12,16 +11,10 @@ describe('TaskService', () => {
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
 
-  // let testService = { actionMember: (s: string) => ({}) } as unknown as DomainObjectRepresentation;
-  // let testServices = { getService: (s: string) => testService } as unknown as DomainServicesRepresentation;
-
   beforeEach(() => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     contextServiceSpy = jasmine.createSpyObj('ConfigService', ['getServices'], { config: { appPath: 'testPath' } });
     repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke'])
-
-    //contextServiceSpy.getServices.and.returnValue(Promise.resolve(testServices));
-
 
     TestBed.configureTestingModule({});
     service = new TaskService(routerSpy, contextServiceSpy, repLoaderSpy)
@@ -59,66 +52,97 @@ describe('TaskService', () => {
     service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
 
     const object = new DomainObjectRepresentation();
-    object.hateoasUrl = `testPath/objects/Model.Types.Task/testTask`;
     const pm = new PropertyMember({value : 'testlanguage'} as any, object, 'Language');
     pm.entryType = () => EntryType.FreeForm;
     pm.isScalar = () => true;
 
     object.propertyMembers = () => ({'Language': pm});
     
-    const actionResult = {result: () => ({object: object})} as unknown as ActionResultRepresentation;
-
+    const actionResult = {result: () => ({object: () => object})} as unknown as ActionResultRepresentation;
     const promise = Promise.resolve(actionResult);
 
     repLoaderSpy.invoke.and.returnValue(promise);
 
     service.loadTask(1);
+    service.currentTask.pipe(first()).subscribe(t => {
+      expect(t.Language).toEqual('testlanguage');
+    });
     tick();
-    
     const params = service.params(1);
-
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params),  jasmine.objectContaining({}));
     
-    service.currentTask.pipe(first()).subscribe(t => {
-        expect(t.Language).toEqual('testlanguage');
-      }
-    );
-   
   }));
 
-  // it('should load empty task if task not found', fakeAsync(() => {
+  it('should load empty task if task not found', fakeAsync(() => {
 
-  //   repLoaderSpy.populate.and.returnValue(Promise.reject({ status: 404 }));
+    const testAction = {} as InvokableActionMember;
+    service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
 
-  //   service.loadTask('testTask');
+    repLoaderSpy.invoke.and.returnValue(Promise.reject({ status: 404 }));
 
-  //   expect(repLoaderSpy.populate).toHaveBeenCalledWith(jasmine.objectContaining({ hateoasUrl: `testPath/objects/Model.Types.Task/testTask` }), true);
-  //   service.currentTask.pipe(first()).subscribe(t =>
-  //     expect(t.Language).toEqual('')
-  //   );
-  // }));
+    service.loadTask(1);
+    service.currentTask.pipe(first()).subscribe(t =>
+      expect(t.Language).toEqual('')
+    );
+    tick();
+    const params = service.params(1);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params),  jasmine.objectContaining({}));
 
-  // it('should get the html file for the task', () => {
+    
+  }));
+
+  it('should goto a new task', () => {
+    service.currentTask.pipe(first()).subscribe(t =>
+      expect(t.Language).toEqual('testlanguage')
+    );
+
+    service.gotoTask(9);
+
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/task/9']);
+  });
+
+  it('should return a hint', fakeAsync(() => {
    
-  //   repLoaderSpy.getFile.and.returnValue(Promise.resolve(new Blob(['task description'])));
-  //   service.getFile(['testUrl', 'testMt']).then(t => expect(t).toBe('task description'));
-  //   expect(repLoaderSpy.getFile).toHaveBeenCalledWith('testUrl', 'testMt', true);
-  // });
+    const testAction = {} as InvokableActionMember;
+    service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
 
-  // it('should handle error when get the html file for the task', () => {
+    const object = new DomainObjectRepresentation();
+    const pm = new PropertyMember({value : 'hint title'} as any, object, 'Title');
+    pm.entryType = () => EntryType.FreeForm;
+    pm.isScalar = () => true;
+
+    object.propertyMembers = () => ({'Title': pm});
+    
+    const actionResult = {result: () => ({object: () => object})} as unknown as ActionResultRepresentation;
+    const promise = Promise.resolve(actionResult);
+
+    repLoaderSpy.invoke.and.returnValue(promise);
+  
+    service.loadHint(1, 1).then(t => {
+      expect(t.Title).toEqual('hint title');
+    });
+    tick();
+    
+    const params = service.params(1, 1);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params),  jasmine.objectContaining({}));
+    
+  }));
+
+  it('should return empty hint if not found', fakeAsync(() => {
    
-  //   repLoaderSpy.getFile.and.returnValue(Promise.reject());
-  //   service.getFile(['testUrl', 'testMt']).then(t => expect(t).toBe(''));
-  //   expect(repLoaderSpy.getFile).toHaveBeenCalledWith('testUrl', 'testMt', true);
-  // });
+    const testAction = {} as InvokableActionMember;
+    service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
 
-  // it('should goto a new task', () => {
-  //   service.currentTask.pipe(first()).subscribe(t =>
-  //     expect(t.Language).toEqual('testlanguage')
-  //   );
 
-  //   service.gotoTask(9);
-
-  //   expect(routerSpy.navigate).toHaveBeenCalledWith(['/task/9']);
-  // });
+    repLoaderSpy.invoke.and.returnValue(Promise.reject({ status: 404 }));
+  
+    service.loadHint(1, 1).then(t => {
+      expect(t.Title).toEqual('');
+    });
+    tick();
+    
+    const params = service.params(1, 1);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params),  jasmine.objectContaining({}));
+    
+  }));
 });
