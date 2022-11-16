@@ -25,14 +25,14 @@ namespace Model.Types
         [MemberOrder(2)]
         public string Name { get; init; }
 
-        [HideInClient]
+        [Hidden]
         public string Title => ToString();
 
         [MemberOrder(3)]
         public int CostInMarks { get; init; }
 
         #region HtmlFile
-        [HideInClient]
+        [Hidden]
         public FileAttachment HtmlFile => (Content == null) ? null :
                  new FileAttachment(Content, $"{Name}", "text/html");
 

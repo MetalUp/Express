@@ -23,7 +23,6 @@ public static class TaskAccess
         {
             var context2 = UseHintNo(task, hintNumber, context);
             var hint = task.GetHintNo(hintNumber);
-            var activities = asgn.ListActivity(context);
             var huv = new HintUserView(
                 taskId,
                 hintNumber,
