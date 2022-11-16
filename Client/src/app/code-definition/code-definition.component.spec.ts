@@ -80,23 +80,18 @@ describe('CodeDefinitionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-
   it('should submit code for compile OK', () => {
     compileServerServiceSpy.submitCode.and.returnValue(of<RunResult>(testRunResultOK));
 
     component.taskId = 67;
     component.codeDefinitions = 'test';
-    
 
     component.onSubmit();
     expect(compileServerServiceSpy.submitCode).toHaveBeenCalledWith(67, 'test');
-
     expect(component.compiledOK).toBe(true);
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
-
     expect(compileServerServiceSpy.setUserDefinedCode).toHaveBeenCalledWith(component.codeDefinitions);
-
   });
 
   it('should submit code for compile Fail', () => {
@@ -104,17 +99,13 @@ describe('CodeDefinitionComponent', () => {
 
     component.taskId = 67;
     component.codeDefinitions = 'test';
-   
 
     component.onSubmit();
     expect(compileServerServiceSpy.submitCode).toHaveBeenCalledWith(67, 'test');
-
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('compiler error');
     expect(component.pendingSubmit).toBe(false);
-
     expect(compileServerServiceSpy.setUserDefinedCode).not.toHaveBeenCalledWith(component.codeDefinitions);
-
   });
 
   it('should submit code for compile Error', () => {
@@ -146,80 +137,37 @@ describe('CodeDefinitionComponent', () => {
     expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
   });
 
-  // it('should call model changed when changed', () => {
+  it('should call model changed when changed', () => {
 
-  //   component.taskId = 67;
-  //   component.nextTaskClears = true;
-  //   component.codeDefinitions = 'something';
-    
-  //   taskSubject.next({ Id: 1, PasteCode: true } as ITaskUserView);
+    component.taskId = 67;
+    component.codeDefinitions = 'something';
 
-  //   expect(component.compiledOK).toBe(false);
-  //   expect(component.currentStatus).toBe('');
-  //   expect(component.pendingSubmit).toBe(false);
-  //   expect(component.codeDefinitions).toBe('');
+    taskSubject.next({ Id: 1, PasteCode: true, Code: '' } as ITaskUserView);
 
+    expect(component.compiledOK).toBe(false);
+    expect(component.currentStatus).toBe('');
+    expect(component.pendingSubmit).toBe(false);
+    expect(component.codeDefinitions).toBe('');
 
-  //   expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
-  // });
-
-  // it('should not call model changed when changed in nextClassClears flag unset', () => {
-
-  //   component.taskId = 67;
-  //   component.codeDefinitions = 'original';
-  //   component.nextTaskClears = false;
-  //   component.compiledOK = true;
-    
-  //   taskSubject.next({ Id: 1, PasteCode: true } as ITaskUserView);
-
-  //   expect(component.codeDefinitions).toBe('original');
-  //   expect(component.compiledOK).toBe(true);
-  //   expect(component.currentStatus).toBe('Compiled OK');
-  //   expect(component.pendingSubmit).toBe(false);
-
-  //   expect(compileServerServiceSpy.clearUserDefinedCode).not.toHaveBeenCalled();
-  // });
-
-  // it('should default nextClassClears flag', () => {
-  //   expect(component.nextTaskClears).toBe(true);
-  //   taskSubject.next({ } as ITask);
-  //   expect(component.nextTaskClears).toBe(false);
-  // });
-
-  // it('should unset nextClassClears flag from task', () => {
-  //   expect(component.nextTaskClears).toBe(true);
-  //   taskSubject.next({ NextTaskClearsFunctions: true} as ITaskUserView);
-  //   expect(component.nextTaskClears).toBe(true);
-  // });
-
-  // it('should set nextClassClears flag from task', () => {
-  //   component.nextTaskClears = false;
-  //   expect(component.nextTaskClears).toBe(false);
-  //   taskSubject.next({ NextTaskClearsFunctions: false} as ITaskUserView);
-  //   expect(component.nextTaskClears).toBe(false);
-  // });
-
+    expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
+  });
 
   it('should not allow empty code to be submitted', () => {
-
     component.modelChanged();
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('');
     expect(component.pendingSubmit).toBe(false);
-
     expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
   });
 
   it('should call checkRules on enter', () => {
 
     compileServerServiceSpy.submitCode.and.returnValue(of<RunResult>(testRunResultOK));
-
     component.taskId = 67;
     component.codeDefinitions = 'test';
-    
-
     component.onSubmit();
+
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith(Applicability.functions, "test");
     expect(compileServerServiceSpy.submitCode).toHaveBeenCalledWith(67, 'test');
 
@@ -251,42 +199,33 @@ describe('CodeDefinitionComponent', () => {
 
 
   it('should disable paste by default', () => {
-
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();
   });
 
-  // it('should enable paste from task', () => {
+  it('should enable paste from task', () => {
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    taskSubject.next({ PasteCode: true } as ITaskUserView);
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).not.toHaveBeenCalled();
+  });
 
-  //   let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-  //   taskSubject.next({ PasteCode: true } as ITaskUserView);
+  it('should disable paste from task', () => {
+    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    taskSubject.next({ PasteCode: false } as ITaskUserView);
+    component.onPaste(eventSpy);
+    expect(eventSpy.preventDefault).toHaveBeenCalled();
+  });
 
-  //   component.onPaste(eventSpy);
-  //   expect(eventSpy.preventDefault).not.toHaveBeenCalled();
-  // });
+  it('should set taskid from task', () => {
+    taskSubject.next({ Id: 65 } as ITaskUserView);
+    expect(component.taskId).toEqual(65);
+  });
 
-  // it('should disable paste from task', () => {
-
-  //   let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-  //   taskSubject.next({ PasteCode: false } as ITaskUserView);
-
-  //   component.onPaste(eventSpy);
-  //   expect(eventSpy.preventDefault).toHaveBeenCalled();
-  // });
-
-  // it('should set taskid from task', () => {
-
-  //   taskSubject.next({ Id: 65 } as ITaskUserView);
-
-  //   expect(component.taskId).toEqual(65);
-  // });
-
-  // it('should show no code by default and disable Reset button', () => {
-
-  //   expect(component.codeDefinitions).toEqual('');
-  // });
+  it('should show no code by default', () => {
+    expect(component.codeDefinitions).toEqual('');
+  });
 
   it('gets the placeholder for the selected language', () => {
     expect(component.placeholder).toEqual('static <returnType> Name(<parameter definitions>) => <expression>;');
