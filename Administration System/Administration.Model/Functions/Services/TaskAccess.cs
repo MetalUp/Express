@@ -14,7 +14,7 @@ public static class TaskAccess
                 hintNumber,
                 task.Hints.Any() ? $"{task.Hints.Count} hints available" : "No hints for this task",
                 null,
-                null,
+                0,
                 NextHintNo(task, 0),
                 task.Hints.Any() ? task.GetHintNo(1).CostInMarks : 0);
             return (huv, context);
