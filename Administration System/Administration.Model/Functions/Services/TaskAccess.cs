@@ -47,7 +47,8 @@ public static class TaskAccess
            Title(task, context),
            CodeForTask(task, context),
            !task.HasTests() ||IsCompleted(task, context),
-           task.Tests is not null
+           task.Tests is not null,
+           asgn.Id
            );
     }
 
