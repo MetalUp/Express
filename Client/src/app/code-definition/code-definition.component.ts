@@ -84,10 +84,12 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
-      this.codeDefinitions = t.Code || "";
-      this.taskId = t.Id;
-      this.canPaste = t.PasteCode;
-      this.modelChanged();
+      if (t.Id !== this.taskId) {
+        this.codeDefinitions = t.Code || "";
+        this.taskId = t.Id;
+        this.canPaste = t.PasteCode;
+        this.modelChanged();
+      }
     })
   }
 

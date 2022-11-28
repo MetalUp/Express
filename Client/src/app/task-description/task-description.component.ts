@@ -47,8 +47,11 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
+      const newTask = this.currentTask.Id !== task.Id;
       this.currentTask = task;
-      this.taskHtml = this.currentTask.Description;
+      if (newTask) {
+        this.taskHtml = this.currentTask.Description;
+      }
     })
   }
 

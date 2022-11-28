@@ -75,6 +75,8 @@ export class TestingComponent implements OnInit, OnDestroy {
     else {
       this.currentResultMessage = getResultOutcome(result.outcome);
     }
+    // refresh task
+    this.taskService.loadTask(this.taskId);
   }
 
   onRunTests() {

@@ -48,21 +48,25 @@ export class HintComponent implements OnInit, OnDestroy {
   }
 
   viewPreviousHint() {
-    this.getHint(this.currentHint.PreviousHintNo!);
+    this.getHint(this.currentHint.PreviousHintNo!, false);
   }
 
   viewNextHint() {
-    this.getHint(this.currentHint.NextHintNo!);
+    this.getHint(this.currentHint.NextHintNo!, false);
   }
 
   getNextHint() {
-    this.getHint(this.currentHint.NextHintNo!);
+    this.getHint(this.currentHint.NextHintNo!, true);
   }
 
-  getHint(hintNo: number) {
+  getHint(hintNo: number, newHint: boolean) {
+    
     this.taskService.loadHint(this.currentTask.Id, hintNo).then(h => {
       if (h.CostOfNextHint >= 0){
         this.currentHint = h;
+        if (newHint) {
+          this.taskService.loadTask(this.currentTask.Id);
+        }
       }
       else {
         console.log(`error getting hint ${hintNo} for task ${this.currentTask.Id}`);
@@ -72,8 +76,11 @@ export class HintComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
+      const newTask = this.currentTask.Id !== task.Id; 
       this.currentTask = task;
-      this.getHint(0);
+      if (newTask){
+        this.getHint(0, false);
+      }
     })
   }
 
