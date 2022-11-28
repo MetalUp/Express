@@ -6,7 +6,7 @@ import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { CompileServerService } from '../services/compile-server.service';
-import { registerLocaleData } from '@angular/common';
+
 
 @Component({
   selector: 'app-code-definition',
@@ -86,7 +86,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadCode() {
+  loadServerCode() {
     this.taskService.loadCode(this.taskId, this.codeIndex).then(c => {
       if (c.Code) {
         this.codeDefinitions = c.Code;
@@ -111,7 +111,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     }
     else {
       this.codeIndex--;
-      this.loadCode();
+      this.loadServerCode();
     }
   }
 
@@ -121,7 +121,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   previousCode() {
     this.codeIndex++;
-    this.loadCode();
+    this.loadServerCode();
   }
 
   private placeholderMap: Map<string, string> = new Map(
