@@ -51,12 +51,11 @@
           assignments.Aggregate(context, (c, a) => a.MarkNotCompleted(teacherNote, c));
 
 
-
         internal static Assignment GetAssignmentForCurrentUser(int taskId, IContext context)
         {
             int pId = Tasks.GetTask(taskId, context).ProjectId.Value;
             int uId = Users.Me(context).Id;
-            return context.Instances<Assignment>().SingleOrDefault(a => a.ProjectId == pId && a.AssignedToId == uId);
+            return context.Instances<Assignment>().LastOrDefault(a => a.ProjectId == pId && a.AssignedToId == uId);
         }
 
 
