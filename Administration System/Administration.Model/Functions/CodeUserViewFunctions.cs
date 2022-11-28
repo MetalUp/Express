@@ -9,6 +9,4 @@ public static class CodeUserView_Functions
 
     public static CodeUserView CreateFromKeys(string[] keys, IContext context) =>
        TaskAccess.GetCodeVersion(Convert.ToInt32(keys[0]), Convert.ToInt32(keys[1]), context);
-       
-
 }
