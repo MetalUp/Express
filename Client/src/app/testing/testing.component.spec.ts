@@ -121,6 +121,7 @@ describe('TestingComponent', () => {
     expect(component.currentResultMessage).toEqual('All tests passed.');
     expect(component.message()).toEqual('All tests passed.');
     expect(component.testedOk).toEqual(true);
+    expect(taskServiceSpy.loadTask).toHaveBeenCalledOnceWith(56);
   });
 
   it('should submit test code - test fail', () => {
@@ -138,6 +139,7 @@ describe('TestingComponent', () => {
     expect(component.currentResultMessage).toEqual('test failed error');
     expect(component.message()).toEqual('test failed error');
     expect(component.testedOk).toEqual(false);
+    expect(taskServiceSpy.loadTask).toHaveBeenCalledOnceWith(56);
   });
 
   it('should submit test code - test error', () => {
@@ -156,6 +158,7 @@ describe('TestingComponent', () => {
     expect(component.currentResultMessage).toEqual('run error');
     expect(component.message()).toEqual('run error');
     expect(component.testedOk).toEqual(false);
+    expect(taskServiceSpy.loadTask).toHaveBeenCalledOnceWith(56);
   });
 
   it('should submit test code - test compile error', () => {
@@ -173,6 +176,7 @@ describe('TestingComponent', () => {
     expect(component.currentResultMessage).toEqual("The Test system cannot find the function(s) it expects to see in your code. Check the function signature(s) carefully. If you can't see why a function signature is wrong, use a Hint. " + 'compile error');
     expect(component.message()).toEqual("The Test system cannot find the function(s) it expects to see in your code. Check the function signature(s) carefully. If you can't see why a function signature is wrong, use a Hint. " + 'compile error');
     expect(component.testedOk).toEqual(false);
+    expect(taskServiceSpy.loadTask).toHaveBeenCalledOnceWith(56);
   });
 
   it('should submit test code - test outcome error', () => {
@@ -190,6 +194,7 @@ describe('TestingComponent', () => {
     expect(component.currentResultMessage).toEqual('Unknown or pending outcome');
     expect(component.message()).toEqual('Unknown or pending outcome');
     expect(component.testedOk).toEqual(false);
+    expect(taskServiceSpy.loadTask).toHaveBeenCalledOnceWith(56);
   });
 
   it('should allow testing when jobe server has test functions', () => {

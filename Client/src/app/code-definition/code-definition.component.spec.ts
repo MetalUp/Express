@@ -137,7 +137,7 @@ describe('CodeDefinitionComponent', () => {
     expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
   });
 
-  it('should call model changed when changed', () => {
+  it('should call model changed when task changed', () => {
 
     component.taskId = 67;
     component.codeDefinitions = 'something';
@@ -150,6 +150,18 @@ describe('CodeDefinitionComponent', () => {
     expect(component.codeDefinitions).toBe('');
 
     expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
+  });
+
+  it('should not call model changed when task refreshed', () => {
+
+    component.taskId = 67;
+    component.codeDefinitions = 'something';
+
+    taskSubject.next({ Id: 67, PasteCode: true, Code: '' } as ITaskUserView);
+
+    expect(component.codeDefinitions).toBe('something');
+
+    expect(compileServerServiceSpy.clearUserDefinedCode).not.toHaveBeenCalled();
   });
 
   it('should not allow empty code to be submitted', () => {

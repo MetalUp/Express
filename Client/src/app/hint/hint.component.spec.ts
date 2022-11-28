@@ -76,11 +76,12 @@ describe('HintComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get the hint', fakeAsync(() => {
+  it('should get the hint if new task', fakeAsync(() => {
     
     // hint 0
     taskSubject.next(testTask);
     expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 0);
+    expect(taskServiceSpy.loadTask).not.toHaveBeenCalled();
     tick();
     
     expect(component.canGetNextHint()).toEqual(true);
@@ -94,7 +95,8 @@ describe('HintComponent', () => {
     component.getNextHint(); 
     expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 1);
     tick();
-    
+    expect(taskServiceSpy.loadTask).toHaveBeenCalledWith(66);
+    taskServiceSpy.loadTask.calls.reset();
     expect(component.canGetNextHint()).toEqual(true);
     expect(component.canViewNextHint()).toEqual(false);
     expect(component.canViewPreviousHint()).toEqual(false);
@@ -106,7 +108,9 @@ describe('HintComponent', () => {
     component.getNextHint(); 
     expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 2);
     tick();
-    
+    expect(taskServiceSpy.loadTask).toHaveBeenCalledWith(66);
+    taskServiceSpy.loadTask.calls.reset();
+
     expect(component.canGetNextHint()).toEqual(false);
     expect(component.canViewNextHint()).toEqual(false);
     expect(component.canViewPreviousHint()).toEqual(true);
@@ -118,6 +122,7 @@ describe('HintComponent', () => {
     component.viewPreviousHint(); 
     expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 1);
     tick();
+    expect(taskServiceSpy.loadTask).not.toHaveBeenCalled();
 
     expect(component.canGetNextHint()).toEqual(false);
     expect(component.canViewNextHint()).toEqual(true);
@@ -125,6 +130,16 @@ describe('HintComponent', () => {
     expect(component.title).toEqual("hint1 title");
     expect(component.hintHtml).toEqual('hint1 contents');
 
+  }));
+
+  it('should not get the hint if same task', fakeAsync(() => {
+    
+    component.currentTask = testTask;
+
+    taskSubject.next(testTask);
+    expect(taskServiceSpy.loadHint).not.toHaveBeenCalled();
+    expect(taskServiceSpy.loadTask).not.toHaveBeenCalled();
+    
   }));
 
   it('should display message if no hints', fakeAsync(() => {

@@ -43,12 +43,26 @@ describe('TaskDescriptionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get the task html file', fakeAsync(() => {
+  it('should get the task html if changed', fakeAsync(() => {
 
     const testTask = { Description: 'test html' } as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     expect(component.currentTask).toEqual(testTask);
+    tick();
+    expect(component.taskHtml).toEqual('test html');
+  }));
+
+  it('should not get the task html if reloaded', fakeAsync(() => {
+
+    const testTask1 = { Id: 66, Description: 'test html' } as unknown as ITaskUserView;
+
+    taskSubject.next(testTask1);
+    tick();
+    expect(component.taskHtml).toEqual('test html');
+    
+    const testTask2 = { Id: 66, Description: 'test html new' } as unknown as ITaskUserView;
+    taskSubject.next(testTask2);
     tick();
     expect(component.taskHtml).toEqual('test html');
   }));
