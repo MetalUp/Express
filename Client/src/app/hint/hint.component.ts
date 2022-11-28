@@ -27,7 +27,7 @@ export class HintComponent implements OnInit, OnDestroy {
     }
 
     if (this.canViewNextHint()) {
-      return "Click ">" to see your first used hint";
+      return "Click '>' to see your first used hint";
     }
 
     return 'There are no Hints for this task.'
