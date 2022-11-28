@@ -6,6 +6,7 @@ import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { CompileServerService } from '../services/compile-server.service';
+import { registerLocaleData } from '@angular/common';
 
 @Component({
   selector: 'app-code-definition',
@@ -26,6 +27,12 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   codeDefinitions = '';
 
+  unsubmittedCode = '';
+
+  codeIndex = -1;
+
+  hasPreviousCodeVersion = false;
+
   pendingSubmit = false;
 
   private canPaste = false;
@@ -41,12 +48,18 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
       (this.compiledOK ? 'Compiled OK' : '');
   }
 
-  modelChanged() {
+  codeUpdated() {
     this.validationFail = '';
     this.compiledOK = false;
     this.result = EmptyRunResult;
     this.pendingSubmit = !!(this.codeDefinitions.trim());
     this.compileServer.clearUserDefinedCode();
+  }
+
+  modelChanged() {
+    this.codeUpdated();
+    this.unsubmittedCode = this.codeDefinitions;
+    this.codeIndex = -1;
   }
 
   onPaste(event: ClipboardEvent) {
@@ -56,6 +69,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.codeIndex = -1;
     this.compiledOK = false;
     this.pendingSubmit = false;
     this.validationFail = this.rulesService.checkRules(Applicability.functions, this.codeDefinitions);
@@ -65,17 +79,49 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {
           this.compileServer.setUserDefinedCode(this.codeDefinitions);
+          this.codeIndex = 0;
+          this.unsubmittedCode = "";
         }
       });
     }
   }
 
-  nextCode() {
+  loadCode() {
+    this.taskService.loadCode(this.taskId, this.codeIndex).then(c => {
+      if (c.Code) {
+        this.codeDefinitions = c.Code;
+        this.hasPreviousCodeVersion = c.HasPreviousVersion;
+        this.codeIndex = c.Version;
+        this.codeUpdated();
+      }
+    });
+  }
 
+  canNextCode() {
+    return this.codeIndex > 0  || (this.codeIndex == 0 && this.unsubmittedCode.trim() !== "");
+  }
+
+  nextCode() {
+    if (this.codeIndex == 0) {
+      // go to last submitted code
+      this.codeIndex--;
+      this.hasPreviousCodeVersion = true;
+      this.codeDefinitions = this.unsubmittedCode;
+      this.codeUpdated();
+    }
+    else {
+      this.codeIndex--;
+      this.loadCode();
+    }
+  }
+
+  canPreviousCode() {
+    return this.hasPreviousCodeVersion;
   }
 
   previousCode() {
-
+    this.codeIndex++;
+    this.loadCode();
   }
 
   private placeholderMap: Map<string, string> = new Map(
@@ -97,6 +143,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
         this.taskId = t.Id;
         this.canPaste = t.PasteCode;
         this.modelChanged();
+        this.taskService.loadCode(this.taskId, 0).then(c => this.hasPreviousCodeVersion = c.HasPreviousVersion);
       }
     })
   }

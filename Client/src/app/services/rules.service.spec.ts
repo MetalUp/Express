@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { RulesService } from './rules.service';
 import { ErrorType, Applicability } from '../models/rules';
 import { TaskService } from './task.service';
-import { ITaskUserView } from '../models/task';
+import { ITaskUserView } from '../models/task-user-view';
 import { Subject } from 'rxjs';
 
 

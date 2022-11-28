@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { EmptyTaskUserView, ITaskUserView, TaskUserView } from '../models/task';
-import { EmptyHintUserView, HintUserView, IHintUserView } from '../models/hint';
+import { EmptyTaskUserView, ITaskUserView, TaskUserView } from '../models/task-user-view';
+import { EmptyHintUserView, HintUserView, IHintUserView } from '../models/hint-user-view';
 import { Subject } from 'rxjs';
 import { ContextService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
 import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, IHateoasModel, InvokableActionMember, PropertyMember, Value } from '@nakedobjects/restful-objects';
 import { Dictionary } from 'lodash';
+import { CodeUserView, EmptyCodeUserView, ICodeUserView } from '../models/code-user-view';
 
 @Injectable({
   providedIn: 'root'
@@ -71,7 +72,7 @@ export class TaskService {
     }
   }
 
-  private convertTo<T extends ITaskUserView | IHintUserView>(toObj: TaskUserView | HintUserView, rep: DomainObjectRepresentation) {
+  private convertTo<T extends ITaskUserView | IHintUserView | ICodeUserView>(toObj: TaskUserView | HintUserView | CodeUserView, rep: DomainObjectRepresentation) {
     if (rep && Object.keys(rep.propertyMembers()).length > 0) {
       const pMembers = rep.propertyMembers()
       for (const k in pMembers) {
@@ -90,11 +91,19 @@ export class TaskService {
     return this.convertTo<IHintUserView>(new HintUserView(), rep);
   }
 
-  params(taskId: number, currentHintNo?: number) {
+  private convertToCode(rep: DomainObjectRepresentation) {
+    return this.convertTo<ICodeUserView>(new CodeUserView(), rep);
+  }
+
+  params(taskId: number, currentHintNo?: number, codeVersion?: number) {
     const params = { "taskId": new Value(taskId) } as Dictionary<Value>;
 
     if (currentHintNo != undefined) {
       params['hintNumber'] = new Value(currentHintNo);
+    }
+
+    if (codeVersion != undefined) {
+      params['codeVersion'] = new Value(codeVersion);
     }
 
     return params;
@@ -130,24 +139,24 @@ export class TaskService {
         })
         .catch((e: ErrorWrapper) => {
           console.log(`${e.title}:${e.description}`);
-          return EmptyHintUserView;
+          return EmptyHintUserView as IHintUserView;
         });
     });
   }
 
-  loadCode(taskId: number, codeIndex: number) {
+  loadCode(taskId: number, version: number) {
 
     return this.getService().then(s => {
-      const action = s.actionMember("GetCode") as InvokableActionMember;
+      const action = s.actionMember("GetCodeVersion") as InvokableActionMember;
 
-      return this.repLoader.invoke(action, this.params(taskId, codeIndex), {} as Dictionary<Object>)
+      return this.repLoader.invoke(action, this.params(taskId, undefined, version), {} as Dictionary<Object>)
         .then((ar: ActionResultRepresentation) => {
           var obj = ar.result().object()!;
-          return this.convertToHint(obj);
+          return this.convertToCode(obj);
         })
         .catch((e: ErrorWrapper) => {
           console.log(`${e.title}:${e.description}`);
-          return EmptyHintUserView;
+          return EmptyCodeUserView as ICodeUserView;
         });
     });
   }

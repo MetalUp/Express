@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EmptyTaskUserView, ITaskUserView } from '../models/task';
+import { EmptyTaskUserView, ITaskUserView } from '../models/task-user-view';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
-import { EmptyHintUserView, IHintUserView } from '../models/hint';
+import { EmptyHintUserView, IHintUserView } from '../models/hint-user-view';
 
 
 @Component({

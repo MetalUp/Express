@@ -5,9 +5,10 @@ import { CodeDefinitionComponent } from './code-definition.component';
 import { RulesService } from '../services/rules.service';
 import { Applicability } from '../models/rules';
 import { TaskService } from '../services/task.service';
-import { ITaskUserView } from '../models/task';
+import { ITaskUserView } from '../models/task-user-view';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CompileServerService } from '../services/compile-server.service';
+import { EmptyCodeUserView } from '../models/code-user-view';
 
 describe('CodeDefinitionComponent', () => {
   let component: CodeDefinitionComponent;
@@ -49,7 +50,11 @@ describe('CodeDefinitionComponent', () => {
     rulesServiceSpy.checkRules.and.returnValue('');
     rulesServiceSpy.filter.and.callFake((_e, tf) => tf);
 
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['loadTask', 'loadCode', 'loadHint'], { currentTask: taskSubject });
+
+    const testCode = EmptyCodeUserView;
+
+    taskServiceSpy.loadCode.and.returnValue(Promise.resolve(testCode));
 
     await TestBed.configureTestingModule({
       declarations: [CodeDefinitionComponent],
