@@ -20,14 +20,15 @@
         {
             var context2 = RecordActivity(taskId, ActivityType.RunTestsSuccess, null, null, null, context);
             var task = context.Instances<Task>().Single(t => t.Id == taskId);
-            if (task.NextTaskId != null)
-            {
-                return context2;
-            }
-            else
+            var next = task.NextTaskId == null ? null : context.Instances<Task>().Single(t => t.Id == taskId);
+            if (next == null || !next.HasTests() )
             {
                 var a = Assignments.GetAssignmentForCurrentUser(taskId, context);
                 return context2.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Completed });
+            }
+            else
+            {
+                return context2;
             }
         }
 
