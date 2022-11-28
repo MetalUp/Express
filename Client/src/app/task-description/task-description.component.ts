@@ -35,6 +35,14 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
     return this.taskService.gotoTask(this.currentTask.NextTaskId!);
   }
 
+  canGetNextTask() {
+    return this.currentTask.NextTaskEnabled && !!this.currentTask.NextTaskId;
+  }
+
+  getNextTask() {
+    return this.taskService.gotoTask(this.currentTask.NextTaskId!);
+  }
+
   canReturnToAssignment() {
     return this.currentTask.NextTaskEnabled && !this.currentTask.NextTaskId;
   }

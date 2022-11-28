@@ -79,7 +79,11 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
     this.previousExpressionIndex = this.previousExpressions.length -1;
   }
 
-  onEnter() {
+  canSubmit() {
+    return this.expression.trim() !== "";
+  }
+
+  onSubmit() {
     this.expression = this.expression.trim();
     if (this.expression !== "") {
       this.result = EmptyRunResult;
@@ -110,19 +114,27 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   onKey(event: KeyboardEvent) {
     if (event.key === "ArrowUp") {
-      this.onUp();
+      this.onPrevious();
     }
     if (event.key === "ArrowDown") {
-      this.onDown();
+      this.onNext();
     }
   }
 
-  onUp() {
+  canPrevious() {
+    return this.previousExpressionIndex > 0;
+  }
+
+  onPrevious() {
     this.previousExpressionIndex = this.previousExpressionIndex <= 0 ? 0 : this.previousExpressionIndex - 1;
     this.expression = this.previousExpressions[this.previousExpressionIndex][0].trim();
   }
 
-  onDown() {
+  canNext() {
+    return this.previousExpressionIndex < this.previousExpressions.length;
+  }
+
+  onNext() {
     if (this.previousExpressionIndex >= this.previousExpressions.length - 1) {
       this.previousExpressionIndex = this.previousExpressions.length;
       this.expression = '';
