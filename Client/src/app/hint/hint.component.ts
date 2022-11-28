@@ -36,11 +36,11 @@ export class HintComponent implements OnInit, OnDestroy {
   }
 
   canGetNextHint() {
-    return !!this.currentHint.NextHintNo && this.currentHint.CostOfNextHint > 0;
+    return !!this.currentHint.NextHintNo && !this.currentHint.NextHintAlreadyUsed;
   }
 
   canViewNextHint() {
-    return !!this.currentHint.NextHintNo && this.currentHint.CostOfNextHint === 0;
+    return !!this.currentHint.NextHintNo && this.currentHint.NextHintAlreadyUsed;
   }
 
   canViewPreviousHint() {
