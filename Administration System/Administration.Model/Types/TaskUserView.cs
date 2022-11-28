@@ -3,16 +3,16 @@
 [ViewModel(typeof(TaskUserView_Functions))]
 public class TaskUserView
 {
-    public TaskUserView(Task task, string title, string codeLastSubmitted, bool nextTaskEnabled, bool hasTests, int assignmentId, bool completed)
+    public TaskUserView(Task task, string title, string codeLastSubmitted, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted)
     {
         Task = task;
         Project = task.Project;
         Title = title;
         Code = codeLastSubmitted;
-        NextTaskIsStarted = nextTaskEnabled;
+        Completed = completed;
         HasTests = hasTests;
         AssignmentId = assignmentId;
-        Completed = completed;
+        NextTaskIsStarted = nextTaskIsStarted;
     }
 
     internal Task Task { get; init; }
