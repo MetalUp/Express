@@ -67,25 +67,73 @@ describe('TaskDescriptionComponent', () => {
     expect(component.taskHtml).toEqual('test html');
   }));
 
-  it('should disable next task if no next task', () => {
+  it('should disable get next task if no next task', () => {
 
-    const testTask = { NextTaskId: undefined, NextTaskEnabled: true } as unknown as ITaskUserView;
+    const testTask = { NextTaskId: 0, Completed: true,NextTaskIsStarted : false } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canGetNextTask()).toEqual(false);
+  });
+
+  it('should disable get next task if undefined next task', () => {
+
+    const testTask = { NextTaskId: undefined, Completed: true,NextTaskIsStarted : false } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canGetNextTask()).toEqual(false);
+  });
+
+  it('should disable get next task if not Completed', () => {
+
+    const testTask = { NextTaskId: 1, Completed: false, NextTaskIsStarted : false } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canGetNextTask()).toEqual(false);
+  });
+
+  it('should disable get next task if next task started', () => {
+
+    const testTask = { NextTaskId: 1, Completed: true, NextTaskIsStarted : true } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canGetNextTask()).toEqual(false);
+  });
+
+  it('should disable view next task if no next task', () => {
+
+    const testTask = { NextTaskId: 0, NextTaskIsStarted: true } as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     expect(component.canViewNextTask()).toEqual(false);
   });
 
-  it('should disable next task if not enabled', () => {
+  it('should disable view next task if undefined next task', () => {
 
-    const testTask = { NextTaskId: 1, NextTaskEnabled: false } as unknown as ITaskUserView;
+    const testTask = { NextTaskId: undefined, NextTaskIsStarted: true } as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     expect(component.canViewNextTask()).toEqual(false);
   });
 
-  it('should enable next task', () => {
+  it('should disable view next task if not started', () => {
 
-    const testTask = { NextTaskId: 1, NextTaskEnabled: true } as unknown as ITaskUserView;
+    const testTask = { NextTaskId: 1, NextTaskIsStarted: false } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canViewNextTask()).toEqual(false);
+  });
+
+  it('should enable get next task', () => {
+
+    const testTask = { NextTaskId: 1, Completed: true, NextTaskIsStarted: false } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canGetNextTask()).toEqual(true);
+  });
+
+  it('should enable view next task', () => {
+
+    const testTask = { NextTaskId: 1, NextTaskIsStarted: true } as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     expect(component.canViewNextTask()).toEqual(true);
@@ -93,14 +141,31 @@ describe('TaskDescriptionComponent', () => {
 
   it('should get the next task', () => {
 
-    const testTask = { NextTaskId: 55, NextTaskEnabled: true } as unknown as ITaskUserView;
+    const testTask = { NextTaskId: 55, Completed: true, NextTaskIsStarted: false } as unknown as ITaskUserView;
     taskSubject.next(testTask);
-    expect(component.canViewNextTask()).toEqual(true);
-    component.viewNextTask();
+    expect(component.canGetNextTask()).toEqual(true);
+    component.getNextTask();
     expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith(55);
   });
 
+  it('should view the next task', () => {
+
+    const testTask = { NextTaskId: 56, NextTaskIsStarted: true } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+    expect(component.canViewNextTask()).toEqual(true);
+    component.viewNextTask();
+    expect(taskServiceSpy.gotoTask).toHaveBeenCalledWith(56);
+  });
+
   it('should disable previous task if no previous task', () => {
+
+    const testTask = { PreviousTaskId: 0 } as unknown as ITaskUserView;
+    taskSubject.next(testTask);
+
+    expect(component.canViewPreviousTask()).toEqual(false);
+  });
+
+  it('should disable previous task if undefined previous task', () => {
 
     const testTask = { PreviousTaskId: undefined } as unknown as ITaskUserView;
     taskSubject.next(testTask);
@@ -127,7 +192,7 @@ describe('TaskDescriptionComponent', () => {
 
   it('should disable return to assignment next task', () => {
 
-    const testTask = { NextTaskId: 1, NextTaskEnabled: true } as unknown as ITaskUserView;
+    const testTask = { NextTaskId: 1, Completed: true } as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     expect(component.canReturnToAssignment()).toEqual(false);
@@ -135,7 +200,7 @@ describe('TaskDescriptionComponent', () => {
 
   it('should disable return to assignment not complete', () => {
 
-    const testTask = { NextTaskId: 0, NextTaskEnabled: false } as unknown as ITaskUserView;
+    const testTask = { NextTaskId: 0, Completed: false } as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     expect(component.canReturnToAssignment()).toEqual(false);
@@ -143,7 +208,7 @@ describe('TaskDescriptionComponent', () => {
 
   it('should enable return to assignment', () => {
 
-    const testTask = { NextTaskId: 0, NextTaskEnabled: true } as unknown as ITaskUserView;
+    const testTask = { NextTaskId: 0, Completed: true } as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     expect(component.canReturnToAssignment()).toEqual(true);
@@ -151,7 +216,7 @@ describe('TaskDescriptionComponent', () => {
 
   it('should navigate to assignment', () => {
 
-    const testTask = { NextTaskId: 0, NextTaskEnabled: true, AssignmentId : 77 } as unknown as ITaskUserView;
+    const testTask = { NextTaskId: 0, Completed: true, AssignmentId : 77 } as unknown as ITaskUserView;
     taskSubject.next(testTask);
 
     component.returnToAssignment();

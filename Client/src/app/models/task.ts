@@ -1,6 +1,7 @@
 export interface ITaskUserView {
     Id: number;
-    NextTaskEnabled: boolean;
+    Completed: boolean;
+    NextTaskIsStarted: boolean;
     Title: string;
     Language: string;
     Description: string;
@@ -17,7 +18,8 @@ export interface ITaskUserView {
 export class TaskUserView implements ITaskUserView {
   
     constructor(public Id: number) {}
-    NextTaskEnabled = false;
+    Completed = false;
+    NextTaskIsStarted = false;
     Title = "";
     Language = "";
     Description = "";

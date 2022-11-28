@@ -135,6 +135,24 @@ export class TaskService {
     });
   }
 
+  loadCode(taskId: number, codeIndex: number) {
+
+    return this.getService().then(s => {
+      const action = s.actionMember("GetCode") as InvokableActionMember;
+
+      return this.repLoader.invoke(action, this.params(taskId, codeIndex), {} as Dictionary<Object>)
+        .then((ar: ActionResultRepresentation) => {
+          var obj = ar.result().object()!;
+          return this.convertToHint(obj);
+        })
+        .catch((e: ErrorWrapper) => {
+          console.log(`${e.title}:${e.description}`);
+          return EmptyHintUserView;
+        });
+    });
+  }
+
+
   gotoTask(taskId: number) {
     this.router.navigate([`/task/${taskId}`]);
   }
