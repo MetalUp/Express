@@ -7,10 +7,13 @@ public static class TaskAccess
         var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
         if (asgn == null) return null;
         var task = Tasks.GetTask(taskId, context);
-        var successfulCodeCommits = Activities.ActivitiesOfCurrentUser(task.Id, context).Where(a => a.ActivityType == ActivityType.SubmitCodeSuccess).OrderByDescending(a => a.TimeStamp);
+        var successfulCodeCommits = Activities.ActivitiesOfCurrentUser(task.Id, context)
+            .Where(a => a.ActivityType == ActivityType.SubmitCodeSuccess)
+            .OrderByDescending(a => a.TimeStamp)
+            .Skip(codeVersion);
         return new CodeUserView(
             taskId,
-            successfulCodeCommits.Skip(codeVersion).First().CodeSubmitted,
+            successfulCodeCommits.First().CodeSubmitted,
             codeVersion,
             successfulCodeCommits.Count() > 1
             );
