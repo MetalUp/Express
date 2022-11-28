@@ -16,7 +16,9 @@ public static class TaskAccess
                 null,
                 0,
                 NextHintNo(task, 0),
-                task.Hints.Any() ? task.GetHintNo(1).CostInMarks : 0);
+                task.Hints.Any() ? task.GetHintNo(1).CostInMarks : 0,
+                NextHintIsAlreadyUsed(task, 0, context)
+                );
             return (huv, context);
         }
         else
@@ -30,7 +32,8 @@ public static class TaskAccess
                 hint.ContentsAsString(),
                 hintNumber - 1,
                 NextHintNo(task, hintNumber),
-                CostOfNextHint(task, hintNumber, context)
+                CostOfNextHint(task, hintNumber, context),
+                NextHintIsAlreadyUsed(task, hintNumber, context)
             );
             return (huv, context2);
         }
@@ -67,9 +70,10 @@ public static class TaskAccess
     internal static bool IsStarted(int? taskId, IContext context) =>
         taskId is null ? false : Activities.ActivitiesOfCurrentUser(taskId.Value, context).Any();
 
-    internal static string CodeForTask(Task task, IContext context) {
+    internal static string CodeForTask(Task task, IContext context)
+    {
         var code = CodeLastSubmitted(task, context);
-        return code is not null ? 
+        return code is not null ?
             code
             : task.PreviousTaskId is null ?
                 null
@@ -87,6 +91,7 @@ public static class TaskAccess
 
     internal static int HighestHintNoUsed(Task task, IContext context) =>
         Activities.ActivitiesOfCurrentUser(task.Id, context).Select(a => a.HintUsed).ToList().DefaultIfEmpty(0).Max();
+
 
     internal static int TotalMarksDeducted(Task task, IContext context)
     {
@@ -110,6 +115,12 @@ public static class TaskAccess
 
     internal static int NextHintNo(Task task, int currentHintNumber) =>
         currentHintNumber < task.Hints.Count ? currentHintNumber + 1 : 0;
+
+    internal static bool NextHintIsAlreadyUsed(Task task, int currentHintNo, IContext context)
+    {
+        var next = NextHintNo(task, currentHintNo);
+        return next > 0 && next <= HighestHintNoUsed(task, context);
+    }
 
     internal static int CostOfNextHint(Task task, int currentHintNo, IContext context) =>
         NextHintNo(task, currentHintNo) == 0 ?
