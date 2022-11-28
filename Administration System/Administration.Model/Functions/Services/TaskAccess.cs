@@ -46,9 +46,10 @@ public static class TaskAccess
            task,
            Title(task, context),
            CodeForTask(task, context),
-           !task.HasTests() ||IsCompleted(task, context),
+           !task.HasTests() || IsCompleted(task, context),
            task.HasTests(),
-           asgn.Id
+           asgn.Id,
+           IsStarted(task.NextTaskId, context)
            );
     }
 
@@ -62,6 +63,9 @@ public static class TaskAccess
 
     internal static bool IsCompleted(Task task, IContext context) =>
        task.HasTests && Activities.ActivitiesOfCurrentUser(task.Id, context).FirstOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
+
+    internal static bool IsStarted(int? taskId, IContext context) =>
+        taskId is null ? false : Activities.ActivitiesOfCurrentUser(taskId.Value, context).Any();
 
     internal static string CodeForTask(Task task, IContext context) {
         var code = CodeLastSubmitted(task, context);
