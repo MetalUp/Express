@@ -70,6 +70,14 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     }
   }
 
+  nextCode() {
+
+  }
+
+  previousCode() {
+
+  }
+
   private placeholderMap: Map<string, string> = new Map(
     [
       ['csharp', 'static <returnType> Name(<parameter definitions>) => <expression>;'],

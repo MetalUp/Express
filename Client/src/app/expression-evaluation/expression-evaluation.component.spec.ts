@@ -151,7 +151,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.taskId = 66;
     component.expression = 'test';
 
-    component.onEnter();
+    component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
     expect(component.expression).toBe('test');
@@ -167,7 +167,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.taskId = 66;
     component.expression = 'test';
    
-    component.onEnter();
+    component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
     expect(component.expression).toBe('test');
@@ -183,7 +183,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.taskId = 66;
     component.expression = 'test';
   
-    component.onEnter();
+    component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
     expect(component.expression).toBe('test');
@@ -198,7 +198,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.taskId = 66;
     component.expression = 'test';
    
-    component.onEnter();
+    component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
     expect(component.expression).toBe('test');
@@ -213,7 +213,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     component.taskId = 66;
     component.expression = '';
-    component.onEnter();
+    component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).not.toHaveBeenCalled();
     expect(component.previousExpressionResult).toBe('');
     expect(component.expressionError).toBe('');
@@ -226,7 +226,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.taskId = 66;
     component.expression = 'test';
    
-    component.onEnter();
+    component.onSubmit();
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith(Applicability.expressions, "test");
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
@@ -242,7 +242,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.taskId = 66;
     component.expression = 'test';
 
-    component.onEnter();
+    component.onSubmit();
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith( Applicability.expressions, "test");
     expect(compileServerServiceSpy.evaluateExpression).not.toHaveBeenCalled();
 
