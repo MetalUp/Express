@@ -5,7 +5,7 @@ import { EmptyRunResult, RunResult } from '../models/run-result';
 import { RulesService } from '../services/rules.service';
 import { Applicability } from '../models/rules';
 import { TaskService } from '../services/task.service';
-import { ITaskUserView } from '../models/task';
+import { ITaskUserView } from '../models/task-user-view';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CompileServerService } from '../services/compile-server.service';
 

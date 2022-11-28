@@ -4,7 +4,7 @@ import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { Subject } from 'rxjs';
 import { RunResult, errorRunResult } from '../models/run-result';
-import { ITaskUserView } from '../models/task';
+import { ITaskUserView } from '../models/task-user-view';
 
 import { CompileServerService } from './compile-server.service';
 import { TaskService } from './task.service';

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ITaskUserView } from '../models/task';
+import { ITaskUserView } from '../models/task-user-view';
 import { TaskService } from '../services/task.service';
 import { of, Subject } from 'rxjs';
 import { TestingComponent } from './testing.component';

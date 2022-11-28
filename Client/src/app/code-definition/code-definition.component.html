@@ -2,8 +2,8 @@
     <div class="pane-header">Code
         <div class="button-bar">
             <button [disabled]="!pendingSubmit" (click)="onSubmit()">Submit</button>
-            <button title="Next code"  (click)="nextCode()">></button>
-            <button title="Previous code"  (click)="previousCode()"><</button>
+            <button [disabled]="!canNextCode()" title="Next code"  (click)="nextCode()">></button>
+            <button [disabled]="!canPreviousCode()" title="Previous code"  (click)="previousCode()"><</button>
         </div>
     </div>
     <div class="one-column pane-body">
