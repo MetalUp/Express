@@ -2,6 +2,20 @@
 
 public static class TaskAccess
 {
+    public static CodeUserView GetCodeVersion(int taskId, int codeVersion, IContext context)
+    {
+        var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
+        if (asgn == null) return null;
+        var task = Tasks.GetTask(taskId, context);
+        var successfulCodeCommits = Activities.ActivitiesOfCurrentUser(task.Id, context).Where(a => a.ActivityType == ActivityType.SubmitCodeSuccess).OrderByDescending(a => a.TimeStamp);
+        return new CodeUserView(
+            taskId,
+            successfulCodeCommits.Skip(codeVersion).First().CodeSubmitted,
+            codeVersion,
+            successfulCodeCommits.Count() > 1
+            );
+    }
+
     public static (HintUserView, IContext) GetHint(int taskId, int hintNumber, IContext context)
     {
         var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
