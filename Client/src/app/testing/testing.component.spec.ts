@@ -59,7 +59,7 @@ describe('TestingComponent', () => {
 
   beforeEach(async () => {
     compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['runTests', 'hasUserDefinedCode'], { "selectedLanguage": "csharp" });
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'getFile'], { currentTask: taskSubject });
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['loadTask'], { currentTask: taskSubject });
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'filterAndReplace']);
 
     await TestBed.configureTestingModule({

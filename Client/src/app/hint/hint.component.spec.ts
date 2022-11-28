@@ -53,7 +53,7 @@ describe('HintComponent', () => {
   hint2.PreviousHintNo = 1;
 
   beforeEach(async () => {
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['loadHint'], { currentTask: taskSubject });
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['loadHint', 'loadTask'], { currentTask: taskSubject });
     taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint0));
 
     await TestBed.configureTestingModule({
