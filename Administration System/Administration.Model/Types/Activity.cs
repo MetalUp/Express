@@ -56,7 +56,9 @@
         [MemberOrder(9)]
         public string Message { get; init; }
 
-        public override string ToString() => $"{TimeStamp} {ActivityType}";
+        private string hintNumber() => ActivityType == ActivityType.HintUsed ? HintUsed.ToString() : "";
+
+        public override string ToString() => $"{TimeStamp} {ActivityType} {hintNumber()}";
     }
 
 

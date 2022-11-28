@@ -55,10 +55,7 @@
         {
             int pId = Tasks.GetTask(taskId, context).ProjectId.Value;
             int uId = Users.Me(context).Id;
-            return context.Instances<Assignment>().LastOrDefault(a => a.ProjectId == pId && a.AssignedToId == uId);
+            return context.Instances<Assignment>().Where(a => a.ProjectId == pId && a.AssignedToId == uId).OrderByDescending(a => a.DueBy).FirstOrDefault();
         }
-
-
-
     }
 }

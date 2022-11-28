@@ -7,16 +7,24 @@
 
 
         #region Methods to record an Activity involving code
-        internal static IContext SubmitCodeFail(int taskId, string code, string message, IContext context) =>
-     RecordActivity(taskId, ActivityType.SubmitCodeFail, code, message, null, context);
+        internal static IContext SubmitCodeFail(int taskId, string code, string message, IContext context)
+        {
+            var context2 = RecordActivity(taskId, ActivityType.SubmitCodeFail, code, message, null, context);
+            return EnsureAssignmentIsStarted(taskId, context2);
+        }
 
         internal static IContext SubmitCodeSuccess(int taskId, string code, IContext context)
         {
-            var a = Assignments.GetAssignmentForCurrentUser(taskId, context);
+
             var context2 = RecordActivity(taskId, ActivityType.SubmitCodeSuccess, code, null, null, context);
-            return a.Status == AssignmentStatus.PendingStart ? context2.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Started }) : context2;
+            return EnsureAssignmentIsStarted(taskId, context2);
         }
-            
+
+        private static IContext EnsureAssignmentIsStarted(int taskId, IContext context)
+        {
+            var a = Assignments.GetAssignmentForCurrentUser(taskId, context);
+            return a.Status == AssignmentStatus.PendingStart ? context.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Started }) : context;
+        }
 
         internal static IContext RunTestsFail(int taskId, string message, IContext context) =>
             RecordActivity(taskId, ActivityType.RunTestsFail, null, message, null, context);
