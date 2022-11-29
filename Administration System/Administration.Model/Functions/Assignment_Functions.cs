@@ -2,6 +2,10 @@
 {
     public static class Assignment_Functions
     {
+        #region Display
+        public static bool HideLink(this Assignment assignment, IContext context) =>
+            assignment.Status == AssignmentStatus.Completed || assignment.Status == AssignmentStatus.Terminated;
+        #endregion
         #region Activity
         public static IQueryable<Activity> ListActivity(this Assignment assignment, IContext context)
         {
@@ -19,9 +23,9 @@
         
         public static string Default1EditTeacherNotes(this Assignment a) => a.TeacherNotes;
 
-        public static IContext MarkNotCompleted(this Assignment a, string notes, IContext context) =>
-            context.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.NotCompleted, TeacherNotes = notes });
+        public static IContext MarkAsTerminated(this Assignment a, string notes, IContext context) =>
+            context.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Terminated, TeacherNotes = notes });
 
-        public static string Default1MarkNotCompleted(this Assignment a) => a.TeacherNotes;
+        public static string Default1MarkAsTerminated(this Assignment a) => a.TeacherNotes;
     }
 }

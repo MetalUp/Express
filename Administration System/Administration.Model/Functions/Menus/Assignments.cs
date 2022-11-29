@@ -55,16 +55,16 @@
             Groups.AllOurGroups(context).ToList();
 
         public static IContext MarkTasksNotCompleted(this IQueryable<Assignment> assignments, string teacherNote, IContext context) =>
-          assignments.Aggregate(context, (c, a) => a.MarkNotCompleted(teacherNote, c));
+          assignments.Aggregate(context, (c, a) => a.MarkAsTerminated(teacherNote, c));
 
 
         internal static Assignment GetAssignmentForCurrentUser(int taskId, IContext context)
         {
             int projectId = Tasks.GetTask(taskId, context).ProjectId.Value;
-            return GetAssignmentsForCurrentUser(projectId, context).OrderByDescending(a => a.DueBy).FirstOrDefault();
+            return ActiveAssignmentsForCurrentUser(projectId, context).OrderByDescending(a => a.DueBy).FirstOrDefault();
         }
 
-        internal static IQueryable<Assignment> GetAssignmentsForCurrentUser(int projectId, IContext context)
+        internal static IQueryable<Assignment> ActiveAssignmentsForCurrentUser(int projectId, IContext context)
         {
             int uId = Users.Me(context).Id;
             return context.Instances<Assignment>().Where(a =>

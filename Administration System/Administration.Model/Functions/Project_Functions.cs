@@ -206,7 +206,7 @@ namespace Model.Functions
         internal static bool IsAssignedToMe(this Project project, IContext context)
         {
             var pid = project.Id;
-            return Assignments.GetAssignmentsForCurrentUser(pid, context).Any();
+            return Assignments.ActiveAssignmentsForCurrentUser(pid, context).Any();
         }
         #endregion
 
