@@ -9,7 +9,6 @@ import { ITaskUserView } from '../models/task-user-view';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CompileServerService } from '../services/compile-server.service';
 import { EmptyCodeUserView, ICodeUserView } from '../models/code-user-view';
-import { TimePickerComponent } from '@nakedobjects/gemini';
 
 describe('CodeDefinitionComponent', () => {
   let component: CodeDefinitionComponent;
@@ -91,6 +90,7 @@ describe('CodeDefinitionComponent', () => {
 
     component.taskId = 67;
     component.codeDefinitions = 'test';
+    component.unsubmittedCode = "test1";
 
     component.onSubmit();
     expect(compileServerServiceSpy.submitCode).toHaveBeenCalledWith(67, 'test');
@@ -98,6 +98,9 @@ describe('CodeDefinitionComponent', () => {
     expect(component.currentStatus).toBe('Compiled OK');
     expect(component.pendingSubmit).toBe(false);
     expect(compileServerServiceSpy.setUserDefinedCode).toHaveBeenCalledWith(component.codeDefinitions);
+    expect(component.unsubmittedCode).toBe("");
+    expect(taskServiceSpy.loadCode).toHaveBeenCalledWith(67, 1);
+
   });
 
   it('should submit code for compile Fail', () => {
@@ -105,6 +108,7 @@ describe('CodeDefinitionComponent', () => {
 
     component.taskId = 67;
     component.codeDefinitions = 'test';
+    component.unsubmittedCode = "test1";
 
     component.onSubmit();
     expect(compileServerServiceSpy.submitCode).toHaveBeenCalledWith(67, 'test');
@@ -112,6 +116,8 @@ describe('CodeDefinitionComponent', () => {
     expect(component.currentStatus).toBe('compiler error');
     expect(component.pendingSubmit).toBe(false);
     expect(compileServerServiceSpy.setUserDefinedCode).not.toHaveBeenCalledWith(component.codeDefinitions);
+    expect(component.unsubmittedCode).toBe("test1");
+    expect(taskServiceSpy.loadCode).not.toHaveBeenCalled();
   });
 
   it('should submit code for compile Error', () => {
@@ -143,22 +149,20 @@ describe('CodeDefinitionComponent', () => {
     expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
   });
 
-  // it('should call model changed when task changed', () => {
+  it('should call loadCode when task changed', () => {
 
-  //   component.taskId = 67;
-  //   component.codeDefinitions = 'something';
+    component.taskId = 67;
+    
+    taskSubject.next({ Id: 1, PasteCode: true } as ITaskUserView);
 
-  //   taskSubject.next({ Id: 1, PasteCode: true, Code: '' } as ITaskUserView);
+    expect(component.compiledOK).toBe(false);
+    expect(component.currentStatus).toBe('');
+    expect(component.pendingSubmit).toBe(false);
 
-  //   expect(component.compiledOK).toBe(false);
-  //   expect(component.currentStatus).toBe('');
-  //   expect(component.pendingSubmit).toBe(false);
-  //   expect(component.codeDefinitions).toBe('');
+    expect(taskServiceSpy.loadCode).toHaveBeenCalledWith(1, 0);
+  });
 
-  //   expect(compileServerServiceSpy.clearUserDefinedCode).toHaveBeenCalled();
-  // });
-
-  it('should not call model changed when task refreshed', () => {
+  it('should not call load code when task refreshed', () => {
 
     component.taskId = 67;
     component.codeDefinitions = 'something';
@@ -167,7 +171,7 @@ describe('CodeDefinitionComponent', () => {
 
     expect(component.codeDefinitions).toBe('something');
 
-    expect(compileServerServiceSpy.clearUserDefinedCode).not.toHaveBeenCalled();
+    expect(taskServiceSpy.loadCode).not.toHaveBeenCalled();
   });
 
   it('should not allow empty code to be submitted', () => {
@@ -249,40 +253,65 @@ describe('CodeDefinitionComponent', () => {
     expect(component.placeholder).toEqual('static <returnType> Name(<parameter definitions>) => <expression>;');
   });
 
-  // it('should call loadCode when task changed', fakeAsync(() => {
+  it('should get unsubmitted code ', fakeAsync(() => {
 
-  //   component.taskId = 67;
-  //   component.codeDefinitions = 'something';
-  //   const codeVersion = {HasPreviousVersion: true} as unknown as ICodeUserView;
-  //   const p = Promise.resolve(codeVersion);
-
-  //   taskServiceSpy.loadCode.and.returnValue(p);
-
-  //   taskSubject.next({ Id: 1, PasteCode: true, Code: '' } as ITaskUserView);
-
-  //   expect(component.compiledOK).toBe(false);
-  //   expect(component.currentStatus).toBe('');
-  //   expect(component.pendingSubmit).toBe(false);
-  //   expect(component.codeDefinitions).toBe('');
-  //   expect(taskServiceSpy.loadCode).toHaveBeenCalledWith(1, 0);
-  //   tick();
-
-  //   //expect(component.hasPreviousCodeVersion).toBeTrue();
-  // }));
-
-  // it('should get unsubmitted code ', fakeAsync(() => {
-
-  //   //component.codeIndex = 0;
-  //   component.codeDefinitions = 'something';
-  //   component.unsubmittedCode = 'unsubmitted';
+    component.currentCodeVersion = { Version: 1 } as unknown as ICodeUserView;
+    component.codeDefinitions = 'something';
+    component.unsubmittedCode = 'unsubmitted';
   
-  //   expect(component.canNewerCode).toBeTrue();
-  //   component.newerCode();
-  //   expect(component.codeIndex).toBe(-1);
-  //   expect(component.codeDefinitions).toBe('unsubmitted');
-  //   expect(component.compiledOK).toBe(false);
-  //   expect(component.currentStatus).toBe('');
-  //   expect(component.pendingSubmit).toBe(false);
-  //   expect(component.hasPreviousCodeVersion).toBeTrue();
-  // }));
+    expect(component.canNewerCode()).toBeTrue();
+    component.newerCode();
+   
+    expect(component.codeDefinitions).toBe('unsubmitted');
+    expect(component.compiledOK).toBe(false);
+    expect(component.currentStatus).toBe('');
+    expect(component.pendingSubmit).toBe(true);
+    expect(component.currentCodeVersion.Version).toBe(0);
+  }));
+
+  it('should get newer code ', fakeAsync(() => {
+
+    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 1, Code: "new code", HasPreviousVersion: true}
+
+    taskServiceSpy.loadCode.and.returnValue(Promise.resolve(testCodeVersion));
+
+    component.taskId = 1;
+    component.currentCodeVersion = { Version: 2 } as unknown as ICodeUserView;
+    component.codeDefinitions = 'something';
+    component.unsubmittedCode = 'unsubmitted';
+  
+    expect(component.canNewerCode()).toBeTrue();
+    component.newerCode();
+    tick();
+    expect(taskServiceSpy.loadCode).toHaveBeenCalledWith(1, 1);
+   
+    expect(component.codeDefinitions).toBe('new code');
+    expect(component.compiledOK).toBe(false);
+    expect(component.currentStatus).toBe('');
+    expect(component.pendingSubmit).toBe(true);
+    expect(component.currentCodeVersion.Version).toBe(1);
+  }));
+
+  it('should get older code ', fakeAsync(() => {
+
+    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 3, Code: "old code", HasPreviousVersion: true}
+
+    taskServiceSpy.loadCode.and.returnValue(Promise.resolve(testCodeVersion));
+
+    component.taskId = 1;
+    component.currentCodeVersion = { Version: 2, HasPreviousVersion: true } as unknown as ICodeUserView;
+    component.codeDefinitions = 'something';
+    component.unsubmittedCode = 'unsubmitted';
+  
+    expect(component.canOlderCode()).toBeTrue();
+    component.olderCode();
+    tick();
+    expect(taskServiceSpy.loadCode).toHaveBeenCalledWith(1, 3);
+   
+    expect(component.codeDefinitions).toBe('old code');
+    expect(component.compiledOK).toBe(false);
+    expect(component.currentStatus).toBe('');
+    expect(component.pendingSubmit).toBe(true);
+    expect(component.currentCodeVersion.Version).toBe(3);
+  }));
 });
