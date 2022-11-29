@@ -3,12 +3,11 @@
 [ViewModel(typeof(TaskUserView_Functions))]
 public class TaskUserView
 {
-    public TaskUserView(Task task, string title, string codeLastSubmitted, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted)
+    public TaskUserView(Task task, string title, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted)
     {
         Task = task;
         Project = task.Project;
         Title = title;
-        Code = codeLastSubmitted;
         Completed = completed;
         HasTests = hasTests;
         AssignmentId = assignmentId;
@@ -38,8 +37,6 @@ public class TaskUserView
     public int? NextTaskId => Task.NextTaskId;
 
     public bool NextTaskIsStarted { get; init; }
-
-    public string Code { get; init; } //Might be carried forward from previous, or 
 
     public bool HasTests { get; init; }
 
