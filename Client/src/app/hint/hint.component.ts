@@ -39,6 +39,13 @@ export class HintComponent implements OnInit, OnDestroy {
     return this.currentHint.Title || "Hint";
   }
 
+  get cost() {
+    const cost = this.currentHint.CostOfNextHint;
+    const marks = cost === 1 ? "mark" : "marks"; 
+
+    return `(Next Hint will cost ${cost} ${marks})`;
+  }
+
   canGetNextHint() {
     return !!this.currentHint.NextHintNo && !this.currentHint.NextHintAlreadyUsed;
   }

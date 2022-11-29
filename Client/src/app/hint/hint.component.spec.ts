@@ -162,6 +162,23 @@ describe('HintComponent', () => {
     expect(component.hintHtml).toEqual("There are no Hints for this task.");
   }));
 
+  it('should display cost of next hint', fakeAsync(() => {
+    taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint0));
+
+    // hint 0
+    taskSubject.next(testTask);
+    expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 0);
+    tick();
+    
+    expect(component.cost).toEqual("(Next Hint will cost 1 mark)");
+
+    taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint1bis));
+    component.getNextHint(); 
+    tick();
+
+    expect(component.cost).toEqual("(Next Hint will cost 0 marks)");
+  }));
+
   it('should handle error', fakeAsync(() => {
     taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hintError));
 

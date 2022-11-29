@@ -3,6 +3,10 @@
     font-size: 11pt;
 }
 
+.cost{
+    padding: 5px;
+}
+
 .hint {
     width: 99%;
     overflow: auto;
