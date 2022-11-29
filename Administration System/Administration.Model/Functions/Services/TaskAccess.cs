@@ -174,10 +174,10 @@ public static class TaskAccess
         return next > 0 && next <= HighestHintNoUsed(task, context);
     }
 
-    internal static int CostOfNextHint(Task task, int currentHintNo, IContext context) =>
-        NextHintNo(task, currentHintNo) == 0 ?
-            0
-            : currentHintNo == HighestHintNoUsed(task, context) ?
-                task.GetHintNo(NextHintNo(task, currentHintNo)).CostInMarks
-                : 0;
+    internal static int CostOfNextHint(Task task, int currentHintNo, IContext context)
+    {
+        int next = NextHintNo(task, currentHintNo);
+        return next == 0 ? 0 : task.GetHintNo(next).CostInMarks;
+    }
+
 }
