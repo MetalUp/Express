@@ -180,6 +180,9 @@ namespace Model.Functions
         public static IContext AssignToMe(this Project project, IContext context) =>
             AssignToIndividual(project, Users.Me(context), context.Today(), context);
 
+        public static string DisableAssignToMe(this Project project, IContext context) =>
+            project.IsAssignedToMe(context) ? "Project is already assigned to you" : null;
+
         [MemberOrder(10)]
         public static IContext AssignToIndividual(this Project project, User singleUser, DateTime dueBy, IContext context) =>
             Assignments.NewAssignmentToIndividual(singleUser, project, dueBy, context);
@@ -202,9 +205,8 @@ namespace Model.Functions
 
         internal static bool IsAssignedToMe(this Project project, IContext context)
         {
-            var myId = Users.Me(context).Id;
             var pid = project.Id;
-            return context.Instances<Assignment>().Any(a => a.AssignedToId == myId && a.ProjectId == pid);
+            return Assignments.GetAssignmentsForCurrentUser(pid, context).Any();
         }
         #endregion
 

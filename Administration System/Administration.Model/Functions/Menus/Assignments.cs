@@ -60,9 +60,19 @@
 
         internal static Assignment GetAssignmentForCurrentUser(int taskId, IContext context)
         {
-            int pId = Tasks.GetTask(taskId, context).ProjectId.Value;
-            int uId = Users.Me(context).Id;
-            return context.Instances<Assignment>().Where(a => a.ProjectId == pId && a.AssignedToId == uId).OrderByDescending(a => a.DueBy).FirstOrDefault();
+            int projectId = Tasks.GetTask(taskId, context).ProjectId.Value;
+            return GetAssignmentsForCurrentUser(projectId, context).OrderByDescending(a => a.DueBy).FirstOrDefault();
         }
+
+        internal static IQueryable<Assignment> GetAssignmentsForCurrentUser(int projectId, IContext context)
+        {
+            int uId = Users.Me(context).Id;
+            return context.Instances<Assignment>().Where(a =>
+                    a.ProjectId == projectId 
+                    && a.AssignedToId == uId
+                    && (a.Status == AssignmentStatus.PendingStart || a.Status == AssignmentStatus.Started)
+                    );
+        }
+
     }
 }
