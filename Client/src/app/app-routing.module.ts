@@ -11,6 +11,7 @@ import {
     RecentComponent
 } from '@nakedobjects/gemini';
 import { ViewType } from '@nakedobjects/services';
+import { ArmliteComponent } from './armlite/armlite.component';
 import { LandingComponent } from './landing/landing.component';
 import { LogoffComponent } from './logoff/logoff.component';
 import { RegistrationService } from './services/registration.service';
@@ -117,6 +118,7 @@ const routes: Routes = [
     { path: 'task/:id', component: TaskViewComponent, canActivate: [RegistrationService] },
     { path: 'task',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
+    { path: 'armlite',  component: ArmliteComponent, canActivate: [RegistrationService]},
     { path: '**', redirectTo: 'landing', pathMatch: 'full' }
 ];
 

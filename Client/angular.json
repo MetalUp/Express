@@ -28,7 +28,10 @@
               "src/styles.css",
               "src/theme.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/compress_1_2_2.js",
+              "src/assets/matomo_expandedx.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -98,7 +101,10 @@
               "src/styles.css",
               "src/theme.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/compress_1_2_2.js",
+              "src/assets/matomo_expandedx.js"
+            ]
           }
         },
         "lint": {

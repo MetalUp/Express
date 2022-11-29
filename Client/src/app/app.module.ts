@@ -17,6 +17,7 @@ import { UserComponent } from './user/user.component';
 import { LandingComponent } from './landing/landing.component';
 import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { LogoffComponent } from './logoff/logoff.component';
+import { ArmliteComponent } from './armlite/armlite.component';
 
 @NgModule({
     declarations: [
@@ -30,6 +31,7 @@ import { LogoffComponent } from './logoff/logoff.component';
         TaskViewComponent,
         LandingComponent,
         LogoffComponent,
+        ArmliteComponent,
     ],
     imports: [
         BrowserModule,
