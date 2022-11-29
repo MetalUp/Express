@@ -8,17 +8,17 @@
 .content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: 90vh;
     gap: 10px 10px;
     height: 100%;
 }
 
 .independent-column1 {
-    grid-template-rows: minmax(min-content, 100%) minmax(min-content, 100%);
+    grid-template-rows: 2fr 1fr;
     gap: 10px 10px;
 }
 
 .independent-column2 {
-    grid-template-rows: minmax(min-content, 100%)  minmax(min-content, 100%) minmax(min-content, 100%);
+    grid-template-rows: 1fr  1fr 1fr;
     gap: 10px 10px;
 }
