@@ -27,7 +27,7 @@
         public int Id { get; init; }
 
         [MemberOrder(1)]
-        [UrlLink("Try out the Project")]
+        [UrlLink("Start or Continue Project")]
         public string Link => $"https://express.metalup.org/task/{Tasks.First().Id}";
 
         [Hidden]

@@ -2,6 +2,9 @@
 {
     public static class Assignments
     {
+        [TableView(false, nameof(Assignment.Project), nameof(Assignment.AssignedTo), nameof(Assignment.DueBy), nameof(Assignment.Status))]
+        public static IQueryable<Assignment> AllAssignments(IContext context) => context.Instances<Assignment>();
+
         [PageSize(20)]
         [TableView(false, nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.Project))]
         public static IQueryable<Assignment> MyAssignments(IContext context) =>
@@ -13,16 +16,20 @@
             return context.Instances<Assignment>().Where(a => a.AssignedToId == id).OrderByDescending(a => a.DueBy);
         }
 
-
-        [PageSize(20)]
-        public static IQueryable<Assignment> AssignmentsCreatedByMe(IContext context)
+        public static IQueryable<Assignment> AssignmentsCreatedByMe( IContext context)
         {
             var meId = Users.Me(context).Id;
             return context.Instances<Assignment>().Where(s => s.AssignedById == meId).OrderByDescending(a => a.DueBy);
         }
 
-        public static IQueryable<Assignment> AllAssignments(IContext context) => context.Instances<Assignment>();
-
+        [PageSize(20)]
+        [TableView(false, nameof(Assignment.Project), nameof(Assignment.AssignedTo), nameof(Assignment.DueBy), nameof(Assignment.Status))]
+        public static IQueryable<Assignment> FindAssignmentsCreatedByMe(
+             AssignmentStatus status,
+            IContext context) =>
+                 AssignmentsCreatedByMe(context)
+                .Where(s => s.Status == status)
+                .OrderByDescending(a => a.DueBy);
 
         public static IContext NewAssignmentToIndividual(User assignedTo, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context)
         {
