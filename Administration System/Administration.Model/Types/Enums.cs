@@ -17,7 +17,7 @@
 
     public enum AssignmentStatus
     {
-        PendingStart, Started, Completed, NotCompleted
+        PendingStart, Started, Completed, Terminated
     }
 
     public enum ProjectStatus
