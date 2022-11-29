@@ -2,21 +2,62 @@
 
 public static class TaskAccess
 {
-    public static CodeUserView GetCodeVersion(int taskId, int codeVersion, IContext context)
+    public static (CodeUserView, IContext) GetCodeVersion(int taskId, int codeVersion, IContext context)
+    {
+        var task = Tasks.GetTask(taskId, context);
+        if (codeVersion > 0)
+        {
+            return ReturnCUVWithCodeVersion(taskId, codeVersion, context, task);
+        }
+        else
+        {
+            return CreateEmptyCUVForVersion0(taskId, codeVersion, context, task);
+        }
+    }
+
+    private static (CodeUserView, IContext) ReturnCUVWithCodeVersion(int taskId, int codeVersion, IContext context, Task task)
     {
         var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
-        if (asgn == null) return null;
-        var task = Tasks.GetTask(taskId, context);
+
         var successfulCodeCommits = Activities.ActivitiesOfCurrentUser(task.Id, context)
             .Where(a => a.ActivityType == ActivityType.SubmitCodeSuccess)
             .OrderByDescending(a => a.TimeStamp)
-            .Skip(codeVersion);
-        return new CodeUserView(
+            .Skip(codeVersion - 1); //Because codeVersion 1 means 'most recently submitted code'
+
+        var cuv = new CodeUserView(
             taskId,
             successfulCodeCommits.First().CodeSubmitted,
             codeVersion,
             successfulCodeCommits.Count() > 1
             );
+
+        return (cuv, context);
+    }
+
+    private static (CodeUserView, IContext) CreateEmptyCUVForVersion0(int taskId, int codeVersion, IContext context, Task task)
+    {
+        if (CodeLastSubmitted(task, context) is not null)
+        {
+            return (new CodeUserView(taskId, "", codeVersion, true), context);
+        }
+        else
+        {
+            return HandleCodeCarriedForwardIfAny(taskId, codeVersion, context, task);
+        }
+    }
+
+    private static (CodeUserView, IContext) HandleCodeCarriedForwardIfAny(int taskId, int codeVersion, IContext context, Task task)
+    {
+        var codeCarriedForward = CodeCarriedForwardFromPriorTask(task, context);
+        if (codeCarriedForward is null)
+        {
+            return (new CodeUserView(taskId, "", codeVersion, false), context);
+        }
+        else
+        {
+            var context2 = Activities.SubmitCodeSuccess(taskId, codeCarriedForward, context);
+            return (new CodeUserView(taskId, "", codeVersion, true), context2);
+        }
     }
 
     public static (HintUserView, IContext) GetHint(int taskId, int hintNumber, IContext context)
@@ -65,7 +106,6 @@ public static class TaskAccess
         return new TaskUserView(
            task,
            Title(task, context),
-           CodeForTask(task, context),
            !task.HasTests() || IsCompleted(task, context),
            task.HasTests(),
            asgn.Id,
@@ -87,17 +127,12 @@ public static class TaskAccess
     internal static bool IsStarted(int? taskId, IContext context) =>
         taskId is null ? false : Activities.ActivitiesOfCurrentUser(taskId.Value, context).Any();
 
-    internal static string CodeForTask(Task task, IContext context)
-    {
-        var code = CodeLastSubmitted(task, context);
-        return code is not null ?
-            code
-            : task.PreviousTaskId is null ?
+    internal static string CodeCarriedForwardFromPriorTask(Task task, IContext context) =>
+        task.PreviousTaskId is null ?
                 null
                 : task.PreviousTask.CodeCarriedForwardToNextTask() ?
                     CodeLastSubmitted(task.PreviousTask, context)
                     : null;
-    }
 
     private static string CodeLastSubmitted(Task task, IContext context)
     {
