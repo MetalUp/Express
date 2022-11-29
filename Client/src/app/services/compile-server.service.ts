@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
-import { catchError, from, of } from 'rxjs';
+import { catchError, from, Observable, of, Subject } from 'rxjs';
 import { RunResult, errorRunResult } from '../models/run-result';
 import { TaskService } from './task.service';
 import { Dictionary } from 'lodash';
@@ -35,6 +35,8 @@ export class CompileServerService {
   selectedLanguage: string = '';
 
   private userDefinedCode: string = '';
+
+  lastExpressionResult = new Subject<RunResult>();
 
   // easier to test functions
   setUserDefinedCode(userCode: string) {

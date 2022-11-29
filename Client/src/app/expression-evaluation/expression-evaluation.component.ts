@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../models/run-result';
@@ -92,6 +92,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
         this.compileServer.evaluateExpression(this.taskId, this.expression).pipe(first()).subscribe(rr => {
           this.result = rr;
           this.pushExpression();
+          this.compileServer.lastExpressionResult.next(rr);
         });
       }
       else {

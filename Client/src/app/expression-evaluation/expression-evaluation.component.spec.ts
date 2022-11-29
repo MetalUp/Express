@@ -16,6 +16,7 @@ describe('ExpressionEvaluationComponent', () => {
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let taskSubject = new Subject<ITaskUserView>();
+  let resultSubject = new Subject<RunResult>();
 
   let testRunResultOK: RunResult = {
     run_id: 'a',
@@ -51,7 +52,7 @@ describe('ExpressionEvaluationComponent', () => {
 
 
   beforeEach(async () => {
-    compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['evaluateExpression'], { "selectedLanguage": "csharp" });
+    compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['evaluateExpression'], { "selectedLanguage": "csharp", lastExpressionResult: resultSubject });
     
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
     rulesServiceSpy.checkRules.and.returnValue('');
