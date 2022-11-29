@@ -57,13 +57,15 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   modelChanged() {
     this.unsubmittedCode = this.codeDefinitions;
-    this.setCodeVersion(this.getUncompiledCode());
+    this.setCodeVersion(this.getUnsubmittedCodeVersion(), true);
   }
 
-  setCodeVersion(version : ICodeUserView) {
+  setCodeVersion(version: ICodeUserView, update: boolean) {
     this.currentCodeVersion = version;
     this.codeDefinitions = version.Code;
-    this.codeUpdated();
+    if (update) {
+      this.codeUpdated();
+    }
   }
 
   onPaste(event: ClipboardEvent) {
@@ -84,37 +86,33 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
           this.compileServer.setUserDefinedCode(this.codeDefinitions);
           this.unsubmittedCode = "";
           // load code but don't update state
-          this.taskService.loadCode(this.taskId, 1).then(c => this.currentCodeVersion = c);
+          this.taskService.loadCode(this.taskId, 1).then(c => this.setCodeVersion(c, false));
         }
       });
     }
   }
 
   loadServerCode(index: number) {
-    this.taskService.loadCode(this.taskId, index).then(c => {
-      this.setCodeVersion(c);
-    });
+    this.taskService.loadCode(this.taskId, index).then(c => this.setCodeVersion(c, true));
   }
 
   canNewerCode() {
     return this.currentCodeVersion.Version > 1 || (this.currentCodeVersion.Version == 1 && !!this.unsubmittedCode.trim());
   }
 
-  getUncompiledCode() {
+  getUnsubmittedCodeVersion() {
     return {
       TaskId: 0,
       Code: this.unsubmittedCode,
       Version: 0,
       HasPreviousVersion: true
-    }
+    } as ICodeUserView;
   }
 
   newerCode() {
     if (this.currentCodeVersion.Version == 1) {
       // go to last submitted code
-      this.currentCodeVersion = this.getUncompiledCode();
-      this.codeDefinitions = this.unsubmittedCode;
-      this.codeUpdated();
+      this.setCodeVersion(this.getUnsubmittedCodeVersion(), true);
     }
     else {
       this.loadServerCode(this.currentCodeVersion.Version - 1);
@@ -147,7 +145,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
         this.taskId = t.Id;
         this.canPaste = t.PasteCode;
         this.taskService.loadCode(this.taskId, 0).then(c => {
-          this.setCodeVersion(c);
+          this.setCodeVersion(c, true);
           if (c.HasPreviousVersion) {
             this.loadServerCode(1);
           }
