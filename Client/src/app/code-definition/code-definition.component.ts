@@ -6,6 +6,7 @@ import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { CompileServerService } from '../services/compile-server.service';
+import { EmptyCodeUserView, ICodeUserView } from '../models/code-user-view';
 
 
 @Component({
@@ -29,9 +30,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   unsubmittedCode = '';
 
-  codeIndex = -1;
-
-  hasPreviousCodeVersion = false;
+  currentCodeVersion: ICodeUserView = EmptyCodeUserView;
 
   pendingSubmit = false;
 
@@ -57,9 +56,14 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   }
 
   modelChanged() {
-    this.codeUpdated();
     this.unsubmittedCode = this.codeDefinitions;
-    this.codeIndex = -1;
+    this.setCodeVersion(this.getUncompiledCode());
+  }
+
+  setCodeVersion(version : ICodeUserView) {
+    this.currentCodeVersion = version;
+    this.codeDefinitions = version.Code;
+    this.codeUpdated();
   }
 
   onPaste(event: ClipboardEvent) {
@@ -69,7 +73,6 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.codeIndex = -1;
     this.compiledOK = false;
     this.pendingSubmit = false;
     this.validationFail = this.rulesService.checkRules(Applicability.functions, this.codeDefinitions);
@@ -79,49 +82,51 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {
           this.compileServer.setUserDefinedCode(this.codeDefinitions);
-          this.codeIndex = 0;
           this.unsubmittedCode = "";
+          // load code but don't update state
+          this.taskService.loadCode(this.taskId, 1).then(c => this.currentCodeVersion = c);
         }
       });
     }
   }
 
-  loadServerCode() {
-    this.taskService.loadCode(this.taskId, this.codeIndex).then(c => {
-      if (c.Code) {
-        this.codeDefinitions = c.Code;
-        this.hasPreviousCodeVersion = c.HasPreviousVersion;
-        this.codeIndex = c.Version;
-        this.codeUpdated();
-      }
+  loadServerCode(index: number) {
+    this.taskService.loadCode(this.taskId, index).then(c => {
+      this.setCodeVersion(c);
     });
   }
 
-  canNextCode() {
-    return this.codeIndex > 0  || (this.codeIndex == 0 && this.unsubmittedCode.trim() !== "");
+  canNewerCode() {
+    return this.currentCodeVersion.Version > 1 || (this.currentCodeVersion.Version == 1 && !!this.unsubmittedCode.trim());
   }
 
-  nextCode() {
-    if (this.codeIndex == 0) {
+  getUncompiledCode() {
+    return {
+      TaskId: 0,
+      Code: this.unsubmittedCode,
+      Version: 0,
+      HasPreviousVersion: true
+    }
+  }
+
+  newerCode() {
+    if (this.currentCodeVersion.Version == 1) {
       // go to last submitted code
-      this.codeIndex--;
-      this.hasPreviousCodeVersion = true;
+      this.currentCodeVersion = this.getUncompiledCode();
       this.codeDefinitions = this.unsubmittedCode;
       this.codeUpdated();
     }
     else {
-      this.codeIndex--;
-      this.loadServerCode();
+      this.loadServerCode(this.currentCodeVersion.Version - 1);
     }
   }
 
-  canPreviousCode() {
-    return this.hasPreviousCodeVersion;
+  canOlderCode() {
+    return this.currentCodeVersion.HasPreviousVersion;
   }
 
-  previousCode() {
-    this.codeIndex++;
-    this.loadServerCode();
+  olderCode() {
+    this.loadServerCode(this.currentCodeVersion.Version + 1);
   }
 
   private placeholderMap: Map<string, string> = new Map(
@@ -139,11 +144,14 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
       if (t.Id !== this.taskId) {
-        this.codeDefinitions = t.Code || "";
         this.taskId = t.Id;
         this.canPaste = t.PasteCode;
-        this.modelChanged();
-        this.taskService.loadCode(this.taskId, 0).then(c => this.hasPreviousCodeVersion = c.HasPreviousVersion);
+        this.taskService.loadCode(this.taskId, 0).then(c => {
+          this.setCodeVersion(c);
+          if (c.HasPreviousVersion) {
+            this.loadServerCode(1);
+          }
+        });
       }
     })
   }
