@@ -265,17 +265,13 @@ gemini {
     font-family: monospace;
 }
 
-.metalup .pane-holder {
-    grid-template-rows: 1fr;
-}
-
 .metalup .one-column {
     display: grid;
     grid-template-columns: 1fr;
 }
 
 .metalup .pane {
-    grid-template-rows: 28px minmax(min-content, 1fr);
+    grid-template-rows: 28px min-content;
     border: none; 
 }
 

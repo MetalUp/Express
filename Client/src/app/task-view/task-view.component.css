@@ -14,8 +14,6 @@
 }
 
 .independent-column {
-    grid-template-rows: 1fr 1fr 1fr;
-    align-content: start;
-    align-items: stretch;
+    grid-template-rows: min-content min-content min-content;
     gap: 10px 10px;
 }
