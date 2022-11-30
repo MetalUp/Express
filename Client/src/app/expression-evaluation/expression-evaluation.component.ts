@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
@@ -19,6 +19,9 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
     private rulesService: RulesService,
     private taskService: TaskService) {
   }
+
+  @ViewChild('pane') 
+  pane?: ElementRef;
 
   previousExpressionIndex = 0;
 
@@ -109,6 +112,25 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
     }
     if (event.key === "ArrowDown") {
       this.onNext();
+    }
+  }
+
+  private mouseListener = false;
+
+  onMouseDown(event: any) {
+    this.mouseListener = true;
+  }
+
+  onMouseUp(event: any) {
+    this.mouseListener = false;
+  }
+
+
+  onMouseMove(event: any) {
+    if (this.mouseListener) {
+      const e = event as MouseEvent;
+      const element = this.pane!.nativeElement;
+      element.style.height = e.pageY - element.getBoundingClientRect().bottom + 'px';
     }
   }
 

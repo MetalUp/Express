@@ -4,7 +4,7 @@
         <button [disabled]="!canNext()" title="Next expression"  (click)="onNext()">></button>
         <button [disabled]="!canPrevious()" title="Previous expression"  (click)="onPrevious()"><</button></div>
     </div>
-    <div class="one-column pane-body">
+    <div #pane class="one-column pane-body">
         <div class="expression code">
             <span class="prompt"></span>
             <textarea placeholder="(cursor up/down to retrieve previous expressions)" (paste)="onPaste($event)"
@@ -13,4 +13,5 @@
         </div>
         <textarea *ngIf="expressionError" readonly>{{expressionError}}</textarea>
     </div>
+    <div (mousedown)="onMouseDown($event)"  (mouseup)="onMouseUp($event)"  (mousemove)="onMouseMove($event)" style="margin-top: -5px; cursor:n-resize;"></div>
 </div>
