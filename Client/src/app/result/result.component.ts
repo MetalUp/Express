@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ErrorType } from '../models/rules';
 import { EmptyRunResult, RunResult } from '../models/run-result';
 import { CompileServerService } from '../services/compile-server.service';
@@ -9,7 +10,7 @@ import { RulesService } from '../services/rules.service';
   templateUrl: './result.component.html',
   styleUrls: ['./result.component.css']
 })
-export class ResultComponent implements OnInit {
+export class ResultComponent implements OnInit, OnDestroy {
 
   constructor(private compileServer: CompileServerService,
               private rulesService: RulesService) {
@@ -17,9 +18,7 @@ export class ResultComponent implements OnInit {
 
   result: RunResult = EmptyRunResult;
 
-  ngOnInit(): void {
-    this.compileServer.lastExpressionResult.subscribe(rr => this.result = rr);
-  }
+  
 
   filteredStderr() {
     return this.result.stderr
@@ -29,5 +28,22 @@ export class ResultComponent implements OnInit {
 
   get previousExpressionResult() {
     return this.result.stdout || this.filteredStderr();
+  }
+
+  
+  get paneSize() {
+    return "pane-size-medium";
+  }
+
+  private sub?: Subscription;
+
+  ngOnInit(): void {
+    this.sub = this.compileServer.lastExpressionResult.subscribe(rr => this.result = rr);
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 }

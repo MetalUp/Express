@@ -137,6 +137,10 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     return this.placeholderMap.get(this.compileServer.selectedLanguage) || '';
   }
 
+  get paneSize() {
+    return "pane-size-large";
+  }
+
   private sub?: Subscription;
 
   ngOnInit(): void {

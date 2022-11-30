@@ -6,8 +6,8 @@
             <button [disabled]="!canOlderCode()" title="Previous code"  (click)="olderCode()"><</button>
         </div>
     </div>
-    <div class="one-column pane-body">
-        <div class="code-definition code">
+    <div class="one-column pane-body" [ngClass]="paneSize">
+        <div class="code-definition code" >
             <textarea 
                 [(ngModel)]="codeDefinitions" 
                 (ngModelChange)="modelChanged()" 

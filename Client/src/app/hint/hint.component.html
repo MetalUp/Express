@@ -7,7 +7,7 @@
             <div *ngIf="canGetNextHint()" class="cost">{{cost}}</div>
         </div>
     </div>
-    <div class="one-column pane-body">
+    <div class="one-column pane-body" [ngClass]="paneSize">
         <div class="hint" [innerHtml]="hintHtml"></div>
     </div>
 </div>

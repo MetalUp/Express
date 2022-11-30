@@ -7,7 +7,7 @@
             <button title="Previous task"  [disabled]="!canViewPreviousTask()" (click)="viewPreviousTask()"><</button>
         </div>
     </div>
-    <div class="one-column pane-body">
+    <div class="one-column pane-body" [ngClass]="paneSize">
         <div class="task" [innerHtml]="taskHtml"></div>    
     </div>
 </div>

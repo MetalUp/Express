@@ -85,6 +85,10 @@ export class TestingComponent implements OnInit, OnDestroy {
     });
   }
 
+  get paneSize() {
+    return "pane-size-medium";
+  }
+
   private sub?: Subscription;
 
   ngOnInit(): void {

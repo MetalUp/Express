@@ -85,6 +85,11 @@ export class HintComponent implements OnInit, OnDestroy {
     });
   }
 
+  
+  get paneSize() {
+    return "pane-size-medium";
+  }
+
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       const newTask = this.currentTask.Id !== task.Id; 

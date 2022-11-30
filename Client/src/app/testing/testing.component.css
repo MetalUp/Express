@@ -1,7 +1,6 @@
 .pane-body {
     grid-template-rows: 1fr;
     font-size: 11pt;
-    height: 15vh;
 }
 
 .message {

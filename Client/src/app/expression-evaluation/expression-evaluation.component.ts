@@ -20,9 +20,6 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
     private taskService: TaskService) {
   }
 
-  @ViewChild('pane') 
-  pane?: ElementRef;
-
   previousExpressionIndex = 0;
 
   previousExpressions: [expr: string, result: string][] = [];
@@ -115,25 +112,6 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
     }
   }
 
-  private mouseListener = false;
-
-  onMouseDown(event: any) {
-    this.mouseListener = true;
-  }
-
-  onMouseUp(event: any) {
-    this.mouseListener = false;
-  }
-
-
-  onMouseMove(event: any) {
-    if (this.mouseListener) {
-      const e = event as MouseEvent;
-      const element = this.pane!.nativeElement;
-      element.style.height = e.pageY - element.getBoundingClientRect().bottom + 'px';
-    }
-  }
-
   canPrevious() {
     return this.previousExpressionIndex > 0;
   }
@@ -156,6 +134,11 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
       this.previousExpressionIndex = this.previousExpressionIndex + 1;
       this.expression = this.previousExpressions[this.previousExpressionIndex][0].trim();
     }
+  }
+
+  
+  get paneSize() {
+    return "pane-size-medium";
   }
 
   private sub?: Subscription;

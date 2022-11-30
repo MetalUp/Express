@@ -402,3 +402,15 @@ div.icon.recent {
 .hide-in-client {
     display: none !important;
 }
+
+.pane-size-small {
+    height: 10vh;
+}
+
+.pane-size-medium {
+    height: 20vh;
+}
+
+.pane-size-large {
+    height: 40vh;
+}

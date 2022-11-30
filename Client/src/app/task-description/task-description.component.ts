@@ -53,6 +53,10 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(tree);
   }
 
+  get paneSize() {
+    return "pane-size-large";
+  }
+
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       const newTask = this.currentTask.Id !== task.Id;
