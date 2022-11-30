@@ -294,6 +294,8 @@ gemini {
    background-color: var(--background-color);
    color: black;
    font-size: 11pt;
+   resize: vertical;
+   overflow: auto;
 }
 
 .metalup .info {

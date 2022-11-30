@@ -13,12 +13,9 @@
     height: 100%;
 }
 
-.independent-column1 {
+.independent-column {
     grid-template-rows: 1fr 1fr 1fr;
-    gap: 10px 10px;
-}
-
-.independent-column2 {
-    grid-template-rows: 1fr  1fr 1fr;
+    align-content: start;
+    align-items: stretch;
     gap: 10px 10px;
 }
