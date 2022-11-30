@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, getResultOutcome, RunResult } from '../models/run-result';
@@ -44,12 +44,6 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
       : ''
   }
 
-  filteredStderr() {
-    return this.result.stderr
-      ? this.rulesService.filter(ErrorType.stderr, this.result.stderr)
-      : ''
-  }
-
   mapOutcome(outcome: number) {
     return getResultOutcome(outcome);
   }
@@ -64,10 +58,6 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   get previousExpression() {
     return this.getPrevious(0);
-  }
-
-  get previousExpressionResult() {
-    return this.getPrevious(1) || this.filteredStderr();
   }
 
   get expressionError() {

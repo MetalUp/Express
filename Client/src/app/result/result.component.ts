@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ErrorType } from '../models/rules';
 import { EmptyRunResult, RunResult } from '../models/run-result';
 import { CompileServerService } from '../services/compile-server.service';
+import { RulesService } from '../services/rules.service';
 
 @Component({
   selector: 'app-result',
@@ -9,16 +11,23 @@ import { CompileServerService } from '../services/compile-server.service';
 })
 export class ResultComponent implements OnInit {
 
-  constructor(private compileServer: CompileServerService) {
+  constructor(private compileServer: CompileServerService,
+              private rulesService: RulesService) {
   }
 
-  lastRunResult: RunResult = EmptyRunResult;
+  result: RunResult = EmptyRunResult;
 
   ngOnInit(): void {
-    this.compileServer.lastExpressionResult.subscribe(rr => this.lastRunResult = rr);
+    this.compileServer.lastExpressionResult.subscribe(rr => this.result = rr);
+  }
+
+  filteredStderr() {
+    return this.result.stderr
+      ? this.rulesService.filter(ErrorType.stderr, this.result.stderr)
+      : ''
   }
 
   get previousExpressionResult() {
-    return this.lastRunResult.stdout;
+    return this.result.stdout || this.filteredStderr();
   }
 }

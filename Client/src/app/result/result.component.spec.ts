@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { RunResult } from '../models/run-result';
 import { CompileServerService } from '../services/compile-server.service';
+import { RulesService } from '../services/rules.service';
 
 import { ResultComponent } from './result.component';
 
@@ -10,12 +11,15 @@ describe('ResultComponent', () => {
   let component: ResultComponent;
   let fixture: ComponentFixture<ResultComponent>;
   let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
+  let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let resultSubject = new Subject<RunResult>();
 
 
   beforeEach(async () => {
     compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['evaluateExpression'], { "selectedLanguage": "csharp",  lastExpressionResult: resultSubject  });
-  
+    rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
+    rulesServiceSpy.checkRules.and.returnValue('');
+    rulesServiceSpy.filter.and.callFake(( _e, tf) => tf);
     
     await TestBed.configureTestingModule({
       declarations: [ResultComponent],
@@ -24,6 +28,10 @@ describe('ResultComponent', () => {
         {
           provide: CompileServerService,
           useValue: compileServerServiceSpy
+        },
+        {
+          provide: RulesService,
+          useValue: rulesServiceSpy
         }
       ]
     }).compileComponents();

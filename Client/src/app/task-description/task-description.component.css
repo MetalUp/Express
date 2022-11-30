@@ -1,5 +1,5 @@
 .pane-body {
-    grid-template-rows:  minmax(min-content, 40vh);
+    grid-template-rows:  40vh;
     font-size: 11pt;
 }
 

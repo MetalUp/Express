@@ -113,35 +113,35 @@ describe('ExpressionEvaluationComponent', () => {
   it('should show the most recent previous expression', () => {
 
     expect(component.previousExpression).toEqual('');
-    expect(component.previousExpressionResult).toEqual('');
+    
 
     component.previousExpressions = [['e1', 'r1'], ['e2', 'r2'], ['e3', 'r3']];
     component.previousExpressionIndex = component.previousExpression.length;
 
     expect(component.previousExpression).toEqual("e3");
-    expect(component.previousExpressionResult).toEqual("r3");
+    
 
   });
 
   it('should show error if no result', () => {
 
     expect(component.previousExpression).toEqual('');
-    expect(component.previousExpressionResult).toEqual('');
+   
 
     component.result = testRunResultErr;
 
     expect(component.previousExpression).toEqual('');
-    expect(component.previousExpressionResult).toEqual('run error');
+    
 
     component.result = testRunResultCmp;
 
     expect(component.previousExpression).toEqual('');
-    expect(component.previousExpressionResult).toEqual('');
+   
 
     component.validationFail = "validFail"
 
     expect(component.previousExpression).toEqual('');
-    expect(component.previousExpressionResult).toEqual('');
+   
 
     component.result = EmptyRunResult;
   });
@@ -157,7 +157,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('expression result');
+   
     expect(component.expressionError).toBe('');
 
   });
@@ -173,7 +173,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe(' expression result');
+    
     expect(component.expressionError).toBe('');
   });
 
@@ -189,7 +189,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('');
+   
     expect(component.expressionError).toBe('compiler error');
   });
 
@@ -204,7 +204,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('run error');
+    
     expect(component.expressionError).toBe('');
   });
 
@@ -216,7 +216,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.expression = '';
     component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).not.toHaveBeenCalled();
-    expect(component.previousExpressionResult).toBe('');
+   
     expect(component.expressionError).toBe('');
   });
 
@@ -249,7 +249,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    expect(component.previousExpressionResult).toBe('');
+    
     expect(component.expressionError).toBe('rules fail');
   });
 
