@@ -3,10 +3,14 @@
 body{
     height: 99vh;
     margin: 0px;
+    width: 100vw;
+    overflow: hidden;
 }
 
 app-root {
     height: 100%;
+    width: 100vw;
+    overflow: hidden;
 }
 
 app-task-view {
