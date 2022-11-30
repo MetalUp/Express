@@ -1,5 +1,6 @@
 .pane-body {
     grid-template-rows: minmax(min-content, 100%) min-content;
+    height: 10vh;
 }
 
 .previous {

@@ -1,6 +1,7 @@
 .pane-body {
     grid-template-rows:  40vh;
     font-size: 11pt;
+    height: 40vh;
 }
 
 .task {

@@ -1,5 +1,6 @@
 div.pane-body {
     grid-template-rows: minmax(min-content, 100%) min-content;
+    height: 20vh;
 }
 
 div.code-definition {

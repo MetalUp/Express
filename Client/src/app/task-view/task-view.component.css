@@ -8,12 +8,14 @@
 .content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 90vh;
+    grid-template-rows: 100%;
     column-gap: 10px;
-    height: 100%;
+    height: 92vh;
 }
 
 .independent-column {
     grid-template-rows: min-content min-content min-content;
     gap: 10px 10px;
+    overflow:hidden;
+    height: 100%;
 }
