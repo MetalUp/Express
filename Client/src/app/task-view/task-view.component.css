@@ -22,5 +22,6 @@
     overflow:auto;
     height: 100%;
     resize: horizontal;
-    width: 44vw;
+    width: 43.7vw;
+    padding-right: 12px;
 }
