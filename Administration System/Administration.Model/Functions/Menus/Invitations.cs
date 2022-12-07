@@ -66,7 +66,7 @@ namespace Model.Functions.Menus
                     "That is not a valid Invitation Code";
 
         //TEMP HELPERS - TO BE REMOVED
-        public static bool CodeAlwaysValid(string code) => code.StartsWith("1");
-        public static bool CodeAlwaysInvalid(string code) => code.StartsWith("0");
+        public static bool CodeAlwaysValid(string code) => code == "SUCCEED";
+        public static bool CodeAlwaysInvalid(string code) => code == "FAIL";
     }
 }
