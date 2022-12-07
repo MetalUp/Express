@@ -23,6 +23,7 @@ using Newtonsoft.Json;
 using Model;
 using Server;
 using Microsoft.Extensions.Options;
+using static System.Net.WebRequestMethods;
 
 namespace NakedFunctions.Rest.App.Demo
 {
@@ -48,7 +49,7 @@ namespace NakedFunctions.Rest.App.Demo
             }).AddJwtBearer(options => {
                 options.Authority = $"https://{Configuration["Auth0:Domain"]}/";
                 options.Audience = Configuration["Auth0:Audience"];
-                options.TokenValidationParameters.NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+                options.TokenValidationParameters.NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
             });
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc);
