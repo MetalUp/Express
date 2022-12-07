@@ -4,7 +4,7 @@ namespace Model.Functions
     public static class User_Functions
     {
         #region Display
-        public static bool HideLink(this User user) => user.Link is null || user.Link == "";
+        public static bool HideLink(this User user) => user.LinkToBeEmailed is null || user.LinkToBeEmailed == "";
 
         #endregion
         #region Editing
