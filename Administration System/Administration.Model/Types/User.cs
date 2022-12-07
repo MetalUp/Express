@@ -40,14 +40,15 @@
         [MemberOrder(6)]
         public virtual Organisation Organisation { get; init; }
 
-        [MemberOrder(7)]
+        [Hidden]
         public string InvitationCode { get; init; } //Visible only to teachers in organisation and when status is Pending
 
+        [MemberOrder(7)]
+        [UrlLink("Invitation link (email to person)")]
+        public string Link => $"https://express.metalup.org/invitation/{InvitationCode}";
 
         public  virtual ICollection<Group> Groups { get; init; } = new List<Group>();
 
         public override string ToString() => $"{Name} - {(Status == UserStatus.PendingAcceptance ? "PENDING ":null)}{Role}";
     }
-
-
 }

@@ -3,6 +3,10 @@ namespace Model.Functions
 {
     public static class User_Functions
     {
+        #region Display
+        public static bool HideLink(this User user) => user.Link is null || user.Link == "";
+
+        #endregion
         #region Editing
         [Edit]
         public static IContext EditName(
