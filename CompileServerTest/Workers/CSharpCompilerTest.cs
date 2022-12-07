@@ -208,17 +208,17 @@ public class CSharpCompilerTest {
         Assert.AreEqual("", rr.run_id);
     }
 
-    [TestMethod]
-    public void TestCompileAndTestStackOverflow() {
-        using var runSpec = CsharpRunSpec(TestCodeStackOverflow);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
-        Assert.IsNotNull(rr);
-        Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
-        Assert.AreEqual("", rr.cmpinfo);
-        Assert.IsTrue(rr.stderr.Contains("Stack overflow"));
-        //Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
-        Assert.AreEqual("", rr.run_id);
-    }
+    //[TestMethod]
+    //public void TestCompileAndTestStackOverflow() {
+    //    using var runSpec = CsharpRunSpec(TestCodeStackOverflow);
+    //    var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+    //    Assert.IsNotNull(rr);
+    //    Assert.AreEqual(Outcome.RunTimeError, rr.outcome);
+    //    Assert.AreEqual("", rr.cmpinfo);
+    //    Assert.IsTrue(rr.stderr.Contains("Stack overflow"));
+    //    //Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
+    //    Assert.AreEqual("", rr.run_id);
+    //}
 
     [TestMethod]
     public void TestCompileAndRunInParallel() {
