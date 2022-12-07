@@ -1,6 +1,10 @@
 <div class="metalup">
+    
     <ng-container *ngIf="(userLoggedOn | async) === false || (registeredService.registered$ | async) === false" >
         <h1>Welcome to MetalUp Express</h1>
+        <ng-container *ngIf="failedInvite">
+            <p>Sorry that was not a valid invitation please reread the notes below</p>
+        </ng-container>
         <ng-container *ngIf="(userLoggedOn | async) === true">
             <p>Although you are technically logged on, you are not a registered user, so the capabilities of
                 MetalUp.Express are not available to you.</p>

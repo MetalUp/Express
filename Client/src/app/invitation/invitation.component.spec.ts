@@ -38,22 +38,12 @@ describe('InvitationComponent', () => {
           provide: ActivatedRoute,
           useValue: activatedRouteSpy
         },
-        {
-          provide: Router,
-          useValue: routerSpy
-        },
+       
         {
           provide: RegistrationService,
           useValue: registeredServiceSpy
         },
-        {
-          provide: ContextService,
-          useValue: contextServiceSpy
-        },
-        {
-          provide: RepLoaderService,
-          useValue: repLoaderSpy
-        },
+      
       ]
     })
     .compileComponents();

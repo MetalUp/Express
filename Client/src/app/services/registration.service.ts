@@ -19,21 +19,25 @@ export class RegistrationService implements CanActivate {
   }
 
   constructor(public auth: AuthService, private contextService: ContextService, private router: Router) {
-    
+
     auth.isAuthenticated$.subscribe(b => {
       if (b) {
-          this.contextService.getUser()
-            .then(u => {
-              this.setRegistered (!!u.userName());
-            })
-            .catch(e => {
-              this.setRegistered(false);
-            })
+        this.refreshRegistration();
       }
       else {
         this.setRegistered(false);
       }
     })
+  }
+
+  refreshRegistration() {
+    this.contextService.getUser()
+      .then(u => {
+        this.setRegistered(!!u.userName());
+      })
+      .catch(e => {
+        this.setRegistered(false);
+      })
   }
 
   isLoggedOn() {
@@ -63,11 +67,11 @@ export class RegistrationService implements CanActivate {
     return `${url}/${page || 'landing'}`;
   }
 
-  login(page? : string) {
-    this.auth.loginWithRedirect({redirect_uri : this.callbackUrl(page),  scope: 'openid email profile', response_type: 'code'});
+  login() {
+    this.auth.loginWithRedirect({redirect_uri : this.callbackUrl(),  scope: 'openid email profile', response_type: 'code'});
   } 
 
-  logout() {
-    this.auth.logout({returnTo: this.callbackUrl()});
+  logout(page?: string) {
+    this.auth.logout({returnTo: this.callbackUrl(page)});
   } 
 }

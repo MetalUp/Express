@@ -1,4 +1,6 @@
-<div class="metalup">
+<div *ngIf="showPage" class="metalup">
     <h1>Welcome to MetalUp Express</h1>
-    <p>{{message}}</p>
+    <p>Something about logging on</p>
+
+    <button class="btn btn-primary btn-margin" (click)="registeredService.login()">Log In</button>
 </div>

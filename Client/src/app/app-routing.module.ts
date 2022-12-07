@@ -20,8 +20,8 @@ import { TaskViewComponent } from './task-view/task-view.component';
 
 const routes: Routes = [
     { path: '',  redirectTo: 'landing',  pathMatch: 'full' },
-    { path: 'invitation', component: InvitationComponent },
     { path: 'invitation/:id', component: InvitationComponent },
+    { path: 'invitation', component: InvitationComponent },
     {
         path: 'dashboard/home',
         component: HomeComponent,
