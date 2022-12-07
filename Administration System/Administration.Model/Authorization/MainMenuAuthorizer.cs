@@ -72,8 +72,7 @@ namespace Model.Authorization
                 >= Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Invitations.InviteNewTeacher),
                     nameof(Invitations.InviteNewStudent)),
-                Role.Student => false,
-                _ => Helpers.MatchesOneOf(memberName, nameof(Invitations.AcceptInvitation))
+                _ => false
             };
 
         private bool GroupsAuth(string memberName, IContext context) =>
