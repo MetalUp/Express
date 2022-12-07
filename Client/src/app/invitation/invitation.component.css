@@ -1,0 +1,9 @@
+:host {
+    color: white;
+    
+}
+
+.metalup {
+    font-family: var(--font-text-family);
+    margin-left: 150px;
+}

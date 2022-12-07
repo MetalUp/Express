@@ -12,6 +12,7 @@ import {
 } from '@nakedobjects/gemini';
 import { ViewType } from '@nakedobjects/services';
 import { ArmliteComponent } from './armlite/armlite.component';
+import { InvitationComponent } from './invitation/invitation.component';
 import { LandingComponent } from './landing/landing.component';
 import { LogoffComponent } from './logoff/logoff.component';
 import { RegistrationService } from './services/registration.service';
@@ -19,6 +20,8 @@ import { TaskViewComponent } from './task-view/task-view.component';
 
 const routes: Routes = [
     { path: '',  redirectTo: 'landing',  pathMatch: 'full' },
+    { path: 'invitation', component: InvitationComponent },
+    { path: 'invitation/:id', component: InvitationComponent },
     {
         path: 'dashboard/home',
         component: HomeComponent,

@@ -58,16 +58,16 @@ export class RegistrationService implements CanActivate {
     return true;
   }
 
-  private get callbackUrl() {
+  private callbackUrl(page?: string) {
     const url = (window as any).location.origin;
-    return `${url}/landing`;
+    return `${url}/${page || 'landing'}`;
   }
 
-  login() {
-    this.auth.loginWithRedirect({redirect_uri : this.callbackUrl,  scope: 'openid email profile', response_type: 'code'});
+  login(page? : string) {
+    this.auth.loginWithRedirect({redirect_uri : this.callbackUrl(page),  scope: 'openid email profile', response_type: 'code'});
   } 
 
   logout() {
-    this.auth.logout({returnTo: this.callbackUrl});
+    this.auth.logout({returnTo: this.callbackUrl()});
   } 
 }

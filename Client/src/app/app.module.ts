@@ -19,6 +19,7 @@ import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { LogoffComponent } from './logoff/logoff.component';
 import { ArmliteComponent } from './armlite/armlite.component';
 import { ResultComponent } from './result/result.component';
+import { InvitationComponent } from './invitation/invitation.component';
 
 @NgModule({
     declarations: [
@@ -34,6 +35,7 @@ import { ResultComponent } from './result/result.component';
         LogoffComponent,
         ArmliteComponent,
         ResultComponent,
+        InvitationComponent,
     ],
     imports: [
         BrowserModule,
