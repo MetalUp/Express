@@ -27,9 +27,7 @@ namespace Model.Functions.Menus
             return (teacher, context2);
         }
 
-        private static string GenerateInvitationCode(IContext context) =>
-            SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(context.RandomSeed().Value.ToString())).Take(8)
-            .Aggregate("", (s, b) => s + b.ToString("x2"));
+        private static string GenerateInvitationCode(IContext context) => context.NewGuid().ToString();
 
         public static (User, IContext) InviteNewUser(
              string name,
@@ -50,9 +48,10 @@ namespace Model.Functions.Menus
         }
 
         public static (User, IContext) AcceptInvitation(
-            [RegEx(@"^[a-f0-9]{16}")][DescribedAs("Paste your Invitation Code here")] string code,
+            string code,
             IContext context)
         {
+            if (CodeAlwaysValid(code) || CodeAlwaysInvalid(code)) return (null, context); //TEMP HELPERS - TO BE REMOVED
             var userName = Users.HashedCurrentUserName(context);
             var invitee = context.Instances<User>().Single(u => u.InvitationCode == code);
             var invitee2 = new User(invitee) {UserName = userName, InvitationCode = null, Status = UserStatus.Active };
@@ -60,7 +59,14 @@ namespace Model.Functions.Menus
         }
 
         public static string ValidateAcceptInvitation(string code, IContext context) =>
-            context.Instances<User>().Any(u => u.InvitationCode == code) ? null :
-            "That is not a valid Invitation Code";
+           CodeAlwaysValid(code) ? null :  //TEMP HELPERS - TO BE REMOVED
+               CodeAlwaysInvalid(code) ? "That is not a valid Invitation Code" :  //TEMP HELPERS - TO BE REMOVED
+                Guid.TryParse(code, out Guid result) && context.Instances<User>().Count(u => u.InvitationCode == code) ==1 ? 
+                     null :
+                    "That is not a valid Invitation Code";
+
+        //TEMP HELPERS - TO BE REMOVED
+        public static bool CodeAlwaysValid(string code) => code.StartsWith("1");
+        public static bool CodeAlwaysInvalid(string code) => code.StartsWith("0");
     }
 }
