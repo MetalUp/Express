@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomainObjectRepresentation, IHateoasModel, InvokableActionMember, MenusRepresentation, Value } from '@nakedobjects/restful-objects';
+import { DomainObjectRepresentation, DomainServicesRepresentation, IHateoasModel, InvokableActionMember, MenusRepresentation, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { Subscription } from 'rxjs';
@@ -69,17 +69,17 @@ export class InvitationComponent implements OnInit, OnDestroy {
     }
   }
 
-  getMenu() {
-    return this.contextService.getMenus()
-      .then((menus: MenusRepresentation) => {
-        const menu = menus.getMenu("Invitations");
-        return this.repLoader.populate(menu);
+  getService() {
+    return this.contextService.getServices()
+      .then((services: DomainServicesRepresentation) => {
+        const service = services.getService("Model.Functions.Services.InvitationAcceptance");
+        return this.repLoader.populate(service);
       })
-      .then((m: IHateoasModel) => m as DomainObjectRepresentation)
+      .then((s: IHateoasModel) => s as DomainObjectRepresentation)
   }
 
   getAction() {
-    return this.getMenu().then(menu => menu.actionMember("AcceptInvitation") as InvokableActionMember);
+    return this.getService().then(service => service.actionMember("AcceptInvitation") as InvokableActionMember);
   }
 
   acceptInvitation() {

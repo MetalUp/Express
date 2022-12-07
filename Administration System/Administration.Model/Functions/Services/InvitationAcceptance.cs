@@ -1,6 +1,6 @@
 ﻿namespace Model.Functions.Services
 {
-    public class InvitationAcceptance
+    public static class InvitationAcceptance
     {
             public static IContext AcceptInvitation(
                 string code,
