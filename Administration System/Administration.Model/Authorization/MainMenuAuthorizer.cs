@@ -106,7 +106,7 @@ namespace Model.Authorization
                     nameof(Users.StudentsPendingAcceptance),
                     nameof(Users.FindStudentByName),
                     nameof(Users.MyColleagues)),
-                Role.Student => false,
+                Role.Student => Helpers.MatchesOneOf(memberName, nameof(Users.Me)),
                 _ => false
             };
 
