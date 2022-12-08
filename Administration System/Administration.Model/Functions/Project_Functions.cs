@@ -177,15 +177,15 @@ namespace Model.Functions
         #region Assignment
 
         [MemberOrder(5)]
-        public static IContext AssignToMe(this Project project, IContext context) =>
-            AssignToIndividual(project, Users.Me(context), context.Today(), context);
+        public static (Assignment, IContext) AssignToMe(this Project project, IContext context) =>
+            Assignments.NewAssignmentToIndividual(Users.Me(context), project, context.Today(), context);
 
         public static string DisableAssignToMe(this Project project, IContext context) =>
             project.IsAssignedToMe(context) ? "Project is already assigned to you" : null;
 
         [MemberOrder(10)]
         public static IContext AssignToIndividual(this Project project, User singleUser, DateTime dueBy, IContext context) =>
-            Assignments.NewAssignmentToIndividual(singleUser, project, dueBy, context);
+            Assignments.NewAssignmentToIndividual(singleUser, project, dueBy, context).Item2;
 
         [MemberOrder(20)]
         public static IContext AssignToGroup(this Project project, Group group, DateTime dueBy, IContext context) =>

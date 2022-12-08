@@ -31,7 +31,7 @@
                 .Where(s => s.Status == status)
                 .OrderByDescending(a => a.DueBy);
 
-        public static IContext NewAssignmentToIndividual(User assignedTo, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context)
+        public static (Assignment, IContext) NewAssignmentToIndividual(User assignedTo, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context)
         {
             var me = Users.Me(context);
             var a = new Assignment()
@@ -45,11 +45,11 @@
                 DueBy = dueBy,
                 Status = AssignmentStatus.PendingStart
             };
-            return context.WithNew(a);
+            return (a, context.WithNew(a));
         }
 
         public static IContext NewAssignmentToGroup(Group group, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
-            group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, project, dueBy, c));
+            group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, project, dueBy, c).Item2);
 
         public static List<Group> Choices0NewAssignmentToGroup(Group group, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
             Groups.AllOurGroups(context).ToList();
