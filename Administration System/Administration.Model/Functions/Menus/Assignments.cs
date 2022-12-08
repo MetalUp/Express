@@ -2,9 +2,11 @@
 {
     public static class Assignments
     {
+        [MemberOrder(10)]
         [TableView(false, nameof(Assignment.Project), nameof(Assignment.AssignedTo), nameof(Assignment.DueBy), nameof(Assignment.Status))]
         public static IQueryable<Assignment> AllAssignments(IContext context) => context.Instances<Assignment>();
 
+        [MemberOrder(20)]
         [PageSize(20)]
         [TableView(false, nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.Project))]
         public static IQueryable<Assignment> MyAssignments(IContext context) =>
@@ -16,6 +18,8 @@
             return context.Instances<Assignment>().Where(a => a.AssignedToId == id).OrderByDescending(a => a.DueBy);
         }
 
+
+        [MemberOrder(30)]
         [TableView(false,  nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.AssignedTo), nameof(Assignment.Project))]
         public static IQueryable<Assignment> AssignmentsSetByMe( IContext context)
         {
@@ -23,13 +27,17 @@
             return context.Instances<Assignment>().Where(s => s.AssignedById == meId).OrderByDescending(a => a.DueBy).ThenBy(a => a.Status);
         }
 
-        [TableView(false, nameof(Assignment.AssignedTo), nameof(Assignment.Project), nameof(Assignment.DueBy), nameof(Assignment.Status) )]
+
+        [MemberOrder(40)]
+        [TableView(false, nameof(Assignment.AssignedTo), nameof(Assignment.Project), nameof(Assignment.DueBy), nameof(Assignment.Status))]
         public static IQueryable<Assignment> OverdueAssignmentsSetByMe(IContext context)
         {
             var today = context.Today();
-            return AssignmentsSetByMe(context).Where(a => a.DueBy.IsAtLeastOneDayBefore(today) && a.Status != AssignmentStatus.Completed);
+            return AssignmentsSetByMe(context).Where(a => a.DueBy < today && a.Status != AssignmentStatus.Completed);
         }
 
+
+        [MemberOrder(50)]
         [PageSize(20)]
         [TableView(false, nameof(Assignment.Project), nameof(Assignment.AssignedTo), nameof(Assignment.DueBy), nameof(Assignment.Status))]
         public static IQueryable<Assignment> FindAssignmentsSetByMe(
@@ -39,6 +47,8 @@
                 .Where(s => s.Status == status)
                 .OrderByDescending(a => a.DueBy);
 
+
+        [MemberOrder(60)]
         public static (Assignment, IContext) NewAssignmentToIndividual(User assignedTo, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context)
         {
             var me = Users.Me(context);
@@ -56,6 +66,8 @@
             return (a, context.WithNew(a));
         }
 
+
+        [MemberOrder(70)]
         public static IContext NewAssignmentToGroup(Group group, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
             group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, project, dueBy, c).Item2);
 
