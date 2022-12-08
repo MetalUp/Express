@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Subject } from 'rxjs';
 import { RegistrationService } from '../services/registration.service';
 
@@ -11,42 +10,28 @@ describe('InvitationComponent', () => {
   let fixture: ComponentFixture<InvitationComponent>;
 
   let registeredServiceSpy: jasmine.SpyObj<RegistrationService>;
-  let routerSpy: jasmine.SpyObj<Router>;
   let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
-  let contextServiceSpy: jasmine.SpyObj<ContextService>;
-  let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
-
-  let registeredSub = new Subject<boolean | undefined>();
-  let loggedOnSub = new Subject<boolean>();
   let mapSub = new Subject<ParamMap>();
 
-  registeredServiceSpy = jasmine.createSpyObj('RegisteredService', ['isLoggedOn'], { registered$ : registeredSub });
-  routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-  activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['navigate'], {paramMap: mapSub });
-  contextServiceSpy = jasmine.createSpyObj('ContextService', ['navigate']);
-  repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['navigate']);
-
+  activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['navigate'], { paramMap: mapSub });
 
   beforeEach(async () => {
-
-    registeredServiceSpy.isLoggedOn.and.returnValue(loggedOnSub)
-
+    registeredServiceSpy = jasmine.createSpyObj('RegisteredService', ['logout']);
+   
     await TestBed.configureTestingModule({
-      declarations: [ InvitationComponent ],
+      declarations: [InvitationComponent],
       providers: [
         {
           provide: ActivatedRoute,
           useValue: activatedRouteSpy
         },
-       
         {
           provide: RegistrationService,
           useValue: registeredServiceSpy
         },
-      
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(InvitationComponent);
     component = fixture.componentInstance;
@@ -55,5 +40,22 @@ describe('InvitationComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should logout if invitation code', () => {
+    mapSub.next({ get: () => 'code' } as unknown as ParamMap);
+
+    expect(registeredServiceSpy.logout).toHaveBeenCalledWith('invitation');
+    expect(component.showPage).toBeFalse();
+
+    expect(localStorage.getItem("invitationCode")).toBe('code');
+    localStorage.removeItem("invitationCode")
+  });
+
+  it('should show page if no invitation code', () => {
+    mapSub.next({ get: () => null } as unknown as ParamMap);
+
+    expect(registeredServiceSpy.logout).not.toHaveBeenCalled();
+    expect(component.showPage).toBeTrue();
   });
 });

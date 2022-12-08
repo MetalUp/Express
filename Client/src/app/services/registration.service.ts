@@ -9,17 +9,16 @@ import { first, of, pipe, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class RegistrationService implements CanActivate {
-  
-  registered$ = new Subject<boolean>();
-  registered? : boolean;
 
-  private setRegistered(registered : boolean) {
+  registered$ = new Subject<boolean>();
+  registered?: boolean;
+
+  private setRegistered(registered: boolean) {
     this.registered = registered;
     this.registered$.next(registered);
   }
 
   constructor(public auth: AuthService, private contextService: ContextService, private router: Router) {
-
     auth.isAuthenticated$.subscribe(b => {
       if (b) {
         this.refreshRegistration();
@@ -29,6 +28,8 @@ export class RegistrationService implements CanActivate {
       }
     })
   }
+
+  static inviteCodeKey = "invitationCode"
 
   refreshRegistration() {
     this.contextService.getUser()
@@ -50,7 +51,7 @@ export class RegistrationService implements CanActivate {
     }
 
     this.registered$.pipe(first()).subscribe(b => {
-      if (b === false){
+      if (b === false) {
         this.router.navigate(['/landing']);
       }
     })
@@ -58,7 +59,7 @@ export class RegistrationService implements CanActivate {
     return this.registered$;
   }
 
-  canDeactivate(c : any) {
+  canDeactivate(c: any) {
     return true;
   }
 
@@ -68,10 +69,10 @@ export class RegistrationService implements CanActivate {
   }
 
   login() {
-    this.auth.loginWithRedirect({redirect_uri : this.callbackUrl(),  scope: 'openid email profile', response_type: 'code'});
-  } 
+    this.auth.loginWithRedirect({ redirect_uri: this.callbackUrl(), scope: 'openid email profile', response_type: 'code' });
+  }
 
   logout(page?: string) {
-    this.auth.logout({returnTo: this.callbackUrl(page)});
-  } 
+    this.auth.logout({ returnTo: this.callbackUrl(page) });
+  }
 }

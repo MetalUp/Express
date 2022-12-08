@@ -10,18 +10,17 @@ import { RegistrationService } from '../services/registration.service';
 })
 export class InvitationComponent implements OnInit, OnDestroy {
 
-  constructor(private route: ActivatedRoute,
-    public registeredService: RegistrationService) { }
+  constructor(private route: ActivatedRoute, public registeredService: RegistrationService) { }
 
-  private sub1?: Subscription;
+  private sub?: Subscription;
 
   showPage = false;
 
   ngOnInit(): void {
-    this.sub1 = this.route.paramMap.subscribe(pm => {
+    this.sub = this.route.paramMap.subscribe(pm => {
       const code = pm.get('id') || "";
       if (code) {
-        localStorage.setItem("invitationCode", code);
+        localStorage.setItem(RegistrationService.inviteCodeKey, code);
         this.registeredService.logout("invitation");
       }
       else {
@@ -31,8 +30,8 @@ export class InvitationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.sub1) {
-      this.sub1.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
   }
 }
