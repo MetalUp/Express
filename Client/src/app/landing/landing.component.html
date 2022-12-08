@@ -3,11 +3,11 @@
     <ng-container *ngIf="(userLoggedOn | async) === false || (registeredService.registered$ | async) === false" >
         <h1>Welcome to MetalUp Express</h1>
         <ng-container *ngIf="failedInvite">
-            <p>Sorry, the invitation code included in the URL you used is either not a valid invitation, or has already been used. Please contact
+            <p class="invalid">Sorry, the invitation code included in the URL you used is either not a valid invitation, or has already been used. Please contact
                 the person who sent you the invitation.</p>
         </ng-container>
         <ng-container *ngIf="(userLoggedOn | async) === true">
-            <p>Although you are technically logged on, you are not a registered user, so the capabilities of
+            <p>Although you are technically logged in, you are not a registered user so the capabilities of
                 MetalUp.Express are not available to you.</p>
             <button class="btn btn-primary btn-margin" (click)="registeredService.logout()">Log Out</button>
         </ng-container>

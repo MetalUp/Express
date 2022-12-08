@@ -23,3 +23,9 @@ button   {
 button:hover {
     outline-width: 2px;
 }
+
+.invalid {
+    font-size: 14pt;
+    background-color: #e37422;
+    padding: 5px;
+}
