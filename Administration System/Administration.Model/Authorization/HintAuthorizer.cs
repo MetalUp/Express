@@ -9,18 +9,9 @@ namespace Model.Authorization
         public bool IsVisible(Hint hint, string memberName, IContext context) =>
             Users.UserRole(context) switch
             {
-                Role.Root => true,
-                Role.Author => true,
-                Role.Teacher => IsHintProperty(memberName),
-                Role.Student => IsForATaskAssignedToUser(hint, context) && 
-                               IsHintProperty(memberName),
+                >= Role.Author => true,
                 _ => false
             };
-
-        private static bool IsHintProperty(string memberName) => IsProperty<Hint>(memberName);
-
-        private static bool IsForATaskAssignedToUser(Hint hint, IContext context) =>
-            hint.Tasks.Any(t => TaskAuthorizer.TaskIsAssignedToUser(t, context));
 
     }
 }

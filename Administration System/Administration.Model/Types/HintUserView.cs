@@ -4,6 +4,7 @@ namespace Model.Types
     [ViewModel(typeof(HintUserView_Functions))]
     public class HintUserView
     {
+        public HintUserView() { }
         public HintUserView(int taskId, int hintNo, string title, string contents, int previousHintNo, int nextHintNo, int costOfNextHint, bool nextHintAlreadyUsed)
         {
             TaskId = taskId;

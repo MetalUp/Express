@@ -3,6 +3,7 @@
 [ViewModel(typeof(TaskUserView_Functions))]
 public class TaskUserView
 {
+    public TaskUserView() { }
     public TaskUserView(Task task, string title, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted)
     {
         Task = task;
