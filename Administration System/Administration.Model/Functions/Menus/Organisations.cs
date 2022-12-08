@@ -10,7 +10,6 @@
         public static IQueryable<Organisation> FindOrganisation(string nameMatch, IContext context) => 
             context.Instances<Organisation>().Where(org => org.Name.ToUpper().Contains(nameMatch.ToUpper()));
 
-        [CreateNew]
         public static (Organisation, IContext) CreateNewOrganisation(string name, IContext context)
         {
             var org = new Organisation() { Name = name };

@@ -19,7 +19,8 @@
 
         [MultiLine(10)]
         public string Details { get; init; }
-        
+
+        [Hidden]
         public virtual ICollection<User> Teachers { get; set; } = new List<User>();
 
         public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
