@@ -1,9 +1,10 @@
-
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { ContextService } from '@nakedobjects/services';
+import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { AuthService } from '@auth0/auth0-angular';
 import { first, of, pipe, Subject } from 'rxjs';
+import { ActionResultRepresentation, DomainObjectRepresentation, IHateoasModel, InvokableActionMember, MenusRepresentation, Value } from '@nakedobjects/restful-objects';
+import { Dictionary } from 'lodash';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class RegistrationService implements CanActivate {
     this.registered$.next(registered);
   }
 
-  constructor(public auth: AuthService, private contextService: ContextService, private router: Router) {
+  constructor(public auth: AuthService,  private contextService: ContextService,  private repLoader: RepLoaderService, private router: Router) {
     auth.isAuthenticated$.subscribe(b => {
       if (b) {
         this.refreshRegistration();
@@ -32,9 +33,9 @@ export class RegistrationService implements CanActivate {
   static inviteCodeKey = "invitationCode"
 
   refreshRegistration() {
-    this.contextService.getUser()
+    this.getUser()
       .then(u => {
-        this.setRegistered(!!u.userName());
+        this.setRegistered(u === 1);
       })
       .catch(e => {
         this.setRegistered(false);
@@ -75,4 +76,26 @@ export class RegistrationService implements CanActivate {
   logout(page?: string) {
     this.auth.logout({ returnTo: this.callbackUrl(page) });
   }
+
+  getUser() {
+    return this.getAction().then(action => {
+      return this.repLoader.invoke(action, {  } as Dictionary<Value>, {} as Dictionary<Object>)
+        .then((ar : ActionResultRepresentation)  =>  ar.result().object()?.propertyMember('Status').value().scalar() as number) // success
+        .catch(_ => null);
+    });
+  }
+
+  getMenu() {
+    return this.contextService.getMenus()
+      .then((menus: MenusRepresentation) => {
+        const menu = menus.getMenu("Users");
+        return this.repLoader.populate(menu);
+      })
+      .then((s: IHateoasModel) => s as DomainObjectRepresentation)
+  }
+
+  getAction() {
+    return this.getMenu().then(menu => menu.actionMember("Me") as InvokableActionMember);
+  }
+
 }
