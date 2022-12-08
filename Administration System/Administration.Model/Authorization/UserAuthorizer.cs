@@ -9,7 +9,7 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 >= Role.Teacher => Users.Me(context).OrganisationId == user.OrganisationId,
-                Role.Student => user == Users.Me(context),
+                Role.Student => user.Id == Users.Me(context).Id,
                 _ => false
             };
     }
