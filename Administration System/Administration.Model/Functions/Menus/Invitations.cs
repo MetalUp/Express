@@ -10,7 +10,7 @@ namespace Model.Functions.Menus
            [Optionally] Group group,
            IContext context)
         {
-            (var student, var context2) = InviteNewUser(name, Role.Student, Organisations.MyOrganisation(context), context);
+            (var student, var context2) = InviteNewUserToSpecifiedOrganisation(name, Role.Student, Organisations.MyOrganisation(context), context);
             if (group != null)
             {
                 return (student, Group_Functions.AddStudent(group, student, context));
@@ -21,15 +21,17 @@ namespace Model.Functions.Menus
             }
         }
 
+        public static IList<Group> Choices1InviteNewStudent(IContext context) =>  Groups.AllGroups(context).ToList();
+
         public static (User, IContext) InviteNewTeacher(string name, IContext context)
         {
-            (var teacher, var context2) = InviteNewUser(name, Role.Teacher, Organisations.MyOrganisation(context), context);
+            (var teacher, var context2) = InviteNewUserToSpecifiedOrganisation(name, Role.Teacher, Organisations.MyOrganisation(context), context);
             return (teacher, context2);
         }
 
         private static string GenerateInvitationCode(IContext context) => context.NewGuid().ToString();
 
-        public static (User, IContext) InviteNewUser(
+        public static (User, IContext) InviteNewUserToSpecifiedOrganisation(
              string name,
              Role asRole,
              Organisation organisation,
