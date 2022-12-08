@@ -7,6 +7,7 @@ namespace Model.Functions
         public static bool HideLink(this User user) => user.LinkToBeEmailed is null || user.LinkToBeEmailed == "";
 
         #endregion
+
         #region Editing
         [Edit]
         public static IContext EditName(
@@ -82,6 +83,21 @@ namespace Model.Functions
 
         public static List<Group> Choices1AddSelectedStudentsToGroup(this IQueryable<User> students, IContext context) =>
             Groups.AllOurGroups(context).ToList();
+        #endregion
+
+        #region Administrator actions
+
+        public static IContext ChangeRole(
+            this User student,
+            Role role,
+            IContext context) =>
+            context.WithUpdated(student, new(student) { Role = role });
+
+        public static IContext ChangeOrganisation(
+            this User student,
+            Organisation newOrg,
+            IContext context) =>
+            context.WithUpdated(student, new(student) { OrganisationId = newOrg.Id, Organisation = newOrg });
         #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NakedFunctions.Security;
+using static Model.Authorization.Helpers;
 
 namespace Model.Authorization
 {
@@ -8,8 +9,8 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Users.Me(context).OrganisationId == user.OrganisationId,
-                Role.Student => user.Id == Users.Me(context).Id,
+                >= Role.Teacher => Users.Me(context).OrganisationId == user.OrganisationId && !memberName.StartsWith("Change"),
+                Role.Student => user.Id == Users.Me(context).Id && IsProperty<User>(memberName),
                 _ => false
             };
     }
