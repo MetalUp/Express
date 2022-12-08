@@ -20,7 +20,7 @@
         public static IQueryable<Assignment> AssignmentsSetByMe( IContext context)
         {
             var meId = Users.Me(context).Id;
-            return context.Instances<Assignment>().Where(s => s.AssignedById == meId).OrderByDescending(a => a.DueBy);
+            return context.Instances<Assignment>().Where(s => s.AssignedById == meId).OrderByDescending(a => a.DueBy).ThenBy(a => a.Status);
         }
 
         [TableView(false, nameof(Assignment.AssignedTo), nameof(Assignment.Project), nameof(Assignment.DueBy), nameof(Assignment.Status) )]

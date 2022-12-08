@@ -29,7 +29,7 @@ namespace Model.Functions.Menus
             return (teacher, context2);
         }
 
-        private static string GenerateInvitationCode(IContext context) => context.NewGuid().ToString();
+        internal static string GenerateInvitationCode(IContext context) => context.NewGuid().ToString();
 
         public static (User, IContext) InviteNewUserToSpecifiedOrganisation(
              string name,

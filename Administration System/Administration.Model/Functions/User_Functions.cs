@@ -63,6 +63,18 @@ namespace Model.Functions
         internal static bool HasRole(this User user, Role role) => user.Role == role;
         #endregion
 
+        public static IContext InviteToChangeLoginCredentials(
+            this User user,
+            IContext context)
+        {
+            var user2 = new User(user)
+            {
+                InvitationCode = Invitations.GenerateInvitationCode(context),
+                UserName = null
+            };
+            return context.WithUpdated(user, user2);
+        }
+
         #region Assignments
 
         [PageSize(20)]
@@ -98,6 +110,7 @@ namespace Model.Functions
             Organisation newOrg,
             IContext context) =>
             context.WithUpdated(student, new(student) { OrganisationId = newOrg.Id, Organisation = newOrg });
+
         #endregion
     }
 }
