@@ -49,6 +49,12 @@ namespace Model.Functions.Menus
             return (user, context.WithNew(user));
         }
 
+        public static IQueryable<User> OutstandingInvitationsForMyOrganisation(IContext context) =>
+            Users.OurUsers(context).Where(u => u.Status == UserStatus.PendingAcceptance);
+
+
+        public static IQueryable<User> AllOutstandingInvitations(IContext context) =>
+            Users.AllUsers(context).Where(u => u.Status == UserStatus.PendingAcceptance);
 
     }
 }

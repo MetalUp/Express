@@ -22,8 +22,9 @@ namespace Model.Authorization
            proj.IsAssignable() && 
             (IsTaskProperty(memberName) || 
                 MatchesOneOf(memberName,
-                    nameof(Project_Functions.AssignToGroup),
-                    nameof(Project_Functions.AssignToIndividual)));
+                    nameof(Project_Functions.AssignToMe),
+                    nameof(Project_Functions.AssignToIndividual),
+                    nameof(Project_Functions.AssignToGroup)));
 
         private static bool IsTaskProperty(string memberName) => IsProperty<Task>(memberName);
 
