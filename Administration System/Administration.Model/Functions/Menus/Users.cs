@@ -24,7 +24,7 @@ namespace Model.Functions.Menus
         public static IQueryable<User> AllUsers(IContext context) =>context.Instances<User>();
 
         #region Students & Colleagues
-        private static IQueryable<User> OurUsers(IContext context)
+        internal static IQueryable<User> OurUsers(IContext context)
         {
             int myOrgId = Me(context).OrganisationId;
             return context.Instances<User>().Where(s => s.OrganisationId == myOrgId).
@@ -34,10 +34,6 @@ namespace Model.Functions.Menus
         [MemberOrder(100)]
         public static IQueryable<User> OurStudents(IContext context) =>
             OurUsers(context).Where(u => u.Role == Role.Student);
-
-        [MemberOrder(110)]
-        public static IQueryable<User> StudentsPendingAcceptance(IContext context) =>
-            OurStudents(context).Where(u => u.Status == UserStatus.PendingAcceptance);
 
         [MemberOrder(120)]
         public static User FindStudentByName(User student, IContext context) => student;
