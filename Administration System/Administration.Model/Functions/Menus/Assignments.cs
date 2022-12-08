@@ -8,7 +8,7 @@
         [PageSize(20)]
         [TableView(false, nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.Project))]
         public static IQueryable<Assignment> MyAssignments(IContext context) =>
-            AssignmentsTo(Users.Me(context), context);
+            AssignmentsTo(Users.Me(context), context).OrderBy(a => a.DueBy);
 
         internal static IQueryable<Assignment> AssignmentsTo(User user, IContext context)
         {
@@ -16,18 +16,26 @@
             return context.Instances<Assignment>().Where(a => a.AssignedToId == id).OrderByDescending(a => a.DueBy);
         }
 
-        public static IQueryable<Assignment> AssignmentsCreatedByMe( IContext context)
+        [TableView(false,  nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.AssignedTo), nameof(Assignment.Project))]
+        public static IQueryable<Assignment> AssignmentsSetByMe( IContext context)
         {
             var meId = Users.Me(context).Id;
             return context.Instances<Assignment>().Where(s => s.AssignedById == meId).OrderByDescending(a => a.DueBy);
         }
 
+        [TableView(false, nameof(Assignment.AssignedTo), nameof(Assignment.Project), nameof(Assignment.DueBy), nameof(Assignment.Status) )]
+        public static IQueryable<Assignment> OverdueAssignmentsSetByMe(IContext context)
+        {
+            var today = context.Today();
+            return AssignmentsSetByMe(context).Where(a => a.DueBy.IsAtLeastOneDayBefore(today) && a.Status != AssignmentStatus.Completed);
+        }
+
         [PageSize(20)]
         [TableView(false, nameof(Assignment.Project), nameof(Assignment.AssignedTo), nameof(Assignment.DueBy), nameof(Assignment.Status))]
-        public static IQueryable<Assignment> FindAssignmentsCreatedByMe(
+        public static IQueryable<Assignment> FindAssignmentsSetByMe(
              AssignmentStatus status,
             IContext context) =>
-                 AssignmentsCreatedByMe(context)
+                 AssignmentsSetByMe(context)
                 .Where(s => s.Status == status)
                 .OrderByDescending(a => a.DueBy);
 
