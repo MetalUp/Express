@@ -14,6 +14,7 @@
             Status = cloneFrom.Status;
             OrganisationId = cloneFrom.OrganisationId;
             Organisation = cloneFrom.Organisation;
+            InvitationCode = cloneFrom.InvitationCode;
             Groups = new List<Group>(cloneFrom.Groups);
         }
 
