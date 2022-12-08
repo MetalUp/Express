@@ -2,15 +2,15 @@
 {
     public static class InvitationAcceptance
     {
-            public static IContext AcceptInvitation(
+            public static (User,IContext) AcceptInvitation(
                 string code,
                 IContext context)
             {
-                if (CodeAlwaysValid(code) || CodeAlwaysInvalid(code)) return  context; //TEMP HELPERS - TO BE REMOVED
+                if (CodeAlwaysValid(code) || CodeAlwaysInvalid(code)) return  (null, context); //TEMP HELPERS - TO BE REMOVED
                 var userName = Users.HashedCurrentUserName(context);
                 var invitee = context.Instances<User>().Single(u => u.InvitationCode == code);
                 var invitee2 = new User(invitee) { UserName = userName, InvitationCode = null, Status = UserStatus.Active };
-                return context.WithUpdated(invitee, invitee2);
+                return (invitee2, context.WithUpdated(invitee, invitee2));
             }
 
             public static string ValidateAcceptInvitation(string code, IContext context) =>
