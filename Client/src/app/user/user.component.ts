@@ -12,7 +12,9 @@ export class UserComponent implements OnInit {
   constructor(private contextService: ContextService) { }
 
   get userName() {
-    return this.user;
+    //return this.user;
+    // temp commented out pending friendly name change
+    return "";
   }
 
   ngOnInit(): void {

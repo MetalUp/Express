@@ -13,10 +13,10 @@ import { RegistrationService } from '../services/registration.service';
 })
 export class LandingComponent implements OnInit, OnDestroy {
 
-  constructor(public registeredService: RegistrationService,
-     private router: Router,
-      private contextService : ContextService,
-       private repLoader : RepLoaderService) { }
+  constructor(private router: Router,
+              public registeredService: RegistrationService,
+              private contextService: ContextService,
+              private repLoader: RepLoaderService) { }
 
   userChecked = false;
   sub1?: Subscription;
@@ -28,24 +28,23 @@ export class LandingComponent implements OnInit, OnDestroy {
   }
 
   get invitationCode() {
-    return localStorage.getItem("invitationCode"); 
+    return localStorage.getItem(RegistrationService.inviteCodeKey);
   }
 
   clearCode() {
-    localStorage.removeItem("invitationCode"); 
+    localStorage.removeItem(RegistrationService.inviteCodeKey);
   }
 
   ngOnInit(): void {
-    this.sub1 = this.registeredService.registered$.subscribe(b => {
-      if (b) {
+    this.sub1 = this.registeredService.registered$.subscribe(registered => {
+      if (registered) {
         this.router.navigate(['/dashboard']);
       }
       this.userChecked = true;
     });
 
-    this.sub2 = this.registeredService.isLoggedOn().subscribe(b => {
-
-      if (b) {
+    this.sub2 = this.registeredService.isLoggedOn().subscribe(loggedOn => {
+      if (loggedOn) {
         const code = this.invitationCode;
         this.clearCode();
         if (code) {
@@ -55,7 +54,7 @@ export class LandingComponent implements OnInit, OnDestroy {
     });
   }
 
-getService() {
+  getService() {
     return this.contextService.getServices()
       .then((services: DomainServicesRepresentation) => {
         const service = services.getService("Model.Functions.Services.InvitationAcceptance");
@@ -68,9 +67,9 @@ getService() {
     return this.getService().then(service => service.actionMember("AcceptInvitation") as InvokableActionMember);
   }
 
-  acceptInvitation(code : string) {
+  acceptInvitation(code: string) {
     this.getAction().then(action => {
-     
+
       this.repLoader.invoke(action, { code: new Value(code) } as Dictionary<Value>, {} as Dictionary<Object>)
         .then(_ => this.registeredService.refreshRegistration()) // success
         .catch(_ => this.failedInvite = true);

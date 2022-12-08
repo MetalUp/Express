@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Subject } from 'rxjs';
 import { RegistrationService } from '../services/registration.service';
@@ -9,14 +9,15 @@ import { LandingComponent } from './landing.component';
 describe('LandingComponent', () => {
   let component: LandingComponent;
   let fixture: ComponentFixture<LandingComponent>;
+
   let registeredServiceSpy: jasmine.SpyObj<RegistrationService>;
   let routerSpy: jasmine.SpyObj<Router>;
-  let registeredSub = new Subject<boolean | undefined>();
-  let loggedOnSub = new Subject<boolean>();
-  let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
- 
+
+  let registeredSub = new Subject<boolean | undefined>();
+  let loggedOnSub = new Subject<boolean>();
+  
   registeredServiceSpy = jasmine.createSpyObj('RegisteredService', ['isLoggedOn'], { registered$ : registeredSub });
   routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
@@ -31,12 +32,12 @@ describe('LandingComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
-          provide: RegistrationService,
-          useValue: registeredServiceSpy
-        },
-        {
           provide: Router,
           useValue: routerSpy
+        },
+        {
+          provide: RegistrationService,
+          useValue: registeredServiceSpy
         },
         {
           provide: ContextService,
@@ -60,20 +61,30 @@ describe('LandingComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should navigate home if registered', fakeAsync(() => {
-  //   registeredSub.next(true);
-  //   tick();
-  //   tick();
-  //   expect(component.userChecked).toBeTrue();
-  //   expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard']);
-  // }));
+  it('should navigate home if registered', fakeAsync(() => {
+    registeredSub.next(true);
+    tick();
+    tick();
+    expect(component.userChecked).toBeTrue();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard']);
+  }));
 
-  // it('should not navigate home if not registered', fakeAsync(() => {
+  it('should not navigate home if not registered', fakeAsync(() => {
    
-  //   registeredSub.next(false);
-  //   tick();
-  //   tick();
-  //   expect(component.userChecked).toBeTrue();
-  //   expect(routerSpy.navigate).not.toHaveBeenCalled();
-  // }));
+    registeredSub.next(false);
+    tick();
+    tick();
+    expect(component.userChecked).toBeTrue();
+    expect(routerSpy.navigate).not.toHaveBeenCalled();
+  }));
+
+  it('should accept invitataion if logged on and code set', fakeAsync(() => {
+    localStorage.setItem(RegistrationService.inviteCodeKey, "testcode");
+
+    registeredSub.next(true);
+    tick();
+    tick();
+    expect(component.userChecked).toBeTrue();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard']);
+  }));
 });
