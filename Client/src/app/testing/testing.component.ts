@@ -27,7 +27,7 @@ export class TestingComponent implements OnInit, OnDestroy {
       return 'There are no Tests defined for this task'; 
     }
     if (this.canRunTests()) {
-      return 'Tests not yet run on current function definition.';
+      return 'Tests not yet run on current function definition(s).';
     }
     if (this.hasTests && this.result.outcome === 0) {
       return 'This task defines automated tests, which may be run once Code has successfully compiled.';
