@@ -22,6 +22,7 @@ namespace Server
             config.AddTypeAuthorizer<HintUserView, HintUserViewAuthorizer>();
             config.AddTypeAuthorizer<File, FileAuthorizer>();
             config.AddTypeAuthorizer<Assignment, AssignmentAuthorizer>();
+            config.AddTypeAuthorizer<RunResult, RunResultAuthorizer>();
             return config;
         }
 
