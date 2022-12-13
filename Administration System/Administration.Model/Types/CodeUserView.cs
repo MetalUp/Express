@@ -4,6 +4,7 @@ namespace Model.Types
     [ViewModel(typeof(CodeUserView_Functions))]
     public class CodeUserView
     {
+        public CodeUserView() { }
         public CodeUserView(int taskId, string code, int version, bool hasPreviousVersion)
         {
             TaskId = taskId;

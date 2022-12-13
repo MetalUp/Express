@@ -23,6 +23,7 @@ namespace Server
             config.AddTypeAuthorizer<File, FileAuthorizer>();
             config.AddTypeAuthorizer<Assignment, AssignmentAuthorizer>();
             config.AddTypeAuthorizer<RunResult, RunResultAuthorizer>();
+            config.AddTypeAuthorizer<CodeUserView, CodeUserViewAuthorizer>();
             return config;
         }
 
