@@ -26,12 +26,12 @@
             return a.Status == AssignmentStatus.PendingStart ? context.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Started }) : context;
         }
 
-        internal static IContext RunTestsFail(int taskId, string message, IContext context) =>
-            RecordActivity(taskId, ActivityType.RunTestsFail, null, message, null, context);
+        internal static IContext RunTestsFail(int taskId, string message, string code, IContext context) =>
+            RecordActivity(taskId, ActivityType.RunTestsFail, code, message, null, context);
 
-        internal static IContext RunTestsSuccess(int taskId, IContext context)
+        internal static IContext RunTestsSuccess(int taskId, string code, IContext context)
         {
-            var context2 = RecordActivity(taskId, ActivityType.RunTestsSuccess, null, null, null, context);
+            var context2 = RecordActivity(taskId, ActivityType.RunTestsSuccess, code, null, null, context);
             var task = context.Instances<Task>().Single(t => t.Id == taskId);
             var next = task.NextTaskId == null ? null : context.Instances<Task>().Single(t => t.Id == taskId);
             if (next == null || !next.HasTests() )

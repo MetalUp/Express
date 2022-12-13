@@ -99,13 +99,6 @@ namespace Model.Types
 
         #endregion
 
-
-        [Hidden]
-        public bool PasteExpression => Project.PasteExpression;
-
-        [Hidden]
-        public bool PasteCode => Project.PasteCode;
-
         [Hidden]
         public int? PreviousTaskId { get; init; }
 

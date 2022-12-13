@@ -13,8 +13,6 @@
             Title = cloneFrom.Title;
             LanguageId = cloneFrom.LanguageId;
             Language = cloneFrom.Language;
-            PasteExpression = cloneFrom.PasteExpression;
-            PasteCode = cloneFrom.PasteCode;
             Description = cloneFrom.Description;
             CommonHiddenCodeFileId = cloneFrom.CommonHiddenCodeFileId;
             CommonHiddenCodeFile = cloneFrom.CommonHiddenCodeFile;
@@ -46,12 +44,6 @@
 
         [MemberOrder(20)]
         public virtual Language Language { get; init; }
-
-        [MemberOrder(30)]
-        public bool PasteExpression { get; init; }
-
-        [MemberOrder(40)]
-        public bool PasteCode { get; init; }
 
         #region Common Hidden Code
         [Hidden]

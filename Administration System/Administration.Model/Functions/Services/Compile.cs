@@ -103,11 +103,11 @@ public static class Compile
             //TODO: Temporary solution, pending moving RegEx rules server side.
             if (result.Stdout.Contains("Failed!") || result.Stdout.Contains("FAIL")) // C#/VB and Python, respectively {
             {
-               return (result, Activities.RunTestsFail(taskId, result.Stdout, context2));
+               return (result, Activities.RunTestsFail(taskId, result.Stdout, code, context2));
             }
             else
             {
-                return (result, Activities.RunTestsSuccess(taskId, context2));
+                return (result, Activities.RunTestsSuccess(taskId, code, context2));
             }
         }
         return (result, context2);

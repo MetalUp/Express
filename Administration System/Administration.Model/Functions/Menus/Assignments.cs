@@ -81,16 +81,18 @@
         internal static Assignment GetAssignmentForCurrentUser(int taskId, IContext context)
         {
             int projectId = Tasks.GetTask(taskId, context).ProjectId.Value;
-            return ActiveAssignmentsForCurrentUser(projectId, context).OrderByDescending(a => a.DueBy).FirstOrDefault();
+            return AssignmentsForCurrentUser(projectId, context).OrderByDescending(a => a.DueBy).FirstOrDefault();
         }
 
-        internal static IQueryable<Assignment> ActiveAssignmentsForCurrentUser(int projectId, IContext context)
+        internal static IQueryable<Assignment> ActiveAssignmentsForCurrentUser(int projectId, IContext context) =>
+            AssignmentsForCurrentUser(projectId, context).Where(a => a.Status == AssignmentStatus.PendingStart || a.Status == AssignmentStatus.Started);
+
+        internal static IQueryable<Assignment> AssignmentsForCurrentUser(int projectId, IContext context)
         {
             int uId = Users.Me(context).Id;
             return context.Instances<Assignment>().Where(a =>
-                    a.ProjectId == projectId 
+                    a.ProjectId == projectId
                     && a.AssignedToId == uId
-                    && (a.Status == AssignmentStatus.PendingStart || a.Status == AssignmentStatus.Started)
                     );
         }
 
