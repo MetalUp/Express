@@ -18,8 +18,6 @@ export class ResultComponent implements OnInit, OnDestroy {
 
   result: RunResult = EmptyRunResult;
 
-  
-
   filteredStderr() {
     return this.result.stderr
       ? this.rulesService.filter(ErrorType.stderr, this.result.stderr)
@@ -30,7 +28,6 @@ export class ResultComponent implements OnInit, OnDestroy {
     return this.result.stdout || this.filteredStderr();
   }
 
-  
   get paneSize() {
     return "pane-size-medium";
   }

@@ -1,0 +1,8 @@
+div.pane-body {
+    grid-template-rows: 1fr;
+    overflow: none;
+}
+
+div.result {
+    overflow:hidden;
+}
