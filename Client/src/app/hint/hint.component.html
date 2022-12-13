@@ -1,9 +1,9 @@
 <div class="one-column pane">
     <div class="pane-header">{{title}}
         <div class="button-bar">
-            <button title="Get a new hint" [disabled]="!canGetNextHint()" (click)="getNextHint()">Next Hint</button>
-            <button title="Next hint" [disabled]="!canViewNextHint()" (click)="viewNextHint()">></button>
-            <button title="Previous hint" [disabled]="!canViewPreviousHint()" (click)="viewPreviousHint()"><</button>
+            <button title="{{newHintTooltip}}" [disabled]="!canGetNextHint()" (click)="getNextHint()">Next Hint</button>
+            <button title="{{nextHintTooltip}}" [disabled]="!canViewNextHint()" (click)="viewNextHint()">></button>
+            <button title="{{previousHintTooltip}}" [disabled]="!canViewPreviousHint()" (click)="viewPreviousHint()"><</button>
             <div *ngIf="canGetNextHint()" class="cost">{{cost}}</div>
         </div>
     </div>

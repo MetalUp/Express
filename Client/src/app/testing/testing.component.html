@@ -1,7 +1,7 @@
 <div class="one-column pane">
     <div class="pane-header">Test
         <div class="button-bar">
-            <button [disabled]="!canRunTests()" (click)="onRunTests()">Run Tests</button>
+            <button [disabled]="!canRunTests()" title="{{runTestsTooltip}}" (click)="onRunTests()">Run Tests</button>
         </div>
     </div>
     <div class="one-column pane-body" [ngClass]="paneSize">

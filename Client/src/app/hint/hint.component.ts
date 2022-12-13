@@ -3,6 +3,7 @@ import { EmptyTaskUserView, ITaskUserView } from '../models/task-user-view';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { EmptyHintUserView, IHintUserView } from '../models/hint-user-view';
+import { nextHintEnabledTooltip, nextHintDisabledTooltip, previousHintEnabledTooltip, previousHintDisabledTooltip, newHintDisabledTooltip, newHintEnabledTooltip } from '../constants/tooltips';
 
 
 @Component({
@@ -44,6 +45,19 @@ export class HintComponent implements OnInit, OnDestroy {
     const marks = cost === 1 ? "mark" : "marks"; 
 
     return `(Next Hint will cost ${cost} ${marks})`;
+  }
+
+
+  get nextHintTooltip() {
+    return  this.canViewNextHint() ?  nextHintEnabledTooltip : nextHintDisabledTooltip;
+  }
+
+  get previousHintTooltip() {
+    return  this.canViewPreviousHint() ?  previousHintEnabledTooltip : previousHintDisabledTooltip;
+  }
+
+  get newHintTooltip() {
+    return  this.canGetNextHint() ?  newHintEnabledTooltip : newHintDisabledTooltip;
   }
 
   canGetNextHint() {
