@@ -1,65 +1,65 @@
 // Task description pane
 
 // previous task arrow 
-export const previousTaskEnabledTooltip = "enabled previous tooltip";
-export const previousTaskDisabledTooltip = "disabled previous tooltip";
+export const previousTaskEnabledTooltip = "Review previous task in this project";
+export const previousTaskDisabledTooltip = "No previous task in this project";
 
 // next task arrow 
-export const nextTaskEnabledTooltip = "enabled next tooltip";
-export const nextTaskDisabledTooltip = "disabled next tooltip";
+export const nextTaskEnabledTooltip = "Advance to the next task (already started)";
+export const nextTaskDisabledTooltip = "Not available";
 
 // new task button 
-export const newTaskEnabledTooltip = "enabled new tooltip";
-export const newTaskDisabledTooltip = "disabled new tooltip";
+export const newTaskEnabledTooltip = "You may now advance to the Next Task";
+export const newTaskDisabledTooltip = "You cannot advance to the next task until the current code has passed all tests.";
 
 // return to assignment button 
-export const returnToAssignmentEnabledTooltip = "enabled return tooltip";
-export const returnToAssignmentDisabledTooltip = "disabled return tooltip"; // button currently not shown
+export const returnToAssignmentEnabledTooltip = "You have completed the project. View Assignment status.";
+export const returnToAssignmentDisabledTooltip = ""; // button currently not shown
 
 // Expression pane
 
 // previous Expression arrow 
-export const previousExpressionEnabledTooltip = "enabled previous tooltip";
-export const previousExpressionDisabledTooltip = "disabled previous tooltip";
+export const previousExpressionEnabledTooltip = "Go back to previous expression";
+export const previousExpressionDisabledTooltip = "No previous expressions stored for this task";
 
 // next Expression arrow 
-export const nextExpressionEnabledTooltip = "enabled next tooltip";
-export const nextExpressionDisabledTooltip = "disabled next tooltip";
+export const nextExpressionEnabledTooltip = "Go forward to the next expression";
+export const nextExpressionDisabledTooltip = "No later expressions stored for this task";
 
 // submit Expression button 
-export const submitExpressionEnabledTooltip = "enabled submit tooltip";
-export const submitExpressionDisabledTooltip = "disabled submit tooltip";
+export const submitExpressionEnabledTooltip = "Evaluate the expression (or hit Return on the expression);
+export const submitExpressionDisabledTooltip = "Enter or edit";
 
 // Code pane
 
 // previous Code arrow 
-export const previousCodeEnabledTooltip = "enabled previous tooltip";
-export const previousCodeDisabledTooltip = "disabled previous tooltip";
+export const previousCodeEnabledTooltip = "Review previous code submission";
+export const previousCodeDisabledTooltip = "No previous version to view";
 
 // next Code arrow 
-export const nextCodeEnabledTooltip = "enabled next tooltip";
-export const nextCodeDisabledTooltip = "disabled next tooltip";
+export const nextCodeEnabledTooltip = "Review next code submission";
+export const nextCodeDisabledTooltip = "No next version to view";
 
 // submit Code button 
-export const submitCodeEnabledTooltip = "enabled submit tooltip";
-export const submitCodeDisabledTooltip = "disabled submit tooltip";
+export const submitCodeEnabledTooltip = "Submit code to compile";
+export const submitCodeDisabledTooltip = "Enter or edit code to submit again";
 
 // Hints pane
 
 // previous Hint arrow 
-export const previousHintEnabledTooltip = "enabled previous tooltip";
-export const previousHintDisabledTooltip = "disabled previous tooltip";
+export const previousHintEnabledTooltip = "Review previous hint";
+export const previousHintDisabledTooltip = "No previous hint";
 
 // next Hint arrow 
-export const nextHintEnabledTooltip = "enabled next tooltip";
-export const nextHintDisabledTooltip = "disabled next tooltip";
+export const nextHintEnabledTooltip = "Review next (previously viewed) hint";
+export const nextHintDisabledTooltip = "To use the next available hint, click Next Hint";
 
 // new Hint button 
-export const newHintEnabledTooltip = "enabled new tooltip";
-export const newHintDisabledTooltip = "disabled new tooltip";
+export const newHintEnabledTooltip = "View next hint (which may cost you marks)";
+export const newHintDisabledTooltip = "Use the forward arrow if enabled. Otherwise, there are no more hints.";
 
 // Tests pane
 
 // run tests button 
-export const runTestsEnabledTooltip = "enabled run tooltip";
-export const runTestsDisabledTooltip = "disabled run tooltip";
+export const runTestsEnabledTooltip = "Run the tests on the last submitted code.";
+export const runTestsDisabledTooltip = "To run tests again you must enter/edit and submit code";
