@@ -22,7 +22,7 @@ namespace Model.Authorization
                 nameof(Activities) => ActivitiesAuth(memberName, context),
                 nameof(Compile) => CompileAuth(memberName, context),
                 nameof(TaskAccess) => TaskAccessAuth(memberName, context),
-                nameof(InvitationAcceptance) => InvitationAcceptanceAuth(memberName,context),
+                nameof(UserService) => InvitationAcceptanceAuth(memberName,context),
                 _ => false
             };
 

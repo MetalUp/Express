@@ -10,6 +10,9 @@ namespace Model.Functions.Menus
         public static User Me(IContext context) =>
             context.Instances<User>().SingleOrDefault(c => c.UserName == HashedCurrentUserName(context));
 
+        internal static User FindById(int uid, IContext context) =>
+            context.Instances<User>().Single(u => u.Id == uid);
+
         [MemberOrder(20)]
         public static User FindByUserName(string userName, IContext context) =>
     context.Instances<User>().SingleOrDefault(c => c.UserName == Hash(userName));

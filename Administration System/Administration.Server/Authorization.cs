@@ -12,6 +12,7 @@ namespace Server
         {
             var config = new AuthorizationConfiguration<DefaultTypeAuthorizer, MainMenuAuthorizer>();
             config.AddTypeAuthorizer<User, UserAuthorizer>();
+            config.AddTypeAuthorizer<UserViewModel, UserViewModelAuthorizer>();
             config.AddTypeAuthorizer<Organisation, OrganisationAuthorizer>();
             config.AddTypeAuthorizer<Group, GroupAuthorizer>();
             config.AddTypeAuthorizer<Project, ProjectAuthorizer>();
