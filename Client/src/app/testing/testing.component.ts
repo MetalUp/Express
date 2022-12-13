@@ -6,6 +6,7 @@ import { EmptyRunResult, getResultOutcome, RunResult } from '../models/run-resul
 import { RulesService } from '../services/rules.service';
 import { ErrorType } from '../models/rules';
 import { CompileServerService } from '../services/compile-server.service';
+import { runTestsDisabledTooltip, runTestsEnabledTooltip } from '../constants/tooltips';
 
 @Component({
   selector: 'app-testing',
@@ -37,6 +38,11 @@ export class TestingComponent implements OnInit, OnDestroy {
   }
 
   tests = ''
+
+
+  get runTestsTooltip() {
+    return this.canRunTests() ?  runTestsEnabledTooltip : runTestsDisabledTooltip;
+  }
 
   canRunTests() {
     if (!this.hasTests){

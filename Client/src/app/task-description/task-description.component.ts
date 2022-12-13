@@ -3,7 +3,7 @@ import { EmptyTaskUserView, ITaskUserView } from '../models/task-user-view';
 import { TaskService } from '../services/task.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { newTaskDisabledTooltip, newTaskEnabledTooltip, nextTaskDisabledTooltip, nextTaskEnabledTooltip, previousTaskDisabledTooltip, previousTaskEnabledTooltip } from '../constants/tooltips';
+import { newTaskDisabledTooltip, newTaskEnabledTooltip, nextTaskDisabledTooltip, nextTaskEnabledTooltip, previousTaskDisabledTooltip, previousTaskEnabledTooltip, returnToAssignmentDisabledTooltip, returnToAssignmentEnabledTooltip } from '../constants/tooltips';
 
 @Component({
   selector: 'app-task-description',
@@ -30,6 +30,10 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
 
   get newTaskTooltip() {
     return  this.canGetNextTask() ?  newTaskEnabledTooltip : newTaskDisabledTooltip;
+  }
+
+  get returnToAssignmentTooltip() {
+    return  this.canReturnToAssignment() ?  returnToAssignmentEnabledTooltip : returnToAssignmentDisabledTooltip;
   }
 
   canViewPreviousTask() {
