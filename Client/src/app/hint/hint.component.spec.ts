@@ -16,6 +16,7 @@ describe('HintComponent', () => {
   testTask.Id = 66;
 
   const hint0 = structuredClone(EmptyHintUserView) as IHintUserView;
+  hint0.HintNo = 0;
   hint0.Title = 'hint0 title';
   hint0.Contents = '';
   hint0.CostOfNextHint = 1;
@@ -24,6 +25,7 @@ describe('HintComponent', () => {
   hint0.PreviousHintNo = 0;
 
   const hint0bis = structuredClone(EmptyHintUserView) as IHintUserView;
+  hint0bis.HintNo = 0;
   hint0bis.Title = 'hint0 title';
   hint0bis.Contents = '';
   hint0bis.CostOfNextHint = 0;
@@ -34,6 +36,7 @@ describe('HintComponent', () => {
   const hintError = structuredClone(EmptyHintUserView);
   
   const hint1 = structuredClone(EmptyHintUserView) as IHintUserView;
+  hint1.HintNo = 1;
   hint1.Title = 'hint1 title';
   hint1.Contents = 'hint1 contents';
   hint1.CostOfNextHint = 1;
@@ -42,6 +45,7 @@ describe('HintComponent', () => {
   hint1.PreviousHintNo = 0;
 
   const hint1bis = structuredClone(EmptyHintUserView) as IHintUserView;
+  hint1bis.HintNo = 1;
   hint1bis.Title = 'hint1 title';
   hint1bis.Contents = 'hint1 contents';
   hint1bis.CostOfNextHint = 0;
@@ -50,6 +54,7 @@ describe('HintComponent', () => {
   hint1bis.PreviousHintNo = 0;
 
   const hint2 = structuredClone(EmptyHintUserView) as IHintUserView;
+  hint2.HintNo = 2;
   hint2.Title = 'hint2 title';
   hint2.Contents = 'hint2 contents';
   hint2.CostOfNextHint = 0;
@@ -137,15 +142,27 @@ describe('HintComponent', () => {
 
   }));
 
-  // it('should not get the hint if same task', fakeAsync(() => {
+  it('should  refresh the hint if same task', fakeAsync(() => {
     
-  //   component.currentTask = testTask;
+    component.currentTask = testTask;
+    component.currentHint = hint2;
 
-  //   taskSubject.next(testTask);
-  //   expect(taskServiceSpy.loadHint).not.toHaveBeenCalled();
-  //   expect(taskServiceSpy.loadTask).not.toHaveBeenCalled();
+    taskSubject.next(testTask);
+    expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 2);
+    expect(taskServiceSpy.loadTask).not.toHaveBeenCalled();
     
-  // }));
+  }));
+
+  it('should  get 0 hint if new task', fakeAsync(() => {
+    
+    component.currentTask = { Id:100} as unknown as ITaskUserView;
+    component.currentHint = hint2;
+
+    taskSubject.next(testTask);
+    expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 0);
+    expect(taskServiceSpy.loadTask).not.toHaveBeenCalled();
+    
+  }));
 
   it('should display message if no hints', fakeAsync(() => {
     taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint0bis));
