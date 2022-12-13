@@ -51,6 +51,6 @@ namespace Model.Types
         [MultiLine(10)]
         public string TeacherNotes { get; init; }
 
-        public override string ToString() => $"{Project}";
+        public override string ToString() => $"{Project} assigned to {AssignedTo}";
     }
 }
