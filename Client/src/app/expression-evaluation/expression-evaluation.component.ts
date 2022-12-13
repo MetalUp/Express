@@ -6,6 +6,7 @@ import { EmptyRunResult, getResultOutcome, RunResult } from '../models/run-resul
 import { TaskService } from '../services/task.service';
 import { first } from 'rxjs/operators';
 import { CompileServerService } from '../services/compile-server.service';
+import { nextExpressionEnabledTooltip, nextExpressionDisabledTooltip, previousExpressionEnabledTooltip, previousExpressionDisabledTooltip, submitExpressionDisabledTooltip, submitExpressionEnabledTooltip } from '../constants/tooltips';
 
 @Component({
   selector: 'app-expression-evaluation',
@@ -36,6 +37,18 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   get selectedLanguage() {
     return this.compileServer.selectedLanguage;
+  }
+
+  get nextExpressionTooltip() {
+    return  this.canNext() ?  nextExpressionEnabledTooltip : nextExpressionDisabledTooltip;
+  }
+
+  get previousExpressionTooltip() {
+    return  this.canPrevious() ?  previousExpressionEnabledTooltip : previousExpressionDisabledTooltip;
+  }
+
+  get submitExpressionTooltip() {
+    return  this.canSubmit() ?  submitExpressionEnabledTooltip : submitExpressionDisabledTooltip;
   }
 
   filteredCmpinfo() {

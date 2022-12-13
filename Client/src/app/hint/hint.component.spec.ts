@@ -137,15 +137,15 @@ describe('HintComponent', () => {
 
   }));
 
-  it('should not get the hint if same task', fakeAsync(() => {
+  // it('should not get the hint if same task', fakeAsync(() => {
     
-    component.currentTask = testTask;
+  //   component.currentTask = testTask;
 
-    taskSubject.next(testTask);
-    expect(taskServiceSpy.loadHint).not.toHaveBeenCalled();
-    expect(taskServiceSpy.loadTask).not.toHaveBeenCalled();
+  //   taskSubject.next(testTask);
+  //   expect(taskServiceSpy.loadHint).not.toHaveBeenCalled();
+  //   expect(taskServiceSpy.loadTask).not.toHaveBeenCalled();
     
-  }));
+  // }));
 
   it('should display message if no hints', fakeAsync(() => {
     taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint0bis));
