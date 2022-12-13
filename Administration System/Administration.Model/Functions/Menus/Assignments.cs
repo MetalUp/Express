@@ -84,9 +84,6 @@
             return AssignmentsForCurrentUser(projectId, context).OrderByDescending(a => a.DueBy).FirstOrDefault();
         }
 
-        internal static IQueryable<Assignment> ActiveAssignmentsForCurrentUser(int projectId, IContext context) =>
-            AssignmentsForCurrentUser(projectId, context).Where(a => a.Status == AssignmentStatus.PendingStart || a.Status == AssignmentStatus.Started);
-
         internal static IQueryable<Assignment> AssignmentsForCurrentUser(int projectId, IContext context)
         {
             int uId = Users.Me(context).Id;
