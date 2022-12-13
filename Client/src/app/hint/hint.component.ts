@@ -92,11 +92,10 @@ export class HintComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
+      const currentHintNo = this.currentHint.HintNo;
       const newTask = this.currentTask.Id !== task.Id; 
       this.currentTask = task;
-      if (newTask){
-        this.getHint(0, false);
-      }
+      this.getHint(newTask ?  0 : currentHintNo, false);
     })
   }
 

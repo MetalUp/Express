@@ -1,4 +1,5 @@
 export interface IHintUserView {
+    HintNo: number;
     Title: string;
     Contents: string;
     PreviousHintNo: number;//0 indicates there is no previous hint
@@ -8,6 +9,7 @@ export interface IHintUserView {
 }
 
 export class HintUserView implements IHintUserView {
+    HintNo = 0;
     Title = '';
     Contents = '';
     PreviousHintNo = 0;
