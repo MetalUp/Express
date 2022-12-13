@@ -36,7 +36,7 @@ public static class TaskAccess
 
     private static (CodeUserView, IContext) CreateEmptyCUVForVersion0(int taskId, int codeVersion, IContext context, Task task)
     {
-        if (CodeLastSuccessfullyCompiled(task, context) is not null)
+        if (MostRecentActivityOfType(ActivityType.SubmitCodeSuccess, task, context) is not null)
         {
             return (new CodeUserView(taskId, "", codeVersion, true), context);
         }
@@ -101,7 +101,6 @@ public static class TaskAccess
     {
         var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
         if (asgn == null) return null;
-        var activities = asgn.ListActivity(context);
         var task = Tasks.GetTask(taskId, context);
         return new TaskUserView(
            task,
@@ -131,14 +130,14 @@ public static class TaskAccess
         task.PreviousTaskId is null ?
                 null
                 : task.PreviousTask.CodeCarriedForwardToNextTask() ?
-                    CodeLastSuccessfullyCompiled(task.PreviousTask, context)
+                    MostRecentActivityOfType(ActivityType.RunTestsSuccess, task.PreviousTask, context)?.CodeSubmitted
                     : null;
 
-    private static string CodeLastSuccessfullyCompiled(Task task, IContext context)
+    private static Activity MostRecentActivityOfType(ActivityType type, Task task, IContext context)
     {
         var asgn = Assignments.GetAssignmentForCurrentUser(task.Id, context);
-        var activities = asgn.ListActivity(task.Id, context).Where(a => a.ActivityType == ActivityType.SubmitCodeSuccess);
-        return activities.FirstOrDefault()?.CodeSubmitted;
+        var activities = asgn.ListActivity(task.Id, context).Where(a => a.ActivityType == type);
+        return activities.FirstOrDefault();
     }
 
     internal static int HighestHintNoUsed(Task task, IContext context) =>
