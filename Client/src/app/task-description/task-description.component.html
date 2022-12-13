@@ -1,5 +1,5 @@
 <div class="one-column pane">
-    <div class="pane-header">Task Description: {{currentTask.Title}}
+    <div class="pane-header">Task: {{currentTask.Title}}
         <div class="button-bar">
             <button title="{{returnToAssignmentTooltip}}" *ngIf="canReturnToAssignment()" (click)="returnToAssignment()">Return To Assignment</button>
             <button title="{{newTaskTooltip}}"  [disabled]="!canGetNextTask()" (click)="getNextTask()">Next Task</button>
