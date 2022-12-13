@@ -74,17 +74,17 @@ public static class TaskAccess
                 null,
                 0,
                 NextHintNo(task, 0),
-                task.Hints.Any() ? task.GetHintNo(1).CostInMarks : 0,
+                CostOfNextHint(task, hintNumber,context),
                 NextHintIsAlreadyUsed(task, 0, context)
                 );
             return (huv, context);
         }
         else
         {
-            var context2 = UseHintNo(task, hintNumber, context);
+            var context2 = IsCompleted(task, context) ? context : UseHintNo(task, hintNumber, context);
             var hint = task.GetHintNo(hintNumber);
             var huv = new HintUserView(
-                taskId,
+                taskId, 
                 hintNumber,
                 hint.ToString(),
                 hint.ContentsAsString(),
@@ -176,6 +176,7 @@ public static class TaskAccess
 
     internal static int CostOfNextHint(Task task, int currentHintNo, IContext context)
     {
+        if (!task.Hints.Any() || IsCompleted(task, context)) return 0;
         int next = NextHintNo(task, currentHintNo);
         return next == 0 ? 0 : task.GetHintNo(next).CostInMarks;
     }
