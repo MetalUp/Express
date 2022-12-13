@@ -1,8 +1,8 @@
 <div class="one-column pane">
     <div class="pane-header">Expression <div class="button-bar">
-        <button [disabled]="!canSubmit()"  (click)="onSubmit()">Submit</button>
-        <button [disabled]="!canNext()" title="Next expression"  (click)="onNext()">></button>
-        <button [disabled]="!canPrevious()" title="Previous expression"  (click)="onPrevious()"><</button></div>
+        <button [disabled]="!canSubmit()" title="{{submitExpressionTooltip}}" (click)="onSubmit()">Submit</button>
+        <button [disabled]="!canNext()" title="{{nextExpressionTooltip}}"  (click)="onNext()">></button>
+        <button [disabled]="!canPrevious()" title="{{previousExpressionTooltip}}"  (click)="onPrevious()"><</button></div>
     </div>
     <div class="one-column pane-body" [ngClass]="paneSize">
         <div class="expression code">
