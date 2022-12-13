@@ -10,6 +10,8 @@ export class UserService {
 
   constructor(private contextService: ContextService, private repLoader: RepLoaderService) { }
 
+  action?: InvokableActionMember;
+
   getUser() {
     return this.getAction().then(action => {
       return this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>)
@@ -28,6 +30,8 @@ export class UserService {
   }
 
   getAction() {
-    return this.getMenu().then(menu => menu.actionMember("Me") as InvokableActionMember);
+    return this.action
+      ? Promise.resolve(this.action)
+      : this.getMenu().then(menu => this.action = menu.actionMember("Me") as InvokableActionMember);
   }
 }

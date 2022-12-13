@@ -58,7 +58,7 @@ describe('RegisteredService', () => {
     expect(service.canActivate().pipe(first()).subscribe(b => expect(b).toBeFalse()));
   }));
 
-  it('should naviaget to landing if registered undefined', fakeAsync(() => {
+  it('should navigate to landing if registered undefined', fakeAsync(() => {
 
     expect(service.canActivate().pipe(first()).subscribe(b => expect(b).toBeFalse()));
     authSubj.next(false);
