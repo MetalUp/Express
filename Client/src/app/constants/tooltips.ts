@@ -27,7 +27,7 @@ export const nextExpressionEnabledTooltip = "Go forward to the next expression";
 export const nextExpressionDisabledTooltip = "No later expressions stored for this task";
 
 // submit Expression button 
-export const submitExpressionEnabledTooltip = "Evaluate the expression (or hit Return on the expression);
+export const submitExpressionEnabledTooltip = "Evaluate the expression (or hit Return on the expression)";
 export const submitExpressionDisabledTooltip = "Enter or edit";
 
 // Code pane
