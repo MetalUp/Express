@@ -9,11 +9,9 @@ namespace Model.Authorization
                 Users.UserRole(context) switch
                 {
                     Role.Root => true,
-                    Role.Author => IsTaskProperty(memberName) || UserIsAuthor(task, context),
+                    Role.Author => IsProperty<Task>(memberName) || UserIsAuthor(task, context),
                     _ => false
                 };
-
-        private static bool IsTaskProperty(string memberName) => IsProperty<Task>(memberName);
 
         private bool UserIsAuthor(Task task, IContext context) =>
             task.Project.AuthorId == Users.Me(context).Id;
