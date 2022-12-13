@@ -4,7 +4,7 @@
 public class TaskUserView
 {
     public TaskUserView() { }
-    public TaskUserView(Task task, string title, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted)
+    public TaskUserView(Task task, string title, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted, bool canPaste)
     {
         Task = task;
         Project = task.Project;
@@ -13,6 +13,8 @@ public class TaskUserView
         HasTests = hasTests;
         AssignmentId = assignmentId;
         NextTaskIsStarted = nextTaskIsStarted;
+        PasteExpression = canPaste;
+        PasteCode = canPaste;
     }
 
     internal Task Task { get; init; }
@@ -27,9 +29,9 @@ public class TaskUserView
 
     public string RegExRules => Project.RegExRules;
 
-    public bool PasteExpression => Project.PasteExpression;
+    public bool PasteExpression { get; init; }
 
-    public bool PasteCode => Task.Project.PasteCode;
+    public bool PasteCode { get; init; }
 
     public bool Completed { get; init; }
 

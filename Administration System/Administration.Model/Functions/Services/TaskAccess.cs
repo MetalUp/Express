@@ -108,10 +108,13 @@ public static class TaskAccess
            !task.HasTests() || IsCompleted(task, context),
            task.HasTests(),
            asgn.Id,
-           IsStarted(task.NextTaskId, context)
+           IsStarted(task.NextTaskId, context),
+           CanPaste(context)
            );
     }
 
+    internal static bool CanPaste(IContext context) => Users.UserRole(context) >= Role.Teacher;
+         
     internal static string Title(Task task, IContext context) =>
         task.Title +
             (IsCompleted(task, context) ? $" COMPLETED Final mark " : " Marks Available ") +
