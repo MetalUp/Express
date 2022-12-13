@@ -104,7 +104,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPaste(event: ClipboardEvent) {
+  onPaste(event: Event) {
     if (!this.canPaste) {
       event.preventDefault();
     }

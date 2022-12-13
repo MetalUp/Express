@@ -12,7 +12,8 @@
                 [(ngModel)]="codeDefinitions" 
                 (ngModelChange)="modelChanged()" 
                 placeholder="{{placeholder}}"
-                spellcheck="false" 
+                spellcheck="false"
+                (drop)="onPaste($event)"
                 (paste)="onPaste($event)">
             </textarea>
         </div>
