@@ -1,5 +1,5 @@
 .pane-body {
-    grid-template-rows: 15vh;
+    grid-template-rows: 1fr;
     font-size: 11pt;
 }
 
