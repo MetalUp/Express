@@ -25,3 +25,17 @@ export const nextExpressionDisabledTooltip = "disabled next tooltip";
 // submit Expression button 
 export const submitExpressionEnabledTooltip = "enabled submit tooltip";
 export const submitExpressionDisabledTooltip = "disabled submit tooltip";
+
+// Code pane
+
+// previous Code arrow 
+export const previousCodeEnabledTooltip = "enabled previous tooltip";
+export const previousCodeDisabledTooltip = "disabled previous tooltip";
+
+// next Code arrow 
+export const nextCodeEnabledTooltip = "enabled next tooltip";
+export const nextCodeDisabledTooltip = "disabled next tooltip";
+
+// submit Code button 
+export const submitCodeEnabledTooltip = "enabled submit tooltip";
+export const submitCodeDisabledTooltip = "disabled submit tooltip";

@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { CompileServerService } from '../services/compile-server.service';
 import { EmptyCodeUserView, ICodeUserView } from '../models/code-user-view';
+import { nextCodeEnabledTooltip, nextCodeDisabledTooltip, previousCodeEnabledTooltip, previousCodeDisabledTooltip, submitCodeEnabledTooltip, submitCodeDisabledTooltip } from '../constants/tooltips';
 
 
 @Component({
@@ -39,6 +40,19 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   taskId = 0;
 
   validationFail: string = '';
+
+
+  get nextCodeTooltip() {
+    return  this.canNewerCode() ?  nextCodeEnabledTooltip : nextCodeDisabledTooltip;
+  }
+
+  get previousCodeTooltip() {
+    return  this.canOlderCode() ?  previousCodeEnabledTooltip : previousCodeDisabledTooltip;
+  }
+
+  get submitCodeTooltip() {
+    return  this.pendingSubmit ?  submitCodeEnabledTooltip : submitCodeDisabledTooltip;
+  }
 
   get currentStatus() {
     return this.validationFail ||
