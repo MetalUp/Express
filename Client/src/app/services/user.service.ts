@@ -53,8 +53,8 @@ export class UserService {
     this.getUserAction().then(action => {
       this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>)
         .then((ar: ActionResultRepresentation) => {
-          var obj = ar.result().object()!;
-          var user = this.convertToUser(obj);
+          var obj = ar.result().object();
+          var user = obj ? this.convertToUser(obj) : EmptyUserView;
           this.currentUserAsSubject.next(user);
         })
         .catch(_ => {
