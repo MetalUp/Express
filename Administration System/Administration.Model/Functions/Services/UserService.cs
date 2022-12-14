@@ -1,4 +1,6 @@
-﻿namespace Model.Functions.Services
+﻿using NakedFramework.Error;
+
+namespace Model.Functions.Services
 {
     public static class UserService
     {
@@ -28,7 +30,7 @@
         public static UserViewModel GetUser(IContext context)
         {
             var user = Users.Me(context);
-            return new UserViewModel(user.Id, user.Name);
+            return user is not null   ? new UserViewModel(user.Id, user.Name) : null;
         }
 
     }
