@@ -1,6 +1,7 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { InvokableActionMember, DomainObjectRepresentation, MenusRepresentation, ActionResultRepresentation } from '@nakedobjects/restful-objects';
+import { InvokableActionMember, DomainObjectRepresentation, MenusRepresentation, ActionResultRepresentation, DomainServicesRepresentation } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
+import { EmptyUserView } from '../models/user-view';
 
 import { UserService } from './user.service';
 
@@ -9,7 +10,7 @@ describe('UserService', () => {
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
 
-  contextServiceSpy = jasmine.createSpyObj('ConfigService', ['getMenus'], { config: { appPath: 'testPath' } });
+  contextServiceSpy = jasmine.createSpyObj('ConfigService', ['getServices'], { config: { appPath: 'testPath' } });
   repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke'])
 
   beforeEach(() => {
@@ -23,20 +24,20 @@ describe('UserService', () => {
 
   it('should get the action', fakeAsync(() => {
     const testAction = {} as InvokableActionMember;
-    const testMenu = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
-    const testMenus = { getMenu: (s: string) => testMenu } as unknown as MenusRepresentation;
+    const testService = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
+    const testServices = { getService: (s: string) => testService } as unknown as DomainServicesRepresentation;
 
-    const tssp = Promise.resolve(testMenus);
-    const tsp = Promise.resolve(testMenu);
+    const tssp = Promise.resolve(testServices);
+    const tsp = Promise.resolve(testService);
 
-    contextServiceSpy.getMenus.and.returnValue(tssp);
+    contextServiceSpy.getServices.and.returnValue(tssp);
     repLoaderSpy.populate.and.returnValue(tsp);
   
     service.getAction();
     tick();
 
-    expect(contextServiceSpy.getMenus).toHaveBeenCalled();
-    expect(repLoaderSpy.populate).toHaveBeenCalledWith(testMenu);
+    expect(contextServiceSpy.getServices).toHaveBeenCalled();
+    expect(repLoaderSpy.populate).toHaveBeenCalledWith(testService);
     tick();
     expect(service.action).toEqual(testAction);
   }));
@@ -50,7 +51,7 @@ describe('UserService', () => {
    
     service.action = testAction;
 
-    service.getUser().then(i => expect(i).toBe(666));
+    service.getUser().then(i => expect(i).toBe(EmptyUserView));
     tick();
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining({}),  jasmine.objectContaining({}));
     

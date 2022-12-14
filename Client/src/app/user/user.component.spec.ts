@@ -1,31 +1,29 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { UserRepresentation } from '@nakedobjects/restful-objects';
-import { ContextService } from '@nakedobjects/services';
+import { Subject } from 'rxjs';
+import { UserView } from '../models/user-view';
+import { UserService } from '../services/user.service';
 import { UserComponent } from './user.component';
 
 describe('UserComponent', () => {
   let component: UserComponent;
   let fixture: ComponentFixture<UserComponent>;
 
-  let contextServiceSpy: jasmine.SpyObj<ContextService>;
-  let testUser = {
-    userName : () => 'testName'
-  }
+  let userServiceSpy: jasmine.SpyObj<UserService>;
+
+  const userSubj = new Subject<UserView>();
 
   beforeEach(async () => {
 
-    contextServiceSpy = jasmine.createSpyObj('ContextService', ['getUser']);
-
-    contextServiceSpy.getUser.and.returnValue(Promise.resolve(testUser as UserRepresentation));
+    userServiceSpy = jasmine.createSpyObj('UserService', ['getUser'], {currentUser: userSubj} );
 
     await TestBed.configureTestingModule({
       declarations: [ UserComponent ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
-          provide: ContextService,
-          useValue: contextServiceSpy
+          provide: UserService,
+          useValue: userServiceSpy
         },
       ]
     })
@@ -40,8 +38,12 @@ describe('UserComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should display user', () => {  
-  //   expect(component.userName).toEqual('testName');
-  // });
+  it('should display user', () => {  
+
+    userSubj.next({DisplayName: "Test Name"});
+
+
+    expect(component.userName).toEqual('Test Name');
+  });
 
 });

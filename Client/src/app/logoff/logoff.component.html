@@ -5,7 +5,7 @@
         </div>
         <ng-container *ngIf="userIsLoggedIn() | async">
             <p>Please confirm log off</p>
-            <p>User : {{userId}}</p>
+            <p>User : {{user.DisplayName}}</p>
             <button class="btn btn-primary btn-margin" type="button" value="Log Off" (click)="logoff()">Log Off</button>
         </ng-container>
         <ng-container *ngIf="(userIsLoggedIn() | async) === false">

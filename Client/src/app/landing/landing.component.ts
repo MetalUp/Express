@@ -57,7 +57,7 @@ export class LandingComponent implements OnInit, OnDestroy {
   getService() {
     return this.contextService.getServices()
       .then((services: DomainServicesRepresentation) => {
-        const service = services.getService("Model.Functions.Services.InvitationAcceptance");
+        const service = services.getService("Model.Functions.Services.UserService");
         return this.repLoader.populate(service);
       })
       .then((s: IHateoasModel) => s as DomainObjectRepresentation)

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { RepLoaderService } from '@nakedobjects/services';
 import { first, Subject } from 'rxjs';
+import { EmptyUserView, UserView } from '../models/user-view';
 import { RegistrationService } from './registration.service';
 import { UserService } from './user.service';
 
@@ -15,6 +16,8 @@ describe('RegisteredService', () => {
 
   let authSubj = new Subject<boolean>();
 
+  let userSubj = new Subject<UserView>();
+
 
   beforeEach(() => {
     authServiceSpy = jasmine.createSpyObj('AuthService', ['loginWithRedirect'], { isAuthenticated$: authSubj });
@@ -26,7 +29,7 @@ describe('RegisteredService', () => {
     TestBed.configureTestingModule({});
     service = new RegistrationService(authServiceSpy, userServiceSpy, routerSpy);
 
-    userServiceSpy.getUser.and.returnValue(Promise.resolve(1));
+    userServiceSpy.getUser.and.returnValue(Promise.resolve({DisplayName : "Test User"}));
   });
 
   it('should be created', () => {
@@ -34,7 +37,7 @@ describe('RegisteredService', () => {
   });
 
   it('should check registration - true', fakeAsync(() => {
-    userServiceSpy.getUser.and.returnValue(Promise.resolve(1))
+    userServiceSpy.getUser.and.returnValue(Promise.resolve({DisplayName: "Test Name"}))
 
     authSubj.next(true);
     tick();
@@ -45,7 +48,7 @@ describe('RegisteredService', () => {
   }));
 
   it('should check registration - false', fakeAsync(() => {
-    userServiceSpy.getUser.and.returnValue(Promise.resolve(0))
+    userServiceSpy.getUser.and.returnValue(Promise.resolve(EmptyUserView))
 
     authSubj.next(true);
     tick();

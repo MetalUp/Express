@@ -33,7 +33,7 @@ export class RegistrationService implements CanActivate {
   refreshRegistration() {
     this.userService.getUser()
       .then(u => {
-        this.setRegistered(u === 1);
+        this.setRegistered(!!u.DisplayName);
       })
       .catch(e => {
         this.setRegistered(false);
