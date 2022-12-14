@@ -4,9 +4,10 @@ import { EmptyTaskUserView, ITaskUserView, TaskUserView } from '../models/task-u
 import { EmptyHintUserView, HintUserView, IHintUserView } from '../models/hint-user-view';
 import { Subject } from 'rxjs';
 import { ContextService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
-import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, IHateoasModel, InvokableActionMember, PropertyMember, Value } from '@nakedobjects/restful-objects';
+import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
 import { Dictionary } from 'lodash';
 import { CodeUserView, EmptyCodeUserView, ICodeUserView } from '../models/code-user-view';
+import { convertTo } from './rep-helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -42,57 +43,16 @@ export class TaskService {
 
   private currentTaskAsSubject = new Subject<ITaskUserView>()
 
-  private getChoicesValue(member: PropertyMember) {
-    const raw = member.value().scalar() as number;
-    const choices = member.choices();
-    for (const k in choices) {
-      const v = choices[k];
-      if (v.scalar() === raw) {
-        return k;
-      }
-    }
-    return undefined;
-  }
-
-  private setPropertyValue(toObj: any, member: PropertyMember) {
-    const attachmentLink = member.attachmentLink();
-    if (attachmentLink) {
-      const href = attachmentLink.href();
-      const mt = attachmentLink.type().asString;
-      toObj[member.id()] = [href, mt];
-    }
-    else if (member.entryType() == EntryType.Choices) {
-      toObj[member.id()] = this.getChoicesValue(member);
-    }
-    else if (member.isScalar()) {
-      toObj[member.id()] = member.value().scalar();
-    }
-    else {
-      toObj[member.id()] = member.value().getHref();
-    }
-  }
-
-  private convertTo<T extends ITaskUserView | IHintUserView | ICodeUserView>(toObj: TaskUserView | HintUserView | CodeUserView, rep: DomainObjectRepresentation) {
-    if (rep && Object.keys(rep.propertyMembers()).length > 0) {
-      const pMembers = rep.propertyMembers()
-      for (const k in pMembers) {
-        const member = pMembers[k];
-        this.setPropertyValue(toObj, member);
-      }
-    }
-    return toObj as T;
-  }
-
   private convertToTask(rep: DomainObjectRepresentation, id: number) {
-    return this.convertTo<ITaskUserView>(new TaskUserView(id), rep);
+    return convertTo<ITaskUserView>(new TaskUserView(id), rep);
   }
 
   private convertToHint(rep: DomainObjectRepresentation) {
-    return this.convertTo<IHintUserView>(new HintUserView(), rep);
+    return convertTo<IHintUserView>(new HintUserView(), rep);
   }
 
   private convertToCode(rep: DomainObjectRepresentation) {
-    return this.convertTo<ICodeUserView>(new CodeUserView(), rep);
+    return convertTo<ICodeUserView>(new CodeUserView(), rep);
   }
 
   params(taskId: number, currentHintNo?: number, codeVersion?: number) {

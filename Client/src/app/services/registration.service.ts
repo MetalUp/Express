@@ -20,25 +20,19 @@ export class RegistrationService implements CanActivate {
   constructor(public auth: AuthService,  private userService: UserService, private router: Router) {
     auth.isAuthenticated$.subscribe(b => {
       if (b) {
-        this.refreshRegistration();
+        this.userService.loadUser();
       }
       else {
         this.setRegistered(false);
       }
     })
+
+    userService.currentUser.subscribe(u => {
+      this.setRegistered(!!u.DisplayName);
+    });
   }
 
   static inviteCodeKey = "invitationCode"
-
-  refreshRegistration() {
-    this.userService.getUser()
-      .then(u => {
-        this.setRegistered(!!u.DisplayName);
-      })
-      .catch(e => {
-        this.setRegistered(false);
-      })
-  }
 
   isLoggedOn() {
     return this.auth.isAuthenticated$

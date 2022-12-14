@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DomainServicesRepresentation, IHateoasModel, DomainObjectRepresentation, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
-import { Dictionary } from 'lodash';
 import { Subscription } from 'rxjs';
 import { RegistrationService } from '../services/registration.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-landing',
@@ -15,8 +14,7 @@ export class LandingComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
               public registeredService: RegistrationService,
-              private contextService: ContextService,
-              private repLoader: RepLoaderService) { }
+              private userService: UserService) { }
 
   userChecked = false;
   sub1?: Subscription;
@@ -48,31 +46,9 @@ export class LandingComponent implements OnInit, OnDestroy {
         const code = this.invitationCode;
         this.clearCode();
         if (code) {
-          this.acceptInvitation(code);
+          this.userService.acceptInvitation(code).then(b => this.failedInvite = !b);
         }
       }
-    });
-  }
-
-  getService() {
-    return this.contextService.getServices()
-      .then((services: DomainServicesRepresentation) => {
-        const service = services.getService("Model.Functions.Services.UserService");
-        return this.repLoader.populate(service);
-      })
-      .then((s: IHateoasModel) => s as DomainObjectRepresentation)
-  }
-
-  getAction() {
-    return this.getService().then(service => service.actionMember("AcceptInvitation") as InvokableActionMember);
-  }
-
-  acceptInvitation(code: string) {
-    this.getAction().then(action => {
-
-      this.repLoader.invoke(action, { code: new Value(code) } as Dictionary<Value>, {} as Dictionary<Object>)
-        .then(_ => this.registeredService.refreshRegistration()) // success
-        .catch(_ => this.failedInvite = true);
     });
   }
 

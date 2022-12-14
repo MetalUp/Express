@@ -33,13 +33,13 @@ describe('UserService', () => {
     contextServiceSpy.getServices.and.returnValue(tssp);
     repLoaderSpy.populate.and.returnValue(tsp);
   
-    service.getAction();
+    service.getUserAction();
     tick();
 
     expect(contextServiceSpy.getServices).toHaveBeenCalled();
     expect(repLoaderSpy.populate).toHaveBeenCalledWith(testService);
     tick();
-    expect(service.action).toEqual(testAction);
+    expect(service.userAction).toEqual(testAction);
   }));
 
   it('should get the user', fakeAsync(() => {
@@ -49,9 +49,9 @@ describe('UserService', () => {
 
     const testAction = {} as InvokableActionMember;
    
-    service.action = testAction;
+    service.userAction = testAction;
 
-    service.getUser().then(i => expect(i).toBe(EmptyUserView));
+    service.loadUser();
     tick();
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining({}),  jasmine.objectContaining({}));
     

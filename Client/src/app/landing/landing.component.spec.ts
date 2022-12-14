@@ -78,7 +78,7 @@ describe('LandingComponent', () => {
     expect(routerSpy.navigate).not.toHaveBeenCalled();
   }));
 
-  it('should accept invitataion if logged on and code set', fakeAsync(() => {
+  it('should accept invitation if logged on and code set', fakeAsync(() => {
     localStorage.setItem(RegistrationService.inviteCodeKey, "testcode");
 
     registeredSub.next(true);
