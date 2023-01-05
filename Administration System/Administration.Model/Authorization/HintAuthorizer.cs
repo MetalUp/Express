@@ -9,7 +9,8 @@ namespace Model.Authorization
         public bool IsVisible(Hint hint, string memberName, IContext context) =>
             Users.UserRole(context) switch
             {
-                >= Role.Author => AuthorAuthorization(hint, memberName, context),
+                Role.Root => true,
+                Role.Author => AuthorAuthorization(hint, memberName, context),
                 _ => false
             };
 

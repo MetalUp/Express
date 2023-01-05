@@ -33,18 +33,21 @@ namespace Model.Types
 
         #region HtmlFile
         [Hidden]
-        public FileAttachment HtmlFile => (Content == null) ? null :
-                 new FileAttachment(Content, $"{Name}", "text/html");
+        public FileAttachment HtmlFile => File?.Details;
 
         [Hidden]
-        public byte[] Content { get; init; }
+        public int? FileId { get; init; }
+
+        [MemberOrder(70)]
+        public virtual File File { get; init; }
+
+        [Hidden]
+        public byte[] Content { get; init; } //To be deleted when content has been moved into File objects and associated
 
         [Hidden]
         public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();
 
         #endregion
-
-        //private string marks => CostInMarks > 1 ? "marks" : "mark";
         public override string ToString() => $"Hint {Number}";
     }
 }
