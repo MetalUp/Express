@@ -23,6 +23,13 @@ namespace Model.Functions
 
         #region Editing
         [Edit]
+        public static IContext EditName(
+         this File file,
+         string name,
+         IContext context) =>
+             context.WithUpdated(file, new(file) { Name = name });
+
+        [Edit]
         public static IContext EditLanguage(
                  this File file,
                  Language language,
