@@ -30,8 +30,19 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
-        [MemberOrder(30)]
+
+        [Hidden]
+        public int? ProjectId { get; init; }
+
+        [MemberOrder(10)]
+        public virtual Project Project { get; init; }
+
+        [Hidden]
         public string Name { get; init; }
+
+        [MemberOrder(20)]
+        [Named("Task No. within Project")]
+        public int Number { get; init; }
 
         [Hidden]
         public string Title => ToString();
@@ -114,14 +125,8 @@ namespace Model.Types
         [MemberOrder(220)]
         public bool NextTaskClearsFunctions { get; init; }
 
-        [Hidden]
-        public int? ProjectId { get; init; }
-
-        [MemberOrder(300)]
-        public virtual Project Project { get; init; }
-
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
-        public override string ToString() => $"{Name} {Project.Language.Name}";
+        public override string ToString() => $"{Project.Title} {Number} {Project.Language.Name}";
     }
 }
