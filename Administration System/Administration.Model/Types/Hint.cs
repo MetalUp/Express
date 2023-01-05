@@ -12,7 +12,8 @@ namespace Model.Types
             Name = cloneFrom.Name;
             Number = cloneFrom.Number;
             CostInMarks = cloneFrom.CostInMarks;
-            Content = cloneFrom.Content;
+            FileId = cloneFrom.FileId;
+            File = cloneFrom.File;
             Tasks = cloneFrom.Tasks;
         }
 
@@ -40,9 +41,6 @@ namespace Model.Types
 
         [MemberOrder(70)]
         public virtual File File { get; init; }
-
-        [Hidden]
-        public byte[] Content { get; init; } //To be deleted when content has been moved into File objects and associated
 
         [Hidden]
         public virtual ICollection<Task> Tasks { get; set; } = new List<Task>();

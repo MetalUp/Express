@@ -240,17 +240,26 @@ namespace Model.Functions
             this Task task,
             int number,
             [DefaultValue(1)] int costInMarks,
-            FileAttachment file,
             IContext context)
         {
+            var name = $"{task.Name}Hint{number}";
+            var file = new File()
+            {
+                Name = name + ".html",
+                ContentType = ContentType.Hint,
+                AuthorId = task.Project.AuthorId,
+                Mime = "text/html",
+                LanguageId = null,
+                Content = new byte[0]
+            };
             var hint = new Hint
             {
                 Number = number,
-                Name = file.Name,
+                Name = name,
                 CostInMarks = costInMarks,
-                Content = file == null ? null : file.GetResourceAsByteArray(),
+                File = file
             };
-            return context.WithNew(hint).WithUpdated(task, new Task(task) { Hints = task.Hints.Append(hint).ToList() });
+            return context.WithNew(file).WithNew(hint).WithUpdated(task, new Task(task) { Hints = task.Hints.Append(hint).ToList() });
         }
 
         public static int Default1AddNewHint(this Task task) =>

@@ -27,16 +27,6 @@ namespace Model.Functions
             IContext context) =>
         context.WithUpdated(hint, new(hint) { CostInMarks = costInMarks });
 
-        public static IContext ReloadContentFromExternalFile(this Hint hint, FileAttachment externalFile, IContext context) =>
-            context.WithUpdated(hint, new Hint(hint) { Name = externalFile.Name, Content = externalFile.GetResourceAsByteArray() });
-
-        public static IContext EditContentAsString(this Hint hint, [MultiLine(20)] string content, IContext context) =>
-            context.WithUpdated(hint, new Hint(hint) { Content = content.AsByteArray() });
-
-        public static string Default1EditContentAsString(this Hint hint) =>
-            hint.ContentsAsString();
-
-        internal static string ContentsAsString(this Hint hint) => hint.Content.AsASCIIonly();
+        internal static string ContentsAsString(this Hint hint) => hint.File.Content.AsASCIIonly();
     }
-
 }
