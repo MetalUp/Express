@@ -41,7 +41,7 @@ namespace Model.Types
         public byte[] Content { get; init; }
 
         [MemberOrder(10)]
-        public FileAttachment Details => new FileAttachment(Content, Name, Mime);
+        public FileAttachment Details => new FileAttachment(Content, "Click here to View in new Tab", Mime);
 
         [Hidden]
         public int AuthorId { get; init; }
