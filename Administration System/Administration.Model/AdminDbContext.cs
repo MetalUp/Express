@@ -29,7 +29,7 @@ namespace Model
             mb.Entity<Assignment>().HasOne(e => e.AssignedBy).WithMany().OnDelete(DeleteBehavior.NoAction); //Because cascading delete would be confused by the two FKs to User
             mb.Entity<Assignment>().HasOne(e => e.AssignedTo).WithMany().OnDelete(DeleteBehavior.NoAction);
 
-            mb.Entity<Task>().Property(e => e.Name).HasColumnName("Name");
+            mb.Entity<Task>().Property(e => e.Number).HasColumnName("Number");
             mb.Entity<Task>().HasOne(e => e.NextTask).WithMany().OnDelete(DeleteBehavior.NoAction);
             mb.Entity<Task>().HasOne(e => e.PreviousTask).WithMany().OnDelete(DeleteBehavior.NoAction);
             mb.Entity<Task>().HasOne(e => e.DescriptionFile).WithMany().OnDelete(DeleteBehavior.NoAction);

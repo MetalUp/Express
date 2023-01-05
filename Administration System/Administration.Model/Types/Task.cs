@@ -11,7 +11,7 @@ namespace Model.Types
             Id = cloneFrom.Id;
             ProjectId = cloneFrom.ProjectId;
             Project = cloneFrom.Project;
-            Name = cloneFrom.Name;
+            Number = cloneFrom.Number;
             MaxMarks = cloneFrom.MaxMarks;
             DescriptionFileId = cloneFrom.DescriptionFileId;
             DescriptionFile = cloneFrom.DescriptionFile;
@@ -36,9 +36,6 @@ namespace Model.Types
 
         [MemberOrder(10)]
         public virtual Project Project { get; init; }
-
-        [Hidden]
-        public string Name { get; init; }
 
         [MemberOrder(20)]
         [Named("Task No. within Project")]

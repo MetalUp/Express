@@ -252,7 +252,7 @@ namespace Model.Functions
         [MemberOrder(50)]
         public static IContext CreateTask(
             this Project project,
-            string title,
+            int  number,
             [Optionally] Task previousTask,
             IContext context)
         {
@@ -260,7 +260,7 @@ namespace Model.Functions
             {
                 ProjectId = project.Id,
                 Project = project,
-                Name = title,
+                Number = number,
                 PreviousTaskId = previousTask is null ? null : previousTask.Id,
                 PreviousTask = previousTask,
             };
@@ -269,6 +269,10 @@ namespace Model.Functions
             var context2 = updatedPrevious is null ? context : context.WithUpdated(previousTask, updatedPrevious);
             return context2.WithNew(t);
         }
+
+        public static int Default1CreateTask(
+            this Project project) =>
+            project.Tasks.Count == 0 ? 1 : project.Tasks.Last().Number + 1;
 
         public static Task Default2CreateTask(
             this Project project) =>

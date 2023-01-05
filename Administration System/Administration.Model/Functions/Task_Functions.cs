@@ -7,11 +7,11 @@ namespace Model.Functions
     {
         #region Editing Task properties
         [Edit]
-        public static IContext EditName(
+        public static IContext EditNumber(
             this Task task,
-            string name,
+            int number,
             IContext context) =>
-                context.WithUpdated(task, new(task) { Name = name });
+                context.WithUpdated(task, new(task) { Number = number });
 
         [Edit]
         public static IContext EditMaxMarks(
@@ -242,7 +242,7 @@ namespace Model.Functions
             [DefaultValue(1)] int costInMarks,
             IContext context)
         {
-            var name = $"{task.Name}Hint{number}";
+            var name = $"{task} Hint {number}";
             var file = new File()
             {
                 Name = name + ".html",
