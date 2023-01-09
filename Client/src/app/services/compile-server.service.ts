@@ -5,7 +5,7 @@ import { catchError, from, Observable, of, Subject } from 'rxjs';
 import { RunResult, errorRunResult } from '../models/run-result';
 import { TaskService } from './task.service';
 import { Dictionary } from 'lodash';
-import { SubmitCode } from 'armlite_service';
+//import { SubmitCode } from 'armlite_service';
 
 @Injectable({
   providedIn: 'root'
@@ -83,9 +83,9 @@ export class CompileServerService {
   }
 
   private submit(action: InvokableActionMember, params: Dictionary<Value>) {
-    if (this.selectedLanguage === "armlite") {
-      return SubmitCode
-    }
+    // if (this.selectedLanguage === "armlite") {
+    //   return SubmitCode
+    // }
 
 
     return from(this.repLoader.invoke(action, params, this.urlParams)
