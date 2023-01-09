@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { first, of, Subject } from 'rxjs';
+import { BehaviorSubject, first, map, of, Subject } from 'rxjs';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { UserService } from './user.service';
 })
 export class RegistrationService implements CanActivate {
 
-  registered$ = new Subject<boolean>();
+  registered$ = new BehaviorSubject<boolean>(false);
   registered?: boolean;
 
   private setRegistered(registered?: boolean) {
@@ -40,18 +40,21 @@ export class RegistrationService implements CanActivate {
     return this.auth.isAuthenticated$
   }
 
+  getRegistered() {
+    return this.userService.loadUser().then(u => (u.Registered === true));
+  } 
+
   canActivate() {
-    if (this.registered === true || this.registered === false) {
-      return of(this.registered);
+    if (this.registered === true) {
+      return this.registered;
     }
 
-    this.registered$.pipe(first()).subscribe(b => {
+    return this.getRegistered().then(b => {
       if (b === false) {
-        this.router.navigate(['/landing']);
+        return this.router.createUrlTree(['/landing']);
       }
-    })
-
-    return this.registered$;
+      return b;
+    });
   }
 
   canDeactivate(c: any) {

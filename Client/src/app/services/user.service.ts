@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Value, ActionResultRepresentation, IHateoasModel, DomainObjectRepresentation, InvokableActionMember, PropertyMember, EntryType, DomainServicesRepresentation } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { EmptyUserView, IUserView, RegisteredUserView, UnregisteredUserView, UserView } from '../models/user-view';
 import { convertTo } from './rep-helpers';
 
@@ -50,16 +50,22 @@ export class UserService {
   }
 
   loadUser() {
-    this.getUserAction().then(action => {
-      this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>)
+    return this.getUserAction().then(action => {
+      return this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>)
         .then((ar: ActionResultRepresentation) => {
           var obj = ar.result().object();
           var user = obj ? this.convertToUser(obj) : UnregisteredUserView;
           this.currentUserAsSubject.next(user);
+          return user;
         })
         .catch(_ => {
           this.currentUserAsSubject.next(EmptyUserView);
+          return EmptyUserView as IUserView;
         });
+    })
+    .catch(_ => {
+      this.currentUserAsSubject.next(EmptyUserView);
+      return EmptyUserView as IUserView;
     });
   }
 
