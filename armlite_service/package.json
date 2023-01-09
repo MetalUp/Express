@@ -1,8 +1,8 @@
 {
   "name": "armlite_service",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/service_2_0a.js",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,6 @@
   ],
   "dependencies": {
     "typescript": "~4.7.2"
-  }
+  },
+  "typings": "./dist/service_2_0a.d.ts"
 }

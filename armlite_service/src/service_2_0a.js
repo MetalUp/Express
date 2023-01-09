@@ -504,7 +504,7 @@ function textToHtml()
  * @param {string}  codeString - A string param.
  * @return {RunResult} This is the result
  */
-function SubmitProgram(codeString)	// SubmitProgram(code : string) : RunResult
+export function SubmitProgram(codeString)	// SubmitProgram(code : string) : RunResult
 {
 	programText = codeString;
 	textToHtml();
@@ -1829,7 +1829,7 @@ function setAddress(x, y)
  * @param {number} maxSteps
  * @return {RunResult}
  */
-function Run(maxSteps)		// Service interface
+export function Run(maxSteps)		// Service interface
 {
 	// use the single step code so we can count
 	dontDisplay = 1;	// so selects fast path options
@@ -1976,7 +1976,7 @@ function doInterrupt()			// normally will change PC (but may leave alone if inte
 /**
  * @return {RunResult>}
  */
-function Reset()	// interface Reset call
+export function Reset()	// interface Reset call
 {
 	running = false;
 	noKeyEffects = false;
@@ -1997,7 +1997,7 @@ function Reset()	// interface Reset call
 /**
  * @return {RunResult>}
  */
-function ClearSystem()
+export function ClearSystem()
 {
 	// clear all the memory
 	for (var i=0; i<maxUsableMem; i+=4) {
@@ -2012,7 +2012,7 @@ function ClearSystem()
  * @param {number} n
  * @return {number}
  */
-function GetRegister(n)
+export function GetRegister(n)
 {
 	if (n >=0 && n <15) return register[n];
 	if (n == 15) return pCounter;
@@ -2023,7 +2023,7 @@ function GetRegister(n)
 /**
  * @return {boolean}
  */
-function GetN()
+export function GetN()
 {
 	if (flags&8) return true;
 	return false;
@@ -2031,7 +2031,7 @@ function GetN()
 /**
  * @return {boolean}
  */
-function GetZ()
+export function GetZ()
 {
 	if (flags&4) return true;
 	return false;
@@ -2039,7 +2039,7 @@ function GetZ()
 /**
  * @return {boolean}
  */
-function GetC()
+export function GetC()
 {
 	if (flags&2) return true;
 	return false;
@@ -2047,7 +2047,7 @@ function GetC()
 /**
  * @return {boolean}
  */
-function GetV()
+export function GetV()
 {
 	if (flags&1) return true;
 	return false;
@@ -2056,7 +2056,7 @@ function GetV()
  * @param {number} loc
  * @return {number}
  */
-function GetMemory(loc)
+export function GetMemory(loc)
 {
 	// note might extend to lowLim later
 	// lowLim = vaddressBase-0x100000000;
@@ -2074,7 +2074,7 @@ function GetMemory(loc)
  * @param {number} addr
  * @return {number}
  */
-function GetPixel(addr)
+export function GetPixel(addr)
 {
 	// assume given a 32 bit unsigned address
 	if (addr < (pixelBase+4*pixelAreaSize) && addr >= pixelBase) // is pixel memory in I/O area
@@ -2108,7 +2108,7 @@ function GetCharScreen()
 /**
  * @return {string}
  */
-function GetConsoleOutput()
+export function GetConsoleOutput()
 {
 	return output1;
 }
