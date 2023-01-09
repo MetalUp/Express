@@ -128,6 +128,17 @@ var saveSeq = 0;
 var autoRun = 0;		// flag for URL options to load/submit/run
 var serviceMode = true;	// false to get direct I/O
 
+/**
+ * @typedef {Object} RunResult 
+ * @property {string} run_id 
+ * @property {number} outcome 
+ * @property {string} cmpinfo 
+ * @property {string} formattedSource 
+ * @property {string} stdout 
+ * @property {string} stderr 
+ */
+
+
 /* export interface RunResult {
     run_id: string, //Unused by ARMlite, so always set an empty string
     outcome: number, //A standard integer code - see below - unique to 
@@ -145,6 +156,7 @@ var serviceMode = true;	// false to get direct I/O
 }
 object.property or object["property"] */
 
+/** @type {RunResult} */
 var RunResult = {};
 
 // Reduce the number of Events logged (new logging system Nov 2022)
@@ -488,6 +500,10 @@ function textToHtml()
 }
 
 // First API for ARMlite Service
+/**
+ * @param {string}  codeString - A string param.
+ * @return {RunResult} This is the result
+ */
 function SubmitProgram(codeString)	// SubmitProgram(code : string) : RunResult
 {
 	programText = codeString;
@@ -1809,6 +1825,10 @@ function setAddress(x, y)
 	updateDisplayedMemory(x, y);
 }
 
+/**
+ * @param {number} maxSteps
+ * @return {RunResult}
+ */
 function Run(maxSteps)		// Service interface
 {
 	// use the single step code so we can count
@@ -1952,6 +1972,10 @@ function doInterrupt()			// normally will change PC (but may leave alone if inte
 	if (xTime && (xTime < Date.now())) doClockInt();	
 }
 
+
+/**
+ * @return {RunResult>}
+ */
 function Reset()	// interface Reset call
 {
 	running = false;
@@ -1970,6 +1994,9 @@ function Reset()	// interface Reset call
 	return RunResult;
 }
 
+/**
+ * @return {RunResult>}
+ */
 function ClearSystem()
 {
 	// clear all the memory
@@ -1981,7 +2008,10 @@ function ClearSystem()
 	textToHtml();		// better than setting all the resets
 	return Reset();
 }
-
+/**
+ * @param {number} n
+ * @return {number}
+ */
 function GetRegister(n)
 {
 	if (n >=0 && n <15) return register[n];
@@ -1990,27 +2020,42 @@ function GetRegister(n)
 }
 
 // flags	// N Z C V
+/**
+ * @return {boolean}
+ */
 function GetN()
 {
 	if (flags&8) return true;
 	return false;
 }
+/**
+ * @return {boolean}
+ */
 function GetZ()
 {
 	if (flags&4) return true;
 	return false;
 }
+/**
+ * @return {boolean}
+ */
 function GetC()
 {
 	if (flags&2) return true;
 	return false;
 }
+/**
+ * @return {boolean}
+ */
 function GetV()
 {
 	if (flags&1) return true;
 	return false;
 }
-
+/**
+ * @param {number} loc
+ * @return {number}
+ */
 function GetMemory(loc)
 {
 	// note might extend to lowLim later
@@ -2025,6 +2070,10 @@ function GetMemory(loc)
 // var v2address = [];						// char map and low-res pixel memory
 
 // GetPixel(n) gives you what LDR Rd,n would give you (and this is a copy of that code!!)
+/**
+ * @param {number} addr
+ * @return {number}
+ */
 function GetPixel(addr)
 {
 	// assume given a 32 bit unsigned address
@@ -2056,6 +2105,9 @@ function GetCharScreen()
 	return charBase;
 }
 
+/**
+ * @return {string}
+ */
 function GetConsoleOutput()
 {
 	return output1;
