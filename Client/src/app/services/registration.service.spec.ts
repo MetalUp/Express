@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { RepLoaderService } from '@nakedobjects/services';
 import { BehaviorSubject, first, Subject } from 'rxjs';
-import { UserView } from '../models/user-view';
+import { IUserView, UserView } from '../models/user-view';
 import { RegistrationService } from './registration.service';
 import { UserService } from './user.service';
 
@@ -32,8 +32,8 @@ describe('RegisteredService', () => {
   });
 
   it('should check registration - true', fakeAsync(() => {
-   
-    userSubj.next({DisplayName : "Test Name"});
+
+    userSubj.next({ DisplayName: "Test Name", Registered: true } as IUserView);
     authSubj.next(true);
     tick();
 
@@ -43,8 +43,8 @@ describe('RegisteredService', () => {
   }));
 
   it('should check registration - false', fakeAsync(() => {
-    
-    userSubj.next({DisplayName : ""});
+
+    userSubj.next({ DisplayName: "", Registered: false } as IUserView);
     authSubj.next(true);
     tick();
 
@@ -53,16 +53,16 @@ describe('RegisteredService', () => {
 
   }));
 
-  it('should return registered bool for canActivate if set', fakeAsync(() => {
-    userSubj.next({DisplayName : "Test Name"});
+  it('should return registered bool for canActivate if set and auth', fakeAsync(() => {
+    userSubj.next({DisplayName : "Test Name", Registered: true} as IUserView);
     authSubj.next(true);
     tick();
 
     expect(service.canActivate().pipe(first()).subscribe(b => expect(b).toBeTrue()));
   }));
 
-  it('should return registered bool for canActivate if set', fakeAsync(() => {
-    userSubj.next({DisplayName : "Test Name"});
+  it('should return registered bool for canActivate if set and unauth', fakeAsync(() => {
+    userSubj.next({DisplayName : "Test Name", Registered: true} as IUserView);
     authSubj.next(false);
     tick();
 

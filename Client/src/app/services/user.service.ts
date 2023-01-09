@@ -3,7 +3,7 @@ import { Value, ActionResultRepresentation, IHateoasModel, DomainObjectRepresent
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
-import { EmptyUserView, IUserView, UserView } from '../models/user-view';
+import { EmptyUserView, IUserView, RegisteredUserView, UnregisteredUserView, UserView } from '../models/user-view';
 import { convertTo } from './rep-helpers';
 
 @Injectable({
@@ -23,7 +23,7 @@ export class UserService {
   private currentUserAsSubject = new BehaviorSubject<IUserView>(EmptyUserView);
 
   private convertToUser(rep: DomainObjectRepresentation) {
-    return convertTo<IUserView>(new UserView(), rep);
+    return convertTo<IUserView>(RegisteredUserView, rep);
   }
 
   getService() {
@@ -54,7 +54,7 @@ export class UserService {
       this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>)
         .then((ar: ActionResultRepresentation) => {
           var obj = ar.result().object();
-          var user = obj ? this.convertToUser(obj) : EmptyUserView;
+          var user = obj ? this.convertToUser(obj) : UnregisteredUserView;
           this.currentUserAsSubject.next(user);
         })
         .catch(_ => {

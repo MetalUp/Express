@@ -12,9 +12,11 @@ export class RegistrationService implements CanActivate {
   registered$ = new Subject<boolean>();
   registered?: boolean;
 
-  private setRegistered(registered: boolean) {
-    this.registered = registered;
-    this.registered$.next(registered);
+  private setRegistered(registered?: boolean) {
+    if (registered === true || registered === false) {
+      this.registered = registered;
+      this.registered$.next(registered);
+    }
   }
 
   constructor(public auth: AuthService,  private userService: UserService, private router: Router) {
@@ -28,7 +30,7 @@ export class RegistrationService implements CanActivate {
     })
 
     userService.currentUser.subscribe(u => {
-      this.setRegistered(!!u.DisplayName);
+      this.setRegistered(u.Registered);
     });
   }
 
