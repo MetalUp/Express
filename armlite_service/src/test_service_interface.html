@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+ <title>ARMlite Assembly Language Simulator by Peter Higginson</title>
+ <meta name="copyright" content="&copy; 2020-23 Peter Higginson and Richard Pawson">
+ <script src="main_2_0a.js"></script>
+ <script src="service_2_0a.js"></script>
+ <script src="css_subs_2_0a.js"></script>
+ <script src="routines_min_2_0a.js"></script>
+ </head>
+<body id="xxbody">
+  <h3>Test of service interface</h3>
+  <script>
+	var xx = SubmitProgram("// divisor in R2, dividend in R1\nMOV R1,#6789\nMOV R2,#12\nMOV R0,#1\nDiv1: CMP R2,#0x80000000\nBCS nxt\nCMP R2,R1\nBCS nxt\nLSL R2,R2,#1 // ASL==LSL\nLSL R0,R0,#1\nB Div1\nnxt: MOV R3,#0\nDiv2: CMP R1,R2\n// BCC nosub // we don't have BCC\nbcs .+2\nb nosub\nSUB R1,R1,R2\nADD R3,R3,R0\nnosub: LSR R0,R0,#1 // Note the MOVS sets flags\nCMP R0,#0\nLSR R2,R2,#1 // an extra shift at end should not matter\nBNE Div2\n// result in R3, remainder in R1\nHALT\n");
+  </script>
+  <h3>Assembled</h3><div id="xxx"></div>
+  <script>
+	var my = JSON.stringify(xx);
+	document.getElementById("xxx").innerHTML = my;
+  </script>
+  <script>
+	xx = Run(1000);
+  </script>
+  <h3>Ran</h3><div id="xxy"></div>
+  <script>
+	my = JSON.stringify(xx);
+	document.getElementById("xxy").innerHTML = my;
+  </script>
+  <h3>Results</h3><div id="xxz"></div>
+  <script>
+    var r3 = GetRegister(3);
+	var r1 = GetRegister(1);
+	document.getElementById("xxz").innerHTML = "Quotient="+r3+" &nbsp; Remainder="+r1;  
+  </script>
+  <h3>Finish</h3>
+</body>
+</html>
