@@ -3400,7 +3400,7 @@ var coloursVal = ['0xffffff','0xf0f8ff','0xfaebd7','0x00ffff','0x7fffd4','0xf0ff
 // return -1 if not found, note 0 means "no colour" set
 function getColourVal(x)
 {
-	for (i=0;i<200;++i) {
+	for (var i=0;i<200;++i) {
 		if (coloursNam[i] == '') return -1;
 		if (x == coloursNam[i]) return coloursVal[i];
 	}

@@ -94,11 +94,11 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     if (!this.validationFail) {
       this.compileServer.submitCode(this.taskId, this.codeDefinitions).pipe(first()).subscribe(rr => {
         this.result = rr;
-        if (rr.formattedsource) {
-          const el = document.createElement("div");
-          el.innerHTML = rr.formattedsource;
-          this.codeDefinitions = el.innerText.replace(/\\n/g, '\r\n');
-        }
+        // if (rr.formattedsource) {
+        //   const el = document.createElement("div");
+        //   el.innerHTML = rr.formattedsource;
+        //   this.codeDefinitions = el.innerText.replace(/\\n/g, '\r\n');
+        // }
 
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {

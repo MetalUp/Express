@@ -27,7 +27,7 @@
     "@nakedobjects/view-models": "file:./temp_no/nakedobjects-view-models-v13.1.0.tgz",
     "@types/lodash": "^4.14.185",
     "@types/luxon": "^3.0.1",
-    "armlite_service": "file:./temp_no/armlite_service-1.0.13.tgz",
+    "armlite_service": "file:./temp_no/armlite_service-1.0.14.tgz",
     "luxon": "^3.0.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
