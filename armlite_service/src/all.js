@@ -133,10 +133,9 @@ var serviceMode = true;	// false to get direct I/O
  * @property {string} run_id 
  * @property {number} outcome 
  * @property {string} cmpinfo 
- * @property {string} formattedsource 
+ * @property {string} formattedSource 
  * @property {string} stdout 
  * @property {string} stderr 
- * @property {string} progout 
  */
 
 
@@ -1975,7 +1974,7 @@ function doInterrupt()			// normally will change PC (but may leave alone if inte
 
 
 /**
- * @return {RunResult}
+ * @return {RunResult>}
  */
 export function Reset()	// interface Reset call
 {
@@ -3406,4 +3405,2123 @@ function getColourVal(x)
 		if (x == coloursNam[i]) return coloursVal[i];
 	}
 	return -1;
+}
+
+// The idea is that everything that depends on layout has been taken out to here
+
+// The known exception is the program layout in HTML (sort out later)
+
+// ID's program, R0-R15, flags, ir, ur (inst decode), irq (grey/normal interrupt)
+// console (temp just put one line not scroll)
+// page - needs input here later - one page only at the moment!!!!
+// memory contents are a0 to a127, LHS addresses are meml0 to meml31
+
+var editWin = 296;
+
+// setup the repetitive parts of the html
+function setupDivs()
+{
+	resetLoadButton();
+	consoleReset();
+	var m="";
+	// memory
+	var holdI = 0;
+	for (var j=0; j<32; ++j) {
+		m+='<div class="row"><div class="address" id="meml'+j+'">0x'+padHex(j,4)+'</div>';
+		for (var i=0; i<4; ++i) {		// if change to/from binary dimensions change
+			m+='<div class="word" id="a'+holdI+'" onclick="openAddress(this)" >0x0</div>';
+			++holdI;
+		}
+		m+='</div>';
+	}
+	setValue("memory",m);
+	
+	setPixelAreaSize(pixelAreaSize);	// pixels
+
+	// charmap
+	m="";
+	for (var j=0; j<512; ++j) {		// 32x16
+		m+='<div id="c'+j+'"></div>';
+	}
+	setValue("chars",m);
+}
+
+// Now can only change size by Query String
+function setPixelAreaSize(val)
+{
+	var m="";
+	if (val == 12288) {			// 128x96
+		pixelAreaSize = 12288;
+		removeClass("pixels","pixels1");	// should be ignored if not present
+		addClass("pixels","pixels2");		
+	} else {		// 768 is faked now using 3072
+		pixelAreaSize = 3072;
+		removeClass("pixels","pixels2");	// should be ignored if not present
+		addClass("pixels","pixels1");
+	}
+	if (serviceMode) return;
+
+	if ((pixelMask & 5) != 0) { // Pixel interrupt (2 set/1 poll enable/0 int enable)
+		document.getElementById("chars").style.display = "none";
+		for (var j=0; j<pixelAreaSize; ++j) {
+			m+='<div id="p'+j+'" onclick="pixelInt(this)"></div>';
+		}
+	} else {
+		document.getElementById("chars").style.display = "block";		
+		for (var j=0; j<pixelAreaSize; ++j) {
+			m+='<div id="p'+j+'"></div>';
+		}
+	}
+	setValue("pixels",m);
+}
+
+// borrowed from the web
+function padHex(d, padding) {
+    var hex = Number(d).toString(16);
+    padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
+    while (hex.length < padding) {
+        hex = "0" + hex;
+    }
+    return hex;
+}
+
+var plhtmp;
+// display a system message (with previous user output)
+function message(y)
+{
+	if (dontDisplay == 0 && !serviceMode) {
+		var elePosn = document.getElementById("console"); 
+		if (y) elePosn.innerHTML = output1+'\n'+y;
+		else elePosn.innerHTML = output1;
+		//elePosn.scrollTop = elePosn.scrollHeight;
+        if (!scrollTimeout) {
+			scrollTimeout = setTimeout(scroll_to_max, 10); // Allow for the element to be updated
+			plhtmp = 0;
+		}
+	}
+	lastMessage = y;
+}
+
+// display just the user output on the system console
+function justConsole()
+{
+	// the scroll can be massive
+	//if (output1.length > 100000) return;		// try this - worked but message() output it anyway
+	var elePosn = document.getElementById("console"); 
+	elePosn.innerHTML = output1;
+	//elePosn.scrollTop = elePosn.scrollHeight;
+	if (!scrollTimeout) {
+		scrollTimeout = setTimeout(scroll_to_max, 10); // Allow for the element to be updated
+		plhtmp = 0;
+	}
+}
+
+
+// attempt to move the scroll after a delay to allow rendering
+// ===========================================================
+// I think the issue is that scrollTop is not updated until the screen is drawn so that
+// you cannot update when you write text (it still has the old value and limit). Provided
+// the offset is large enough (200 = 15 lines I think) that is enough but this code checks
+// and so normally gets attempts 2. If no scroll is needed/allowed you exit the first time
+function scroll_to_max() {
+	++plhtmp;
+	var elePosn = document.getElementById("console"); 
+	var t = elePosn.scrollTop;
+	elePosn.scrollTop = t+4000;
+	if(elePosn.scrollTop != t) {
+		scrollTimeout = setTimeout(scroll_to_max, 10); // Keep scrolling till we hit max value
+	} else {
+		scrollTimeout = false;
+		// I have seen 20 on the file copy test with 200 - try 2000 pixels above
+		if (debug && (plhtmp > 100)) alert("Scroll attempts are "+plhtmp);
+	}
+}
+
+// set a square in the pixel mapped output area
+function videoWrite(indx, y)		// index is offset in 32x24 or 64x48 array, y is HTML code
+{
+	if (indx < 0 || indx >= pixelAreaSize) return;
+	y &= 0xffffff;				// needed because 7 digits is ignored (i.e. did not work)
+	document.getElementById("p"+indx).style.background = "#"+padHex(y,6);
+}
+
+/* Now we can change size by program we need to reset rather than clear
+function clearPixelArea()
+{
+	for (var indx = 0; indx < pixelAreaSize ; ++indx)
+		document.getElementById("p"+indx).style.background = "white";
+} */
+
+//var monospace = '"Courier New Bold",courier,monospace';
+
+/* // The blinks need rewriting anyway (and text() is removed!!
+function blinkoff()
+{
+	if (!waitingForInput) return;					// ignore if not doing input
+										// should already have been deleted
+	text("inpxx", "", 261, 541, 12, "red");
+	delay(500, "blinkon");
+}
+function blinkon()
+{
+	if (!waitingForInput) return;					// ignore if not doing input
+	text("inpxx", " &nbsp; INPUT NEEDED", 261, 541, 12, "red");
+	delay(1000, "blinkoff");
+}
+
+// same flashing style for input file
+//var fileText2 = '<input type="file" id="read-file" onchange="read_file(this)" autocomplete="off" style="display:none;" ><button onclick="document.getElementById(&#39;read-file&#39;).click()" style="color:black; font-size:24px">CLICK TO SELECT FILE</button>';
+//var fileText = '<input type="file" id="read-file" onchange="read_file(this)" autocomplete="off" style="display:none;" ><button onclick="document.getElementById(&#39;read-file&#39;).click()" style="color:red; font-size:24px">CLICK TO SELECT FILE</button>';
+
+function bloff()
+{
+	if (!waitingForInput) return;					// ignore if not doing input
+										// should already have been deleted
+	text("fileRequest", fileText2, 15, 12, 20, "yellow");
+	delay(500, "blon");
+}
+
+function blon()
+{
+	if (!waitingForInput) return;					// ignore if not doing input
+	text("fileRequest", fileText, 15, 12, 20, "red");
+	delay(1000, "bloff");
+	//var elePosn = document.getElementById("read-file");
+	//elePosn.click();
+}
+*/
+
+function openNextMem(x)
+{
+	var elePosn = document.getElementById("a"+x);
+	elePosn.innerHTML = addressInputText(elePosn.innerHTML);
+	document.getElementById("aForm").focus();
+	document.getElementById("aForm").setAttribute("onblur","loseAddress(this)");
+	return elePosn;
+}
+
+function insertTabInProgramArea()
+{
+	var textarea = document.getElementById('pForm');
+	var s = textarea.selectionStart;
+	textarea.value = textarea.value.substring(0,textarea.selectionStart) + "\t" + textarea.value.substring(textarea.selectionEnd);
+	textarea.selectionEnd = s+1; 					// should reset the cursor
+}
+
+/* not used now
+function getPCFormValue()
+{
+	var elePosn = document.getElementById("PCForm");
+	elePosn.removeAttribute("onblur");
+	return elePosn.value;
+} */
+
+function openProgramArea(text)
+{
+	addClass("program","edit");
+	var elePosn = document.getElementById("source");
+	elePosn.style.overflow = "initial";					// reset scroll mode because textarea has own
+	elePosn.style.whiteSpace = "normal";				// reset wrapping (or buttons get moved)
+	elePosn.innerHTML = '<form action="javascript:programSubmit()"><textarea id="pForm" rows="36" cols="36"  spellcheck="false" >'+
+			text.replace(/&/g, "&amp;");+'</textarea></form>';
+	elePosn = document.getElementById("pForm");
+	elePosn.style.width = editWin+"px";	
+	elePosn.focus();
+}
+
+function getProgramArea()
+{
+	var elePosn = document.getElementById("pForm");
+	return elePosn.value;
+}
+
+// Impure interface - called with formatted html!!!
+function resetProgramArea(newText)
+{
+	setValue("source",newText);
+	var src = document.getElementById("source");
+	src.style.overflow = "auto";
+	src.style.whiteSpace = "nowrap";
+	src.scrollTop = 0;
+	// since we did a reset from original there are no markers set
+	lastCodeHighlight = -1;
+	breakpointAddr = -1;
+	errorLineNum = -1;
+}
+
+var lastState = 0;
+// Master control of the simulator states. Since the running code needs rewiting, I'll make this
+// internally consistent and keep a state variable so we are not randomly modifing the DOM state
+// States - 0 start, 1 ready, 2 edit, >4 running, 4 just running, 5 slow, 6 paused
+// make these setStateXxx so can search in main.js and find all uses
+function setStateReady()
+{
+	changeState(1);
+}
+
+function setStateEdit()
+{
+	changeState(2);
+}
+
+function setStateRunning()
+{
+	changeState(4);
+}
+
+// used if might already be in slow mode which we don't want to change
+function setStateForceRunning()
+{
+	if (lastState == 5) return;
+	changeState(4);
+}
+
+function setStateSlow()
+{
+	changeState(5);
+}
+
+function setStatePaused()
+{
+	changeState(6);
+}
+
+var plhComCnt = 0;
+function changeState(val)
+{
+	function xVal(va)
+	{
+		if (va == 1) return "ready";
+		if (va == 2) return "edit";
+		if (va == 4) return "running";
+		if (va == 5) return "running+slow";
+		if (va == 6) return "running+paused";
+		return va;
+	}
+	if (lastState == val) {
+		++plhComCnt;
+		if (debug == 2) setValue("credits", "New state "+xVal(val)+" == Old state "+xVal(lastState)+" == Dup "+plhComCnt);
+		return;
+	}
+	plhComCnt = 0;
+	if (debug == 2) setValue("credits", "New state "+xVal(val)+" == Old state "+xVal(lastState));
+	if (lastState != 0) {		// an old state to remove
+		if (lastState == 6) {
+			removeClass("xxbody","paused");
+			lastState = 4;
+		}
+		if (lastState == 5) {
+			removeClass("xxbody","slow");
+			lastState = 4;
+		}
+		if (lastState == val) return;	// check again
+		if (lastState == 4 && val >=4) {
+			// can do setup without removing running
+			lastState = val;
+			if (val == 4) return;		// just running
+			if (val == 5) addClass("xxbody","slow");
+			if (val == 6) addClass("xxbody","paused");
+			return;
+		}
+		if (lastState == 4) removeClass("xxbody","running");
+		if (lastState == 2) removeClass("xxbody","edit");
+		if (lastState == 1) removeClass("xxbody","ready");
+	}
+	// now need to set the new state
+	lastState = val;
+	if (val >= 4) {
+		addClass("xxbody","running");
+		if (val == 5) addClass("xxbody","slow");
+		if (val == 6) addClass("xxbody","paused");
+		return;
+	}
+	if (lastState == 2) addClass("xxbody","edit");
+	if (lastState == 1) addClass("xxbody","ready");
+}
+
+
+// called on reset to remove any state classes from IRQ
+// also called if both Pin ISR removed and polling disabled
+function intButtonReset()
+{
+	removeClass("irq","enabled");
+	removeClass("irq","active");
+}
+
+// called when Pin ISR setup or polling enabled
+function intButtonSetup()
+{
+	addClass("irq","enabled");
+}
+
+// not clickable
+function intButtonGrey()
+{
+	removeClass("irq","active");
+}
+
+// clickable (so set enabled in case we got here without calling setup)
+function intButtonShow()
+{
+	addClass("irq","enabled");
+	addClass("irq","active");
+}
+
+/*function getOverlayValue()
+{
+	return document.getElementById("ov1").value;
+}*/
+
+function rewriteSide()			// rewrite the memory left side heading and the overlay value
+{
+	var base = overlay*16;
+	for (var i=0; i<32; ++i) {
+		setValue("meml"+i,'0x'+padHex(base+i,4));
+	}
+	setValue("page", padHex(overlay,3));
+}
+
+// OVERLAY CHANGE LOGIC - LATER SPLIT INTO FUNCTIONAL AND HTML/CSS
+// open the overlay location when clicked
+function changePage()
+{
+	if (myMaybe || myTimeout) return false;		// if running might interfere with user I/O
+	message("Modifying memory overlay");		// it did not work either!
+	setValue("page",overlayForm);
+	var elePosn = document.getElementById("oForm");
+	elePosn.focus();
+	waitingForOverlay = true;
+}
+
+var overlayForm = '<form action="javascript:pageSubmit()"><input id="oForm" type="text"></form>';
+
+function pageSubmit()
+{
+	var elePosn = document.getElementById("oForm");
+	if (!elePosn || !waitingForOverlay) {
+		if (debug) alert("Bad pageSubmit call");
+		return false;
+	}
+	waitingForOverlay = false;
+	var val = parseInt(elePosn.value,16);
+	if (isNaN(val) || (val * 256) >= maxUsableMem) {
+		setValue("page", padHex(overlay,3));		// reset the overlay field
+		message("Bad page value");
+		return;
+	}
+	if ((val * 256) == (maxUsableMem-256)) --val;		// you are allowed to ask for the last page
+	evPush('Pg'+padHex(val,3));
+	var tmp = lastMemHighlight;
+	removeMemHighlight();			// need to do this before we change the value of overlay!
+	overlay = val;	
+	var savDD = dontDisplay;		// currently you cannot change page in fast running so this isn't needed
+	dontDisplay = 0;				// mouse click so execution paused
+	rewriteSide();					// rewrite the side bar with the new addresses
+	rewriteMemoryAndRegs(true);		// do not update registers (does update flags - should not matter)
+	if (tmp >= 0) {
+		setMemHighlight(tmp);
+	}
+	dontDisplay = savDD;
+	message("Page value set");			
+}
+
+// if you don't do this then you cannot load a file, edit it and load it again (you get the old version)
+function resetLoadButton()
+{
+	setValue("program-controls", loadText);
+}
+var loadText = '<input type="file" id="read-input" onchange="read_chg(this)" autocomplete="off"><button id="load" onclick="document.getElementById(&#39;read-input&#39;).click()">Load</button><button  id="save" onclick="saveProgram()">Save</button><button  id="edit" onclick="openProgram()">Edit</button><button  id="submit" onclick="programSubmit()">Submit</button><button  id="revert" onclick="programCancel()">Revert</button>';
+
+// note that assemble() rewrites the whole program area html so there should not be a need to clear these three
+function setLabel(r)
+{
+	var elePosn = document.getElementById("lin"+r);
+	if (elePosn) {
+		elePosn.classList.add("label");
+	} else {
+		if (debug) alert("could not find line "+r+" to set label class");
+	}
+}
+
+// mem might be text of the form 0xa-0xb or 0xnn - it must be TEXT
+function setCode(r,mem)
+{
+	var elePosn = document.getElementById("lin"+r);
+	if (elePosn) {
+		elePosn.classList.add("selectable");
+		elePosn.title = mem;
+		elePosn.setAttribute("onclick","javascript:setBreakpoint(this);");
+	} else {
+		if (debug) alert("could not find line "+r+" to set code options");
+	}
+}
+
+function setData(r,mem)		// as above but data not code
+{
+	var elePosn = document.getElementById("lin"+r);
+	if (elePosn) {
+		elePosn.title = mem;
+	} else {
+		if (debug) alert("could not find line "+r+" to set data options");
+	}
+}
+
+function setBreakpoint(inp)
+{
+	if (waitingForInput) return;		// ignore if doing some other input (ours or the program)
+	if (myTimeout || myMaybe) return;	// ignore if something running
+	var lin = parseInt(inp.id.substring(3));
+	var tit = parseInt(inp.title);		// is of form 0xnnnn
+	if (isNaN(lin) || isNaN(tit)) {
+		if (debug) alert("could not parse breakpoint id "+inp.id+" title "+tit);
+		return;
+	}
+	//alert("Check line number "+lin+" title "+tit);
+
+	if (tit == breakpointAddr) {		// remove this breakpoint address
+		inp.classList.remove(breakpoint);
+		breakpointAddr = -1;
+		message("Breakpoint removed at line "+lin+" address 0x"+padHex(tit,5));
+	} else {
+		if (breakpointAddr >= 0) {		// remove the old marker
+			removeClassFromLineNumber(addrToLine[breakpointAddr/4], breakpoint);
+		}
+		breakpointAddr = tit;			// set the new breakpoint
+		inp.classList.add(breakpoint);
+		message("Breakpoint set at line "+lin+" address 0x"+padHex(tit,5));
+	}
+}
+
+// update a register or the PC on the screen
+function updateRDisplay(r,y)
+{
+	if (Math.floor(y) != y) {
+		if (debug) alert("Attempt to put non-integer value into register "+y);
+		y = Math.floor(y);
+	}
+	// Now with tool tips we need all the options	
+	var uns = ''+y;
+	var sig = uns;
+	if (y > 2147483647) sig = '-'+(4294967296-y);
+	var bin = '0b';
+	for (var i = 0; i<32; ++i) {
+		bin += ((y<<i) & 0x80000000)?"1":"0";
+	}
+	var hex = '0x'+padHex(y,8);
+	var tip = "";
+	// 0 = 2's comp, 1 = unsigned, 2 = hex, 3 = binary
+	if (memOpt == 0) {
+		y = sig;
+		if (uns == sig) tip = hex+' '+bin;
+		else tip = '('+uns+') '+hex+' '+bin;
+	} else if (memOpt == 1) {
+		y = uns;
+		if (uns == sig) tip = hex+' '+bin;
+		else tip = sig+' '+hex+' '+bin;
+	} else if (memOpt == 3) {
+		y = bin;
+		if (uns == sig) tip = sig+' '+hex;
+		else tip = sig+' ('+uns+') '+hex;
+	} else {
+		y = hex;
+		if (uns == sig) tip = sig+' '+bin;
+		else tip = sig+' ('+uns+') '+bin;
+	}
+
+	var elePosn = document.getElementById("R"+r); 
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find R"+r+" to set new contents "+y);}
+	else {
+		elePosn.innerHTML = y;
+		elePosn.title = tip;
+	}
+}
+
+// produce lower case hex string with 0 (left) padding (if true) and without the x
+// the important point is that consecutive ffff's are spaced out more
+// NOT USED ANY MORE
+/*function spacedHex(y, padding, span)
+{
+	var i = 0;
+	var z = y;
+	y = hex[y%16];
+	// the problem is that consequtive f are badly spaced and turning off kerning does not work
+	while (++i < 8) {
+		if (!padding && Math.floor(z/16) == 0) break;	// no padding and rest is zero (first char above)
+		if (z % 16 == 15) {		// last char was f
+			if (i == 1 && span == true) y = 'f</span>';
+			z = Math.floor(z/16);
+			if (z % 16 != 15 && span == true) {		// this char is not f
+				y = '<span class="ffff">'+y;
+			}
+			y = hex[z%16]+y;
+		} else {
+			z = Math.floor(z/16);
+			if (z % 16 == 15 && span == true) {		// this char is f but last was not
+				y = 'f</span>'+y;
+			}else {
+				y = hex[z%16]+y;
+			}
+		}
+	}
+	if (z % 16 == 15 && span == true) {		// last char added char was f (of course first in string)
+		y = '<span class="ffff">'+y;
+	}
+	return y;
+}*/
+
+function updateFlags(y)
+{
+	flags = y&15;
+	if (dontDisplay == 1) return;
+	var txt = (y&8)!=0?'1':'0'; //thinsp removed
+	txt += ((y&4)!=0?'1':'0');
+	txt += ((y&2)!=0?'1':'0');
+	txt += ((y&1)!=0?'1':'0');
+	setValue("flags",txt);
+}
+
+function addressInputText(val)
+{
+	if (val == '0' || val == '0x00000000' || val == '0b00000000000000000000000000000000') val ='';
+	var widthX = (memOpt == 3) ? '252' :'75';
+	return '<form action="javascript:addressSubmit()"><input id="aForm" type="text" style="padding:0; border:0; font-family: monospace; width:'+widthX+'px;height:14px;font-size:13.4px;" value="'+val+'"></form>';
+}
+
+function openAddressToEdit(inp)
+{
+	inp.innerHTML = addressInputText(inp.innerHTML);
+	document.getElementById("aForm").focus();
+	document.getElementById("aForm").setAttribute("onblur","loseAddress(this)");
+}
+
+function getAddressValue()
+{
+	var elePosn = document.getElementById("aForm");
+	return elePosn.value;
+}
+
+function resetAddressInput() // the setAddress finishes tidying up
+{
+	document.getElementById("aForm").removeAttribute("onblur");	
+}
+
+var breakpoint = "breakpoint";
+var current = "current";
+var error = "error";
+// x is the index into the memory locations displayed on screen (words not bytes so 0 to 127!!)
+// y is the value to put there, memOpt tells you how to do it (byte mode now removed)
+function updateDisplayedMemory(x, y)
+{
+	// Now with tool tips we need all the options	
+	// but should not need padding now
+	var uns = ''+y;
+	var sig = uns;
+	if (y > 2147483647) sig = '-'+(4294967296-y);
+	var bin = '0b';
+	for (var i = 0; i<32; ++i) {
+		bin += ((y<<i) & 0x80000000)?"1":"0";
+	}
+	var hex = '0x'+padHex(y,8);
+	var tip = "";
+	// 0 = 2's comp, 1 = unsigned, 2 = hex, 3 = binary
+	if (memOpt == 0) {
+		y = sig;
+		if (uns == sig) tip = hex+' '+bin;
+		else tip = '('+uns+') '+hex+' '+bin;
+	} else if (memOpt == 1) {
+		y = uns;
+		if (uns == sig) tip = hex+' '+bin;
+		else tip = sig+' '+hex+' '+bin;
+	} else if (memOpt == 3) {
+		y = bin;
+		if (uns == sig) tip = sig+' '+hex;
+		else tip = sig+' ('+uns+') '+hex;
+	} else {
+		y = hex;
+		if (uns == sig) tip = sig+' '+bin;
+		else tip = sig+' ('+uns+') '+bin;
+	}
+
+	var elePosn = document.getElementById("a"+x); 
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find a"+x+" to set new contents "+y);}
+	else {
+		elePosn.innerHTML = y;
+		elePosn.title = tip;
+	}
+}
+
+// note breakpoint and current are now orthogonal (in the program area)
+function removeCodeHighlight()
+{
+	if (lastCodeHighlight >= 0) {
+		var line = document.getElementById("lin"+lastCodeHighlight);
+		line.classList.remove(current);
+		lastCodeHighlight = -1;
+	}
+}
+
+// indicate the line being executed - called with the real line number (i.e. not PC/4)
+function showExecute(r)
+{
+	removeCodeHighlight();				// need to remove previous one (if any)
+	addClassToLineNumber(r, current);
+	lastCodeHighlight = r;
+}
+
+// indicate the line being executed - called with the real line number (i.e. not PC/4)
+// this version called if stopping to also scroll to correct place
+function showExecuteStop(r)
+{
+	removeCodeHighlight();				// need to remove previous one (if any)
+	addClassToLineNumber(r, current);
+	lastCodeHighlight = r;
+	var pos = (r-18)*15.2395;
+	if (r < 30) pos = 0;
+	document.getElementById("source").scrollTop = pos;
+}
+
+// Indicate where the error is - called with the real line number (never the address)
+function showError(r)
+{
+	addClassToLineNumber(r, error);
+	byteCount = 0;			// prevent any future STEP or RUN trying to highlight instructions
+	errorLineNum = r;
+	var pos = (r-18)*15.2395;
+	if (r < 30) pos = 0;
+	document.getElementById("source").scrollTop = pos;
+}
+
+// called by reset to remove any existing markers
+function removeError()
+{
+	if (errorLineNum >= 0) {
+		removeClassFromLineNumber(errorLineNum, error);
+		errorLineNum = -1;
+	}
+}
+
+function addClassToLineNumber(r, classToAdd)
+{
+	if (r < 0) return; // should not happen
+	var elePosn = document.getElementById("lin"+r);
+	if (elePosn) {
+		elePosn.classList.add(classToAdd)
+	} else {
+		if (debug) alert("could not find line "+r+" to add class "+classToAdd);
+	}
+}
+
+function removeClassFromLineNumber(r, classToRemove)
+{
+	if (r < 0) return; // should not happen
+	var elePosn = document.getElementById("lin"+r);
+	if (elePosn) {
+		elePosn.classList.remove(classToRemove)
+	} else {
+		if (debug) alert("could not find line "+r+" to remove class "+classToRemove);
+	}
+}
+
+function removeMemHighlight()
+{
+	if (lastMemHighlight >= 0) {
+		var x = overlay * 256;
+		if (lastMemHighlight >= x && lastMemHighlight < (x+512)) {
+			// should be a multiple of 4 but would go horribly wrong if wasn't
+			x = Math.floor((lastMemHighlight-x)/4);
+			document.getElementById("a"+x).classList.remove(current);
+		}
+		lastMemHighlight = -1;
+	}
+}
+
+// r is a memory address
+function setMemHighlight(r)
+{
+	removeMemHighlight();
+	if (r < 0) return; // should not happen
+	var x = overlay * 256;
+	if (r >= x && r < (x+512)) {
+		// should be a multiple of 4 but would go horribly wrong if wasn't
+		x = Math.floor((r-x)/4);
+		// since we have tested for a range it should always exist!
+		document.getElementById("a"+x).classList.add(current);
+	}
+	lastMemHighlight = r; // remembered even if not set so can set if overlay changes
+}
+
+function IEKeyEnable()
+{
+	document.getElementById("xxbody").focus();	//	IE needs this to get single keys
+}
+
+function clearInputArea()
+{
+	setValue("input","&nbsp;");
+}
+
+function enableInput(secret)
+{
+	if (secret) setValue("input",inputFormSecret);
+	else setValue("input",inputForm);
+	var elePosn = document.getElementById("iForm");
+	elePosn.focus();
+	//delay(1000, "blinkoff");					// start blink
+}
+
+var inputForm = '<form action="javascript:inputSubmit()"><input id="iForm" type="text" placeholder="Input expected"></form>';
+var inputFormSecret = '<form action="javascript:inputSubmit()"><input id="iForm" type="password" placeholder="Input expected"></form>';
+
+// This sets a character in the character map
+function showChar(i,x)		// note x is a number
+{
+	if (i < 0 || i >= 512) {
+		if (debug) alert("Bad index for showChar() "+i);
+		return;
+	}
+	var cList = "";				// default is to set a null string (for space)
+	if (x > 32 && x < 128) {	// going to display this (non-space)
+		if (x == '<') cList = '&lt;';
+		else if (x == '>') cList = '&gt;';
+		else if (x == '&') cList = '&amp;';
+		else cList = String.fromCharCode(x);
+	}
+	setValue("c"+i,cList);
+}
+
+function getInput()
+{
+	var elePosn = document.getElementById("iForm");
+	if (!elePosn) {
+		if (debug) alert("Bad getInput call");
+		return false;
+	}
+	return elePosn.value;
+}
+
+function inputRestore(val)
+{
+	setValue("input",val);
+}
+
+// clear the instruction decode area
+function clearIR()
+{
+	setValue("ir", "&nbsp;");
+	setValue("ur", "&nbsp;");
+}
+
+// set the top line of the instruction decode area (spaced hex number)
+function setIR(y)
+{
+	setValue("ir", y);
+}
+
+// set the 2nd line of the instruction decode area (text decode of inst)
+function addIR(y)
+{
+	setValue("ur", y);
+}
+
+// This is the class names that the display modes map into
+//var modeNames = ['signed','unsigned','hex','binary'];
+
+// file read functions
+function fileOpen()
+{
+	// create our own button under where the file window often is that the user can click
+	// if the file window does not show
+	//text("fileRequest", fileText, 15, 12, 20, "red");
+	//delay(1000, "bloff");
+	//message("File Open required");
+	
+	// let's ignore the above and try a non blinking version in the message field
+	// we cannot put tags inside a textarea so we need to rewrite the whole thing
+	setValue("outer_console",'<textarea class="console" id="console" readonly>'+output1+'\n</textarea>'+fileText);
+	
+	// REMEMBER WE NEED TO RESET THIS LATER
+	
+	var elePosn = document.getElementById("read-file");
+	elePosn.click();
+}
+
+var fileText = '<input type="file" id="read-file" onchange="read_file(this)" autocomplete="off"><button onclick="document.getElementById(&#39;read-file&#39;).click()">File Open required</button>';
+
+function consoleReset()		// after get file click or do reset
+{
+	setValue("outer_console",'<textarea class="console" id="console" readonly>'+output1+'\n</textarea>');
+}
+
+// This code was adapted from:
+// https://thiscouldbebetter.wordpress.com/2012/12/18/
+// loading-editing-and-saving-a-text-file-in-html5-using-javascrip/
+function saveFile(text,name)
+{
+	var textToSaveAsBlob = new Blob([text], {type:"text/plain"});
+	var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+	var fileNameToSaveAs = "myprog.txt";
+
+	var downloadLink = document.createElement("a");
+	downloadLink.download = name;
+	downloadLink.innerHTML = "Download File";
+	downloadLink.href = textToSaveAsURL;
+	downloadLink.onclick = destroyClickedElement;
+	downloadLink.style.display = "none";
+	document.body.appendChild(downloadLink);
+ 
+	downloadLink.click();
+} 
+function destroyClickedElement(event)
+{
+    document.body.removeChild(event.target);
+	//waitingForInput = false;
+	//output1 = "Saved the File";
+}
+
+
+// this should work to set the contents of any named object
+function setValue(id, y)
+{
+	if (serviceMode) return;
+	var elePosn = document.getElementById(id); 
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find "+id+" to set new contents "+y);}
+	else elePosn.innerHTML = y;
+}
+
+function setClass(id,newClass)
+{
+	if (serviceMode) return;
+	var elePosn = document.getElementById(id); 
+	if (!elePosn) if (debug) {alert("Simulator bug - cannot find "+id+" to set new class "+newClass);}
+	else elePosn.className = newClass;
+}
+
+function addClass(id,newClass)
+{
+	if (serviceMode) return;
+	var elePosn = document.getElementById(id); 
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find "+id+" to add class "+newClass);}
+	else elePosn.classList.add(newClass);
+}
+
+function removeClass(id,oldClass)
+{
+	if (serviceMode) return;
+	var elePosn = document.getElementById(id); 
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find "+id+" to remove class "+newClass);}
+	else elePosn.classList.remove(oldClass);
+}
+
+// New function to set or change the program area size
+function setProgramWidth(width)
+{
+	if (serviceMode) return;
+	// we need to move the other things out of the way
+	editWin = width-4;
+	var mid = width+50;
+	var memPosn = width+400;
+	if (memOpt == 3) memPosn += 170;
+	var elePosn = document.getElementById("mxx");
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find mxx to set left "+memPosn);}
+	else elePosn.style.left = memPosn+"px";
+	var elePosn = document.getElementById("processor"); 
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find processor to set left "+mid);}
+	else elePosn.style.left = mid+"px";
+	var elePosn = document.getElementById("io"); 
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find io to set left "+mid);}
+	else elePosn.style.left = mid+"px";
+	// now can make proram area wider
+	var elePosn = document.getElementById("program"); 
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find program to set width "+width);}
+	else elePosn.style.width = width+"px";
+	if (modifyingProgram) {
+		elePosn = document.getElementById("pForm");
+		elePosn.style.width = editWin+"px";
+	}
+}
+
+// called when change in or out of binary mode
+function setMemBinary(flag)		// memOpt has yet not been set when this is called
+{
+	if (serviceMode) return;
+	var memPosn = editWin+404;
+	if (flag) memPosn += 170;
+	var elePosn = document.getElementById("mxx");
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find mxx to set left "+memPosn);}
+	else {
+		elePosn.style.left = memPosn+"px";
+		if (flag) elePosn.style.fontSize = binarySize+"%";
+		else elePosn.style.fontSize = "100%";
+	}
+	elePosn = document.getElementById("registers");
+	if (!elePosn) {if (debug) alert("Simulator bug - cannot find registers to set fontSize");}
+	else {
+		if (flag) elePosn.style.fontSize = binarySize+"%";
+		else elePosn.style.fontSize = "100%";
+	}
+}
+
+// here if window size changes
+function changeDimensions()
+{
+	getDimensions();
+	if (dynamicProgramWidth) {
+		var tmp = maxWidth - 826;
+		if (tmp < 300) tmp = 300;			// impose limits
+		if (tmp > 3000) tmp = 3000;			// anything above 3000 just seems silly
+		setProgramWidth(tmp);	// need to set something as window reduces in size
+	}
+}
+
+// Event compressing and logging functions
+function evStep()		// special case, so own call
+{
+	if (serviceMode) return;		// no tracking in service mode (for now anyway)
+	if (eventCount == 0) {
+		evFirst();
+		evPusha("St1");	// it's really unlikely that the first event will be Step
+		return;			// but we might as well allow for it
+	}
+	++eventStep;
+	if (eventStep < 100 && (Date.now() - logTime) < 300000) return;
+	// force a report every 100 steps or 5 minutes
+	evPusha("St"+eventStep);
+	eventStep = 0;
+}
+	
+// Log a cross-reference in Matomo on first call
+function evFirst()
+{
+	_paq.push(["trackEvent","First",plh_url+" "+plh_id]);
+	eventCount = 55;		// force the first event to also log in new system
+}
+
+// general button event
+function evPush(button)
+{
+	if (serviceMode) return;		// no tracking in service mode (for now anyway)
+	if (eventCount == 0) evFirst();
+	if (eventStep != 0) {
+		evPusha("St"+eventStep);
+		eventStep = 0;
+	}
+	evPusha(button);
+}
+
+// record an event (can be string as well as button)
+function evPusha(button)
+{	
+	if (eventList == "") eventList = button;
+	else eventList += " "+button;
+	// 1500 is a reasonable limit to send in a URL (unlikely but BAD if 2048 total exceeded)
+	if (eventList.length < 1500 && (Date.now()-logTime) < 300000 && ++eventCount < 53) return;
+
+	// here if we are going to send a log report to the new system
+	var UrlToSend = "https://www.peterhigginson.co.uk:/log/log.php?u="+plh_url+"&i="+plh_id+"&x="+eventList;
+	if (window.fetch) {
+		// Try this alternative
+		const myInit = {method: 'GET', mode: 'no-cors', keepalive: true};
+		var myRequest = new Request(UrlToSend);
+		fetch(myRequest, myInit);
+	} else {
+		// THIS WORKED EXCEPT WHEN MOVING AWAY FROM THE PAGE (CORS errors)
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("GET", UrlToSend+" OLD", true);	// I did try POST but getting url parameters is harder
+		xhttp.send();						// true sets ASYNC (and SYNC isn't allowed for onbeforeunload etc.)
+	}
+	// now reset all the variables to start saving up events again (should the instance continue)
+	logTime = Date.now();
+	eventList = "";
+	eventCount = 2;
+}
+
+// here (we hope) when the user closes the window
+function flushLog()
+{
+	if (serviceMode) return;	// probably can't happen but better a wasted line than a hard to find bug
+
+	if (eventCount > 1) {		// if we haven't started, no point in recording a finish
+		eventCount = 55;		// force the event to flush the log
+		evPush("Unld");			// Problem with delay to make sure message is actually sent
+		eventCount = 1;			// avoid sending two consecutive Unloads
+	}
+}
+
+// Extended AQA Instruction set simulator, ARMlite
+// Copyright 2019-23 Peter Higginson (plh256 at hotmail.com)
+
+// Jan 2023 Partition the code into a Service module for Richard's Angular service
+// for now keep the outer layer so I can test it, whether this becomes ARMlite is TBD
+// First pass, keep the global definitions in the service module and just the setups here
+
+// For historical comments see last V1 mainxxx.js file
+// BEWARE you cannot do == NaN (at least not to get the result you expect)
+
+function main()						// main is called when the page is loaded
+{
+	serviceMode = false;			// to get direct I/O
+	// look at any parameters
+	var url = new URL(location);
+	var foo = url.searchParams.get('slow_delay');
+	if (foo) {
+		var tmp = parseInt(foo);
+		if (tmp > 1 && tmp < 1000) {	// fast uses speed 1
+			slowSpeed = tmp;			// default delay for SLOW mode
+		}
+	}
+	foo = url.searchParams.get('fast_delay');	// UNDOCUMENTED FEATURE - default=4
+	if (foo) {		// for some future browser we might need to find a better default
+		var tmp = parseInt(foo);
+		if (tmp > 0 && tmp < 251) {
+			delayTime = tmp;			// default parallel delay in FAST mode
+		}
+	}
+	foo = url.searchParams.get('data');
+	if (foo) {
+		foo = foo.toLowerCase();
+		if (foo.startsWith("sig")) memOpt = 0;		// 0 = 2's comp
+		if (foo.startsWith("dec")) memOpt = 0;		// 0 = 2's comp
+		if (foo.startsWith("uns")) memOpt = 1;		// 1 = unsigned
+		if (foo.startsWith("hex")) memOpt = 2;		// 2 = hex
+		if (foo.startsWith("bin")) {
+			memOpt = 3;								// 3 = binary
+			addClass("xxbody","binary");
+		}
+	}
+	foo = url.searchParams.get('mem_k');
+	if (foo) {
+		var tmp = parseInt(foo);
+		if (tmp >= 1 && tmp <= 1024) {
+			maxUsableMem = tmp*1024;			// first byte we cannot use
+		}
+	}
+	foo = url.searchParams.get('debug');
+	if (foo) {
+		var tmp = parseInt(foo);
+		debug = tmp;						// debug options
+	}
+	foo = url.searchParams.get('profile');
+	if (foo) {
+		addClass("xxbody","profile-"+foo);
+	} else {
+		// profile=player is broken by the dynamic sizing of the windows
+		// any profile is likely to be incompatible with this
+		dynamicProgramWidth = true;			// default if no profile
+		var newWidth = maxWidth - 826;
+		foo = url.searchParams.get('progw');	// option to set program area width
+		if (foo) {
+			var tmp = parseInt(foo);
+			if (tmp >= 300 && tmp <= 3000) {
+				newWidth = tmp;				// anything above 3000 just seems silly
+				dynamicProgramWidth = false;
+			}
+		}
+		setProgramWidth(newWidth);
+	}
+
+	foo = url.searchParams.get('alcom');	// option to align comments
+	if (foo) {	// decided to just go with spaces option
+		var tmp = parseInt(foo);
+		if (tmp > 5 && tmp < 301) {
+			comment_align = tmp;
+		}
+	}
+
+	if (navigator.platform.indexOf('Win32') > -1) binarySize = 100;
+	else binarySize = 92;
+
+	foo = url.searchParams.get('binsiz');	// option make binary smaller
+	if (foo) {
+		var tmp = parseInt(foo);
+		if (tmp > 79 && tmp < 101) {
+			binarySize = tmp;
+		}
+	}
+
+	// ?load  - just loads the code into the Program window, leaving it in Edit mode so that the user can then hit Submit and Play
+	// ?submit - loads the code and assembles it. When user goes to the App they can either then hit Play button, or correct errors and submit again
+	// ?run - loads code, submits and if no errors runs it
+	foo = url.searchParams.get('load');		// option to supply some code
+	if (!foo) {
+		foo = url.searchParams.get('submit');	// option to supply some code and assemble it
+		if (!foo) {
+			foo = url.searchParams.get('run');	// option to supply some code and run it
+			if (foo) autoRun = 3;			// marker to assemble and run
+		} else autoRun = 2;					// marker to assemble but not run
+	} else autoRun = 1;						// marker to leave in edit mode
+	if (foo) {
+		programText = decodeURIComponent(foo);
+		textToHtml();
+	}
+
+	window.document.title = "ARMlite Assembly Language Simulator by Peter Higginson";
+	trapKey(9, "tabKey", null);				// trap TAB in program input mode
+	trapKey(27, "escKey", null);			// trap ESC to exit from input mode
+
+	// this will do the rest of the screen setup (basic is in html now)
+	setupDivs();
+
+	// although these are setup to hex 0x0 by setupDivs() the url might have asked
+	// for signed or binary, so do it again
+	updateR(0,0);
+	updateR(1,0);
+	updateR(2,0);
+	updateR(3,0);
+	updateR(4,0);
+	updateR(5,0);
+	updateR(6,0);
+	updateR(7,0);
+	updateR(8,0);
+	updateR(9,0);
+	updateR(10,0);
+	updateR(11,0);
+	updateR(12,0);
+	updateR(13,maxUsableMem);		// treat LR and SP as R14 and R13 for AQA
+	updateR(14,0);
+	updateFlags(0);
+	updatePC(0);
+	clearIR();
+	output1 = "System Messages";	// first Submit etc. resets this
+	message("LOAD, EDIT a program or modify memory");
+	removeClass("program","edit");
+	
+	// Cheat for now (maybe always) by passing the globals we have already setup to be done again
+	// Excluded display features: memOpt, profile, dynamicProgramWidth, binarySize
+	ConfigureSystem(slowSpeed, delayTime, maxUsableMem, debug, comment_align);
+	// comment_align (int 6-300) included because can pass back formatted assembly listing
+
+	setStateReady();
+	
+	// while we clear all the memory
+	for (var i=0; i<maxUsableMem; i+=4) {
+		setAddress(i,0);
+	}
+
+	if (autoRun != 0) {			// marker for load/submit/run URL options
+		if (autoRun == 1) {		// leave in edit mode
+			openProgram2();		// because Mamoto not yet initialised
+		} else {
+			assemble();
+			if (address[0] != 0 && autoRun == 3) {	//assemble worked and run wanted
+				// force a screen update before doing run
+				delay(100, "run");
+			}
+		}
+	}
+}
+
+// Might as well leave the key handling here for now
+
+// ESCAPE key handler - for all input cases except program requested input
+function escKey(e)
+{
+	if (!waitingForInput) return;					// ignore if not doing input
+	if (myTimeout || myMaybe) return;	// ignore if running a program
+	e.preventDefault();
+	waitingForInput = false;
+	setStateReady();
+	if (savOpenAddress) {						// has a memory address open
+		var x = parseInt(savOpenAddress.id[1]);
+		if (savOpenAddress.id.length >= 3) x = x*10 + parseInt(savOpenAddress.id[2]);
+		if (savOpenAddress.id.length >= 4) x = x*10 + parseInt(savOpenAddress.id[3]);
+		if (savOpenAddress.id.length == 5) x = x*10 + parseInt(savOpenAddress.id[4]);
+		x += overlay * 64;
+		setAddress(x*4, address[x]);	// removes input form as well
+		savOpenAddress = false;
+	} else if (modifyingProgram) {					// has the program area open
+		modifyingProgram = false;
+		textToHtml();
+	} /* else {								// must be the PC which is open
+		updatePC(pCounter);
+		//updatePCmarker(pCounter);
+	} - **no PC editing now** */
+	message("ESC pressed to abort input");
+}
+
+// TAB key handler - for all input cases except program requested input
+function tabKey(e)
+{
+	e.preventDefault();
+	// Warning - do not put an alert before the preventDefault
+	if (!waitingForInput) return;						// ignore if not doing input
+	if (myTimeout || myMaybe) return;	// ignore if running a program
+	if (savOpenAddress) {						// has a memory address open
+		// let's hope x is the offset in this displayed page pair
+		var x = parseInt(savOpenAddress.id[1]);
+		if (savOpenAddress.id.length >= 3) x = x*10 + parseInt(savOpenAddress.id[2]);
+		if (savOpenAddress.id.length >= 4) x = x*10 + parseInt(savOpenAddress.id[3]);
+		if (savOpenAddress.id.length == 5) x = x*10 + parseInt(savOpenAddress.id[4]);
+		var inp = document.getElementById("aForm");
+		var ok = checkInput(inp.value); // so do not overwrite error message
+		loseAddress(inp);				// ignore errors because "alert" wrecks things
+		if (x < 127) {					// open next location
+			++x;
+			if (ok) message("Modifying memory contents");
+			savOpenAddress = openNextMem(x);
+			waitingForInput = true;
+			setStateEdit();
+			evPush('An');
+		} else {
+			waitingForInput = false;	// I think it was a bug that this was missing!
+			setStateReady();
+		}
+	} else if (modifyingProgram) {			// has the program area open
+		insertTabInProgramArea();
+	} /* else {							// must be the PC
+		//var inp = document.getElementById("PCForm");
+		PCSubmit();					// might as well accept this
+	} */
+}
+
+function openProgram()
+{
+	if (waitingForInput) return;			// ignore if doing input (ours or the program)
+	if (myTimeout || myMaybe) return;		// ignore if something running
+	evPush('Ed');
+	openProgram2();
+}
+
+function openProgram2()
+{	
+	message("Modifying Program Area");
+	
+	// see if can find scroll position before go to edit
+	var source = document.getElementById("source");
+	var top = Math.floor(source.scrollTop);		// this is a float not an integer so fix it now
+	//alert("scrollTop is "+source.scrollTop);
+
+	setStateEdit();							// normally assemble() will call reset2() to clear this
+	openProgramArea(programEdit);
+	waitingForInput = true;
+	modifyingProgram = true;
+	// might need a delay to draw element first - no seems to work
+	if (top) document.getElementById("pForm").scrollTop = top;
+}
+
+function programSubmit()
+{
+	if (!waitingForInput) {
+		if (debug) alert("Bad - Submit when not waiting for input");
+		return false;
+	}
+	programSubmit2(true);
+}
+
+// key is true for real Submit, false if part of Save
+function programSubmit2(key)
+{
+	waitingForInput = false;
+	modifyingProgram = false;
+	removeClass("program","edit");		// put the edit button back
+	programText = getProgramArea();
+	// test for the DEMO Easter Egg
+	if (key && programText.length < 10) {		// very short inputs only
+		var foo = programText.toLowerCase();	// and not part of save
+		if (foo.startsWith("demo")) {
+			evPush('Dm');
+			demoSetup();
+			textToHtml();
+			assemble();
+			// force a screen update before doing run
+			delay(100, "runOrig");
+			return;
+		}
+	}
+	if (key) evPush('Sb');
+	else evPush('SvSb');
+	textToHtml();
+	assemble();
+}
+
+function demoSetup()
+{
+	programText = 'MOV R11,#.black// Constant\nMOV R12,#.white// Constant\nMOV R1,#screen2 \nADD R3,R1,#12288// End\nclearPixel:\nSTR R12,[R1]// set everything white\nADD R1,R1,#4\nCMP R1,R3\nBLT clearPixel\n// Initialise 2nd screen with random pattern\nMOV R2,#screen2// 1st pixel\nADD R3,R2,#12288// End\nrandLoop:LDR R0,.Random\nAND R0,R0,#3// start with 25% set only\nCMP R0,#0\nBNE skip// only need to set blacks\nSTR R11,[R2]// set black\nskip:\nADD R2,R2,#4\nCMP R2,R3\nBLT randLoop\ncopyScreen2to1:\nMOV R1,#.PixelScreen\nMOV R2,#screen2\nADD R3,R1,#12288\ncopyLoop:\nLDR R0,[R2]\nSTR R0,[R1]\nADD R1,R1,#4\nADD R2,R2,#4\nCMP R1,R3\nBLT copyLoop\n// Next generation\nMOV R3,#0// R3 is cell offset,0 to 12288 (incr by 4)\nnextGenLoop:\nBL countBlock// count neighbours in R6\n// Now decide fate of cell\nMOV R2,#screen2\nADD R2,R2,R3\nCMP R6,#4\nBLT .+3 \nSTR R12,[R2]// Cell dies (or remains empty) if 4 or more neighbours\nB continue\nCMP R6,#3\nBLT .+3 \nSTR R11,[R2]// Cell born (or remains) if 3 or 4 neighbours\nB continue\nCMP R6,#2\nBEQ continue// Cell remains in present state if 2 neighbours\nSTR R12,[R2]// Cell dies (or remains empty) if < 2 neighbours\ncontinue:\nADD R3,R3,#4\nCMP R3,#12288\nBLT nextGenLoop\nB copyScreen2to1\n\n// R3 is pixel index,R6 return count\n// R11,R12 do not change,R5 used by countIfLive()\n// we use R1,R4 and R10 (as temp for LR!!!!)\ncountBlock:\nMOV R10,LR\nMOV R6,#0// Reset live count\nMOV R1,#.PixelScreen\nADD R1,R1,R3\nAND R4,R3,#255// index in row\nCMP R3,#256\nBLT topRow// remove all the special cases\nCMP R3,#12032\nBEQ leftBot// because BGE not in AQA set\nBGT botRow// and #12028 is > 8 bits\nCMP R4,#0\nBEQ leftCol\nCMP R4,#252\nBEQ rightCol\n// now can do original count neighbours\nSUB R1,R1,#256// North \nBL countIfLive\nADD R1,R1,#4// Northeast\nBL countIfLive\nADD R1,R1,#256// East\nBL countIfLive\nADD R1,R1,#256// Southeast\nBL countIfLive\nSUB R1,R1,#4// South\nBL countIfLive\nSUB R1,R1,#4// Southwest\nBL countIfLive\nSUB R1,R1,#256// West\nBL countIfLive\nSUB R1,R1,#256// Northwest\nBL countIfLive\nMOV PC,R10// RET\nrightCol:// but not top or bottom\nSUB R1,R1,#256// North \nBL countIfLive\nSUB R1,R1,#252// Northeast\nBL countIfLive\nADD R1,R1,#256// East\nBL countIfLive\nADD R1,R1,#256// Southeast\nBL countIfLive\nADD R1,R1,#252// South\nBL countIfLive\nSUB R1,R1,#4// Southwest\nBL countIfLive\nSUB R1,R1,#256// West\nBL countIfLive\nSUB R1,R1,#256// Northwest\nBL countIfLive\nMOV PC,R10// RET\nleftCol:// but not top or bottom\nSUB R1,R1,#256// North \nBL countIfLive\nADD R1,R1,#4// Northeast\nBL countIfLive\nADD R1,R1,#256// East\nBL countIfLive\nADD R1,R1,#256// Southeast\nBL countIfLive\nSUB R1,R1,#4// South\nBL countIfLive\nADD R1,R1,#252// Southwest\nBL countIfLive\nSUB R1,R1,#256// West\nBL countIfLive\nSUB R1,R1,#256// Northwest\nBL countIfLive\nMOV PC,R10// RET\ntopRow:\nCMP R4,#0// note R3=R4\nBEQ leftTop\nCMP R4,#252\nBEQ rightTop\n// now top but not sides\nADD R1,R1,#12032// North \nBL countIfLive\nADD R1,R1,#4// Northeast\nBL countIfLive\nSUB R1,R1,#12032// East\nBL countIfLive\nADD R1,R1,#256// Southeast\nBL countIfLive\nSUB R1,R1,#4// South\nBL countIfLive\nSUB R1,R1,#4// Southwest\nBL countIfLive\nSUB R1,R1,#256// West\nBL countIfLive\nADD R1,R1,#12032// Northwest\nBL countIfLive\nMOV PC,R10// RET\nbotRow:// removed leftBot already\nCMP R4,#252\nBEQ rightBot\nSUB R1,R1,#256// North \nBL countIfLive\nADD R1,R1,#4// Northeast\nBL countIfLive\nADD R1,R1,#256// East\nBL countIfLive\nSUB R1,R1,#12032// Southeast\nBL countIfLive\nSUB R1,R1,#4// South\nBL countIfLive\nSUB R1,R1,#4// Southwest\nBL countIfLive\nADD R1,R1,#12032// West\nBL countIfLive\nSUB R1,R1,#256// Northwest\nBL countIfLive\nMOV PC,R10// RET\n// There must be a way to improve this but I\'m not short of space! \nleftTop:\nADD R1,R1,#12032// North \nBL countIfLive\nADD R1,R1,#4// Northeast\nBL countIfLive\nSUB R1,R1,#12032// East\nBL countIfLive\nADD R1,R1,#256// Southeast\nBL countIfLive\nSUB R1,R1,#4// South\nBL countIfLive\nADD R1,R1,#252// Southwest\nBL countIfLive\nSUB R1,R1,#256// West\nBL countIfLive\nADD R1,R1,#12032// Northwest\nBL countIfLive\nMOV PC,R10// RET\nrightTop:\nADD R1,R1,#12032// North \nBL countIfLive\nSUB R1,R1,#252// Northeast\nBL countIfLive\nMOV R1,#.PixelScreen// East (SUB is > 8 bits)\nBL countIfLive\nADD R1,R1,#256// Southeast\nBL countIfLive\nADD R1,R1,#252// South\nBL countIfLive\nSUB R1,R1,#4// Southwest\nBL countIfLive\nSUB R1,R1,#256// West\nBL countIfLive\nADD R1,R1,#12032// Northwest\nBL countIfLive\nMOV PC,R10// RET\nleftBot:\nSUB R1,R1,#256// North \nBL countIfLive\nADD R1,R1,#4// Northeast\nBL countIfLive\nADD R1,R1,#256// East\nBL countIfLive\nSUB R1,R1,#12032// Southeast\nBL countIfLive\nSUB R1,R1,#4// South (=#.PixelScreen)\nBL countIfLive\nADD R1,R1,#252// Southwest\nBL countIfLive\nADD R1,R1,#12032// West\nBL countIfLive\nSUB R1,R1,#256// Northwest\nBL countIfLive\nMOV PC,R10// RET\nrightBot:\nSUB R1,R1,#256// North \nBL countIfLive\nSUB R1,R1,#252// Northeast\nBL countIfLive\nADD R1,R1,#256// East\nBL countIfLive\nSUB R1,R1,#12032// Southeast (=#.PixelScreen)\nBL countIfLive\nADD R1,R1,#252// South\nBL countIfLive \nSUB R1,R1,#4// Southwest\nBL countIfLive\nADD R1,R1,#12032// West\nBL countIfLive\nSUB R1,R1,#256// Northwest\nBL countIfLive\nMOV PC,R10// RET\n// Subroutines\ncountIfLive:LDR R5,[R1]// Sub\nCMP R5,R12\nBEQ .+2\nADD R6,R6,#1\nRET\nHALT\n.ALIGN 1024\nscreen2:.DATA\n';
+}
+
+function programCancel()
+{				// reset original values
+	if (!waitingForInput) {
+		if (debug) alert("Bad - Cancel when not waiting for input");
+		return false;
+	}
+	evPush('Rv');
+	waitingForInput = false;
+	modifyingProgram = false;
+	if (programText == "") message("LOAD or EDIT a program");
+	else message("RUN/STEP your program or LOAD/EDIT a program");
+	removeClass("program","edit");
+	resetProgramArea(programHTML);
+	setStateReady();			// if exit edit without doing submit
+}
+
+function saveProgram()
+{
+	evPush('Sv');
+	// Problem that you might be editing and forgot to do submit first
+	if (modifyingProgram == true) programSubmit2(false);
+
+	saveFile(programSave, "myprog.txt");
+	message("Saving File");
+}
+
+function iclick()			// The interrupt button has been clicked
+{
+	if ((pinMask & 1) != 0 && IOVectors[1] >= 0) {	// ignore unless enabled and ISR setup
+		interruptRequest |= 1;				// but remember even if interrupts not enabled (yet)
+		intButtonGrey();
+	} else if ((pinMask & 2) != 0) {	// non-interrupt I/O
+		pinMask |= 4;
+		intButtonGrey();
+	} else if (debug) alert("clicked but not enabled");
+}
+
+function checkClickColour()
+{
+	if ((pinMask & 6) == 2) {		// manual mode on
+		intButtonShow();			// show includes Setup
+	} else if ((pinMask & 1) == 1 &&		// interrupt mode on for button
+		IOVectors[1] >= 0 && (IOVectors[1]&3)==0 && IOVectors[1]<maxUsableMem) { // with valid ISR
+		if ((interruptMask & 1) != 0) {		// interrupts are on
+			intButtonShow();
+		// DO NOT set grey if interrupts turn off - so if service another interrupt does not flicker
+		} else intButtonSetup();			// not sure we need this case (but belt and braces)
+	} else {			// see if is in use, could be a vector or polling but clicked already
+		if (IOVectors[1] >= 0 || (pinMask & 2) != 0) {
+			intButtonSetup();			// so setup but not clickable
+			intButtonGrey();
+		} else intButtonReset();		// not enabled in any way
+	}
+}
+
+function testKeyInterrupt()		// we have had a key press
+{
+	if ((keyboardMask & 1) == 1 &&			// interrupt mode on for keyboard
+		IOVectors[2] >= 0 && (IOVectors[2]&3)==0 && IOVectors[2]<maxUsableMem) { // with valid ISR
+		interruptRequest |= 2;				// remember even if interrupts not enabled (yet)
+	}
+}
+
+// function to setup the next time interval if timer interrupts are enabled and setup
+function checkClockEnabled()
+{
+	if (xTime != 0) return;		// already running (and we are called from RFE)
+	if (clockIntFreq == 0) return;	// need count at least 1
+	if ((interruptMask&1) == 0) return;
+	if (IOVectors[3] >= 0 && (IOVectors[3]&3)==0 && IOVectors[3]<maxUsableMem) {
+		xTime = Date.now() + clockIntFreq;
+	}
+}
+
+function clearMem()
+{
+	evPush('Clr');
+	reset2();
+	overlay = 0;	
+	rewriteSide();	// rewrite the side bar with the new addresses and the page field
+
+	for (var i = 0; i < maxUsableMem; i+=4) {
+		setAddress(i, 0);
+	}
+	byteCount = 0;		// prevent false program highlighting
+	programText = "";
+	textToHtml();		// better than setting all the resets
+	message("System Cleared");	
+}
+
+// bring back part of original op2() for the data display mode switch
+// not sure whether we need more for binary - try this and see what happens
+// memOpt values 0 = 2's comp, 1 = unsigned, 2 = hex, 3 = binary
+function op2()				// a data display mode selection has been made
+{
+	var op = document.getElementById("data").value;
+	evPush(op);
+	// switch did not work on numbers - try strings here
+	if (memOpt == 3) {		// undo binary class
+		if (op == 'bin') return;	// no change
+		removeClass("xxbody","binary");
+		setMemBinary(false);
+	}
+	switch(op) {
+	case 'sig':
+		memOpt = 0;
+		break;
+	case 'uns':
+		memOpt = 1;
+		break;
+	case 'bin':
+		memOpt = 3;
+		addClass("xxbody","binary");
+		setMemBinary(true);
+		break;
+	default:		// hex
+		memOpt = 2;
+		break;
+	}
+	var savDD = dontDisplay;
+	dontDisplay = 0;				// mouse click so execution paused
+	rewriteMemoryAndRegs(false);
+	dontDisplay = savDD;
+}
+
+function rewriteMemoryAndRegs(noregs)
+{
+	updateFlags(flags);				// do this because this routine used to do general screen resets
+
+	var base = overlay*64;			// need the word offset not the byte one
+
+	for (var i=0; i<128; ++i) {		// rewrite the contents (only need to rewrite visible mem)
+		setAddress((i+base)*4, address[i+base]);
+	}
+	
+	if (noregs) return;
+
+	// new register setup - the memory mode class isn't done here any more
+	//var newClass = modeNames[memOpt];
+	//if (!newClass) {if (debug) alert("memOpt error "+memOpt);}
+	//newClass = "value "+newClass;
+
+	for (var i=0; i<15; ++i) {
+		//setClass("R"+i,newClass);
+		updateR(i, register[i]);
+	}
+	//setClass("R15",newClass);
+	updatePC(pCounter);				// switch mode on PC
+}
+
+// file read for LOAD button
+function read_chg(inp)
+{
+	evPush('Ld');
+	// we did start in edit mode so the user might just click LOAD first
+	if (modifyingProgram == true) programCancel();
+	reset2();
+	var fs = inp['files'];
+	if(!fs) { message("BAD FILE SELECTION RETURN"); return; }
+	var fr=new FileReader;
+	fr.readAsText(fs[0],'utf-8');
+	fr.onload = function() {
+		programText = fr.result;
+		textToHtml();
+		assemble();
+		resetLoadButton(); // re-write so can load same file again		
+	}
+}
+
+// file read for INP instruction - uses fake STOP button click
+function read_file(inp)
+{
+	var fs = inp['files'];
+	consoleReset();
+	if(!fs) {
+		message("BAD FILE SELECTION RETURN");
+		if (fileResult >= 0) updateR(fileResult, 0xffffffff);		// failed to open file
+		fileResult = -1;
+		waitingForInput = false;
+		return;
+	}
+	var fr=new FileReader;
+	fr.onload = function() {
+		fileRead = fr.result;
+		if (fileResult >= 0) updateR(fileResult, fileRead.length);	// read the file
+		waitingForInput = false;
+		fileResult = -1;
+	}
+	fr.readAsText(fs[0],'utf-8');
+}
+
+var savOpenAddress = false;
+
+function openAddress(inp)
+{
+	if (waitingForInput) return;					// ignore if doing input (ours or the program)
+	if (myTimeout || myMaybe) return;	// ignore if something running
+	evPush('A'+inp.id);
+	message("Modifying memory contents");
+	openAddressToEdit(inp);
+	waitingForInput = true;
+	savOpenAddress = inp;
+	setStateEdit();
+}
+
+// used by tab and focus changes to filter out the error cases, return true if OK
+// reason is to avoid addressSubmit() doing an alert (which changes focus)
+// it means that in some cases (like TAB) we do these tests 3 times
+function checkInput(iValue)
+{
+	if (!waitingForInput) return false;	// should not happen
+	if (memOpt == 3) iValue = iValue.replace(' ','');
+	if (/*isNaN(iValue) ||*/ iValue=="") return false;
+	var value = parseIntGen(iValue);
+	if (isNaN(value) || value > 4294967295 || value < -2147483648) {
+		return false;
+	}
+	return true;
+}
+
+function addressSubmit()
+{
+	if (!waitingForInput) {
+		if (debug) alert("Bad input - not waiting for input");
+		return;
+	}
+	var epvalue = getAddressValue();  // so can remove space in binary
+	//if (memOpt == 3) epvalue = epvalue.replace(' ','');
+	
+	if (/*isNaN(epvalue) ||*/ epvalue=="") {
+		message("Bad input - must be a number");
+		return;
+	}
+
+	var value = parseIntGen(epvalue);
+	if (isNaN(value) || value > 4294967295 || value < -2147483648) {
+		message("Bad number format or value");
+		return;
+	}
+	document.getElementById("aForm").removeAttribute("onblur");	
+	// need to decode savOpenAddress.id
+	var x = parseInt(savOpenAddress.id[1]);
+	if (savOpenAddress.id.length >= 3) x = x*10 + parseInt(savOpenAddress.id[2]);
+	if (savOpenAddress.id.length >= 4) x = x*10 + parseInt(savOpenAddress.id[3]);
+	if (savOpenAddress.id.length == 5) x = x*10 + parseInt(savOpenAddress.id[4]);
+	x += overlay * 64;
+	setAddress(x*4, value);		// removes input form as well
+	waitingForInput = false;
+	setStateReady();
+	savOpenAddress = false;
+	if (programText == "") message("LOAD or EDIT a program");
+	else message("RUN/STEP your program or LOAD/EDIT a program");
+}
+
+function loseAddress(inp)
+{
+	if (!waitingForInput) return;		// happens after addressSubmit as well
+	if (checkInput(inp.value)) addressSubmit();
+	else {		// bad value
+		resetAddressInput();
+		var x = parseInt(savOpenAddress.id[1]);
+		if (savOpenAddress.id.length >= 3) x = x*10 + parseInt(savOpenAddress.id[2]);
+		if (savOpenAddress.id.length >= 4) x = x*10 + parseInt(savOpenAddress.id[3]);
+		if (savOpenAddress.id.length == 5) x = x*10 + parseInt(savOpenAddress.id[4]);
+		x += overlay * 64;
+		setAddress(x*4, address[x]);	// removes input form as well
+		waitingForInput = false;
+		setStateReady();
+		savOpenAddress = false;
+		message("BAD input ignored");
+	}
+}
+
+// step button pressed 
+function step3()		// run step2 to get execution indication of one instruction
+{
+	evStep();
+	oneStep = true;
+	speed = 11;
+	if (dontDisplay == 1) {			// we were running fast
+		// (I think) we cannot get here without being in a "myMaybe" delay
+		if (myMaybe) clearTimeout(myMaybe);
+		myMaybe = false;
+		dontDisplay = 0;
+		rewriteMemoryAndRegs(false);
+	} else {
+		if (myTimeout) clearTimeout(myTimeout);
+		myTimeout = false;
+	}
+	run2();
+	setValue("counter",""+instructionCount);
+}
+
+// run slow button pressed
+function runSlow()
+{
+	if (myTimeout) {	// multiple presses seemed to get through
+		// we are running slow already - speed up
+		speed = Math.floor((speed+2)/2);	// min value 2
+		return;
+	}
+	if (pCounter == 0 && address[0] == 0) {
+		message("No program to run");
+		return;
+	}
+	// only record valid first presses
+	evPush('Slw');
+	oneStep = false;
+	speed = slowSpeed;
+	setStateSlow();
+	if (dontDisplay == 1) {			// we were running fast
+		// (I think) we cannot get here without being in a "myMaybe" delay
+		if (myMaybe) clearTimeout(myMaybe);
+		myMaybe = false;
+		dontDisplay = 0;
+		rewriteMemoryAndRegs(false);
+		if (!waitingForInput) myTimeout = delay(speed, "runContinue");
+	} else run2();
+}
+
+// run button pressed
+//function run() - change because interface has Run() and too similar
+function runOrig()
+{
+	if (waitingForInput || myMaybe) return;		// prevent multiple presses
+	if (myTimeout) {
+		clearTimeout(myTimeout);
+		myTimeout = false;
+	}
+	evPush('Rn');
+	if (pCounter == 0 && address[0] == 0) {
+		message("No program to run");
+		return;
+	}
+	oneStep = false;
+	
+	// extra instructions for speed measurement - change to own variable
+	measureSpeed = instructionCount;
+	setValue("counter","0");
+	runTimer = getMilliseconds();
+	
+	speed = 1;
+	setStateRunning();		// remove pause or slow
+	//message("Running without screen updates");
+	message("");
+	dontDisplay = 1;	// need to quench display
+	removeCodeHighlight();
+	removeMemHighlight();
+	clearIR();
+	myMaybe = delay(delayTime, "maybeRunContinue");			// attempt to get refreshes with minimal pauses
+	run2();
+}
+
+function run2()				// make step same as run 
+{
+	if (waitingForInput) return;
+	//reset1();
+	// buttons are not dynamic any more
+	stopping = false;
+	noKeyEffects = true;
+	IEKeyEnable();
+	runContinue();
+}
+
+function runContinuey()					// wait for a halt to finish
+{
+	if (dontDisplay == 1) {				// probably overkill but I have added this everywhere we reset the RUN button
+		if (myMaybe) clearTimeout(myMaybe);
+		myMaybe = false;
+		dontDisplay = 0;
+		rewriteMemoryAndRegs(false);
+	}
+	// buttons are not dynamic any more
+	running = false;
+	setStatePaused();
+	noKeyEffects = false;
+	message(halted);		// try adding this
+	myTimeout = false;
+}
+
+function runContinuez()				// wait for input in fast execution - needed for one step case
+{
+	if (waitingForInput) {
+		myTimeout = delay(speed, "runContinuez");
+		
+		if (fileResult >= 20) {			// delay the click
+			fileResult -= 20;
+			var elePosn = document.getElementById("read-file");
+			elePosn.click();
+		}
+	} else {
+		lastKey = 0;
+		if (breakpointAddr == pCounter) { //  breakpoint instruction - stop before
+			if (myMaybe) alert("BUG - myMaybe");
+			if (dontDisplay) {
+				dontDisplay = 0;
+				rewriteMemoryAndRegs(false);
+				message(lastMessage);
+				if (lineNo*4 < byteCount) showExecuteStop(addrToLine[lineNo]);
+				setMemHighlight(lineNo*4);
+				setValue("counter",""+instructionCount);
+			}
+			message("Breakpoint detect at PC = 0x"+padHex(pCounter,5));
+			running = false;
+			setStatePaused();		// need to check all 3 modes!!!
+			noKeyEffects = false;
+			return;
+		}
+
+		message(stepTxt);
+		if (speed == 1 && oneStep == false) {
+			//message("Running without screen updates");
+			message("");
+			dontDisplay = 1;	// need to quench display
+			clearIR();
+			// do another 5ms of work
+			maybeWaiting = 0;
+			myMaybe = delay(delayTime, "maybeRunContinue");		// set delay
+			runContinue();
+		} else myTimeout = delay(speed, "runContinue");
+	}
+}
+
+// Requesting a delay (which calls setTimeout) and then doing 5ms of work cheats the Chrome delay algorithm
+var myMaybe = 0;
+var maybeWaiting = 0;
+function maybeRunContinue()
+{
+	if (myMaybe == 0) {if (debug) alert("myMaybe == 0 should not happen");}
+	if (maybeWaiting == 0) {
+		//alert("maybeWaiting == 0 - outside test parameters");	// this should not happen with the loop test program
+		myMaybe = 0;				// later need to decide how to handle this case
+		return;
+	}
+	// here if need to do another 5ms of work
+	maybeWaiting = 0;
+	myMaybe = delay(delayTime, "maybeRunContinue");		// set ourselves another
+	runContinue();
+}
+
+// delays - unused  1  2   3   4   5  6	 7 8 9 10
+var DC =    [4000,750,750,300,100,40,20,10,5,2,1];
+// adding this to the inner loop slowed things down by more than 10%
+// thinking about this, you cannot get a stopping, oneStep, a click or a keyboard interrupt
+// without a re-schedule so you probably only have to check on calling runContinue()
+// (ACTUALLY wrong, RFE and various interupt enable cases now need trapping)
+// maybe also linearly do 10 calls to step1() 
+// also change HALT to be post detected not pre-detected
+// look for other optimisations in step1
+
+function runContinue()
+{
+	myTimeout = false;
+	if (stopping) {						// stop button pressed
+		if (dontDisplay == 1) {
+			if (myMaybe) clearTimeout(myMaybe);
+			myMaybe = false;
+			dontDisplay = 0;
+			rewriteMemoryAndRegs(false);
+			// this was a problem because the PC has advanced so made lineNo global
+			if (lineNo*4 < byteCount) showExecuteStop(addrToLine[lineNo]);
+			setMemHighlight(lineNo*4);
+			setValue("counter",""+instructionCount);
+			// special for measurment
+			measureSpeed = instructionCount - measureSpeed;
+			runTimer = getMilliseconds()-runTimer;
+			var tmp1 = Math.floor((measureSpeed/runTimer)/10); 	// 10K inst/sec
+			var tmp2 = Math.floor(runTimer/100); 					// tenths of a second
+			if (step1Code!=2) message("Program paused. "+measureSpeed+" ins in "+tmp2/10+" secs, "+tmp1/100+"M ins/sec");
+		} else if (!oneStep) { 
+			if (step1Code!=2) message("Program paused. RUN or STEP to continue, STOP to abort.");
+		} else if (step1Code!=2) message(stepTxt);
+		// buttons are not dynamic any more
+		running = false;
+		setStatePaused();		// main case - probably minor ones to find
+		noKeyEffects = false;
+		return;
+	}
+	if (oneStep) stopping = true;
+
+	// we can only get a click or KB interrupt after a reschedule so we can check those outside the fast loop
+	// EXCEPT that we need to then special case the RFE and all of the ways an interrupt might be enabled so that
+	// the interrupt request is then detected by the fast path
+
+	// Test if need an interrupt before going to do any instruction
+	if ((interruptMask&1)!=0 && (interruptRequest!=0 || (xTime && (xTime < Date.now())))) {
+	
+		// should not get a request unless the corresponding ISR and enable are set
+		// but we will double check those below as well
+
+		// xTime is designed to keep the overheads down. Whenever there might be a clock
+		// interrupt we set xTime to how long we have to go. It is cleared if you write zero
+		// to the byte .ClockInterruptFrequency and set when do anything that might enable
+		// a clock interrupt. The RFE from the clock interrupt restarts the timer.
+		//alert("xTime is "+xTime+" now is "+Date.now());
+		
+		if (badStack()) return; 			// badStack() returns true if error
+		doInterrupt();						// usually changes PC
+	}
+
+	// separate the slow case from the fast case!
+	step1Code = 0;				// set non-zero for RFE, HALT and some other cases
+				// 0=error, 1=HALT, 2=Breakpoint, 3=interrupt, 4=input, 5=NOP (MOV r0,r0)
+
+	if (dontDisplay == 0) {		// note single step can only come here
+		var pc = Math.floor(pCounter/4);
+		if (pc*4 < byteCount) showExecuteStop(addrToLine[pc]);	// now for run and step
+		setMemHighlight(pCounter);
+
+		if (!step1(1) && breakpointAddr != pCounter) {	// instruction went OK
+			message(stepTxt);
+			setValue("counter",""+instructionCount);			
+			myTimeout = delay((speed-10)*4, "runContinue");
+			return;
+		}
+		// error return and step1Code only used in slow path for error, HALT, Breakpoint and input
+		setValue("counter",""+instructionCount);
+		if (waitingForInput) {			// wait for input or alert to be cancelled (step1Code == 4)
+			myTimeout = delay(speed, "runContinuez");
+			return;
+		}
+		// here if error or HALT or Breakpoint
+		// buttons are not dynamic any more
+		if (breakpointAddr == pCounter) { //  breakpoint instruction - stop before
+			message("Breakpoint detect at PC = 0x"+padHex(pCounter,5));
+		}
+		running = false;
+		setStatePaused();
+		noKeyEffects = false;
+		return;
+	}
+
+	// This is the fast path - the call was expensive so all the loops are now in step1()
+	//if (step1(DC[speed])) {
+	if (step1(751)) {				// no longer dynamic
+		// here if exception or special case
+
+		// convert NOP at breakpoint into breakpoint
+		if (breakpointAddr == pCounter && step1Code == 5) step1Code = 2;
+
+		if (step1Code < 3) { // error or HALT *** need to check messages for HALT!
+					// 0=error, 1=HALT, 2=Breakpoint, 3=interrupt, 4=input, 5=NOP (MOV r0,r0)
+			if (myMaybe) clearTimeout(myMaybe);
+			myMaybe = false;
+			dontDisplay = 0;
+			rewriteMemoryAndRegs(false);
+			message(lastMessage);
+			if (step1Code == 2) message("Stopped on Breakpoint at PC = 0x"+padHex(pCounter,5));
+			// this was a problem because the PC has advanced so made lineNo global
+			if (lineNo*4 < byteCount) showExecuteStop(addrToLine[lineNo]);
+			setMemHighlight(lineNo*4);
+			setValue("counter",""+instructionCount);
+			// buttons are not dynamic any more
+			running = false;
+			setStatePaused();
+			noKeyEffects = false;
+			return;
+		}
+		// step1Code is 3 = interrupt, 4 = input, 5 = NOP (MOV r0,r0 = 0xE1000070)
+		if (waitingForInput) {			// wait for input or alert to be cancelled (step1Code == 4)
+			if (myMaybe) clearTimeout(myMaybe);
+			myMaybe = false;
+			dontDisplay = 0;
+			rewriteMemoryAndRegs(false);
+			message(lastMessage);
+			setValue("counter",""+instructionCount);
+			myTimeout = delay(speed, "runContinuez");
+			return;
+		}
+		// here if NOP to cause reschedule wait - just wait the remainder of the current cycle
+	}
+	maybeWaiting = 1;
+	if (myMaybe == 0) {if (debug) alert("myMaybe == 0 - interlock went wrong");}	// this should not happen
+	setValue("counter",""+instructionCount);		// only update in fastest mode
+	if (speed == 1) return;			// if not very fastest show regs and memory
+	dontDisplay = 0;	// This doen't happen any more - there is no regs only mode
+	rewriteMemoryAndRegs(false);
+	dontDisplay = 1;
+	return;
+}
+
+// stop button pressed (note that stop is only available when running)
+// Also what used to be stop is now Pause and Stop is now reset
+function stop()
+{
+	evPush('Ps');
+	stopping = true;					// always stop
+}
+
+function stop2()		// strange - only called from reset1
+{
+	if (myMaybe) clearTimeout(myMaybe);
+	myMaybe = false;
+	if (myTimeout) clearTimeout(myTimeout);
+	myTimeout = false;
+	//message("Program stopped. RUN or STEP to continue, RESET to abort.");
+	// buttons are not dynamic any more
+	running = false;
+	noKeyEffects = false;
+	fileResult = -1;			// cancel waiting for file read
+	consoleReset();
+	removeCodeHighlight();
+	removeMemHighlight();
+	removeError();
+}
+
+// reset button pressed (now stop button)
+function reset1()								// note reset did not work but is not listed as a reserved word
+{
+	evPush('Stp');
+	reset2();
+	message("Stop done, edit &amp; Submit, RUN/STEP or alter memory");
+}
+
+function reset2()								// internal reset
+{
+	dontDisplay = 0;				// so updates get done
+	stop2();
+	reset3();
+	if (savOpenAddress) {			// has a memory address open
+		// these two lines look like a bug!!!
+		//setAddress(x, address[Math.floor(x/4)]);		// removes input form and resets value
+		//savOpenAddress = false;
+
+		var x = parseInt(savOpenAddress.id[1]);
+		if (savOpenAddress.id.length >= 3) x = x*10 + parseInt(savOpenAddress.id[2]);
+		if (savOpenAddress.id.length >= 4) x = x*10 + parseInt(savOpenAddress.id[3]);
+		if (savOpenAddress.id.length == 5) x = x*10 + parseInt(savOpenAddress.id[4]);
+		x += overlay * 64;
+		setAddress(x*4, address[x]);	// removes input form as well
+		waitingForInput = false;
+		savOpenAddress = false;
+	}
+	if (modifyingProgram) {
+		modifyingProgram = false;
+		textToHtml();
+		waitingForInput = false;
+		removeClass("program","edit");
+	}
+	setValue("counter","0");
+	rewriteMemoryAndRegs(false);	// need to refresh memory in case it was off
+	intButtonReset();
+}
+
+// � 2019 Peter Higginson (plh256 at hotmail.com)
+// Set of functions for use with JavaScript sessons
+// Minimised version
+
+// note 0,0 is the top left corner, any names must go in quotes e.g. "name"
+
+// Provided functions
+// 	text("name", "text", x, y, size, "colour");
+// 	text("name", "text", x, y, size, "colour", "attribute", "value", "font"); 	// attribute, value and font are optional
+// 	remove("name");
+//	randomInt(min, max);						// note returns the result
+//	trapKey("character", "upFunction", "downFn");		// note functions may have one parameter - the character trapped
+//	getMilliseconds();
+// 	timeout = delay(milliseconds, "function", parameters);  	// note returns a value which can be used with clearTimeout
+// System functions
+//	clearTimeout(timeout);
+//	alert("message");
+//	prompt("Question : ", "default answer");
+//	location.reload();						// reload the page (to restart the game)
+
+var maxHeight, maxWidth; 	//current window dimensions
+var lastKey=0;				// last key pressed
+var noKeyEffects=false;		// when running
+
+function startIt()
+{
+	getDimensions();
+	main();
+}
+
+function getDimensions()
+{
+	if(typeof(window.innerWidth) == 'number' ) {	//Chrome
+		maxWidth = window.innerWidth;
+		maxHeight = window.innerHeight;
+	} else { 							//IE 6+ in 'standards compliant mode'
+		maxWidth = document.documentElement.clientWidth;
+		maxHeight = document.documentElement.clientHeight;
+	}
+}
+
+function randomInt(min,max)
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function getMilliseconds()
+{
+	var d = new Date();
+	return d.getTime();
+}
+
+function delay(ms, fn)	// has additional parameters as arguments to fn
+{
+	var tmp = fn+"(";
+	for (var i = 2; i < arguments.length; i++) {
+		if (i > 2) tmp += ",";
+		tmp += arguments[i];
+	}
+	tmp += ")";
+	// console.log("delay "+ms+"ms, call "+tmp);
+	return setTimeout(tmp, ms);
+}
+
+var chrsToMatch = [];
+var dnFnCall = [];
+var upFnCall = [];
+var chrsDown = [];
+
+function trapKey(chr, fnDn, fnUp)		// note fnDn/fnUp can have one parameter - the character trapped
+{
+	var indx = chrsToMatch.indexOf(chr);
+	if (indx == -1) {				// not seen this character before
+		indx = chrsToMatch.push(chr) - 1;
+		chrsDown[indx] = 0;
+	}
+	dnFnCall[indx] = fnDn;
+	upFnCall[indx] = fnUp;
+}
+
+function keyDown(e)
+{
+	var x=e.keyCode;
+	if (x == 8) {
+		var d = e.srcElement || e.target;
+		var preventKeyPress;
+		switch (d.tagName.toUpperCase()) {
+		case 'TEXTAREA':
+			preventKeyPress = d.readOnly || d.disabled;
+			break;
+		case 'INPUT':
+			preventKeyPress = d.readOnly || d.disabled ||
+				(d.attributes["type"] && ["radio", "checkbox", "submit", "button"].indexOf(d.attributes["type"].value.toLowerCase()) >= 0);
+			// error above in previous versions because $.inArray is a jQuery function which we don't have
+			break;
+		case 'DIV':
+			preventKeyPress = d.readOnly || d.disabled || !(d.attributes["contentEditable"] && d.attributes["contentEditable"].value == "true");
+			break;
+		default:
+			preventKeyPress = true;
+			break;
+		}
+		if (preventKeyPress) e.preventDefault();
+	}
+	var keychar=String.fromCharCode(x);
+	if (x == 27 || x == 9) keychar = x;
+	var indx = chrsToMatch.indexOf(keychar);
+	if (indx == -1) {
+		// waste of space on console log
+		// console.log("Key " + keychar + " was pressed down "+x);
+		if (noKeyEffects) {
+			if ((keyboardMask & 4) == 0) { // bit 2 is accept all chars
+				if (x > 90) return;			// ignore keys > Z
+				if ((keyboardMask & 2) == 0) {// bit 1 is accept arrows
+					if (x < 48) return;		// ignore keys < 0
+				} else {
+					if (x < 37 || (x > 40 && x < 48)) return
+				}
+			}
+			lastKey = x;
+			testKeyInterrupt();		// hope not called unless wanted
+			e.preventDefault();		// using keys
+		}
+	} else {
+		// when you hold a key down you do not get ups
+		// if (chrsDown[indx] == 0) {
+			chrsDown[indx] = 1;
+			if (dnFnCall[indx]) window[dnFnCall[indx]](e);
+		//}
+	}
+}
+
+function keyUp(e)
+{
+	var x=e.keyCode;
+	var keychar=String.fromCharCode(x);
+	if (x == 27 || x == 9) keychar = x;
+	var indx = chrsToMatch.indexOf(keychar);
+	if (indx != -1 && chrsDown[indx] == 1) {
+		chrsDown[indx] = 0;
+		if (upFnCall[indx]) window[upFnCall[indx]](e);		
+	}
 }
