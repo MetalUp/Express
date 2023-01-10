@@ -91,7 +91,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   onSubmit() {
     this.compiledOK = false;
     this.pendingSubmit = false;
-    this.validationFail = "";// this.rulesService.checkRules(Applicability.functions, this.codeDefinitions);
+    this.validationFail = this.rulesService.checkRules(Applicability.functions, this.codeDefinitions);
     if (!this.validationFail) {
       this.compileServer.submitCode(this.taskId, this.codeDefinitions).pipe(first()).subscribe(rr => {
         this.result = rr;

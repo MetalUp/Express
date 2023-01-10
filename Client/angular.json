@@ -27,6 +27,10 @@
             "styles": [
               "src/styles.css",
               "src/theme.css"
+            ],
+            "scripts": [
+              "src/assets/compress_1_2_2.js",
+              "src/assets/matomo_expandedx.js"
             ]
           },
           "configurations": {
@@ -96,6 +100,10 @@
             "styles": [
               "src/styles.css",
               "src/theme.css"
+            ],
+            "scripts": [
+              "src/assets/compress_1_2_2.js",
+              "src/assets/matomo_expandedx.js"
             ]
           }
         },
