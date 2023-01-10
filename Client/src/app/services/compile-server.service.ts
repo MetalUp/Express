@@ -105,7 +105,7 @@ export class CompileServerService {
   }
 
   submitCode(taskId: number, code: string) {
-    if (this.selectedLanguage === "csharp") {
+    if (this.selectedLanguage === "arm") {
       return of(SubmitProgram(code));
     }
 

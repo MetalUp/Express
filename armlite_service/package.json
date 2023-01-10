@@ -1,6 +1,6 @@
 {
   "name": "armlite_service",
-  "version": "1.0.0",
+  "version": "1.0.10",
   "description": "",
   "main": "./dist/service_2_0a.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "files": [
-    "dist/**/*"
+    "dist"
   ],
   "dependencies": {
     "typescript": "~4.7.2"
