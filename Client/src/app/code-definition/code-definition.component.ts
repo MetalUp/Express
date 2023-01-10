@@ -9,7 +9,6 @@ import { CompileServerService } from '../services/compile-server.service';
 import { EmptyCodeUserView, ICodeUserView } from '../models/code-user-view';
 import { nextCodeEnabledTooltip, nextCodeDisabledTooltip, previousCodeEnabledTooltip, previousCodeDisabledTooltip, submitCodeEnabledTooltip, submitCodeDisabledTooltip } from '../constants/tooltips';
 
-
 @Component({
   selector: 'app-code-definition',
   templateUrl: './code-definition.component.html',
@@ -95,6 +94,12 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     if (!this.validationFail) {
       this.compileServer.submitCode(this.taskId, this.codeDefinitions).pipe(first()).subscribe(rr => {
         this.result = rr;
+        if (rr.formattedsource) {
+          const el = document.createElement("div");
+          el.innerHTML = rr.formattedsource;
+          this.codeDefinitions = el.innerText.replace(/\\n/g, '\r\n');
+        }
+
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {
           this.compileServer.setUserDefinedCode(this.codeDefinitions);

@@ -106,7 +106,7 @@ export class CompileServerService {
 
   submitCode(taskId: number, code: string) {
     if (this.selectedLanguage === "arm") {
-      return of(SubmitProgram(code));
+      return of(SubmitProgram(code) as RunResult);
     }
 
     const action = this.submitCodeAction;

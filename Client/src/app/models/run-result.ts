@@ -4,7 +4,8 @@ export interface RunResult {
     cmpinfo: string,
     stdout: string,
     stderr: string,
-    formattedSource?: string
+    formattedsource?: string,
+    progout?: string
 }
 
 export const EmptyRunResult = {
