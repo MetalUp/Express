@@ -3,7 +3,8 @@ export interface RunResult {
     outcome: number,
     cmpinfo: string,
     stdout: string,
-    stderr: string
+    stderr: string,
+    formattedSource?: string
 }
 
 export const EmptyRunResult = {

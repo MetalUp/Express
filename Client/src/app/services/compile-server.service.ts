@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
-import { catchError, from, Observable, of, Subject } from 'rxjs';
+import { catchError, from, of, Subject } from 'rxjs';
 import { RunResult, errorRunResult } from '../models/run-result';
 import { TaskService } from './task.service';
 import { Dictionary } from 'lodash';
 import { SubmitProgram } from 'armlite_service';
-//import { SubmitProgram } from 'armlite_service';
 
 @Injectable({
   providedIn: 'root'
@@ -106,7 +105,7 @@ export class CompileServerService {
   }
 
   submitCode(taskId: number, code: string) {
-    if (this.selectedLanguage === "armlite") {
+    if (this.selectedLanguage === "csharp") {
       return of(SubmitProgram(code));
     }
 
