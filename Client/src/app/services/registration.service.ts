@@ -9,7 +9,7 @@ import { UserService } from './user.service';
 })
 export class RegistrationService implements CanActivate {
 
-  registered$ = new BehaviorSubject<boolean>(false);
+  registered$ = new BehaviorSubject<boolean | null>(null);
   registered?: boolean;
 
   private setRegistered(registered?: boolean) {

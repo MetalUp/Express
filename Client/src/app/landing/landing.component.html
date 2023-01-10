@@ -1,65 +1,83 @@
 <div class="metalup">
-    
-    <ng-container *ngIf="(userLoggedOn | async) === false || (registeredService.registered$ | async) === false" >
-        <h1>Welcome to MetalUp Express</h1>
-        <ng-container *ngIf="failedInvite">
-            <p class="invalid">Sorry, the invitation code included in the URL you used is either not a valid invitation, or has already been used. Please contact
-                the person who sent you the invitation.</p>
-        </ng-container>
-        <ng-container *ngIf="(userLoggedOn | async) === true">
-            <p>Although you are technically logged in, you are not a registered user so the capabilities of
-                MetalUp.Express are not available to you.</p>
-            <button class="btn btn-primary btn-margin" (click)="registeredService.logout()">Log Out</button>
-        </ng-container>
-        <ng-container *ngIf="(userLoggedOn | async) === false">
-            <p>MetalUp.Express is an online 'Integrated Learning Environment' for programming, in several different
-                programming languages,
-                designed specifically for use within schools, collegues, and universities.
+    <h1>Welcome to MetalUp Express</h1>
+    <ng-container *ngIf="pendingStatus">
+        <p>Checking user status</p>
+    </ng-container>
+
+    <ng-container *ngIf="!pendingStatus">
+        <ng-container *ngIf="(userLoggedOn | async) === false || (registeredService.registered$ | async) === false">
+
+            <ng-container *ngIf="failedInvite">
+                <p class="invalid">Sorry, the invitation code included in the URL you used is either not a valid
+                    invitation, or has already been used. Please contact
+                    the person who sent you the invitation.</p>
+            </ng-container>
+            <ng-container *ngIf="userChecked && (userLoggedOn | async) === true">
+                <p>Although you are technically logged in, you are not a registered user so the capabilities of
+                    MetalUp.Express are not available to you.</p>
+                <button class="btn btn-primary btn-margin" (click)="registeredService.logout()">Log Out</button>
+            </ng-container>
+            <ng-container *ngIf="(userLoggedOn | async) === false">
+                <p>MetalUp.Express is an online 'Integrated Learning Environment' for programming, in several different
+                    programming languages,
+                    designed specifically for use within schools, collegues, and universities.
+                </p>
+                <h3>Using the system</h3>
+                <p>To use MetalUp.Express you will need to be registered as a Student or a Teacher (see below).
+                    If you are <i>already</i> registered, then please <b>Log In</b> to use the system.
+                    (If you are <i>not</i> already registered then just logging in still won't get you access to any of
+                    content.) Clicking the <b>Log In</b>
+                    button will generate a pop-up managed by the 'Auth0' service. This will allow you to log in using
+                    your
+                    Google, GitHub, or othe recognised credentials,
+                    but <i>once you have registered <i>please always log in using the same credentials</i>, as these
+                        will be
+                        associated with your User profile.
+                    </i></p>
+                <button class="btn btn-primary btn-margin" (click)="registeredService.login()">Log In</button>
+            </ng-container>
+
+            <h3>How to register</h3>
+
+            <p>If you are a Student, you need to have an invitation (by email) from a teacher already registered on
+                MetalUp.Express.
+                Just follow the link in the email that the teacher sends you.</p>
+
+            <p>If you are a Teacher, and would like to be able to use MetalUp.Express with your students please email
+                Richard Pawson as rpawson@metalup.org. MetalUp.Express is completely free of charge for use in schools,
+                colleages, and universities. Please provide
+                details of your educational institution, your role within in. <b>Important:</b> please provide clear
+                evidence that you are a teacher,
+                lecturer or equivalent, at your institution, ideally a link showing your name and role on the
+                institutions
+                website. Please also ensure that you are sending the email from an email address associated with your
+                institution.
+                Please note that this request is manually processed: while we <i>typically</i> respond the same day, it
+                may take a few days depending upon our availability.
             </p>
-            <h3>Using the system</h3>
-            <p>To use MetalUp.Express you will need to be registered as a Student or a Teacher (see below).
-                If you are <i>already</i> registered, then please <b>Log In</b> to use the system.
-                (If you are <i>not</i> already registered then just logging in still won't get you access to any of
-                content.) Clicking the <b>Log In</b>
-                button will generate a pop-up managed by the 'Auth0' service. This will allow you to log in using your
-                Google, GitHub, or othe recognised credentials,
-                but <i>once you have registered <i>please always log in using the same credentials</i>, as these will be
-                    associated with your User profile.
-                </i></p>
-            <button class="btn btn-primary btn-margin" (click)="registeredService.login()">Log In</button>
+
+            <p>If your application is successful you will be emailed with instructions
+                on how to explore the projects available on MetalpUp.Express, invite students and/or other teacher
+                colleagues to participate, assign projects to students, track their progress, and administer your own
+                organisational and
+                student data.</p>
+
+            <h3>Privacy policy</h3>
+            <p>MetalUp.Express stores as little personal information as possible to allow the system to function:</p>
+            <ol>
+                <li>If you are a Teacher, we store your name, institution details,
+                    and your email address. We may contact you concerning your use of MetalUp.Express, but your
+                    details will not be used for marketing purposes,
+                    nor passed on to any third party.</li>
+                <li>If you are a Student then it is up to your Teacher(s) to determine how you are identified: we
+                    recommend that
+                    they use first name only, initials, and/or student number. We do never request, use, or store, email
+                    addresses for students.
+                    MetalUp.Express does not require specific identity details for students.</li>
+                <li>For all users, we store the log-in user identity (from the credentials provider) but
+                    <i>only in encrypted form</i>.
+                </li>
+            </ol>
         </ng-container>
-
-        <h3>How to register</h3>
-
-        <p>If you are a Student, you need to have an invitation (by email) from a teacher already registered on
-            MetalUp.Express.
-            Just follow the link in the email that the teacher sends you.</p>
-
-        <p>If you are a Teacher, and would like to be able to use MetalUp.Express with your students please email
-            Richard Pawson as rpawson@metalup.org. MetalUp.Express is completely free of charge for use in schools, colleages, and universities. Please provide
-            details of your educational institution, your role within in. <b>Important:</b> please provide clear evidence that you are a teacher,
-            lecturer or equivalent, at your institution, ideally a link showing your name and role on the institutions
-            website. Please also ensure that you are sending the email from an email address associated with your institution. 
-            Please note that this request is manually processed: while we <i>typically</i> respond the same day, it may take a few days depending upon our availability.
-        </p>
-
-        <p>If your application is successful you will be emailed with instructions
-            on how to explore the projects available on MetalpUp.Express, invite students and/or other teacher
-            colleagues to participate, assign projects to students, track their progress, and administer your own organisational and
-            student data.</p>
-
-        <h3>Privacy policy</h3>
-        <p>MetalUp.Express stores as little personal information as possible to allow the system to function:</p>
-        <ol>
-            <li>If you are a Teacher, we store your name, institution details,
-                and your email address. We may contact you concerning your use of MetalUp.Express, but your
-                details will not be used for marketing purposes,
-                nor passed on to any third party.</li>
-            <li>If you are a Student then it is up to your Teacher(s) to determine how you are identified: we recommend that
-                they use first name only, initials, and/or student number.  We do never request, use, or store, email addresses for students.
-                MetalUp.Express does not require specific identity details for students.</li>
-            <li>For all users, we store the log-in user identity (from the credentials provider) but
-                <i>only in encrypted form</i>.</li>
-        </ol>
     </ng-container>
 </div>
