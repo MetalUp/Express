@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthService } from '@auth0/auth0-angular';
-import { UserRepresentation } from '@nakedobjects/restful-objects';
 import { ConfigService } from '@nakedobjects/services';
 import { of, Subject } from 'rxjs';
 import { UserView } from '../models/user-view';

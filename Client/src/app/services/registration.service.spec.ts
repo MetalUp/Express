@@ -1,7 +1,6 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { RepLoaderService } from '@nakedobjects/services';
 import { BehaviorSubject, first, Subject } from 'rxjs';
 import { IUserView, UserView } from '../models/user-view';
 import { RegistrationService } from './registration.service';
@@ -25,6 +24,8 @@ describe('RegisteredService', () => {
 
     TestBed.configureTestingModule({});
     service = new RegistrationService(authServiceSpy, userServiceSpy, routerSpy); 
+
+    userServiceSpy.loadUser.and.returnValue(Promise.resolve({DisplayName : "Test Name", Registered: true} as IUserView));
   });
 
   it('should be created', () => {
@@ -58,15 +59,18 @@ describe('RegisteredService', () => {
     authSubj.next(true);
     tick();
 
-    //expect(service.canActivate().then(b => expect(b).toBeTrue()));
+    const ca = service.canActivate();
+    expect(ca === true).toBeTrue;
   }));
 
   it('should return registered bool for canActivate if set and unauth', fakeAsync(() => {
-    userSubj.next({DisplayName : "Test Name", Registered: true} as IUserView);
+    userSubj.next({DisplayName : "Test Name", Registered: false} as IUserView);
     authSubj.next(false);
     tick();
 
-    //expect(service.canActivate().pipe(first()).subscribe(b => expect(b).toBeFalse()));
+    service.canActivate();
+
+    expect(userServiceSpy.loadUser).toHaveBeenCalled();
   }));
 
 });
