@@ -52,6 +52,7 @@
         public int? CommonHiddenCodeFileId { get; init; }
 
         [MemberOrder(80)]
+        [Named("Common Hidden Code")]
         public virtual File CommonHiddenCodeFile { get; init; }
         #endregion
 
@@ -63,6 +64,7 @@
         public int? CommonTestsFileId { get; init; }
 
         [MemberOrder(90)]
+        [Named("Common Tests")]
         public virtual File CommonTestsFile { get; init; }
         #endregion
 

@@ -57,61 +57,27 @@ namespace Model.Functions
 
         #endregion
 
-        #region FileAttachments
+        #region Associated files
         #region Description
         [MemberOrder(20)]
-        public static IContext AddDescriptionFromFile(
+        public static IContext AddDescription(
             this Task task,
-            FileAttachment file,
+            File file,
             IContext context) =>
-                SaveDescriptionAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+                    context.WithUpdated(task,
+                    new(task)
+                    {
+                        DescriptionFileId = file.Id,
+                        DescriptionFile = file,
+                    });
 
-        public static string ValidateAddDescriptionFromFile(
+        public static string ValidateAddDescription(
           this Task task,
-          FileAttachment file) =>
-            file.Name.EndsWith(".html") ? null : "The file name must have extension '.html'";
-
-        public static string DisableAddDescriptionFromFile(this Task task) =>
+          File file) =>
+            file.ValidateContentType(ContentType.Description);
+            
+        public static string DisableAddDescription(this Task task) =>
             task.DescriptionFileId is null ? null : "Either go to Description file and reload/edit it, or Clear Description to create a new file here.";
-
-        [MemberOrder(21)]
-        public static IContext AddDescriptionAsString(
-            this Task task,
-            [MultiLine(10)] string content,
-            IContext context) =>
-                SaveDescriptionAsFile(task, $"Description{task.Project.Language.FileExtension}", content.AsByteArray(), context);
-
-        public static string DisableAddDescriptionAsString(this Task task) => DisableAddDescriptionFromFile(task);
-
-
-        private static IContext SaveDescriptionAsFile(
-            this Task task,
-            string name,
-            byte[] content,
-            IContext context)
-                {
-                    var author = Users.Me(context);
-                    var f = new File() { Name = name, Content = content, Mime = "text/html", AuthorId = author.Id, Author = author };
-                    return context
-                        .WithNew(f)
-                        .WithUpdated(task,
-                            new(task)
-                            {
-                                DescriptionFileId = f.Id,
-                                DescriptionFile = f,
-                            });
-                }
-
-        [Edit]
-        public static IContext EditDesciption(
-            this Task task,
-            File descriptionFile,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { DescriptionFileId = descriptionFile.Id, DescriptionFile = descriptionFile });
-
-        public static string ValidateEditDescription(this Task task, File file) =>
-          file.ContentType == ContentType.Description ? null :
-            "The file's Content Type must be 'Description'";
 
         [MemberOrder(22)]
         public static IContext ClearDesciption(
@@ -123,112 +89,67 @@ namespace Model.Functions
         public static string DisableClearDescription(this Task task) => task.DescriptionFileId is null ? "No Description specified" : null;
         #endregion
 
-        #region Hidden Code
+        #region Task Specific Hidden Code
         [MemberOrder(30)]
-        public static IContext AddHiddenCodeFromFile(
+        public static IContext AddTaskSpecificHiddenCode(
             this Task task,
-            FileAttachment file,
+            File file,
             IContext context) =>
-                SaveHiddenCodeAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
+                context.WithUpdated(task,
+                            new(task)
+                            {
+                                HiddenCodeFileId = file.Id,
+                                HiddenCodeFile = file,
+                            });
 
-        public static string ValidateAddHiddenCodeFromFile(
+        public static string ValidateAddTaskSpecificHiddenCode(
             this Task task,
-            FileAttachment file) =>
-            task.Project.ValidateFileExtension(file);
+            File file) =>
+            file.ValidateContentType(ContentType.HiddenCode);
 
-        public static string DisableAddHiddenCodeFromFile(this Task task) =>
+        public static string DisableOverrideProjectHiddenCode(this Task task) =>
             task.HiddenCodeFileId is null ? null : "Either go to Hidden Code file and reload/edit it, or Clear Hidden Code to create a new file here.";
 
-        [MemberOrder(31)]
-        public static IContext AddHiddenCodeAsString(
-            this Task task,
-            [MultiLine(10)] string content,
-            IContext context) =>
-                SaveHiddenCodeAsFile(task, $"HiddenCode{task.Project.Language.FileExtension}", content.AsByteArray(), context);
+        [MemberOrder(32)]
+        public static IContext ClearTaskSpecificHiddenCode(
+     this Task task,
+     IContext context) =>
+         context.WithUpdated(task, new Task(task) { HiddenCodeFileId = null, HiddenCodeFile = null });
 
-        public static string DisableAddHiddenCodeAsString(this Task task) => DisableAddHiddenCodeFromFile(task);
 
-        private static IContext SaveHiddenCodeAsFile(
-            this Task task,
-            string name,
-            byte[] content,
-            IContext context)
-                {
-                    var author = Users.Me(context);
-                    var f = new File() { Name = name, Content = content, Mime = "text/plain", AuthorId = author.Id, Author = author };
-                    return context
-                        .WithNew(f)
-                        .WithUpdated(task,
-                            new(task)
-                            {
-                                HiddenCodeFileId = f.Id,
-                                HiddenCodeFile = f,
-                            });
-                }
+        public static bool HideClearTaskSpecificHiddenCode(this Task task) => task.HiddenCodeFileId is null;
 
-        [Edit]
-        public static IContext EditHiddenCode(
-            this Task task,
-            [Optionally] File hiddenCodefile,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { HiddenCodeFileId = hiddenCodefile.Id, HiddenCodeFile = hiddenCodefile });
-
-        public static string ValidateEditHiddenCode(this Task task, File f) =>
-            task.Project.ValidateEditCommonHiddenCodeFile(f);
         #endregion
 
-        #region Tests
+        #region Task Specific Tests
         [MemberOrder(40)]
-        public static IContext AddTestsFromFile(
+        public static IContext AddTaskSpecificTests(
             this Task task,
-            FileAttachment file,
+            File file,
             IContext context) =>
-                SaveTestsAsFile(task, file.Name, file.GetResourceAsByteArray(), context);
-
-        public static string ValidateAddTestsFromFile(
-            this Task task,
-            FileAttachment file) =>
-            task.Project.ValidateFileExtension(file);
-
-        public static string DisableAddTestsFromFile(this Task task) =>
-            task.TestsFileId is null ? null : "Either go to Tests file and reload/edit it, or Clear Tests to create a new file here.";
-
-        [MemberOrder(41)]
-        public static IContext AddTestsAsString(
-            this Task task,
-            [MultiLine(10)] string content,
-            IContext context) =>
-                SaveTestsAsFile(task, $"Tests{task.Project.Language.FileExtension}", content.AsByteArray(), context);
-
-        public static string DisableAddTestsAsString(this Task task) => DisableAddTestsFromFile(task);
-
-        private static IContext SaveTestsAsFile(
-            this Task task,
-            string name,
-            byte[] content,
-            IContext context)
-                {
-                    var author = Users.Me(context);
-                    var f = new File() { Name = name, Content = content, Mime = "text/plain", AuthorId = author.Id, Author = author };
-                    return context
-                        .WithNew(f)
-                        .WithUpdated(task,
+                context.WithUpdated(task,
                             new(task)
                             {
-                                TestsFileId = f.Id,
-                                TestsFile = f,
+                                TestsFileId = file.Id,
+                                TestsFile = file,
                             });
-                }
 
-        [Edit]
-        public static IContext EditTests(
+        public static string ValidateAddTaskSpecificTests(
             this Task task,
-            [Optionally] File testsFile,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { TestsFileId = testsFile.Id, TestsFile = testsFile });
+            File file) =>
+                file.ValidateContentType(ContentType.Tests);
 
-        public static string ValidateEditTests(this Task task, File f) =>
-                 task.Project.ValidateEditCommonHiddenCodeFile(f);
+        public static bool HideAddTaskSpecificTests(this Task task) =>
+            task.TestsFileId == null;
+
+        [MemberOrder(42)]
+        public static IContext ClearTaskSpecificTests(
+this Task task,
+IContext context) =>
+ context.WithUpdated(task, new Task(task) { HiddenCodeFileId = null, HiddenCodeFile = null });
+
+
+        public static bool HideClearTaskSpecificTests(this Task task) => task.HiddenCodeFileId is null;
 
         #endregion
 

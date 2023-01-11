@@ -1,7 +1,4 @@
-﻿using NakedFramework.Value;
-using System.Text;
-
-namespace Model.Functions
+﻿namespace Model.Functions
 {
     public static class Hint_Functions
     {

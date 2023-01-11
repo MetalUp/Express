@@ -69,6 +69,7 @@ namespace Model.Types
         public int? HiddenCodeFileId { get; init; }
 
         [MemberOrder(80)]
+        [Named("Task Specific Hidden Code")]
         public virtual File HiddenCodeFile { get; init; }
         #endregion
 
@@ -83,6 +84,7 @@ namespace Model.Types
         public int? TestsFileId { get; init; }
 
         [MemberOrder(90)]
+        [Named("Task Specific Tests")]
         public virtual File TestsFile { get; init; }
         #endregion
 
