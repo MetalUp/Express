@@ -43,5 +43,10 @@ namespace Model.Functions
             IContext context) =>
                 context.WithUpdated(file, new(file) { ContentType = contentType });
         #endregion
+
+
+        internal static string ValidateContentType(this File file, ContentType type) =>
+            file.ContentType == type ? null : $"File must have Content Type {type}";
     }
+
 }

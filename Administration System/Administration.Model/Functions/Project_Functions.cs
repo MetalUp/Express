@@ -79,132 +79,106 @@ namespace Model.Functions
 
         #endregion
 
-        #region Common files
+        #region Associate Files
 
         #region Hidden Code
         [MemberOrder(30)]
-        public static IContext AddCommonHiddenCodeFromFile(
+        public static IContext AddCommonHiddenCode(
             this Project proj,
-            FileAttachment file,
-            IContext context)
-        {
-            var author = Users.Me(context);
-            var f = new File()
-            {
-                Name = file.Name,
-                Content = file.GetResourceAsByteArray(),
-                ContentType = ContentType.HiddenCode,
-                LanguageId = proj.LanguageId,
-                Language = proj.Language,
-                Mime = "text/plain",
-                AuthorId = author.Id,
-                Author = author,
-            };
-            return context
-                .WithNew(f)
-                .WithUpdated(proj,
+            File file,
+            IContext context) =>
+            context.WithUpdated(proj,
                     new(proj)
                     {
-                        CommonHiddenCodeFileId = f.Id,
-                        CommonHiddenCodeFile = f,
+                        CommonHiddenCodeFileId = file.Id,
+                        CommonHiddenCodeFile = file,
                     });
-        }
 
-        public static string ValidateAddCommonAddHiddenCodeFromFile(
+        public static string ValidateAddCommonAddHiddenCode(
             this Project proj,
-            FileAttachment file) =>
-            proj.ValidateFileExtension(file);
-
-        internal static string ValidateFileExtension(this Project proj, FileAttachment file) =>
-            file.Name.EndsWith(proj.Language.FileExtension) ? null : $"File's name must have extension. {proj.Language.FileExtension}";
+            File file) =>
+            file.ValidateContentType(ContentType.HiddenCode);
 
 
-        public static string DisableAddCommonHiddenCodeFromFile(this Project proj) =>
+        public static string DisableAddCommonHiddenCode(this Project proj) =>
     proj.CommonHiddenCodeFileId is null ? null : "Either go to Commoon Hidden Code file and reload/edit it, or clear Common Hidden Code to create a new file here.";
+
+
+        public static IContext ClearCommonHiddenCode(
+            this Project proj,
+            IContext context) =>
+            context.WithUpdated(proj,
+            new(proj)
+            {
+                CommonHiddenCodeFileId = null,
+                CommonHiddenCodeFile = null,
+            });
+
+        public static bool HideClearCommonHiddenCode(this Project proj) =>
+            proj.CommonHiddenCodeFileId == null;
         #endregion
 
         #region Tests
         [MemberOrder(40)]
-        public static IContext AddCommonTestsFromFile(
+        public static IContext AddCommonTests(
             this Project proj,
-            FileAttachment file,
-            IContext context)
-        {
-            var author = Users.Me(context);
-            var f = new File()
-            {
-                Name = file.Name,
-                Content = file.GetResourceAsByteArray(),
-                ContentType = ContentType.Tests,
-                LanguageId = proj.LanguageId,
-                Language = proj.Language,
-                Mime = "text/plain",
-                AuthorId = author.Id,
-                Author = author
-            };
-            return context
-                .WithNew(f)
-                .WithUpdated(proj,
+            File file,
+            IContext context) =>
+             context.WithUpdated(proj,
                     new(proj)
                     {
-                        CommonTestsFileId = f.Id,
-                        CommonTestsFile = f,
+                        CommonTestsFileId = file.Id,
+                        CommonTestsFile = file,
                     });
-        }
 
-        public static string ValidateAddCommonTestsFromFile(
+        public static string ValidateAddCommonTests(
             this Project proj,
-            FileAttachment file) =>
-                proj.ValidateFileExtension(file);
+            File file) =>
+                file.ValidateContentType(ContentType.Tests);
 
 
-        public static string DisableAddCommonTestsFromFile(this Project proj) =>
-    proj.CommonTestsFileId is null ? null : "Either go to Common Tests file and reload/edit it, or clear Common Tests to create a new file here.";
+        public static string DisableAddCommonTests(this Project proj) =>
+            proj.CommonTestsFileId is null ? null : "Either go to Common Tests file and reload/edit it, or Clear Common Tests to create a new file here.";
 
+        public static IContext ClearCommonTests(
+     this Project proj,
+     IContext context) =>
+        context.WithUpdated(proj,
+        new(proj)
+        {
+            CommonTestsFileId = null,
+            CommonTestsFile = null,
+        });
 
+        public static bool HideClearCommonTests(this Project proj) =>
+            proj.CommonTestsFileId == null;
 
         #endregion
 
-        #region Custom Wrapper
+        #region Custom Wrapper Code
         [MemberOrder(30)]
         public static IContext AddCustomWrapperCode(
             this Project proj,
-            FileAttachment file,
-            IContext context)
-        {
-            var author = Users.Me(context);
-            var f = new File()
-            {
-                Name = file.Name,
-                Content = file.GetResourceAsByteArray(),
-                ContentType = ContentType.WrapperCode,
-                LanguageId = proj.LanguageId,
-                Language = proj.Language,
-                Mime = "text/plain",
-                AuthorId = author.Id,
-                Author = author,
-            };
-            return context
-                .WithNew(f)
-                .WithUpdated(proj,
+            File file,
+            IContext context) =>
+             context.WithUpdated(proj,
                     new(proj)
                     {
-                        WrapperFileId = f.Id,
-                        WrapperFile = f,
+                        WrapperFileId = file.Id,
+                        WrapperFile = file,
                     });
-        }
+
 
         public static string ValidateAddCustomWrapperCode(
             this Project proj,
-            FileAttachment file) =>
-            file.Name.EndsWith("txt") ? null : $"File's name must have extension '.txt'";
+            File file) =>
+            file.ValidateContentType(ContentType.WrapperCode);
 
         public static string DisableAddCustomWrapperCode(this Project proj) =>
-    proj.CommonHiddenCodeFileId is null ? null : "Either go to file and reload/edit it, or Clear Custom Wrapper Code to create a new file here.";
+            proj.WrapperFileId is null ? null : "Either go to file and reload/edit it, or Clear Custom Wrapper Code to create a new file here.";
 
         public static IContext ClearCustomWrapperCode(
              this Project proj,
-             FileAttachment file,
              IContext context) =>
                 context.WithUpdated(proj,
                 new(proj)
@@ -223,42 +197,25 @@ namespace Model.Functions
         [Named("Add Custom RegEx Rules")]
         public static IContext AddCustomRegExRules(
             this Project proj,
-            FileAttachment file,
-            IContext context)
-        {
-            var author = Users.Me(context);
-            var f = new File()
-            {
-                Name = file.Name,
-                Content = file.GetResourceAsByteArray(),
-                ContentType = ContentType.RexExRules,
-                LanguageId = proj.LanguageId,
-                Language = proj.Language,
-                Mime = "text/plain",
-                AuthorId = author.Id,
-                Author = author,
-            };
-            return context
-                .WithNew(f)
-                .WithUpdated(proj,
+            File file,
+            IContext context) =>
+            context.WithUpdated(proj,
                     new(proj)
                     {
-                        RegExRulesFileId = f.Id,
-                        RegExRulesFile = f,
+                        RegExRulesFileId = file.Id,
+                        RegExRulesFile = file,
                     });
-        }
 
         public static string ValidateAddCustomRegExRules(
             this Project proj,
-            FileAttachment file) =>
-            file.Name.EndsWith("txt") ? null : $"File's name must have extension '.txt'";
+            File file) =>
+                file.ValidateContentType(ContentType.RexExRules);
 
         public static string DisableAddCustomRegExRules(this Project proj) =>
     proj.CommonHiddenCodeFileId is null ? null : "Either go to file and reload/edit it, or Clear Custom RegEx Rules to create a new file here.";
 
         public static IContext ClearCustomRegExRules(
              this Project proj,
-             FileAttachment file,
              IContext context) =>
                 context.WithUpdated(proj,
                 new(proj)
