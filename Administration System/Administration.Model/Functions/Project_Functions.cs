@@ -79,7 +79,7 @@ namespace Model.Functions
 
         #endregion
 
-        #region Associate Files
+        #region Associated Files
 
         #region Hidden Code
         [MemberOrder(30)]
@@ -103,7 +103,7 @@ namespace Model.Functions
         public static string DisableAddCommonHiddenCode(this Project proj) =>
     proj.CommonHiddenCodeFileId is null ? null : "Either go to Commoon Hidden Code file and reload/edit it, or clear Common Hidden Code to create a new file here.";
 
-
+        [MemberOrder(31)]
         public static IContext ClearCommonHiddenCode(
             this Project proj,
             IContext context) =>
@@ -140,6 +140,7 @@ namespace Model.Functions
         public static string DisableAddCommonTests(this Project proj) =>
             proj.CommonTestsFileId is null ? null : "Either go to Common Tests file and reload/edit it, or Clear Common Tests to create a new file here.";
 
+        [MemberOrder(41)]
         public static IContext ClearCommonTests(
      this Project proj,
      IContext context) =>
@@ -156,7 +157,7 @@ namespace Model.Functions
         #endregion
 
         #region Custom Wrapper Code
-        [MemberOrder(30)]
+        [MemberOrder(50)]
         public static IContext AddCustomWrapperCode(
             this Project proj,
             File file,
@@ -177,6 +178,7 @@ namespace Model.Functions
         public static string DisableAddCustomWrapperCode(this Project proj) =>
             proj.WrapperFileId is null ? null : "Either go to file and reload/edit it, or Clear Custom Wrapper Code to create a new file here.";
 
+        [MemberOrder(51)]
         public static IContext ClearCustomWrapperCode(
              this Project proj,
              IContext context) =>
@@ -193,7 +195,7 @@ namespace Model.Functions
         #endregion
 
         #region Custom RegEx Rules
-        [MemberOrder(30)]
+        [MemberOrder(60)]
         [Named("Add Custom RegEx Rules")]
         public static IContext AddCustomRegExRules(
             this Project proj,
@@ -214,6 +216,7 @@ namespace Model.Functions
         public static string DisableAddCustomRegExRules(this Project proj) =>
     proj.CommonHiddenCodeFileId is null ? null : "Either go to file and reload/edit it, or Clear Custom RegEx Rules to create a new file here.";
 
+        [MemberOrder(61)]
         public static IContext ClearCustomRegExRules(
              this Project proj,
              IContext context) =>
@@ -318,7 +321,7 @@ namespace Model.Functions
         #endregion
 
         #region Create Task
-        [MemberOrder(50)]
+        [MemberOrder(70)]
         public static IContext CreateTask(
             this Project project,
             int number,
