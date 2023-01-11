@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { catchError, from, of, Subject } from 'rxjs';
-import { RunResult, errorRunResult } from '../models/run-result';
+import { RunResult, errorRunResult, EmptyRunResult } from '../models/run-result';
 import { TaskService } from './task.service';
 import { Dictionary } from 'lodash';
 import { SubmitProgram } from 'armlite_service';
+import { ArmTestHelper } from '../models/arm-test-helper';
 
 @Injectable({
   providedIn: 'root'
@@ -114,7 +115,33 @@ export class CompileServerService {
     return this.submit(action, params);
   }
 
+  runArmTests() {
+    var rr = { ...EmptyRunResult };
+    var helper = new ArmTestHelper();
+
+    try {
+      ArmTestHelper.RunTests(helper);
+      rr.stdout = "all tests passed";
+      rr.outcome = 15;
+    }
+    catch (e) {
+      if (e instanceof Error) {
+        rr.stdout = e.message;
+      }
+      else {
+        rr.stderr = `unexpected error: ${e}`;
+      }
+    }
+
+    return rr;
+  }
+
+
   runTests(taskId: number) {
+    if (this.selectedLanguage === "arm") {
+      return of(this.runArmTests() as RunResult);
+    }
+
     const action = this.runTestsAction;
     var params = this.params(taskId);
     return this.submit(action, params);
