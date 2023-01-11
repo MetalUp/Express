@@ -674,9 +674,10 @@ function showExecuteStop(r)
 // Indicate where the error is - called with the real line number (never the address)
 function showError(r)
 {
-	addClassToLineNumber(r, error);
 	byteCount = 0;			// prevent any future STEP or RUN trying to highlight instructions
 	errorLineNum = r;
+	if (serviceMode) return;
+	addClassToLineNumber(r, error);
 	var pos = (r-18)*15.2395;
 	if (r < 30) pos = 0;
 	document.getElementById("source").scrollTop = pos;
