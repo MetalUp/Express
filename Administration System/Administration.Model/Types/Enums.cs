@@ -27,7 +27,7 @@
 
     public enum ContentType
     {
-        Description, HiddenCode, Tests, Wrapper, Helpers, Rules, Hint
+        Description, HiddenCode, Tests, WrapperCode, Helpers, RexExRules, Hint
     }
 
     public enum CompilerOutcome //Duplication of Outcome enum in CompileServer project

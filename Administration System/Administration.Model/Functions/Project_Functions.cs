@@ -48,7 +48,8 @@ namespace Model.Functions
             this Project project,
             [Optionally] File commonHiddenCodeFile,
             IContext context) =>
-                context.WithUpdated(project, new Project(project) { 
+                context.WithUpdated(project, new Project(project)
+                {
                     CommonHiddenCodeFileId = commonHiddenCodeFile.Id,
                     CommonHiddenCodeFile = commonHiddenCodeFile
                 });
@@ -86,26 +87,28 @@ namespace Model.Functions
             this Project proj,
             FileAttachment file,
             IContext context)
-        {                 
-                var author = Users.Me(context);
-                var f = new File() { Name = file.Name,
-                    Content = file.GetResourceAsByteArray(),
-                    ContentType = ContentType.HiddenCode,
-                    LanguageId = proj.LanguageId,
-                    Language = proj.Language,
-                    Mime = "text/plain", 
-                    AuthorId = author.Id, 
-                    Author = author, 
-                };
-                return context
-                    .WithNew(f)
-                    .WithUpdated(proj,
-                        new(proj)
-                        {
-                            CommonHiddenCodeFileId = f.Id,
-                            CommonHiddenCodeFile = f,
-                        });
-            }
+        {
+            var author = Users.Me(context);
+            var f = new File()
+            {
+                Name = file.Name,
+                Content = file.GetResourceAsByteArray(),
+                ContentType = ContentType.HiddenCode,
+                LanguageId = proj.LanguageId,
+                Language = proj.Language,
+                Mime = "text/plain",
+                AuthorId = author.Id,
+                Author = author,
+            };
+            return context
+                .WithNew(f)
+                .WithUpdated(proj,
+                    new(proj)
+                    {
+                        CommonHiddenCodeFileId = f.Id,
+                        CommonHiddenCodeFile = f,
+                    });
+        }
 
         public static string ValidateAddCommonAddHiddenCodeFromFile(
             this Project proj,
@@ -126,17 +129,19 @@ namespace Model.Functions
             this Project proj,
             FileAttachment file,
             IContext context)
-        { 
+        {
             var author = Users.Me(context);
-            var f = new File() { 
-                Name = file.Name, 
+            var f = new File()
+            {
+                Name = file.Name,
                 Content = file.GetResourceAsByteArray(),
                 ContentType = ContentType.Tests,
                 LanguageId = proj.LanguageId,
                 Language = proj.Language,
-                Mime = "text/plain", 
-                AuthorId = author.Id, 
-                Author = author };
+                Mime = "text/plain",
+                AuthorId = author.Id,
+                Author = author
+            };
             return context
                 .WithNew(f)
                 .WithUpdated(proj,
@@ -160,13 +165,120 @@ namespace Model.Functions
 
         #endregion
 
+        #region Custom Wrapper
+        [MemberOrder(30)]
+        public static IContext AddCustomWrapperCode(
+            this Project proj,
+            FileAttachment file,
+            IContext context)
+        {
+            var author = Users.Me(context);
+            var f = new File()
+            {
+                Name = file.Name,
+                Content = file.GetResourceAsByteArray(),
+                ContentType = ContentType.WrapperCode,
+                LanguageId = proj.LanguageId,
+                Language = proj.Language,
+                Mime = "text/plain",
+                AuthorId = author.Id,
+                Author = author,
+            };
+            return context
+                .WithNew(f)
+                .WithUpdated(proj,
+                    new(proj)
+                    {
+                        WrapperFileId = f.Id,
+                        WrapperFile = f,
+                    });
+        }
+
+        public static string ValidateAddCustomWrapperCode(
+            this Project proj,
+            FileAttachment file) =>
+            file.Name.EndsWith("txt") ? null : $"File's name must have extension '.txt'";
+
+        public static string DisableAddCustomWrapperCode(this Project proj) =>
+    proj.CommonHiddenCodeFileId is null ? null : "Either go to file and reload/edit it, or Clear Custom Wrapper Code to create a new file here.";
+
+        public static IContext ClearCustomWrapperCode(
+             this Project proj,
+             FileAttachment file,
+             IContext context) =>
+                context.WithUpdated(proj,
+                new(proj)
+                {
+                    WrapperFileId = null,
+                    WrapperFile = null,
+                });
+
+        public static bool HideClearCustomWrapperCode(this Project proj) =>
+            proj.WrapperFileId == null;
+
+        #endregion
+
+        #region Custom RegEx Rules
+        [MemberOrder(30)]
+        [Named("Add Custom RegEx Rules")]
+        public static IContext AddCustomRegExRules(
+            this Project proj,
+            FileAttachment file,
+            IContext context)
+        {
+            var author = Users.Me(context);
+            var f = new File()
+            {
+                Name = file.Name,
+                Content = file.GetResourceAsByteArray(),
+                ContentType = ContentType.RexExRules,
+                LanguageId = proj.LanguageId,
+                Language = proj.Language,
+                Mime = "text/plain",
+                AuthorId = author.Id,
+                Author = author,
+            };
+            return context
+                .WithNew(f)
+                .WithUpdated(proj,
+                    new(proj)
+                    {
+                        RegExRulesFileId = f.Id,
+                        RegExRulesFile = f,
+                    });
+        }
+
+        public static string ValidateAddCustomRegExRules(
+            this Project proj,
+            FileAttachment file) =>
+            file.Name.EndsWith("txt") ? null : $"File's name must have extension '.txt'";
+
+        public static string DisableAddCustomRegExRules(this Project proj) =>
+    proj.CommonHiddenCodeFileId is null ? null : "Either go to file and reload/edit it, or Clear Custom RegEx Rules to create a new file here.";
+
+        public static IContext ClearCustomRegExRules(
+             this Project proj,
+             FileAttachment file,
+             IContext context) =>
+                context.WithUpdated(proj,
+                new(proj)
+                {
+                    RegExRulesFileId = null,
+                    RegExRulesFile = null,
+                });
+
+        public static bool HideClearOverriddenRegExRules(this Project proj) =>
+            proj.RegExRulesFileId == null;
+
+        #endregion
+
         #endregion
 
         #region Assignment
 
         [MemberOrder(5)]
         public static (Assignment, IContext) AssignToMe(this Project project, IContext context) =>
-            Assignments.NewAssignmentToIndividual(Users.Me(context), project, context.Today(), context);
+        Assignments.NewAssignmentToIndividual(Users.Me(context), project, context.Today(), context);
 
         public static string DisableAssignToMe(this Project project, IContext context) =>
             project.IsAssignedToMe(context) ? "Project is already assigned to you" : null;
@@ -239,7 +351,7 @@ namespace Model.Functions
             };
             var context2 = context.WithNew(t).WithUpdated(project, p2);
             var context3 = previousTask is null ? context2 : context2.WithUpdated(previousTask,
-                new Task(previousTask) {NextTask = t });
+                new Task(previousTask) { NextTask = t });
             return context3;
         }
 
@@ -252,7 +364,7 @@ namespace Model.Functions
         [MemberOrder(50)]
         public static IContext CreateTask(
             this Project project,
-            int  number,
+            int number,
             [Optionally] Task previousTask,
             IContext context)
         {

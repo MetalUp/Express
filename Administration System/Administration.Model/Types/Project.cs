@@ -75,6 +75,7 @@
         public int? WrapperFileId { get; init; }
 
         [MemberOrder(100)]
+        [Named("Custom Wrapper Code")]
         public virtual File WrapperFile { get; init; }
 
         #endregion
@@ -100,6 +101,7 @@
         public int? RegExRulesFileId { get; init; }
 
         [MemberOrder(110)]
+        [Named("Custom RegEx Rules")]
         public virtual File RegExRulesFile { get; init; }
 
         #endregion
