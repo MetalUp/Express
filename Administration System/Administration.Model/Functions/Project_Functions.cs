@@ -11,9 +11,9 @@ namespace Model.Functions
 
         public static bool HideLink(this Project project, IContext context) => !project.IsAssignedToMe(context);
 
-        public static bool HideHiddenCodeFile(this Project project) => project.CommonHiddenCodeFileId == null;
+        public static bool HideCommonHiddenCodeFile(this Project project) => project.CommonHiddenCodeFileId == null;
 
-        public static bool HideTestsFile(this Project project) => project.CommonTestsFileId == null;
+        public static bool HideCommonTestsFile(this Project project) => project.CommonTestsFileId == null;
 
         public static bool HideWrapperFile(this Project project) => project.WrapperFileId == null;
 
@@ -85,6 +85,32 @@ namespace Model.Functions
         public static string ValidateEditCommonTestsFile(this Project project, File commonHiddenCodeFile) =>
                 ValidateLanguageAndContentType(project, commonHiddenCodeFile, ContentType.Tests);
 
+        #endregion
+
+        #region Assignment
+
+        [MemberOrder(5)]
+        public static (Assignment, IContext) AssignToMe(this Project project, IContext context) =>
+        Assignments.NewAssignmentToIndividual(Users.Me(context), project, context.Today(), context);
+
+        public static string DisableAssignToMe(this Project project, IContext context) =>
+            project.IsAssignedToMe(context) ? "Project is already assigned to you" : null;
+
+        [MemberOrder(10)]
+        public static IContext AssignToIndividual(this Project project, User singleUser, DateTime dueBy, IContext context) =>
+            Assignments.NewAssignmentToIndividual(singleUser, project, dueBy, context).Item2;
+
+        [MemberOrder(20)]
+        public static IContext AssignToGroup(this Project project, Group group, DateTime dueBy, IContext context) =>
+         Assignments.NewAssignmentToGroup(group, project, dueBy, context);
+
+
+        public static string ValidateAssignTo(this Project project, Group inGroup, bool allInGroup, User singleUser, DateTime dueBy, IContext context) =>
+            allInGroup && inGroup is null ? "Must specify a Group" :
+               !allInGroup && singleUser is null ? "Must specify a Single User" : null;
+
+        public static List<Group> Choices1AssignTo(this Project project, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
+            Groups.AllOurGroups(context).ToList();
         #endregion
 
         #region Associated Files
@@ -228,36 +254,10 @@ namespace Model.Functions
                     RegExRulesFile = null,
                 });
 
-        public static bool HideClearOverriddenRegExRules(this Project proj) =>  proj.RegExRulesFileId == null;
+        public static bool HideClearCustomRegExRules(this Project proj) =>  proj.RegExRulesFileId == null;
 
         #endregion
 
-        #endregion
-
-        #region Assignment
-
-        [MemberOrder(5)]
-        public static (Assignment, IContext) AssignToMe(this Project project, IContext context) =>
-        Assignments.NewAssignmentToIndividual(Users.Me(context), project, context.Today(), context);
-
-        public static string DisableAssignToMe(this Project project, IContext context) =>
-            project.IsAssignedToMe(context) ? "Project is already assigned to you" : null;
-
-        [MemberOrder(10)]
-        public static IContext AssignToIndividual(this Project project, User singleUser, DateTime dueBy, IContext context) =>
-            Assignments.NewAssignmentToIndividual(singleUser, project, dueBy, context).Item2;
-
-        [MemberOrder(20)]
-        public static IContext AssignToGroup(this Project project, Group group, DateTime dueBy, IContext context) =>
-         Assignments.NewAssignmentToGroup(group, project, dueBy, context);
-
-
-        public static string ValidateAssignTo(this Project project, Group inGroup, bool allInGroup, User singleUser, DateTime dueBy, IContext context) =>
-            allInGroup && inGroup is null ? "Must specify a Group" :
-               !allInGroup && singleUser is null ? "Must specify a Single User" : null;
-
-        public static List<Group> Choices1AssignTo(this Project project, [Optionally] Group inGroup, bool allInGroup, [Optionally] User singleUser, DateTime dueBy, IContext context) =>
-            Groups.AllOurGroups(context).ToList();
         #endregion
 
         #region internal functions
@@ -270,8 +270,39 @@ namespace Model.Functions
         }
         #endregion
 
+        #region Create Task
+        [MemberOrder(100)]
+        public static IContext CreateTask(
+            this Project project,
+            int number,
+            [Optionally] Task previousTask,
+            IContext context)
+        {
+            var t = new Task
+            {
+                ProjectId = project.Id,
+                Project = project,
+                Number = number,
+                PreviousTaskId = previousTask is null ? null : previousTask.Id,
+                PreviousTask = previousTask,
+            };
+            var updatedPrevious = previousTask is null ? null :
+                new Task(previousTask) { NextTask = t };
+            var context2 = updatedPrevious is null ? context : context.WithUpdated(previousTask, updatedPrevious);
+            return context2.WithNew(t);
+        }
+
+        public static int Default1CreateTask(
+            this Project project) =>
+            project.Tasks.Count == 0 ? 1 : project.Tasks.Last().Number + 1;
+
+        public static Task Default2CreateTask(
+            this Project project) =>
+            project.Tasks.LastOrDefault();
+        #endregion
+
         #region Copying
-        [MemberOrder(30)]
+        [MemberOrder(110)]
         public static (Project, IContext) CopyProjectForNewLanguage(
             this Project project,
             Language newLanguage,
@@ -288,7 +319,7 @@ namespace Model.Functions
             return (p, context.WithNew(p));
         }
 
-        [MemberOrder(40)]
+        [MemberOrder(120)]
         public static IContext CopyNextTaskFromAnotherProject(
             this Project project,
             [Optionally][Named("Previous Task (if relevant)")] Task previousTask,
@@ -320,35 +351,6 @@ namespace Model.Functions
 
         #endregion
 
-        #region Create Task
-        [MemberOrder(70)]
-        public static IContext CreateTask(
-            this Project project,
-            int number,
-            [Optionally] Task previousTask,
-            IContext context)
-        {
-            var t = new Task
-            {
-                ProjectId = project.Id,
-                Project = project,
-                Number = number,
-                PreviousTaskId = previousTask is null ? null : previousTask.Id,
-                PreviousTask = previousTask,
-            };
-            var updatedPrevious = previousTask is null ? null :
-                new Task(previousTask) { NextTask = t };
-            var context2 = updatedPrevious is null ? context : context.WithUpdated(previousTask, updatedPrevious);
-            return context2.WithNew(t);
-        }
 
-        public static int Default1CreateTask(
-            this Project project) =>
-            project.Tasks.Count == 0 ? 1 : project.Tasks.Last().Number + 1;
-
-        public static Task Default2CreateTask(
-            this Project project) =>
-            project.Tasks.LastOrDefault();
-        #endregion
     }
 }

@@ -3,9 +3,17 @@
     public static class Task_Functions
     {
         #region Display
+        public static bool HidePreviousTask(this Task task) => task.PreviousTaskId == null;
+
+        public static bool HideNextTask(this Task task) => task.NextTaskId == null;
+
+        public static bool HideNextTaskClearsFunctions(this Task task) => HideNextTask(task);
+
         public static bool HideHiddenCodeFile(this Task task) => task.HiddenCodeFileId == null;
 
         public static bool HideTestsFile(this Task task) => task.TestsFileId == null;
+
+        public static bool HideTestsRunOnClient(this Task task) => !task.TestsRunOnClient;
 
         public static bool HideWrapperFile(this Task task) => task.WrapperFileId == null;
 
@@ -62,13 +70,6 @@
           bool nextTaskClearsFunctions,
           IContext context) =>
             context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskClearsFunctions });
-
-        [Edit]
-        public static IContext EditTestsRunOnClient(
-          this Task task,
-          bool testsRunOnClient,
-          IContext context) =>
-            context.WithUpdated(task, new(task) { TestsRunOnClient = testsRunOnClient });
 
         #endregion
 
@@ -193,7 +194,7 @@
             File file) =>
                 file.ValidateContentType(ContentType.Tests);
 
-        public static bool HideAddTaskSpecificTests(this Task task) => task.TestsFileId == null;
+        public static bool HideAddTaskSpecificTests(this Task task) => task.TestsFileId != null;
 
         [MemberOrder(41)]
         public static IContext ClearTaskSpecificTests(
@@ -224,7 +225,7 @@
             File file) =>
                 file.ValidateContentType(ContentType.WrapperCode);
 
-        public static bool HideAddTaskSpecificWrapperCode(this Task task) => task.WrapperFileId == null;
+        public static bool HideAddTaskSpecificWrapperCode(this Task task) => task.WrapperFileId != null;
 
         [MemberOrder(51)]
         public static IContext ClearTaskSpecificWrapperCode(
@@ -255,7 +256,7 @@
             File file) =>
                 file.ValidateContentType(ContentType.RegExRules);
 
-        public static bool HideAddTaskSpecificRegExRules(this Task task) => task.RegExRulesFileId == null;
+        public static bool HideAddTaskSpecificRegExRules(this Task task) => task.RegExRulesFileId != null;
 
         [MemberOrder(61)]
         public static IContext ClearTaskSpecificRegExRules(
@@ -267,13 +268,24 @@
         public static bool HideClearTaskSpecificRegExRules(this Task task) => task.RegExRulesFileId == null;
 
         #endregion
-
         #endregion
 
         #region Helpers
         public static bool CodeCarriedForwardToNextTask(this Task task) => !task.NextTaskClearsFunctions;
 
         public static bool HasTests(this Task task) => task.Tests is not null;
+        #endregion
+
+        #region TestsRunOnClient
+        public static IContext SpecifyThatTestsRunOnClient(this Task task, IContext context) =>
+            context.WithUpdated(task, new(task) { TestsRunOnClient = true });
+
+        public static bool HideSpecifyThatTestsRunOnClient(this Task task) => task.TestsRunOnClient;
+
+        public static IContext ClearTestsRunOnClient(this Task task, IContext context) =>
+    context.WithUpdated(task, new(task) { TestsRunOnClient = false });
+
+        public static bool HideClearTestsRunOnClient(this Task task) => !task.TestsRunOnClient;
         #endregion
     }
 }
