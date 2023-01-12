@@ -1,10 +1,18 @@
-﻿using NakedFramework.Value;
-using System.Text;
-
-namespace Model.Functions
+﻿namespace Model.Functions
 {
     public static class Task_Functions
     {
+        #region Display
+        public static bool HideHiddenCodeFile(this Task task) => task.HiddenCodeFileId == null;
+
+        public static bool HideTestsFile(this Task task) => task.TestsFileId == null;
+
+        public static bool HideWrapperFile(this Task task) => task.WrapperFileId == null;
+
+        public static bool HideRegExRulesFile(this Task task) => task.RegExRulesFileId == null;
+
+        #endregion
+
         #region Editing Task properties
         [Edit]
         public static IContext EditNumber(
@@ -55,108 +63,17 @@ namespace Model.Functions
           IContext context) =>
             context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskClearsFunctions });
 
-        #endregion
-
-        #region Associated files
-        #region Description
-        [MemberOrder(20)]
-        public static IContext AddDescription(
-            this Task task,
-            File file,
-            IContext context) =>
-                    context.WithUpdated(task,
-                    new(task)
-                    {
-                        DescriptionFileId = file.Id,
-                        DescriptionFile = file,
-                    });
-
-        public static string ValidateAddDescription(
+        [Edit]
+        public static IContext EditTestsRunOnClient(
           this Task task,
-          File file) =>
-            file.ValidateContentType(ContentType.Description);
-            
-        public static string DisableAddDescription(this Task task) =>
-            task.DescriptionFileId is null ? null : "Either go to Description file and reload/edit it, or Clear Description to create a new file here.";
-
-        [MemberOrder(22)]
-        public static IContext ClearDesciption(
-            this Task task,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { DescriptionFileId = null, DescriptionFile = null });
-
-
-        public static string DisableClearDescription(this Task task) => task.DescriptionFileId is null ? "No Description specified" : null;
-        #endregion
-
-        #region Task Specific Hidden Code
-        [MemberOrder(30)]
-        public static IContext AddTaskSpecificHiddenCode(
-            this Task task,
-            File file,
-            IContext context) =>
-                context.WithUpdated(task,
-                            new(task)
-                            {
-                                HiddenCodeFileId = file.Id,
-                                HiddenCodeFile = file,
-                            });
-
-        public static string ValidateAddTaskSpecificHiddenCode(
-            this Task task,
-            File file) =>
-            file.ValidateContentType(ContentType.HiddenCode);
-
-        public static string DisableOverrideProjectHiddenCode(this Task task) =>
-            task.HiddenCodeFileId is null ? null : "Either go to Hidden Code file and reload/edit it, or Clear Hidden Code to create a new file here.";
-
-        [MemberOrder(32)]
-        public static IContext ClearTaskSpecificHiddenCode(
-     this Task task,
-     IContext context) =>
-         context.WithUpdated(task, new Task(task) { HiddenCodeFileId = null, HiddenCodeFile = null });
-
-
-        public static bool HideClearTaskSpecificHiddenCode(this Task task) => task.HiddenCodeFileId is null;
-
-        #endregion
-
-        #region Task Specific Tests
-        [MemberOrder(40)]
-        public static IContext AddTaskSpecificTests(
-            this Task task,
-            File file,
-            IContext context) =>
-                context.WithUpdated(task,
-                            new(task)
-                            {
-                                TestsFileId = file.Id,
-                                TestsFile = file,
-                            });
-
-        public static string ValidateAddTaskSpecificTests(
-            this Task task,
-            File file) =>
-                file.ValidateContentType(ContentType.Tests);
-
-        public static bool HideAddTaskSpecificTests(this Task task) =>
-            task.TestsFileId == null;
-
-        [MemberOrder(42)]
-        public static IContext ClearTaskSpecificTests(
-this Task task,
-IContext context) =>
- context.WithUpdated(task, new Task(task) { HiddenCodeFileId = null, HiddenCodeFile = null });
-
-
-        public static bool HideClearTaskSpecificTests(this Task task) => task.HiddenCodeFileId is null;
-
-        #endregion
+          bool testsRunOnClient,
+          IContext context) =>
+            context.WithUpdated(task, new(task) { TestsRunOnClient = testsRunOnClient });
 
         #endregion
 
         #region Hints 
-        [MemberOrder(50)]
+        [MemberOrder(10)]
         public static IContext AddNewHint(
             this Task task,
             int number,
@@ -186,7 +103,7 @@ IContext context) =>
         public static int Default1AddNewHint(this Task task) =>
             task.Hints.Count + 1;
 
-        [MemberOrder(50)]
+        [MemberOrder(15)]
         public static IContext UseExistingHintsFrom(
             this Task thisTask,
             Task otherTask,
@@ -194,6 +111,162 @@ IContext context) =>
             context.WithUpdated(thisTask, new Task(thisTask) { Hints = new List<Hint>(otherTask.Hints) });
 
         internal static Hint GetHintNo(this Task task, int hintNo) => task.Hints.Single(h => h.Number == hintNo);
+
+        #endregion
+
+        #region Associated files
+        #region Description
+        [MemberOrder(20)]
+        public static IContext AddDescription(
+            this Task task,
+            File file,
+            IContext context) =>
+                    context.WithUpdated(task,
+                    new(task)
+                    {
+                        DescriptionFileId = file.Id,
+                        DescriptionFile = file,
+                    });
+
+        public static string ValidateAddDescription(
+          this Task task,
+          File file) =>
+            file.ValidateContentType(ContentType.Description);
+
+        public static bool HideAddDescription(this Task task) => task.DescriptionFileId != null;
+
+        [MemberOrder(21)]
+        public static IContext ClearDesciption(
+            this Task task,
+            IContext context) =>
+                context.WithUpdated(task, new Task(task) { DescriptionFileId = null, DescriptionFile = null });
+
+
+        public static bool HideClearDescription(this Task task) => task.DescriptionFileId == null;
+        #endregion
+
+        #region Task Specific Hidden Code
+        [MemberOrder(30)]
+        public static IContext AddTaskSpecificHiddenCode(
+            this Task task,
+            File file,
+            IContext context) =>
+                context.WithUpdated(task,
+                            new(task)
+                            {
+                                HiddenCodeFileId = file.Id,
+                                HiddenCodeFile = file,
+                            });
+
+        public static string ValidateAddTaskSpecificHiddenCode(
+            this Task task,
+            File file) =>
+            file.ValidateContentType(ContentType.HiddenCode);
+
+        public static bool HideOverrideProjectHiddenCode(this Task task) => task.HiddenCodeFileId != null;
+
+        [MemberOrder(31)]
+        public static IContext ClearTaskSpecificHiddenCode(
+             this Task task,
+             IContext context) =>
+                 context.WithUpdated(task, new Task(task) { HiddenCodeFileId = null, HiddenCodeFile = null });
+
+        public static bool HideClearTaskSpecificHiddenCode(this Task task) => task.HiddenCodeFileId == null;
+
+        #endregion
+
+        #region Task Specific Tests
+        [MemberOrder(40)]
+        public static IContext AddTaskSpecificTests(
+            this Task task,
+            File file,
+            IContext context) =>
+                context.WithUpdated(task,
+                            new(task)
+                            {
+                                TestsFileId = file.Id,
+                                TestsFile = file,
+                            });
+
+        public static string ValidateAddTaskSpecificTests(
+            this Task task,
+            File file) =>
+                file.ValidateContentType(ContentType.Tests);
+
+        public static bool HideAddTaskSpecificTests(this Task task) => task.TestsFileId == null;
+
+        [MemberOrder(41)]
+        public static IContext ClearTaskSpecificTests(
+            this Task task,
+            IContext context) =>
+             context.WithUpdated(task, new Task(task) { TestsFileId = null, TestsFile = null });
+
+
+        public static bool HideClearTaskSpecificTests(this Task task) => task.TestsFileId == null;
+
+        #endregion
+
+        #region Task Specific Wrapper Code
+        [MemberOrder(50)]
+        public static IContext AddTaskSpecificWrapperCode(
+            this Task task,
+            File file,
+            IContext context) =>
+                context.WithUpdated(task,
+                            new(task)
+                            {
+                                WrapperFileId = file.Id,
+                                WrapperFile = file,
+                            });
+
+        public static string ValidateAddTaskSpecificWrapperCode(
+            this Task task,
+            File file) =>
+                file.ValidateContentType(ContentType.WrapperCode);
+
+        public static bool HideAddTaskSpecificWrapperCode(this Task task) => task.WrapperFileId == null;
+
+        [MemberOrder(51)]
+        public static IContext ClearTaskSpecificWrapperCode(
+            this Task task,
+            IContext context) =>
+             context.WithUpdated(task, new Task(task) { WrapperFileId = null, WrapperFile = null });
+
+
+        public static bool HideClearTaskSpecificWrapperCode(this Task task) => task.WrapperFileId == null;
+
+        #endregion
+
+        #region Task Specific RegEx Rules
+        [MemberOrder(60)]
+        public static IContext AddTaskSpecificRegExRules(
+            this Task task,
+            File file,
+            IContext context) =>
+                context.WithUpdated(task,
+                            new(task)
+                            {
+                                RegExRulesFileId = file.Id,
+                                RegExRulesFile = file,
+                            });
+
+        public static string ValidateAddTaskSpecificRegExRules(
+            this Task task,
+            File file) =>
+                file.ValidateContentType(ContentType.RegExRules);
+
+        public static bool HideAddTaskSpecificRegExRules(this Task task) => task.RegExRulesFileId == null;
+
+        [MemberOrder(61)]
+        public static IContext ClearTaskSpecificRegExRules(
+            this Task task,
+            IContext context) =>
+             context.WithUpdated(task, new Task(task) { RegExRulesFileId = null, RegExRulesFile = null });
+
+
+        public static bool HideClearTaskSpecificRegExRules(this Task task) => task.RegExRulesFileId == null;
+
+        #endregion
 
         #endregion
 

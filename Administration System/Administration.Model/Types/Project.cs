@@ -85,19 +85,12 @@
         #region Helpers
 
         [Hidden]
-        public string Helpers => HelpersFileId == null ? Language.Helpers : HelpersFile.ContentsAsString();
-
-        [Hidden]
-        public int? HelpersFileId { get; init; }
-
-        [MemberOrder(110)]
-        public virtual File HelpersFile { get; init; }
+        public string Helpers => Language.Helpers;
 
         #endregion
 
         #region RegExRules
-        [Hidden]
-        public string RegExRules => RegExRulesFileId == null ? Language.RegExRules  : RegExRulesFile.ContentsAsString();
+        internal string RegExRules => RegExRulesFileId == null ? Language.RegExRules  : RegExRulesFile.ContentsAsString();
 
         [Hidden]
         public int? RegExRulesFileId { get; init; }

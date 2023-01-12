@@ -11,6 +11,14 @@ namespace Model.Functions
 
         public static bool HideLink(this Project project, IContext context) => !project.IsAssignedToMe(context);
 
+        public static bool HideHiddenCodeFile(this Project project) => project.CommonHiddenCodeFileId == null;
+
+        public static bool HideTestsFile(this Project project) => project.CommonTestsFileId == null;
+
+        public static bool HideWrapperFile(this Project project) => project.WrapperFileId == null;
+
+        public static bool HideRegExRulesFile(this Project project) => project.RegExRulesFileId == null;
+
         #endregion
 
         #region Edits
@@ -100,8 +108,7 @@ namespace Model.Functions
             file.ValidateContentType(ContentType.HiddenCode);
 
 
-        public static string DisableAddCommonHiddenCode(this Project proj) =>
-    proj.CommonHiddenCodeFileId is null ? null : "Either go to Commoon Hidden Code file and reload/edit it, or clear Common Hidden Code to create a new file here.";
+        public static bool HideAddCommonHiddenCode(this Project proj) => proj.CommonHiddenCodeFileId != null; 
 
         [MemberOrder(31)]
         public static IContext ClearCommonHiddenCode(
@@ -114,8 +121,7 @@ namespace Model.Functions
                 CommonHiddenCodeFile = null,
             });
 
-        public static bool HideClearCommonHiddenCode(this Project proj) =>
-            proj.CommonHiddenCodeFileId == null;
+        public static bool HideClearCommonHiddenCode(this Project proj) => proj.CommonHiddenCodeFileId == null;
         #endregion
 
         #region Tests
@@ -137,22 +143,20 @@ namespace Model.Functions
                 file.ValidateContentType(ContentType.Tests);
 
 
-        public static string DisableAddCommonTests(this Project proj) =>
-            proj.CommonTestsFileId is null ? null : "Either go to Common Tests file and reload/edit it, or Clear Common Tests to create a new file here.";
+        public static bool HideAddCommonTests(this Project proj) => proj.CommonTestsFileId != null; 
 
         [MemberOrder(41)]
         public static IContext ClearCommonTests(
-     this Project proj,
-     IContext context) =>
-        context.WithUpdated(proj,
-        new(proj)
-        {
-            CommonTestsFileId = null,
-            CommonTestsFile = null,
-        });
+             this Project proj,
+             IContext context) =>
+                context.WithUpdated(proj,
+                new(proj)
+                {
+                    CommonTestsFileId = null,
+                    CommonTestsFile = null,
+                });
 
-        public static bool HideClearCommonTests(this Project proj) =>
-            proj.CommonTestsFileId == null;
+        public static bool HideClearCommonTests(this Project proj) => proj.CommonTestsFileId == null;
 
         #endregion
 
@@ -175,8 +179,7 @@ namespace Model.Functions
             File file) =>
             file.ValidateContentType(ContentType.WrapperCode);
 
-        public static string DisableAddCustomWrapperCode(this Project proj) =>
-            proj.WrapperFileId is null ? null : "Either go to file and reload/edit it, or Clear Custom Wrapper Code to create a new file here.";
+        public static bool HideAddCustomWrapperCode(this Project proj) => proj.WrapperFileId != null;
 
         [MemberOrder(51)]
         public static IContext ClearCustomWrapperCode(
@@ -189,8 +192,7 @@ namespace Model.Functions
                     WrapperFile = null,
                 });
 
-        public static bool HideClearCustomWrapperCode(this Project proj) =>
-            proj.WrapperFileId == null;
+        public static bool HideClearCustomWrapperCode(this Project proj) =>  proj.WrapperFileId == null;
 
         #endregion
 
@@ -211,10 +213,9 @@ namespace Model.Functions
         public static string ValidateAddCustomRegExRules(
             this Project proj,
             File file) =>
-                file.ValidateContentType(ContentType.RexExRules);
+                file.ValidateContentType(ContentType.RegExRules);
 
-        public static string DisableAddCustomRegExRules(this Project proj) =>
-    proj.CommonHiddenCodeFileId is null ? null : "Either go to file and reload/edit it, or Clear Custom RegEx Rules to create a new file here.";
+        public static bool HideAddCustomRegExRules(this Project proj) => proj.RegExRulesFileId != null;
 
         [MemberOrder(61)]
         public static IContext ClearCustomRegExRules(
@@ -227,8 +228,7 @@ namespace Model.Functions
                     RegExRulesFile = null,
                 });
 
-        public static bool HideClearOverriddenRegExRules(this Project proj) =>
-            proj.RegExRulesFileId == null;
+        public static bool HideClearOverriddenRegExRules(this Project proj) =>  proj.RegExRulesFileId == null;
 
         #endregion
 

@@ -62,8 +62,7 @@ namespace Model.Types
         #endregion
 
         #region Hidden Code
-        [Hidden]
-        public string HiddenCode => HiddenCodeFile is null ?  Project.CommonHiddenCode :HiddenCodeFile.ContentsAsString();
+        internal string HiddenCode => HiddenCodeFile is null ?  Project.CommonHiddenCode :HiddenCodeFile.ContentsAsString();
 
         [Hidden]
         public int? HiddenCodeFileId { get; init; }
@@ -74,8 +73,7 @@ namespace Model.Types
         #endregion
 
         #region Tests
-        [Hidden]
-        public string Tests => TestsFile is null ? Project.CommonTests : TestsFile.ContentsAsString();
+        internal string Tests => TestsFile is null ? Project.CommonTests : TestsFile.ContentsAsString();
 
         [Hidden]
         public bool HasTests => Tests is not null;
@@ -88,26 +86,42 @@ namespace Model.Types
         public virtual File TestsFile { get; init; }
         #endregion
 
+        //Normally false. Set true for ARMlite or other Tasks where tests are written in JavaScript to run on client.
+        [MemberOrder(91)]
+        public bool TestsRunOnClient { get; init; }
+
         #region Wrapper
 
-        [Hidden]
-        public string Wrapper => Project.Wrapper;
-
-        #endregion
-
-        #region Helpers
+        internal string Wrapper => WrapperFileId == null ? Project.Wrapper : WrapperFile.ContentsAsString();
 
         [Hidden]
-        public string Helpers => Project.Helpers;
+        public int? WrapperFileId { get; init; }
+
+        [MemberOrder(100)]
+        [Named("Task specific Wrapper Code")]
+        public virtual File WrapperFile { get; init; }
 
         #endregion
-
         #region RegExRules
 
+        internal string RegExRules => RegExRulesFileId == null ? Project.RegExRules : RegExRulesFile.ContentsAsString();
+
         [Hidden]
-        public string RegExRules => Project.RegExRules;
+        public int? RegExRulesFileId { get; init; }
+
+        [MemberOrder(110)]
+        [Named("Task specific RegEx Rules")]
+        public virtual File RegExRulesFile { get; init; }
 
         #endregion
+
+
+        #region Helpers
+        //Helpers should be generic
+        internal string Helpers => Project.Helpers;
+
+        #endregion
+
 
         [Hidden]
         public int? PreviousTaskId { get; init; }
