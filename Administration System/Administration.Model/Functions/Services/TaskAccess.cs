@@ -109,9 +109,12 @@ public static class TaskAccess
            task.HasTests(),
            asgn.Id,
            IsStarted(task.NextTaskId, context),
-           CanPaste(context)
+           CanPaste(context),
+           ClientRunTestCodeIfAny(task)
            );
     }
+
+    private static string ClientRunTestCodeIfAny(Task task) => task.TestsRunOnClient ? task.TestsFile.ContentsAsString() : null;
 
     internal static bool CanPaste(IContext context) => Users.UserRole(context) >= Role.Teacher;
          
