@@ -19,6 +19,11 @@ namespace Model.Types
             HiddenCodeFile = cloneFrom.HiddenCodeFile;
             TestsFileId = cloneFrom.TestsFileId;
             TestsFile = cloneFrom.TestsFile;
+            TestsRunOnClient = cloneFrom.TestsRunOnClient;
+            WrapperFileId = cloneFrom.WrapperFileId;
+            WrapperFile = cloneFrom.WrapperFile;
+            RegExRulesFileId = cloneFrom.RegExRulesFileId;
+            RegExRulesFile = cloneFrom.RegExRulesFile;
             PreviousTaskId = cloneFrom.PreviousTaskId;
             PreviousTask = cloneFrom.PreviousTask;
             NextTaskId = cloneFrom.NextTaskId;

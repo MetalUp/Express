@@ -18,6 +18,10 @@
             CommonHiddenCodeFile = cloneFrom.CommonHiddenCodeFile;
             CommonTestsFileId = cloneFrom.CommonTestsFileId;
             CommonTestsFile = cloneFrom.CommonTestsFile;    
+            WrapperFileId = cloneFrom.WrapperFileId;
+            WrapperFile = cloneFrom.WrapperFile;
+            RegExRulesFileId = cloneFrom.RegExRulesFileId;
+            RegExRulesFile = cloneFrom.RegExRulesFile;
             Tasks = new List<Task>(cloneFrom.Tasks);
         }
 
