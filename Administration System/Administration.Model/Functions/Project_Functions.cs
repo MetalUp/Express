@@ -134,7 +134,7 @@ namespace Model.Functions
             file.ValidateContentType(ContentType.HiddenCode);
 
 
-        public static bool HideAddCommonHiddenCode(this Project proj) => proj.CommonHiddenCodeFileId != null; 
+        public static bool HideAddCommonHiddenCode(this Project proj) => proj.CommonHiddenCodeFileId != null;
 
         [MemberOrder(31)]
         public static IContext ClearCommonHiddenCode(
@@ -169,7 +169,7 @@ namespace Model.Functions
                 file.ValidateContentType(ContentType.Tests);
 
 
-        public static bool HideAddCommonTests(this Project proj) => proj.CommonTestsFileId != null; 
+        public static bool HideAddCommonTests(this Project proj) => proj.CommonTestsFileId != null;
 
         [MemberOrder(41)]
         public static IContext ClearCommonTests(
@@ -199,11 +199,11 @@ namespace Model.Functions
                         WrapperFile = file,
                     });
 
-
-        public static string ValidateAddCustomWrapperCode(
-            this Project proj,
-            File file) =>
-            file.ValidateContentType(ContentType.WrapperCode);
+        public static IEnumerable<File> Choices1AddCustomWrapperCode(this Project proj, IContext context)
+        {
+            string langId = proj.LanguageId;
+            return context.Instances<File>().Where(f => f.ContentType == ContentType.WrapperCode && f.LanguageId == langId);
+        }
 
         public static bool HideAddCustomWrapperCode(this Project proj) => proj.WrapperFileId != null;
 
@@ -218,7 +218,7 @@ namespace Model.Functions
                     WrapperFile = null,
                 });
 
-        public static bool HideClearCustomWrapperCode(this Project proj) =>  proj.WrapperFileId == null;
+        public static bool HideClearCustomWrapperCode(this Project proj) => proj.WrapperFileId == null;
 
         #endregion
 
@@ -236,10 +236,12 @@ namespace Model.Functions
                         RegExRulesFile = file,
                     });
 
-        public static string ValidateAddCustomRegExRules(
-            this Project proj,
-            File file) =>
-                file.ValidateContentType(ContentType.RegExRules);
+        public static IEnumerable<File> Choices1AddCustomRegExRules(this Project proj, IContext context)
+        {
+            string langId = proj.LanguageId;
+            return context.Instances<File>().Where(f => f.ContentType == ContentType.RegExRules && f.LanguageId == langId);
+        }
+
 
         public static bool HideAddCustomRegExRules(this Project proj) => proj.RegExRulesFileId != null;
 
@@ -254,7 +256,7 @@ namespace Model.Functions
                     RegExRulesFile = null,
                 });
 
-        public static bool HideClearCustomRegExRules(this Project proj) =>  proj.RegExRulesFileId == null;
+        public static bool HideClearCustomRegExRules(this Project proj) => proj.RegExRulesFileId == null;
 
         #endregion
 

@@ -220,10 +220,11 @@
                                 WrapperFile = file,
                             });
 
-        public static string ValidateAddTaskSpecificWrapperCode(
-            this Task task,
-            File file) =>
-                file.ValidateContentType(ContentType.WrapperCode);
+        public static IEnumerable<File> Choices1AddTaskSpecificWrapperCode(this Task task, IContext context)
+        {
+            string langId = task.Project.LanguageId;
+            return context.Instances<File>().Where(f => f.ContentType == ContentType.WrapperCode && f.LanguageId == langId);
+        }
 
         public static bool HideAddTaskSpecificWrapperCode(this Task task) => task.WrapperFileId != null;
 
@@ -251,10 +252,11 @@
                                 RegExRulesFile = file,
                             });
 
-        public static string ValidateAddTaskSpecificRegExRules(
-            this Task task,
-            File file) =>
-                file.ValidateContentType(ContentType.RegExRules);
+        public static IEnumerable<File> Choices1AddTaskSpecificRegExRuless(this Task task, IContext context)
+        {
+            string langId = task.Project.LanguageId;
+            return context.Instances<File>().Where(f => f.ContentType == ContentType.RegExRules && f.LanguageId == langId);
+        }
 
         public static bool HideAddTaskSpecificRegExRules(this Task task) => task.RegExRulesFileId != null;
 

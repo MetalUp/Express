@@ -50,8 +50,8 @@
         public virtual Language Language { get; init; }
 
         #region Common Hidden Code
-        [Hidden]
-        public string CommonHiddenCode => CommonHiddenCodeFile?.ContentsAsString();
+        internal string CommonHiddenCode => CommonHiddenCodeFile?.ContentsAsString();
+
         [Hidden]
         public int? CommonHiddenCodeFileId { get; init; }
 
@@ -61,8 +61,7 @@
         #endregion
 
         #region CommonTests
-        [Hidden]
-        public string CommonTests => CommonTestsFile?.ContentsAsString();
+       internal string CommonTests => CommonTestsFile?.ContentsAsString();
 
         [Hidden]
         public int? CommonTestsFileId { get; init; }
@@ -74,8 +73,7 @@
 
         #region Wrapper
 
-        [Hidden]
-        public string Wrapper => WrapperFileId == null ? Language.Wrapper : WrapperFile.ContentsAsString();
+        internal string Wrapper => WrapperFileId == null ? Language.Wrapper : WrapperFile.ContentsAsString();
 
         [Hidden]
         public int? WrapperFileId { get; init; }
