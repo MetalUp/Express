@@ -7,7 +7,8 @@ import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { CompileServerService } from '../services/compile-server.service';
 import { EmptyCodeUserView, ICodeUserView } from '../models/code-user-view';
-import { nextCodeEnabledTooltip, nextCodeDisabledTooltip, previousCodeEnabledTooltip, previousCodeDisabledTooltip, submitCodeEnabledTooltip, submitCodeDisabledTooltip } from '../constants/tooltips';
+import { nextCodeEnabledTooltip, nextCodeDisabledTooltip, previousCodeEnabledTooltip, previousCodeDisabledTooltip, submitCodeEnabledTooltip, submitCodeDisabledTooltip, runAppEnabledTooltip, runAppDisabledTooltip } from '../constants/tooltips';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-code-definition',
@@ -50,7 +51,11 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   }
 
   get submitCodeTooltip() {
-    return  this.pendingSubmit ?  submitCodeEnabledTooltip : submitCodeDisabledTooltip;
+    return this.pendingSubmit ? submitCodeEnabledTooltip : submitCodeDisabledTooltip;
+  }
+
+  get RunAppTooltip() {
+    return this.canRunApp ? runAppEnabledTooltip : runAppDisabledTooltip;
   }
 
   get currentStatus() {
@@ -87,6 +92,19 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     }
   }
 
+  get displayRunApp() {
+    return this.compileServer.selectedLanguage === "arm";
+  }
+
+  get canRunApp() {
+    return this.compiledOK;
+  }
+
+  onRunApp() {
+    const code = encodeURIComponent(this.codeDefinitions);
+    window.open(`http://armlite.metalup.org?${code}`, '_blank');
+  }
+
   onSubmit() {
     this.compiledOK = false;
     this.pendingSubmit = false;
@@ -94,12 +112,6 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     if (!this.validationFail) {
       this.compileServer.submitCode(this.taskId, this.codeDefinitions).pipe(first()).subscribe(rr => {
         this.result = rr;
-        // if (rr.formattedsource) {
-        //   const el = document.createElement("div");
-        //   el.innerHTML = rr.formattedsource;
-        //   this.codeDefinitions = el.innerText.replace(/\\n/g, '\r\n');
-        // }
-
         this.compiledOK = !(this.result.cmpinfo || this.result.stderr) && this.result.outcome == 15;
         if (this.compiledOK) {
           this.compileServer.setUserDefinedCode(this.codeDefinitions);
