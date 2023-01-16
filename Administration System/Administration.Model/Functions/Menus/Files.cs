@@ -7,6 +7,11 @@ namespace Model.Functions.Menus
     {
         public static IQueryable<File> AllFiles(IContext context) => context.Instances<File>();
 
+        public static IQueryable<File> ListFiles([Optionally] Language? language, [Optionally] ContentType? contentType, IContext context)
+        {
+            string langId = language?.LanguageID;
+            return context.Instances<File>().Where(f => (langId == null || f.LanguageId == langId) && (contentType == null || f.ContentType == contentType));
+        }
         public static File FindFile(File fileName, IContext context) => fileName;
 
         public static IQueryable<File> AutoComplete0FindFile(string partialName, IContext context) =>
