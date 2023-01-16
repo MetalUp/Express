@@ -50,5 +50,6 @@ namespace Model.Types
         public virtual User Author { get; init; }
 
         public override string ToString() => $"{Name} {ContentType} {Language}";
-   
-} 
+
+    }
+}
