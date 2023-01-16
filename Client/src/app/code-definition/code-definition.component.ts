@@ -102,7 +102,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   onRunApp() {
     const code = encodeURIComponent(this.codeDefinitions);
-    window.open(`http://armlite.metalup.org?${code}`, '_blank');
+    window.open(`http://armlite.metalup.org?run=${code}`, '_blank');
   }
 
   onSubmit() {
