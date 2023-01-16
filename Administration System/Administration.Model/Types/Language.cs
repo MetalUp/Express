@@ -79,5 +79,5 @@ public class Language
 
     #endregion
 
-    public override string ToString() => $"{Name} {Version}";
+    public override string ToString() => $"{Name}";
 }

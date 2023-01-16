@@ -49,6 +49,6 @@ namespace Model.Types
         [MemberOrder(40)]
         public virtual User Author { get; init; }
 
-        public override string ToString() => Name;
-    }
-}
+        public override string ToString() => $"{Name} {ContentType} {Language}";
+   
+} 
