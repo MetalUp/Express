@@ -9,10 +9,22 @@ import { SubmitProgram } from 'armlite_service';
 import { ArmTestHelper } from '../models/arm-test-helper';
 import { ITaskUserView } from '../models/task-user-view';
 
+
+enum ActivityType {
+  submitCodeFail, 
+  submitCodeSuccess, 
+  runTestsFail,
+  runTestsSuccess,
+  hintUsed
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class CompileServerService {
+
+  
+
 
   constructor(taskService: TaskService, private repLoader: RepLoaderService, private contextService: ContextService) {
     taskService.currentTask.subscribe(t => {
@@ -83,6 +95,10 @@ export class CompileServerService {
     return this.compileServer!.actionMember("RunTests") as InvokableActionMember;
   }
 
+  get recordActivityAction() {
+    return this.compileServer!.actionMember("RecordCodeActivityWithoutCompiling") as InvokableActionMember;
+  }
+
   get urlParams() {
     return {} as Dictionary<Object>;
   }
@@ -94,6 +110,12 @@ export class CompileServerService {
       .pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
   }
 
+  private submitVoid(rr : RunResult, action: InvokableActionMember, params: Dictionary<Value>) {
+    return from(this.repLoader.invoke(action, params, this.urlParams)
+      .then(ar => rr)
+      .catch(e => rr));
+  }
+
   params(taskId: number, expression?: string, code?: string) {
     const dict = { "taskId": new Value(taskId) } as Dictionary<Value>;
     if (expression) {
@@ -103,21 +125,54 @@ export class CompileServerService {
     return dict;
   }
 
+  activityParams(taskId: number, type: ActivityType, code: string) {
+    const dict = {
+      "taskId": new Value(taskId),
+      "activityType": new Value(type),
+      "code": new Value(code)
+    } as Dictionary<Value>;
+
+    return dict;
+  }
+
   evaluateExpression(taskId: number, expression: string) {
     const action = this.evaluateExpressionAction;
     var params = this.params(taskId, expression);
     return this.submit(action, params);
   }
 
+  recordActivity(rr: RunResult,  taskId: number, code: string, type: ActivityType) {
+    const action = this.recordActivityAction;
+    var params = this.activityParams(taskId, type, code);
+    return this.submitVoid(rr, action, params);
+  }
+
+  private getCodeToSubmit(rr: RunResult, code: string) {
+    if (rr.formattedsource) {
+      const el = document.createElement("div");
+      el.innerHTML = rr.formattedsource;
+      return el.innerText.replace(/\\n/g, '\r\n');
+    }
+    return code;
+  }
+
+  submitARMCode(taskId: number, code: string) {
+
+    const rr = SubmitProgram(code) as RunResult;
+    if (rr.outcome === 15) {
+      rr.stdout = rr.cmpinfo;
+      rr.cmpinfo = "";
+      const codeToSubmit = this.getCodeToSubmit(rr, code);
+      return this.recordActivity(rr, taskId, codeToSubmit, ActivityType.submitCodeSuccess);
+    }
+    else {
+      return this.recordActivity(rr, taskId, code, ActivityType.submitCodeFail);
+    }
+  }
+
   submitCode(taskId: number, code: string) {
     if (this.selectedLanguage === "arm") {
-      const rr = SubmitProgram(code) as RunResult;
-      if (rr.outcome === 15) {
-        rr.stdout = rr.cmpinfo;
-        rr.cmpinfo = "";
-      }
-
-      return of(rr);
+      return this.submitARMCode(taskId, code);
     }
 
     const action = this.submitCodeAction;
@@ -125,32 +180,9 @@ export class CompileServerService {
     return this.submit(action, params);
   }
 
-  runArmTests() {
-    var rr = { ...EmptyRunResult };
-    var helper = new ArmTestHelper();
-
-    try {
-      ArmTestHelper.RunTests(helper);
-      rr.stdout = "all tests passed";
-      rr.outcome = 15;
-    }
-    catch (e) {
-      if (e instanceof Error) {
-        rr.stdout = e.message;
-      }
-      else {
-        rr.stderr = `unexpected error: ${e}`;
-      }
-      rr.outcome = 12;
-    }
-
-    return rr;
-  }
-
-
   runTests(taskId: number) {
     if (this.currentTask?.ClientRunTestCode) {
-      const rr = this.runArmTests() as RunResult;
+      const rr = ArmTestHelper.runTests(this.currentTask?.ClientRunTestCode) as RunResult;
 
       if (rr.outcome !== 15 && !rr.stderr) {
         rr.stderr = rr.stdout;
