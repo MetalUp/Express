@@ -49,7 +49,7 @@ export class ArmTestHelper {
     AssertRegister(number: number, expected: number) {
         var actual = this.GetRegister(number);
         if (actual != expected)
-            throw new TestError(`${expected}: Expected ${expected} Actual: ${actual}`);
+            throw new TestError(`Expected: ${expected} Actual: ${actual}`);
     }
 
     AssertMemory(address: number, expected: number) {

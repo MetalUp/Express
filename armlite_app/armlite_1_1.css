@@ -13,7 +13,7 @@
      --width4: 600px;
      --widthMem: 410px;
      --widthRegister: 120px;
-     --color1:  rgb(68, 114, 196);
+     --color1:  #1f1100;
      --pixelSize: 5px;
      --charSize: 10px;
      --charFontSize: 14px;
@@ -94,8 +94,11 @@ body.profile-player {
     background-color: white;
 }
 
+button {
+    background-color: #E37422;
+}
 .value.highlighted {
-    background-color: orange;
+    background-color: #E37422;
 }
 
 #program {
@@ -190,16 +193,16 @@ body.profile-player {
 }
 
 #source .current, .word.current {
-    background-color: orange;
+    background-color: #E37422;
 }
 
 #source .breakpoint .line {
-    background-color: red;
+    background-color: #B22516;
     color: black;
 }
 
 #source .error {
-    background-color: pink;
+    background-color: B22516;
 }
 
 #source textarea {
