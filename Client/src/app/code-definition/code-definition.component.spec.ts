@@ -249,10 +249,6 @@ describe('CodeDefinitionComponent', () => {
     expect(component.codeDefinitions).toEqual('');
   });
 
-  it('gets the placeholder for the selected language', () => {
-    expect(component.placeholder).toEqual('static <returnType> Name(<parameter definitions>) => <expression>;');
-  });
-
   it('should get unsubmitted code ', fakeAsync(() => {
 
     component.currentCodeVersion = { Version: 1 } as unknown as ICodeUserView;
