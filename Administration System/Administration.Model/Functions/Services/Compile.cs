@@ -95,6 +95,12 @@ public static class Compile
         return (result, context2);
     }
 
+    //Intended to be called by client when code is handled locally (e.g. ARMlite)
+    public static void RecordCodeActivityWithoutCompiling(int taskId, ActivityType activityType, string code, IContext context) =>
+        Activities.RecordActivity(taskId, activityType, code, null, null, context);
+
+
+
     public static (RunResult, IContext) RunTests(int taskId, string code, IContext context)
     {
         (var result, var context2) = Execute(WrapCode(context, taskId, code, true), $"{compileServer}/tests", context);

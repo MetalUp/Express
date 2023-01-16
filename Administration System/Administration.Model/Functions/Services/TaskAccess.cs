@@ -165,8 +165,7 @@ public static class TaskAccess
         }
         else
         {
-            var act = new Activity(asgn.Id, task.Id, ActivityType.HintUsed, hintNo, null, null, context);
-            return context.WithNew(act);
+            return Activities.RecordActivity(task.Id, ActivityType.HintUsed,  null, null, hintNo, context); 
         }
     }
 

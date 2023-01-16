@@ -45,7 +45,7 @@
             }
         }
 
-        private static IContext RecordActivity(int taskId, ActivityType type, string code, string message, int? hintUsed, IContext context)
+        internal static IContext RecordActivity(int taskId, ActivityType type, string code, string message, int? hintUsed, IContext context)
         {
             var aId = Assignments.GetAssignmentForCurrentUser(taskId, context).Id;
             var act = new Activity()

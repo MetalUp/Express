@@ -15,7 +15,7 @@ public class TaskUserView
         NextTaskIsStarted = nextTaskIsStarted;
         PasteExpression = canPaste;
         PasteCode = canPaste;
-        TestsRunLocally = ClientRunTestCode != null;
+        TestsRunLocally = javaScriptTestCode != null;
         ClientRunTestCode = javaScriptTestCode;
     }
 
