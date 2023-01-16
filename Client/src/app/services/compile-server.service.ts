@@ -148,11 +148,11 @@ export class CompileServerService {
   }
 
   private getCodeToSubmit(rr: RunResult, code: string) {
-    // if (rr.formattedsource) {
-    //   const el = document.createElement("div");
-    //   el.innerHTML = rr.formattedsource;
-    //   return el.innerText.replace(/\\n/g, '\r\n');
-    // }
+    if (rr.formattedsource) {
+      const el = document.createElement("div");
+      el.innerHTML = rr.formattedsource;
+      return el.innerText.replace(/\xa0/g, ' ').replace(/(\s*\d+\|)/g, '\n$1');
+    }
     return code;
   }
 
