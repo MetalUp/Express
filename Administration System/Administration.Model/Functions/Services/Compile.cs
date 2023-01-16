@@ -96,7 +96,7 @@ public static class Compile
     }
 
     //Intended to be called by client when code is handled locally (e.g. ARMlite)
-    public static void RecordCodeActivityWithoutCompiling(int taskId, ActivityType activityType, string code, IContext context) =>
+    public static IContext RecordCodeActivityWithoutCompiling(int taskId, ActivityType activityType, string code, IContext context) =>
         Activities.RecordActivity(taskId, activityType, code, null, null, context);
 
 
