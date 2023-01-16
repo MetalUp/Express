@@ -518,7 +518,7 @@ export function SubmitProgram(codeString)	// SubmitProgram(code : string) : RunR
 		RunResult.outcome = 15;
 		RunResult.cmpinfo = "Assembled "+byteCount+" bytes OK";
 	} else {
-		RunResult.outcome = 11;
+		RunResult.outcome = 11;		// note errorLineNum set if we need to return it
 		RunResult.cmpinfo = lastMessage;
 	}
 	return RunResult;
@@ -3213,7 +3213,7 @@ function outputNum(y,mode)
 			}
 			++y;
 		}
-		justConsole();		// does not matter if called when nothing output due to error
+		if (!serviceMode) justConsole();		// does not matter if called when nothing output due to error
 		return;
 	}
 	// Now output1 is the last line of the scrolling output
@@ -3277,7 +3277,7 @@ function outputNum(y,mode)
 	}
 
 	// after the project restart these messages go to the console area not the charmap
-	justConsole();
+	if (!serviceMode) justConsole();
 	//setValue("console",output1);
 }
 

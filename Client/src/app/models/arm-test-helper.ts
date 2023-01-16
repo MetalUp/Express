@@ -1,23 +1,29 @@
 import { Run, GetRegister, GetMemory } from 'armlite_service';
-import { RunResult } from './run-result';
+import { EmptyRunResult, RunResult } from './run-result';
 
 export class ArmTestHelper {
 
-    // static TestTests(helper: ArmTestHelper) {
-    //     //This assumes that it can only be called once the code has been submitted to ARMliteServer and assembled OK
-    //     helper.Run(1); //specifies number of steps
-    //     helper.AssertRegister(0, 114); //Can use helpers to reduce duplication here
-    //     helper.Run(1); //specifies number of steps
-    //     helper.AssertRegister(0, 75); //Can use helpers to reduce duplication here
-    //     helper.Run(1); //specifies number of steps
-    //     helper.AssertMemory(2000, 75); //Can use helpers to reduce duplication here
-    // }
+    static runTests(testCode: string) {
+        var rr = { ...EmptyRunResult };
+        var helper = new ArmTestHelper();
+    
+        try {
+            const runTestsFunction = new Function('helper', testCode);
+            runTestsFunction(helper);
+            rr.stdout = "all tests passed";
+            rr.outcome = 15;
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                rr.stdout = e.message;
+            }
+            else {
+                rr.stderr = `unexpected error: ${e}`;
+            }
+            rr.outcome = 12;
+        }
 
-    static RunTests(helper: ArmTestHelper) {
-        const tests = "helper.Run(1);"
-        const runTestsFunction = new Function('helper', tests);
-
-        runTestsFunction(helper);
+        return rr;
     }
 
     Run(maxSteps: number) {
