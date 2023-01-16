@@ -5,22 +5,33 @@ namespace Model.Functions.Menus
 {
     public static class Files
     {
+        [MemberOrder(10)]
         public static IQueryable<File> AllFiles(IContext context) => context.Instances<File>();
 
+        [MemberOrder(20)]
         public static IQueryable<File> ListFiles([Optionally] Language? language, [Optionally] ContentType? contentType, IContext context)
         {
             string langId = language?.LanguageID;
-            return context.Instances<File>().Where(f => (langId == null || f.LanguageId == langId) && (contentType == null || f.ContentType == contentType));
+            return context.Instances<File>().Where(f => (langId == null || f.LanguageId == langId) && (contentType == null || f.ContentType == contentType))
+                .OrderBy(f => f.Name);
         }
+
+        [MemberOrder(30)]
         public static File FindFile(File fileName, IContext context) => fileName;
 
         public static IQueryable<File> AutoComplete0FindFile(string partialName, IContext context) =>
-            context.Instances<File>().Where(f => f.Name.ToUpper().Contains(partialName.ToUpper()));
+    context.Instances<File>().Where(f => f.Name.ToUpper().Contains(partialName.ToUpper()));
 
+        [MemberOrder(40)]
+        public static IQueryable<File> FindFiles(string name, IContext context) =>
+            context.Instances<File>().Where(f => f.Name.ToUpper().Contains(name.ToUpper()));
+
+        [MemberOrder(50)]
         [CreateNew]
         public static (File, IContext) CreateNewFileFromExtFile(FileAttachment extFile, IContext context) =>
             CreateNewFile(extFile.Name, extFile.MimeType, extFile.GetResourceAsByteArray(), context);
 
+        [MemberOrder(60)]
         [CreateNew]
         public static (File, IContext) CreateNewFileAsString(string name, string mimeType, [MultiLine(20)] string content, IContext context) =>
             CreateNewFile(name, mimeType, content.AsByteArray(), context);
@@ -40,7 +51,5 @@ namespace Model.Functions.Menus
             };
             return (f, context.WithNew(f));
         }
-
-
     }
 }
