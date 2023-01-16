@@ -94,6 +94,9 @@ body.profile-player {
     background-color: white;
 }
 
+button {
+    background-color: #E37422;
+}
 .value.highlighted {
     background-color: #E37422;
 }
