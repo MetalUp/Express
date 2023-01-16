@@ -13,11 +13,17 @@ export interface ITaskUserView {
     Code?: string;
     HasTests: boolean;
     AssignmentId: number;
+    ClientRunTestCode: string;
+    TestRunLocally: boolean;
 }
 
 export class TaskUserView implements ITaskUserView {
   
     constructor(public Id: number) {}
+    PreviousTaskId?: number | undefined;
+    NextTaskId?: number | undefined;
+    ClientRunTestCode = "";
+    TestRunLocally = false;
     Completed = false;
     NextTaskIsStarted = false;
     Title = "";

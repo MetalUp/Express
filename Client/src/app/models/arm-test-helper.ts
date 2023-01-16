@@ -3,15 +3,21 @@ import { RunResult } from './run-result';
 
 export class ArmTestHelper {
 
-    // temp
+    // static TestTests(helper: ArmTestHelper) {
+    //     //This assumes that it can only be called once the code has been submitted to ARMliteServer and assembled OK
+    //     helper.Run(1); //specifies number of steps
+    //     helper.AssertRegister(0, 114); //Can use helpers to reduce duplication here
+    //     helper.Run(1); //specifies number of steps
+    //     helper.AssertRegister(0, 75); //Can use helpers to reduce duplication here
+    //     helper.Run(1); //specifies number of steps
+    //     helper.AssertMemory(2000, 75); //Can use helpers to reduce duplication here
+    // }
+
     static RunTests(helper: ArmTestHelper) {
-        //This assumes that it can only be called once the code has been submitted to ARMliteServer and assembled OK
-        helper.Run(1); //specifies number of steps
-        helper.AssertRegister(0, 114); //Can use helpers to reduce duplication here
-        helper.Run(1); //specifies number of steps
-        helper.AssertRegister(0, 75); //Can use helpers to reduce duplication here
-        helper.Run(1); //specifies number of steps
-        helper.AssertMemory(2000, 75); //Can use helpers to reduce duplication here
+        const tests = "helper.Run(1);"
+        const runTestsFunction = new Function('helper', tests);
+
+        runTestsFunction(helper);
     }
 
     Run(maxSteps: number) {
