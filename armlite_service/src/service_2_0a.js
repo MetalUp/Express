@@ -128,18 +128,6 @@ var saveSeq = 0;
 var autoRun = 0;		// flag for URL options to load/submit/run
 var serviceMode = true;	// false to get direct I/O
 
-/**
- * @typedef {Object} RunResult 
- * @property {string} run_id 
- * @property {number} outcome 
- * @property {string} cmpinfo 
- * @property {string} formattedsource 
- * @property {string} stdout 
- * @property {string} stderr 
- * @property {string} progout 
- */
-
-
 /* export interface RunResult {
     run_id: string, //Unused by ARMlite, so always set an empty string
     outcome: number, //A standard integer code - see below - unique to 
@@ -157,7 +145,6 @@ var serviceMode = true;	// false to get direct I/O
 }
 object.property or object["property"] */
 
-/** @type {RunResult} */
 var RunResult = {};
 
 // Reduce the number of Events logged (new logging system Nov 2022)
@@ -501,11 +488,7 @@ function textToHtml()
 }
 
 // First API for ARMlite Service
-/**
- * @param {string}  codeString - A string param.
- * @return {RunResult} This is the result
- */
-export function SubmitProgram(codeString)	// SubmitProgram(code : string) : RunResult
+function SubmitProgram(codeString)	// SubmitProgram(code : string) : RunResult
 {
 	programText = codeString;
 	textToHtml();
@@ -519,7 +502,7 @@ export function SubmitProgram(codeString)	// SubmitProgram(code : string) : RunR
 		RunResult.outcome = 15;
 		RunResult.cmpinfo = "Assembled "+byteCount+" bytes OK";
 	} else {
-		RunResult.outcome = 11;
+		RunResult.outcome = 11;		// note errorLineNum set if we need to return it
 		RunResult.cmpinfo = lastMessage;
 	}
 	return RunResult;
@@ -1826,11 +1809,7 @@ function setAddress(x, y)
 	updateDisplayedMemory(x, y);
 }
 
-/**
- * @param {number} maxSteps
- * @return {RunResult}
- */
-export function Run(maxSteps)		// Service interface
+function Run(maxSteps)		// Service interface
 {
 	// use the single step code so we can count
 	dontDisplay = 1;	// so selects fast path options
@@ -1973,11 +1952,7 @@ function doInterrupt()			// normally will change PC (but may leave alone if inte
 	if (xTime && (xTime < Date.now())) doClockInt();	
 }
 
-
-/**
- * @return {RunResult}
- */
-export function Reset()	// interface Reset call
+function Reset()	// interface Reset call
 {
 	running = false;
 	noKeyEffects = false;
@@ -1995,10 +1970,7 @@ export function Reset()	// interface Reset call
 	return RunResult;
 }
 
-/**
- * @return {RunResult>}
- */
-export function ClearSystem()
+function ClearSystem()
 {
 	// clear all the memory
 	for (var i=0; i<maxUsableMem; i+=4) {
@@ -2009,11 +1981,8 @@ export function ClearSystem()
 	textToHtml();		// better than setting all the resets
 	return Reset();
 }
-/**
- * @param {number} n
- * @return {number}
- */
-export function GetRegister(n)
+
+function GetRegister(n)
 {
 	if (n >=0 && n <15) return register[n];
 	if (n == 15) return pCounter;
@@ -2021,43 +1990,28 @@ export function GetRegister(n)
 }
 
 // flags	// N Z C V
-/**
- * @return {boolean}
- */
-export function GetN()
+function GetN()
 {
 	if (flags&8) return true;
 	return false;
 }
-/**
- * @return {boolean}
- */
-export function GetZ()
+function GetZ()
 {
 	if (flags&4) return true;
 	return false;
 }
-/**
- * @return {boolean}
- */
-export function GetC()
+function GetC()
 {
 	if (flags&2) return true;
 	return false;
 }
-/**
- * @return {boolean}
- */
-export function GetV()
+function GetV()
 {
 	if (flags&1) return true;
 	return false;
 }
-/**
- * @param {number} loc
- * @return {number}
- */
-export function GetMemory(loc)
+
+function GetMemory(loc)
 {
 	// note might extend to lowLim later
 	// lowLim = vaddressBase-0x100000000;
@@ -2071,11 +2025,7 @@ export function GetMemory(loc)
 // var v2address = [];						// char map and low-res pixel memory
 
 // GetPixel(n) gives you what LDR Rd,n would give you (and this is a copy of that code!!)
-/**
- * @param {number} addr
- * @return {number}
- */
-export function GetPixel(addr)
+function GetPixel(addr)
 {
 	// assume given a 32 bit unsigned address
 	if (addr < (pixelBase+4*pixelAreaSize) && addr >= pixelBase) // is pixel memory in I/O area
@@ -2106,10 +2056,7 @@ function GetCharScreen()
 	return charBase;
 }
 
-/**
- * @return {string}
- */
-export function GetConsoleOutput()
+function GetConsoleOutput()
 {
 	return output1;
 }
@@ -3214,7 +3161,7 @@ function outputNum(y,mode)
 			}
 			++y;
 		}
-		justConsole();		// does not matter if called when nothing output due to error
+		if (!serviceMode) justConsole();		// does not matter if called when nothing output due to error
 		return;
 	}
 	// Now output1 is the last line of the scrolling output
@@ -3278,7 +3225,7 @@ function outputNum(y,mode)
 	}
 
 	// after the project restart these messages go to the console area not the charmap
-	justConsole();
+	if (!serviceMode) justConsole();
 	//setValue("console",output1);
 }
 
