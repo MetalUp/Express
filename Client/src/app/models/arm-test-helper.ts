@@ -1,6 +1,13 @@
 import { Run, GetRegister, GetMemory } from 'armlite_service';
 import { EmptyRunResult, RunResult } from './run-result';
 
+class TestError extends Error {
+    constructor(message : string) {
+        super(message);
+    }
+}
+
+
 export class ArmTestHelper {
 
     static runTests(testCode: string) {
@@ -11,18 +18,19 @@ export class ArmTestHelper {
             const runTestsFunction = new Function('helper', testCode);
             runTestsFunction(helper);
             rr.stdout = "all tests passed";
-            rr.outcome = 15;
         }
         catch (e) {
-            if (e instanceof Error) {
+            if (e instanceof TestError) {
                 rr.stdout = e.message;
+            }
+            else if (e instanceof Error) {
+                rr.stderr = `unexpected error: ${e.message}`;
             }
             else {
                 rr.stderr = `unexpected error: ${e}`;
             }
-            rr.outcome = 12;
         }
-
+        rr.outcome = rr.stderr ? 12 : 15;
         return rr;
     }
 
@@ -41,13 +49,13 @@ export class ArmTestHelper {
     AssertRegister(number: number, expected: number) {
         var actual = this.GetRegister(number);
         if (actual != expected)
-            throw new Error(`${expected}: Expected ${expected} Actual: ${actual}`);
+            throw new TestError(`${expected}: Expected ${expected} Actual: ${actual}`);
     }
 
     AssertMemory(address: number, expected: number) {
         var actual = this.GetMemory(address);
         if (actual != expected)
-            throw new Error(`Memory address ${address}: Expected ${expected} Actual ${actual}`);
+            throw new TestError(`Memory address ${address}: Expected ${expected} Actual ${actual}`);
     }
 
 }

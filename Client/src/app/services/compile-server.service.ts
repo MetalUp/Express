@@ -180,15 +180,14 @@ export class CompileServerService {
     return this.submit(action, params);
   }
 
+  runLocalTests(taskId: number) {
+    const rr = ArmTestHelper.runTests(this.currentTask?.ClientRunTestCode!) as RunResult;
+    return this.recordActivity(rr, taskId, this.userDefinedCode, rr.outcome === 15 ? ActivityType.runTestsSuccess : ActivityType.runTestsFail);
+  }
+
   runTests(taskId: number) {
-    if (this.currentTask?.ClientRunTestCode) {
-      const rr = ArmTestHelper.runTests(this.currentTask?.ClientRunTestCode) as RunResult;
-
-      if (rr.outcome !== 15 && !rr.stderr) {
-        rr.stderr = rr.stdout;
-      }
-
-      return of(rr);
+    if (this.currentTask?.TestsRunLocally) {
+      return this.runLocalTests(taskId);
     }
 
     const action = this.runTestsAction;

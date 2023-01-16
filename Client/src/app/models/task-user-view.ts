@@ -14,7 +14,7 @@ export interface ITaskUserView {
     HasTests: boolean;
     AssignmentId: number;
     ClientRunTestCode: string;
-    TestRunLocally: boolean;
+    TestsRunLocally: boolean;
 }
 
 export class TaskUserView implements ITaskUserView {
@@ -23,7 +23,7 @@ export class TaskUserView implements ITaskUserView {
     PreviousTaskId?: number | undefined;
     NextTaskId?: number | undefined;
     ClientRunTestCode = "";
-    TestRunLocally = false;
+    TestsRunLocally = false;
     Completed = false;
     NextTaskIsStarted = false;
     Title = "";
