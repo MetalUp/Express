@@ -44,6 +44,9 @@ export const nextCodeDisabledTooltip = "No next version to view";
 export const submitCodeEnabledTooltip = "Submit code to compile";
 export const submitCodeDisabledTooltip = "Enter or edit code to submit again";
 
+export const runAppEnabledTooltip = "Click to run app with code";
+export const runAppDisabledTooltip = "No compiled code to run";
+
 // Hints pane
 
 // previous Hint arrow 
