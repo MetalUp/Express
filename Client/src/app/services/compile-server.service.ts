@@ -7,6 +7,7 @@ import { TaskService } from './task.service';
 import { Dictionary } from 'lodash';
 import { SubmitProgram } from 'armlite_service';
 import { ArmTestHelper } from '../models/arm-test-helper';
+import { ITaskUserView } from '../models/task-user-view';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class CompileServerService {
 
   constructor(taskService: TaskService, private repLoader: RepLoaderService, private contextService: ContextService) {
     taskService.currentTask.subscribe(t => {
+      this.currentTask = t;
       this.selectedLanguage = t.Language;
     })
 
@@ -33,6 +35,8 @@ export class CompileServerService {
       }
 
   private compileServer? : DomainObjectRepresentation;
+
+  private currentTask? : ITaskUserView;
 
   selectedLanguage: string = '';
 
@@ -107,7 +111,13 @@ export class CompileServerService {
 
   submitCode(taskId: number, code: string) {
     if (this.selectedLanguage === "arm") {
-      return of(SubmitProgram(code) as RunResult);
+      const rr = SubmitProgram(code) as RunResult;
+      if (rr.outcome === 15) {
+        rr.stdout = rr.cmpinfo;
+        rr.cmpinfo = "";
+      }
+
+      return of(rr);
     }
 
     const action = this.submitCodeAction;
@@ -131,6 +141,7 @@ export class CompileServerService {
       else {
         rr.stderr = `unexpected error: ${e}`;
       }
+      rr.outcome = 12;
     }
 
     return rr;
@@ -138,8 +149,14 @@ export class CompileServerService {
 
 
   runTests(taskId: number) {
-    if (this.selectedLanguage === "arm") {
-      return of(this.runArmTests() as RunResult);
+    if (this.currentTask?.ClientRunTestCode) {
+      const rr = this.runArmTests() as RunResult;
+
+      if (rr.outcome !== 15 && !rr.stderr) {
+        rr.stderr = rr.stdout;
+      }
+
+      return of(rr);
     }
 
     const action = this.runTestsAction;
