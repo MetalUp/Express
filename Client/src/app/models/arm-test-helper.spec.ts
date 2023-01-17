@@ -161,4 +161,15 @@ describe('ArmTestHelper', () => {
             expect(e.message).toBe("Line of code: MOV R0, #1 should not contain MOV")
         }
     });
+
+    it('should throw if out of range', () => {
+        const ath = new ArmTestHelper(testInstruction);
+        try {
+            ath.AssertCodeContains("MOV", 1);
+            fail(); // expect exception
+        }
+        catch (e : any) {
+            expect(e.message).toBe("No code at offset 1 code length: 1")
+        }
+    });
 })
