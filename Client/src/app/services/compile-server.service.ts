@@ -151,7 +151,7 @@ export class CompileServerService {
     if (rr.formattedsource) {
       const el = document.createElement("div");
       el.innerHTML = rr.formattedsource;
-      return el.innerText.replace(/\xa0/g, ' ').replace(/(\s*\d+\|)/g, '\n$1');
+      return el.innerText.replace(/\xa0/g, ' ').replace(/(\s*\d+\|)/g, '\n$1').replace(/\n/, ''); // replace nbsp and add line breaks before each line except first
     }
     return code;
   }

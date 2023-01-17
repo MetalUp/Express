@@ -8,7 +8,6 @@ import { first } from 'rxjs/operators';
 import { CompileServerService } from '../services/compile-server.service';
 import { EmptyCodeUserView, ICodeUserView } from '../models/code-user-view';
 import { nextCodeEnabledTooltip, nextCodeDisabledTooltip, previousCodeEnabledTooltip, previousCodeDisabledTooltip, submitCodeEnabledTooltip, submitCodeDisabledTooltip, runAppEnabledTooltip, runAppDisabledTooltip } from '../constants/tooltips';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-code-definition',
