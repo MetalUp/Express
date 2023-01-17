@@ -27,6 +27,19 @@ public static class DotNetCompiler {
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.VisualStudio.TestPlatform.TestFramework").Location)
     };
 
+    private static (int, int) GetFirstLineAndColumn(IEnumerable<Diagnostic> diagnostics) {
+        var first = diagnostics.FirstOrDefault();
+        if (first is not null) {
+            var span = first.Location.GetLineSpan();
+            var line = span.Span.Start.Line + 1;
+            var col = span.Span.Start.Character + 1;
+
+            return (line, col);
+        }
+
+        return (0, 0);
+    }
+
     internal static (RunResult, byte[]) Compile(RunSpec runSpec, Func<string, Compilation> generateCode) {
         var code = runSpec.sourcecode;
 
@@ -36,9 +49,12 @@ public static class DotNetCompiler {
 
         if (!result.Success) {
             var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
+            var (l, c) = GetFirstLineAndColumn(result.Diagnostics);
             return (new RunResult(runSpec.TempDir) {
                 cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
-                outcome = Outcome.CompilationError
+                outcome = Outcome.CompilationError,
+                LineNo = l,
+                ColNo = c
             }, Array.Empty<byte>());
         }
 
