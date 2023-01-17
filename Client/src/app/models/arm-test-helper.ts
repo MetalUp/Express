@@ -98,7 +98,7 @@ export class ArmTestHelper {
             }
         }
         else {
-            for (const loc in instr) {
+            for (const loc of instr) {
                 this.AssertLineOfCode(snippet, loc, contains)
             }
         }

@@ -119,4 +119,46 @@ describe('ArmTestHelper', () => {
             expect(e.message).toBe("Line of code: MOV R0, #1 should not contain MOV")
         }
     });
+
+    it('should assert contains ok no line', () => {
+        const ath = new ArmTestHelper(testInstruction);
+        try {
+            ath.AssertCodeContains("MOV");
+        }
+        catch (e : any) {
+           fail();
+        }
+    });
+
+    it('should assert contains fail no line', () => {
+        const ath = new ArmTestHelper(testInstruction);
+        try {
+            ath.AssertCodeContains("MOT");
+            fail(); // expect exception
+        }
+        catch (e : any) {
+            expect(e.message).toBe("Line of code: MOV R0, #1 should contain MOT")
+        }
+    });
+
+    it('should assert not contains ok no line', () => {
+        const ath = new ArmTestHelper(testInstruction);
+        try {
+            ath.AssertCodeDoesNotContain("MOT");
+        }
+        catch (e : any) {
+           fail();
+        }
+    });
+
+    it('should assert not contains fail no line', () => {
+        const ath = new ArmTestHelper(testInstruction);
+        try {
+            ath.AssertCodeDoesNotContain("MOV");
+            fail(); // expect exception
+        }
+        catch (e : any) {
+            expect(e.message).toBe("Line of code: MOV R0, #1 should not contain MOV")
+        }
+    });
 })
