@@ -37,7 +37,7 @@ public static class DotNetCompiler {
         if (!result.Success) {
             var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
             return (new RunResult(runSpec.TempDir) {
-                cmpinfo = new CmpInfo(string.Join('\n', failures.Select(d => d.ToString()).ToArray())),
+                cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
                 outcome = Outcome.CompilationError
             }, Array.Empty<byte>());
         }

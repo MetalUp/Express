@@ -98,14 +98,14 @@ public static class Handler {
         runSpec.language_id switch {
             "csharp" => CSharpCompiler.Compile(runSpec, createExecutable),
             "vb" => VisualBasicCompiler.Compile(runSpec, createExecutable),
-            _ => (new RunResult(runSpec.TempDir) { outcome = Outcome.IllegalSystemCall, cmpinfo = new CmpInfo($"Unknown language: {runSpec.language_id}") }, Array.Empty<byte>())
+            _ => (new RunResult(runSpec.TempDir) { outcome = Outcome.IllegalSystemCall, cmpinfo = $"Unknown language: {runSpec.language_id}" }, Array.Empty<byte>())
         };
 
     private static (RunResult, byte[]) DotNetCompileForTest(RunSpec runSpec) =>
         runSpec.language_id switch {
             "csharp" => CSharpCompiler.CompileForTest(runSpec),
             "vb" => VisualBasicCompiler.CompileForTest(runSpec),
-            _ => (new RunResult(runSpec.TempDir) { outcome = Outcome.IllegalSystemCall, cmpinfo = new CmpInfo($"Unknown language: {runSpec.language_id}") }, Array.Empty<byte>())
+            _ => (new RunResult(runSpec.TempDir) { outcome = Outcome.IllegalSystemCall, cmpinfo = $"Unknown language: {runSpec.language_id}" }, Array.Empty<byte>())
         };
 
     public static Task<JsonResult> Compile(RunSpec runSpec, ILogger logger) =>

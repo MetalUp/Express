@@ -87,7 +87,7 @@ public class JavaCompilerTest {
         using var runSpec = JavaRunSpec(MissingSC);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
 
-        rr.cmpinfo.Message = ClearWhiteSpace(rr.cmpinfo.Message);
+        rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"{runSpec.TempDir}temp.java:3:error:';'expectedinta=1^1error");
     }
@@ -111,7 +111,7 @@ public class JavaCompilerTest {
         foreach (var rr in rrs) {
             Assert.IsNotNull(rr);
             Assert.AreEqual(Outcome.Ok, rr.outcome);
-            Assert.AreEqual("", rr.cmpinfo.Message);
+            Assert.AreEqual("", rr.cmpinfo);
             Assert.AreEqual("1", rr.stdout);
             Assert.AreEqual("", rr.stderr);
             Assert.AreEqual("", rr.run_id);

@@ -138,20 +138,16 @@ public static class Compile
         }
     }
 
-    private class ApiCmpInfo {
-        public string Message { get; set; }
-        public int? LineNo { get; set; }
-        public int? ColNo { get; set; }
-    }
-
     private class ApiRunResult
     {
-        public ApiCmpInfo cmpinfo { get; set; }
+        public string cmpinfo { get; set; }
+        public int? LineNo { get; set; }
+        public int? ColNo { get; set; }
         public int outcome { get; set; }
         public string run_id { get; set; }
         public string stderr { get; set; }
         public string stdout { get; set; }
 
-        public RunResult ToRunResult() => new() { Cmpinfo = cmpinfo.Message, Outcome = outcome, RunID = run_id, Stderr = stderr, Stdout = stdout };
+        public RunResult ToRunResult() => new() { Cmpinfo = cmpinfo, Outcome = outcome, RunID = run_id, Stderr = stderr, Stdout = stdout, LineNo = LineNo, ColNo = ColNo};
     }
 }

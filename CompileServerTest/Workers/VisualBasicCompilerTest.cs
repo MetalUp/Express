@@ -143,7 +143,7 @@ public class VisualBasicCompilerTest {
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
-        Assert.AreEqual("", rr.cmpinfo.Message);
+        Assert.AreEqual("", rr.cmpinfo);
         Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.run_id);
@@ -155,7 +155,7 @@ public class VisualBasicCompilerTest {
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
-        Assert.AreEqual("", rr.cmpinfo.Message);
+        Assert.AreEqual("", rr.cmpinfo);
         Assert.IsTrue(rr.stdout.Contains("Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1"), rr.stdout);
         Assert.AreEqual("", rr.stderr);
         Assert.AreEqual("", rr.run_id);
@@ -190,7 +190,7 @@ public class VisualBasicCompilerTest {
         foreach (var rr in rrs) {
             Assert.IsNotNull(rr);
             Assert.AreEqual(Outcome.Ok, rr.outcome);
-            Assert.AreEqual("", rr.cmpinfo.Message);
+            Assert.AreEqual("", rr.cmpinfo);
             Assert.AreEqual("1", rr.stdout);
             Assert.AreEqual("", rr.stderr);
             Assert.AreEqual("", rr.run_id);
@@ -210,7 +210,7 @@ public class VisualBasicCompilerTest {
         foreach (var rr in rrs) {
             Assert.IsNotNull(rr);
             Assert.AreEqual(Outcome.Ok, rr.outcome);
-            Assert.AreEqual("", rr.cmpinfo.Message);
+            Assert.AreEqual("", rr.cmpinfo);
             Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
             Assert.AreEqual("", rr.stderr);
             Assert.AreEqual("", rr.run_id);
