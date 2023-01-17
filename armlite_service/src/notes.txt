@@ -24,8 +24,6 @@ They are negative with respect to 32 bit numbers but you should pass them as pos
 NOT YET SUPPORTED
 *****************
 
-InputText(text: string) : RunResult
-
 HitKey(keyValue : int) : RunResult
 
 function GetMemory(from: int, to: int) : int[]
