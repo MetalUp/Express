@@ -8,7 +8,7 @@ namespace Model.Functions
     {
         [MemberOrder(10)]
         public static IContext ReloadFromExternalFile(this File file, FileAttachment externalFile, IContext context) =>
-            context.WithUpdated(file, new File(file) { Content = externalFile.GetResourceAsByteArray(), Name=externalFile.Name, Mime = externalFile.MimeType });
+            context.WithUpdated(file, new File(file) { Content = externalFile.GetResourceAsByteArray(), Mime = externalFile.MimeType });
 
         [MemberOrder(20)]
         public static IContext EditContentAsString(this File file, [MultiLine(20)] string content, IContext context) =>

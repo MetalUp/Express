@@ -84,7 +84,7 @@
             var name = $"{task} Hint {number}";
             var file = new File()
             {
-                Name = name + ".html",
+                Name = $"{task}-{number}",
                 ContentType = ContentType.Hint,
                 AuthorId = task.Project.AuthorId,
                 Mime = "text/html",
