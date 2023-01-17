@@ -48,6 +48,70 @@ export class ArmTestHelper {
         return GetMemory(loc);
     }
 
+    private isActiveInstruction(line: string) {
+        const trimmed = line.trim();
+        if (trimmed === "") {
+            return false;
+        }
+        if (trimmed.startsWith("/")) {
+            return false;
+        }
+        return true;
+    }
+
+    GetInstructions() {
+       const codeArray = this.studentCode.split('\n');
+       return codeArray.filter(l => this.isActiveInstruction(l));
+    }
+
+    AssertLineOfCodeContains(snippet: string, loc: string) {
+        if (!loc.includes(snippet)) {
+            throw new TestError(`Line of code: ${loc} should contain ${snippet}`)
+        }
+    }
+
+    AssertLineOfCodeDoesNotContains(snippet: string, loc: string) {
+        if (loc.includes(snippet)) {
+            throw new TestError(`Line of code: ${loc} should not contain ${snippet}`)
+        }
+    }
+
+    AssertLineOfCode(snippet: string, loc: string, contains: boolean) {
+        if (contains) {
+            this.AssertLineOfCodeContains(snippet, loc);
+        }
+        else {
+            this.AssertLineOfCodeDoesNotContains(snippet, loc);
+        }
+    }
+
+    AssertCode(snippet: string, contains: boolean, atInstrNo?: number) {
+        const instr = this.GetInstructions();
+
+        if (atInstrNo != null) {
+            if (instr.length > atInstrNo) {
+                const loc = instr[atInstrNo];
+                this.AssertLineOfCode(snippet, loc, contains)
+            }
+            else {
+                throw new TestError(`No code at offset ${atInstrNo} code length: ${instr.length}`)
+            }
+        }
+        else {
+            for (const loc in instr) {
+                this.AssertLineOfCode(snippet, loc, contains)
+            }
+        }
+    }
+
+    AssertCodeContains(snippet: string, atInstrNo?: number) {
+        this.AssertCode(snippet, true, atInstrNo);
+    }
+ 
+    AssertCodeDoesNotContain(snippet: string, atInstrNo?: number) {
+        this.AssertCode(snippet, false, atInstrNo);
+    }
+
     AssertRegister(number: number, expected: number) {
         var actual = this.GetRegister(number);
         if (actual != expected)
@@ -59,5 +123,4 @@ export class ArmTestHelper {
         if (actual != expected)
             throw new TestError(`Memory address ${address}: Expected ${expected} Actual ${actual}`);
     }
-
 }
