@@ -5,3 +5,7 @@ div.pane-body {
 div.code-definition {
     width: 100%;
 }
+
+.location {
+    margin: 5px
+}

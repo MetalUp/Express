@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
 import { EmptyRunResult, RunResult } from '../models/run-result';
@@ -75,6 +75,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   modelChanged() {
     this.unsubmittedCode = this.codeDefinitions;
     this.setCodeVersion(this.getUnsubmittedCodeVersion(), true);
+    this.refreshCursorPosition();
   }
 
   setCodeVersion(version: ICodeUserView, update: boolean) {
@@ -189,5 +190,21 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     if (this.sub) {
       this.sub.unsubscribe();
     }
+  }
+
+  @ViewChild('codeArea', { static: true }) 
+  taElement?: ElementRef;
+
+  lineAndColumn = [0,0];
+
+  refreshCursorPosition() {
+    const ta = this.taElement?.nativeElement as any;
+    const lineNo = ta.value.substr(0, ta.selectionStart).split(/\r?\n|\r/).length;
+    const toSelection =  ta.value.substr(0, ta.selectionStart).split("").reverse().join("");
+    const fromLineArray = toSelection.match(/.*$/m);
+    const fromLine = fromLineArray[0];
+    const col = fromLine.length;
+
+    this.lineAndColumn = [lineNo, col];
   }
 }
