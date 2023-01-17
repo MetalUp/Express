@@ -19,8 +19,8 @@ public static class Helpers {
 
     private static RunResult SetCompileResults(Process process, RunResult runResult) {
         using var stdErr = process.StandardError;
-        runResult.cmpinfo = stdErr.ReadToEnd();
-        runResult.outcome = string.IsNullOrEmpty(runResult.cmpinfo) ? Outcome.Ok : Outcome.CompilationError;
+        runResult.cmpinfo = new CmpInfo(stdErr.ReadToEnd());
+        runResult.outcome = string.IsNullOrEmpty(runResult.cmpinfo.Message) ? Outcome.Ok : Outcome.CompilationError;
         return runResult;
     }
 

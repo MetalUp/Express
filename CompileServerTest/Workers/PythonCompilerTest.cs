@@ -102,7 +102,7 @@ if __name__ == ""__main__"":
         using var runSpec = PythonRunSpec(MissingTerm);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
 
-        rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
+        rr.cmpinfo.Message = ClearWhiteSpace(rr.cmpinfo.Message);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line1print(str(1/))^SyntaxError:invalidsyntax");
     }
@@ -124,7 +124,7 @@ if __name__ == ""__main__"":
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
-        Assert.AreEqual("", rr.cmpinfo);
+        Assert.AreEqual("", rr.cmpinfo.Message);
         Assert.IsTrue(rr.stdout.Contains("Ran 1 test in"), rr.stdout);
         Assert.IsTrue(rr.stdout.Contains("OK"), rr.stdout);
         Assert.AreEqual("", rr.stderr);
@@ -137,7 +137,7 @@ if __name__ == ""__main__"":
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
-        Assert.AreEqual("", rr.cmpinfo);
+        Assert.AreEqual("", rr.cmpinfo.Message);
         Assert.IsTrue(rr.stdout.Contains("Ran 1 test in"), rr.stdout);
         Assert.IsTrue(rr.stdout.Contains("Should be 6"), rr.stdout);
         Assert.IsTrue(rr.stdout.Contains("FAIL"), rr.stdout);
@@ -150,7 +150,7 @@ if __name__ == ""__main__"":
         var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
-        Assert.AreEqual("", rr.cmpinfo);
+        Assert.AreEqual("", rr.cmpinfo.Message);
         Assert.IsTrue(rr.stdout.Contains("Ran 1 test in"), rr.stdout);
         Assert.IsTrue(rr.stdout.Contains("invalid literal"), rr.stdout);
         Assert.IsTrue(rr.stdout.Contains("ERROR"), rr.stdout);
@@ -182,7 +182,7 @@ if __name__ == ""__main__"":
         foreach (var rr in rrs) {
             Assert.IsNotNull(rr);
             Assert.AreEqual(Outcome.Ok, rr.outcome);
-            Assert.AreEqual("", rr.cmpinfo);
+            Assert.AreEqual("", rr.cmpinfo.Message);
             Assert.IsTrue(rr.stdout.Contains("Ran 1 test in"), rr.stdout);
             Assert.IsTrue(rr.stdout.Contains("OK"), rr.stdout);
             Assert.AreEqual("", rr.stderr);

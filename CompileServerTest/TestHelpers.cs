@@ -14,7 +14,7 @@ public static class TestHelpers {
 
     public static void AssertRunResult(this RunResult rr, Outcome outcome, string cmpinfo = "", string stdout = "", string stderr = "") {
         Assert.AreEqual(outcome, rr.outcome);
-        Assert.AreEqual(cmpinfo, rr.cmpinfo);
+        Assert.AreEqual(cmpinfo, rr.cmpinfo.Message);
         Assert.AreEqual(stdout, rr.stdout);
         Assert.AreEqual(stderr, rr.stderr);
         Assert.AreEqual("", rr.run_id);
@@ -22,7 +22,7 @@ public static class TestHelpers {
 
     public static void AssertRunResultContains(this RunResult rr, Outcome outcome, string cmpinfo = "", string stdout = "", string stderr = "") {
         Assert.AreEqual(outcome, rr.outcome);
-        Assert.AreEqual(cmpinfo, rr.cmpinfo);
+        Assert.AreEqual(cmpinfo, rr.cmpinfo.Message);
         Assert.AreEqual(stdout, rr.stdout);
         Assert.IsTrue(rr.stderr.Contains(stderr), rr.stderr);
         Assert.AreEqual("", rr.run_id);
