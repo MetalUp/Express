@@ -81,10 +81,10 @@
             [DefaultValue(1)] int costInMarks,
             IContext context)
         {
-            var name = $"{task} Hint {number}";
+            var name = $"{task.Project.Title} {task.Number}-{number}";
             var file = new File()
             {
-                Name = $"{task.Project.Title} {task.Number}-{number}",
+                Name = name,
                 ContentType = ContentType.Hint,
                 AuthorId = task.Project.AuthorId,
                 Mime = "text/html",
