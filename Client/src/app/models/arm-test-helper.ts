@@ -50,13 +50,8 @@ export class ArmTestHelper {
 
     private isActiveInstruction(line: string) {
         const trimmed = line.trim();
-        if (trimmed === "") {
-            return false;
-        }
-        if (trimmed.startsWith("/")) {
-            return false;
-        }
-        return true;
+        const emptyOrComment = trimmed === "" || trimmed.startsWith("/");
+        return !emptyOrComment;
     }
 
     GetInstructions() {
