@@ -181,7 +181,7 @@ export class CompileServerService {
   }
 
   runLocalTests(taskId: number) {
-    const rr = ArmTestHelper.runTests(this.currentTask?.ClientRunTestCode!) as RunResult;
+    const rr = ArmTestHelper.runTests(this.currentTask?.ClientRunTestCode!, this.userDefinedCode) as RunResult;
     return this.recordActivity(rr, taskId, this.userDefinedCode, rr.outcome === 15 ? ActivityType.runTestsSuccess : ActivityType.runTestsFail);
   }
 

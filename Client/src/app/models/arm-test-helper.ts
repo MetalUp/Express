@@ -10,12 +10,14 @@ class TestError extends Error {
 
 export class ArmTestHelper {
 
-    static runTests(testCode: string) {
+    constructor(private studentCode: string) { }
+
+    static runTests(tests: string, studentCode: string) {
         var rr = { ...EmptyRunResult };
-        var helper = new ArmTestHelper();
+        var helper = new ArmTestHelper(studentCode);
     
         try {
-            const runTestsFunction = new Function('helper', testCode);
+            const runTestsFunction = new Function('helper', tests);
             runTestsFunction(helper);
             rr.stdout = "all tests passed";
         }
