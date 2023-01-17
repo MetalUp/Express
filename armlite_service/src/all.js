@@ -506,12 +506,17 @@ function textToHtml()
  */
 export function SubmitProgram(codeString)	// SubmitProgram(code : string) : RunResult
 {
+	RunResult.run_id = "";		// Unused by ARMlite, so always set an empty string
+	RunResult.stdout = "";		// unused by assemble
+	if (waitingForInput) {		// bad sequence
+		RunResult.stderr = "Waiting for input";
+		RunResult.outcome = 35;		// Invalid
+		return RunResult;
+	}
 	programText = codeString;
 	textToHtml();
 	assemble();
-	RunResult.run_id = "";					// Unused by ARMlite, so always set an empty string
 	RunResult.formattedsource = programHTML;	// source reformatted
-	RunResult.stdout = "";					// unused by assemble
 	RunResult.stderr = "";					// unused by assemble
 	RunResult.progout = "";					// unused by assemble
 	if (address[0] != 0) {				// assembly worked
@@ -1831,6 +1836,13 @@ function setAddress(x, y)
  */
 export function Run(maxSteps)		// Service interface
 {
+	RunResult.run_id = "";		// Unused by ARMlite, so always set an empty string
+	RunResult.stdout = "";
+	if (waitingForInput) {		// bad sequence
+		RunResult.stderr = "Waiting for input";
+		RunResult.outcome = 35;		// Invalid
+		return RunResult;
+	}
 	// use the single step code so we can count
 	dontDisplay = 1;	// so selects fast path options
 	step1Code = 0;				// set non-zero for RFE, HALT and some other cases
@@ -1838,16 +1850,13 @@ export function Run(maxSteps)		// Service interface
 	
 	stopping = false;	// Not sure whether we really need these
 	noKeyEffects = true;
-	IEKeyEnable();
 
-	RunResult.run_id = "";					// Unused by ARMlite, so always set an empty string
 	RunResult.formattedsource = programHTML;	// source reformatted	
 	RunResult.cmpinfo = "";
 	
 	while (--maxSteps >= 0) {
 		if (step1(1) && step1Code != 5) {		// got an error
 			RunResult.stderr = lastMessage;
-			RunResult.stdout = "";
 			RunResult.progout = output1;
 			switch (step1Code) {
 			case 0:
@@ -1864,6 +1873,9 @@ export function Run(maxSteps)		// Service interface
 				break;
 			case 4:
 				RunResult.outcome = 31;		// Input - but continue not yet supported
+				RunResult.stderr = "";
+				RunResult.stdout = "Input expected";
+				// see comments on InputText() if need type of input
 				break;
 			default:
 				RunResult.outcome = 20;		// Should not happen
@@ -1879,6 +1891,30 @@ export function Run(maxSteps)		// Service interface
 	RunResult.progout = output1;
 	RunResult.outcome = 30;
 	return RunResult;	
+}
+
+// Note that we saved registerToInput as the dest register and
+// inst (historical!!) as the type of input (0 num, -1 string, +1 FP)
+function InputText(val)
+{
+	RunResult.stderr = "";
+	RunResult.run_id = "";		// Unused by ARMlite, so always set an empty string
+	RunResult.stdout = "";
+	RunResult.outcome = 35;		// Invalid is the default
+	if (val === false || val == "") {
+		RunResult.stderr = "Bad input - must not be empty";
+		return RunResult;
+	}
+	if (!waitingForInput) {
+		RunResult.stderr = "Bad input - not waiting for input";
+		return RunResult;
+	}
+	if (processInput(val)) {	// returns true if OK, else false and (maybe) message
+		RunResult.outcome = 15;	// OK
+		return RunResult;
+	}
+	RunResult.stderr = lastMessage;
+	return RunResult;
 }
 
 // check stack valid before handling any interrupt
@@ -3189,7 +3225,7 @@ function inputNum(dreg, code)			// original read an input number (0 num, -1 stri
 	inst = code;	// originally used to distinguish step1() case from FETCH/EXECUTE case
 					// now used for type of input required
 	noKeyEffects = false;
-	enableInput(code == -2);
+	if (!serviceMode) enableInput(code == -2);
 }
 
 // new - mode is 3 for floating point 
@@ -3307,17 +3343,23 @@ function inputSubmit()
 		message("Bad input - must not be empty");
 		return;
 	}
+	processInput(val);	// returns true if OK, else false and (maybe) message
+	// but we only care in service mode!
+}
+
+function processInput(val)
+{
 	var value;
 	if (inst == 0) {	// old case
 		value = parseIntGen(val);
 		if (isNaN(value) || value > 4294967295 || value < -2147483648) {
 			message("Bad number format or value");
-			return;
+			return false;
 		}
 	} else if (inst < 0) {		// read string
 		value = val
 		var len = value.length;
-		if (registerToInput > 14 || len == 0) return;
+		if (registerToInput > 14 || len == 0) return false;
 		var addr = register[registerToInput];
 		//alert("xxx addr="+addr+"  len="+len+" string="+value);
 		if (len > 127) len = 127;				// max string 127 chars
@@ -3334,14 +3376,14 @@ function inputSubmit()
 		if (inst == -2) inputRestore("");	// secret mode
 		else inputRestore(val);
 		noKeyEffects = true;			// back to ignore chars mode
-		message("String read into memory at "+addr);
+		//message("String read into memory at "+addr); - assume same issue as below
 		waitingForInput = false;
-		return;
+		return true;
 	} else {			// floating point
 		var mantissa = parseFloat(val);		// same issues as parseInt - stops but valid at first bad character
 		if (isNaN(mantissa)) {
 			message("Bad input - must be a floating point number");
-			return;
+			return false;
 		}
 		var exponent = 0;
 		while (mantissa >= 1 || mantissa < -1) {
@@ -3357,7 +3399,7 @@ function inputSubmit()
 		//alert("after loop 2 mantissa="+mantissa+"  exponent="+exponent);
 		if (exponent > 127) {
 			message("Bad input - number out of range");
-			return;
+			return false;
 		}
 		if (mantissa == 0 || exponent < -128) value = 0;
 		else {
@@ -3365,13 +3407,14 @@ function inputSubmit()
 			value = (tmp & 0xffffff00) + (exponent & 255);
 		}
 	}
-	inputRestore(val);
+	if (!serviceMode) inputRestore(val);
 	noKeyEffects = true;			// back to ignore chars mode
 	//the message below never got seen - even in single step
 	//message("INPUT value loaded into register "+registerToInput);
 	// INP no longer sets flags
 	updateR(registerToInput, value);
 	waitingForInput = false;
+	return true;
 }
 
 var coloursNam = ['.background', '.aliceblue', '.antiquewhite', '.aqua', '.aquamarine', '.azure', '.beige', '.bisque', '.black', '.blanchedalmond', '.blue', '.blueviolet', '.brown', '.burlywood', '.cadetblue', '.chartreuse', '.chocolate', '.coral', '.cornflowerblue', '.cornsilk', '.crimson', '.cyan', '.darkblue', '.darkcyan', '.darkgoldenrod', '.darkgray', '.darkgreen', '.darkgrey', '.darkkhaki', '.darkmagenta', '.darkolivegreen', '.darkorange', '.darkorchid', '.darkred', '.darksalmon', '.darkseagreen', '.darkslateblue', '.darkslategray', '.darkslategrey', '.darkturquoise', '.darkviolet', '.deeppink', '.deepskyblue', '.dimgray', '.dimgrey', '.dodgerblue', '.firebrick', '.floralwhite', '.forestgreen', '.fuchsia', '.gainsboro', '.ghostwhite', '.gold', '.goldenrod', '.gray', '.green', '.greenyellow', '.grey', '.honeydew', '.hotpink', '.indianred', '.indigo', '.ivory', '.khaki', '.lavender', '.lavenderblush', '.lawngreen', '.lemonchiffon', '.lightblue', '.lightcoral', '.lightcyan', '.lightgoldenrodyellow', '.lightgray', '.lightgreen', '.lightgrey', '.lightpink', '.lightsalmon', '.lightseagreen', '.lightskyblue', '.lightslategray', '.lightslategrey', '.lightsteelblue', '.lightyellow', '.lime', '.limegreen', '.linen', '.magenta', '.maroon', '.mediumaquamarine', '.mediumblue', '.mediumorchid', '.mediumpurple', '.mediumseagreen', '.mediumslateblue', '.mediumspringgreen', '.mediumturquoise', '.mediumvioletred', '.midnightblue', '.mintcream', '.mistyrose', '.moccasin', '.navajowhite', '.navy', '.oldlace', '.olive', '.olivedrab', '.orange', '.orangered', '.orchid', '.palegoldenrod', '.palegreen', '.paleturquoise', '.palevioletred', '.papayawhip', '.peachpuff', '.peru', '.pink', '.plum', '.powderblue', '.purple', '.red', '.rosybrown', '.royalblue', '.saddlebrown', '.salmon', '.sandybrown', '.seagreen', '.seashell', '.sienna', '.silver', '.skyblue', '.slateblue', '.slategray', '.slategrey', '.snow', '.springgreen', '.steelblue', '.tan', '.teal', '.thistle', '.tomato', '.turquoise', '.violet', '.wheat', '.white', '.whitesmoke', '.yellow', '.yellowgreen', ''];
