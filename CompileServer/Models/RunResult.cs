@@ -11,7 +11,6 @@ public class RunResult {
     public string cmpinfo { get; set; } = "";
     public string stdout { get; set; } = "";
     public string stderr { get; set; } = "";
-
-    public int? LineNo { get; set; }
-    public int? ColNo { get; set; }
+    public int line_no { get; set; }
+    public int col_no { get; set; }
 }
