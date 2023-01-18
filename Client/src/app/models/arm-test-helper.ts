@@ -96,58 +96,52 @@ export class ArmTestHelper {
         return GetConsoleOutput() as string;
     }
 
-    private isActiveInstruction(line: string) {
-        const trimmed = line.trim();
-        const emptyOrComment = trimmed === "" || trimmed.startsWith("/");
-        return !emptyOrComment;
-    }
-
-    GetInstructions() {
+    GetNonEmptyLinesOfCode() {
        const codeArray = this.studentCode.split('\n');
-       return codeArray.filter(l => this.isActiveInstruction(l));
+       return codeArray.filter(l => !(l.trim() === ""));
     }
 
     AssertAreEqual(expected: string, actual: string, context: string) {
         if(actual != expected)
-        throw new TestError(`{context}: Expected ${expected} Actual ${actual}`);
+        throw new TestError(`${context}: Expected ${expected} Actual ${actual}`);
     }
 
-    AssertLineOfCodeContains(snippet: string, loc: string) {
+    private AssertLineOfCodeContains(snippet: string, atInstrNo: number) {
+        const loc = this.GetNonEmptyLinesOfCode()[atInstrNo -1];
         if (!loc.toUpperCase().includes(snippet.toUpperCase())) {
-            throw new TestError(`Line of code: ${loc} should contain ${snippet}`)
+            throw new TestError(`Line of code: ${atInstrNo} should contain ${snippet}`)
         }
     }
 
-    AssertLineOfCodeDoesNotContains(snippet: string, loc: string) {
+    private AssertLineOfCodeDoesNotContains(snippet: string, atInstrNo: number) {
+        const loc = this.GetNonEmptyLinesOfCode()[atInstrNo -1];
         if (loc.toUpperCase().includes(snippet.toUpperCase())) {
-            throw new TestError(`Line of code: ${loc} should not contain ${snippet}`)
+            throw new TestError(`Line of code: ${atInstrNo} should not contain ${snippet}`)
         }
     }
 
-    AssertLineOfCode(snippet: string, loc: string, contains: boolean) {
+    private AssertLineOfCode(snippet: string, atInstrNo: number, contains: boolean) {
         if (contains) {
-            this.AssertLineOfCodeContains(snippet, loc);
+            this.AssertLineOfCodeContains(snippet, atInstrNo);
         }
         else {
-            this.AssertLineOfCodeDoesNotContains(snippet, loc);
+            this.AssertLineOfCodeDoesNotContains(snippet, atInstrNo);
         }
     }
 
-    AssertCode(snippet: string, contains: boolean, atInstrNo?: number) {
-        const instr = this.GetInstructions();
-
+    private AssertCode(snippet: string, contains: boolean, atInstrNo?: number) {
+        const instr = this.GetNonEmptyLinesOfCode();
         if (atInstrNo != null) {
             if (instr.length > atInstrNo) {
-                const loc = instr[atInstrNo];
-                this.AssertLineOfCode(snippet, loc, contains)
+                this.AssertLineOfCode(snippet, atInstrNo, contains)
             }
             else {
                 throw new TestError(`No code at offset ${atInstrNo} code length: ${instr.length}`)
             }
         }
         else {
-            for (const loc of instr) {
-                this.AssertLineOfCode(snippet, loc, contains)
+            for (let n = 0; n < instr.length; n++) {
+                this.AssertLineOfCode(snippet, n, contains)
             }
         }
     }
