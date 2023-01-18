@@ -90,6 +90,8 @@ public class JavaCompilerTest {
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"{runSpec.TempDir}temp.java:3:error:';'expectedinta=1^1error");
+        Assert.AreEqual(3, rr.line_no);
+        Assert.AreEqual(21, rr.col_no);
     }
 
     [TestMethod]
