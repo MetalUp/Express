@@ -12,6 +12,6 @@ public class RunResult {
     public string stdout { get; set; } = "";
     public string stderr { get; set; } = "";
 
-    public int? LineNo { get; set; }
-    public int? ColNo { get; set; }
+    public int LineNo { get; set; }
+    public int ColNo { get; set; }
 }
