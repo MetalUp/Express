@@ -21,7 +21,9 @@ describe('CompileServerService', () => {
     outcome: 66,
     cmpinfo: 'b',
     stdout: 'c',
-    stderr: 'd'
+    stderr: 'd',
+    lineno: 0,
+    colno: 0
   }
 
   class mockValue {
@@ -41,6 +43,8 @@ describe('CompileServerService', () => {
             case "Stderr": return new mockValue("d");
             case "Stdout": return new mockValue("c");
             case "RunID": return new mockValue("a");
+            case 'LineNo': return new mockValue(0);
+            case 'ColNo': return new mockValue(0);
           }
           return new mockValue("fail");
         } 
