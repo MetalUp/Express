@@ -64,6 +64,10 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
       (this.compiledOK ? 'Compiled OK' : '');
   }
 
+  get errorLocation() {
+    return (this.compiledOK || this.validationFail || !this.result.lineno) ? '' : ` (${this.result.lineno},${this.result.colno})`;
+  }
+
   codeUpdated() {
     this.validationFail = '';
     this.compiledOK = false;

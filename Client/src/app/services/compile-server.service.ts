@@ -78,6 +78,8 @@ export class CompileServerService {
         stderr :  result?.propertyMember("Stderr").value().scalar(),
         stdout:  result?.propertyMember("Stdout").value().scalar(),
         run_id: result?.propertyMember("RunID").value().scalar(),
+        lineno: result?.propertyMember("LineNo").value().scalar(),
+        colno: result?.propertyMember("ColNo").value().scalar(),
       } as RunResult : errorRunResult({message : "null result from server"});
   }
 

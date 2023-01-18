@@ -23,6 +23,6 @@
                 (paste)="onPaste($event)">
             </textarea>
         </div>
-        <textarea *ngIf="currentStatus"  readonly>{{currentStatus}}</textarea>
+        <textarea *ngIf="currentStatus"  readonly>{{currentStatus}}{{errorLocation}}</textarea>
     </div>
 </div>
