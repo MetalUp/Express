@@ -53,8 +53,8 @@ public static class DotNetCompiler {
             return (new RunResult(runSpec.TempDir) {
                 cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
                 outcome = Outcome.CompilationError,
-                LineNo = l,
-                ColNo = c
+                line_no = l,
+                col_no = c
             }, Array.Empty<byte>());
         }
 

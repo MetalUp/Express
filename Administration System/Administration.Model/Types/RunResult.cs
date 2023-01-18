@@ -7,6 +7,6 @@ public class RunResult {
     public string RunID { get; init; }
     public string Stderr { get; init; }
     public string Stdout { get; init; }
-    public int? LineNo { get; set; }
-    public int? ColNo { get; set; }
+    public int LineNo { get; set; }
+    public int ColNo { get; set; }
 }

@@ -141,13 +141,13 @@ public static class Compile
     private class ApiRunResult
     {
         public string cmpinfo { get; set; }
-        public int? LineNo { get; set; }
-        public int? ColNo { get; set; }
+        public int line_no { get; set; }
+        public int col_no { get; set; }
         public int outcome { get; set; }
         public string run_id { get; set; }
         public string stderr { get; set; }
         public string stdout { get; set; }
 
-        public RunResult ToRunResult() => new() { Cmpinfo = cmpinfo, Outcome = outcome, RunID = run_id, Stderr = stderr, Stdout = stdout, LineNo = LineNo, ColNo = ColNo};
+        public RunResult ToRunResult() => new() { Cmpinfo = cmpinfo, Outcome = outcome, RunID = run_id, Stderr = stderr, Stdout = stdout, LineNo = line_no, ColNo = col_no};
     }
 }

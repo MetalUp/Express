@@ -152,8 +152,8 @@ public class CSharpCompilerTest {
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.CompilationError, "(1,9): error CS0020: Division by constant zero");
-        Assert.AreEqual(1, rr.LineNo);
-        Assert.AreEqual(9, rr.ColNo);
+        Assert.AreEqual(1, rr.line_no);
+        Assert.AreEqual(9, rr.col_no);
     }
 
     [TestMethod]
