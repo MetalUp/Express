@@ -49,13 +49,14 @@ describe('ArmTestHelper', () => {
         expect(insts[2]).toEqual("MOV R0, #3");
     });
 
-    it('should get instructions and ignore comments', () => {
+    it('should get instructions and not ignore comments', () => {
         const testCode = "MOV R0, #1\n//comment";
         const ath = new ArmTestHelper(testCode);
         const insts = ath.GetNonEmptyLinesOfCode();
         
-        expect(insts.length).toBe(1);
+        expect(insts.length).toBe(2);
         expect(insts[0]).toEqual(testInstruction);
+        expect(insts[1]).toEqual("//comment");
     });
 
     it('should get multiple instructions and ignore comments', () => {
@@ -63,10 +64,11 @@ describe('ArmTestHelper', () => {
         const ath = new ArmTestHelper(testCode);
         const insts = ath.GetNonEmptyLinesOfCode();
         
-        expect(insts.length).toBe(3);
+        expect(insts.length).toBe(4);
         expect(insts[0]).toEqual(testInstruction);
-        expect(insts[1]).toEqual("MOV R0, #2");
-        expect(insts[2]).toEqual("MOV R0, #3");
+        expect(insts[1]).toEqual("// comment");
+        expect(insts[2]).toEqual("MOV R0, #2");
+        expect(insts[3]).toEqual("MOV R0, #3");
     });
 
     it('should get instructions and not ignore comments after instructions', () => {
@@ -81,7 +83,7 @@ describe('ArmTestHelper', () => {
     it('should assert contains ok', () => {
         const ath = new ArmTestHelper(testInstruction);
         try {
-            ath.AssertCodeContains("MOV", 0);
+            ath.AssertCodeContains("MOV", 1);
         }
         catch (e : any) {
            fail();
@@ -91,18 +93,18 @@ describe('ArmTestHelper', () => {
     it('should assert contains fail', () => {
         const ath = new ArmTestHelper(testInstruction);
         try {
-            ath.AssertCodeContains("MOT", 0);
+            ath.AssertCodeContains("MOT", 1);
             fail(); // expect exception
         }
         catch (e : any) {
-            expect(e.message).toBe("Line of code: MOV R0, #1 should contain MOT")
+            expect(e.message).toBe("Line of code: 1 should contain MOT")
         }
     });
 
     it('should assert not contains ok', () => {
         const ath = new ArmTestHelper(testInstruction);
         try {
-            ath.AssertCodeDoesNotContain("MOT", 0);
+            ath.AssertCodeDoesNotContain("MOT", 1);
         }
         catch (e : any) {
            fail();
@@ -112,11 +114,11 @@ describe('ArmTestHelper', () => {
     it('should assert not contains fail', () => {
         const ath = new ArmTestHelper(testInstruction);
         try {
-            ath.AssertCodeDoesNotContain("MOV", 0);
+            ath.AssertCodeDoesNotContain("MOV", 1);
             fail(); // expect exception
         }
         catch (e : any) {
-            expect(e.message).toBe("Line of code: MOV R0, #1 should not contain MOV")
+            expect(e.message).toBe("Line of code: 1 should not contain MOV")
         }
     });
 
@@ -137,7 +139,7 @@ describe('ArmTestHelper', () => {
             fail(); // expect exception
         }
         catch (e : any) {
-            expect(e.message).toBe("Line of code: MOV R0, #1 should contain MOT")
+            expect(e.message).toBe("Line of code: 1 should contain MOT")
         }
     });
 
@@ -158,18 +160,18 @@ describe('ArmTestHelper', () => {
             fail(); // expect exception
         }
         catch (e : any) {
-            expect(e.message).toBe("Line of code: MOV R0, #1 should not contain MOV")
+            expect(e.message).toBe("Line of code: 1 should not contain MOV")
         }
     });
 
     it('should throw if out of range', () => {
         const ath = new ArmTestHelper(testInstruction);
         try {
-            ath.AssertCodeContains("MOV", 1);
+            ath.AssertCodeContains("MOV", 2);
             fail(); // expect exception
         }
         catch (e : any) {
-            expect(e.message).toBe("No code at offset 1 code length: 1")
+            expect(e.message).toBe("No code at offset 2 code length: 1")
         }
     });
 })

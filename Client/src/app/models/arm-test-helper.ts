@@ -132,7 +132,7 @@ export class ArmTestHelper {
     private AssertCode(snippet: string, contains: boolean, atInstrNo?: number) {
         const instr = this.GetNonEmptyLinesOfCode();
         if (atInstrNo != null) {
-            if (instr.length > atInstrNo) {
+            if (instr.length >= atInstrNo) {
                 this.AssertLineOfCode(snippet, atInstrNo, contains)
             }
             else {
@@ -140,7 +140,7 @@ export class ArmTestHelper {
             }
         }
         else {
-            for (let n = 0; n < instr.length; n++) {
+            for (let n = 1; n <= instr.length; n++) {
                 this.AssertLineOfCode(snippet, n, contains)
             }
         }
