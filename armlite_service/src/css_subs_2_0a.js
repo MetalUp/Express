@@ -280,6 +280,10 @@ function setStatePaused()
 var plhComCnt = 0;
 function changeState(val)
 {
+	if (serviceMode) {
+		lastState = val;	// not currently used anywhere else but I worry it might get used
+		return;				// so harmless to set it!
+	}
 	function xVal(va)
 	{
 		if (va == 1) return "ready";

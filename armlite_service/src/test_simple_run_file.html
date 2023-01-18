@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+ <title>ARMlite Assembly Language Simulator by Peter Higginson</title>
+ <meta name="copyright" content="&copy; 2020-23 Peter Higginson and Richard Pawson">
+ <script src="main_2_0a.js"></script>
+ <script src="service_2_0a.js"></script>
+ <script src="css_subs_2_0a.js"></script>
+ <script src="routines_min_2_0a.js"></script>
+ <script>
+ function doNext()
+ {
+	var xx = GetProgram();
+	var my = JSON.stringify(xx);
+	document.getElementById("xxa").innerHTML = '<h3>Result of Load and Assemble</h3><div id="xya"></div>';
+	document.getElementById("xya").innerHTML = my;
+	xx = Run(100000);
+	my = JSON.stringify(xx);
+	document.getElementById("xxb").innerHTML = '<h3>Ran</h3><div id="xyb"></div>';
+	document.getElementById("xyb").innerHTML = my;
+	var pc = GetRegister(15);
+	document.getElementById("xxc").innerHTML = "<br>PC="+pc+"  next is code line="+(pc/4+1)+"+comments";	// counts from 1 as well
+
+	// remember to change the ID below as add code!!
+	document.getElementById("xxd").innerHTML = '<h3>Done</h3></div>';
+}
+ </script>
+ </head>
+<body>
+  <h3>Test of service interface</h3>
+  <input type="file" style="display:none;" id="read-input" onchange="read_chg(this)" autocomplete="off"><button onclick="document.getElementById(&#39;read-input&#39;).click()">Load</button>
+  <button onclick="doNext()">Next</button>
+  <h3>Click Load and then Next</h3><div id="xxa"></div><div id="xxb"></div><div id="xxc"></div>
+  <div id="xxd"></div><div id="xxe"></div></div><div id="xxf"></div>
+  <h3>End Marker</h3>
+</body>
+</html>
