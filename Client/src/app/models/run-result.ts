@@ -5,7 +5,9 @@ export interface RunResult {
     stdout: string,
     stderr: string,
     formattedsource?: string,
-    progout?: string
+    progout?: string,
+    lineno?: number,
+    colno?: number
 }
 
 export const EmptyRunResult = {
@@ -13,17 +15,13 @@ export const EmptyRunResult = {
     outcome: 0,
     cmpinfo: '',
     stdout: '',
-    stderr: ''
-}
+    stderr: '',
+    lineno: 0,
+    colno: 0
+} as RunResult;
 
 export function errorRunResult(err : any) {
-    const eResult = {
-        run_id: '',
-        outcome: 0,
-        cmpinfo: '',
-        stdout: '',
-        stderr: ''
-    };
+    const eResult = { ...EmptyRunResult } as RunResult;
 
     if (err?.message) {
         eResult.stderr = err.message;
