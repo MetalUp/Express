@@ -1,4 +1,4 @@
-import { Run, GetRegister, GetMemory, GetPixel } from 'armlite_service';
+import { Run, Reset, ClearSystem, GetRegister, GetN, GetZ, GetC, GetV, GetMemory, GetPixel, GetConsoleOutput } from 'armlite_service';
 import { EmptyRunResult, RunResult } from './run-result';
 
 class TestError extends Error {
@@ -36,12 +36,36 @@ export class ArmTestHelper {
         return rr;
     }
 
-    Run(maxSteps: number) {
+    Run(maxSteps: number): RunResult {
         return Run(maxSteps) as RunResult;
+    }
+
+    Reset(): RunResult {
+        return Reset() as RunResult;
+    }
+
+    ClearSystem(): RunResult {
+        return ClearSystem() as RunResult;
     }
 
     GetRegister(n: number) {
         return GetRegister(n);
+    }
+
+    GetN(): boolean {
+        return GetN() as boolean;
+    }
+
+    GetZ(): boolean {
+        return GetZ() as boolean;
+    }
+
+    GetC(): boolean {
+        return GetC() as boolean;
+    }
+
+    GetV(): boolean {
+        return GetV() as boolean;
     }
 
     GetMemory(loc: number) {
@@ -50,6 +74,10 @@ export class ArmTestHelper {
 
     GetPixel(addr: number) {
         return GetPixel(addr);
+    }
+
+    GetConsoleOutput(): string {
+        return GetConsoleOutput() as string;
     }
 
     private isActiveInstruction(line: string) {
@@ -61,6 +89,11 @@ export class ArmTestHelper {
     GetInstructions() {
        const codeArray = this.studentCode.split('\n');
        return codeArray.filter(l => this.isActiveInstruction(l));
+    }
+
+    AssertAreEqual(expected: string, actual: string, context: string) {
+        if(actual != expected)
+        throw new TestError(`{context}: Expected ${expected} Actual ${actual}`);
     }
 
     AssertLineOfCodeContains(snippet: string, loc: string) {
