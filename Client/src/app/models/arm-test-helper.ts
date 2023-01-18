@@ -113,13 +113,13 @@ export class ArmTestHelper {
     }
 
     AssertLineOfCodeContains(snippet: string, loc: string) {
-        if (!loc.includes(snippet)) {
+        if (!loc.toUpperCase().includes(snippet.toUpperCase())) {
             throw new TestError(`Line of code: ${loc} should contain ${snippet}`)
         }
     }
 
     AssertLineOfCodeDoesNotContains(snippet: string, loc: string) {
-        if (loc.includes(snippet)) {
+        if (loc.toUpperCase().includes(snippet.toUpperCase())) {
             throw new TestError(`Line of code: ${loc} should not contain ${snippet}`)
         }
     }
