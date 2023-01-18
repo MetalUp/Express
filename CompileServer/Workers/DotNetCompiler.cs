@@ -42,11 +42,12 @@ public static class DotNetCompiler {
     }
 
     private const int CSharpLineAdjustment = 18;
+    private const int VbLineAdjustment = 52;
 
     private static int AdJustLineNumber(RunSpec runSpec, int lineNumber) =>
         (runSpec.language_id) switch {
             "csharp" when lineNumber > CSharpLineAdjustment =>  lineNumber - CSharpLineAdjustment,
-            "vb" => lineNumber,
+            "vb" when lineNumber > VbLineAdjustment =>  lineNumber - VbLineAdjustment,
             _ => lineNumber
         };
 
