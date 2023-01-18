@@ -15,6 +15,11 @@ public class PythonCompilerTest {
     private const string MissingTerm =
         @"print (str(1/))";
 
+    private const string MissingTermMultiLine =
+        @"print (str(1))
+print (str(2))
+print (str(1/))";
+
     private const string RunTimeFail =
         @"print (int(""invalid""))";
 
@@ -105,6 +110,20 @@ if __name__ == ""__main__"":
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line1print(str(1/))^SyntaxError:invalidsyntax");
+        Assert.AreEqual(1, rr.line_no);
+        Assert.AreEqual(18, rr.col_no);
+    }
+
+    [TestMethod]
+    public void TestCompileFailMissingTermMultiLine() {
+        using var runSpec = PythonRunSpec(MissingTermMultiLine);
+        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+
+        rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
+
+        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line3print(str(1/))^SyntaxError:invalidsyntax");
+        Assert.AreEqual(3, rr.line_no);
+        Assert.AreEqual(18, rr.col_no);
     }
 
     [TestMethod]
