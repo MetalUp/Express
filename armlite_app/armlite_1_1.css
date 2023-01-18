@@ -94,11 +94,8 @@ body.profile-player {
     background-color: white;
 }
 
-button {
-    background-color: #E37422;
-}
 .value.highlighted {
-    background-color: #E37422;
+    background-color: #e37422;
 }
 
 #program {
@@ -127,7 +124,7 @@ button {
     display: block;
     float: left;
     color: var(--color1);
-    background-color: white;
+    background-color: #e9a021;
     font-family: var(--font1);
     font-size: var(--font-size1);
     margin-right: 10px;
@@ -176,7 +173,7 @@ button {
 }
 
 #source .comment {
-    color: green;
+    color: #e37422;
 	font-weight: 550;
     white-space: nowrap;
     overflow: hidden;
