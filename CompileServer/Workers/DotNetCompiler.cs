@@ -1,4 +1,5 @@
-﻿using CompileServer.Models;
+﻿using System.Diagnostics;
+using CompileServer.Models;
 using Microsoft.CodeAnalysis;
 
 namespace CompileServer.Workers;
@@ -40,6 +41,15 @@ public static class DotNetCompiler {
         return (0, 0);
     }
 
+    private const int CSharpLineAdjustment = 18;
+
+    private static int AdJustLineNumber(RunSpec runSpec, int lineNumber) =>
+        (runSpec.language_id) switch {
+            "csharp" when lineNumber > CSharpLineAdjustment =>  lineNumber - CSharpLineAdjustment,
+            "vb" => lineNumber,
+            _ => lineNumber
+        };
+
     internal static (RunResult, byte[]) Compile(RunSpec runSpec, Func<string, Compilation> generateCode) {
         var code = runSpec.sourcecode;
 
@@ -53,7 +63,7 @@ public static class DotNetCompiler {
             return (new RunResult(runSpec.TempDir) {
                 cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
                 outcome = Outcome.CompilationError,
-                line_no = l,
+                line_no = AdJustLineNumber(runSpec, l),
                 col_no = c
             }, Array.Empty<byte>());
         }
