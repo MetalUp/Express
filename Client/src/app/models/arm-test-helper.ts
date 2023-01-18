@@ -1,4 +1,4 @@
-import { Run, GetRegister, GetMemory } from 'armlite_service';
+import { Run, GetRegister, GetMemory, GetPixel } from 'armlite_service';
 import { EmptyRunResult, RunResult } from './run-result';
 
 class TestError extends Error {
@@ -46,6 +46,10 @@ export class ArmTestHelper {
 
     GetMemory(loc: number) {
         return GetMemory(loc);
+    }
+
+    GetPixel(addr: number) {
+        return GetPixel(addr);
     }
 
     private isActiveInstruction(line: string) {
@@ -110,12 +114,18 @@ export class ArmTestHelper {
     AssertRegister(number: number, expected: number) {
         var actual = this.GetRegister(number);
         if (actual != expected)
-            throw new TestError(`Expected: ${expected} Actual: ${actual}`);
+            throw new TestError(`R${number}: Expected ${expected} Actual ${actual}`);
+    }
+
+    AssertPixel(addr: number, expected: number) {
+        var actual = this.GetPixel(addr);
+        if(actual != expected)
+            throw new TestError(`Pixel ${addr}: Expected ${expected} Actual ${actual}`);
     }
 
     AssertMemory(address: number, expected: number) {
         var actual = this.GetMemory(address);
         if (actual != expected)
-            throw new TestError(`Memory address ${address}: Expected ${expected} Actual ${actual}`);
+            throw new TestError(`Memory Location ${address}: Expected ${expected} Actual ${actual}`);
     }
 }
