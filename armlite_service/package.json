@@ -1,6 +1,6 @@
 {
   "name": "armlite_service",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "",
   "main": "./dist/all.js",
   "scripts": {

@@ -1909,7 +1909,11 @@ export function Run(maxSteps)		// Service interface
 
 // Note that we saved registerToInput as the dest register and
 // inst (historical!!) as the type of input (0 num, -1 string, +1 FP)
-function InputText(val)
+/**
+ * @param {string} val
+ * @return {RunResult}
+ */
+export function InputText(val)
 {
 	RunResult.stderr = "";
 	RunResult.run_id = "";		// Unused by ARMlite, so always set an empty string
@@ -2021,8 +2025,11 @@ function doInterrupt()			// normally will change PC (but may leave alone if inte
 	// The clock interrupt can be serviced now
 	if (xTime && (xTime < Date.now())) doClockInt();	
 }
-
-function HitKey(keyval)
+/**
+ * @param {number} keyval
+ * @return {RunResult}
+ */
+export function HitKey(keyval)
 {
 	lastKey = keyval;
 	testKeyInterrupt();
@@ -2128,7 +2135,13 @@ export function GetMemory(loc)
 	return address[loc/4];
 }
 
-function GetMemoryRange(low,high)
+
+/**
+ * @param {number} low
+ * @param {number} high
+ * @return {number[]}
+ */
+export function GetMemoryRange(low,high)
 {
 	// note might extend to lowLim later
 	// lowLim = vaddressBase-0x100000000;
@@ -2167,7 +2180,12 @@ export function GetPixel(addr)
 	throw new Error('Bad pixel or char address');
 }
 
-function GetPixels(low,high)
+/**
+ * @param {number} low
+ * @param {number} high
+ * @return {number[]}
+ */
+export function GetPixels(low,high)
 {
 	if (low > high || (low & 3) != 0 || (high & 3) != 0) throw new Error('bad address range');
 	var ret = [];

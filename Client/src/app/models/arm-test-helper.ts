@@ -1,4 +1,4 @@
-import { Run, Reset, ClearSystem, GetRegister, GetN, GetZ, GetC, GetV, GetMemory, GetPixel, GetConsoleOutput } from 'armlite_service';
+import { Run, Reset, ClearSystem, GetRegister, GetN, GetZ, GetC, GetV, GetMemory, GetPixel, GetConsoleOutput, InputText, HitKey, GetPixels, GetMemoryRange } from 'armlite_service';
 import { EmptyRunResult, RunResult } from './run-result';
 
 class TestError extends Error {
@@ -74,6 +74,22 @@ export class ArmTestHelper {
 
     GetPixel(addr: number) {
         return GetPixel(addr);
+    }
+
+    InputText(text: string) {
+        return InputText(text);
+    }
+
+    HitKey(keyValue: number) {
+        return HitKey(keyValue);
+    }
+
+    GetPixels(low: number, high: number) {
+        return GetPixels(low, high);
+    }
+
+    GetMemoryRange(low: number, high: number) {
+        return GetMemoryRange(low, high);
     }
 
     GetConsoleOutput(): string {
