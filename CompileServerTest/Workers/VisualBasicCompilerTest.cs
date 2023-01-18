@@ -126,6 +126,8 @@ public class VisualBasicCompilerTest {
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
 
         rr.AssertRunResult(Outcome.CompilationError, "(3) : error BC30542: Division by zero occurred while evaluating this expression.");
+        Assert.AreEqual(3, rr.line_no);
+        Assert.AreEqual(21, rr.col_no);
     }
 
     [TestMethod]
