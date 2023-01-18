@@ -1847,14 +1847,28 @@ export function Run(maxSteps)		// Service interface
 	dontDisplay = 1;	// so selects fast path options
 	step1Code = 0;				// set non-zero for RFE, HALT and some other cases
 		// 0=error, 1=HALT, 2=Breakpoint, 3=interrupt, 4=input, 5=NOP (MOV r0,r0)
+	lastMessage = "";	// otherwise we often get the last assembly message
 	
 	stopping = false;	// Not sure whether we really need these
 	noKeyEffects = true;
 
 	RunResult.formattedsource = programHTML;	// source reformatted	
 	RunResult.cmpinfo = "";
+	RunResult.instructions = 0;
+
+	if ((interruptMask&1)!=0 && (interruptRequest!=0)) {
+		// clock interrupts later maybe || (xTime && (xTime < Date.now())))) {
+
+		if (badStack()) { 			// badStack() returns true if error
+			RunResult.stderr = lastMessage;
+			RunResult.outcome = 35;
+			return RunResult;			
+		}
+		doInterrupt();						// usually changes PC
+	}
 	
 	while (--maxSteps >= 0) {
+		++RunResult.instructions;
 		if (step1(1) && step1Code != 5) {		// got an error
 			RunResult.stderr = lastMessage;
 			RunResult.progout = output1;
@@ -1869,7 +1883,7 @@ export function Run(maxSteps)		// Service interface
 				RunResult.outcome = 33;		// use STOPPED code
 				break;
 			case 3:
-				RunResult.outcome = 35;		// Interrupt not supported yet
+				RunResult.outcome = 35;		// Interrupt only comes here for fast mode
 				break;
 			case 4:
 				RunResult.outcome = 31;		// Input - but continue not yet supported
@@ -1883,7 +1897,7 @@ export function Run(maxSteps)		// Service interface
 			}
 			return RunResult;
 		}
-		// NOTE WE ARE NOT CHECKING FOR INTERRUPTS YET
+		// NOTE INTERRUPTS cannot happen while running currently
 	}
 	// here if done instructions requested
 	RunResult.stderr = "";
@@ -2008,6 +2022,20 @@ function doInterrupt()			// normally will change PC (but may leave alone if inte
 	if (xTime && (xTime < Date.now())) doClockInt();	
 }
 
+function HitKey(keyval)
+{
+	lastKey = keyval;
+	testKeyInterrupt();
+	RunResult.run_id = "";					// Unused by ARMlite, so always set an empty string
+	RunResult.formattedsource = "";
+	RunResult.stdout = "";
+	RunResult.stderr = "";
+	RunResult.progout = "";
+	RunResult.outcome = 15;
+	RunResult.cmpinfo = "";
+	return RunResult;
+}
+
 
 /**
  * @return {RunResult>}
@@ -2096,8 +2124,22 @@ export function GetMemory(loc)
 {
 	// note might extend to lowLim later
 	// lowLim = vaddressBase-0x100000000;
-	if (loc < 0 || loc >= maxUsableMem) throw new Error('bad address');
-	return address[loc];
+	if (loc < 0 || loc >= maxUsableMem || (loc & 3) != 0) throw new Error('bad address');
+	return address[loc/4];
+}
+
+function GetMemoryRange(low,high)
+{
+	// note might extend to lowLim later
+	// lowLim = vaddressBase-0x100000000;
+	if (low < 0 || high >= maxUsableMem || low > high || (low & 3) != 0 || (high & 3) != 0) throw new Error('bad address range');
+	var ret = [];
+	var i = 0;
+	while (low <= high) {
+		ret[i++] = address[low];
+		low += 4;
+	}
+	return ret;
 }
 
 // v1address[] starts at vaddressBase and is pixelAreaSize (dynamic) long
@@ -2112,6 +2154,7 @@ export function GetMemory(loc)
  */
 export function GetPixel(addr)
 {
+	if ((addr & 3) != 0) throw new Error('address not multiple of 4');
 	// assume given a 32 bit unsigned address
 	if (addr < (pixelBase+4*pixelAreaSize) && addr >= pixelBase) // is pixel memory in I/O area
 		return v1address[(addr-pixelBase)/4];
@@ -2122,6 +2165,18 @@ export function GetPixel(addr)
 	// note the gap between v1address and v2address just drops through to error
 	// but the gap between the char and low-res pixel areas just reads white
 	throw new Error('Bad pixel or char address');
+}
+
+function GetPixels(low,high)
+{
+	if (low > high || (low & 3) != 0 || (high & 3) != 0) throw new Error('bad address range');
+	var ret = [];
+	var i = 0;
+	while (low <= high) {
+		ret[i++] = GetPixel(low);
+		low += 4;
+	}
+	return ret;
 }
 
 // I have added function GetpixelAreaSize() : int because otherwise you cannot work out whether
@@ -2147,6 +2202,25 @@ function GetCharScreen()
 export function GetConsoleOutput()
 {
 	return output1;
+}
+
+function GetProgram()
+{
+	// just the return part of SubmitProgram()
+	RunResult.run_id = "";		// Unused by ARMlite, so always set an empty string
+	RunResult.formattedsource = programHTML;	// source reformatted
+	RunResult.stderr = "";					// unused by assemble
+	RunResult.progout = "";					// unused by assemble
+	if (address[0] != 0) {				// assembly worked
+		RunResult.outcome = 15;
+		RunResult.cmpinfo = "Assembled "+byteCount+" bytes OK";
+		RunResult.stdout = lastMessage;	// incase called after Run()
+	} else {
+		RunResult.outcome = 11;		// note errorLineNum set if we need to return it
+		RunResult.cmpinfo = lastMessage;
+		RunResult.stdout = "";		// unused by assemble
+	}
+	return RunResult;
 }
 
 function reset3()					// internal reset - non-display parts
@@ -2776,7 +2850,7 @@ for (var jj=0;jj<201;++jj) {
 				if (offst < pixelAreaSize) {		// pixel map area (hi-res or mid-res)
 					if (v1address[offst] == result) break;	// *IGNORE if nothing changed*
 					v1address[offst] = result;
-					videoWrite(offst, result);		// words
+					if (!serviceMode) videoWrite(offst, result);		// words
 				} else {
 					offst = (addr-charBase)/4;					
 					if (addr > charBase && offst < (charMax/4)) {	// char map
@@ -3212,7 +3286,7 @@ function videoProc(same,offst,result)
 {
 	if (v1address[offst] == result) return same;
 	v1address[offst] = result;
-	videoWrite(offst, result);
+	if (!serviceMode) videoWrite(offst, result);
 	return false;
 }
 
@@ -3732,6 +3806,10 @@ function setStatePaused()
 var plhComCnt = 0;
 function changeState(val)
 {
+	if (serviceMode) {
+		lastState = val;	// not currently used anywhere else but I worry it might get used
+		return;				// so harmless to set it!
+	}
 	function xVal(va)
 	{
 		if (va == 1) return "ready";
