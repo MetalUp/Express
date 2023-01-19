@@ -2200,16 +2200,26 @@ export function GetPixels(low,high)
 // I have added function GetpixelAreaSize() : int because otherwise you cannot work out whether
 // the program changed the resolution or what range is valid for GetPixel(n).
 // pixelAreaSize defaults to 3072 but the program can change to 12288 (words and pixels)
-function GetPixelAreaSize()
+/**
+ * @return {number}
+ */
+export function GetPixelAreaSize()
 {
 	return pixelAreaSize;
 }
 
-function GetPixelScreen()
+/**
+ * @return {number}
+ */
+export function GetPixelScreen()
 {
 	return pixelBase;
 }
-function GetCharScreen()
+
+/**
+ * @return {number}
+ */
+export function GetCharScreen()
 {
 	return charBase;
 }

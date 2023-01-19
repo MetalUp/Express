@@ -97,7 +97,7 @@ describe('ArmTestHelper', () => {
             fail(); // expect exception
         }
         catch (e : any) {
-            expect(e.message).toBe("Line of code: 1 should contain MOT")
+            expect(e.message).toBe("Line of code: 1 should contain 'MOT'")
         }
     });
 
@@ -118,7 +118,7 @@ describe('ArmTestHelper', () => {
             fail(); // expect exception
         }
         catch (e : any) {
-            expect(e.message).toBe("Line of code: 1 should not contain MOV")
+            expect(e.message).toBe("Line of code: 1 should not contain 'MOV'")
         }
     });
 
@@ -139,7 +139,7 @@ describe('ArmTestHelper', () => {
             fail(); // expect exception
         }
         catch (e : any) {
-            expect(e.message).toBe("Line of code: 1 should contain MOT")
+            expect(e.message).toBe("Line of code: 1 should contain 'MOT'")
         }
     });
 
@@ -160,7 +160,7 @@ describe('ArmTestHelper', () => {
             fail(); // expect exception
         }
         catch (e : any) {
-            expect(e.message).toBe("Line of code: 1 should not contain MOV")
+            expect(e.message).toBe("Line of code: 1 should not contain 'MOV'")
         }
     });
 

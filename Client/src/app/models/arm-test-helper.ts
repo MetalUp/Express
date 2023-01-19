@@ -1,4 +1,4 @@
-import { Run, Reset, ClearSystem, GetRegister, GetN, GetZ, GetC, GetV, GetMemory, GetPixel, GetConsoleOutput, InputText, HitKey, GetPixels, GetMemoryRange } from 'armlite_service';
+import { Run, Reset, ClearSystem, GetRegister, GetN, GetZ, GetC, GetV, GetMemory, GetPixel, GetPixels, GetConsoleOutput, InputText, HitKey, GetMemoryRange } from 'armlite_service';
 import { EmptyRunResult, RunResult } from './run-result';
 
 class TestError extends Error {
@@ -6,7 +6,6 @@ class TestError extends Error {
         super(message);
     }
 }
-
 
 export class ArmTestHelper {
 
@@ -106,37 +105,37 @@ export class ArmTestHelper {
         throw new TestError(`${context}: Expected ${expected} Actual ${actual}`);
     }
 
-    private AssertLineOfCodeContains(snippet: string, atInstrNo: number) {
-        const loc = this.GetNonEmptyLinesOfCode()[atInstrNo -1];
+    private AssertLineOfCodeContains(snippet: string, atLineNo: number) {
+        const loc = this.GetNonEmptyLinesOfCode()[atLineNo -1];
         if (!loc.toUpperCase().includes(snippet.toUpperCase())) {
-            throw new TestError(`Line of code: ${atInstrNo} should contain ${snippet}`)
+            throw new TestError(`Line of code: ${atLineNo} should contain '${snippet}'`)
         }
     }
 
-    private AssertLineOfCodeDoesNotContains(snippet: string, atInstrNo: number) {
-        const loc = this.GetNonEmptyLinesOfCode()[atInstrNo -1];
+    private AssertLineOfCodeDoesNotContains(snippet: string, atLineNo: number) {
+        const loc = this.GetNonEmptyLinesOfCode()[atLineNo -1];
         if (loc.toUpperCase().includes(snippet.toUpperCase())) {
-            throw new TestError(`Line of code: ${atInstrNo} should not contain ${snippet}`)
+            throw new TestError(`Line of code: ${atLineNo} should not contain '${snippet}'`)
         }
     }
 
-    private AssertLineOfCode(snippet: string, atInstrNo: number, contains: boolean) {
+    private AssertLineOfCode(snippet: string, atLineNo: number, contains: boolean) {
         if (contains) {
-            this.AssertLineOfCodeContains(snippet, atInstrNo);
+            this.AssertLineOfCodeContains(snippet, atLineNo);
         }
         else {
-            this.AssertLineOfCodeDoesNotContains(snippet, atInstrNo);
+            this.AssertLineOfCodeDoesNotContains(snippet, atLineNo);
         }
     }
 
-    private AssertCode(snippet: string, contains: boolean, atInstrNo?: number) {
+    private AssertCode(snippet: string, contains: boolean, atLineNo?: number) {
         const instr = this.GetNonEmptyLinesOfCode();
-        if (atInstrNo != null) {
-            if (instr.length >= atInstrNo) {
-                this.AssertLineOfCode(snippet, atInstrNo, contains)
+        if (atLineNo != null) {
+            if (instr.length >= atLineNo) {
+                this.AssertLineOfCode(snippet, atLineNo, contains)
             }
             else {
-                throw new TestError(`No code at offset ${atInstrNo} code length: ${instr.length}`)
+                throw new TestError(`No code at offset ${atLineNo} code length: ${instr.length}`)
             }
         }
         else {
@@ -146,12 +145,12 @@ export class ArmTestHelper {
         }
     }
 
-    AssertCodeContains(snippet: string, atInstrNo?: number) {
-        this.AssertCode(snippet, true, atInstrNo);
+    AssertCodeContains(snippet: string, atLineNo?: number) {
+        this.AssertCode(snippet, true, atLineNo);
     }
  
-    AssertCodeDoesNotContain(snippet: string, atInstrNo?: number) {
-        this.AssertCode(snippet, false, atInstrNo);
+    AssertCodeDoesNotContain(snippet: string, atLineNo?: number) {
+        this.AssertCode(snippet, false, atLineNo);
     }
 
     AssertRegister(number: number, expected: number) {
