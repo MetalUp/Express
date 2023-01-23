@@ -43,6 +43,10 @@ namespace Model.Types
         [MemberOrder(10)]
         public FileAttachment Details => new FileAttachment(Content, "Click here to View in new Tab", Mime);
 
+        [MemberOrder(11)]
+        [UrlLink("Click here to Edit in editor")]
+        public string Edit =>  $"~/{Id}";
+
         [Hidden]
         public int AuthorId { get; init; }
 
