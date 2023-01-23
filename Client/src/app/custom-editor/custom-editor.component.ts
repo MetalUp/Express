@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ContextService, ErrorWrapper, InteractionMode, RepLoaderService } from '@nakedobjects/services';
-import { ActionRepresentation, ActionResultRepresentation, DomainObjectRepresentation, InvokableActionMember, ObjectIdWrapper, Value } from '@nakedobjects/restful-objects';
+import { ContextService, InteractionMode, RepLoaderService } from '@nakedobjects/services';
+import {  DomainObjectRepresentation, InvokableActionMember, ObjectIdWrapper } from '@nakedobjects/restful-objects';
 import { Location } from '@angular/common';
-import { Dictionary } from 'lodash';
+
 
 @Component({
   selector: 'app-custom-editor',
