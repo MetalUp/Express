@@ -351,6 +351,12 @@ gemini {
     height: 100%;
 }
 
+.metalup .radio {
+    margin-right: 5px;
+    border: none;
+    color: white;
+}
+
 .metalup button {
     height: 20px;
     width: fit-content;

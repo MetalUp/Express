@@ -17,8 +17,8 @@
             <div class="pane-header">Display
                 <div class="button-bar">
                     <div *ngFor="let l of languages">
-                        <input (click)="onRadio(l)" type="radio" id="{{l}}" name="language" value="{{l}}" [checked]="isChecked(l)"/>
-                        <label for="l">{{l}}</label>
+                        <input class="radio" (click)="onRadio(l)" type="radio" id="{{l}}" name="language" value="{{l}}" [checked]="isChecked(l)"/>
+                        <label class="radio" for="l">{{l}}</label>
                     </div>
                 </div>
             </div>
