@@ -7,8 +7,8 @@
                     <button (click)="onCancel()">Cancel</button>
                 </div>
             </div>
-            <div class="one-column pane-body" [ngClass]="">
-                <textarea rows="20"
+            <div class="one-column pane-body" [ngClass]="paneSize">
+                <textarea
                 [(ngModel)]="editContent" 
                 (ngModelChange)="modelChanged()">
             </textarea>
@@ -16,17 +16,17 @@
         </div>
 
         <div class="one-column pane">
-        <div class="pane-header">Display
-            <div class="button-bar">
-                <div *ngFor="let l of languages"><input (click)="onRadio(l)" type="radio" id="{{l}}" name="language" value="{{l}}" [checked]="isChecked(l)"  /><label for="l">{{l}}</label></div>
+            <div class="pane-header">Display
+                <div class="button-bar">
+                    <div *ngFor="let l of languages">
+                        <input (click)="onRadio(l)" type="radio" id="{{l}}" name="language" value="{{l}}" [checked]="isChecked(l)"/>
+                        <label for="l">{{l}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="one-column pane-body" [ngClass]="paneSize">
+                <div class="task" [innerHtml]="editContent"></div>    
             </div>
         </div>
-        <div class="one-column pane-body" [ngClass]="">
-            <div class="task" [innerHtml]="editContent"></div>    
-        </div>
-        </div>
-    </div>
-    <div class=""button-bar>
-  
     </div>
 </div>

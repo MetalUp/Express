@@ -324,19 +324,23 @@ gemini {
     color: grey;
 }
 
-.python :is(.dotnet, .csharp, .vb, .java, ) {
+.python :is(.dotnet, .csharp, .vb, .java, .arm) {
     display:none;
 }
 
-.csharp :is(.python, .vb, .java) {
+.csharp :is(.python, .vb, .java, .arm) {
     display:none;
 }
 
-.vb :is(.csharp, .python, .java) {
+.vb :is(.csharp, .python, .java, .arm) {
     display:none;
 }
 
-.java :is(.dotnet, .csharp, .vb, .python) {
+.java :is(.dotnet, .csharp, .vb, .python, .arm) {
+    display:none;
+}
+
+.arm :is(.dotnet, .csharp, .vb, .python, .java) {
     display:none;
 }
 

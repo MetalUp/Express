@@ -6,12 +6,12 @@ div.metalup {
     height: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: 100%;
     gap: 10px;
 }
 
 .pane-body {
-    grid-template-rows:  40vh;
+    grid-template-rows:  100%;
     font-size: 11pt;
 }
 
@@ -21,6 +21,6 @@ div.metalup {
     margin: 5px;
 }
 
-textarea {
-    height:100%;
+.pane-size-x-large {
+    height: 80vh;
 }

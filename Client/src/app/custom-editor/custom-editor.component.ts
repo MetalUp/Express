@@ -25,7 +25,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
   file?: DomainObjectRepresentation;
 
   get languages() {
-    return ["arm", "vb", "python", "csharp"];
+    return ["arm", "java", "vb", "python", "csharp"];
   } 
 
   selectedLanguage = "csharp";
@@ -38,6 +38,10 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
     return l === this.selectedLanguage ? "checked" : "";
   }
 
+  
+  get paneSize() {
+    return "pane-size-x-large";
+  }
 
   ngOnInit(): void {
     this.sub = this.route.paramMap.subscribe(pm => {
