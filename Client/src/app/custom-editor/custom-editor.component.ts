@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ContextService, InteractionMode, RepLoaderService, UrlManagerService } from '@nakedobjects/services';
-import {  DomainObjectRepresentation, InvokableActionMember, ObjectIdWrapper, Value } from '@nakedobjects/restful-objects';
+import { ContextService, InteractionMode } from '@nakedobjects/services';
+import { DomainObjectRepresentation, InvokableActionMember, ObjectIdWrapper, Value } from '@nakedobjects/restful-objects';
 import { Location } from '@angular/common';
 import { Dictionary } from 'lodash';
 
@@ -15,8 +15,6 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute, 
               private location : Location, 
-              private repLoader: RepLoaderService,
-              private urlManager: UrlManagerService,
               private contextService : ContextService) { }
 
   editContent: string = "";
@@ -57,7 +55,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
     this.sub = this.route.paramMap.subscribe(pm => {
       const id = pm.get('id') || "";
       if (id) {
-        this.contextService.getObject(1, ObjectIdWrapper.fromObjectId(id, "--"), InteractionMode.View).then(o => {
+        this.contextService.getObject(1, ObjectIdWrapper.fromRaw("Model.Types.File", id, "--"), InteractionMode.View).then(o => {
           this.file = o;
           const action = this.file.actionMember("EditContentAsString") as InvokableActionMember;
           this.editContent = action.parameters()["content"].default().toValueString();
