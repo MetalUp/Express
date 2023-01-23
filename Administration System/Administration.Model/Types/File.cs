@@ -45,7 +45,7 @@ namespace Model.Types
 
         [MemberOrder(11)]
         [UrlLink("Click here to Edit in editor")]
-        public string Edit =>  $"/editor/{Id}";
+        public string Edit =>  $"/dashboard/editor/{this.GetType().FullName}--{Id}";
 
         [Hidden]
         public int AuthorId { get; init; }
