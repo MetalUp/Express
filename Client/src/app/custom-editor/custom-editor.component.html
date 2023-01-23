@@ -1,5 +1,5 @@
 <div class="metalup" [ngClass]="selectedLanguage">
-    <div class="editarea">
+    <div class="editarea" [ngClass]="columns">
         <div class="one-column pane">
             <div class="pane-header">Editor
                 <div class="button-bar">
@@ -8,9 +8,7 @@
                 </div>
             </div>
             <div class="one-column pane-body" [ngClass]="paneSize">
-                <textarea
-                [(ngModel)]="editContent" 
-                (ngModelChange)="modelChanged()">
+                <textarea [(ngModel)]="editContent">
             </textarea>
             </div>
         </div>

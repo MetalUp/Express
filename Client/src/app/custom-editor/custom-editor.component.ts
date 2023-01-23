@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ContextService, InteractionMode, RepLoaderService } from '@nakedobjects/services';
-import {  DomainObjectRepresentation, InvokableActionMember, ObjectIdWrapper } from '@nakedobjects/restful-objects';
+import { ContextService, InteractionMode, RepLoaderService, UrlManagerService } from '@nakedobjects/services';
+import {  DomainObjectRepresentation, InvokableActionMember, ObjectIdWrapper, Value } from '@nakedobjects/restful-objects';
 import { Location } from '@angular/common';
-
+import { Dictionary } from 'lodash';
 
 @Component({
   selector: 'app-custom-editor',
@@ -16,9 +16,12 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, 
               private location : Location, 
               private repLoader: RepLoaderService,
+              private urlManager: UrlManagerService,
               private contextService : ContextService) { }
 
   editContent: string = "";
+
+  mime: string = "";
 
   sub?: Subscription;
 
@@ -38,9 +41,16 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
     return l === this.selectedLanguage ? "checked" : "";
   }
 
+  get isHtmlEdit() {
+    return this.mime === "text/html";
+  }
   
   get paneSize() {
     return "pane-size-x-large";
+  }
+
+  get columns() {
+    return this.isHtmlEdit ? "two-columns" : "one-column";
   }
 
   ngOnInit(): void {
@@ -51,20 +61,26 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
           this.file = o;
           const action = this.file.actionMember("EditContentAsString") as InvokableActionMember;
           this.editContent = action.parameters()["content"].default().toValueString();
+          this.mime = this.file.propertyMember("Mime").value().toValueString();
         })
       }
     })
   }
 
-  onSave() {}
+  onSave() {
+    const action = this.file?.actionMember("EditContentAsString") as InvokableActionMember;
+    
+    const map = {} as Dictionary<Value>;
 
+    map["content"] = new Value(this.editContent);
+
+    this.contextService.invokeAction(action, map, 1, 1, false).then(ar => {
+      this.location.back();
+    });
+  }
 
   onCancel() {
     this.location.back()
-  }
-
-  modelChanged() {
-
   }
 
   ngOnDestroy() {
