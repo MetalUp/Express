@@ -21,7 +21,7 @@ namespace Model.Types
         public int Id { get; init; }
 
         [MemberOrder(0)][UrlLink("Start or continue Project")]
-        public string Link =>  $"https://express.metalup.org/task/{Project.Tasks.First().Id}";
+        public string Link =>  $"/task/{Project.Tasks.First().Id}";
 
         [MemberOrder(1)]
         public DateTime DueBy { get; init; }
