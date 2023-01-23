@@ -19,6 +19,7 @@ import { AuthHttpInterceptor, AuthModule } from '@auth0/auth0-angular';
 import { LogoffComponent } from './logoff/logoff.component';
 import { ResultComponent } from './result/result.component';
 import { InvitationComponent } from './invitation/invitation.component';
+import { CustomEditorComponent } from './custom-editor/custom-editor.component';
 
 @NgModule({
     declarations: [
@@ -34,6 +35,7 @@ import { InvitationComponent } from './invitation/invitation.component';
         LogoffComponent,
         ResultComponent,
         InvitationComponent,
+        CustomEditorComponent,
     ],
     imports: [
         BrowserModule,

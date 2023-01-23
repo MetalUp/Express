@@ -11,6 +11,7 @@ import {
     RecentComponent
 } from '@nakedobjects/gemini';
 import { ViewType } from '@nakedobjects/services';
+import { CustomEditorComponent } from './custom-editor/custom-editor.component';
 import { InvitationComponent } from './invitation/invitation.component';
 import { LandingComponent } from './landing/landing.component';
 import { LogoffComponent } from './logoff/logoff.component';
@@ -119,6 +120,7 @@ const routes: Routes = [
     { path: 'task/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'task/:id', component: TaskViewComponent, canActivate: [RegistrationService] },
     { path: 'task',  redirectTo: 'dashboard/home', pathMatch: 'full'},
+    { path: 'dashboard/editor/:id',  component: CustomEditorComponent, canActivate: [RegistrationService] },
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: '**', redirectTo: 'landing', pathMatch: 'full' }
 ];

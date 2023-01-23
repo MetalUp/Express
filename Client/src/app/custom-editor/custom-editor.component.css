@@ -1,0 +1,26 @@
+div.metalup {
+    height: 100%;
+}
+
+.editarea {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 10px;
+}
+
+.pane-body {
+    grid-template-rows:  40vh;
+    font-size: 11pt;
+}
+
+.task {
+    width: 99%;
+    overflow: auto;
+    margin: 5px;
+}
+
+textarea {
+    height:100%;
+}
