@@ -55,6 +55,7 @@
                 ActivityType = type,
                 CodeSubmitted = code,
                 Message = message,
+                HintUsed = hintUsed is null ? 0 : hintUsed.Value,
                 TimeStamp = context.Now()
             };
             return context.WithNew(act);

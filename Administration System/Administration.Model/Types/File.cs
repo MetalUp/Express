@@ -42,7 +42,7 @@ namespace Model.Types
         [Hidden]
         public string LanguageId { get; init; }
 
-        [MemberOrder(4)]
+        [MemberOrder(60)]
         public virtual Language Language { get; init; }
 
         [Hidden]
@@ -51,7 +51,7 @@ namespace Model.Types
         [Hidden]
         public int AuthorId { get; init; }
 
-        [MemberOrder(60)]
+        [MemberOrder(70)]
         public virtual User Author { get; init; }
 
         public override string ToString() => $"{Name} {ContentType} {Language}";

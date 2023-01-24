@@ -30,7 +30,7 @@
 
         [MemberOrder(1)]
         [UrlLink("Start or Continue Project")]
-        public string Link => $"https://express.metalup.org/task/{Tasks.First().Id}";
+        public string Link => $"/task/{Tasks.First().Id}";
 
         [Hidden]
         public int AuthorId { get; init; }
