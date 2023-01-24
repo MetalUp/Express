@@ -1,8 +1,9 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { InvokableActionMember, DomainObjectRepresentation, MenusRepresentation, ActionResultRepresentation, DomainServicesRepresentation } from '@nakedobjects/restful-objects';
+import { InvokableActionMember, DomainObjectRepresentation, MenusRepresentation, ActionResultRepresentation, DomainServicesRepresentation, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
+import { Dictionary } from 'lodash';
 import { first } from 'rxjs';
-import { EmptyUserView } from '../models/user-view';
+import { EmptyUserView, UnregisteredUserView } from '../models/user-view';
 
 import { UserService } from './user.service';
 
@@ -33,7 +34,7 @@ describe('UserService', () => {
 
     contextServiceSpy.getServices.and.returnValue(tssp);
     repLoaderSpy.populate.and.returnValue(tsp);
-  
+
     service.getUserAction();
     tick();
 
@@ -53,7 +54,7 @@ describe('UserService', () => {
 
     contextServiceSpy.getServices.and.returnValue(tssp);
     repLoaderSpy.populate.and.returnValue(tsp);
-  
+
     service.getAcceptInvitationAction();
     tick();
 
@@ -63,24 +64,31 @@ describe('UserService', () => {
     expect(service.acceptInvitationAction).toEqual(testAction);
   }));
 
-  // it('should load the user', fakeAsync(() => {
-  //   const tar = { result: () => ({ "object": () => ({ propertyMember: (s: string) => ({ value: () => ({ scalar: () => "Test User" }) }) }) }) } as unknown as ActionResultRepresentation;  
+  it('should get the user', fakeAsync(() => {
 
-  //   repLoaderSpy.invoke.and.returnValue(Promise.resolve(tar));
+    service.userAction = {} as InvokableActionMember;
 
-  //   const testAction = {} as InvokableActionMember;
-   
-  //   service.userAction = testAction;
+    const testAr = { result: () => ({ object: () => null }) } as ActionResultRepresentation;
 
-    
+    repLoaderSpy.invoke.and.returnValue(Promise.resolve(testAr));
 
-  //   service.loadUser();
-  //   service.currentUser.pipe(first()).subscribe(u => expect(u.DisplayName).toBe(""));
-  //   service.currentUser.pipe(first()).subscribe(u => expect(u.DisplayName).toBe("Test Users"));
-  //   tick();
-    
-  //   expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining({}),  jasmine.objectContaining({}));
-    
+    service.loadUser().then(o => expect(o).toBe(UnregisteredUserView));
+    tick();
 
-  // }));
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.userAction, {} as Dictionary<Value>, {} as Dictionary<Object>);
+  }));
+
+  it('should accept the invitation', fakeAsync(() => {
+
+    service.acceptInvitationAction = {} as InvokableActionMember;
+
+    const testAr = { result: () => ({ object: () => null }) } as ActionResultRepresentation;
+
+    repLoaderSpy.invoke.and.returnValue(Promise.resolve(testAr));
+
+    service.acceptInvitation('test code').then(o => expect(o).toBe(false));
+    tick();
+
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.acceptInvitationAction, { code: new Value('test code') } as Dictionary<Value>, {} as Dictionary<Object>);
+  }));
 });

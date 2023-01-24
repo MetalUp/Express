@@ -1,6 +1,8 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { InvokableActionMember, DomainObjectRepresentation, MenusRepresentation, ActionResultRepresentation, DomainServicesRepresentation } from '@nakedobjects/restful-objects';
+import { InvokableActionMember, DomainObjectRepresentation, MenusRepresentation, ActionResultRepresentation, DomainServicesRepresentation, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
+import { Dictionary } from 'lodash';
+import { EmptyFileView } from '../models/file-view';
 import { FileService } from './file.service';
 
 
@@ -61,24 +63,31 @@ describe('FileService', () => {
     expect(service.saveAction).toEqual(testAction);
   }));
 
-  // it('should load the user', fakeAsync(() => {
-  //   const tar = { result: () => ({ "object": () => ({ propertyMember: (s: string) => ({ value: () => ({ scalar: () => "Test User" }) }) }) }) } as unknown as ActionResultRepresentation;  
+  it('should get the file', fakeAsync(() => {
 
-  //   repLoaderSpy.invoke.and.returnValue(Promise.resolve(tar));
+    service.fileAction = {} as InvokableActionMember;
 
-  //   const testAction = {} as InvokableActionMember;
-   
-  //   service.userAction = testAction;
+    const testAr = { result: () => ({ object: () => null }) } as ActionResultRepresentation;
 
-    
+    repLoaderSpy.invoke.and.returnValue(Promise.resolve(testAr));
 
-  //   service.loadUser();
-  //   service.currentUser.pipe(first()).subscribe(u => expect(u.DisplayName).toBe(""));
-  //   service.currentUser.pipe(first()).subscribe(u => expect(u.DisplayName).toBe("Test Users"));
-  //   tick();
-    
-  //   expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining({}),  jasmine.objectContaining({}));
-    
+    service.loadFile('fileid').then(o => expect(o).toBe(EmptyFileView));
+    tick();
 
-  // }));
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.fileAction, { id: new Value("fileid") } as Dictionary<Value>, {} as Dictionary<Object>);
+  }));
+
+  it('should save the file', fakeAsync(() => {
+
+    service.saveAction = {} as InvokableActionMember;
+
+    const testAr = { result: () => ({ object: () => null }) } as ActionResultRepresentation;
+
+    repLoaderSpy.invoke.and.returnValue(Promise.resolve(testAr));
+
+    service.saveFile('fileid', 'test content').then(o => expect(o).toBe(true));
+    tick();
+
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.saveAction, { id: new Value("fileid"), content: new Value('test content') } as Dictionary<Value>, {} as Dictionary<Object>);
+  }));
 });
