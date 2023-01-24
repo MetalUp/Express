@@ -1,11 +1,12 @@
 <div class="one-column pane" [ngClass]="pendingSubmit ? 'uncompiled' : ''">
     <div class="pane-header">Code
+        <div class="location">{{lineAndColumn}}</div>
         <div class="button-bar">
             <button *ngIf="displayRunApp" [disabled]="!canRunApp" title="{{RunAppTooltip}}"(click)="onRunApp()">Run App</button>
             <button [disabled]="!pendingSubmit" title="{{submitCodeTooltip}}" (click)="onSubmit()">Submit</button>
             <button [disabled]="!canNewerCode()" title="{{nextCodeTooltip}}"  (click)="newerCode()">></button>
             <button [disabled]="!canOlderCode()" title="{{previousCodeTooltip}}"  (click)="olderCode()"><</button>
-            <div class="location">{{lineAndColumn}}</div>
+            
         </div>
     </div>
     <div class="one-column pane-body" [ngClass]="paneSize">
