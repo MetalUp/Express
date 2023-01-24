@@ -31,3 +31,7 @@ div.metalup {
 .pane-size-x-large {
     height: 88vh;
 }
+
+.text-plain textarea {
+    font-family: monospace;
+}

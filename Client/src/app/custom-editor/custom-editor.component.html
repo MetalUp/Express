@@ -1,4 +1,4 @@
-<div class="metalup" [ngClass]="selectedLanguage">
+<div class="metalup" [ngClass]="classes">
     <div class="editarea" [ngClass]="columns">
         <div class="one-column pane">
             <div class="pane-header">Editor
@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="one-column pane-body" [ngClass]="paneSize">
-                <textarea [(ngModel)]="editContent">
+                <textarea spellcheck="false" [(ngModel)]="editContent">
             </textarea>
             </div>
         </div>

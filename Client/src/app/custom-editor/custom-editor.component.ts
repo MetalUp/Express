@@ -29,6 +29,10 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
     return ["arm", "java", "vb", "python", "csharp"];
   } 
 
+  get classes() {
+    return `${this.selectedLanguage} ${this.mime.replace('/', '-')}`;
+  }
+
   selectedLanguage = "csharp";
 
   onRadio(l: string){
