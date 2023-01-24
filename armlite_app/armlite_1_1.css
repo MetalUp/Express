@@ -98,6 +98,15 @@ body.profile-player {
     background-color: #e37422;
 }
 
+a:link, a:visited  {
+    color: white;
+}
+
+a:active, a:hover  {
+    color:#E37422
+}
+
+
 #program {
     display: block;
     width: 300px;

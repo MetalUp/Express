@@ -95,7 +95,7 @@ LOAD, EDIT a program or modify memory</textarea></div>
      </select>
      <button id="clear" title="Clear Memory" onclick="clearMem()">Clear</button>
     <div class="links">
-        <a id="documentation" href="doc.php" target="_blank">Documentation</a>
+        <a id="documentation" href="https://peterhigginson.co.uk/ARMlite/doc.php" target="_blank">Documentation</a>
     </div>
     <div class="credits" id="credits">    
       ARMLite Simulator V2.0b &copy; Peter Higginson 2020-23
