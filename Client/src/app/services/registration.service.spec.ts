@@ -1,7 +1,7 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { BehaviorSubject, first, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { IUserView, UserView } from '../models/user-view';
 import { RegistrationService } from './registration.service';
 import { UserService } from './user.service';
@@ -11,21 +11,21 @@ describe('RegisteredService', () => {
   let authServiceSpy: jasmine.SpyObj<AuthService>;
   let userServiceSpy: jasmine.SpyObj<UserService>;
   let routerSpy: jasmine.SpyObj<Router>;
-  
+
   let authSubj = new Subject<boolean>();
 
-  let userSubj = new BehaviorSubject<UserView>({DisplayName: ""});
+  let userSubj = new BehaviorSubject<UserView>({ DisplayName: "" });
 
 
   beforeEach(() => {
     authServiceSpy = jasmine.createSpyObj('AuthService', ['loginWithRedirect'], { isAuthenticated$: authSubj });
-    userServiceSpy = jasmine.createSpyObj('UserService', ['loadUser'], {currentUser : userSubj});
+    userServiceSpy = jasmine.createSpyObj('UserService', ['loadUser'], { currentUser: userSubj });
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({});
-    service = new RegistrationService(authServiceSpy, userServiceSpy, routerSpy); 
+    service = new RegistrationService(authServiceSpy, userServiceSpy, routerSpy);
 
-    userServiceSpy.loadUser.and.returnValue(Promise.resolve({DisplayName : "Test Name", Registered: true} as IUserView));
+    userServiceSpy.loadUser.and.returnValue(Promise.resolve({ DisplayName: "Test Name", Registered: true } as IUserView));
   });
 
   it('should be created', () => {
@@ -55,7 +55,7 @@ describe('RegisteredService', () => {
   }));
 
   it('should return registered bool for canActivate if set and auth', fakeAsync(() => {
-    userSubj.next({DisplayName : "Test Name", Registered: true} as IUserView);
+    userSubj.next({ DisplayName: "Test Name", Registered: true } as IUserView);
     authSubj.next(true);
     tick();
 
@@ -64,7 +64,7 @@ describe('RegisteredService', () => {
   }));
 
   it('should return registered bool for canActivate if set and unauth', fakeAsync(() => {
-    userSubj.next({DisplayName : "Test Name", Registered: false} as IUserView);
+    userSubj.next({ DisplayName: "Test Name", Registered: false } as IUserView);
     authSubj.next(false);
     tick();
 

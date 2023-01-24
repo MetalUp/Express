@@ -27,17 +27,17 @@ describe('CompileServerService', () => {
   }
 
   class mockValue {
-    constructor(private val: any) {}
+    constructor(private val: any) { }
     value = () => ({
       scalar: () => this.val
     })
   }
 
   let mockAR = {
-    result : () => ({
+    result: () => ({
       object: () => ({
-        propertyMember: (n : string) => {
-          switch(n){
+        propertyMember: (n: string) => {
+          switch (n) {
             case "Cmpinfo": return new mockValue("b");
             case "Outcome": return new mockValue(66);
             case "Stderr": return new mockValue("d");
@@ -47,7 +47,7 @@ describe('CompileServerService', () => {
             case 'ColNo': return new mockValue(0);
           }
           return new mockValue("fail");
-        } 
+        }
       })
     })
   } as unknown as ActionResultRepresentation;

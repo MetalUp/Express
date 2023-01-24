@@ -8,96 +8,96 @@ import { Subject } from 'rxjs';
 
 describe('RulesService', () => {
   let service: RulesService;
- 
+
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let taskSubject = new Subject<ITaskUserView>();
 
-  let regex = 
+  let regex =
   {
     "Messages": {
-        "DisallowedKeyword": "Use of the keyword '{1}' is not permitted",
-        "NotPermitted": "Use of '{1}' is not permitted",
-        "ExternalDependency": "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter",
-        "MutatingMethod": "Use of '{1}', or any other method that mutates a List is not permitted",
-        "Assignment": "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')",
-        "TestResult": "Result is: {1}"
+      "DisallowedKeyword": "Use of the keyword '{1}' is not permitted",
+      "NotPermitted": "Use of '{1}' is not permitted",
+      "ExternalDependency": "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter",
+      "MutatingMethod": "Use of '{1}', or any other method that mutates a List is not permitted",
+      "Assignment": "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')",
+      "TestResult": "Result is: {1}"
     },
     "ServerResponseMessageFilters": {
-        "cmpinfo": "CS.*",
-        "stderr": "\\w+Exception",
-        "tests": [
-          ["(Failed)", "Messages.TestResult"],
-          ["Passed", "All OK"]
-        ]
+      "cmpinfo": "CS.*",
+      "stderr": "\\w+Exception",
+      "tests": [
+        ["(Failed)", "Messages.TestResult"],
+        ["Passed", "All OK"]
+      ]
     },
     "CodeMustMatch": {
-        "both": [],
-        "expressions": [],
-        "functions": [
-            [
-                "^\\s*static\\s+.*",
-                "Functions must start with 'static'"
-            ],
-            [
-                "^(?:.|\\n)*=>.*",
-                "Functions must include the symbol '=>'"
-            ],
-            [
-                "^(?:static\\s(?:.|\\n)*=>(?:.|\\n)*;\\s*)*$",
-                "Functions must follow the form: static <ReturnType> <NameStartingInUpperCase>(<parameters>) => <expression>;"
-            ]
+      "both": [],
+      "expressions": [],
+      "functions": [
+        [
+          "^\\s*static\\s+.*",
+          "Functions must start with 'static'"
+        ],
+        [
+          "^(?:.|\\n)*=>.*",
+          "Functions must include the symbol '=>'"
+        ],
+        [
+          "^(?:static\\s(?:.|\\n)*=>(?:.|\\n)*;\\s*)*$",
+          "Functions must follow the form: static <ReturnType> <NameStartingInUpperCase>(<parameters>) => <expression>;"
         ]
+      ]
     },
     "CodeMustNotContain": {
-        "both": [
-            [
-                ".*(?:^|\\s+)(return|var|void|using|public|private|protected|class|abstract|readOnly)\\s.*",
-                "Messages.DisallowedKeyword"
-            ],
-            [
-                "(Console|System)\\.",
-                "Messages.NotPermitted"
-            ],
-            [
-                "\\w*[^(=|>|<)]=[^(=|>)]\\w*",
-                "Messages.Assignment"
-            ],
-            [
-                "\\W(ArrayList)\\W",
-                "Use of ArrayList is not permitted. Use a typed list such as List<int>"
-            ],
-            [
-                "\\.(Add|AddRange|Clear|RemoveAll|RemoveAt|RemoveRange)\\s*\\(",
-                "Messages.MutatingMethod"
-            ]
+      "both": [
+        [
+          ".*(?:^|\\s+)(return|var|void|using|public|private|protected|class|abstract|readOnly)\\s.*",
+          "Messages.DisallowedKeyword"
         ],
-        "expressions": [
-            [
-                "(;)",
-                "Messages.NotPermitted"
-            ]
+        [
+          "(Console|System)\\.",
+          "Messages.NotPermitted"
         ],
-        "functions": [
-            [
-                "\\s+DateTime\\.(Today|Now)",
-                "Messages.ExternalDependency"
-            ],
-            [
-                "=>\\s*{",
-                "Function implementation may not start with curly brace '{'"
-            ]
+        [
+          "\\w*[^(=|>|<)]=[^(=|>)]\\w*",
+          "Messages.Assignment"
+        ],
+        [
+          "\\W(ArrayList)\\W",
+          "Use of ArrayList is not permitted. Use a typed list such as List<int>"
+        ],
+        [
+          "\\.(Add|AddRange|Clear|RemoveAll|RemoveAt|RemoveRange)\\s*\\(",
+          "Messages.MutatingMethod"
         ]
+      ],
+      "expressions": [
+        [
+          "(;)",
+          "Messages.NotPermitted"
+        ]
+      ],
+      "functions": [
+        [
+          "\\s+DateTime\\.(Today|Now)",
+          "Messages.ExternalDependency"
+        ],
+        [
+          "=>\\s*{",
+          "Function implementation may not start with curly brace '{'"
+        ]
+      ]
     }
-};
+  };
 
 
 
   beforeEach(() => {
-    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], {currentTask : taskSubject});
+    taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
 
     TestBed.configureTestingModule({});
     service = new RulesService(taskServiceSpy);
-    taskSubject.next( {RegExRules : JSON.stringify(regex)} as ITaskUserView);
+    taskSubject.next({ RegExRules: JSON.stringify(regex) } as ITaskUserView);
   });
 
   it('should be created', () => {

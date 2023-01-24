@@ -1,9 +1,8 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { InvokableActionMember, DomainObjectRepresentation, MenusRepresentation, ActionResultRepresentation, DomainServicesRepresentation, Value } from '@nakedobjects/restful-objects';
+import { InvokableActionMember, DomainObjectRepresentation, ActionResultRepresentation, DomainServicesRepresentation, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
-import { first } from 'rxjs';
-import { EmptyUserView, UnregisteredUserView } from '../models/user-view';
+import { UnregisteredUserView } from '../models/user-view';
 
 import { UserService } from './user.service';
 
@@ -80,13 +79,14 @@ describe('UserService', () => {
 
   it('should accept the invitation', fakeAsync(() => {
 
+    service.userAction = {} as InvokableActionMember;
     service.acceptInvitationAction = {} as InvokableActionMember;
 
     const testAr = { result: () => ({ object: () => null }) } as ActionResultRepresentation;
 
     repLoaderSpy.invoke.and.returnValue(Promise.resolve(testAr));
 
-    service.acceptInvitation('test code').then(o => expect(o).toBe(false));
+    service.acceptInvitation('test code').then(o => expect(o).toBe(true));
     tick();
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.acceptInvitationAction, { code: new Value('test code') } as Dictionary<Value>, {} as Dictionary<Object>);
