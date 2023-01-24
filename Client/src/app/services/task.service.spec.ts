@@ -25,7 +25,7 @@ describe('TaskService', () => {
   });
 
   it('should get the service', fakeAsync(() => {
-   
+
     const testAction = {} as InvokableActionMember;
     const testService = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
     const testServices = { getService: (s: string) => testService } as unknown as DomainServicesRepresentation;
@@ -35,7 +35,7 @@ describe('TaskService', () => {
 
     contextServiceSpy.getServices.and.returnValue(tssp);
     repLoaderSpy.populate.and.returnValue(tsp);
-  
+
     service.getService();
     tick();
 
@@ -47,18 +47,18 @@ describe('TaskService', () => {
   }));
 
   it('should get the task', fakeAsync(() => {
-   
+
     const testAction = {} as InvokableActionMember;
     service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
 
     const object = new DomainObjectRepresentation();
-    const pm = new PropertyMember({value : 'testlanguage'} as any, object, 'Language');
+    const pm = new PropertyMember({ value: 'testlanguage' } as any, object, 'Language');
     pm.entryType = () => EntryType.FreeForm;
     pm.isScalar = () => true;
 
-    object.propertyMembers = () => ({'Language': pm});
-    
-    const actionResult = {result: () => ({object: () => object})} as unknown as ActionResultRepresentation;
+    object.propertyMembers = () => ({ 'Language': pm });
+
+    const actionResult = { result: () => ({ object: () => object }) } as unknown as ActionResultRepresentation;
     const promise = Promise.resolve(actionResult);
 
     repLoaderSpy.invoke.and.returnValue(promise);
@@ -69,8 +69,8 @@ describe('TaskService', () => {
     });
     tick();
     const params = service.params(1);
-    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params),  jasmine.objectContaining({}));
-    
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params), jasmine.objectContaining({}));
+
   }));
 
   it('should load empty task if task not found', fakeAsync(() => {
@@ -86,9 +86,9 @@ describe('TaskService', () => {
     );
     tick();
     const params = service.params(1);
-    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params),  jasmine.objectContaining({}));
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params), jasmine.objectContaining({}));
 
-    
+
   }));
 
   it('should goto a new task', () => {
@@ -102,47 +102,47 @@ describe('TaskService', () => {
   });
 
   it('should return a hint', fakeAsync(() => {
-   
+
     const testAction = {} as InvokableActionMember;
     service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
 
     const object = new DomainObjectRepresentation();
-    const pm = new PropertyMember({value : 'hint title'} as any, object, 'Title');
+    const pm = new PropertyMember({ value: 'hint title' } as any, object, 'Title');
     pm.entryType = () => EntryType.FreeForm;
     pm.isScalar = () => true;
 
-    object.propertyMembers = () => ({'Title': pm});
-    
-    const actionResult = {result: () => ({object: () => object})} as unknown as ActionResultRepresentation;
+    object.propertyMembers = () => ({ 'Title': pm });
+
+    const actionResult = { result: () => ({ object: () => object }) } as unknown as ActionResultRepresentation;
     const promise = Promise.resolve(actionResult);
 
     repLoaderSpy.invoke.and.returnValue(promise);
-  
+
     service.loadHint(1, 1).then(t => {
       expect(t.Title).toEqual('hint title');
     });
     tick();
-    
+
     const params = service.params(1, 1);
-    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params),  jasmine.objectContaining({}));
-    
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params), jasmine.objectContaining({}));
+
   }));
 
   it('should return empty hint if not found', fakeAsync(() => {
-   
+
     const testAction = {} as InvokableActionMember;
     service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
 
 
     repLoaderSpy.invoke.and.returnValue(Promise.reject({ status: 404 }));
-  
+
     service.loadHint(1, 1).then(t => {
       expect(t.Title).toEqual('');
     });
     tick();
-    
+
     const params = service.params(1, 1);
-    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params),  jasmine.objectContaining({}));
-    
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(testAction, jasmine.objectContaining(params), jasmine.objectContaining({}));
+
   }));
 });

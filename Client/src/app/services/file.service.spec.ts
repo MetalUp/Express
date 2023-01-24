@@ -1,5 +1,5 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { InvokableActionMember, DomainObjectRepresentation, MenusRepresentation, ActionResultRepresentation, DomainServicesRepresentation, Value } from '@nakedobjects/restful-objects';
+import { InvokableActionMember, DomainObjectRepresentation, ActionResultRepresentation, DomainServicesRepresentation, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { EmptyFileView } from '../models/file-view';
@@ -33,7 +33,7 @@ describe('FileService', () => {
 
     contextServiceSpy.getServices.and.returnValue(tssp);
     repLoaderSpy.populate.and.returnValue(tsp);
-  
+
     service.getFileAction();
     tick();
 
@@ -53,7 +53,7 @@ describe('FileService', () => {
 
     contextServiceSpy.getServices.and.returnValue(tssp);
     repLoaderSpy.populate.and.returnValue(tsp);
-  
+
     service.getSaveAction();
     tick();
 
