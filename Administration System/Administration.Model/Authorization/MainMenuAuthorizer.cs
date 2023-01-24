@@ -23,6 +23,7 @@ namespace Model.Authorization
                 nameof(Compile) => CompileAuth(memberName, context),
                 nameof(TaskAccess) => TaskAccessAuth(memberName, context),
                 nameof(UserService) => InvitationAcceptanceAuth(memberName,context),
+                nameof(FileService) => FileServiceAuth(memberName,context),
                 _ => false
             };
 
@@ -117,6 +118,8 @@ namespace Model.Authorization
         private bool TaskAccessAuth(string memberName, IContext context) => true;
 
         private bool InvitationAcceptanceAuth(string memberName, IContext context) => true;
+
+        private bool FileServiceAuth(string memberName, IContext context) => true;
 
         private bool LanguagesAuth(string memberName, IContext context) =>
             Users.UserRole(context) switch
