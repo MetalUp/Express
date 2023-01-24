@@ -3,12 +3,13 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
  <title>ARMlite Assembly Language Simulator by Peter Higginson</title>
- <meta name="copyright" content="&copy; 2020-22 Peter Higginson and Richard Pawson">
+ <meta name="copyright" content="&copy; 2020-23 Peter Higginson and Richard Pawson">
+ <meta name="viewport" content="width=1233, initial-scale=1" />
  <link href="armlite_1_1.css" rel="stylesheet">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
- <script src="compress_1_2_4x.js"></script>
+ <script src="compress_2_0b.js"></script>
 </head>
-<body id="xxbody" onresize="changeDimensions()" onkeydown="keyDown(event)" onkeyup="keyUp(event)" onbeforeunload="flushLog()" class="ready" style="tab-size:4;">
+<body id="xxbody" onresize="changeDimensions()" onkeydown="keyDown(event)" onkeyup="keyUp(event)" class="ready" style="tab-size:4;">
   <div id="program">
     <div class="title">Program</div>
     <div id="source">
@@ -53,7 +54,7 @@
   <div class="title">Count</div>
  </div>
  <div id="run-controls">
-    <button type="submit" id="run" title="Run" onclick="run()"><img src="./images/Run.png"></button>
+    <button type="submit" id="run" title="Run" onclick="runOrig()"><img src="./images/Run.png"></button>
     <button type="submit" id="pause" title="Pause" onclick="stop()"><img src="./images/Pause.png"></button>
 	<!-- stop is what reset was before (and pause what stop was) -->
     <button type="submit" id="stop" title="Stop" onclick="reset1()"><img src="./images/Stop.png"></button>	
@@ -94,28 +95,20 @@ LOAD, EDIT a program or modify memory</textarea></div>
      </select>
      <button id="clear" title="Clear Memory" onclick="clearMem()">Clear</button>
     <div class="links">
-        <!--<a id="documentation" href="docv1_2.php" target="_blank">Documentation</a>-->
+        <a id="documentation" href="doc.php" target="_blank">Documentation</a>
     </div>
     <div class="credits" id="credits">    
-      ARMLite Simulator V1.2.4x &copy; Peter Higginson 2020-22
+      ARMLite Simulator V2.0b &copy; Peter Higginson 2020-23
     </div>
   </div>
 </div>
 <!-- Matomo -->
 <script>
-  startIt();
-  var _paq = window._paq = window._paq || [];
-  _paq.push(["disableCookies"]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//matomo.peterhigginson.co.uk/matomo/";
-    _paq.push(['setTrackerUrl', u+'matomo.php']);
-    _paq.push(['setSiteId', '4']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.async=true; g.src=u+'matomo_expandedx.js'; s.parentNode.insertBefore(g,s);
-  })();
+startIt();
+var _paq = window._paq = window._paq || [];_paq.push(["disableCookies"]);_paq.push(['trackPageView']);_paq.push(['enableLinkTracking']);
+(function() {var u="//matomo.peterhigginson.co.uk/matomo/";_paq.push(['setTrackerUrl', u+'matomo.php']);_paq.push(['setSiteId', '4']);var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);})();  
 </script>
 <noscript><p><img src="//matomo.peterhigginson.co.uk/matomo/matomo.php?idsite=4&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+<script type="text/javascript">/* history.pushState('', '', '/ARMlite/index_2_0b.php');loses ?params*/</script>
 </body>
 </html>
