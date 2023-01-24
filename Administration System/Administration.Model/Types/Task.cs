@@ -57,7 +57,7 @@ namespace Model.Types
         public int MaxMarks { get; init; }
 
         #region Description
-        internal FileAttachment Description => DescriptionFile?.Details;
+        internal FileAttachment Description => DescriptionFile?.ViewContent;
 
         [Hidden]
         public int? DescriptionFileId { get; init; }

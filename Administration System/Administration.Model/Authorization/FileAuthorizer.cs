@@ -9,7 +9,7 @@ namespace Model.Authorization
          Users.UserRole(context) switch
                     {
                         Role.Root => true,
-                        Role.Author => IsProperty<File>(memberName)  || UserIsAuthor(file, context),
+                        Role.Author => UserIsAuthor(file, context) || (IsProperty<File>(memberName) && memberName != nameof(File.EditContent)),
                         _ => false
                     };
 

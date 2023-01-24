@@ -34,7 +34,7 @@ namespace Model.Types
 
         #region HtmlFile
         [Hidden]
-        public FileAttachment HtmlFile => File?.Details;
+        public FileAttachment HtmlFile => File?.ViewContent;
 
         [Hidden]
         public int? FileId { get; init; }
