@@ -29,6 +29,8 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   changed: boolean = false;
 
+  loaded: boolean = false;
+
   get languages() {
     return ["arm", "java", "vb", "python", "csharp"];
   }
@@ -73,6 +75,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
           this.editContent = this.initialContent = file.Content;
           this.mime = file.Mime || 'text/plain';
           this.selectedLanguage = file.LanguageAlphaName || 'csharp';
+          this.loaded = true;
         })
       }
     })
