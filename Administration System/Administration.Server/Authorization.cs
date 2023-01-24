@@ -25,10 +25,8 @@ namespace Server
             config.AddTypeAuthorizer<Assignment, AssignmentAuthorizer>();
             config.AddTypeAuthorizer<RunResult, RunResultAuthorizer>();
             config.AddTypeAuthorizer<CodeUserView, CodeUserViewAuthorizer>();
+            config.AddTypeAuthorizer<FileViewModel, FileViewModelAuthorizer>();
             return config;
         }
-
-
     }
-
 }

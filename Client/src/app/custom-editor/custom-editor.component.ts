@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ContextService, InteractionMode } from '@nakedobjects/services';
-import { DomainObjectRepresentation, InvokableActionMember, ObjectIdWrapper, Value } from '@nakedobjects/restful-objects';
 import { Location } from '@angular/common';
-import { Dictionary } from 'lodash';
+import { FileService } from '../services/file.service';
+import { IFileView } from '../models/file-view';
 
 @Component({
   selector: 'app-custom-editor',
@@ -15,7 +14,9 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute, 
               private location : Location, 
-              private contextService : ContextService) { }
+              private fileService : FileService) { }
+
+  id?: string;
 
   editContent: string = "";
 
@@ -23,7 +24,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   sub?: Subscription;
 
-  file?: DomainObjectRepresentation;
+  file?: IFileView;
 
   get languages() {
     return ["arm", "java", "vb", "python", "csharp"];
@@ -57,26 +58,19 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.route.paramMap.subscribe(pm => {
-      const id = pm.get('id') || "";
-      if (id) {
-        this.contextService.getObject(1, ObjectIdWrapper.fromRaw("Model.Types.File", id, "--"), InteractionMode.View).then(o => {
-          this.file = o;
-          const action = this.file.actionMember("EditContentAsString") as InvokableActionMember;
-          this.editContent = action.parameters()["content"].default().toValueString();
-          this.mime = this.file.propertyMember("Mime").value().toValueString();
+      this.id = pm.get('id') || "";
+      if (this.id) {
+        this.fileService.loadFile(this.id).then(file => {
+          this.editContent = file.Content;
+          this.mime = file.Mime || 'text/plain';
+          this.selectedLanguage = file.LanguageAlphaName || 'csharp';
         })
       }
     })
   }
 
   onSave() {
-    const action = this.file?.actionMember("EditContentAsString") as InvokableActionMember;
-    
-    const map = {} as Dictionary<Value>;
-
-    map["content"] = new Value(this.editContent);
-
-    this.contextService.invokeAction(action, map, 1, 1, false).then(ar => {
+    this.fileService.saveFile(this.id!, this.editContent).then(b => {
       this.location.back();
     });
   }

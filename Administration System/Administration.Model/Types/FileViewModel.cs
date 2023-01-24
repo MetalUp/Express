@@ -1,10 +1,12 @@
 ﻿namespace Model.Types;
 
 [ViewModel(typeof(FileViewModel_Functions))]
-public class FileViewModel {
+public class FileViewModel
+{
     public FileViewModel() { }
 
-    public FileViewModel(File file) {
+    public FileViewModel(File file)
+    {
         FileId = file.Id;
         Content = file.ContentsAsString() ?? "";
         Mime = file.Mime ?? "";
