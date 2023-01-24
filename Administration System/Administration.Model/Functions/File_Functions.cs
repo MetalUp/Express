@@ -10,12 +10,6 @@ namespace Model.Functions
         public static IContext ReloadFromExternalFile(this File file, FileAttachment externalFile, IContext context) =>
             context.WithUpdated(file, new File(file) { Content = externalFile.GetResourceAsByteArray(), Mime = externalFile.MimeType });
 
-        [MemberOrder(20)]
-        public static IContext EditContentAsString(this File file, [MultiLine(20)] string content, IContext context) =>
-            context.WithUpdated(file, new File(file) {Content =content.AsByteArray()});
-
-        public static string Default1EditContentAsString(this File file) => file.ContentsAsString();
-
         internal static string ContentsAsString(this File file) => file.Content.AsASCIIonly();
 
         internal static string AsASCIIonly(this byte[] bytes) =>

@@ -23,13 +23,20 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
-        [MemberOrder(1)]
+        [MemberOrder(10)]
+        public FileAttachment ViewContent => new FileAttachment(Content, "Click here to open view", Mime);
+
+        [MemberOrder(20)]
+        [UrlLink("Click here to open editor")]
+        public string EditContent => $"/dashboard/editor/{Id}";
+
+        [MemberOrder(30)]
         public string Name { get; init; }
 
-        [MemberOrder(2)]
+        [MemberOrder(40)]
         public ContentType? ContentType { get; init; }
 
-        [MemberOrder(3)]
+        [MemberOrder(50)]
         public string Mime { get; init; }
 
         [Hidden]
@@ -41,17 +48,10 @@ namespace Model.Types
         [Hidden]
         public byte[] Content { get; init; }
 
-        [MemberOrder(10)]
-        public FileAttachment Details => new FileAttachment(Content, "Click here to View in new Tab", Mime);
-
-        [MemberOrder(11)]
-        [UrlLink("Click here to Edit in editor")]
-        public string Edit =>  $"/dashboard/editor/{Id}";
-
         [Hidden]
         public int AuthorId { get; init; }
 
-        [MemberOrder(40)]
+        [MemberOrder(60)]
         public virtual User Author { get; init; }
 
         public override string ToString() => $"{Name} {ContentType} {Language}";
