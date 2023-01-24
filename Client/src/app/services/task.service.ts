@@ -4,7 +4,7 @@ import { EmptyTaskUserView, ITaskUserView, TaskUserView } from '../models/task-u
 import { EmptyHintUserView, HintUserView, IHintUserView } from '../models/hint-user-view';
 import { Subject } from 'rxjs';
 import { ContextService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
-import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
+import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
 import { Dictionary } from 'lodash';
 import { CodeUserView, EmptyCodeUserView, ICodeUserView } from '../models/code-user-view';
 import { convertTo } from './rep-helpers';
@@ -120,7 +120,6 @@ export class TaskService {
         });
     });
   }
-
 
   gotoTask(taskId: number) {
     this.router.navigate([`/task/${taskId}`]);

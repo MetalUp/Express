@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Value, ActionResultRepresentation, IHateoasModel, DomainObjectRepresentation, InvokableActionMember, DomainServicesRepresentation } from '@nakedobjects/restful-objects';
+import { Value, ActionResultRepresentation, DomainObjectRepresentation, InvokableActionMember } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { EmptyFileView, FileView, IFileView } from '../models/file-view';
-import { convertTo } from './rep-helpers';
+import { convertTo, getAction, getService } from './rep-helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -19,24 +19,14 @@ export class FileService {
     return convertTo<IFileView>(new FileView(), rep);
   }
 
-  getService() {
-    return this.contextService.getServices()
-      .then((services: DomainServicesRepresentation) => {
-        const service = services.getService("Model.Functions.Services.FileService");
-        return this.repLoader.populate(service);
-      })
-      .then((s: IHateoasModel) => s as DomainObjectRepresentation)
-  }
+  // must be lambda function for 'this' binding
+  getService = () => getService(this.contextService, this.repLoader, "Model.Functions.Services.FileService");
 
   saveFile(id: string, content: string) {
     return this.getSaveAction().then(action => {
       return this.repLoader.invoke(action, { id: new Value(id), content: new Value(content) } as Dictionary<Value>, {} as Dictionary<Object>)
-        .then(_ => {
-          return true;
-        }) // success
-        .catch(_ => {
-          return false;
-        });
+        .then(_ => true) // success
+        .catch(_ => false);
     });
   }
 
@@ -69,6 +59,6 @@ export class FileService {
   }
 
   getAction(name: string) {
-    return this.getService().then(service => service.actionMember(name) as InvokableActionMember);
+    return getAction(this.getService, name);
   }
 }

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Value, ActionResultRepresentation, IHateoasModel, DomainObjectRepresentation, InvokableActionMember, PropertyMember, EntryType, DomainServicesRepresentation } from '@nakedobjects/restful-objects';
+import { Value, ActionResultRepresentation, DomainObjectRepresentation, InvokableActionMember } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { EmptyUserView, IUserView, RegisteredUserView, UnregisteredUserView, UserView } from '../models/user-view';
-import { convertTo } from './rep-helpers';
+import { convertTo, getAction, getService } from './rep-helpers';
 
 @Injectable({
   providedIn: 'root'
@@ -26,15 +26,9 @@ export class UserService {
     return convertTo<IUserView>(RegisteredUserView, rep);
   }
 
-  getService() {
-    return this.contextService.getServices()
-      .then((services: DomainServicesRepresentation) => {
-        const service = services.getService("Model.Functions.Services.UserService");
-        return this.repLoader.populate(service);
-      })
-      .then((s: IHateoasModel) => s as DomainObjectRepresentation)
-  }
-
+  // must be lambda function for 'this' binding
+  getService = () => getService(this.contextService, this.repLoader, "Model.Functions.Services.UserService");
+  
   acceptInvitation(code: string) {
     return this.getAcceptInvitationAction().then(action => {
       return this.repLoader.invoke(action, { code: new Value(code) } as Dictionary<Value>, {} as Dictionary<Object>)
@@ -63,10 +57,10 @@ export class UserService {
           return EmptyUserView as IUserView;
         });
     })
-    .catch(_ => {
-      this.currentUserAsSubject.next(EmptyUserView);
-      return EmptyUserView as IUserView;
-    });
+      .catch(_ => {
+        this.currentUserAsSubject.next(EmptyUserView);
+        return EmptyUserView as IUserView;
+      });
   }
 
   getUserAction() {
@@ -82,6 +76,6 @@ export class UserService {
   }
 
   getAction(name: string) {
-    return this.getService().then(service => service.actionMember(name) as InvokableActionMember);
+    return getAction(this.getService, name);
   }
 }
