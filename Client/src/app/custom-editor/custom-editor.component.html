@@ -3,8 +3,9 @@
         <div class="one-column pane">
             <div class="pane-header">Editor
                 <div class="button-bar">
-                    <button (click)="onSave()">Save</button>
                     <button (click)="onCancel()">Cancel</button>
+                    <button [disabled]="!canSave()" (click)="onSave()">Save</button>
+                    <div class="warning">{{warning}}</div>
                 </div>
             </div>
             <div class="one-column pane-body" [ngClass]="paneSize">
@@ -17,13 +18,14 @@
             <div class="pane-header">Display
                 <div class="button-bar">
                     <div *ngFor="let l of languages">
-                        <input class="radio" (click)="onRadio(l)" type="radio" id="{{l}}" name="language" value="{{l}}" [checked]="isChecked(l)"/>
+                        <input class="radio" (click)="onRadio(l)" type="radio" id="{{l}}" name="language" value="{{l}}"
+                            [checked]="isChecked(l)" />
                         <label class="radio" for="l">{{l}}</label>
                     </div>
                 </div>
             </div>
             <div class="one-column pane-body" [ngClass]="paneSize">
-                <div class="display" [innerHtml]="editContent"></div>    
+                <div class="display" [innerHtml]="editContent"></div>
             </div>
         </div>
     </div>

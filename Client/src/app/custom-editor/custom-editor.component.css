@@ -35,3 +35,7 @@ div.metalup {
 .text-plain textarea {
     font-family: monospace;
 }
+
+.warning {
+    margin: 5px;
+}
