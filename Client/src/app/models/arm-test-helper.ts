@@ -1,4 +1,4 @@
-import { Run, Reset, ClearSystem, GetRegister, GetN, GetZ, GetC, GetV, GetMemory, GetPixel, GetPixels, GetConsoleOutput, InputText, HitKey, GetMemoryRange } from 'armlite_service';
+import * as ARMlite from 'armlite_service';
 import { EmptyRunResult, RunResult } from './run-result';
 
 class TestError extends Error {
@@ -36,66 +36,82 @@ export class ArmTestHelper {
     }
 
     Run(maxSteps: number): RunResult {
-        return Run(maxSteps) as RunResult;
-    }
-
-    Reset(): RunResult {
-        return Reset() as RunResult;
-    }
-
-    ClearSystem(): RunResult {
-        return ClearSystem() as RunResult;
-    }
-
-    GetRegister(n: number) {
-        return GetRegister(n);
-    }
-
-    GetN(): boolean {
-        return GetN() as boolean;
-    }
-
-    GetZ(): boolean {
-        return GetZ() as boolean;
-    }
-
-    GetC(): boolean {
-        return GetC() as boolean;
-    }
-
-    GetV(): boolean {
-        return GetV() as boolean;
-    }
-
-    GetMemory(loc: number) {
-        return GetMemory(loc);
-    }
-
-    GetPixel(addr: number) {
-        return GetPixel(addr);
+        return ARMlite.Run(maxSteps) as RunResult;
     }
 
     InputText(text: string) {
-        return InputText(text);
+        return ARMlite.InputText(text);
     }
 
     HitKey(keyValue: number) {
-        return HitKey(keyValue);
+        return ARMlite.HitKey(keyValue);
     }
 
-    GetPixels(low: number, high: number) {
-        return GetPixels(low, high);
+    Reset(): RunResult {
+        return ARMlite.Reset() as RunResult;
     }
 
-    GetMemoryRange(low: number, high: number) {
-        return GetMemoryRange(low, high);
+    ClearSystem(): RunResult {
+        return ARMlite.ClearSystem() as RunResult;
+    }
+
+    GetRegister(n: number) : number {
+        return ARMlite.GetRegister(n);
+    }
+
+    GetN(): boolean {
+        return ARMlite.GetN() as boolean;
+    }
+
+    GetZ(): boolean {
+        return ARMlite.GetZ() as boolean;
+    }
+
+    GetC(): boolean {
+        return ARMlite.GetC() as boolean;
+    }
+
+    GetV(): boolean {
+        return ARMlite.GetV() as boolean;
+    }
+
+    GetMemory(loc: number) : number {
+        return ARMlite.GetMemory(loc);
+    }
+
+    GetMemoryRange(low: number, high: number) : number []{
+        return ARMlite.GetMemoryRange(low, high);
+    }
+
+    GetPixel(addr: number) : number {
+        return ARMlite.GetPixel(addr);
+    }
+
+    GetPixels(low: number, high: number) : number[] {
+        return ARMlite.GetPixels(low, high);
+    }
+
+    GetPixelAreaSize(): number {
+        return ARMlite.GetPixelAreaSize();
+    }
+
+    GetPixelScreen(): number {
+        return ARMlite.GetPixelScreen();
+    }
+
+    GetCharScreen(): number {
+        return ARMlite.GetCharScreen();
     }
 
     GetConsoleOutput(): string {
-        return GetConsoleOutput() as string;
+        return ARMlite.GetConsoleOutput() as string;
     }
 
-    GetNonEmptyLinesOfCode() {
+    GetProgram(): RunResult {
+        return ARMlite.GetProgram();
+    }
+
+    GetNonEmptyLinesOfCode() : string[] {
        const codeArray = this.studentCode.split('\n');
        return codeArray.filter(l => !(l.trim() === ""));
     }
