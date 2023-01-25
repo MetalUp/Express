@@ -23,6 +23,8 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   mime: string = "";
 
+  name: string = "";
+
   sub?: Subscription;
 
   file?: IFileView;
@@ -75,6 +77,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
           this.editContent = this.initialContent = file.Content;
           this.mime = file.Mime || 'text/plain';
           this.selectedLanguage = file.LanguageAlphaName || 'csharp';
+          this.name = file.Name;
           this.loaded = true;
         })
       }
