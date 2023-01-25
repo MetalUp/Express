@@ -38,6 +38,7 @@ function getDimensions()
 		maxHeight = document.documentElement.clientHeight;
 	}
 }
+// for ARMlite scaling made all the CSS box borders visible so was useless!!
 
 function randomInt(min,max)
 {

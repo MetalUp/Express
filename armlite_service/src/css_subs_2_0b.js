@@ -346,18 +346,19 @@ function intButtonReset()
 // called when Pin ISR setup or polling enabled
 function intButtonSetup()
 {
-	addClass("irq","enabled");
+	if (!serviceMode) addClass("irq","enabled");
 }
 
 // not clickable
 function intButtonGrey()
 {
-	removeClass("irq","active");
+	if (!serviceMode) removeClass("irq","active");
 }
 
 // clickable (so set enabled in case we got here without calling setup)
 function intButtonShow()
 {
+	if (serviceMode) return;
 	addClass("irq","enabled");
 	addClass("irq","active");
 }
@@ -405,7 +406,7 @@ function pageSubmit()
 		return;
 	}
 	if ((val * 256) == (maxUsableMem-256)) --val;		// you are allowed to ask for the last page
-	evPush('Pg'+padHex(val,3));
+	//evPush('Pg'+padHex(val,3));
 	var tmp = lastMemHighlight;
 	removeMemHighlight();			// need to do this before we change the value of overlay!
 	overlay = val;	
@@ -962,12 +963,14 @@ function changeDimensions()
 {
 	getDimensions();
 	if (dynamicProgramWidth) {
-		var tmp = maxWidth - 826;
+		var tmp = maxWidth - 834;
 		if (tmp < 300) tmp = 300;			// impose limits
 		if (tmp > 3000) tmp = 3000;			// anything above 3000 just seems silly
 		setProgramWidth(tmp);	// need to set something as window reduces in size
 	}
 }
+
+/* Removed for v1.2.3
 
 // Event compressing and logging functions
 function evStep()		// special case, so own call
@@ -1042,3 +1045,4 @@ function flushLog()
 		eventCount = 1;			// avoid sending two consecutive Unloads
 	}
 }
+*/
