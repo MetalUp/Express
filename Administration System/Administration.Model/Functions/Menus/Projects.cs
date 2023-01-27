@@ -13,7 +13,7 @@
         [MemberOrder(20)]
         [TableView(false, "Status", "Title", "Language")]
         public static IQueryable<Project> AllProjects(IContext context) =>
-        context.Instances<Project>().OrderBy(p => p.Status).ThenBy(p => p.Title).ThenBy(p => p.Language);
+            context.Instances<Project>().OrderBy(p => p.Status).ThenBy(p => p.Title).ThenBy(p => p.Language);
 
         [MemberOrder(30)]
         public static (Project, IContext) CreateNewProject(string title, Language language, IContext context)
@@ -24,14 +24,15 @@
 
         [MemberOrder(120)]
         public static IQueryable<Project> AllAssignableProjects(
-    [Optionally] Language language,
-    IContext context) =>
-    AllProjects(context).Where(p => p.Status == ProjectStatus.Assignable && (language == null || p.Language == language));
+            [Optionally] Language language,
+            IContext context) =>
+            AllProjects(context).Where(p => p.Status == ProjectStatus.Assignable && (language == null || p.Language == language));
+
 
         [MemberOrder(130)]
         public static IQueryable<Project> FindProjects(
-            [Optionally] string title,
-            [Optionally] Language language,
+             Language language,
+            [Optionally] [DescribedAs("optional")]string title,
             IContext context) =>
                 AllAssignableProjects(language, context).Where(t => title == null || t.Title.ToUpper().Contains(title.ToUpper()));
     }
