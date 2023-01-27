@@ -10,6 +10,8 @@ namespace Model.Authorization
                 {
                     Role.Root => true,
                     Role.Author => IsProperty<Task>(memberName) || UserIsAuthor(task, context),
+                    Role.Teacher => IsProperty<Task>(memberName),
+                    Role.Student => IsProperty<Task>(memberName) && !memberName.Contains("File"),
                     _ => false
                 };
 

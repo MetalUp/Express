@@ -5,7 +5,7 @@ namespace Model.Functions.Menus
 {
     public static class Invitations
     {
-        public static (User, IContext) InviteNewStudent(
+        public static (User, IContext) InviteNewStudentInMyOrganisation(
            string name,
            [Optionally] Group group,
            IContext context)
@@ -21,9 +21,9 @@ namespace Model.Functions.Menus
             }
         }
 
-        public static IList<Group> Choices1InviteNewStudent(IContext context) =>  Groups.AllGroups(context).ToList();
+        public static IList<Group> Choices1InviteNewStudentInMyOrganisation(IContext context) =>  Groups.AllGroups(context).ToList();
 
-        public static (User, IContext) InviteNewTeacher(string name, IContext context)
+        public static (User, IContext) InviteNewTeacherInMyOrganisation(string name, IContext context)
         {
             (var teacher, var context2) = InviteNewUserToSpecifiedOrganisation(name, Role.Teacher, Organisations.MyOrganisation(context), context);
             return (teacher, context2);

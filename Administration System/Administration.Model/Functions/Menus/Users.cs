@@ -17,13 +17,6 @@ namespace Model.Functions.Menus
         public static User FindByUserName(string userName, IContext context) =>
     context.Instances<User>().SingleOrDefault(c => c.UserName == Hash(userName));
 
-        [MemberOrder(30)]
-        public static (User, IContext) CreateNewPendingUser(string name, Role role, Organisation org, IContext context)
-        {
-            var s = new User { Name = name, Role = role, OrganisationId = org.Id, Organisation = org, Status = UserStatus.PendingAcceptance };
-            return (s, context.WithNew(s));
-        }
-
         public static IQueryable<User> AllUsers(IContext context) =>context.Instances<User>();
 
         #region Students & Colleagues
