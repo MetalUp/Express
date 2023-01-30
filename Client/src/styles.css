@@ -299,9 +299,6 @@ gemini {
 }
 
 .metalup .info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 28px;
     box-sizing: border-box;
     border: none;
     background-color: var(--background-color);
