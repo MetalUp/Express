@@ -23,7 +23,7 @@
             <div class="one-column pane-body">
                 <div class="control">
                     <div><label for="newurl">Link Url</label><input id="newurl" [(ngModel)]="url"/></div>
-                    <textarea class="payload" [ngModel]="payload"></textarea>
+                    <textarea rows="10" class="payload" spellcheck="false" [(ngModel)]="payload"></textarea>
                     <button [title]="okTooltip" [disabled]="disableOk" (click)="onOk()">Ok</button>
                     <div>{{message}}</div>
                 </div>

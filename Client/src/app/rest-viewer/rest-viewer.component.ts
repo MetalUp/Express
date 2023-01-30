@@ -24,9 +24,19 @@ export class RestViewerComponent implements OnInit {
 
   message = "";
 
+  getUrl(url: string) {
+    if (this.payload) {
+      const encoded = encodeURI(this.payload);
+      return `${url}?${encoded}`;
+    }
+    else {
+      return url;
+    }
+  }
+
   loadUrl(url: string) {
     this.message = "";
-    this.http.request('get', url, { responseType: 'json' })
+    this.http.request('get', this.getUrl(url), { responseType: 'json' })
       .pipe(first())
       .pipe(catchError((e) => {
         if (e instanceof HttpErrorResponse){
