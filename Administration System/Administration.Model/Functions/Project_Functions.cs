@@ -46,7 +46,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditDescription(
             this Project proj,
-            [MultiLine(10)] string description,
+            string description,
             IContext context) =>
              context.WithUpdated(proj, new(proj) { Description = description });
 
@@ -84,6 +84,24 @@ namespace Model.Functions
 
         public static string ValidateEditCommonTestsFile(this Project project, File commonHiddenCodeFile) =>
                 ValidateLanguageAndContentType(project, commonHiddenCodeFile, ContentType.Tests);
+
+        #endregion
+
+        #region Keywords
+        public  static IContext AddKeywords(this Project project, IEnumerable<string> existingKeywords, string newKeyword, IContext context)
+        {
+            IContext context2 = context;
+            string updated = existingKeywords.Aggregate(project.Keywords, (a,k) => a + " " + k);
+            if(newKeyword != null && !existingKeywords.Contains(newKeyword))
+            {
+                updated += $"{newKeyword} ";
+                context2 = context.WithNew(new Keyword { WordOrPhrase = newKeyword });
+            }
+            return context2.WithUpdated(project, new Project(project) { Keywords = updated});
+        }
+
+        public static IEnumerable<string> Choices1AddKeywords(this Project project, IContext context) =>
+            context.Instances<Keyword>().Select(k => k.WordOrPhrase);
 
         #endregion
 
