@@ -1,4 +1,5 @@
 ﻿using NakedFunctions.Security;
+using static Model.Authorization.Helpers;
 
 namespace Model.Authorization
 {
@@ -7,8 +8,13 @@ namespace Model.Authorization
         public bool IsVisible(Organisation org, string memberName, IContext context) =>
             Users.UserRole(context) switch
             {
-                >= Role.Teacher => Users.Me(context).OrganisationId == org.Id,
+                Role.Root => true,
+                >= Role.Teacher => IsOwnOrganisation(org, context),
+                Role.Student => IsOwnOrganisation(org, context) && IsProperty<Organisation>(memberName),
                 _ => false
             };
+
+        private bool IsOwnOrganisation(Organisation org, IContext context) =>
+            Users.Me(context).OrganisationId == org.Id;
     }
 }

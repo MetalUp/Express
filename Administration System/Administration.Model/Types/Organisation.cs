@@ -15,8 +15,10 @@
         [Hidden]
         public int Id { get; init; }
 
+        [MemberOrder(10)]
         public string Name { get; init; }
 
+        [MemberOrder(20)]
         [MultiLine(10)]
         public string Details { get; init; }
 
