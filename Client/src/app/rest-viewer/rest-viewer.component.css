@@ -2,7 +2,7 @@ div.metalup {
     height: 100%;
 }
 
-.content, textarea, input {
+.content, textarea, input, .content pre {
     font-family: monospace;
 }
 
