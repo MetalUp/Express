@@ -27,5 +27,11 @@
             context.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Terminated, TeacherNotes = notes });
 
         public static string Default1MarkAsTerminated(this Assignment a) => a.TeacherNotes;
+
+
+        internal static bool IsAssignedTo(this Assignment assgn, User user) => assgn.AssignedToId == user.Id;
+
+        internal static bool IsAssignedByOrToAnyoneInOrganisation(this Assignment assgn, Organisation org) =>
+            assgn.AssignedBy.OrganisationId == org.Id || assgn.AssignedTo.OrganisationId == org.Id;
     }
 }
