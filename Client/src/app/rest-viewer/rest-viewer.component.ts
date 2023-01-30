@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ConfigService,  } from '@nakedobjects/services';
-import { first } from 'rxjs';
+import { catchError, first, of } from 'rxjs';
+import { okButtonDisabledTooltip, okButtonEnabledTooltip, methodButtonDisabledTooltip, methodButtonEnabledTooltip, homeTooltip } from '../constants/tooltips';
 
 @Component({
   selector: 'app-rest-viewer',
@@ -12,13 +13,67 @@ export class RestViewerComponent implements OnInit {
 
   constructor(private readonly http: HttpClient, private readonly configService: ConfigService) { }
 
-  url = this.configService.config.appPath;
+  private home = this.configService.config.appPath;
+
+  currentUrl = this.home;
+  url = "";
 
   content?: Object;
 
+  payload = "";
+
+  message = "";
+
+  loadUrl(url: string) {
+    this.message = "";
+    this.http.request('get', url, { responseType: 'json' })
+      .pipe(first())
+      .pipe(catchError((e) => {
+        if (e instanceof HttpErrorResponse){
+          this.message = `${e.message}`;
+        }
+        else {
+          this.message = "An unknown error occurred";
+        }
+        return of(new Object());
+      }))
+      .subscribe(b => {
+        this.content = b;
+        this.currentUrl = this.message ? "" :  url;
+        this.url = "";
+        this.payload = "";
+      });
+  }
+
+  onOk() {
+    this.loadUrl(this.url);
+  }
+
+  get disableOk() {
+    return !(this.url.startsWith(this.home));
+  }
+
+  get methodEnabledTooltip() {
+    return methodButtonEnabledTooltip;
+  }
+
+  get methodDisabledTooltip() {
+    return methodButtonDisabledTooltip;
+  }
+
+  get homeTooltip() {
+    return homeTooltip;
+  }
+
+  get okTooltip() {
+    return this.disableOk ? okButtonDisabledTooltip : okButtonEnabledTooltip;
+  }
+
+  onHome() {
+    this.loadUrl(this.home);
+  }
+
   ngOnInit(): void {
-    this.http.request('get', this.url, {responseType : 'json'}).pipe(first()).subscribe(b => {
-      this.content = b;
-    });
+    this.loadUrl(this.home);
   }
 }

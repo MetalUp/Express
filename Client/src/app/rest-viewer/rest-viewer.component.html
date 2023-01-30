@@ -1,22 +1,32 @@
 <div class="metalup">
     <div class="editarea">
         <div class="one-column pane">
-            <div class="pane-header">Viewing: {{url}}
-                <div class="button-bar"></div>
-            </div>
-            <div class="one-column pane-body">
-                <div>
-                <pre><p>{{content | json}}</p></pre>
+            <div class="pane-header">Viewing: {{currentUrl}}
+                <div class="button-bar">
+                    <button [title]="homeTooltip"(click)="onHome()">Home</button>
                 </div>
+            </div>
+            <div class="one-column pane-body content">
+                <pre>{{content | json}}</pre>
             </div>
         </div>
 
         <div class="one-column pane">
-            <div class="pane-header">Display
-                <div class="button-bar"></div>
+            <div class="pane-header">Control
+                <div class="button-bar">
+                    <button [title]="methodDisabledTooltip" [disabled]="true">DELETE</button>
+                    <button [title]="methodDisabledTooltip" [disabled]="true">POST</button>
+                    <button [title]="methodDisabledTooltip" [disabled]="true">PUT</button>
+                    <button [title]="methodEnabledTooltip">GET</button>
+                </div>
             </div>
             <div class="one-column pane-body">
-                <div class="display"></div>
+                <div class="control">
+                    <div><label for="newurl">Link Url</label><input id="newurl" [(ngModel)]="url"/></div>
+                    <textarea class="payload" [ngModel]="payload"></textarea>
+                    <button [title]="okTooltip" [disabled]="disableOk" (click)="onOk()">Ok</button>
+                    <div>{{message}}</div>
+                </div>
             </div>
         </div>
     </div>

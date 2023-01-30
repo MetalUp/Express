@@ -66,3 +66,11 @@ export const newHintDisabledTooltip = "Use the forward arrow if enabled. Otherwi
 // run tests button 
 export const runTestsEnabledTooltip = "Run the tests on the last submitted code.";
 export const runTestsDisabledTooltip = "To run tests again you must enter/edit and submit code";
+
+// Rest Viewer 
+
+export const okButtonEnabledTooltip = "Submit Url";
+export const okButtonDisabledTooltip = "Sorry Url is not valid";
+export const methodButtonEnabledTooltip = "Current Method";
+export const methodButtonDisabledTooltip = "Sorry you are not authorised to use this method";
+export const homeTooltip = "Return to the Home resource";
