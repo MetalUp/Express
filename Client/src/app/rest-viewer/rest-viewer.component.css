@@ -2,6 +2,10 @@ div.metalup {
     height: 100%;
 }
 
+.content, textarea, input {
+    font-family: monospace;
+}
+
 .editarea {
     height: 100%;
     display: grid;
