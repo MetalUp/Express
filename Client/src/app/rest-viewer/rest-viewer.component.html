@@ -22,7 +22,7 @@
             </div>
             <div class="one-column pane-body">
                 <div class="control">
-                    <div><label for="newurl">Link Url:</label><input id="newurl" [(ngModel)]="url" placeholder="Copy/Paste from pane on left e.g. https://metalup..."/></div>
+                    <div><label for="newurl">href:</label><input id="newurl" [(ngModel)]="url" placeholder="Copy/Paste from pane on left e.g. https://metalup..."/></div>
                     <label>Payload:</label><textarea class="payload" [(ngModel)]="payload" rows="10" [placeholder]="payloadPlaceholder"></textarea>
                     <button [title]="okTooltip" [disabled]="disableOk" (click)="onOk()">Go</button>
                     <div>{{message}}</div>
