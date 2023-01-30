@@ -20,6 +20,7 @@ import { LogoffComponent } from './logoff/logoff.component';
 import { ResultComponent } from './result/result.component';
 import { InvitationComponent } from './invitation/invitation.component';
 import { CustomEditorComponent } from './custom-editor/custom-editor.component';
+import { RestViewerComponent } from './rest-viewer/rest-viewer.component';
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import { CustomEditorComponent } from './custom-editor/custom-editor.component';
         ResultComponent,
         InvitationComponent,
         CustomEditorComponent,
+        RestViewerComponent,
     ],
     imports: [
         BrowserModule,

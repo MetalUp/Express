@@ -15,6 +15,7 @@ import { CustomEditorComponent } from './custom-editor/custom-editor.component';
 import { InvitationComponent } from './invitation/invitation.component';
 import { LandingComponent } from './landing/landing.component';
 import { LogoffComponent } from './logoff/logoff.component';
+import { RestViewerComponent } from './rest-viewer/rest-viewer.component';
 import { RegistrationService } from './services/registration.service';
 import { TaskViewComponent } from './task-view/task-view.component';
 
@@ -121,6 +122,7 @@ const routes: Routes = [
     { path: 'task/:id', component: TaskViewComponent, canActivate: [RegistrationService] },
     { path: 'task',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'dashboard/editor/:id',  component: CustomEditorComponent, canActivate: [RegistrationService] },
+    { path: 'restviewer',  component: RestViewerComponent, canActivate: [RegistrationService] },
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: '**', redirectTo: 'landing', pathMatch: 'full' }
 ];
