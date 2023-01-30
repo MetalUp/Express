@@ -79,6 +79,10 @@ export class RestViewerComponent implements OnInit {
     return this.disableOk ? okButtonDisabledTooltip : okButtonEnabledTooltip;
   }
 
+  get payloadPlaceholder() {
+    return 'Copy/Paste from pane on left e.g {"id": {"value": "1"}}';
+  }
+
   onHome() {
     this.loadUrl(this.home);
   }
