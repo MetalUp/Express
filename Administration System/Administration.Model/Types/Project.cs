@@ -104,8 +104,11 @@
         #endregion
 
         [MemberOrder(120)]
-        [MultiLine(10)]
         public string Description { get; init; }
+
+        [MemberOrder(130)]
+        [MultiLine(5)]
+        public string Keywords { get; init; }
 
         [RenderEagerly]
         public virtual ICollection<Task> Tasks { get; init; } = new List<Task>();

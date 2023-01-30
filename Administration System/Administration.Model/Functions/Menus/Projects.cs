@@ -33,7 +33,12 @@
         public static IQueryable<Project> FindProjects(
              Language language,
             [Optionally] [DescribedAs("optional")]string title,
+            [Optionally][DescribedAs("optional")] string keyword,
             IContext context) =>
-                AllAssignableProjects(language, context).Where(t => title == null || t.Title.ToUpper().Contains(title.ToUpper()));
+                AllAssignableProjects(language, context).Where(p => (title == null || p.Title.ToUpper().Contains(title.ToUpper()))
+                && (keyword == null || p.Keywords.Contains(keyword)));
+
+        public static IEnumerable<string> Choices2FindProjects(IContext context) =>
+            context.Instances<Keyword>().Select(k => k.WordOrPhrase);
     }
 }
