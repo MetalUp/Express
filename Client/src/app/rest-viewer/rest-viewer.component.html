@@ -12,7 +12,7 @@
         </div>
 
         <div class="one-column pane">
-            <div class="pane-header">Control
+            <div class="pane-header">Follow Link
                 <div class="button-bar">
                     <button [title]="methodDisabledTooltip" [disabled]="true">DELETE</button>
                     <button [title]="methodDisabledTooltip" [disabled]="true">POST</button>
@@ -22,9 +22,9 @@
             </div>
             <div class="one-column pane-body">
                 <div class="control">
-                    <div><label for="newurl">Link Url</label><input id="newurl" [(ngModel)]="url"/></div>
-                    <textarea class="payload" [ngModel]="payload"></textarea>
-                    <button [title]="okTooltip" [disabled]="disableOk" (click)="onOk()">Ok</button>
+                    <div><label for="newurl">Link Url:</label><input id="newurl" [(ngModel)]="url" placeholder="Copy/Paste from pane on left e.g. https://metalup..."/></div>
+                    <label>Payload:</label><textarea class="payload" [ngModel]="payload" placeholder="Not yet implemented"></textarea>
+                    <button [title]="okTooltip" [disabled]="disableOk" (click)="onOk()">Go</button>
                     <div>{{message}}</div>
                 </div>
             </div>
