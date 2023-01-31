@@ -24,13 +24,10 @@
                     </div>
                 </div>
                 <div class="one-column pane-body">
-                    <div class="control">
-                        <div><label for="newurl">href:</label><input id="newurl" [(ngModel)]="url"
-                                placeholder="Copy/Paste from pane above e.g. https://metalup..." /></div>
-                        <label>Payload:</label><textarea class="payload" [(ngModel)]="payload"
-                            [placeholder]="payloadPlaceholder"></textarea>
-                        <button [title]="okTooltip" [disabled]="disableGo" (click)="onGo()">Go</button>
-                        <div>{{message}}</div>
+                    <div class="control">   
+                        <div class="line"><label for="newurl">href:</label><input id="newurl" [(ngModel)]="url" placeholder="Copy/Paste from pane above e.g. https://metalup..." /></div>
+                        <div class="line"><label for="payload">Payload:</label><textarea id="payload" class="payload" [(ngModel)]="payload" [placeholder]="payloadPlaceholder"></textarea></div>
+                        <div class="line"><button [title]="okTooltip" [disabled]="disableGo" (click)="onGo()">Go</button><div>{{message}}</div>
                     </div>
                 </div>
             </div>
