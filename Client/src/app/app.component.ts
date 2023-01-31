@@ -28,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
         return {
             'gemini': this.isDashboard(),
             'metalup': !this.isDashboard(),
+            'custom-component': this.isCustomComponent(),
             'in-progress': this.loading,
             'not-in-progress': !this.loading
         }
@@ -43,6 +44,14 @@ export class AppComponent implements OnInit, OnDestroy {
         const [, mode] = segments;
 
         return mode === 'dashboard';
+    }
+
+    isCustomComponent() {
+        const url = this.router.url;
+        const segments = url.split('/');
+        const [, mode, subMode] = segments;
+
+        return subMode === 'editor' || mode === 'restviewer';
     }
 
     ngOnInit(): void {

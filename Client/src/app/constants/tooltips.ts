@@ -74,3 +74,14 @@ export const okButtonDisabledTooltip = "Sorry Url is not valid";
 export const methodButtonEnabledTooltip = "Current Method";
 export const methodButtonDisabledTooltip = "Sorry you are not authorised to use this method";
 export const homeTooltip = "Return to the Home resource";
+
+// previous url arrow 
+export const previousUrlEnabledTooltip = "Go back to previous url";
+export const previousUrlDisabledTooltip = "No previous urls stored";
+
+// next url arrow 
+export const nextUrlEnabledTooltip = "Go forward to the next url";
+export const nextUrlDisabledTooltip = "No later urls stored";
+
+// rest viewer icon 
+export const restViewerLink = "View the RESTful API";

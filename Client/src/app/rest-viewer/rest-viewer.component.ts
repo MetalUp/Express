@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ConfigService,  } from '@nakedobjects/services';
 import { catchError, first, of } from 'rxjs';
-import { okButtonDisabledTooltip as goButtonDisabledTooltip, okButtonEnabledTooltip as goButtonEnabledTooltip, methodButtonDisabledTooltip, methodButtonEnabledTooltip, homeTooltip } from '../constants/tooltips';
+import { okButtonDisabledTooltip as goButtonDisabledTooltip, okButtonEnabledTooltip as goButtonEnabledTooltip, methodButtonDisabledTooltip, methodButtonEnabledTooltip, homeTooltip, nextUrlEnabledTooltip, nextUrlDisabledTooltip, previousUrlDisabledTooltip, previousUrlEnabledTooltip } from '../constants/tooltips';
 
 @Component({
   selector: 'app-rest-viewer',
@@ -65,6 +65,7 @@ export class RestViewerComponent implements OnInit {
 
         if (this.message) {
           this.currentUrl = "";
+          this.urlHistoryIndex = this.urlHistory.length;
         }
         else {
           this.addUrl(url, save);
@@ -92,7 +93,7 @@ export class RestViewerComponent implements OnInit {
     return homeTooltip;
   }
 
-  get okTooltip() {
+  get goTooltip() {
     return this.disableGo ? goButtonDisabledTooltip : goButtonEnabledTooltip;
   }
 
@@ -128,5 +129,13 @@ export class RestViewerComponent implements OnInit {
     this.urlHistoryIndex++;
     const url = this.urlHistory[this.urlHistoryIndex];
     this.loadUrl(url, false);
+  }
+
+  get nextUrlTooltip() {
+    return  this.canNext() ?  nextUrlEnabledTooltip : nextUrlDisabledTooltip;
+  }
+
+  get previousUrlTooltip() {
+    return  this.canPrevious() ?  previousUrlEnabledTooltip : previousUrlDisabledTooltip;
   }
 }

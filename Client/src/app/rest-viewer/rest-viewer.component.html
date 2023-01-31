@@ -5,8 +5,8 @@
                 <div class="pane-header">Viewing: {{currentUrl}}
                     <div class="button-bar">
                         <button [title]="homeTooltip" (click)="onHome()">Home</button>
-                        <button [disabled]="!canNext()" (click)="onNext()">></button>
-                        <button [disabled]="!canPrevious()" (click)="onPrevious()"><</button>
+                        <button [title]="nextUrlTooltip" [disabled]="!canNext()" (click)="onNext()">></button>
+                        <button [title]="previousUrlTooltip" [disabled]="!canPrevious()" (click)="onPrevious()"><</button>
                     </div>
                 </div>
                 <div class="one-column pane-body rest-content">
@@ -27,7 +27,7 @@
                     <div class="control">   
                         <div class="line"><label for="newurl">href:</label><input id="newurl" [(ngModel)]="url" placeholder="Copy/Paste from pane above e.g. https://metalup..." /></div>
                         <div class="line"><label for="payload">Payload:</label><textarea id="payload" class="payload" [(ngModel)]="payload" [placeholder]="payloadPlaceholder"></textarea></div>
-                        <div class="line"><button [title]="okTooltip" [disabled]="disableGo" (click)="onGo()">Go</button><div>{{message}}</div>
+                        <div class="line"><button [title]="goTooltip" [disabled]="disableGo" (click)="onGo()">Go</button><div>{{message}}</div>
                     </div>
                 </div>
             </div>
