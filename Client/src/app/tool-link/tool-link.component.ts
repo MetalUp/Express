@@ -18,7 +18,7 @@ export class ToolLinkComponent {
     this.router.navigate([this.urlLink]);
   }
 
-  get tooltip(){
+  get tooltip() {
     return restViewerLink;
   }
 }

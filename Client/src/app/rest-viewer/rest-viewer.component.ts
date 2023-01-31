@@ -60,15 +60,15 @@ export class RestViewerComponent implements OnInit {
       }))
       .subscribe(b => {
         this.content = b;
-        this.url = "";
-        this.payload = "";
-
+    
         if (this.message) {
           this.currentUrl = "";
           this.urlHistoryIndex = this.urlHistory.length;
         }
         else {
           this.addUrl(url, save);
+          this.url = "";
+          this.payload = "";
         }
       });
   }
