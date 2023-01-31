@@ -2,6 +2,10 @@
     font-family: monospace;
 }
 
+.rest-content {
+    height: 65vh;
+}
+
 input {
     width: 100%;
 }
@@ -16,6 +20,11 @@ label {
 
 .pane {
     display: grid;
+}
+
+.rest-pane {
+    display: grid;
+    grid-template-rows: 28px min-content;
 }
 
 .control {
@@ -37,22 +46,16 @@ label {
 }
 
 .content {
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 100%;
-    justify-content: left;
-    column-gap: 10px;
     height: 92vh;
     width: 90vw;
     overflow: auto;
 }
 
 .independent-column {
-    grid-template-rows: minmax(1fr,  min-content) min-content;
+    grid-template-rows: min-content min-content;
     gap: 10px 10px;
     overflow:auto;
     height: 100%;
-    resize: horizontal;
     width: 98%;
     padding-right: 12px;
 }
