@@ -5,6 +5,8 @@
                 <div class="pane-header">Viewing: {{currentUrl}}
                     <div class="button-bar">
                         <button [title]="homeTooltip" (click)="onHome()">Home</button>
+                        <button [disabled]="!canNext()" (click)="onNext()">></button>
+                        <button [disabled]="!canPrevious()" (click)="onPrevious()"><</button>
                     </div>
                 </div>
                 <div class="one-column pane-body rest-content">
@@ -27,7 +29,7 @@
                                 placeholder="Copy/Paste from pane above e.g. https://metalup..." /></div>
                         <label>Payload:</label><textarea class="payload" [(ngModel)]="payload"
                             [placeholder]="payloadPlaceholder"></textarea>
-                        <button [title]="okTooltip" [disabled]="disableOk" (click)="onOk()">Go</button>
+                        <button [title]="okTooltip" [disabled]="disableGo" (click)="onGo()">Go</button>
                         <div>{{message}}</div>
                     </div>
                 </div>

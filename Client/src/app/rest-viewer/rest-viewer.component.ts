@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ConfigService,  } from '@nakedobjects/services';
 import { catchError, first, of } from 'rxjs';
-import { okButtonDisabledTooltip, okButtonEnabledTooltip, methodButtonDisabledTooltip, methodButtonEnabledTooltip, homeTooltip } from '../constants/tooltips';
+import { okButtonDisabledTooltip as goButtonDisabledTooltip, okButtonEnabledTooltip as goButtonEnabledTooltip, methodButtonDisabledTooltip, methodButtonEnabledTooltip, homeTooltip } from '../constants/tooltips';
 
 @Component({
   selector: 'app-rest-viewer',
@@ -24,6 +24,9 @@ export class RestViewerComponent implements OnInit {
 
   message = "";
 
+  urlHistory: string[] = [];
+  urlHistoryIndex = -1; 
+
   getUrl(url: string) {
     if (this.payload) {
       const encoded = encodeURI(this.payload);
@@ -34,7 +37,15 @@ export class RestViewerComponent implements OnInit {
     }
   }
 
-  loadUrl(url: string) {
+  addUrl(url : string, save: boolean) {
+    this.currentUrl = url;
+    if (save) {
+      this.urlHistory.push(url);
+      this.urlHistoryIndex = this.urlHistory.length -1;
+    }
+  }
+
+  loadUrl(url: string, save: boolean) {
     this.message = "";
     this.http.request('get', this.getUrl(url), { responseType: 'json' })
       .pipe(first())
@@ -49,17 +60,23 @@ export class RestViewerComponent implements OnInit {
       }))
       .subscribe(b => {
         this.content = b;
-        this.currentUrl = this.message ? "" :  url;
         this.url = "";
         this.payload = "";
+
+        if (this.message) {
+          this.currentUrl = "";
+        }
+        else {
+          this.addUrl(url, save);
+        }
       });
   }
 
-  onOk() {
-    this.loadUrl(this.url);
+  onGo() {
+    this.loadUrl(this.url, true);
   }
 
-  get disableOk() {
+  get disableGo() {
     return !(this.url.startsWith(this.home));
   }
 
@@ -76,7 +93,7 @@ export class RestViewerComponent implements OnInit {
   }
 
   get okTooltip() {
-    return this.disableOk ? okButtonDisabledTooltip : okButtonEnabledTooltip;
+    return this.disableGo ? goButtonDisabledTooltip : goButtonEnabledTooltip;
   }
 
   get payloadPlaceholder() {
@@ -84,10 +101,32 @@ export class RestViewerComponent implements OnInit {
   }
 
   onHome() {
-    this.loadUrl(this.home);
+    this.urlHistoryIndex = 0;
+    const url = this.urlHistory[this.urlHistoryIndex];
+    this.loadUrl(url, false);
   }
 
   ngOnInit(): void {
-    this.loadUrl(this.home);
+    this.loadUrl(this.home, true);
+  }
+
+  canPrevious() {
+    return this.urlHistoryIndex > 0;
+  }
+
+  canNext() {
+    return this.urlHistoryIndex < this.urlHistory.length -1;
+  }
+
+  onPrevious() {
+    this.urlHistoryIndex--;
+    const url = this.urlHistory[this.urlHistoryIndex];
+    this.loadUrl(url, false);
+  }
+
+  onNext() {
+    this.urlHistoryIndex++;
+    const url = this.urlHistory[this.urlHistoryIndex];
+    this.loadUrl(url, false);
   }
 }
