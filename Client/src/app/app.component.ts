@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, OnDestroy {
         const segments = url.split('/');
         const [, mode, subMode] = segments;
 
-        return subMode === 'editor' || mode === 'restviewer';
+        return subMode === 'editor' || mode === 'roapiviewer';
     }
 
     ngOnInit(): void {

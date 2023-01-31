@@ -119,12 +119,12 @@ const routes: Routes = [
     },
     { path: 'task/logoff',  redirectTo: 'dashboard/logoff', pathMatch: 'full'},
     { path: 'task/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
-    { path: 'restviewer/logoff',  redirectTo: 'dashboard/logoff', pathMatch: 'full'},
-    { path: 'restviewer/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
+    { path: 'roapiviewer/logoff',  redirectTo: 'dashboard/logoff', pathMatch: 'full'},
+    { path: 'roapiviewer/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'task/:id', component: TaskViewComponent, canActivate: [RegistrationService] },
     { path: 'task',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'dashboard/editor/:id',  component: CustomEditorComponent, canActivate: [RegistrationService] },
-    { path: 'restviewer',  component: RestViewerComponent, canActivate: [RegistrationService] },
+    { path: 'roapiviewer',  component: RestViewerComponent, canActivate: [RegistrationService] },
     { path: 'dashboard',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: '**', redirectTo: 'landing', pathMatch: 'full' }
 ];

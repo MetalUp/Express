@@ -422,6 +422,6 @@ div.icon.recent {
     height: 40vh;
 }
 
-.custom-component :is(.full, .swap, .restviewer) {
+.custom-component :is(.full, .swap, .rest-viewer) {
     display: none !important;
 }
