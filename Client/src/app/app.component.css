@@ -29,6 +29,7 @@ div.metalup {
 }
 
 .composite-footer {
+  background-color: #1F1110;
   display: grid;
   grid-template-columns: 1fr 1fr min-content;
   grid-template-rows: 1fr;
