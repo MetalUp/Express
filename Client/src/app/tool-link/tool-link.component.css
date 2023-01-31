@@ -7,4 +7,6 @@
     cursor: pointer;
     width: 48px;
     height: 52px;
+    padding: var(--space-3);
+    margin-left: var(--space-4);
 }

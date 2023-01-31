@@ -421,3 +421,7 @@ div.icon.recent {
 .pane-size-large {
     height: 40vh;
 }
+
+.custom-component :is(.full, .swap, .restviewer) {
+    display: none !important;
+}
