@@ -119,6 +119,8 @@ const routes: Routes = [
     },
     { path: 'task/logoff',  redirectTo: 'dashboard/logoff', pathMatch: 'full'},
     { path: 'task/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
+    { path: 'restviewer/logoff',  redirectTo: 'dashboard/logoff', pathMatch: 'full'},
+    { path: 'restviewer/home',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'task/:id', component: TaskViewComponent, canActivate: [RegistrationService] },
     { path: 'task',  redirectTo: 'dashboard/home', pathMatch: 'full'},
     { path: 'dashboard/editor/:id',  component: CustomEditorComponent, canActivate: [RegistrationService] },
