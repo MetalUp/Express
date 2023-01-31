@@ -36,6 +36,10 @@ div.metalup {
   justify-content: space-between;
 }
 
+.icons {
+    display: flex;
+  }
+
 .masthead {
     font-size: 24pt;
     color: var(--masthead-color);

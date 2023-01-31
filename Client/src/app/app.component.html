@@ -9,7 +9,10 @@
         <router-outlet></router-outlet>
         <ng-container *ngIf="registeredService.registered$ | async">
           <div class="composite-footer">
-            <nof-footer></nof-footer>
+            <div class="icons">
+              <nof-footer></nof-footer>
+              <app-tool-link [urlLink]="'restviewer'"></app-tool-link>
+            </div>
             <app-user></app-user>
             <div class="masthead"><b>MetalUp</b>.Express</div>
           </div>

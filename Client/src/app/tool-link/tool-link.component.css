@@ -1,0 +1,10 @@
+.icon.restviewer {
+    background: var(--rest-icon);
+    background-size: cover;
+}
+
+.icon {
+    cursor: pointer;
+    width: 48px;
+    height: 52px;
+}

@@ -21,6 +21,7 @@ import { ResultComponent } from './result/result.component';
 import { InvitationComponent } from './invitation/invitation.component';
 import { CustomEditorComponent } from './custom-editor/custom-editor.component';
 import { RestViewerComponent } from './rest-viewer/rest-viewer.component';
+import { ToolLinkComponent } from './tool-link/tool-link.component';
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { RestViewerComponent } from './rest-viewer/rest-viewer.component';
         InvitationComponent,
         CustomEditorComponent,
         RestViewerComponent,
+        ToolLinkComponent,
     ],
     imports: [
         BrowserModule,
