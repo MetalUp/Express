@@ -24,21 +24,25 @@
 
         [MemberOrder(120)]
         public static IQueryable<Project> AllAssignableProjects(
-            [Optionally] Language language,
+            [Optionally] string language,
             IContext context) =>
-            AllProjects(context).Where(p => p.Status == ProjectStatus.Assignable && (language == null || p.Language == language));
+            AllProjects(context).Where(p => p.Status == ProjectStatus.Assignable && (language == null || p.Language.Name == language));
+
+        public static IEnumerable<string> Choices0AllAssignableProjects(IContext context) =>
+            context.Instances<Language>().Select(l => l.Name);
 
 
         [MemberOrder(130)]
         public static IQueryable<Project> FindProjects(
-             Language language,
-            [Optionally] [DescribedAs("optional")]string title,
-            [Optionally][DescribedAs("optional")] string keyword,
+            [Optionally] string language,
+            [Optionally] string title,
+            [Optionally] string keywordOrName,
             IContext context) =>
-                AllAssignableProjects(language, context).Where(p => (title == null || p.Title.ToUpper().Contains(title.ToUpper()))
-                && (keyword == null || p.Keywords.Contains(keyword)));
+                AllAssignableProjects(language, context).Where(p =>
+                    (language == null || p.Language.Name == language) &&
+                    (title == null || p.Title.ToUpper().Contains(title.ToUpper())) &&
+                    (keywordOrName == null || p.Keywords.Contains(keywordOrName) || p.Title.Contains(keywordOrName)));
 
-        public static IEnumerable<string> Choices2FindProjects(IContext context) =>
-            context.Instances<Keyword>().Select(k => k.WordOrPhrase);
+        public static IEnumerable<string> Choices00FindProjects(IContext context) => Choices0AllAssignableProjects(context);
     }
 }

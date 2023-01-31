@@ -88,7 +88,7 @@ namespace Model.Functions
         #endregion
 
         #region Keywords
-        public  static IContext AddKeywords(this Project project, IEnumerable<string> existingKeywords, string newKeyword, IContext context)
+        public  static IContext AddKeywords(this Project project,[Optionally] IEnumerable<string> existingKeywords,[Optionally] string newKeyword, IContext context)
         {
             IContext context2 = context;
             string updated = existingKeywords.Aggregate(project.Keywords, (a,k) => a + " " + k);
