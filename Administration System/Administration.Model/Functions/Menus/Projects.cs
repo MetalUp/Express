@@ -43,6 +43,6 @@
                     (title == null || p.Title.ToUpper().Contains(title.ToUpper())) &&
                     (keywordOrName == null || p.Keywords.Contains(keywordOrName) || p.Title.Contains(keywordOrName)));
 
-        public static IEnumerable<string> Choices00FindProjects(IContext context) => Choices0AllAssignableProjects(context);
+        public static IEnumerable<string> Choices0FindProjects(IContext context) => Choices0AllAssignableProjects(context);
     }
 }
