@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { restViewerLink } from '../constants/tooltips';
 
 @Component({
   selector: 'app-tool-link',
@@ -15,5 +16,9 @@ export class ToolLinkComponent {
 
   onClick() {
     this.router.navigate([this.urlLink]);
+  }
+
+  get tooltip(){
+    return restViewerLink;
   }
 }
