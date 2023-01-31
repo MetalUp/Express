@@ -1,35 +1,37 @@
 <div class="metalup">
     <div class="content">
-    <div class="view-area">
-        <div class="pane">
-            <div class="pane-header">Viewing: {{currentUrl}}
-                <div class="button-bar">
-                    <button [title]="homeTooltip"(click)="onHome()">Home</button>
+        <div class="one-column independent-column">
+            <div class="pane">
+                <div class="pane-header">Viewing: {{currentUrl}}
+                    <div class="button-bar">
+                        <button [title]="homeTooltip" (click)="onHome()">Home</button>
+                    </div>
+                </div>
+                <div class="one-column pane-body rest-content">
+                    <pre>{{content | json}}</pre>
                 </div>
             </div>
-            <div class="one-column pane-body rest-content">
-                <pre>{{content | json}}</pre>
-            </div>
-        </div>
 
-        <div class="pane">
-            <div class="pane-header">Follow Link
-                <div class="button-bar">
-                    <button [title]="methodDisabledTooltip" [disabled]="true">DELETE</button>
-                    <button [title]="methodDisabledTooltip" [disabled]="true">POST</button>
-                    <button [title]="methodDisabledTooltip" [disabled]="true">PUT</button>
-                    <button [title]="methodEnabledTooltip">GET</button>
+            <div class="pane">
+                <div class="pane-header">Follow Link
+                    <div class="button-bar">
+                        <button [title]="methodDisabledTooltip" [disabled]="true">DELETE</button>
+                        <button [title]="methodDisabledTooltip" [disabled]="true">POST</button>
+                        <button [title]="methodDisabledTooltip" [disabled]="true">PUT</button>
+                        <button [title]="methodEnabledTooltip">GET</button>
+                    </div>
                 </div>
-            </div>
-            <div class="one-column pane-body">
-                <div class="control">
-                    <div><label for="newurl">href:</label><input id="newurl" [(ngModel)]="url" placeholder="Copy/Paste from pane on left e.g. https://metalup..."/></div>
-                    <label>Payload:</label><textarea class="payload" [(ngModel)]="payload" [placeholder]="payloadPlaceholder"></textarea>
-                    <button [title]="okTooltip" [disabled]="disableOk" (click)="onOk()">Go</button>
-                    <div>{{message}}</div>
+                <div class="one-column pane-body">
+                    <div class="control">
+                        <div><label for="newurl">href:</label><input id="newurl" [(ngModel)]="url"
+                                placeholder="Copy/Paste from pane above e.g. https://metalup..." /></div>
+                        <label>Payload:</label><textarea class="payload" [(ngModel)]="payload"
+                            [placeholder]="payloadPlaceholder"></textarea>
+                        <button [title]="okTooltip" [disabled]="disableOk" (click)="onOk()">Go</button>
+                        <div>{{message}}</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
