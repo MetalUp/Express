@@ -80,7 +80,7 @@ export class RestViewerComponent implements OnInit {
   }
 
   get payloadPlaceholder() {
-    return 'Copy/Paste from pane on left e.g {"id": {"value": "1"}}';
+    return 'Copy/Paste from "arguments" in pane above e.g {"id": {"value": "1"}}';
   }
 
   onHome() {
