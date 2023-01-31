@@ -65,6 +65,7 @@ export class RestViewerComponent implements OnInit {
 
         if (this.message) {
           this.currentUrl = "";
+          this.urlHistoryIndex = this.urlHistory.length;
         }
         else {
           this.addUrl(url, save);
