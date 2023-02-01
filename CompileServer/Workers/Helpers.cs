@@ -24,6 +24,21 @@ public static class Helpers {
         return runResult;
     }
 
+    private static RunResult SetTypeCheckResults(Process process, RunResult runResult) {
+        using var stdOut = process.StandardOutput;
+        var message = stdOut.ReadToEnd();
+
+        if (message.StartsWith("Success")) {
+            runResult.outcome = Outcome.Ok;
+        }
+        else {
+            runResult.outcome = Outcome.CompilationError;
+            runResult.cmpinfo = message;
+        }
+
+        return runResult;
+    }
+
     private static RunResult SetCompileResults(RunResult runResult, Exception e) {
         runResult.outcome = Outcome.CompilationError;
         runResult.stderr = e.Message;
@@ -91,6 +106,21 @@ public static class Helpers {
         }
 
         return (runResult, returnFileName);
+    }
+
+    public static RunResult TypeCheck(string exe, string args, RunSpec runSpec) {
+        var runResult = new RunResult(runSpec.TempDir);
+
+        try {
+            using var process = CreateProcess(exe, args, runResult);
+            process.WaitForExit();
+            runResult = SetTypeCheckResults(process, runResult);
+        }
+        catch (Exception e) {
+            runResult = SetCompileResults(runResult, e);
+        }
+
+        return runResult;
     }
 
     public static string GetVersion(string exe, string args, RunSpec runSpec) {

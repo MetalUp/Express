@@ -27,7 +27,7 @@ public static class JavaCompiler {
                 var colErr = err[2];
                 rr.col_no = colErr[..(colErr.IndexOf('^') + 1)].Length;
             }
-            catch (Exception _) {
+            catch (Exception) {
                 // ignore all exceptions
             }
         }

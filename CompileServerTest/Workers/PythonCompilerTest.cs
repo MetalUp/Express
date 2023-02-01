@@ -28,7 +28,7 @@ print (str(1/))";
 
 class Tests(unittest.TestCase):
 
-    def test_Ok(self):
+    def test_Ok(self) -> None:
         assert sum([1, 2, 3]) == 6, ""Should be 6""
 
 if __name__ == ""__main__"":
@@ -41,7 +41,7 @@ if __name__ == ""__main__"":
 
 class Tests(unittest.TestCase):
 
-    def test_Ok(self):
+    def test_Ok(self) -> None:
         assert sum([1, 2, 4]) == 6, ""Should be 6""
 
 if __name__ == ""__main__"":
@@ -54,13 +54,15 @@ if __name__ == ""__main__"":
 
 class Tests(unittest.TestCase):
 
-    def test_Ok(self):
+    def test_Ok(self) -> None:
         print (int(""invalid""))
 
 if __name__ == ""__main__"":
     unittest.main()
     print(""Everything passed"")
 ";
+
+    private const string TestCodeTypeFail = "def N(c): return c - 20 if c > 19 else c +  380";
 
     private readonly ILogger testLogger = NullLogger.Instance;
 
@@ -103,15 +105,27 @@ if __name__ == ""__main__"":
     }
 
     [TestMethod]
+    public void TestTypeCheckFail() {
+        using var runSpec = PythonRunSpec(TestCodeTypeFail);
+        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+
+        rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
+
+        rr.AssertRunResult(Outcome.CompilationError, @$"temp.py:1:1:error:Functionismissingatypeannotation[no-untyped-def]Found1errorin1file(checked1sourcefile)");
+        Assert.AreEqual(1, rr.line_no);
+        Assert.AreEqual(1, rr.col_no);
+    }
+
+    [TestMethod]
     public void TestCompileFailMissingTerm() {
         using var runSpec = PythonRunSpec(MissingTerm);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
 
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line1print(str(1/))^SyntaxError:invalidsyntax");
+        rr.AssertRunResult(Outcome.CompilationError, @$"temp.py:1:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
         Assert.AreEqual(1, rr.line_no);
-        Assert.AreEqual(18, rr.col_no);
+        Assert.AreEqual(15, rr.col_no);
     }
 
     [TestMethod]
@@ -121,9 +135,9 @@ if __name__ == ""__main__"":
 
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line3print(str(1/))^SyntaxError:invalidsyntax");
+        rr.AssertRunResult(Outcome.CompilationError, @$"temp.py:3:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
         Assert.AreEqual(3, rr.line_no);
-        Assert.AreEqual(18, rr.col_no);
+        Assert.AreEqual(15, rr.col_no);
     }
 
     [TestMethod]
