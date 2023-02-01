@@ -39,9 +39,26 @@ public static class PythonCompiler {
         const string tempFileName = "temp.py";
         var file = $"{runSpec.TempDir}{tempFileName}";
         File.WriteAllText(file, runSpec.sourcecode);
+
+        var (runResult, fileName) = TypeCheck(runSpec, createExecutable, file, tempFileName);
+        if (runResult.outcome == Outcome.Ok) {
+            (runResult, fileName) = Compile(runSpec, createExecutable, file, tempFileName);
+        }
+
+        return (runResult, fileName);
+    }
+
+    private static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable, string file, string tempFileName) {
         var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
         var args = $"-m py_compile {file}";
 
         return UpdateLineNumber(Helpers.Compile(pythonExe, args, createExecutable ? tempFileName : "", runSpec));
+    }
+
+    private static (RunResult, string) TypeCheck(RunSpec runSpec, bool createExecutable, string file, string tempFileName) {
+        var pythonExe = $"{CompileServerController.PythonPath}\\Scripts\\mypy.exe";
+        var args = $"{file}  --strict --disallow-untyped-defs";
+
+        return Helpers.Compile(pythonExe, args, "", runSpec);
     }
 }

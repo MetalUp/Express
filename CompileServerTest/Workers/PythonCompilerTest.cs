@@ -66,7 +66,7 @@ if __name__ == ""__main__"":
 
     [ClassInitialize]
     public static void Initialize(TestContext testContext) {
-        CompileServerController.PythonPath = "C:\\Python310";
+        CompileServerController.PythonPath = "C:\\Users\\scasc\\AppData\\Local\\Programs\\Python\\Python311";
     }
 
     [TestMethod]
@@ -74,7 +74,7 @@ if __name__ == ""__main__"":
         var csv = Handler.GetNameAndVersion(PythonRunSpec(""), testLogger);
 
         Assert.AreEqual("python", csv[0]);
-        Assert.IsTrue(csv[1].StartsWith("3.10."));
+        Assert.IsTrue(csv[1].StartsWith("3.11."));
     }
 
     [TestMethod]
@@ -83,7 +83,7 @@ if __name__ == ""__main__"":
 
         foreach (var csv in csvs) {
             Assert.AreEqual("python", csv[0]);
-            Assert.IsTrue(csv[1].StartsWith("3.10."));
+            Assert.IsTrue(csv[1].StartsWith("3.11."));
         }
     }
 
@@ -134,7 +134,7 @@ if __name__ == ""__main__"":
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
 
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line1,in<module>print(int(""invalid""))ValueError:invalidliteralforint()withbase10:'invalid'");
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line1,in<module>print(int(""invalid""))^^^^^^^^^^^^^^ValueError:invalidliteralforint()withbase10:'invalid'");
     }
 
     [TestMethod]
