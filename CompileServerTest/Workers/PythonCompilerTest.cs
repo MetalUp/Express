@@ -66,7 +66,7 @@ if __name__ == ""__main__"":
 
     [ClassInitialize]
     public static void Initialize(TestContext testContext) {
-        CompileServerController.PythonPath = "C:\\Users\\scasc\\AppData\\Local\\Programs\\Python\\Python311";
+        CompileServerController.PythonPath = "C:\\Python311";
     }
 
     [TestMethod]
