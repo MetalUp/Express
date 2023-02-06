@@ -7,6 +7,7 @@ public abstract class CompileServerController : ControllerBase {
     private const string CompileServerName = "CompileServer";
     private const string PythonPathName = "PythonPath";
     private const string JavaPathName = "JavaPath";
+    private const string HaskellPathName = "HaskellPath";
     private const string CSharpVersionName = "CSharpVersion";
     private const string VisualBasicVersionName = "VisualBasicVersion";
     private const string ProcessTimeoutName = "ProcessTimeout";
@@ -16,6 +17,7 @@ public abstract class CompileServerController : ControllerBase {
 
         PythonPath = Environment.GetEnvironmentVariable(PythonPathName) ?? configuration.GetSection(CompileServerName).GetSection(PythonPathName).Value;
         JavaPath = Environment.GetEnvironmentVariable(JavaPathName) ?? configuration.GetSection(CompileServerName).GetSection(JavaPathName).Value;
+        HaskellPath = Environment.GetEnvironmentVariable(HaskellPathName) ?? configuration.GetSection(CompileServerName).GetSection(HaskellPathName).Value;
 
         var csVersion = Environment.GetEnvironmentVariable(CSharpVersionName) ?? configuration.GetSection(CompileServerName).GetSection(CSharpVersionName).Value;
         var vbVersion = Environment.GetEnvironmentVariable(VisualBasicVersionName) ?? configuration.GetSection(CompileServerName).GetSection(VisualBasicVersionName).Value;
@@ -34,6 +36,7 @@ public abstract class CompileServerController : ControllerBase {
 
     public static string PythonPath { get; set; } = "";
     public static string JavaPath { get; set; } = "";
+    public static string HaskellPath { get; set; } = "";
     public static LanguageVersion CSharpVersion { get; private set; } = 0;
     public static Microsoft.CodeAnalysis.VisualBasic.LanguageVersion VisualBasicVersion { get; private set; } = 0;
 

@@ -8,6 +8,8 @@ public static class TestHelpers {
     public static TestRunSpec JavaRunSpec(string code) => RunSpec("java", code);
     public static TestRunSpec PythonRunSpec(string code) => RunSpec("python", code);
 
+    public static TestRunSpec HaskellRunSpec(string code) => RunSpec("haskell", code);
+
     public static string ClearWhiteSpace(string s) => s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
 
     private static TestRunSpec RunSpec(string language, string code) => new() { language_id = language, sourcecode = code };

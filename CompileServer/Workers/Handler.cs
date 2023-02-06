@@ -94,6 +94,24 @@ public static class Handler {
             }, runSpec)
         );
 
+    private static Task<JsonResult> HaskellCompileAndRun(RunSpec runSpec) =>
+        Task.Run(Wrap(() => {
+                var (runResult, exe) = HaskellCompiler.Compile(runSpec, true);
+                if (runResult.outcome == Outcome.Ok) {
+                    runResult = HaskellRunner.Execute(exe, runResult);
+                }
+
+                return runResult;
+            }, runSpec)
+        );
+
+    private static Task<JsonResult> HaskellCompile(RunSpec runSpec) =>
+        Task.Run(Wrap(() => {
+                var (runResult, _) = HaskellCompiler.Compile(runSpec, false);
+                return runResult;
+            }, runSpec)
+        );
+
     private static (RunResult, byte[]) DotNetCompile(RunSpec runSpec, bool createExecutable) =>
         runSpec.language_id switch {
             "csharp" => CSharpCompiler.Compile(runSpec, createExecutable),
@@ -113,6 +131,7 @@ public static class Handler {
             "python" => PythonCompile(runSpec),
             "java" => JavaCompile(runSpec),
             "csharp" or "vb" => DotNetCompile(runSpec),
+            "haskell" => HaskellCompile(runSpec),
             _ => Task.Run(Wrap(() => new RunResult(runSpec.TempDir) { outcome = Outcome.IllegalSystemCall }, runSpec))
         };
 
@@ -121,6 +140,7 @@ public static class Handler {
             "python" => PythonCompileAndRun(runSpec),
             "java" => JavaCompileAndRun(runSpec),
             "csharp" or "vb" => DotNetCompileAndRun(runSpec, logger),
+            "haskell" => HaskellCompileAndRun(runSpec),
             _ => Task.Run(Wrap(() => new RunResult(runSpec.TempDir) { outcome = Outcome.IllegalSystemCall }, runSpec))
         };
 
@@ -137,6 +157,7 @@ public static class Handler {
             "csharp" => CSharpCompiler.GetNameAndVersion(),
             "vb" => VisualBasicCompiler.GetNameAndVersion(),
             "java" => JavaCompiler.GetNameAndVersion(runSpec),
+            "haskell" => HaskellCompiler.GetNameAndVersion(runSpec),
             _ => Array.Empty<string>()
         };
 }
