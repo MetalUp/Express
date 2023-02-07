@@ -105,6 +105,17 @@ public static class Handler {
             }, runSpec)
         );
 
+    private static Task<JsonResult> HaskellCompileAndTest(RunSpec runSpec) =>
+        Task.Run(Wrap(() => {
+                var (runResult, exe) = HaskellCompiler.Compile(runSpec, true);
+                if (runResult.outcome == Outcome.Ok) {
+                    runResult = HaskellRunner.Execute(exe, runResult);
+                }
+
+                return runResult;
+            }, runSpec)
+        );
+
     private static Task<JsonResult> HaskellCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, _) = HaskellCompiler.Compile(runSpec, false);
@@ -148,6 +159,7 @@ public static class Handler {
         runSpec.language_id switch {
             "python" => PythonCompileAndTest(runSpec),
             "csharp" or "vb" => DotNetCompileAndTest(runSpec),
+            "haskell" => HaskellCompileAndTest(runSpec),
             _ => Task.Run(Wrap(() => new RunResult(runSpec.TempDir) { outcome = Outcome.IllegalSystemCall }, runSpec))
         };
 
