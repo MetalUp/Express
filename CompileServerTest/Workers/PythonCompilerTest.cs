@@ -13,10 +13,12 @@ public class PythonCompilerTest {
         @"print (str(1))";
 
     private const string MissingTerm =
-        @"print (str(1/))";
+        @"
+print (str(1/))";
 
     private const string MissingTermMultiLine =
-        @"print (str(1))
+        @"
+print (str(1))
 print (str(2))
 print (str(1/))";
 
@@ -147,7 +149,7 @@ if __name__ == ""__main__"":
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:1:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
+        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:2:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
         Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(15, rr.col_no);
     }
@@ -160,8 +162,8 @@ if __name__ == ""__main__"":
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line1print(str(1/))^SyntaxError:invalidsyntax");
-        Assert.AreEqual(1, rr.line_no);
+        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line2print(str(1/))^SyntaxError:invalidsyntax");
+        Assert.AreEqual(2, rr.line_no);
         Assert.AreEqual(18, rr.col_no);
     }
 
@@ -172,7 +174,7 @@ if __name__ == ""__main__"":
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:3:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
+        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:4:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
         Assert.AreEqual(3, rr.line_no);
         Assert.AreEqual(15, rr.col_no);
     }
@@ -185,8 +187,8 @@ if __name__ == ""__main__"":
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line3print(str(1/))^SyntaxError:invalidsyntax");
-        Assert.AreEqual(3, rr.line_no);
+        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line4print(str(1/))^SyntaxError:invalidsyntax");
+        Assert.AreEqual(4, rr.line_no);
         Assert.AreEqual(18, rr.col_no);
     }
 

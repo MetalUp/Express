@@ -7,6 +7,7 @@ public static class PythonCompiler {
     private const string PythonExeName = "python.exe";
     private const string MyPyExeName = "mypy.exe";
     private const string TempFileName = "temp.py";
+    private const int PythonLineAdjustment = 1;
 
     private static string PythonExe => $"{CompileServerController.PythonPath}\\{PythonExeName}";
 
@@ -40,13 +41,15 @@ public static class PythonCompiler {
         return result;
     }
 
+    private static int AdJustLineNumber(int lineNumber) => lineNumber >PythonLineAdjustment ? lineNumber - PythonLineAdjustment : lineNumber;
+
     private static (RunResult, string) UpdateTypeCheckLineNumber((RunResult, string) result) {
         var (rr, _) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split(":");
                 if (int.TryParse(err[1], out var lineNo)) {
-                    rr.line_no = lineNo;
+                    rr.line_no = AdJustLineNumber(lineNo);
                 }
 
                 if (int.TryParse(err[2], out var colNo)) {
