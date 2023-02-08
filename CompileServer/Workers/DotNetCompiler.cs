@@ -1,10 +1,12 @@
-﻿using System.Diagnostics;
-using CompileServer.Models;
+﻿using CompileServer.Models;
 using Microsoft.CodeAnalysis;
 
 namespace CompileServer.Workers;
 
 public static class DotNetCompiler {
+    private const int CSharpLineAdjustment = 18;
+    private const int VbLineAdjustment = 52;
+
     internal static readonly MetadataReference[] DotNetReferences = {
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections").Location), // System.Collections
@@ -41,13 +43,10 @@ public static class DotNetCompiler {
         return (0, 0);
     }
 
-    private const int CSharpLineAdjustment = 18;
-    private const int VbLineAdjustment = 52;
-
     private static int AdJustLineNumber(RunSpec runSpec, int lineNumber) =>
-        (runSpec.language_id) switch {
-            "csharp" when lineNumber > CSharpLineAdjustment =>  lineNumber - CSharpLineAdjustment,
-            "vb" when lineNumber > VbLineAdjustment =>  lineNumber - VbLineAdjustment,
+        runSpec.language_id switch {
+            "csharp" when lineNumber > CSharpLineAdjustment => lineNumber - CSharpLineAdjustment,
+            "vb" when lineNumber > VbLineAdjustment => lineNumber - VbLineAdjustment,
             _ => lineNumber
         };
 

@@ -15,7 +15,7 @@ public static class HaskellCompiler {
     internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "haskell", GetVersion(runSpec) };
 
     private static (RunResult, string) UpdateLineNumber((RunResult, string) result) {
-        var (rr, s) = result;
+        var (rr, _) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split(":");

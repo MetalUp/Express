@@ -48,7 +48,7 @@ public static class DotNetTester {
             LoadIfNotInTemp("testhost.dll", runResult);
 
             if (!File.Exists($"{runResult.TempDir}compiled.runtimeconfig.json")) {
-                var rtg = @"{
+                const string rtg = @"{
                           ""runtimeOptions"": {
                             ""tfm"": ""net6.0"",
                             ""framework"": {

@@ -19,7 +19,7 @@ public static class DotNetRunner {
             File.WriteAllBytes(file, compiledAssembly);
 
             if (!File.Exists($"{runResult.TempDir}compiled.runtimeconfig.json")) {
-                var rtg = @"{
+                const string rtg = @"{
                           ""runtimeOptions"": {
                             ""tfm"": ""net6.0"",
                             ""framework"": {

@@ -15,7 +15,7 @@ public static class JavaCompiler {
     internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "java", GetVersion(runSpec) };
 
     private static (RunResult, string) UpdateLineNumber((RunResult, string) result) {
-        var (rr, s) = result;
+        var (rr, _) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split("\n");

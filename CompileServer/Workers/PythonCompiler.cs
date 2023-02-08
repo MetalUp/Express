@@ -4,17 +4,23 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class PythonCompiler {
-    private static string GetVersion(RunSpec runSpec) {
-        var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
-        var version = Helpers.GetVersion(pythonExe, "--version", runSpec);
+    private const string PythonExeName = "python.exe";
+    private const string MyPyExeName = "mypy.exe";
+    private const string TempFileName = "temp.py";
 
+    private static string PythonExe => $"{CompileServerController.PythonPath}\\{PythonExeName}";
+
+    private static string MyPyExe => $"{CompileServerController.PythonPath}\\Scripts\\{MyPyExeName}";
+
+    private static string GetVersion(RunSpec runSpec) {
+        var version = Helpers.GetVersion(PythonExe, "--version", runSpec);
         return string.IsNullOrEmpty(version) ? "not found" : version.Replace("Python ", "").Trim();
     }
 
     internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "python", GetVersion(runSpec) };
 
     private static (RunResult, string) UpdateLineNumber((RunResult, string) result) {
-        var (rr, s) = result;
+        var (rr, _) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split("\n");
@@ -35,7 +41,7 @@ public static class PythonCompiler {
     }
 
     private static (RunResult, string) UpdateTypeCheckLineNumber((RunResult, string) result) {
-        var (rr, s) = result;
+        var (rr, _) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split(":");
@@ -56,28 +62,17 @@ public static class PythonCompiler {
     }
 
     internal static (RunResult, string) Compile(RunSpec runSpec) {
-        const string tempFileName = "temp.py";
-        var file = $"{runSpec.TempDir}{tempFileName}";
+        var file = $"{runSpec.TempDir}{TempFileName}";
         File.WriteAllText(file, runSpec.sourcecode);
 
-        if (CompileServerController.PythonUseTypeAnnotations) {
-            return TypeCheck(runSpec, file, tempFileName);
-        }
-
-        return Compile(runSpec, file, tempFileName);
+        return CompileServerController.PythonUseTypeAnnotations
+            ? TypeCheck(runSpec, file, TempFileName)
+            : Compile(runSpec, file, TempFileName);
     }
 
-    private static (RunResult, string) Compile(RunSpec runSpec, string file, string tempFileName) {
-        var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
-        var args = $"-m py_compile {file}";
+    private static (RunResult, string) Compile(RunSpec runSpec, string file, string tempFileName) =>
+        UpdateLineNumber(Helpers.Compile(PythonExe, $"-m py_compile {file}", tempFileName, runSpec));
 
-        return UpdateLineNumber(Helpers.Compile(pythonExe, args, tempFileName, runSpec));
-    }
-
-    private static (RunResult, string) TypeCheck(RunSpec runSpec, string file, string tempFileName) {
-        var pythonExe = $"{CompileServerController.PythonPath}\\Scripts\\mypy.exe";
-        var args = $"{file}  --strict --disallow-untyped-defs --show-column-numbers";
-
-        return UpdateTypeCheckLineNumber(Helpers.TypeCheck(pythonExe, args, tempFileName, runSpec));
-    }
+    private static (RunResult, string) TypeCheck(RunSpec runSpec, string file, string tempFileName) =>
+        UpdateTypeCheckLineNumber(Helpers.TypeCheck(MyPyExe, $"{file}  --strict --disallow-untyped-defs --show-column-numbers", tempFileName, runSpec));
 }
