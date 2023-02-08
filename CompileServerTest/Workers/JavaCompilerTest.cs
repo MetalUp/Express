@@ -71,6 +71,7 @@ public class JavaCompilerTest {
     public void TestCompileOk() {
         using var runSpec = JavaRunSpec(SimpleCode);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
     }
 
@@ -86,7 +87,7 @@ public class JavaCompilerTest {
     public void TestCompileFailMissingSemiColon() {
         using var runSpec = JavaRunSpec(MissingSC);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
-
+        Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"{runSpec.TempDir}temp.java:3:error:';'expectedinta=1^1error");

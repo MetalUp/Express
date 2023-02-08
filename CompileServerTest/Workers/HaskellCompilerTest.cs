@@ -59,6 +59,7 @@ public class HaskellCompilerTest {
     public void TestCompileOk() {
         using var runSpec = HaskellRunSpec(SimpleCode);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
     }
 
@@ -74,7 +75,7 @@ public class HaskellCompilerTest {
     public void TestCompileFailMissingQuote() {
         using var runSpec = HaskellRunSpec(MissingQuote);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
-
+        Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"{runSpec.TempDir}temp.hs:1:19:error:lexicalerrorinstring/characterliteralatendofinput|1|main=putStrLn""1|^");

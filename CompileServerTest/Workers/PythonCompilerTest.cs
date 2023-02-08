@@ -93,6 +93,7 @@ if __name__ == ""__main__"":
     public void TestCompileOk() {
         using var runSpec = PythonRunSpec(SimpleCode);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
     }
 
@@ -108,7 +109,7 @@ if __name__ == ""__main__"":
     public void TestTypeCheckFail() {
         using var runSpec = PythonRunSpec(TestCodeTypeFail);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
-
+        Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"temp.py:1:1:error:Functionismissingatypeannotation[no-untyped-def]Found1errorin1file(checked1sourcefile)");
@@ -120,7 +121,7 @@ if __name__ == ""__main__"":
     public void TestCompileFailMissingTerm() {
         using var runSpec = PythonRunSpec(MissingTerm);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
-
+        Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"temp.py:1:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
@@ -132,7 +133,7 @@ if __name__ == ""__main__"":
     public void TestCompileFailMissingTermMultiLine() {
         using var runSpec = PythonRunSpec(MissingTermMultiLine);
         var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
-
+        Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"temp.py:3:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
