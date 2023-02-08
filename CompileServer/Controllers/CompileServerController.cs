@@ -47,7 +47,7 @@ public abstract class CompileServerController : ControllerBase {
     public static LanguageVersion CSharpVersion { get; private set; } = LanguageVersion.CSharp10;
     public static Microsoft.CodeAnalysis.VisualBasic.LanguageVersion VisualBasicVersion { get; private set; } = Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic16_9;
     public static int ProcessTimeout { get; private set; } = 30000;
-    public static bool PythonUseTypeAnnotations { get; private set; } = true;
+    public static bool PythonUseTypeAnnotations { get; set; } = true;
 
     private T Parse<T>(string val) where T : struct {
         try {
