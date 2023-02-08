@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -118,6 +119,38 @@ public static class Compile
         }
         return (result, context2);
     }
+
+    public static IList<LanguageViewModel> GetCompileServerLanguagesAndVersions(IContext context)
+    {
+        var request = CreateMessage(context, HttpMethod.Get, $"{compileServer}/languages");
+
+        using var response = Client.SendAsync(request).Result;
+
+        if (response.IsSuccessStatusCode)
+        {
+            var languages = ReadAs<IEnumerable<string[]>>(response);
+            return languages.Select(l => new LanguageViewModel(l[0], l[1])).ToList();
+        }
+
+        throw new HttpRequestException("compile server request failed", null, response.StatusCode);
+    }
+
+    private static LanguageViewModel MatchAndUpdate(LanguageViewModel toUpdate, IEnumerable<LanguageViewModel> froms)
+    {
+        if (froms.SingleOrDefault(f => toUpdate.AlphaName == f.AlphaName) is { } from)
+        {
+            toUpdate.Version = from.Version;
+        }
+
+        return toUpdate;
+    }
+
+    public static IList<LanguageViewModel> GetLanguagesAndVersions(IContext context) {
+        var supportedLanguages = context.Instances<Language>().Select(l => new LanguageViewModel(l.AlphaName, l.Version));
+        var compileServerlanguages = GetCompileServerLanguagesAndVersions(context);
+        return supportedLanguages.Select(sl => MatchAndUpdate(sl, compileServerlanguages)).ToList();
+    }
+
 
     private static T ReadAs<T>(HttpResponseMessage response)
     {

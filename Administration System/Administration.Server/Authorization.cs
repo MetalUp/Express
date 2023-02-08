@@ -27,6 +27,7 @@ namespace Server
             config.AddTypeAuthorizer<CodeUserView, CodeUserViewAuthorizer>();
             config.AddTypeAuthorizer<FileViewModel, FileViewModelAuthorizer>();
             config.AddTypeAuthorizer<Activity, ActivityAuthorizer>();
+            config.AddTypeAuthorizer<LanguageViewModel, LanguageViewModelAuthorizer>();
             return config;
         }
     }
