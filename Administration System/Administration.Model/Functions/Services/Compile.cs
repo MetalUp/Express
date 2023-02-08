@@ -151,7 +151,6 @@ public static class Compile
         return supportedLanguages.Select(sl => MatchAndUpdate(sl, compileServerlanguages)).ToList();
     }
 
-    [RenderEagerly]
     public static IList<LanguageViewModel> GetLanguagesAndVersions(IContext context) {
         return context.Instances<Language>().Select(l => new LanguageViewModel(l.AlphaName, l.Version)).ToList();
     }

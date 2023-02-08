@@ -12,4 +12,8 @@ public class LanguageViewModel {
     public string AlphaName { get; set; }
 
     public string Version { get; set; }
+
+    private string DisplayVersion => string.IsNullOrEmpty(Version) ? string.Empty : $"({Version})";
+
+    public override string ToString() => $"{AlphaName}{DisplayVersion}";
 }
