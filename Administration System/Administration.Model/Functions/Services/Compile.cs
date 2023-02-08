@@ -145,12 +145,16 @@ public static class Compile
         return toUpdate;
     }
 
-    public static IList<LanguageViewModel> GetLanguagesAndVersions(IContext context) {
-        var supportedLanguages = context.Instances<Language>().Select(l => new LanguageViewModel(l.AlphaName, l.Version));
+    public static IList<LanguageViewModel> GetMergedLanguagesAndVersions(IContext context) {
+        var supportedLanguages = GetLanguagesAndVersions(context);
         var compileServerlanguages = GetCompileServerLanguagesAndVersions(context);
         return supportedLanguages.Select(sl => MatchAndUpdate(sl, compileServerlanguages)).ToList();
     }
 
+    [RenderEagerly]
+    public static IList<LanguageViewModel> GetLanguagesAndVersions(IContext context) {
+        return context.Instances<Language>().Select(l => new LanguageViewModel(l.AlphaName, l.Version)).ToList();
+    }
 
     private static T ReadAs<T>(HttpResponseMessage response)
     {
