@@ -48,6 +48,9 @@ describe('CompileServerService', () => {
           }
           return new mockValue("fail");
         }
+      }),
+      list: () => ({
+        value: () => []
       })
     })
   } as unknown as ActionResultRepresentation;
@@ -90,7 +93,7 @@ describe('CompileServerService', () => {
     service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
     var params = { "taskId": new Value(46), "expression": new Value("stub code"), "code": new Value("") } as Dictionary<Value>;
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, params, service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.evaluateExpressionAction, params, service.urlParams);
   }));
 
   it('should call evaluateExpression and include user functions', fakeAsync(() => {
@@ -102,7 +105,7 @@ describe('CompileServerService', () => {
     service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
     var params = { "taskId": new Value(46), "expression": new Value("stub code"), "code": new Value("extra code") } as Dictionary<Value>;
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, params, service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.evaluateExpressionAction, params, service.urlParams);
   }));
 
   it('should call submitCode', fakeAsync(() => {
@@ -113,7 +116,7 @@ describe('CompileServerService', () => {
 
     var params = { "taskId": new Value(46), "code": new Value("stub code") } as Dictionary<Value>;
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.submitCodeAction, params, service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.submitCodeAction, params, service.urlParams);
   }));
 
   it('should call submitCode and not include user code', fakeAsync(() => {
@@ -125,7 +128,7 @@ describe('CompileServerService', () => {
 
     var params = { "taskId": new Value(46), "code": new Value("stub code") } as Dictionary<Value>;
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.submitCodeAction, params, service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.submitCodeAction, params, service.urlParams);
   }));
 
   it('should call runTests', fakeAsync(() => {
@@ -136,7 +139,7 @@ describe('CompileServerService', () => {
 
     var params = { "taskId": new Value(46), "code": new Value("") } as Dictionary<Value>;
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runTestsAction, params, service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.runTestsAction, params, service.urlParams);
   }));
 
   it('should call runTests and include user code', fakeAsync(() => {
@@ -149,7 +152,7 @@ describe('CompileServerService', () => {
 
     var params = { "taskId": new Value(46), "code": new Value("extra code") } as Dictionary<Value>;
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.runTestsAction, params, service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.runTestsAction, params, service.urlParams);
   }));
 
   it('should call evaluateExpression and return an empty result on error', fakeAsync(() => {
@@ -158,7 +161,7 @@ describe('CompileServerService', () => {
 
     service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, service.params(46, "stub code"), service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.evaluateExpressionAction, service.params(46, "stub code"), service.urlParams);
   }));
 
   it('should call submitCode and return an empty result on error', fakeAsync(() => {
@@ -167,7 +170,7 @@ describe('CompileServerService', () => {
 
     service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, service.params(46, undefined, "stub code"), service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.evaluateExpressionAction, service.params(46, undefined, "stub code"), service.urlParams);
   }));
 
   it('should call runTests and return an empty result on error', fakeAsync(() => {
@@ -176,6 +179,6 @@ describe('CompileServerService', () => {
 
     service.runTests(46).subscribe(o => expect(o).toEqual(unknownError));
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledOnceWith(service.evaluateExpressionAction, service.params(46, ""), service.urlParams);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.evaluateExpressionAction, service.params(46, ""), service.urlParams);
   }));
 });

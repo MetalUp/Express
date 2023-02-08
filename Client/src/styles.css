@@ -321,23 +321,31 @@ gemini {
     color: grey;
 }
 
-.python :is(.dotnet, .csharp, .vb, .java, .arm) {
+.arm :is(.csharp, .dotnet, .haskell, .java, .other, .python, .vb) {
     display:none;
 }
 
-.csharp :is(.python, .vb, .java, .arm) {
+.csharp :is(.arm, .haskell, .java, .other, .python, .vb) {
     display:none;
 }
 
-.vb :is(.csharp, .python, .java, .arm) {
+.haskell :is(.arm, .csharp, .dotnet, .java, .other, .python, .vb) {
     display:none;
 }
 
-.java :is(.dotnet, .csharp, .vb, .python, .arm) {
+.java :is(.arm, .csharp, .dotnet, .haskell, .other, .python, .vb) {
     display:none;
 }
 
-.arm :is(.dotnet, .csharp, .vb, .python, .java) {
+.other :is(.arm, .csharp, .dotnet, .haskell, .java, .python, .vb) {
+    display:none;
+}
+
+.python :is(.arm, .csharp, .dotnet, .haskell, .java, .other, .vb) {
+    display:none;
+}
+
+.vb :is(.arm, .csharp, .haskell, .java, .other, .python) {
     display:none;
 }
 

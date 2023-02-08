@@ -6,6 +6,8 @@ import { CustomEditorComponent } from './custom-editor.component';
 import { Subject } from 'rxjs';
 import { IFileView } from '../models/file-view';
 import { Location } from '@angular/common';
+import { CompileServerService } from '../services/compile-server.service';
+import { ILanguageView } from '../models/language-view';
 
 describe('CustomEditorComponent', () => {
   let component: CustomEditorComponent;
@@ -15,12 +17,16 @@ describe('CustomEditorComponent', () => {
   let fileServiceSpy: jasmine.SpyObj<FileService>;
   let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
   let locationSpy: jasmine.SpyObj<Location>;
+  let compileServiceSpy: jasmine.SpyObj<CompileServerService>;
   let mapSub = new Subject<ParamMap>();
   let testFileView = { Content: "test content", Mime: 'test/mime', LanguageAlphaName: 'test language' } as IFileView;
+  let languagesSub = new Subject<ILanguageView[]>();
 
   activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['navigate'], { paramMap: mapSub });
 
   fileServiceSpy = jasmine.createSpyObj('FileService', ['loadFile', 'saveFile']);
+
+  compileServiceSpy = jasmine.createSpyObj('CompileService', [], {languages$ : languagesSub});
 
   locationSpy = jasmine.createSpyObj('Location', ['back']);
 
@@ -44,6 +50,10 @@ describe('CustomEditorComponent', () => {
         {
           provide: FileService,
           useValue: fileServiceSpy
+        },
+        {
+          provide: CompileServerService,
+          useValue: compileServiceSpy
         }
       ]
     })

@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { FileService } from '../services/file.service';
 import { IFileView } from '../models/file-view';
+import { CompileServerService } from '../services/compile-server.service';
 
 @Component({
   selector: 'app-custom-editor',
@@ -14,7 +15,8 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
     private location: Location,
-    private fileService: FileService) { }
+    private fileService: FileService,
+    private compileService: CompileServerService) { }
 
   id?: string;
 
@@ -25,7 +27,9 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   name: string = "";
 
-  sub?: Subscription;
+  sub1?: Subscription;
+
+  sub2?: Subscription;
 
   file?: IFileView;
 
@@ -33,9 +37,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   loaded: boolean = false;
 
-  get languages() {
-    return ["arm", "java", "vb", "python", "csharp"];
-  }
+  languages: string[] = [];
 
   get classes() {
     return `${this.selectedLanguage} ${this.mime.replace('/', '-')}`;
@@ -70,7 +72,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sub = this.route.paramMap.subscribe(pm => {
+    this.sub1 = this.route.paramMap.subscribe(pm => {
       this.id = pm.get('id') || "";
       if (this.id) {
         this.fileService.loadFile(this.id).then(file => {
@@ -82,6 +84,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
         })
       }
     })
+    this.sub2 = this.compileService.languages$.subscribe(ll => this.languages = ll.map(i => i.AlphaName));
   }
 
   canSave() {
@@ -105,8 +108,11 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
+    if (this.sub1) {
+      this.sub1.unsubscribe();
+    }
+    if (this.sub2) {
+      this.sub2.unsubscribe();
     }
   }
 }

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
-import { catchError, from, of, Subject } from 'rxjs';
+import { BehaviorSubject, catchError, from, of, Subject } from 'rxjs';
 import { RunResult, errorRunResult, EmptyRunResult } from '../models/run-result';
 import { TaskService } from './task.service';
 import { Dictionary } from 'lodash';
 import { SubmitProgram } from 'armlite_service';
 import { ArmTestHelper } from '../models/arm-test-helper';
 import { ITaskUserView } from '../models/task-user-view';
+import { ILanguageView, LanguageView } from '../models/language-view';
 
 
 enum ActivityType {
@@ -24,8 +25,6 @@ enum ActivityType {
 export class CompileServerService {
 
   
-
-
   constructor(taskService: TaskService, private repLoader: RepLoaderService, private contextService: ContextService) {
     taskService.currentTask.subscribe(t => {
       this.currentTask = t;
@@ -43,6 +42,7 @@ export class CompileServerService {
         })
         .then((service : IHateoasModel) => {
           this.compileServer = service as DomainObjectRepresentation;
+          this.getLanguages();
         })
       }
 
@@ -51,6 +51,8 @@ export class CompileServerService {
   private currentTask? : ITaskUserView;
 
   selectedLanguage: string = '';
+
+  languages$ = new BehaviorSubject<ILanguageView[]>([]);
 
   private userDefinedCode: string = '';
 
@@ -83,6 +85,12 @@ export class CompileServerService {
       } as RunResult : errorRunResult({message : "null result from server"});
   }
 
+  private ToLanguages(ar: ActionResultRepresentation): ILanguageView[] {
+    var result = ar.result().list();
+    var items = result?.value() || [];
+    return items.map(l => ({ AlphaName: l.title() || "", Version: "" })).sort((a, b) => b.AlphaName.localeCompare(a.AlphaName));
+  }
+
   // expose to make testing easier 
 
   get evaluateExpressionAction() {
@@ -99,6 +107,10 @@ export class CompileServerService {
 
   get recordActivityAction() {
     return this.compileServer!.actionMember("RecordCodeActivityWithoutCompiling") as InvokableActionMember;
+  }
+
+  get getLanguagesAction() {
+    return this.compileServer!.actionMember("GetLanguagesAndVersions") as InvokableActionMember;
   }
 
   get urlParams() {
@@ -195,5 +207,11 @@ export class CompileServerService {
     const action = this.runTestsAction;
     var params = this.params(taskId);
     return this.submit(action, params);
+  }
+
+  getLanguages() {
+    const action = this.getLanguagesAction;
+    this.repLoader.invoke(action, {}, this.urlParams)
+      .then(ar => this.languages$.next(this.ToLanguages(ar)));
   }
 }
