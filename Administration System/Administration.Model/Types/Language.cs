@@ -12,6 +12,7 @@ public class Language
     {
         LanguageID = cloneFrom.LanguageID;  
         Name = cloneFrom.Name;
+        AlphaName = cloneFrom.AlphaName;
         Version = cloneFrom.Version;
         FileExtension = cloneFrom.FileExtension;
         MIMEType = cloneFrom.MIMEType;
