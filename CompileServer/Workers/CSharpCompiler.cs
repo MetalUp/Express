@@ -1,4 +1,5 @@
-﻿using CompileServer.Models;
+﻿using CompileServer.Controllers;
+using CompileServer.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -7,7 +8,7 @@ using Microsoft.CSharp.RuntimeBinder;
 namespace CompileServer.Workers;
 
 public static class CSharpCompiler {
-    private static readonly CSharpParseOptions Options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp10);
+    private static readonly CSharpParseOptions Options = CSharpParseOptions.Default.WithLanguageVersion(CompileServerController.CSharpVersion);
 
     private static readonly MetadataReference[] CSharpReferences = {
         MetadataReference.CreateFromFile(typeof(CSharpArgumentInfo).Assembly.Location)

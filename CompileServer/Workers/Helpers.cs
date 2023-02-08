@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using CompileServer.Controllers;
 using CompileServer.Models;
 
 namespace CompileServer.Workers;
@@ -80,7 +81,7 @@ public static class Helpers {
     public static RunResult Execute(string exe, string args, RunResult runResult) {
         try {
             using var process = CreateProcess(exe, args, runResult);
-            if (!process.WaitForExit(30000)) {
+            if (!process.WaitForExit(CompileServerController.ProcessTimeout)) {
                 process.Kill();
             }
 
@@ -108,7 +109,7 @@ public static class Helpers {
         return (runResult, returnFileName);
     }
 
-    public static RunResult TypeCheck(string exe, string args, RunSpec runSpec) {
+    public static (RunResult, string) TypeCheck(string exe, string args, string returnFileName, RunSpec runSpec) {
         var runResult = new RunResult(runSpec.TempDir);
 
         try {
@@ -120,7 +121,7 @@ public static class Helpers {
             runResult = SetCompileResults(runResult, e);
         }
 
-        return runResult;
+        return (runResult, returnFileName);
     }
 
     public static string GetVersion(string exe, string args, RunSpec runSpec) {

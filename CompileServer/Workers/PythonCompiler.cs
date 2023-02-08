@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using CompileServer.Controllers;
+﻿using CompileServer.Controllers;
 using CompileServer.Models;
 
 namespace CompileServer.Workers;
@@ -35,13 +34,15 @@ public static class PythonCompiler {
         return result;
     }
 
-    private static RunResult UpdateTypeCheckLineNumber(RunResult rr) {
+    private static (RunResult, string) UpdateTypeCheckLineNumber((RunResult, string) result) {
+        var (rr, s) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split(":");
                 if (int.TryParse(err[1], out var lineNo)) {
                     rr.line_no = lineNo;
                 }
+
                 if (int.TryParse(err[2], out var colNo)) {
                     rr.col_no = colNo;
                 }
@@ -51,29 +52,32 @@ public static class PythonCompiler {
             }
         }
 
-        return rr;
+        return result;
     }
 
-    internal static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
+    internal static (RunResult, string) Compile(RunSpec runSpec) {
         const string tempFileName = "temp.py";
         var file = $"{runSpec.TempDir}{tempFileName}";
         File.WriteAllText(file, runSpec.sourcecode);
 
-        var runResult = TypeCheck(runSpec, createExecutable, file, tempFileName);
-        return runResult.outcome == Outcome.Ok ? Compile(runSpec, createExecutable, file, tempFileName) : (runResult, "");
+        if (CompileServerController.PythonUseTypeAnnotations) {
+            return TypeCheck(runSpec, file, tempFileName);
+        }
+
+        return Compile(runSpec, file, tempFileName);
     }
 
-    private static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable, string file, string tempFileName) {
+    private static (RunResult, string) Compile(RunSpec runSpec, string file, string tempFileName) {
         var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
         var args = $"-m py_compile {file}";
 
-        return UpdateLineNumber(Helpers.Compile(pythonExe, args, createExecutable ? tempFileName : "", runSpec));
+        return UpdateLineNumber(Helpers.Compile(pythonExe, args, tempFileName, runSpec));
     }
 
-    private static RunResult TypeCheck(RunSpec runSpec, bool createExecutable, string file, string tempFileName) {
+    private static (RunResult, string) TypeCheck(RunSpec runSpec, string file, string tempFileName) {
         var pythonExe = $"{CompileServerController.PythonPath}\\Scripts\\mypy.exe";
         var args = $"{file}  --strict --disallow-untyped-defs --show-column-numbers";
 
-        return UpdateTypeCheckLineNumber(Helpers.TypeCheck(pythonExe, args, runSpec));
+        return UpdateTypeCheckLineNumber(Helpers.TypeCheck(pythonExe, args, tempFileName, runSpec));
     }
 }

@@ -1,4 +1,5 @@
-﻿using CompileServer.Models;
+﻿using CompileServer.Controllers;
+using CompileServer.Models;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.VisualBasic;
@@ -7,7 +8,7 @@ using Microsoft.VisualBasic.CompilerServices;
 namespace CompileServer.Workers;
 
 public static class VisualBasicCompiler {
-    private static readonly VisualBasicParseOptions Options = VisualBasicParseOptions.Default.WithLanguageVersion(LanguageVersion.VisualBasic16_9);
+    private static readonly VisualBasicParseOptions Options = VisualBasicParseOptions.Default.WithLanguageVersion(CompileServerController.VisualBasicVersion);
 
     private static readonly MetadataReference[] VisualBasicReferences = {
         MetadataReference.CreateFromFile(typeof(VisualBasicCommandLineArguments).Assembly.Location),

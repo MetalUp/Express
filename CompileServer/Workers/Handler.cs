@@ -20,7 +20,7 @@ public static class Handler {
 
     private static Task<JsonResult> PythonCompileAndRun(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
-                var (runResult, pyFile) = PythonCompiler.Compile(runSpec, true);
+                var (runResult, pyFile) = PythonCompiler.Compile(runSpec);
                 if (runResult.outcome == Outcome.Ok) {
                     runResult = PythonRunner.Execute(pyFile, runResult);
                 }
@@ -31,7 +31,7 @@ public static class Handler {
 
     private static Task<JsonResult> PythonCompileAndTest(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
-                var (runResult, pyFile) = PythonCompiler.Compile(runSpec, true);
+                var (runResult, pyFile) = PythonCompiler.Compile(runSpec);
                 if (runResult.outcome == Outcome.Ok) {
                     runResult = PythonTester.Execute(pyFile, runResult);
                 }
@@ -42,7 +42,7 @@ public static class Handler {
 
     private static Task<JsonResult> PythonCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
-                var (runResult, _) = PythonCompiler.Compile(runSpec, false);
+                var (runResult, _) = PythonCompiler.Compile(runSpec);
                 return runResult;
             }, runSpec)
         );
