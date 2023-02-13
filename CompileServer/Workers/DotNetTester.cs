@@ -16,7 +16,7 @@ public static class DotNetTester {
         }
     }
 
-    internal static RunResult Execute(byte[] compiledAssembly, RunSpec runSpec,  RunResult runResult) {
+    internal static RunResult Execute(byte[] compiledAssembly, RunSpec runSpec, RunResult runResult) {
         var consoleOut = new StringWriter();
         var consoleErr = new StringWriter();
         var oldOut = Console.Out;

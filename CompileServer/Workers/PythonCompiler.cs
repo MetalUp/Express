@@ -1,5 +1,4 @@
-﻿using CompileServer.Controllers;
-using CompileServer.Models;
+﻿using CompileServer.Models;
 
 namespace CompileServer.Workers;
 
@@ -41,7 +40,7 @@ public static class PythonCompiler {
         return result;
     }
 
-    private static int AdJustLineNumber(int lineNumber) => lineNumber >PythonLineAdjustment ? lineNumber - PythonLineAdjustment : lineNumber;
+    private static int AdJustLineNumber(int lineNumber) => lineNumber > PythonLineAdjustment ? lineNumber - PythonLineAdjustment : lineNumber;
 
     private static (RunResult, string) UpdateTypeCheckLineNumber((RunResult, string) result) {
         var (rr, _) = result;

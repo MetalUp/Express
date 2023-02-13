@@ -1,4 +1,3 @@
-using CompileServer.Controllers;
 using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
@@ -46,7 +45,7 @@ public class JavaCompilerTest {
 
     [TestMethod]
     public void TestVersion() {
-        var csv = Handler.GetNameAndVersion(JavaRunSpec(""), testLogger);
+        var csv = Handler.GetNameAndVersion(JavaRunSpec(""));
 
         Assert.AreEqual("java", csv[0]);
         Assert.AreEqual(JavaVersion, csv[1]);
@@ -54,7 +53,7 @@ public class JavaCompilerTest {
 
     [TestMethod]
     public void TestVersionInParallel() {
-        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(JavaRunSpec(""), testLogger)).ToArray();
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(JavaRunSpec(""))).ToArray();
 
         foreach (var csv in csvs) {
             Assert.AreEqual("java", csv[0]);
@@ -65,7 +64,7 @@ public class JavaCompilerTest {
     [TestMethod]
     public void TestCompileOk() {
         using var runSpec = JavaRunSpec(SimpleCode);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
     }
@@ -81,7 +80,7 @@ public class JavaCompilerTest {
     [TestMethod]
     public void TestCompileFailMissingSemiColon() {
         using var runSpec = JavaRunSpec(MissingSC);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
@@ -102,7 +101,7 @@ public class JavaCompilerTest {
 
     [TestMethod]
     public void TestCompileAndRunInParallel() {
-        var runSpecs = Enumerable.Range(1, 10).Select(i => JavaRunSpec(SimpleCode));
+        var runSpecs = Enumerable.Range(1, 10).Select(_ => JavaRunSpec(SimpleCode));
 
         var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
 

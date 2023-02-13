@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using CompileServer.Controllers;
 using CompileServer.Models;
 
 namespace CompileServer.Workers;
@@ -22,6 +21,7 @@ public static class HaskellCompiler {
                 if (int.TryParse(err[2], out var lineNo)) {
                     rr.line_no = lineNo;
                 }
+
                 if (int.TryParse(err[3], out var colNo)) {
                     rr.col_no = colNo;
                 }
@@ -34,14 +34,13 @@ public static class HaskellCompiler {
         return result;
     }
 
-
-    internal static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
+    internal static (RunResult, string) Compile(RunSpec runSpec) {
         const string tempFileName = "temp.hs";
         var file = $"{runSpec.TempDir}{tempFileName}";
         var haskellCompiler = $"{runSpec.Options.HaskellPath}\\bin\\ghc-9.4.4.exe";
 
         File.WriteAllText(file, runSpec.sourcecode);
 
-        return  UpdateLineNumber(Helpers.Compile(haskellCompiler, file, "temp.exe", runSpec));
+        return UpdateLineNumber(Helpers.Compile(haskellCompiler, file, "temp.exe", runSpec));
     }
 }

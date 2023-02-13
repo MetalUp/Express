@@ -3,7 +3,7 @@
 namespace CompileServer.Workers;
 
 public static class DotNetRunner {
-    internal static RunResult ExecuteAsProcess(byte[] compiledAssembly, RunSpec runSpec,  RunResult runResult, ILogger logger) {
+    internal static RunResult ExecuteAsProcess(byte[] compiledAssembly, RunSpec runSpec, RunResult runResult) {
         var consoleOut = new StringWriter();
         var consoleErr = new StringWriter();
         var oldOut = Console.Out;

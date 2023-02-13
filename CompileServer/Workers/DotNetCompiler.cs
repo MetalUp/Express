@@ -60,7 +60,7 @@ public static class DotNetCompiler {
         if (!result.Success) {
             var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
             var (l, c) = GetFirstLineAndColumn(result.Diagnostics);
-            return (new RunResult() {
+            return (new RunResult {
                 cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
                 outcome = Outcome.CompilationError,
                 line_no = AdJustLineNumber(runSpec, l),
@@ -70,6 +70,6 @@ public static class DotNetCompiler {
 
         peStream.Seek(0, SeekOrigin.Begin);
 
-        return (new RunResult() { outcome = Outcome.Ok }, peStream.ToArray());
+        return (new RunResult { outcome = Outcome.Ok }, peStream.ToArray());
     }
 }

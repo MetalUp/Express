@@ -98,7 +98,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestVersion() {
         var runSpec = CsharpRunSpec("");
-        var csv = Handler.GetNameAndVersion(runSpec, testLogger);
+        var csv = Handler.GetNameAndVersion(runSpec);
 
         Assert.AreEqual("csharp", csv[0]);
         Assert.AreEqual("10", csv[1]);
@@ -106,7 +106,7 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestVersionInParallel() {
-        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(CsharpRunSpec(""), testLogger)).ToArray();
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(CsharpRunSpec(""))).ToArray();
 
         foreach (var csv in csvs) {
             Assert.AreEqual("csharp", csv[0]);
@@ -117,7 +117,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileOk() {
         using var runSpec = CsharpRunSpec(SimpleCode);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
     }
@@ -125,7 +125,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileOkWithMain() {
         using var runSpec = CsharpRunSpec(SimpleCodeWithMain);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
     }
@@ -149,7 +149,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileFailDivisionByZero() {
         using var runSpec = CsharpRunSpec(DivZero);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.CompilationError, "(1,9): error CS0020: Division by constant zero");
         Assert.AreEqual(1, rr.line_no);
@@ -177,7 +177,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndTestOk() {
         using var runSpec = CsharpRunSpec(TestCodeOk);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -189,7 +189,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndTestFail() {
         using var runSpec = CsharpRunSpec(TestCodeFail);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -201,7 +201,7 @@ public class CSharpCompilerTest {
     [TestMethod]
     public void TestCompileAndTestRTE() {
         using var runSpec = CsharpRunSpec(TestCodeRTE);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -224,7 +224,7 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestCompileAndRunInParallel() {
-        var runSpecs = Enumerable.Range(1, 10).Select(i => CsharpRunSpec(SimpleCode));
+        var runSpecs = Enumerable.Range(1, 10).Select(_ => CsharpRunSpec(SimpleCode));
 
         var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
 
@@ -244,9 +244,9 @@ public class CSharpCompilerTest {
 
     [TestMethod]
     public void TestCompileAndTestInParallel() {
-        var runSpecs = Enumerable.Range(1, 10).Select(i => CsharpRunSpec(TestCodeOk));
+        var runSpecs = Enumerable.Range(1, 10).Select(_ => CsharpRunSpec(TestCodeOk));
 
-        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr).Result.Value).Cast<RunResult>().ToArray();
 
         foreach (var rr in rrs) {
             Assert.IsNotNull(rr);

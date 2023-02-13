@@ -1,4 +1,3 @@
-using CompileServer.Controllers;
 using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
@@ -69,16 +68,14 @@ if __name__ == ""__main__"":
     private readonly ILogger testLogger = NullLogger.Instance;
 
     [ClassInitialize]
-    public static void Initialize(TestContext testContext) {
-    }
+    public static void Initialize(TestContext testContext) { }
 
     [TestInitialize]
-    public void StartTest() {
-    }
+    public void StartTest() { }
 
     [TestMethod]
     public void TestVersion() {
-        var csv = Handler.GetNameAndVersion(PythonRunSpec(""), testLogger);
+        var csv = Handler.GetNameAndVersion(PythonRunSpec(""));
 
         Assert.AreEqual("python", csv[0]);
         Assert.IsTrue(csv[1].StartsWith("3.11."));
@@ -86,7 +83,7 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestVersionInParallel() {
-        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(PythonRunSpec(""), testLogger)).ToArray();
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(PythonRunSpec(""))).ToArray();
 
         foreach (var csv in csvs) {
             Assert.AreEqual("python", csv[0]);
@@ -97,7 +94,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestTypeCheckOk() {
         using var runSpec = PythonRunSpec(SimpleCode);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
     }
@@ -106,7 +103,7 @@ if __name__ == ""__main__"":
     public void TestCompileOk() {
         using var runSpec = PythonRunSpec(SimpleCode);
         runSpec.Options.PythonUseTypeAnnotations = false;
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
     }
@@ -131,7 +128,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestTypeCheckFail() {
         using var runSpec = PythonRunSpec(TestCodeTypeFail);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
@@ -143,7 +140,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestTypeCheckFailMissingTerm() {
         using var runSpec = PythonRunSpec(MissingTerm);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
@@ -156,7 +153,7 @@ if __name__ == ""__main__"":
     public void TestCompileFailMissingTerm() {
         using var runSpec = PythonRunSpec(MissingTerm);
         runSpec.Options.PythonUseTypeAnnotations = false;
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
@@ -168,7 +165,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestTypeCheckFailMissingTermMultiLine() {
         using var runSpec = PythonRunSpec(MissingTermMultiLine);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
@@ -181,7 +178,7 @@ if __name__ == ""__main__"":
     public void TestCompileFailMissingTermMultiLine() {
         using var runSpec = PythonRunSpec(MissingTermMultiLine);
         runSpec.Options.PythonUseTypeAnnotations = false;
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
@@ -216,7 +213,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestTypeCheckAndTestOk() {
         using var runSpec = PythonRunSpec(TestCodeOk);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -230,7 +227,7 @@ if __name__ == ""__main__"":
     public void TestCompileAndTestOk() {
         using var runSpec = PythonRunSpec(TestCodeOk);
         runSpec.Options.PythonUseTypeAnnotations = false;
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -243,7 +240,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestTypeCheckAndTestFail() {
         using var runSpec = PythonRunSpec(TestCodeFail);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -257,7 +254,7 @@ if __name__ == ""__main__"":
     public void TestCompileAndTestFail() {
         using var runSpec = PythonRunSpec(TestCodeFail);
         runSpec.Options.PythonUseTypeAnnotations = false;
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -270,7 +267,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestTypeCheckAndTestRTE() {
         using var runSpec = PythonRunSpec(TestCodeRTE);
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -282,10 +279,9 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestCompileAndTestRTE() {
-       
         using var runSpec = PythonRunSpec(TestCodeRTE);
         runSpec.Options.PythonUseTypeAnnotations = false;
-        var rr = Handler.CompileAndTest(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
         Assert.AreEqual("", rr.cmpinfo);
@@ -297,7 +293,7 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestTypeCheckAndRunInParallel() {
-        var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(SimpleCode));
+        var runSpecs = Enumerable.Range(1, 10).Select(_ => PythonRunSpec(SimpleCode));
 
         var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
 
@@ -313,10 +309,11 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestCompileAndRunInParallel() {
-        var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(SimpleCode));
+        var runSpecs = Enumerable.Range(1, 10).Select(_ => PythonRunSpec(SimpleCode));
         foreach (var testRunSpec in runSpecs) {
             testRunSpec.Options.PythonUseTypeAnnotations = false;
         }
+
         var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
 
         foreach (var rr in rrs) {
@@ -331,9 +328,9 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestTypeCheckAndTestInParallel() {
-        var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(TestCodeOk));
+        var runSpecs = Enumerable.Range(1, 10).Select(_ => PythonRunSpec(TestCodeOk));
 
-        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr).Result.Value).Cast<RunResult>().ToArray();
 
         foreach (var rr in rrs) {
             Assert.IsNotNull(rr);
@@ -352,12 +349,12 @@ if __name__ == ""__main__"":
 
     [TestMethod]
     public void TestCompileAndTestInParallel() {
-      
-        var runSpecs = Enumerable.Range(1, 10).Select(i => PythonRunSpec(TestCodeOk));
+        var runSpecs = Enumerable.Range(1, 10).Select(_ => PythonRunSpec(TestCodeOk));
         foreach (var testRunSpec in runSpecs) {
             testRunSpec.Options.PythonUseTypeAnnotations = false;
         }
-        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
+
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr).Result.Value).Cast<RunResult>().ToArray();
 
         foreach (var rr in rrs) {
             Assert.IsNotNull(rr);

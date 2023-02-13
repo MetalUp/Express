@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using CompileServer.Controllers;
 using CompileServer.Models;
 
 namespace CompileServer.Workers;
@@ -35,14 +34,13 @@ public static class JavaCompiler {
         return result;
     }
 
-
-    internal static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
+    internal static (RunResult, string) Compile(RunSpec runSpec) {
         const string tempFileName = "temp.java";
         var file = $"{runSpec.TempDir}{tempFileName}";
         var javaCompiler = $"{runSpec.Options.JavaPath}\\bin\\javac.exe";
 
         File.WriteAllText(file, runSpec.sourcecode);
 
-        return  UpdateLineNumber(Helpers.Compile(javaCompiler, file, "temp", runSpec));
+        return UpdateLineNumber(Helpers.Compile(javaCompiler, file, "temp", runSpec));
     }
 }

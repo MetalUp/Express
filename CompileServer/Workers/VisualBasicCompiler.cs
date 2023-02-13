@@ -19,7 +19,7 @@ public static class VisualBasicCompiler {
 
     internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "vb", GetVersion(runSpec) };
 
-    internal static (RunResult, byte[]) Compile(RunSpec runSpec, bool createExecutable) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(runSpec, References, true));
+    internal static (RunResult, byte[]) Compile(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(runSpec, References, true));
 
     internal static (RunResult, byte[]) CompileForTest(RunSpec runSpec) => DotNetCompiler.Compile(runSpec, GenerateGenerateCode(runSpec, References, false));
 

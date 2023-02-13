@@ -1,5 +1,4 @@
-﻿using CompileServer.Controllers;
-using CompileServer.Models;
+﻿using CompileServer.Models;
 
 namespace CompileServer.Workers;
 

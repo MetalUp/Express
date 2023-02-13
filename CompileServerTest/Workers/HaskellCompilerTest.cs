@@ -1,4 +1,3 @@
-using CompileServer.Controllers;
 using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
@@ -20,17 +19,15 @@ public class HaskellCompilerTest {
               head []
               putStrLn ""1""";
 
-    private static readonly string HaskellVersion = "9.4.4";
+    private const string HaskellVersion = "9.4.4";
     private readonly ILogger testLogger = NullLogger.Instance;
 
     [ClassInitialize]
-    public static void Initialize(TestContext testContext) {
-        
-    }
+    public static void Initialize(TestContext testContext) { }
 
     [TestMethod]
     public void TestVersion() {
-        var csv = Handler.GetNameAndVersion(HaskellRunSpec(""), testLogger);
+        var csv = Handler.GetNameAndVersion(HaskellRunSpec(""));
 
         Assert.AreEqual("haskell", csv[0]);
         Assert.AreEqual(HaskellVersion, csv[1]);
@@ -38,7 +35,7 @@ public class HaskellCompilerTest {
 
     [TestMethod]
     public void TestVersionInParallel() {
-        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(HaskellRunSpec(""), testLogger)).ToArray();
+        var csvs = Enumerable.Range(1, 10).AsParallel().Select(_ => Handler.GetNameAndVersion(HaskellRunSpec(""))).ToArray();
 
         foreach (var csv in csvs) {
             Assert.AreEqual("haskell", csv[0]);
@@ -49,7 +46,7 @@ public class HaskellCompilerTest {
     [TestMethod]
     public void TestCompileOk() {
         using var runSpec = HaskellRunSpec(SimpleCode);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
     }
@@ -65,7 +62,7 @@ public class HaskellCompilerTest {
     [TestMethod]
     public void TestCompileFailMissingQuote() {
         using var runSpec = HaskellRunSpec(MissingQuote);
-        var rr = Handler.Compile(runSpec, testLogger).Result.Value as RunResult;
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
@@ -75,8 +72,7 @@ public class HaskellCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndRunFail()
-    {
+    public void TestCompileAndRunFail() {
         using var runSpec = HaskellRunSpec(RunTimeFail);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
@@ -86,14 +82,12 @@ public class HaskellCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndRunInParallel()
-    {
-        var runSpecs = Enumerable.Range(1, 10).Select(i => HaskellRunSpec(SimpleCode));
+    public void TestCompileAndRunInParallel() {
+        var runSpecs = Enumerable.Range(1, 10).Select(_ => HaskellRunSpec(SimpleCode));
 
         var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
 
-        foreach (var rr in rrs)
-        {
+        foreach (var rr in rrs) {
             Assert.IsNotNull(rr);
             Assert.AreEqual(Outcome.Ok, rr.outcome);
             Assert.AreEqual("", rr.cmpinfo);
@@ -102,8 +96,7 @@ public class HaskellCompilerTest {
             Assert.AreEqual("", rr.run_id);
         }
 
-        foreach (var testRunSpec in runSpecs)
-        {
+        foreach (var testRunSpec in runSpecs) {
             testRunSpec.Dispose();
         }
     }
