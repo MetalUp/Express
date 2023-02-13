@@ -12,5 +12,5 @@ public class LanguagesController : CompileServerController {
     public LanguagesController(ILogger<LanguagesController> logger, IConfiguration configuration) : base(logger, configuration) { }
 
     [HttpGet]
-    public IEnumerable<string[]> Get() => new[] { "csharp", "vb", "python", "java", "haskell" }.Select(l => Handler.GetNameAndVersion(new RunSpec { language_id = l }));
+    public IEnumerable<string[]> Get() => new[] { "csharp", "vb", "python", "java", "haskell" }.Select(l => Handler.GetNameAndVersion(new RunSpec { language_id = l, Options = RunSpecWrapper.SetDefaults(new RestCompileOptions()) }));
 }

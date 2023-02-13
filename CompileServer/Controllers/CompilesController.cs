@@ -12,5 +12,5 @@ public class CompilesController : CompileServerController {
     public CompilesController(ILogger<RunsController> logger, IConfiguration configuration) : base(logger, configuration) { }
 
     [HttpPost]
-    public async Task<ActionResult> Run([FromBody] RunSpecWrapper runSpec) => await Handler.Compile(runSpec.run_spec);
+    public async Task<ActionResult> Run([FromBody] RunSpecWrapper runSpec) => await Handler.Compile(runSpec.Extract());
 }

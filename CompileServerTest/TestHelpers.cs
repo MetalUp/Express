@@ -1,5 +1,7 @@
 ﻿using CompileServer.Models;
 using Microsoft.CodeAnalysis.CSharp;
+using CS = Microsoft.CodeAnalysis.CSharp;
+using VB = Microsoft.CodeAnalysis.VisualBasic;
 
 namespace CompileServerTest;
 
@@ -8,8 +10,8 @@ public static class TestHelpers {
         PythonPath = "C:\\Python311",
         JavaPath = GetJavaPath(),
         HaskellPath = @"C:\Haskell944",
-        CSharpVersion = LanguageVersion.CSharp10,
-        VisualBasicVersion = Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic16_9,
+        CSharpVersion = CS.LanguageVersion.CSharp10,
+        VisualBasicVersion = VB.LanguageVersion.VisualBasic16_9,
         MyPyArguments = "--strict --disallow-untyped-defs --show-column-numbers",
         ProcessTimeout = 30000
     };

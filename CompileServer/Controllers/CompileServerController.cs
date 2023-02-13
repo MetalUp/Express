@@ -12,7 +12,6 @@ public abstract class CompileServerController : ControllerBase {
     private const string CSharpVersionName = "CSharpVersion";
     private const string VisualBasicVersionName = "VisualBasicVersion";
     private const string ProcessTimeoutName = "ProcessTimeout";
-    
 
     protected CompileServerController(ILogger logger, IConfiguration configuration) {
         Logger = logger;

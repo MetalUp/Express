@@ -13,5 +13,5 @@ public static class HaskellTester {
         //rr.stderr = "";
         //rr.outcome = Outcome.Ok;
         //return rr;
-        new RunResult();
+        new();
 }

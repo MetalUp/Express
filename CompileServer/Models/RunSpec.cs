@@ -1,6 +1,4 @@
-﻿using CompileServer.Controllers;
-
-namespace CompileServer.Models;
+﻿namespace CompileServer.Models;
 
 public class RunSpec {
     public RunSpec() {
@@ -11,7 +9,7 @@ public class RunSpec {
     public string language_id { get; set; } = "";
     public string sourcecode { get; set; } = "";
 
-    public CompileOptions Options { get; set; }
+    public CompileOptions Options { get; set; } = new();
 
     public string TempDir { get; }
 
