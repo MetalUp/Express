@@ -9,12 +9,12 @@ public static class PythonCompiler {
     private const string TempFileName = "temp.py";
     private const int PythonLineAdjustment = 1;
 
-    private static string PythonExe => $"{CompileServerController.PythonPath}\\{PythonExeName}";
+    private static string GetPythonExe(RunSpec runSpec) => $"{runSpec.Options.PythonPath}\\{PythonExeName}";
 
-    private static string MyPyExe => $"{CompileServerController.PythonPath}\\Scripts\\{MyPyExeName}";
+    private static string GetMyPyExe(RunSpec runSpec) => $"{runSpec.Options.PythonPath}\\Scripts\\{MyPyExeName}";
 
     private static string GetVersion(RunSpec runSpec) {
-        var version = Helpers.GetVersion(PythonExe, "--version", runSpec);
+        var version = Helpers.GetVersion(GetPythonExe(runSpec), "--version", runSpec);
         return string.IsNullOrEmpty(version) ? "not found" : version.Replace("Python ", "").Trim();
     }
 
@@ -68,14 +68,14 @@ public static class PythonCompiler {
         var file = $"{runSpec.TempDir}{TempFileName}";
         File.WriteAllText(file, runSpec.sourcecode);
 
-        return CompileServerController.PythonUseTypeAnnotations
+        return runSpec.Options.PythonUseTypeAnnotations
             ? TypeCheck(runSpec, file, TempFileName)
             : Compile(runSpec, file, TempFileName);
     }
 
     private static (RunResult, string) Compile(RunSpec runSpec, string file, string tempFileName) =>
-        UpdateLineNumber(Helpers.Compile(PythonExe, $"-m py_compile {file}", tempFileName, runSpec));
+        UpdateLineNumber(Helpers.Compile(GetPythonExe(runSpec), $"-m py_compile {file}", tempFileName, runSpec));
 
     private static (RunResult, string) TypeCheck(RunSpec runSpec, string file, string tempFileName) =>
-        UpdateTypeCheckLineNumber(Helpers.TypeCheck(MyPyExe, $"{file}  --strict --disallow-untyped-defs --show-column-numbers", tempFileName, runSpec));
+        UpdateTypeCheckLineNumber(Helpers.TypeCheck(GetMyPyExe(runSpec), $"{file}  --strict --disallow-untyped-defs --show-column-numbers", tempFileName, runSpec));
 }

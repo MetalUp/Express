@@ -1,4 +1,6 @@
-﻿using CompileServer.Models;
+﻿using CompileServer.Controllers;
+using CompileServer.Models;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace CompileServerTest;
 
@@ -12,7 +14,24 @@ public static class TestHelpers {
 
     public static string ClearWhiteSpace(string s) => s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
 
-    private static TestRunSpec RunSpec(string language, string code) => new() { language_id = language, sourcecode = code };
+    private static TestRunSpec RunSpec(string language, string code) => new() { language_id = language, sourcecode = code, Options = Options};
+
+    private static string GetJavaPath() {
+        const string localDir = @"C:\Program Files\Java\jdk-17.0.4.1";
+        const string appveyorDir = @"C:\Program Files\Java\jdk17";
+        return Directory.Exists(appveyorDir) ? appveyorDir : localDir;
+    }
+
+    private static CompileOptions Options =>   new CompileOptions {
+        PythonPath = "C:\\Python311",
+        JavaPath = GetJavaPath(),
+        HaskellPath = @"C:\Haskell944",
+        CSharpVersion = LanguageVersion.CSharp10,
+        VisualBasicVersion = Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic16_9,
+        PythonUseTypeAnnotations = true,
+        ProcessTimeout = 30000
+    };
+
 
     public static void AssertRunResult(this RunResult rr, Outcome outcome, string cmpinfo = "", string stdout = "", string stderr = "") {
         Assert.AreEqual(outcome, rr.outcome);

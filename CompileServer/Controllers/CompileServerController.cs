@@ -1,3 +1,4 @@
+using CompileServer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -41,13 +42,13 @@ public abstract class CompileServerController : ControllerBase {
 
     protected ILogger Logger { get; }
 
-    public static string PythonPath { get; set; } = "";
-    public static string JavaPath { get; set; } = "";
-    public static string HaskellPath { get;  set; } = "";
-    public static LanguageVersion CSharpVersion { get; private set; } = LanguageVersion.CSharp10;
-    public static Microsoft.CodeAnalysis.VisualBasic.LanguageVersion VisualBasicVersion { get; private set; } = Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic16_9;
-    public static int ProcessTimeout { get; private set; } = 30000;
-    public static bool PythonUseTypeAnnotations { get; set; } = true;
+    private static string PythonPath { get; set; } = "";
+    private static string JavaPath { get; set; } = "";
+    private static string HaskellPath { get; set; } = "";
+    private static LanguageVersion CSharpVersion { get; set; } = LanguageVersion.CSharp10;
+    private static Microsoft.CodeAnalysis.VisualBasic.LanguageVersion VisualBasicVersion { get; set; } = Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic16_9;
+    private static int ProcessTimeout { get; set; } = 30000;
+    private static bool PythonUseTypeAnnotations { get; set; } = true;
 
     private T Parse<T>(string val) where T : struct {
         try {
@@ -59,4 +60,15 @@ public abstract class CompileServerController : ControllerBase {
 
         return default;
     }
+
+    public static CompileOptions GetOptions() =>
+        new() {
+            PythonPath = PythonPath,
+            JavaPath = JavaPath,
+            HaskellPath = HaskellPath,
+            CSharpVersion = CSharpVersion,
+            VisualBasicVersion = VisualBasicVersion,
+            ProcessTimeout = ProcessTimeout,
+            PythonUseTypeAnnotations = PythonUseTypeAnnotations
+        };
 }

@@ -6,7 +6,7 @@ namespace CompileServer.Workers;
 
 public static class HaskellCompiler {
     private static string GetVersion(RunSpec runSpec) {
-        var haskell = $"{CompileServerController.HaskellPath}\\bin\\ghc-9.4.4.exe";
+        var haskell = $"{runSpec.Options.HaskellPath}\\bin\\ghc-9.4.4.exe";
         var version = Helpers.GetVersion(haskell, "--version", runSpec);
 
         return string.IsNullOrEmpty(version) ? "not found" : Regex.Match(version, "version ([\\d\\.]+)").Groups[1].Value;
@@ -38,7 +38,7 @@ public static class HaskellCompiler {
     internal static (RunResult, string) Compile(RunSpec runSpec, bool createExecutable) {
         const string tempFileName = "temp.hs";
         var file = $"{runSpec.TempDir}{tempFileName}";
-        var haskellCompiler = $"{CompileServerController.HaskellPath}\\bin\\ghc-9.4.4.exe";
+        var haskellCompiler = $"{runSpec.Options.HaskellPath}\\bin\\ghc-9.4.4.exe";
 
         File.WriteAllText(file, runSpec.sourcecode);
 

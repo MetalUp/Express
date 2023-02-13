@@ -3,7 +3,7 @@
 namespace CompileServer.Workers;
 
 public static class DotNetRunner {
-    internal static RunResult ExecuteAsProcess(byte[] compiledAssembly, RunResult runResult, ILogger logger) {
+    internal static RunResult ExecuteAsProcess(byte[] compiledAssembly, RunSpec runSpec,  RunResult runResult, ILogger logger) {
         var consoleOut = new StringWriter();
         var consoleErr = new StringWriter();
         var oldOut = Console.Out;
@@ -14,11 +14,11 @@ public static class DotNetRunner {
 
         try {
             const string tempFileName = "compiled.dll";
-            var file = $"{runResult.TempDir}{tempFileName}";
+            var file = $"{runSpec.TempDir}{tempFileName}";
 
             File.WriteAllBytes(file, compiledAssembly);
 
-            if (!File.Exists($"{runResult.TempDir}compiled.runtimeconfig.json")) {
+            if (!File.Exists($"{runSpec.TempDir}compiled.runtimeconfig.json")) {
                 const string rtg = @"{
                           ""runtimeOptions"": {
                             ""tfm"": ""net6.0"",
@@ -29,12 +29,12 @@ public static class DotNetRunner {
                           }
                         }";
 
-                File.WriteAllText($"{runResult.TempDir}compiled.runtimeconfig.json", rtg);
+                File.WriteAllText($"{runSpec.TempDir}compiled.runtimeconfig.json", rtg);
             }
 
             var args = $"{file}";
 
-            return Helpers.Execute("dotnet", args, runResult);
+            return Helpers.Execute("dotnet", args, runSpec, runResult);
         }
         catch (Exception e) {
             return Helpers.SetRunResults(runResult, consoleOut, consoleErr, e);

@@ -37,15 +37,10 @@ public class JavaCompilerTest {
 
     [ClassInitialize]
     public static void Initialize(TestContext testContext) {
-        const string localDir = @"C:\Program Files\Java\jdk-17.0.4.1";
         const string appveyorDir = @"C:\Program Files\Java\jdk17";
 
         if (Directory.Exists(appveyorDir)) {
-            CompileServerController.JavaPath = appveyorDir;
             JavaVersion = "17.0.1";
-        }
-        else {
-            CompileServerController.JavaPath = localDir;
         }
     }
 

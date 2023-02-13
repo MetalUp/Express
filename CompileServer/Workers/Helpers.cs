@@ -5,14 +5,14 @@ using CompileServer.Models;
 namespace CompileServer.Workers;
 
 public static class Helpers {
-    private static Process CreateProcess(string file, string args, RunResult runResult) {
+    private static Process CreateProcess(string file, string args, RunSpec runSpec) {
         var start = new ProcessStartInfo {
             FileName = file,
             Arguments = args,
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            WorkingDirectory = runResult.TempDir
+            WorkingDirectory = runSpec.TempDir
         };
 
         return Process.Start(start) ?? throw new NullReferenceException("Process failed to start");
@@ -78,10 +78,10 @@ public static class Helpers {
         return runResult;
     }
 
-    public static RunResult Execute(string exe, string args, RunResult runResult) {
+    public static RunResult Execute(string exe, string args, RunSpec runSpec, RunResult runResult) {
         try {
-            using var process = CreateProcess(exe, args, runResult);
-            if (!process.WaitForExit(CompileServerController.ProcessTimeout)) {
+            using var process = CreateProcess(exe, args, runSpec);
+            if (!process.WaitForExit(runSpec.Options.ProcessTimeout)) {
                 process.Kill();
             }
 
@@ -95,10 +95,10 @@ public static class Helpers {
     }
 
     public static (RunResult, string) Compile(string exe, string args, string returnFileName, RunSpec runSpec) {
-        var runResult = new RunResult(runSpec.TempDir);
+        var runResult = new RunResult();
 
         try {
-            using var process = CreateProcess(exe, args, runResult);
+            using var process = CreateProcess(exe, args, runSpec);
             process.WaitForExit();
             runResult = SetCompileResults(process, runResult);
         }
@@ -110,10 +110,10 @@ public static class Helpers {
     }
 
     public static (RunResult, string) TypeCheck(string exe, string args, string returnFileName, RunSpec runSpec) {
-        var runResult = new RunResult(runSpec.TempDir);
+        var runResult = new RunResult();
 
         try {
-            using var process = CreateProcess(exe, args, runResult);
+            using var process = CreateProcess(exe, args, runSpec);
             process.WaitForExit();
             runResult = SetTypeCheckResults(process, runResult);
         }
@@ -129,7 +129,7 @@ public static class Helpers {
 
         try {
             runSpec.SetUp();
-            using var process = CreateProcess(exe, args, new RunResult(runSpec.TempDir));
+            using var process = CreateProcess(exe, args, runSpec);
             process.WaitForExit();
             using var stdOutput = process.StandardOutput;
             version = stdOutput.ReadToEnd();

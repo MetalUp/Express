@@ -20,21 +20,12 @@ public class HaskellCompilerTest {
               head []
               putStrLn ""1""";
 
-    private static string HaskellVersion = "9.4.4";
+    private static readonly string HaskellVersion = "9.4.4";
     private readonly ILogger testLogger = NullLogger.Instance;
 
     [ClassInitialize]
     public static void Initialize(TestContext testContext) {
-        const string localDir = @"C:\Haskell944";
-        const string appveyorDir =  @"C:\Haskell944";
-
-        if (Directory.Exists(appveyorDir)) {
-            CompileServerController.HaskellPath = appveyorDir;
-            HaskellVersion = "9.4.4";
-        }
-        else {
-            CompileServerController.HaskellPath = localDir;
-        }
+        
     }
 
     [TestMethod]
