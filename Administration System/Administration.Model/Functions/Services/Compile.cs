@@ -165,12 +165,26 @@ public static class Compile
     private class RunSpec
     {
         public InnerSpec run_spec { get; init; }
-        public static RunSpec FromParams(string languageID, string code) => new() { run_spec = new InnerSpec { language_id = languageID, sourcecode = code } };
+
+        public CompileOptions compile_options { get; init; }
+
+        public static RunSpec FromParams(string languageID, string code) => new() { run_spec = new InnerSpec { language_id = languageID, sourcecode = code }, compile_options = new CompileOptions()};
 
         public class InnerSpec
         {
             public string language_id { get; init; }
             public string sourcecode { get; init; }
+        }
+
+        public class CompileOptions {
+            public string PythonPath { get; set; }
+            public string MyPyArguments { get; set; } = "--strict --disallow-untyped-defs --show-column-numbers";
+            public string JavaPath { get; set; }
+            public string HaskellPath { get; set; }
+            public int? CSharpVersion { get; set;  }
+            public int? VisualBasicVersion { get; set; }
+            public int? ProcessTimeout { get; set; }
+           
         }
     }
 

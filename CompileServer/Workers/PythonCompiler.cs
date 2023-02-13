@@ -76,5 +76,5 @@ public static class PythonCompiler {
         UpdateLineNumber(Helpers.Compile(GetPythonExe(runSpec), $"-m py_compile {file}", tempFileName, runSpec));
 
     private static (RunResult, string) TypeCheck(RunSpec runSpec, string file, string tempFileName) =>
-        UpdateTypeCheckLineNumber(Helpers.TypeCheck(GetMyPyExe(runSpec), $"{file}  --strict --disallow-untyped-defs --show-column-numbers", tempFileName, runSpec));
+        UpdateTypeCheckLineNumber(Helpers.TypeCheck(GetMyPyExe(runSpec), $"{file}  {runSpec.Options.MyPyArguments}", tempFileName, runSpec));
 }

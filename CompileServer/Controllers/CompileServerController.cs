@@ -12,7 +12,7 @@ public abstract class CompileServerController : ControllerBase {
     private const string CSharpVersionName = "CSharpVersion";
     private const string VisualBasicVersionName = "VisualBasicVersion";
     private const string ProcessTimeoutName = "ProcessTimeout";
-    private const string PythonUseTypeAnnotationsName = "PythonUseTypeAnnotations";
+    
 
     protected CompileServerController(ILogger logger, IConfiguration configuration) {
         Logger = logger;
@@ -32,12 +32,6 @@ public abstract class CompileServerController : ControllerBase {
         if (int.TryParse(pto, out var r)) {
             ProcessTimeout = r;
         }
-
-        var pta = Environment.GetEnvironmentVariable(PythonUseTypeAnnotationsName) ?? configuration.GetSection(CompileServerName).GetSection(PythonUseTypeAnnotationsName).Value;
-
-        if (bool.TryParse(pta, out var b)) {
-            PythonUseTypeAnnotations = b;
-        }
     }
 
     protected ILogger Logger { get; }
@@ -48,7 +42,6 @@ public abstract class CompileServerController : ControllerBase {
     private static LanguageVersion CSharpVersion { get; set; } = LanguageVersion.CSharp10;
     private static Microsoft.CodeAnalysis.VisualBasic.LanguageVersion VisualBasicVersion { get; set; } = Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic16_9;
     private static int ProcessTimeout { get; set; } = 30000;
-    private static bool PythonUseTypeAnnotations { get; set; } = true;
 
     private T Parse<T>(string val) where T : struct {
         try {
@@ -68,7 +61,6 @@ public abstract class CompileServerController : ControllerBase {
             HaskellPath = HaskellPath,
             CSharpVersion = CSharpVersion,
             VisualBasicVersion = VisualBasicVersion,
-            ProcessTimeout = ProcessTimeout,
-            PythonUseTypeAnnotations = PythonUseTypeAnnotations
+            ProcessTimeout = ProcessTimeout
         };
 }

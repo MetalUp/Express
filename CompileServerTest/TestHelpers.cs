@@ -10,7 +10,7 @@ public static class TestHelpers {
         HaskellPath = @"C:\Haskell944",
         CSharpVersion = LanguageVersion.CSharp10,
         VisualBasicVersion = Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic16_9,
-        PythonUseTypeAnnotations = true,
+        MyPyArguments = "--strict --disallow-untyped-defs --show-column-numbers",
         ProcessTimeout = 30000
     };
 

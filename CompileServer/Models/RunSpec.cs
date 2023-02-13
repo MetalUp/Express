@@ -6,7 +6,6 @@ public class RunSpec {
     public RunSpec() {
         var guid = Guid.NewGuid().ToString();
         TempDir = $"{Path.GetTempPath()}{guid}\\";
-        Options = CompileServerController.GetOptions();
     }
 
     public string language_id { get; set; } = "";
