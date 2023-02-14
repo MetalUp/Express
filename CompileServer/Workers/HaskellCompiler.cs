@@ -56,9 +56,7 @@ public static class HaskellCompiler {
         }
     }
 
-
     internal static (RunResult, string) Compile(RunSpec runSpec) {
-
         CopyDirectory($"{runSpec.Options.HaskellPath}\\HUnit-1.6.2.0\\src", runSpec.TempDir);
         CopyDirectory($"{runSpec.Options.HaskellPath}\\call-stack-0.4.0\\src", runSpec.TempDir);
 
