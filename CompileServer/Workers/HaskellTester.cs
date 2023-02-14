@@ -3,15 +3,17 @@
 namespace CompileServer.Workers;
 
 public static class HaskellTester {
-    internal static RunResult Execute(string pyFile, RunResult runResult) =>
-        //var file = $"{runResult.TempDir}{pyFile}";
-        //var pythonExe = $"{CompileServerController.PythonPath}\\python.exe";
-        //var args = $"-m unittest {file}";
-        //var rr = Helpers.Execute(pythonExe, args, runResult);
-        //// since python tester writes by default to stderr swap to stdout
-        //rr.stdout = rr.stderr;
-        //rr.stderr = "";
-        //rr.outcome = Outcome.Ok;
-        //return rr;
-        new();
+    internal static RunResult Execute(string file, RunSpec runSpec, RunResult runResult) {
+        var exe = $"{runSpec.TempDir}{file}";
+        var rr = Helpers.Execute(exe, "", runSpec, runResult);
+
+        // since haskell tester writes by default to stderr swap to stdout and take last line;
+
+        var result = rr.stderr.Trim().Split('\n').Last();
+        rr.stdout = result;
+        rr.stderr = "";
+        rr.outcome = Outcome.Ok;
+
+        return rr;
+    }
 }

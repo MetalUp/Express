@@ -109,7 +109,7 @@ public static class Handler {
         Task.Run(Wrap(() => {
                 var (runResult, exe) = HaskellCompiler.Compile(runSpec);
                 if (runResult.outcome == Outcome.Ok) {
-                    runResult = HaskellRunner.Execute(exe, runSpec, runResult);
+                    runResult = HaskellTester.Execute(exe, runSpec, runResult);
                 }
 
                 return runResult;

@@ -19,6 +19,45 @@ public class HaskellCompilerTest {
               head []
               putStrLn ""1""";
 
+
+    private const string TestCodeOk =
+        @"
+        import Test.HUnit
+
+        test1 = TestCase (assertBool """" True)
+
+        tests = TestList [TestLabel ""test1"" test1]
+
+        main = runTestTT tests
+        ";
+
+    private const string TestCodeFail =
+        @"
+        import Test.HUnit
+
+        test1 = TestCase (assertBool """" False)
+
+        tests = TestList [TestLabel ""test1"" test1]
+
+        main = runTestTT tests
+        ";
+
+    private const string TestCodeRTE =
+        @"
+        import Test.HUnit
+
+        arr :: bool -> [bool]
+        arr b = []
+
+        test1 = TestCase (assertBool """" (head (arr True)))
+
+        tests = TestList [TestLabel ""test1"" test1]
+
+        main = runTestTT tests
+        ";
+
+
+
     private const string HaskellVersion = "9.4.4";
     private readonly ILogger testLogger = NullLogger.Instance;
 
@@ -101,26 +140,43 @@ public class HaskellCompilerTest {
         }
     }
 
-    //[TestMethod]
-    //public void TestCompileAndTestInParallel()
-    //{
-    //    var runSpecs = Enumerable.Range(1, 10).Select(i => HaskellRunSpec(TestCodeOk));
+    [TestMethod]
+    public void TestCompileAndTestOk()
+    {
+        using var runSpec = HaskellRunSpec(TestCodeOk);
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stdout.Contains("Cases: 1  Tried: 1  Errors: 0  Failures: 0"), rr.stdout);
+        Assert.AreEqual("", rr.stderr);
+        Assert.AreEqual("", rr.run_id);
+    }
 
-    //    var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
+    [TestMethod]
+    public void TestCompileAndTestFail()
+    {
+        using var runSpec = HaskellRunSpec(TestCodeFail);
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stdout.Contains("Cases: 1  Tried: 1  Errors: 0  Failures: 1"), rr.stdout);
+        Assert.AreEqual("", rr.stderr);
+        Assert.AreEqual("", rr.run_id);
+    }
 
-    //    foreach (var rr in rrs)
-    //    {
-    //        Assert.IsNotNull(rr);
-    //        Assert.AreEqual(Outcome.Ok, rr.outcome);
-    //        Assert.AreEqual("", rr.cmpinfo);
-    //        Assert.IsTrue(rr.stdout.Contains("Passed!  - Failed:     0, Passed:     1, Skipped:     0, Total:     1"), rr.stdout);
-    //        Assert.AreEqual("", rr.stderr);
-    //        Assert.AreEqual("", rr.run_id);
-    //    }
+    [TestMethod]
+    public void TestCompileAndTestRTE()
+    {
+        using var runSpec = HaskellRunSpec(TestCodeRTE);
+        var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
+        Assert.AreEqual(Outcome.Ok, rr.outcome);
+        Assert.AreEqual("", rr.cmpinfo);
+        Assert.IsTrue(rr.stdout.Contains("Cases: 1  Tried: 1  Errors: 1  Failures: 0"), rr.stdout);
+        Assert.AreEqual("", rr.stderr);
+        Assert.AreEqual("", rr.run_id);
+    }
 
-    //    foreach (var testRunSpec in runSpecs)
-    //    {
-    //        testRunSpec.Dispose();
-    //    }
-    //}
 }
