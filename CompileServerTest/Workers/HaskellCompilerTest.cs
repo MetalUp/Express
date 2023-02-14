@@ -19,7 +19,6 @@ public class HaskellCompilerTest {
               head []
               putStrLn ""1""";
 
-
     private const string TestCodeOk =
         @"
         import Test.HUnit
@@ -55,8 +54,6 @@ public class HaskellCompilerTest {
 
         main = runTestTT tests
         ";
-
-
 
     private const string HaskellVersion = "9.4.4";
     private readonly ILogger testLogger = NullLogger.Instance;
@@ -141,8 +138,7 @@ public class HaskellCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndTestOk()
-    {
+    public void TestCompileAndTestOk() {
         using var runSpec = HaskellRunSpec(TestCodeOk);
         var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
@@ -154,8 +150,7 @@ public class HaskellCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndTestFail()
-    {
+    public void TestCompileAndTestFail() {
         using var runSpec = HaskellRunSpec(TestCodeFail);
         var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
@@ -167,8 +162,7 @@ public class HaskellCompilerTest {
     }
 
     [TestMethod]
-    public void TestCompileAndTestRTE()
-    {
+    public void TestCompileAndTestRTE() {
         using var runSpec = HaskellRunSpec(TestCodeRTE);
         var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
@@ -179,4 +173,23 @@ public class HaskellCompilerTest {
         Assert.AreEqual("", rr.run_id);
     }
 
+    [TestMethod]
+    public void TestCompileAndTestInParallel() {
+        var runSpecs = Enumerable.Range(1, 10).Select(_ => HaskellRunSpec(TestCodeOk));
+
+        var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr).Result.Value).Cast<RunResult>().ToArray();
+
+        foreach (var rr in rrs) {
+            Assert.IsNotNull(rr);
+            Assert.AreEqual(Outcome.Ok, rr.outcome);
+            Assert.AreEqual("", rr.cmpinfo);
+            Assert.IsTrue(rr.stdout.Contains("Cases: 1  Tried: 1  Errors: 0  Failures: 0"), rr.stdout);
+            Assert.AreEqual("", rr.stderr);
+            Assert.AreEqual("", rr.run_id);
+        }
+
+        foreach (var testRunSpec in runSpecs) {
+            testRunSpec.Dispose();
+        }
+    }
 }
