@@ -11,7 +11,7 @@ namespace Model.Authorization
                     Role.Root => true,
                     Role.Author => AuthorAuthorization(proj, memberName, context),
                     Role.Teacher => TeacherAuthorization(proj, memberName, context),
-                    Role.Student => false,
+                    Role.Student => StudentAuthorization(proj, memberName, context),
                     _ => false
                 };
 
@@ -30,6 +30,10 @@ namespace Model.Authorization
                     nameof(Project_Functions.AssignToMe),
                     nameof(Project_Functions.AssignToIndividual),
                     nameof(Project_Functions.AssignToGroup)));
+
+        internal static bool StudentAuthorization(Project proj, string memberName, IContext context) =>
+           proj.IsAssignable() &&
+            IsProperty<Task>(memberName) && !memberName.Contains("File");
 
         private static bool IsProperty(string memberName) => IsProperty<Project>(memberName);
 
