@@ -33,7 +33,7 @@ namespace Model.Authorization
 
         internal static bool StudentAuthorization(Project proj, string memberName, IContext context) =>
            proj.IsAssignable() &&
-            IsProperty<Task>(memberName) && !memberName.Contains("File");
+            IsProperty<Project>(memberName) && !memberName.Contains("File");
 
         private static bool IsProperty(string memberName) => IsProperty<Project>(memberName);
 
