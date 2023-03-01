@@ -5,4 +5,4 @@ global using ROSI.Records;
 global using Model.Functions.Menus;
 global using Model.Functions;
 global using Model.Types;
-global using static ExtensionMethods;
+global using static Test.ExtensionMethods;
