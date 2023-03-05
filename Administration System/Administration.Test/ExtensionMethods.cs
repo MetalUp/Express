@@ -16,13 +16,13 @@ public static class ExtensionMethods {
         return menus;
     }
 
-    public static Menus AssertMemberOrder(this DomainObject? obj, params string[] memberNames) {
+    public static DomainObject AssertMemberOrder(this DomainObject? obj, params string[] memberNames) {
         Assert.IsNotNull(obj);
-        var names = menus.GetLinks().Select(l => l.GetTitle()).ToArray();
+        var names = obj.GetLinks().Select(l => l.GetTitle()).ToArray();
 
-        Assert.AreEqual(names.Count(), menusNames.Length, "an error");
+        Assert.AreEqual(names.Count(), memberNames.Length, "an error");
 
-        var zip = names.Zip(menusNames);
+        var zip = names.Zip(memberNames);
 
         foreach (var (first, second) in zip) {
             Assert.AreEqual(first, second);

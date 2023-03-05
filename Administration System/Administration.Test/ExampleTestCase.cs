@@ -1,8 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Model;
+using NakedFramework.DependencyInjection.Extensions;
 using NakedFramework.Menu;
+using NakedFramework.Persistor.EFCore.Extensions;
+using NakedFramework.Rest.Extensions;
+using NakedFunctions.Reflector.Extensions;
 using Newtonsoft.Json;
+using Server;
 
 namespace Test
 {
