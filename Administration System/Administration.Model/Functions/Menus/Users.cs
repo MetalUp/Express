@@ -17,9 +17,11 @@ namespace Model.Functions.Menus
         public static User FindByUserName(string userName, IContext context) =>
     context.Instances<User>().SingleOrDefault(c => c.UserName == Hash(userName));
 
+        [TableView(false, nameof(User.Name), nameof(User.Role), nameof(User.Organisation))]
         public static IQueryable<User> AllUsers(IContext context) =>context.Instances<User>();
 
         #region Students & Colleagues
+        [TableView(false, nameof(User.Name), nameof(User.Role), nameof(User.EmailAddress))]
         internal static IQueryable<User> OurUsers(IContext context)
         {
             int myOrgId = Me(context).OrganisationId;
@@ -28,6 +30,7 @@ namespace Model.Functions.Menus
         }
 
         [MemberOrder(100)]
+        [TableView(false, nameof(User.Name), nameof(User.Groups))]
         public static IQueryable<User> OurStudents(IContext context) =>
             OurUsers(context).Where(u => u.Role == Role.Student);
 
@@ -38,6 +41,7 @@ namespace Model.Functions.Menus
             OurStudents(context).Where(u => u.Name.ToUpper().Contains(nameOrPartName.ToUpper()));
 
         [MemberOrder(130)]
+        [TableView(false, nameof(User.Name), nameof(User.EmailAddress))]
         public static IQueryable<User> MyColleagues(IContext context)
         {
             var myId = Me(context).Id;
