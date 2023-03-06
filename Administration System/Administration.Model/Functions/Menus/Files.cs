@@ -28,17 +28,17 @@ namespace Model.Functions.Menus
 
         [MemberOrder(50)]
         [CreateNew]
-        public static (File, IContext) CreateNewFileFromExtFile(FileAttachment extFile, IContext context) =>
-            CreateNewFile(extFile.Name, extFile.MimeType, extFile.GetResourceAsByteArray(), context);
+        public static (File, IContext) CreateNewFileFromExtFile(FileAttachment extFile, ContentType type, IContext context) =>
+            CreateNewFile(extFile.Name, extFile.MimeType,type, extFile.GetResourceAsByteArray(), context);
 
         [MemberOrder(60)]
         [CreateNew]
-        public static (File, IContext) CreateNewFileAsString(string name, string mimeType, [MultiLine(20)] string content, IContext context) =>
-            CreateNewFile(name, mimeType, content.AsByteArray(), context);
+        public static (File, IContext) CreateNewFileAsString(string name, string mimeType, ContentType type, [MultiLine(20)] string content, IContext context) =>
+            CreateNewFile(name, mimeType, type, content.AsByteArray(), context);
 
         public static List<string> Choices1CreateNewFileAsString() => new List<string> { "text/plain", "text/html", "application/json" };
 
-        private static (File, IContext) CreateNewFile(string name, string mimeType, byte[] content, IContext context)
+        private static (File, IContext) CreateNewFile(string name, string mimeType, ContentType type, byte[] content, IContext context)
         {
             var me = Users.Me(context);
             var f = new File()
@@ -46,6 +46,7 @@ namespace Model.Functions.Menus
                 Name = name,
                 Content = content,
                 Mime = mimeType,
+                ContentType = type,
                 AuthorId = me.Id,
                 Author = me
             };
