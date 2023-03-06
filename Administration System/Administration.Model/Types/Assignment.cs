@@ -24,6 +24,7 @@ namespace Model.Types
         public string Link =>  $"/task/{Project.Tasks.First().Id}";
 
         [MemberOrder(1)]
+        [Mask("d")]
         public DateTime DueBy { get; init; }
 
         [MemberOrder(2)]
