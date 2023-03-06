@@ -29,9 +29,13 @@
         public static string Default1MarkAsTerminated(this Assignment a) => a.TeacherNotes;
 
 
+        #region Internal
         internal static bool IsAssignedTo(this Assignment assgn, User user) => assgn.AssignedToId == user.Id;
 
         internal static bool IsAssignedByOrToAnyoneInOrganisation(this Assignment assgn, Organisation org) =>
             assgn.AssignedBy.OrganisationId == org.Id || assgn.AssignedTo.OrganisationId == org.Id;
+
+        internal static bool IsCurrent(this Assignment assgn) => assgn.Status == AssignmentStatus.PendingStart || assgn.Status == AssignmentStatus.Started;
+        #endregion
     }
 }

@@ -9,8 +9,14 @@
         [MemberOrder(20)]
         [PageSize(20)]
         [TableView(false, nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.Project))]
-        public static IQueryable<Assignment> MyAssignments(IContext context) =>
-            AssignmentsTo(Users.Me(context), context).OrderBy(a => a.DueBy);
+        public static IQueryable<Assignment> MyCurrentAssignments(IContext context) =>
+            AssignmentsTo(Users.Me(context), context).Where(a => a.Status == AssignmentStatus.PendingStart || a.Status == AssignmentStatus.Started).OrderBy(a => a.DueBy);
+
+        [MemberOrder(25)]
+        [PageSize(20)]
+        [TableView(false, nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.Project))]
+        public static IQueryable<Assignment> MyPastAssignments(IContext context) =>
+    AssignmentsTo(Users.Me(context), context).Where(a => a.Status == AssignmentStatus.Completed || a.Status == AssignmentStatus.Terminated).OrderBy(a => a.DueBy);
 
         internal static IQueryable<Assignment> AssignmentsTo(User user, IContext context)
         {
