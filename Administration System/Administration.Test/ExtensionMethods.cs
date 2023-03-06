@@ -5,7 +5,7 @@ public static class ExtensionMethods {
         Assert.IsNotNull(menus);
         var names = menus.GetValue().Select(l => l.GetTitle()).ToArray();
 
-        Assert.AreEqual(menusNames.Length, names.Count(), "an error");
+        Assert.AreEqual(menusNames.Length, names.Count(), "Menu count does not match names count");
 
         var zip = menusNames.Zip(names);
 
@@ -20,7 +20,7 @@ public static class ExtensionMethods {
         Assert.IsNotNull(obj);
         var names = obj.GetActions().Select(a => a.GetId()).ToArray();
 
-        Assert.AreEqual(memberNames.Length, names.Count(), "an error");
+        Assert.AreEqual(memberNames.Length, names.Count(), "member count does not match names count");
 
         var zip = memberNames.Zip(names);
 
@@ -31,19 +31,15 @@ public static class ExtensionMethods {
         return obj;
     }
 
-    public static ActionMember AssertNumberOfParameters(this ActionMember? am, int numberOfParameters) {
+    public static async Task<ActionMember> AssertNumberOfParameters(this ActionMember? am, int numberOfParameters) {
         Assert.IsNotNull(am);
-
-      //  Assert.AreEqual(numberOfParameters, am.GetParameters());
-       
-
+        Assert.AreEqual(numberOfParameters, (await am.GetParameters()).Parameters().Count(), "Unexpected number of parameters");
         return am;
     }
 
     public static ActionMember AssertReturnsList(this ActionMember? am) {
         Assert.IsNotNull(am);
-      
-
+        Assert.AreEqual("list", am.SafeGetExtension(ExtensionsApi.ExtensionKeys.returnType));
         return am;
     }
 }

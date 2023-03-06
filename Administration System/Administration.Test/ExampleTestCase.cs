@@ -70,11 +70,11 @@ namespace Test
         {
             LogInAs("Richard");
 
-            var menus = (await GetHome().GetMenus(TestInvokeOptions())).AssertMenuOrder(nameof(Assignments), nameof(Groups), nameof(Invitations), nameof(Organisations), nameof(Projects), nameof(Users));
+            var menus = (await GetHome().GetMenus()).AssertMenuOrder(nameof(Assignments), nameof(Groups), nameof(Invitations), nameof(Organisations), nameof(Projects), nameof(Users));
             
-            var projects = (await menus.GetMenu(nameof(Projects), TestInvokeOptions())).AssertMemberOrder(nameof(Projects.AllAssignableProjects), nameof(Projects.FindProjects));
+            var projects = (await menus.GetMenu(nameof(Projects))).AssertMemberOrder(nameof(Projects.AllAssignableProjects), nameof(Projects.FindProjects));
 
-            var all = projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1).AssertReturnsList();
+            var all = (await projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1)).AssertReturnsList();
             
             //var lang = all.GetParameter(1).AssertName("Language").AssertType<Language>().AssertOptional().AssertChoice(0, "Python").AssertValue(null); //Params numbered from 1 ? (TBC)
             //var list = all.AssertValid(null).Invoke(null).GetList(); //Here and line above, 'null' indicates that no option has been specified for an optional param. Could be more explicit as e.g. EMPTY 
