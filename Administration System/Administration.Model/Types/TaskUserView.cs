@@ -29,7 +29,7 @@ public class TaskUserView
 
     public string Description => Task.DescriptionFile?.ContentsAsString();
 
-    public string RegExRules => Project.RegExRules;
+    public string RegExRules => Task.RegExRules;
 
     public bool PasteExpression { get; init; }
 
