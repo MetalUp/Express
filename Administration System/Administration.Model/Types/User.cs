@@ -50,6 +50,6 @@
 
         public  virtual ICollection<Group> Groups { get; init; } = new List<Group>();
 
-        public override string ToString() => $"{Name} - {(Status == UserStatus.PendingAcceptance ? "PENDING ":null)}";
+        public override string ToString() => $"{Name}{(Status == UserStatus.PendingAcceptance ? " - PENDING":null)}";
     }
 }

@@ -6,6 +6,7 @@ namespace Model.Functions
         #region Display
         public static bool HideLinkToBeEmailed(this User user) => user.InvitationCode is null || user.InvitationCode == "";
 
+        public static bool HideEmailAddress(this User user) => user.Role == Role.Student; //Email addresses are deliberately not displayed (or stored) for students
         #endregion
 
         #region Editing

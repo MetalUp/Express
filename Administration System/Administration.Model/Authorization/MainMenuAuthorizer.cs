@@ -39,14 +39,16 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 >= Role.Teacher => Helpers.MatchesOneOf(memberName,
-                    nameof(Assignments.MyAssignments),
+                    nameof(Assignments.MyCurrentAssignments),
+                    nameof(Assignments.MyPastAssignments),
                     nameof(Assignments.AssignmentsSetByMe),
                     nameof(Assignments.OverdueAssignmentsSetByMe),
                     nameof(Assignments.FindAssignmentsSetByMe),
                     nameof(Assignments.NewAssignmentToIndividual),
                     nameof(Assignments.NewAssignmentToGroup)),
                 Role.Student => Helpers.MatchesOneOf(memberName,
-                    nameof(Assignments.MyAssignments)),
+                    nameof(Assignments.MyCurrentAssignments),
+                    nameof(Assignments.MyPastAssignments)),
                 _ => false
             };
 
