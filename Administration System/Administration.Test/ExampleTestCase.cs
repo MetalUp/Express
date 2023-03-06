@@ -1,19 +1,44 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Principal;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Model;
 using NakedFramework.DependencyInjection.Extensions;
 using NakedFramework.Menu;
 using NakedFramework.Persistor.EFCore.Extensions;
+using NakedFramework.RATL.Helpers;
 using NakedFramework.Rest.Extensions;
 using NakedFunctions.Reflector.Extensions;
 using Newtonsoft.Json;
+using NUnit.Framework;
 using Server;
+using Task = System.Threading.Tasks.Task;
 
 namespace Test
 {
     [TestClass]
     public class ExampleTestCase : ExpressTestCase
     {
+
+        [SetUp]
+        public void SetUp() {
+            StartTest();
+        }
+
+        [TearDown]
+        public void TearDown() => EndTest();
+
+        [OneTimeSetUp]
+        public void FixtureSetUp() {
+            InitializeNakedObjectsFramework(this);
+            new TestAdminDbContext().Create();
+        }
+
+        [OneTimeTearDown]
+        public void FixtureTearDown() {
+            CleanupNakedObjectsFramework(this);
+            new TestAdminDbContext().Delete();
+        }
+
 
         protected override void ConfigureServices(IServiceCollection services) {
             services.AddControllers()
@@ -33,22 +58,24 @@ namespace Test
                 });
                 frameworkOptions.AddRestfulObjects(options => options.AcceptHeaderStrict = false);
             });
-            services.AddDbContext<DbContext, TestAdminDbContext>(options => {
-               // options.UseSqlServer(Configuration.GetConnectionString("ILEAdmin"));
-            });
+           
+            services.AddDbContext<DbContext, TestAdminDbContext>();
+            services.AddTransient<RestfulObjectsController, RestfulObjectsController>();
+            services.AddScoped(p => TestPrincipal);
         }
 
 
-        [TestMethod]
-        public async System.Threading.Tasks.Task Test1()
+        [Test]
+        public async Task Test1()
         {
-            //LogInAs("Richard Teacher (LinkedIn)");
+            LogInAs("Richard");
 
-            var menus = (await GetHome().GetMenus(TestInvokeOptions())).AssertMenuOrder(nameof(Activities), nameof(Groups), nameof(Invitations), nameof(Organisations), nameof(Projects), nameof(Users));
+            var menus = (await GetHome().GetMenus(TestInvokeOptions())).AssertMenuOrder(nameof(Assignments), nameof(Groups), nameof(Invitations), nameof(Organisations), nameof(Projects), nameof(Users));
             
             var projects = (await menus.GetMenu(nameof(Projects), TestInvokeOptions())).AssertMemberOrder(nameof(Projects.AllAssignableProjects), nameof(Projects.FindProjects));
 
-            //var all = projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1).AssertReturnsList();
+            var all = projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1).AssertReturnsList();
+            
             //var lang = all.GetParameter(1).AssertName("Language").AssertType<Language>().AssertOptional().AssertChoice(0, "Python").AssertValue(null); //Params numbered from 1 ? (TBC)
             //var list = all.AssertValid(null).Invoke(null).GetList(); //Here and line above, 'null' indicates that no option has been specified for an optional param. Could be more explicit as e.g. EMPTY 
             //var lifeCS = list.AssertType<Project>().AssertHasMember("Life (C Sharp)").GetMember("Life (C Sharp)");

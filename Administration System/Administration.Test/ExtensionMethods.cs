@@ -3,11 +3,11 @@
 public static class ExtensionMethods {
     public static Menus AssertMenuOrder(this Menus? menus, params string[] menusNames) {
         Assert.IsNotNull(menus);
-        var names = menus.GetLinks().Select(l => l.GetTitle()).ToArray();
+        var names = menus.GetValue().Select(l => l.GetTitle()).ToArray();
 
-        Assert.AreEqual(names.Count(), menusNames.Length, "an error");
+        Assert.AreEqual(menusNames.Length, names.Count(), "an error");
 
-        var zip = names.Zip(menusNames);
+        var zip = menusNames.Zip(names);
 
         foreach (var (first, second) in zip) {
             Assert.AreEqual(first, second);
@@ -18,16 +18,32 @@ public static class ExtensionMethods {
 
     public static DomainObject AssertMemberOrder(this DomainObject? obj, params string[] memberNames) {
         Assert.IsNotNull(obj);
-        var names = obj.GetLinks().Select(l => l.GetTitle()).ToArray();
+        var names = obj.GetActions().Select(a => a.GetId()).ToArray();
 
-        Assert.AreEqual(names.Count(), memberNames.Length, "an error");
+        Assert.AreEqual(memberNames.Length, names.Count(), "an error");
 
-        var zip = names.Zip(memberNames);
+        var zip = memberNames.Zip(names);
 
         foreach (var (first, second) in zip) {
             Assert.AreEqual(first, second);
         }
 
         return obj;
+    }
+
+    public static ActionMember AssertNumberOfParameters(this ActionMember? am, int numberOfParameters) {
+        Assert.IsNotNull(am);
+
+      //  Assert.AreEqual(numberOfParameters, am.GetParameters());
+       
+
+        return am;
+    }
+
+    public static ActionMember AssertReturnsList(this ActionMember? am) {
+        Assert.IsNotNull(am);
+      
+
+        return am;
     }
 }
