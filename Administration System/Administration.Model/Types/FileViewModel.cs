@@ -11,6 +11,7 @@ public class FileViewModel
         Content = file.ContentsAsString() ?? "";
         LanguageAlphaName = file.Language?.AlphaName ?? "";
         Name = file.Name;
+        Mime = file.MIMEType();
     }
 
     internal int FileId { get; init; }
