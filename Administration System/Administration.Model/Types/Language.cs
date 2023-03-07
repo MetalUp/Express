@@ -22,6 +22,7 @@ public class Language
         RegExRulesFileId = cloneFrom.RegExRulesFileId;
         RegExRulesFile = cloneFrom.RegExRulesFile;
         DefaultHiddenCode = cloneFrom.DefaultHiddenCode;
+        CompileArguments = cloneFrom.CompileArguments;
     }
 
     [Hidden]
@@ -68,7 +69,6 @@ public class Language
     #endregion
 
     #region RegExRules
-
     [Hidden]
     public string RegExRules => RegExRulesFile?.ContentsAsString();
 
@@ -77,8 +77,10 @@ public class Language
 
     [MemberOrder(70)]
     public virtual File RegExRulesFile { get; init; }
-
     #endregion
+
+    [MemberOrder(80)]
+    public string CompileArguments { get; init; }
 
     //Depending on language, returns empty string (Python) or empty class HiddenCode (C#, VB) so that tasks with no hidden code still compile. 
     public string DefaultHiddenCode { get; init; }
