@@ -32,7 +32,7 @@ public struct RunSpecWrapper {
             CSharpVersion = ExtractVersion(options.CSharpVersion, defaultOptions.CSharpVersion),
             VisualBasicVersion = ExtractVersion(options.VisualBasicVersion, defaultOptions.VisualBasicVersion),
             ProcessTimeout = options.ProcessTimeout ?? defaultOptions.ProcessTimeout,
-            MyPyArguments = options.MyPyArguments ?? ""
+            CompileArguments = options.CompileArguments ?? ""
         };
     }
 }

@@ -11,7 +11,7 @@ public static class TestHelpers {
         HaskellPath = @"C:\Haskell944",
         CSharpVersion = CS.LanguageVersion.CSharp10,
         VisualBasicVersion = VB.LanguageVersion.VisualBasic16_9,
-        MyPyArguments = "--strict --disallow-untyped-defs --show-column-numbers",
+        CompileArguments = "--strict --disallow-untyped-defs --show-column-numbers",
         ProcessTimeout = 30000
     };
 

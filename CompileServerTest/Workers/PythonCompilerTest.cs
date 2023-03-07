@@ -102,7 +102,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileOk() {
         using var runSpec = PythonRunSpec(SimpleCode);
-        runSpec.Options.MyPyArguments = "";
+        runSpec.Options.CompileArguments = "";
         var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
@@ -119,7 +119,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileAndRunOk() {
         using var runSpec = PythonRunSpec(SimpleCode);
-        runSpec.Options.MyPyArguments = "";
+        runSpec.Options.CompileArguments = "";
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1\r\n");
@@ -152,7 +152,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileFailMissingTerm() {
         using var runSpec = PythonRunSpec(MissingTerm);
-        runSpec.Options.MyPyArguments = "";
+        runSpec.Options.CompileArguments = "";
         var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
@@ -177,7 +177,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileFailMissingTermMultiLine() {
         using var runSpec = PythonRunSpec(MissingTermMultiLine);
-        runSpec.Options.MyPyArguments = "";
+        runSpec.Options.CompileArguments = "";
         var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
@@ -201,7 +201,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileAndRunFail() {
         using var runSpec = PythonRunSpec(RunTimeFail);
-        runSpec.Options.MyPyArguments = "";
+        runSpec.Options.CompileArguments = "";
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
 
         Assert.IsNotNull(rr);
@@ -226,7 +226,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileAndTestOk() {
         using var runSpec = PythonRunSpec(TestCodeOk);
-        runSpec.Options.MyPyArguments = "";
+        runSpec.Options.CompileArguments = "";
         var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -253,7 +253,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileAndTestFail() {
         using var runSpec = PythonRunSpec(TestCodeFail);
-        runSpec.Options.MyPyArguments = "";
+        runSpec.Options.CompileArguments = "";
         var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -280,7 +280,7 @@ if __name__ == ""__main__"":
     [TestMethod]
     public void TestCompileAndTestRTE() {
         using var runSpec = PythonRunSpec(TestCodeRTE);
-        runSpec.Options.MyPyArguments = "";
+        runSpec.Options.CompileArguments = "";
         var rr = Handler.CompileAndTest(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         Assert.AreEqual(Outcome.Ok, rr.outcome);
@@ -311,7 +311,7 @@ if __name__ == ""__main__"":
     public void TestCompileAndRunInParallel() {
         var runSpecs = Enumerable.Range(1, 10).Select(_ => PythonRunSpec(SimpleCode));
         foreach (var testRunSpec in runSpecs) {
-            testRunSpec.Options.MyPyArguments = "";
+            testRunSpec.Options.CompileArguments = "";
         }
 
         var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndRun(rr, testLogger).Result.Value).Cast<RunResult>().ToArray();
@@ -351,7 +351,7 @@ if __name__ == ""__main__"":
     public void TestCompileAndTestInParallel() {
         var runSpecs = Enumerable.Range(1, 10).Select(_ => PythonRunSpec(TestCodeOk));
         foreach (var testRunSpec in runSpecs) {
-            testRunSpec.Options.MyPyArguments = "";
+            testRunSpec.Options.CompileArguments = "";
         }
 
         var rrs = runSpecs.AsParallel().Select(rr => Handler.CompileAndTest(rr).Result.Value).Cast<RunResult>().ToArray();

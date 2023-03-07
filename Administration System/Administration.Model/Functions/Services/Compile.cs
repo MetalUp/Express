@@ -178,7 +178,7 @@ public static class Compile
                 },
                 compile_options = new CompileOptions
                 {
-                    MyPyArguments = language.CompileArguments
+                    CompileArguments = language.CompileArguments
                 }
             };
 
@@ -190,15 +190,12 @@ public static class Compile
 
         public class CompileOptions {
             public string PythonPath { get; set; }
-            //public string MyPyArguments { get; set; } = "--strict --disallow-untyped-defs --show-column-numbers";
-            public string MyPyArguments { get; set; }
-
+            public string CompileArguments { get; set; }
             public string JavaPath { get; set; }
             public string HaskellPath { get; set; }
             public int? CSharpVersion { get; set;  }
             public int? VisualBasicVersion { get; set; }
             public int? ProcessTimeout { get; set; }
-           
         }
     }
 

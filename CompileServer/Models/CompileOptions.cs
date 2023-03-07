@@ -5,7 +5,7 @@ namespace CompileServer.Models;
 
 public class RestCompileOptions {
     public string? PythonPath { get; set; }
-    public string? MyPyArguments { get; set; }
+    public string? CompileArguments { get; set; }
     public string? JavaPath { get; set; }
     public string? HaskellPath { get; set; }
     public int? CSharpVersion { get; set; }
@@ -15,11 +15,11 @@ public class RestCompileOptions {
 
 public class CompileOptions {
     public string PythonPath { get; init; } = "";
-    public string MyPyArguments { get; set; } = "";
+    public string CompileArguments { get; set; } = "";
     public string JavaPath { get; init; } = "";
     public string HaskellPath { get; init; } = "";
     public CS.LanguageVersion CSharpVersion { get; init; } = CS.LanguageVersion.CSharp10;
     public VB.LanguageVersion VisualBasicVersion { get; init; } = VB.LanguageVersion.VisualBasic16_9;
     public int ProcessTimeout { get; init; } = 30000;
-    public bool PythonUseTypeAnnotations => !string.IsNullOrWhiteSpace(MyPyArguments);
+    public bool PythonUseTypeAnnotations => !string.IsNullOrWhiteSpace(CompileArguments);
 }
