@@ -84,7 +84,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
         })
       }
     })
-    this.sub2 = this.compileService.languages$.subscribe(ll => this.languages = ll.map(i => i.AlphaName));
+    this.sub2 = this.compileService.languages$.subscribe(ll => this.languages = ll.map(i => i.AlphaName).filter((i, j, k) => k.indexOf(i) === j)); // distinct
   }
 
   canSave() {
