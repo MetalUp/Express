@@ -15,7 +15,6 @@ public class Language
         AlphaName = cloneFrom.AlphaName;
         Version = cloneFrom.Version;
         FileExtension = cloneFrom.FileExtension;
-        MIMEType = cloneFrom.MIMEType;
         WrapperFileId = cloneFrom.WrapperFileId;
         WrapperFile = cloneFrom.WrapperFile;
         HelpersFileId = cloneFrom.HelpersFileId;
@@ -41,7 +40,7 @@ public class Language
     public string FileExtension { get; init; } //includes the .
 
     [MemberOrder(40)]
-    public string MIMEType { get; init; }  //Most will be text/plain
+    public string MIMEType => "text/plain"; 
 
     #region Wrapper
     [Hidden]

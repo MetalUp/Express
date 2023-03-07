@@ -41,10 +41,6 @@ context.WithUpdated(language, new(language) { Version = version });
         public static IContext EditFileExtension(this Language language, string fileExtension, IContext context) =>
 context.WithUpdated(language, new(language) { FileExtension = fileExtension });
 
-        [Edit]
-        public static IContext EditMimeType(this Language language, string mimeType, IContext context) =>
-context.WithUpdated(language, new(language) { MIMEType = mimeType });
-
         #endregion
     }
 }

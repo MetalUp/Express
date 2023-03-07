@@ -12,7 +12,6 @@ namespace Model.Types
             Id = cloneFrom.Id;
             Name = cloneFrom.Name;
             ContentType = cloneFrom.ContentType;
-            Mime = cloneFrom.Mime;
             LanguageId = cloneFrom.LanguageId;
             Language = cloneFrom.Language;
             Content = cloneFrom.Content;
@@ -24,7 +23,7 @@ namespace Model.Types
         public int Id { get; init; }
 
         [MemberOrder(10)]
-        public FileAttachment ViewContent => new FileAttachment(Content, "Click here to open view", Mime);
+        public FileAttachment ViewContent => new FileAttachment(Content, "Click here to open view", this.MIMEType());
 
         [MemberOrder(20)]
         [UrlLink("Click here to open editor")]
@@ -35,9 +34,6 @@ namespace Model.Types
 
         [MemberOrder(40)]
         public ContentType? ContentType { get; init; }
-
-        [MemberOrder(50)]
-        public string Mime { get; init; }
 
         [Hidden]
         public string LanguageId { get; init; }

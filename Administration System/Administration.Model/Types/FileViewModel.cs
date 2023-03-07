@@ -9,7 +9,6 @@ public class FileViewModel
     {
         FileId = file.Id;
         Content = file.ContentsAsString() ?? "";
-        Mime = file.Mime ?? "";
         LanguageAlphaName = file.Language?.AlphaName ?? "";
         Name = file.Name;
     }

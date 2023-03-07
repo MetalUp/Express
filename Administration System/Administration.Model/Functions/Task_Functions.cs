@@ -87,7 +87,6 @@
                 Name = name,
                 ContentType = ContentType.Hint,
                 AuthorId = task.Project.AuthorId,
-                Mime = "text/html",
                 LanguageId = null,
                 Content = new byte[0]
             };

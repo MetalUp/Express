@@ -13,8 +13,7 @@
         {
             var l = new Language()
             {
-                Name = name,
-                MIMEType = "text/plain"
+                Name = name
             };
             return (l, context.WithNew(l));
         }

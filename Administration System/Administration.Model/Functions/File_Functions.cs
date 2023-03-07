@@ -8,7 +8,7 @@ namespace Model.Functions
     {
         [MemberOrder(10)]
         public static IContext ReloadFromExternalFile(this File file, FileAttachment externalFile, IContext context) =>
-            context.WithUpdated(file, new File(file) { Content = externalFile.GetResourceAsByteArray(), Mime = externalFile.MimeType });
+            context.WithUpdated(file, new File(file) { Content = externalFile.GetResourceAsByteArray() });
 
         internal static string ContentsAsString(this File file) => file.Content.AsASCIIonly();
 
@@ -60,6 +60,14 @@ namespace Model.Functions
 
         internal static string ValidateContentType(this File file, ContentType type) =>
             file.ContentType == type ? null : $"File must have Content Type {type}";
+
+        internal static string MIMEType (this File file) => file.ContentType switch
+        {
+            ContentType.Description => "text/html",
+            ContentType.Hint => "text/html",
+            ContentType.RegExRules => "application/json",
+            _ => "text/plain"
+        };
     }
 
 }
