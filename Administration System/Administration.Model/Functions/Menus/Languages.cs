@@ -8,5 +8,16 @@
         internal static Language FindLanguageByName(string name, IContext context) =>
             context.Instances<Language>().SingleOrDefault(l => l.Name == name);
 
+        [CreateNew]
+        public static (Language, IContext) CreateNewLanguage(string name, IContext context)
+        {
+            var l = new Language()
+            {
+                Name = name,
+                MIMEType = "text/plain"
+            };
+            return (l, context.WithNew(l));
+        }
+
     }
 }
