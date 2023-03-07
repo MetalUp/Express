@@ -46,10 +46,10 @@ public static class Compile
         return request;
     }
 
-    private static (RunResult, IContext) Execute((string languageId, string code) wrapped, string url, IContext context)
+    private static (RunResult, IContext) Execute((Language language, string code) wrapped, string url, IContext context)
     {
-        var (languageId, code) = wrapped;
-        using var content = JsonContent.Create(RunSpec.FromParams(languageId, code), new MediaTypeHeaderValue("application/json"));
+        var (language, code) = wrapped;
+        using var content = JsonContent.Create(RunSpec.FromParams(language, code), new MediaTypeHeaderValue("application/json"));
         var request = CreateMessage(context, HttpMethod.Post, url, content);
 
         using var response = Client.SendAsync(request).Result;
@@ -63,18 +63,18 @@ public static class Compile
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
-    private static (string, string) WrapCode(IContext context, int taskId, string code, bool includeTests, string expression = null)
+    private static (Language, string) WrapCode(IContext context, int taskId, string code, bool includeTests, string expression = null)
     {
         var task = context.Instances<Task>().Single(t => t.Id == taskId);
-        var language = task.Language;
+        var language = task.Project.Language;
         var testCode = includeTests ? task.Tests : "";
 
         var wrappedCode = task.Wrapper
-                                  .Replace("<Expression>", expression ?? "\"\"")
-                                  .Replace("<StudentCode>", code)
-                                  .Replace("<HiddenCode>", task.HiddenCode)
-                                  .Replace("<Helpers>", task.Helpers)
-                                  .Replace("<Tests>", testCode);
+                              .Replace("<Expression>", expression ?? "\"\"")
+                              .Replace("<StudentCode>", code)
+                              .Replace("<HiddenCode>", task.HiddenCode)
+                              .Replace("<Helpers>", task.Helpers)
+                              .Replace("<Tests>", testCode);
 
         return (language, wrappedCode);
     }
@@ -84,7 +84,7 @@ public static class Compile
 
     public static (RunResult, IContext) SubmitCode(int taskId, string code, IContext context)
     {
-        (var result, var context2) = Execute(WrapCode(context, taskId, code, false), $"{compileServer}/compiles", context);
+        var (result, context2) = Execute(WrapCode(context, taskId, code, false), $"{compileServer}/compiles", context);
         if (result.Outcome == (int)CompilerOutcome.CompilationError)
         {
             return (result, Activities.SubmitCodeFail(taskId, code, result.Cmpinfo, context));
@@ -104,7 +104,7 @@ public static class Compile
 
     public static (RunResult, IContext) RunTests(int taskId, string code, IContext context)
     {
-        (var result, var context2) = Execute(WrapCode(context, taskId, code, true), $"{compileServer}/tests", context);
+        var (result, context2) = Execute(WrapCode(context, taskId, code, true), $"{compileServer}/tests", context);
         if (result.Outcome == (int)CompilerOutcome.Ok)
         {
             //TODO: Temporary solution, pending moving RegEx rules server side.
@@ -168,7 +168,19 @@ public static class Compile
 
         public CompileOptions compile_options { get; init; }
 
-        public static RunSpec FromParams(string languageID, string code) => new() { run_spec = new InnerSpec { language_id = languageID, sourcecode = code }, compile_options = new CompileOptions()};
+        public static RunSpec FromParams(Language language, string code) =>
+            new()
+            {
+                run_spec = new InnerSpec
+                {
+                    language_id = language.AlphaName,
+                    sourcecode = code
+                },
+                compile_options = new CompileOptions
+                {
+                    MyPyArguments = language.CompileArguments
+                }
+            };
 
         public class InnerSpec
         {
@@ -179,7 +191,7 @@ public static class Compile
         public class CompileOptions {
             public string PythonPath { get; set; }
             //public string MyPyArguments { get; set; } = "--strict --disallow-untyped-defs --show-column-numbers";
-            public string MyPyArguments { get; set; } = "";
+            public string MyPyArguments { get; set; }
 
             public string JavaPath { get; set; }
             public string HaskellPath { get; set; }

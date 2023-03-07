@@ -77,8 +77,10 @@ namespace Test
             var all = (await projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1)).AssertReturnsList();
             
             var lang = (await all.GetParameter(0)).AssertName("Language").AssertString().AssertOptional().AssertChoice(0, "Python").AssertDefault(null); //Params numbered from 1 ? (TBC)
-            
-           // var list = (await (await all.AssertValid()).Invoke()).GetList(); //Here and line above, 'null' indicates that no option has been specified for an optional param. Could be more explicit as e.g. EMPTY 
+
+            var list = await all.Invoke("");
+
+            //var list = (await (await all.AssertValid(0)).Invoke(0)).GetList(); //Here and line above, 'null' indicates that no option has been specified for an optional param. Could be more explicit as e.g. EMPTY 
             
             
             //var lifeCS = list.AssertType<Project>().AssertHasMember("Life (C Sharp)").GetMember("Life (C Sharp)");

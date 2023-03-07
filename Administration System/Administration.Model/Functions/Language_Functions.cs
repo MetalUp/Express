@@ -8,7 +8,7 @@
          this Language language,
          File wrapperFile,
          IContext context) =>
-             context.WithUpdated(language, new(language) { WrapperFileId = wrapperFile.Id, WrapperFile = wrapperFile});
+             context.WithUpdated(language, new(language) { WrapperFileId = wrapperFile.Id, WrapperFile = wrapperFile });
 
         [Edit]
         public static IContext EditHelpersFile(
@@ -40,6 +40,11 @@ context.WithUpdated(language, new(language) { Version = version });
         [Edit]
         public static IContext EditFileExtension(this Language language, string fileExtension, IContext context) =>
 context.WithUpdated(language, new(language) { FileExtension = fileExtension });
+
+        [Edit]
+        public static IContext EditCompileArguments(this Language language, string compileArguments, IContext context) =>
+            context.WithUpdated(language, new(language) { CompileArguments = compileArguments });
+
 
         #endregion
     }
