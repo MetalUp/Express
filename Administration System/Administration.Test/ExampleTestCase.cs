@@ -76,8 +76,11 @@ namespace Test
 
             var all = (await projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1)).AssertReturnsList();
             
-            //var lang = all.GetParameter(1).AssertName("Language").AssertType<Language>().AssertOptional().AssertChoice(0, "Python").AssertValue(null); //Params numbered from 1 ? (TBC)
-            //var list = all.AssertValid(null).Invoke(null).GetList(); //Here and line above, 'null' indicates that no option has been specified for an optional param. Could be more explicit as e.g. EMPTY 
+            var lang = (await all.GetParameter(0)).AssertName("Language").AssertString().AssertOptional().AssertChoice(0, "Python").AssertDefault(null); //Params numbered from 1 ? (TBC)
+            
+           // var list = (await (await all.AssertValid()).Invoke()).GetList(); //Here and line above, 'null' indicates that no option has been specified for an optional param. Could be more explicit as e.g. EMPTY 
+            
+            
             //var lifeCS = list.AssertType<Project>().AssertHasMember("Life (C Sharp)").GetMember("Life (C Sharp)");
             //lifeCS.AssertPropertyOrder(nameof(Project.Link), nameof(Project.Status), nameof(Project.Title), nameof(Project.Language), nameof(Project.CommonHiddenCodeFile),
             //    nameof(Project.Description), nameof(Project.Keywords), nameof(Project.Tasks)).

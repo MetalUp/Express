@@ -1,4 +1,6 @@
-﻿namespace Test;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+
+namespace Test;
 
 public static class ExtensionMethods {
     public static Menus AssertMenuOrder(this Menus? menus, params string[] menusNames) {
@@ -37,9 +39,64 @@ public static class ExtensionMethods {
         return am;
     }
 
+    public static async Task<ActionMember> AssertValid(this ActionMember? am, params object[] pp) {
+        Assert.IsNotNull(am);
+        await am.Validate(pp);
+        return am;
+    }
+
     public static ActionMember AssertReturnsList(this ActionMember? am) {
         Assert.IsNotNull(am);
         Assert.AreEqual("list", am.SafeGetExtension(ExtensionsApi.ExtensionKeys.returnType));
         return am;
+    }
+
+    public static async Task<Parameter> GetParameter(this ActionMember? am, int index) {
+        Assert.IsNotNull(am);
+        return (await am.GetParameters()).Parameters().ToArray()[index].Value;
+    }
+
+    public static T AssertName<T>(this T? hasExtensions, string name) where T : IHasExtensions {
+        Assert.IsNotNull(hasExtensions);
+        Assert.AreEqual(name, ((IHasExtensions)hasExtensions).SafeGetExtension(ExtensionsApi.ExtensionKeys.friendlyName)?.ToString());
+        return hasExtensions;
+    }
+
+    public static T AssertOptional<T>(this T? hasExtensions) where T : IHasExtensions {
+        Assert.IsNotNull(hasExtensions);
+        Assert.AreEqual(true, ((IHasExtensions)hasExtensions).SafeGetExtension(ExtensionsApi.ExtensionKeys.optional));
+        return hasExtensions;
+    }
+
+    public static T AssertChoice<T>(this T? hasChoices, int index, string value) where T : IHasChoices {
+        Assert.IsNotNull(hasChoices);
+        var choices = ((IHasChoices)hasChoices).GetChoices().ToArray();
+        Assert.AreEqual(value, choices[index]);
+        return hasChoices;
+    }
+
+    public static Parameter AssertDefault(this Parameter parameter, string? value)  {
+        Assert.IsNotNull(parameter);
+        Assert.AreEqual(value, parameter.GetDefault());
+        return parameter;
+    }
+
+    public static T AssertType<T, TU>(this T? hasExtensions) where T : IHasExtensions {
+        Assert.IsNotNull(hasExtensions);
+        Assert.AreEqual(typeof(TU).FullName, ((IHasExtensions)hasExtensions).SafeGetExtension(ExtensionsApi.ExtensionKeys.returnType)?.ToString());
+        return hasExtensions;
+    }
+
+    public static T AssertType<T>(this T? hasExtensions, string name) where T : IHasExtensions {
+        Assert.IsNotNull(hasExtensions);
+        Assert.AreEqual(name, ((IHasExtensions)hasExtensions).SafeGetExtension(ExtensionsApi.ExtensionKeys.returnType)?.ToString());
+        return hasExtensions;
+    }
+
+    public static T AssertString<T>(this T? hasExtensions) where T : IHasExtensions {
+        Assert.IsNotNull(hasExtensions);
+        Assert.AreEqual("string", ((IHasExtensions)hasExtensions).SafeGetExtension(ExtensionsApi.ExtensionKeys.returnType)?.ToString());
+        Assert.AreEqual("string", ((IHasExtensions)hasExtensions).SafeGetExtension(ExtensionsApi.ExtensionKeys.format)?.ToString());
+        return hasExtensions;
     }
 }
