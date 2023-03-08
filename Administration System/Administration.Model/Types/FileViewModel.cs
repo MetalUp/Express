@@ -20,7 +20,7 @@ public class FileViewModel
 
     public string Mime { get; init; }
 
-    public string LanguageAlphaName { get; init; }
+    public string LanguageAlphaName { get; init; } 
 
     public string Name { get; init; }
 }

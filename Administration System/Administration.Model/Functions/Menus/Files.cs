@@ -33,10 +33,8 @@ namespace Model.Functions.Menus
 
         [MemberOrder(60)]
         [CreateNew]
-        public static (File, IContext) CreateNewFileAsString(string name, string mimeType, ContentType type, [MultiLine(20)] string content, IContext context) =>
+        public static (File, IContext) CreateNewFileAsString(string name, ContentType type, [MultiLine(20)] string content, IContext context) =>
             CreateNewFile(name, type, content.AsByteArray(), context);
-
-        public static List<string> Choices1CreateNewFileAsString() => new List<string> { "text/plain", "text/html", "application/json" };
 
         private static (File, IContext) CreateNewFile(string name, ContentType type, byte[] content, IContext context)
         {

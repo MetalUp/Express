@@ -3,10 +3,6 @@
     public static class Task_Functions
     {
         #region Display
-        public static bool HidePreviousTask(this Task task) => task.PreviousTaskId == null;
-
-        public static bool HideNextTask(this Task task) => task.NextTaskId == null;
-
         public static bool HideNextTaskClearsFunctions(this Task task) => HideNextTask(task);
 
         public static bool HideHiddenCodeFile(this Task task) => task.HiddenCodeFileId == null;
