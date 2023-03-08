@@ -5,6 +5,7 @@ using Model;
 using NakedFramework.DependencyInjection.Extensions;
 using NakedFramework.Menu;
 using NakedFramework.Persistor.EFCore.Extensions;
+using NakedFramework.RATL.Extensions;
 using NakedFramework.RATL.Helpers;
 using NakedFramework.Rest.Extensions;
 using NakedFunctions.Reflector.Extensions;
