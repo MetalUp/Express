@@ -33,15 +33,15 @@ public static class ExtensionMethods {
         return obj;
     }
 
-    public static async Task<ActionMember> AssertNumberOfParameters(this ActionMember? am, int numberOfParameters) {
+    public static ActionMember AssertNumberOfParameters(this ActionMember? am, int numberOfParameters) {
         Assert.IsNotNull(am);
-        Assert.AreEqual(numberOfParameters, (await am.GetParameters()).Parameters().Count(), "Unexpected number of parameters");
+        Assert.AreEqual(numberOfParameters, am.GetParameters().Result.Parameters().Count(), "Unexpected number of parameters");
         return am;
     }
 
-    public static async Task<ActionMember> AssertValid(this ActionMember? am, params object[] pp) {
+    public static  ActionMember AssertValid(this ActionMember? am, params object[] pp) {
         Assert.IsNotNull(am);
-        await am.Validate(pp);
+        am.Validate(pp).Wait();
         return am;
     }
 
