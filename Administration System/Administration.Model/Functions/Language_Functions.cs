@@ -6,23 +6,23 @@
         [Edit]
         public static IContext EditWrapperFile(
          this Language language,
-         File wrapperFile,
+         [Optionally] File wrapperFile,
          IContext context) =>
              context.WithUpdated(language, new(language) { WrapperFileId = wrapperFile.Id, WrapperFile = wrapperFile });
 
         [Edit]
         public static IContext EditHelpersFile(
- this Language language,
- File helpersFile,
- IContext context) =>
-     context.WithUpdated(language, new(language) { HelpersFileId = helpersFile.Id, HelpersFile = helpersFile });
+         this Language language,
+         [Optionally] File helpersFile,
+         IContext context) =>
+             context.WithUpdated(language, new(language) { HelpersFileId = helpersFile.Id, HelpersFile = helpersFile });
 
         [Edit]
         public static IContext EditRegExRulesFile(
- this Language language,
- File regExRulesFile,
- IContext context) =>
-     context.WithUpdated(language, new(language) { RegExRulesFileId = regExRulesFile.Id, RegExRulesFile = regExRulesFile });
+         this Language language,
+         [Optionally] File regExRulesFile,
+         IContext context) =>
+             context.WithUpdated(language, new(language) { RegExRulesFileId = regExRulesFile.Id, RegExRulesFile = regExRulesFile });
 
         [Edit]
         public static IContext EditName(this Language language, string name, IContext context) =>

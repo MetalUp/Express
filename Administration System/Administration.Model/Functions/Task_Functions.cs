@@ -41,6 +41,7 @@
             this Task task,
             Task previousTask,
             IContext context) =>
+                previousTask == null ? null :
                 previousTask.Id == task.Id ? "Cannot specify a task as its own Previous Task" :
                 previousTask.Language == task.Language ? "" : "Previous Task must specify the same Language";
 

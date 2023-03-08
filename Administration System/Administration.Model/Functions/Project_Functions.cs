@@ -67,6 +67,7 @@ namespace Model.Functions
             ValidateLanguageAndContentType(project, commonHiddenCodeFile, ContentType.HiddenCode);
 
         internal static string ValidateLanguageAndContentType(Project project, File commonHiddenCodeFile, ContentType required) =>
+            commonHiddenCodeFile != null &&
     commonHiddenCodeFile.LanguageId == project.LanguageId &&
     commonHiddenCodeFile.ContentType == required
     ? null : $"Either the programming language or content type of the file is incompatible with this property.";
