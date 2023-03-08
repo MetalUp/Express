@@ -45,7 +45,7 @@ public class TestAdminDbContext : AdminDbContext {
     private static void Seed(ModelBuilder modelBuilder) {
         modelBuilder.Entity<Organisation>().HasData(new Model.Types.Organisation() { Id = 1, Name  = "" });
         modelBuilder.Entity<Model.Types.User>().HasData(new Model.Types.User() { Id = 1, UserName  = Hash("Richard"), Role = Role.Teacher, OrganisationId = 1, Status = UserStatus.Active});
-        modelBuilder.Entity<Language>().HasData(new Model.Types.Language() { LanguageID = "Python", Name  = "Python", AlphaName = "python"});
+        modelBuilder.Entity<Language>().HasData(new Model.Types.Language() { LanguageID = "Python", Name  = "Python", CSSstyle = "python"});
     }
 
     public void Create() => Database.EnsureCreated();

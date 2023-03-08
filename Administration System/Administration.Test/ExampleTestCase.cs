@@ -5,6 +5,7 @@ using Model;
 using NakedFramework.DependencyInjection.Extensions;
 using NakedFramework.Menu;
 using NakedFramework.Persistor.EFCore.Extensions;
+using NakedFramework.RATL.Extensions;
 using NakedFramework.RATL.Helpers;
 using NakedFramework.Rest.Extensions;
 using NakedFunctions.Reflector.Extensions;
@@ -74,15 +75,12 @@ namespace Test
             
             var projects = (await menus.GetMenu(nameof(Projects))).AssertMemberOrder(nameof(Projects.AllAssignableProjects), nameof(Projects.FindProjects));
 
-            var all = (await projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1)).AssertReturnsList();
+            var all = projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1).AssertReturnsList();
             
             var lang = (await all.GetParameter(0)).AssertName("Language").AssertString().AssertOptional().AssertChoice(0, "Python").AssertDefault(null); //Params numbered from 1 ? (TBC)
 
-            var list = await all.Invoke("");
+            var list = (await all.AssertValid("").Invoke("")).GetList();
 
-            //var list = (await (await all.AssertValid(0)).Invoke(0)).GetList(); //Here and line above, 'null' indicates that no option has been specified for an optional param. Could be more explicit as e.g. EMPTY 
-            
-            
             //var lifeCS = list.AssertType<Project>().AssertHasMember("Life (C Sharp)").GetMember("Life (C Sharp)");
             //lifeCS.AssertPropertyOrder(nameof(Project.Link), nameof(Project.Status), nameof(Project.Title), nameof(Project.Language), nameof(Project.CommonHiddenCodeFile),
             //    nameof(Project.Description), nameof(Project.Keywords), nameof(Project.Tasks)).
