@@ -145,6 +145,6 @@ namespace Model.Types
 
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
-        public override string ToString() => $"{Project.Title} - {Number}  ({Project.Language.Name})";
+        public override string ToString() => $"{Project.Title} task {Number}  ({Project.Language.Name})";
     } 
 }
