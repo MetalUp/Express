@@ -67,6 +67,27 @@
           IContext context) =>
             context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskClearsFunctions });
 
+        #region Description
+        [Edit]
+        public static IContext EditDescription(
+            this Task task,
+            [Optionally] File file,
+            IContext context) =>
+                    context.WithUpdated(task,
+                    new(task)
+                    {
+                        DescriptionFileId = file.Id,
+                        DescriptionFile = file,
+                    });
+
+        public static string ValidateEditDescription(
+              this Task task,
+              File file) =>
+                    file == null ? null : file.ValidateContentType(ContentType.Description);
+
+        #endregion
+
+
         #endregion
 
         #region Hints 
@@ -111,35 +132,6 @@
         #endregion
 
         #region Associated files
-        #region Description
-        [MemberOrder(20)]
-        public static IContext AddDescription(
-            this Task task,
-            File file,
-            IContext context) =>
-                    context.WithUpdated(task,
-                    new(task)
-                    {
-                        DescriptionFileId = file.Id,
-                        DescriptionFile = file,
-                    });
-
-        public static string ValidateAddDescription(
-          this Task task,
-          File file) =>
-            file.ValidateContentType(ContentType.Description);
-
-        public static bool HideAddDescription(this Task task) => task.DescriptionFileId != null;
-
-        [MemberOrder(21)]
-        public static IContext ClearDesciption(
-            this Task task,
-            IContext context) =>
-                context.WithUpdated(task, new Task(task) { DescriptionFileId = null, DescriptionFile = null });
-
-
-        public static bool HideClearDescription(this Task task) => task.DescriptionFileId == null;
-        #endregion
 
         #region Task Specific Hidden Code
         [MemberOrder(30)]
