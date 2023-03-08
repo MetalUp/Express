@@ -41,13 +41,14 @@
             this Task task,
             Task previousTask,
             IContext context) =>
+                previousTask == null ? null : //i.e. can clear
                 previousTask.Id == task.Id ? "Cannot specify a task as its own Previous Task" :
                 previousTask.Language == task.Language ? "" : "Previous Task must specify the same Language";
 
         [Edit]
         public static IContext EditNextTask(
            this Task task,
-           Task nextTask,
+           [Optionally] Task nextTask,
            IContext context) =>
             context.WithUpdated(task, new(task) { NextTask = nextTask });
 
@@ -55,6 +56,7 @@
             this Task task,
             Task nextTask,
             IContext context) =>
+                nextTask == null ? null : //i.e. can clear
                 nextTask.Id == task.Id ? "Cannot specify a task as its own Next Task" :
                 nextTask.Language == task.Language ? "" : "Next Task must specify the same Language";
 
