@@ -12,7 +12,7 @@ public class Language
     {
         LanguageID = cloneFrom.LanguageID;  
         Name = cloneFrom.Name;
-        AlphaName = cloneFrom.AlphaName;
+        CSSstyle = cloneFrom.CSSstyle;
         Version = cloneFrom.Version;
         FileExtension = cloneFrom.FileExtension;
         WrapperFileId = cloneFrom.WrapperFileId;
@@ -32,7 +32,7 @@ public class Language
     public string Name { get; init; }
 
     [MemberOrder(15)]
-    public string AlphaName { get; init; }  // e.g. 'csharp'
+    public string CSSstyle { get; init; }  // e.g. 'csharp'
 
     [MemberOrder(20)]
     public string Version { get; init; }

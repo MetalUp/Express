@@ -50,7 +50,7 @@ namespace Model.Types
         public string Title => ToString();
 
         [Hidden]
-        public string Language => Project.Language.AlphaName;
+        public string Language => Project.Language.CSSstyle;
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(60)]

@@ -29,8 +29,8 @@
             context.WithUpdated(language, new(language) { Name = name });
 
         [Edit]
-        public static IContext EditAlphaName(this Language language, string alphaName, IContext context) =>
-    context.WithUpdated(language, new(language) { AlphaName = alphaName });
+        public static IContext EditCSSstyle(this Language language, string cssStyle, IContext context) =>
+    context.WithUpdated(language, new(language) { CSSstyle = cssStyle });
 
         [Edit]
         public static IContext EditVersion(this Language language, string version, IContext context) =>
