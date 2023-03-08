@@ -8,6 +8,7 @@
     "doUrlValidation": true,
     "applicationName" : "MetalUp.Express",
     "clearCacheOnChange": true,
+    "leftClickHomeAlwaysGoesToSinglePane": false,
     "colors": {
         "regexArray": [
             {
