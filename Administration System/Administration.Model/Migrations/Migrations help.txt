@@ -1,6 +1,6 @@
 ﻿Open Command window (via Tools menu) which should be at the solution level
 
-dotnet ef migrations add [migrationName] -p Administration.Model -s Administration.Server
+dotnet ef migrations add NAME -p Administration.Model -s Administration.Server
 dotnet ef database update -p Administration.Model -s Administration.Server
 
 (the options specify the 'migrations' assembly and the server assembly - needed for the injected DbContext)

@@ -110,7 +110,6 @@
             var hint = new Hint
             {
                 Number = number,
-                Name = name,
                 CostInMarks = costInMarks,
                 File = file
             };

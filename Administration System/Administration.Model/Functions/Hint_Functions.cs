@@ -3,13 +3,6 @@
     public static class Hint_Functions
     {
         [Edit]
-        public static IContext EditName(
-             this Hint hint,
-             string name,
-             IContext context) =>
-                 context.WithUpdated(hint, new(hint) { Name = name });
-
-        [Edit]
         public static IContext EditNumber(
              this Hint hint,
              int number,

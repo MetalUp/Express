@@ -46,6 +46,9 @@ namespace Model.Types
         [Named("Task No. within Project")]
         public int Number { get; init; }
 
+        [MemberOrder(30)]
+        public string Summary { get; init; }
+
         [Hidden]
         public string Title => ToString();
 
@@ -143,6 +146,8 @@ namespace Model.Types
         [MemberOrder(220)]
         public bool NextTaskClearsFunctions { get; init; }
 
+        [RenderEagerly]
+        [TableView(false, nameof(Hint.Number), nameof(Hint.CostInMarks))]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
         public override string ToString() => $"{Project.Title} task {Number}  ({Project.Language.Name})";
