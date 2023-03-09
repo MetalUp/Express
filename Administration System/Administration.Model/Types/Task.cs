@@ -57,6 +57,7 @@ namespace Model.Types
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(60)]
+        [Named("Marks")]
         public int MaxMarks { get; init; }
 
         #region Description
