@@ -44,6 +44,7 @@ namespace Model.Types
         public virtual Project Project { get; init; }
 
         [MemberOrder(20)]
+        [Named("No.")]
         public int Number { get; init; }
 
         [MemberOrder(30)]
