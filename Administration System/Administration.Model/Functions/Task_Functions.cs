@@ -24,6 +24,13 @@
                 context.WithUpdated(task, new(task) { Number = number });
 
         [Edit]
+        public static IContext EditSummary(
+    this Task task,
+    string summary,
+    IContext context) =>
+        context.WithUpdated(task, new(task) { Summary = summary });
+
+        [Edit]
         public static IContext EditMaxMarks(
             this Task task,
             int maxMarks,
