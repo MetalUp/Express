@@ -55,8 +55,21 @@ namespace Model.Functions
             return context.Instances<Task>().Where(p => p.TestsFileId == id || p.HiddenCodeFileId == id || p.WrapperFileId == id || p.RegExRulesFileId == id);
         }
 
+        [MemberOrder(50)]
+        public static IQueryable<Hint> FindReferencingHints(this File file, IContext context)
+        {
+            int id = file.Id;
+            return context.Instances<Hint>().Where(h => h.FileId == id);
+        }
 
         #endregion
+
+        public static IContext DeleteFile(this File file, [DescribedAs("type DELETE")] string confirm, IContext context) =>
+            context.WithDeleted(file);
+
+        public static string ValidateDelete(this File file, string confirm) =>
+            confirm == "DELETE" ? null : "Must type 'DELETE'";
+
 
         internal static string ValidateContentType(this File file, ContentType type) =>
             file.ContentType == type ? null : $"File must have Content Type {type}";
@@ -68,6 +81,8 @@ namespace Model.Functions
             ContentType.RegExRules => "application/json",
             _ => "text/plain"
         };
+
+
     }
 
 }
