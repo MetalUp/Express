@@ -74,6 +74,9 @@ nof-object {
 }
 
 /*Other global defaults*/
+code {
+    color: brown;
+}
 
 gemini {
     outline-style: var(--default-outline-style);
