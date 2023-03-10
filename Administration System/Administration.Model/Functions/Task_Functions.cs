@@ -213,11 +213,10 @@
                                 WrapperFile = file,
                             });
 
-        public static IEnumerable<File> Choices1AddTaskSpecificWrapperCode(this Task task, IContext context)
-        {
-            string langId = task.Project.LanguageId;
-            return context.Instances<File>().Where(f => f.ContentType == ContentType.WrapperCode && f.LanguageId == langId);
-        }
+        public static string ValidateAddTaskSpecificWrapperCode(
+    this Task task,
+        File file) =>
+        file.ValidateContentType(ContentType.WrapperCode);
 
         public static bool HideAddTaskSpecificWrapperCode(this Task task) => task.WrapperFileId != null;
 

@@ -28,9 +28,9 @@ namespace Model.Functions
         [Edit]
         public static IContext EditLanguage(
                  this File file,
-                 Language language,
+                 [Optionally] Language? language,
                  IContext context) =>
-                     context.WithUpdated(file, new(file) { LanguageId = language.LanguageID, Language = language});
+                     context.WithUpdated(file, new(file) { Language = language});
 
         [Edit]
         public static IContext EditContentType(
