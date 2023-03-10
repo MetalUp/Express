@@ -63,12 +63,27 @@ namespace Model.Functions
         }
 
         #endregion
+        #region DELETE
 
         public static IContext DeleteFile(this File file, [DescribedAs("type DELETE")] string confirm, IContext context) =>
             context.WithDeleted(file);
 
         public static string ValidateDelete(this File file, string confirm) =>
             confirm == "DELETE" ? null : "Must type 'DELETE'";
+        #endregion
+        #region Copy File
+        public static (File, IContext) CopyFile(this File file,
+            string name,
+            ContentType type,
+            Language language,
+            bool copyContent,
+            IContext context) =>
+            Files.CreateNewFile(name, type, language, copyContent ? file.Content : new byte[0], context);
+
+        public static string Default1CopyFile(this File file) => file.Name;
+        public static ContentType Default2CopyFile(this File file) => file.ContentType ?? ContentType.Unknown;
+        public static Language Default3CopyFile(this File file) => file.Language;
+        #endregion
 
 
         internal static string ValidateContentType(this File file, ContentType type) =>

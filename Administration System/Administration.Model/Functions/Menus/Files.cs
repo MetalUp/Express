@@ -44,7 +44,7 @@ namespace Model.Functions.Menus
             IContext context) =>
                 CreateNewFile(name, type,language, content.AsByteArray(), context);
 
-        private static (File, IContext) CreateNewFile(string name, ContentType type, Language language, byte[] content, IContext context)
+        internal static (File, IContext) CreateNewFile(string name, ContentType type, Language language, byte[] content, IContext context)
         {
             var me = Users.Me(context);
             var f = new File()
