@@ -12,6 +12,7 @@ namespace Model.Types
             ProjectId = cloneFrom.ProjectId;
             Project = cloneFrom.Project;
             Number = cloneFrom.Number;
+            Summary = cloneFrom.Summary;
             MaxMarks = cloneFrom.MaxMarks;
             DescriptionFileId = cloneFrom.DescriptionFileId;
             DescriptionFile = cloneFrom.DescriptionFile;
@@ -43,8 +44,11 @@ namespace Model.Types
         public virtual Project Project { get; init; }
 
         [MemberOrder(20)]
-        [Named("Task No. within Project")]
+        [Named("No.")]
         public int Number { get; init; }
+
+        [MemberOrder(30)]
+        public string Summary { get; init; }
 
         [Hidden]
         public string Title => ToString();
@@ -54,6 +58,7 @@ namespace Model.Types
 
         //Marks awarded for completing the task with no hints taken
         [MemberOrder(60)]
+        [Named("Marks")]
         public int MaxMarks { get; init; }
 
         #region Description
@@ -143,6 +148,8 @@ namespace Model.Types
         [MemberOrder(220)]
         public bool NextTaskClearsFunctions { get; init; }
 
+        [RenderEagerly]
+        [TableView(false, nameof(Hint.Number), nameof(Hint.CostInMarks))]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
         public override string ToString() => $"{Project.Title} task {Number}  ({Project.Language.Name})";

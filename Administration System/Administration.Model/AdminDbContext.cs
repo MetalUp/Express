@@ -42,8 +42,6 @@ namespace Model
             mb.Entity<Task>().HasOne(e => e.TestsFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             mb.Entity<Task>().HasMany(e => e.Hints).WithMany(h => h.Tasks);
 
-            mb.Entity<Hint>().Property(e => e.Name).HasColumnName("Title");
-
             mb.Entity<Language>().HasOne(e => e.WrapperFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             mb.Entity<Language>().HasOne(e => e.HelpersFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             mb.Entity<Language>().HasOne(e => e.RegExRulesFile).WithMany().OnDelete(DeleteBehavior.NoAction);

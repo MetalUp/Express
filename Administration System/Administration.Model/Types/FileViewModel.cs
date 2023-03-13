@@ -10,7 +10,7 @@ public class FileViewModel
         FileId = file.Id;
         Content = file.ContentsAsString() ?? "";
         LanguageAlphaName = file.Language?.CSSstyle ?? "";
-        Name = file.Name;
+        Name = file.ToString();
         Mime = file.MIMEType();
     }
 

@@ -9,7 +9,6 @@ namespace Model.Types
         public Hint(Hint cloneFrom)
         {
             Id = cloneFrom.Id;
-            Name = cloneFrom.Name;
             Number = cloneFrom.Number;
             CostInMarks = cloneFrom.CostInMarks;
             FileId = cloneFrom.FileId;
@@ -22,9 +21,6 @@ namespace Model.Types
 
         [MemberOrder(1)]
         public int Number { get; init; }
-
-        [MemberOrder(2)]
-        public string Name { get; init; }
 
         [Hidden]
         public string Title => ToString();

@@ -111,6 +111,7 @@
         public string Keywords { get; init; }
 
         [RenderEagerly]
+        [TableView(false, nameof(Task.Number), nameof(Task.Summary), nameof(Task.MaxMarks), nameof(Task.Hints))]
         public virtual ICollection<Task> Tasks { get; init; } = new List<Task>();
 
         public override string ToString() => $"{Title} ({Language})";

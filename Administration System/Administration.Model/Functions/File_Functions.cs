@@ -28,9 +28,9 @@ namespace Model.Functions
         [Edit]
         public static IContext EditLanguage(
                  this File file,
-                 Language language,
+                 [Optionally] Language? language,
                  IContext context) =>
-                     context.WithUpdated(file, new(file) { LanguageId = language.LanguageID, Language = language});
+                     context.WithUpdated(file, new(file) { Language = language});
 
         [Edit]
         public static IContext EditContentType(
@@ -55,8 +55,36 @@ namespace Model.Functions
             return context.Instances<Task>().Where(p => p.TestsFileId == id || p.HiddenCodeFileId == id || p.WrapperFileId == id || p.RegExRulesFileId == id);
         }
 
+        [MemberOrder(50)]
+        public static IQueryable<Hint> FindReferencingHints(this File file, IContext context)
+        {
+            int id = file.Id;
+            return context.Instances<Hint>().Where(h => h.FileId == id);
+        }
 
         #endregion
+        #region DELETE
+
+        public static IContext DeleteFile(this File file, [DescribedAs("type DELETE")] string confirm, IContext context) =>
+            context.WithDeleted(file);
+
+        public static string ValidateDelete(this File file, string confirm) =>
+            confirm == "DELETE" ? null : "Must type 'DELETE'";
+        #endregion
+        #region Copy File
+        public static (File, IContext) CopyFile(this File file,
+            string name,
+            ContentType type,
+            Language language,
+            bool copyContent,
+            IContext context) =>
+            Files.CreateNewFile(name, type, language, copyContent ? file.Content : new byte[0], context);
+
+        public static string Default1CopyFile(this File file) => file.Name;
+        public static ContentType Default2CopyFile(this File file) => file.ContentType ?? ContentType.Unknown;
+        public static Language Default3CopyFile(this File file) => file.Language;
+        #endregion
+
 
         internal static string ValidateContentType(this File file, ContentType type) =>
             file.ContentType == type ? null : $"File must have Content Type {type}";
@@ -68,6 +96,8 @@ namespace Model.Functions
             ContentType.RegExRules => "application/json",
             _ => "text/plain"
         };
+
+
     }
 
 }

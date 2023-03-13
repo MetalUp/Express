@@ -39,7 +39,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditLanguage(
              this Project proj,
-             Language language,
+             [Optionally] Language language,
              IContext context) =>
                  context.WithUpdated(proj, new(proj) { Language = language });
 
@@ -55,12 +55,8 @@ namespace Model.Functions
         public static IContext EditCommonHiddenCodeFile(
             this Project project,
             [Optionally] File commonHiddenCodeFile,
-            IContext context) =>
-                context.WithUpdated(project, new Project(project)
-                {
-                    CommonHiddenCodeFileId = commonHiddenCodeFile.Id,
-                    CommonHiddenCodeFile = commonHiddenCodeFile
-                });
+            IContext context) => 
+                context.WithUpdated(project, new Project(project) {CommonHiddenCodeFile = commonHiddenCodeFile});
 
 
         public static string ValidateEditCommonHiddenCodeFile(this Project project, File commonHiddenCodeFile) =>

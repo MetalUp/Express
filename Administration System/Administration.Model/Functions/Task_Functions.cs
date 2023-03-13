@@ -24,6 +24,13 @@
                 context.WithUpdated(task, new(task) { Number = number });
 
         [Edit]
+        public static IContext EditSummary(
+    this Task task,
+    string summary,
+    IContext context) =>
+        context.WithUpdated(task, new(task) { Summary = summary });
+
+        [Edit]
         public static IContext EditMaxMarks(
             this Task task,
             int maxMarks,
@@ -110,7 +117,6 @@
             var hint = new Hint
             {
                 Number = number,
-                Name = name,
                 CostInMarks = costInMarks,
                 File = file
             };
@@ -207,11 +213,10 @@
                                 WrapperFile = file,
                             });
 
-        public static IEnumerable<File> Choices1AddTaskSpecificWrapperCode(this Task task, IContext context)
-        {
-            string langId = task.Project.LanguageId;
-            return context.Instances<File>().Where(f => f.ContentType == ContentType.WrapperCode && f.LanguageId == langId);
-        }
+        public static string ValidateAddTaskSpecificWrapperCode(
+    this Task task,
+        File file) =>
+        file.ValidateContentType(ContentType.WrapperCode);
 
         public static bool HideAddTaskSpecificWrapperCode(this Task task) => task.WrapperFileId != null;
 
