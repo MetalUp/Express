@@ -63,8 +63,8 @@ export class RulesService {
   private mustNotContainRule(rs: RulesService, toValidate: string, rule: [re: string, msg: string]) {
     try {
       const re = new RegExp(rule[0]);
-      const m = toValidate.match(re) || [];
-      return m.length > 0 ? rs.format(rs.getMessage(rule[1]), m) : '';
+      const m = toValidate.match(re);
+      return  (m && m.length > 0) ? rs.format(rs.getMessage(rule[1]), m) : '';
     }
     catch (e) {
       return rs.handleError(e, rule[0]);
