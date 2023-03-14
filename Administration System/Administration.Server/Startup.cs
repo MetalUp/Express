@@ -78,7 +78,9 @@ namespace NakedFunctions.Rest.App.Demo
                         .WithOrigins(
                             "http://localhost:5001",
                             "http://localhost:49998",
-                            "https://express.metalup.org")
+                            "https://express.metalup.org",
+                            "https://development.metalup.org",
+                            "https://test.metalup.org")
                         .AllowAnyHeader()
                         .WithExposedHeaders("Warning", "ETag", "Set-Cookie")
                         .AllowAnyMethod()
