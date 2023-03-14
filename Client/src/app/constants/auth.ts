@@ -1,1 +1,0 @@
-export const audience = 'https://metalupadminserver.azurewebsites.net';

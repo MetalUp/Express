@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  audience : 'https://metalupadminserver.azurewebsites.net'
 };
