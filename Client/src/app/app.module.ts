@@ -22,6 +22,7 @@ import { InvitationComponent } from './invitation/invitation.component';
 import { CustomEditorComponent } from './custom-editor/custom-editor.component';
 import { RestViewerComponent } from './rest-viewer/rest-viewer.component';
 import { ToolLinkComponent } from './tool-link/tool-link.component';
+import { audience } from './constants/auth';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,7 @@ import { ToolLinkComponent } from './tool-link/tool-link.component';
         AuthModule.forRoot({
             domain: 'nakedobjects.eu.auth0.com',
             clientId: 'UASxK8nzWzY2qiZzZg4RIDB4N6dRzXc1',
-            audience: 'https://metalupadminserver.azurewebsites.net',
+            audience: audience,
             httpInterceptor: {
                 allowedList: [
                   'http://localhost:5000',
