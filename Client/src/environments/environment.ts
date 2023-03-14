@@ -4,7 +4,14 @@
 
 export const environment = {
   production: false,
-  audience: 'https://metalupadminserverdevelopment.azurewebsites.net'
+  audience: 'https://metalupadminserverdevelopment.azurewebsites.net',
+  allowedList: [
+    'http://localhost:5000',
+    'http://localhost:5000/*',
+    'https://metalupadminserverdevelopment.azurewebsites.net',
+    'https://metalupadminserverdevelopment.azurewebsites.net/*',
+    '/*'
+  ]
 };
 
 /*

@@ -1,4 +1,8 @@
 export const environment = {
   production: false,
-  audience : 'https://metalupadminservertest.azurewebsites.net'
+  audience : 'https://metalupadminservertest.azurewebsites.net',
+  allowedList: [
+    'https://metalupadminservertest.azurewebsites.net',
+    'https://metalupadminservertest.azurewebsites.net/*'
+  ]
 };

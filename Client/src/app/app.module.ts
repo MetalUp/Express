@@ -56,13 +56,7 @@ import { environment } from 'src/environments/environment';
             clientId: 'UASxK8nzWzY2qiZzZg4RIDB4N6dRzXc1',
             audience: environment.audience,
             httpInterceptor: {
-                allowedList: [
-                  'http://localhost:5000',
-                  'http://localhost:5000/*',
-                  'https://metalupadminserver.azurewebsites.net',
-                  'https://metalupadminserver.azurewebsites.net/*',
-                  '/*'
-                ]
+                allowedList: environment.allowedList
             }
           }),
     ],
