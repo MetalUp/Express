@@ -61,7 +61,34 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "outputPath": "dist/ile-client-dev"
+            },
+            "test": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "2mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "8kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.test.ts"
+                },
+                {
+                  "replace": "src/config.json",
+                  "with": "src/config.test.json"
+                }
+              ],
+              "outputHashing": "all",
+              "outputPath": "dist/ile-client-test"
             }
           },
           "defaultConfiguration": "production"
