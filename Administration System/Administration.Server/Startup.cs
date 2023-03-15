@@ -42,6 +42,13 @@ namespace NakedFunctions.Rest.App.Demo
 
         private string Audience => Environment.GetEnvironmentVariable("Audience") ?? Configuration["Auth0:Audience"];
 
+        private string[] Origins {
+            get {
+                var origins = Environment.GetEnvironmentVariable("Origins") ?? Configuration["Origins"] ?? "";
+                return origins.Split(',');
+            }
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -75,12 +82,7 @@ namespace NakedFunctions.Rest.App.Demo
                 corsOptions.AddPolicy(MyAllowSpecificOrigins, policyBuilder =>
                 {
                     policyBuilder
-                        .WithOrigins(
-                            "http://localhost:5001",
-                            "http://localhost:49998",
-                            "https://express.metalup.org",
-                            "https://development.metalup.org",
-                            "https://test.metalup.org")
+                        .WithOrigins(Origins)
                         .AllowAnyHeader()
                         .WithExposedHeaders("Warning", "ETag", "Set-Cookie")
                         .AllowAnyMethod()
