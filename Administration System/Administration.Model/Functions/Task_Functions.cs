@@ -76,7 +76,7 @@
 
         #region Description
         [Edit]
-        public static IContext EditDescription(
+        public static IContext EditDescriptionFile(
             this Task task,
             [Optionally] File file,
             IContext context) =>
@@ -87,7 +87,7 @@
                         DescriptionFile = file,
                     });
 
-        public static string ValidateEditDescription(
+        public static string ValidateEditDescriptionFile(
               this Task task,
               File file) =>
                     file == null ? null : file.ValidateContentType(ContentType.Description);
