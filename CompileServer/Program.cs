@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +10,21 @@ builder.Services.AddAuthentication(options => {
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options => {
     options.Authority = $"https://{builder.Configuration["Auth0:Domain"]}/";
-    options.Audience = builder.Configuration["Auth0:Audience"];
-    options.TokenValidationParameters.NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+    //options.Audience = builder.Configuration["Auth0:Audience"];
+    //options.TokenValidationParameters.NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+
+
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+        ValidateIssuer = true,
+        ValidAudiences = new List<string> 
+        {
+            "https://metalupadminserver.azurewebsites.net",
+            "https://metalupadminserverdevelopment.azurewebsites.net",
+            "https://metalupadminservertest.azurewebsites.net"
+        }
+    };
 });
 
 builder.Services.AddControllers();
