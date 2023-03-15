@@ -29,19 +29,19 @@ builder.Services.AddAuthentication(options => {
 
 builder.Services.AddControllers();
 
-builder.Services.AddCors(options => {
-    options.AddPolicy("_myAllowSpecificOrigins", builder => {
-        builder
-            .WithOrigins(
-                "http://localhost:5001",
-                "http://localhost:49998",
-                "https://express.metalup.org")
-            .AllowAnyHeader()
-            .WithExposedHeaders("Warning", "ETag", "Set-Cookie")
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
+//builder.Services.AddCors(options => {
+//    options.AddPolicy("_myAllowSpecificOrigins", builder => {
+//        builder
+//            .WithOrigins(
+//                "http://localhost:5001",
+//                "http://localhost:49998",
+//                "https://express.metalup.org")
+//            .AllowAnyHeader()
+//            .WithExposedHeaders("Warning", "ETag", "Set-Cookie")
+//            .AllowAnyMethod()
+//            .AllowCredentials();
+//    });
+//});
 
 var app = builder.Build();
 
