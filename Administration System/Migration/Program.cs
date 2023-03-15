@@ -13,8 +13,8 @@ internal class Program {
             .ConfigureServices((hostContext, services) =>
                                    services.AddDbContext<DbContext, AdminDbContext>(options => { options.UseSqlServer(cs); }));
 
-    private static void Main(string[] args) {
-        var cs = args.First();
+    private static void Main() {
+        var cs = Environment.GetEnvironmentVariable("connection_string") ?? throw new Exception("Missing connection_string");
         var host = CreateHostBuilder(cs).Build();
         using var scope = host.Services.CreateScope();
 
