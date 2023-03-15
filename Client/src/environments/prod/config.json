@@ -10,43 +10,8 @@
     "clearCacheOnChange": true,
     "leftClickHomeAlwaysGoesToSinglePane": false,
     "colors": {
-        "regexArray": [
-            {
-                "regex": ".*Customer.*",
-                "color": 1
-            },
-            {
-                "regex": ".*SalesOrder.*",
-                "color": 2
-            },
-            {
-                "regex": ".*Product.*",
-                "color": 4
-            },
-            {
-                "regex": ".*Employee.*",
-                "color": 5
-            },
-            {
-                "regex": ".*SalesPerson.*",
-                "color": 6
-            },
-            {
-                "regex": ".*SpecialOffer.*",
-                "color": 7
-            },
-            {
-                "regex": ".*Vendot.*",
-                "color": 9
-            },
-            {
-                "regex": ".*PurchaseOrder.*",
-                "color": 10
-            },
-            {
-                "regex": ".*WorkOrder.*",
-                "color": 12
-            }
+        "regexArray": [ 
+            
         ],
         "default": 0,
         "randomMaxIndex" : 12
