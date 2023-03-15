@@ -393,14 +393,6 @@ nof-footer {
     background-color: #1F1110;
 }
 
-div.icon.properties {
-    display: none;
-}
-
-div.icon.recent {
-    display: none;
-}
-
 .metalup div.icon.back {
     display: none;
 }
