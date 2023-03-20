@@ -70,15 +70,29 @@ namespace Test
         [Test]
         public async Task Test1()
         {
-            //LogInAs("google-oauth2|.....");
+            LogInAs("google-oauth2|103249642741140142274");
 
-            //var menus = (await GetHome().GetMenus()).AssertMenuOrder(nameof(Assignments), nameof(Groups), nameof(Invitations), nameof(Organisations), nameof(Projects), nameof(Users));
-            
-            //var projects = (await menus.GetMenu(nameof(Projects))).AssertMemberOrder(nameof(Projects.AllAssignableProjects), nameof(Projects.FindProjects));
+            var menus = (await GetHome().GetMenus()).AssertMenuOrder(
+                nameof(Activities),
+                nameof(Assignments),
+                nameof(Files),
+                nameof(Groups),
+                nameof(Invitations),
+                nameof(Languages),
+                nameof(Organisations),
+                nameof(Projects),
+                nameof(Users));
 
-            //var all = projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1).AssertReturnsList();
-            
-            //var lang = (await all.GetParameter(0)).AssertName("Language").AssertString().AssertOptional().AssertChoice(0, "Python").AssertDefault(null); //Params numbered from 1 ? (TBC)
+            var projects = (await menus.GetMenu(nameof(Projects))).AssertMemberOrder(
+                nameof(Projects.ProjectsAuthoredByMe),
+                nameof(Projects.AllProjects),
+                nameof(Projects.CreateNewProject),
+                nameof(Projects.AllAssignableProjects),
+                nameof(Projects.FindProjects));
+
+            var all = projects.GetAction(nameof(Projects.AllAssignableProjects)).AssertNumberOfParameters(1).AssertReturnsList();
+
+            var lang = (await all.GetParameter(0)).AssertName("Language").AssertString().AssertOptional().AssertChoice(0, "Python").AssertDefault(null); //Params numbered from 1 ? (TBC)
 
             //var list = (await all.AssertValid("").Invoke("")).GetList();
 
