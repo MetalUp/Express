@@ -4,9 +4,6 @@ namespace Model
 {
     public class AdminDbContext : DbContext
     {
-        public AdminDbContext() {
-            
-        }
 
         public AdminDbContext(DbContextOptions<AdminDbContext> options): base(options) { }
 

@@ -31,17 +31,18 @@ namespace Test
         [OneTimeSetUp]
         public void FixtureSetUp() {
             InitializeNakedObjectsFramework(this);
-            new TestAdminDbContext().Create();
         }
 
         [OneTimeTearDown]
         public void FixtureTearDown() {
             CleanupNakedObjectsFramework(this);
-            new TestAdminDbContext().Delete();
         }
 
 
         protected override void ConfigureServices(IServiceCollection services) {
+            var cs = Environment.GetEnvironmentVariable("connection_string");
+
+
             services.AddControllers()
                     .AddNewtonsoftJson(options => options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc);
             services.AddMvc(options => options.EnableEndpointRouting = false);
@@ -59,8 +60,10 @@ namespace Test
                 });
                 frameworkOptions.AddRestfulObjects(options => options.AcceptHeaderStrict = false);
             });
-           
-            services.AddDbContext<DbContext, TestAdminDbContext>();
+            services.AddDbContext<DbContext, AdminDbContext>(options => {
+                options.UseSqlServer(cs);
+            });
+            services.AddDbContext<DbContext, AdminDbContext>();
             services.AddTransient<RestfulObjectsController, RestfulObjectsController>();
             services.AddScoped(p => TestPrincipal);
         }
