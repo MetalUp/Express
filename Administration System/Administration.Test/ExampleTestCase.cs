@@ -42,7 +42,6 @@ namespace Test
         protected override void ConfigureServices(IServiceCollection services) {
             var cs = Environment.GetEnvironmentVariable("connection_string");
 
-
             services.AddControllers()
                     .AddNewtonsoftJson(options => options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc);
             services.AddMvc(options => options.EnableEndpointRouting = false);
@@ -63,7 +62,6 @@ namespace Test
             services.AddDbContext<DbContext, AdminDbContext>(options => {
                 options.UseSqlServer(cs);
             });
-            services.AddDbContext<DbContext, AdminDbContext>();
             services.AddTransient<RestfulObjectsController, RestfulObjectsController>();
             services.AddScoped(p => TestPrincipal);
         }
