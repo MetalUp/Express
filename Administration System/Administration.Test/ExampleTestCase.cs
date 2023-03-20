@@ -16,7 +16,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Test
 {
-    [TestClass]
+    [TestFixture]
     public class ExampleTestCase : ExpressTestCase
     {
 
