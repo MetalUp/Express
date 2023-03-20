@@ -72,7 +72,7 @@ namespace Test
         [Test]
         public async Task Test1()
         {
-            LogInAs("Richard");
+            LogInAs("Richard Root");
 
             var menus = (await GetHome().GetMenus()).AssertMenuOrder(nameof(Assignments), nameof(Groups), nameof(Invitations), nameof(Organisations), nameof(Projects), nameof(Users));
             
