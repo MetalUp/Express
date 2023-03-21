@@ -1,4 +1,5 @@
 using System.Security.Principal;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NakedFramework.Architecture.Framework;
 using NakedFramework.RATL.TestCase;
@@ -20,5 +21,5 @@ public abstract class ExpressTestCase : BaseRATLNUnitTestCase {
         TestPrincipal = new GenericPrincipal(new GenericIdentity(name), new string[] { });
     }
 
-   
+    protected override IConfigurationBuilder AddUserSecrets(IConfigurationBuilder configBuilder) => configBuilder.AddUserSecrets<ExpressTestCase>();
 }

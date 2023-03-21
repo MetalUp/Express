@@ -1,6 +1,7 @@
 ﻿using System.Security.Principal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Model;
 using NakedFramework.Architecture.Framework;
 using NakedFramework.DependencyInjection.Extensions;
@@ -39,8 +40,8 @@ namespace Test
             CleanupNakedObjectsFramework(this);
         }
 
-        protected override void ConfigureServices(IServiceCollection services) {
-            var cs = Environment.GetEnvironmentVariable("connection_string");
+        protected override void ConfigureServices(HostBuilderContext hostBuilderContext, IServiceCollection services) {
+            var cs = Environment.GetEnvironmentVariable("connection_string") ?? hostBuilderContext.Configuration["ConnectionString"];
 
             services.AddControllers()
                     .AddNewtonsoftJson(options => options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc);
