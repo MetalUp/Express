@@ -11,9 +11,11 @@ import { okButtonDisabledTooltip as goButtonDisabledTooltip, okButtonEnabledTool
 })
 export class RestViewerComponent implements OnInit {
 
-  constructor(private readonly http: HttpClient, private readonly configService: ConfigService) { }
+  constructor(private readonly http: HttpClient, configService: ConfigService) {
+    this.home = configService.config.appPath;
+  }
 
-  private home = this.configService.config.appPath;
+  private home = "";
 
   currentUrl = this.home;
   url = "";
