@@ -22,6 +22,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   editContent: string = "";
   initialContent: string = "";
+  lastSavedContent : string = "";
 
   mime: string = "";
 
@@ -76,7 +77,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
       this.id = pm.get('id') || "";
       if (this.id) {
         this.fileService.loadFile(this.id).then(file => {
-          this.editContent = this.initialContent = file.Content;
+          this.editContent = this.lastSavedContent = this.initialContent = file.Content;
           this.mime = file.Mime || 'text/plain';
           this.selectedLanguage = file.LanguageAlphaName || 'csharp';
           this.name = file.Name;
@@ -87,15 +88,28 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
     this.sub2 = this.compileService.languages$.subscribe(ll => this.languages = ll.map(i => i.AlphaName).filter((i, j, k) => k.indexOf(i) === j)); // distinct
   }
 
-  canSave() {
-    return this.editContent !== this.initialContent;
+  hasChanges() {
+    return this.editContent !== this.lastSavedContent;
   }
 
   onSave() {
     this.fileService.saveFile(this.id!, this.editContent).then(b => {
       this.warning = "";
       if (b) {
-        this.location.back();
+        this.lastSavedContent = this.editContent;
+      }
+      else {
+        this.warning = "Save failed!";
+      }
+    });
+  }
+
+  onSaveAndClose() {
+    this.fileService.saveFile(this.id!, this.editContent).then(b => {
+      this.warning = "";
+      if (b) {
+        this.lastSavedContent = this.editContent;
+        this.close();
       }
       else {
         this.warning = "Save failed!";
@@ -104,7 +118,19 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
   }
 
   onCancel() {
-    this.location.back()
+    this.close();
+  }
+
+  onRevert() {
+    this.editContent = this.lastSavedContent;
+  }
+
+  close() {
+    const path = this.location.path();
+    this.location.back();
+    if (path === this.location.path()) {
+      window.close();
+    }
   }
 
   ngOnDestroy() {

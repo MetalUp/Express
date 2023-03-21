@@ -4,7 +4,9 @@
             <div class="pane-header">Edit: {{name}}
                 <div class="button-bar">
                     <button (click)="onCancel()">Cancel</button>
-                    <button [disabled]="!canSave()" (click)="onSave()">Save</button>
+                    <button [disabled]="!hasChanges()" (click)="onRevert()">Revert</button>
+                    <button [disabled]="!hasChanges()" (click)="onSaveAndClose()">Save & Close</button>
+                    <button [disabled]="!hasChanges()" (click)="onSave()">Save</button>
                     <div class="warning">{{warning}}</div>
                 </div>
             </div>
