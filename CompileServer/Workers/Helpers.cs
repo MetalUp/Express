@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using CompileServer.Models;
 
 namespace CompileServer.Workers;
@@ -79,6 +80,7 @@ public static class Helpers {
 
     public static RunResult Execute(string exe, string args, RunSpec runSpec, RunResult runResult) {
         try {
+            Console.OutputEncoding = Encoding.UTF8;
             using var process = CreateProcess(exe, args, runSpec);
             if (!process.WaitForExit(runSpec.Options.ProcessTimeout)) {
                 process.Kill();
