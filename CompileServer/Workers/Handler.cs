@@ -42,7 +42,7 @@ public static class Handler {
 
     private static Task<JsonResult> PythonCompile(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
-                var (runResult, _) = PythonCompiler.Compile(runSpec);
+                var (runResult, _) = PythonCompiler.CompileOrTypeCheck(runSpec);
                 return runResult;
             }, runSpec)
         );

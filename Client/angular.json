@@ -74,6 +74,31 @@
               "namedChunks": true,
               "outputPath": "dist/ile-client-dev"
             },
+            "local": {
+              "assets": [
+                "src/favicon.png",
+                "src/assets",
+                "src/.htaccess",
+                {
+                  "input": "src/environments/local",
+                  "output": "/",
+                  "glob": "*.json"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ],
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "outputPath": "dist/ile-client-local"
+            },
             "test": {
               "assets": [
                 "src/favicon.png",
@@ -117,6 +142,9 @@
             },
             "development": {
               "browserTarget": "ile-client:build:development"
+            },
+            "local": {
+              "browserTarget": "ile-client:build:local"
             }
           },
           "defaultConfiguration": "development"

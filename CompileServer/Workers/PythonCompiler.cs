@@ -63,14 +63,18 @@ public static class PythonCompiler {
         return result;
     }
 
-    internal static (RunResult, string) Compile(RunSpec runSpec) {
+    internal static (RunResult, string) CompileOrTypeCheck(RunSpec runSpec) =>
+        runSpec.Options.PythonUseTypeAnnotations
+            ? TypeCheck(runSpec, CreateSourceFile(runSpec), TempFileName)
+            : Compile(runSpec, CreateSourceFile(runSpec), TempFileName);
+
+    private static string CreateSourceFile(RunSpec runSpec) {
         var file = $"{runSpec.TempDir}{TempFileName}";
         File.WriteAllText(file, runSpec.sourcecode);
-
-        return runSpec.Options.PythonUseTypeAnnotations
-            ? TypeCheck(runSpec, file, TempFileName)
-            : Compile(runSpec, file, TempFileName);
+        return file;
     }
+
+    internal static (RunResult, string) Compile(RunSpec runSpec) => Compile(runSpec, CreateSourceFile(runSpec), TempFileName);
 
     private static (RunResult, string) Compile(RunSpec runSpec, string file, string tempFileName) =>
         UpdateLineNumber(Helpers.Compile(GetPythonExe(runSpec), $"-m py_compile {file}", tempFileName, runSpec));

@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Migration": {
-      "commandName": "Project",
-      "commandLineArgs": "\"Data Source=(LocalDB)\\\\MSSQLLocalDB;Initial Catalog=ILEAdmin;Integrated Security=True;MultipleActiveResultSets=True\""
-    }
-  }
-}
