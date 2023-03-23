@@ -5,6 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+IEnumerable<string> ValidAudiences(ConfigurationManager configuration) {
+    var audiences = Environment.GetEnvironmentVariable("ValidAudiences") ?? configuration["ValidAudiences"] ?? "";
+    return audiences.Split(',');
+}
+
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -13,11 +18,7 @@ builder.Services.AddAuthentication(options => {
     options.TokenValidationParameters = new TokenValidationParameters {
         NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
         ValidateIssuer = true,
-        ValidAudiences = new List<string> {
-            "https://metalupadminserver.azurewebsites.net",
-            "https://metalupadminserverdevelopment.azurewebsites.net",
-            "https://metalupadminservertest.azurewebsites.net"
-        }
+        ValidAudiences = ValidAudiences(builder.Configuration)
     };
 });
 
