@@ -32,6 +32,7 @@ public class Language
     public string Name { get; init; }
 
     [MemberOrder(15)]
+    [Named("CSS Style")]
     public string CSSstyle { get; init; }  // e.g. 'csharp'
 
     [MemberOrder(20)]
