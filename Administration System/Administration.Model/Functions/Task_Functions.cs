@@ -157,7 +157,7 @@
             File file) =>
             file.ValidateContentType(ContentType.HiddenCode);
 
-        public static bool HideOverrideProjectHiddenCode(this Task task) => task.HiddenCodeFileId != null;
+        public static bool HideAddTaskSpecificHiddenCode(this Task task) => task.HiddenCodeFileId != null;
 
         [MemberOrder(31)]
         public static IContext ClearTaskSpecificHiddenCode(
