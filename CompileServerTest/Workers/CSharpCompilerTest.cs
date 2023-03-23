@@ -1,4 +1,5 @@
-﻿using CompileServer.Models;
+﻿using System.Text;
+using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -24,6 +25,10 @@ public class CSharpCompilerTest {
     }";
 
     private const string DivZero = "var a = 1/0;";
+
+    private const string Infinity = @"
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    var a = System.Double.PositiveInfinity;System.Console.Write(a);";
 
     private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
 
@@ -136,6 +141,14 @@ public class CSharpCompilerTest {
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
+    }
+
+    [TestMethod]
+    public void TestCompileAndRunInfinity() {
+        using var runSpec = CsharpRunSpec(Infinity);
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok, "", "∞");
     }
 
     [TestMethod]

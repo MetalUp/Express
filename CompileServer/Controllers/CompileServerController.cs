@@ -1,3 +1,4 @@
+using System.Text;
 using CompileServer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp;
@@ -31,6 +32,7 @@ public abstract class CompileServerController : ControllerBase {
         if (int.TryParse(pto, out var r)) {
             ProcessTimeout = r;
         }
+        System.Console.OutputEncoding = Encoding.UTF8;
     }
 
     protected ILogger Logger { get; }
