@@ -27,10 +27,10 @@ public static class Compile
         }
     }
 
-    private static HttpRequestMessage CreateMessage(IContext context, HttpMethod method, string path, HttpContent content = null)
+    private static HttpRequestMessage CreateMessage(IContext context, HttpMethod method, string endPoint, HttpContent content = null)
     {
         CheckServer(context);
-        var request = new HttpRequestMessage(method, path);
+        var request = new HttpRequestMessage(method, $"{compileServer}{endPoint}");
         var httpContext = context.GetService<IHttpContextAccessor>().HttpContext;
         var token = httpContext.Request.Headers["Authorization"].FirstOrDefault();
         if (token is not null)
@@ -46,11 +46,11 @@ public static class Compile
         return request;
     }
 
-    private static (RunResult, IContext) Execute((Language language, string code) wrapped, string url, IContext context)
+    private static (RunResult, IContext) Execute((Language language, string code) wrapped, string endPoint, IContext context)
     {
         var (language, code) = wrapped;
         using var content = JsonContent.Create(RunSpec.FromParams(language, code), new MediaTypeHeaderValue("application/json"));
-        var request = CreateMessage(context, HttpMethod.Post, url, content);
+        var request = CreateMessage(context, HttpMethod.Post, endPoint, content);
 
         using var response = Client.SendAsync(request).Result;
 
@@ -80,11 +80,11 @@ public static class Compile
     }
 
     public static (RunResult, IContext) EvaluateExpression(int taskId, string expression, [Optionally] string code, IContext context) =>
-        Execute(WrapCode(context, taskId, code, false, expression), $"{compileServer}/runs", context);
+        Execute(WrapCode(context, taskId, code, false, expression), "/runs", context);
 
     public static (RunResult, IContext) SubmitCode(int taskId, string code, IContext context)
     {
-        var (result, context2) = Execute(WrapCode(context, taskId, code, false), $"{compileServer}/compiles", context);
+        var (result, context2) = Execute(WrapCode(context, taskId, code, false), "/compiles", context);
         if (result.Outcome == (int)CompilerOutcome.CompilationError)
         {
             return (result, Activities.SubmitCodeFail(taskId, code, result.Cmpinfo, context));
@@ -104,13 +104,13 @@ public static class Compile
 
     public static (RunResult, IContext) RunTests(int taskId, string code, IContext context)
     {
-        var (result, context2) = Execute(WrapCode(context, taskId, code, true), $"{compileServer}/tests", context);
+        var (result, context2) = Execute(WrapCode(context, taskId, code, true), "/tests", context);
         if (result.Outcome == (int)CompilerOutcome.Ok)
         {
             //TODO: Temporary solution, pending moving RegEx rules server side.
             if (result.Stdout.Contains("Failed!") || result.Stdout.Contains("FAIL")) // C#/VB and Python, respectively {
             {
-               return (result, Activities.RunTestsFail(taskId, result.Stdout, code, context2));
+                return (result, Activities.RunTestsFail(taskId, result.Stdout, code, context2));
             }
             else
             {
@@ -122,7 +122,7 @@ public static class Compile
 
     public static IList<LanguageViewModel> GetCompileServerLanguagesAndVersions(IContext context)
     {
-        var request = CreateMessage(context, HttpMethod.Get, $"{compileServer}/languages");
+        var request = CreateMessage(context, HttpMethod.Get, "/languages");
 
         using var response = Client.SendAsync(request).Result;
 
@@ -145,13 +145,15 @@ public static class Compile
         return toUpdate;
     }
 
-    public static IList<LanguageViewModel> GetMergedLanguagesAndVersions(IContext context) {
+    public static IList<LanguageViewModel> GetMergedLanguagesAndVersions(IContext context)
+    {
         var supportedLanguages = GetLanguagesAndVersions(context);
         var compileServerlanguages = GetCompileServerLanguagesAndVersions(context);
         return supportedLanguages.Select(sl => MatchAndUpdate(sl, compileServerlanguages)).ToList();
     }
 
-    public static IList<LanguageViewModel> GetLanguagesAndVersions(IContext context) {
+    public static IList<LanguageViewModel> GetLanguagesAndVersions(IContext context)
+    {
         return context.Instances<Language>().Select(l => new LanguageViewModel(l.CSSstyle, l.Version)).ToList();
     }
 
@@ -188,12 +190,13 @@ public static class Compile
             public string sourcecode { get; init; }
         }
 
-        public class CompileOptions {
+        public class CompileOptions
+        {
             public string PythonPath { get; set; }
             public string CompileArguments { get; set; }
             public string JavaPath { get; set; }
             public string HaskellPath { get; set; }
-            public int? CSharpVersion { get; set;  }
+            public int? CSharpVersion { get; set; }
             public int? VisualBasicVersion { get; set; }
             public int? ProcessTimeout { get; set; }
         }
@@ -209,6 +212,6 @@ public static class Compile
         public string stderr { get; set; }
         public string stdout { get; set; }
 
-        public RunResult ToRunResult() => new() { Cmpinfo = cmpinfo, Outcome = outcome, RunID = run_id, Stderr = stderr, Stdout = stdout, LineNo = line_no, ColNo = col_no};
+        public RunResult ToRunResult() => new() { Cmpinfo = cmpinfo, Outcome = outcome, RunID = run_id, Stderr = stderr, Stdout = stdout, LineNo = line_no, ColNo = col_no };
     }
 }
