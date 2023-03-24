@@ -41,7 +41,7 @@
                 AllAssignableProjects(language, context).Where(p =>
                     (language == null || p.Language.Name == language) &&
                     (title == null || p.Title.ToUpper().Contains(title.ToUpper())) &&
-                    (keywordOrName == null || p.Keywords.Contains(keywordOrName) || p.Title.Contains(keywordOrName)));
+                    (keywordOrName == null || p.Description.Contains(keywordOrName) || p.Title.Contains(keywordOrName)));
 
         public static IEnumerable<string> Choices0FindProjects(IContext context) => Choices0AllAssignableProjects(context);
     }

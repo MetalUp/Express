@@ -84,24 +84,6 @@ namespace Model.Functions
 
         #endregion
 
-        #region Keywords
-        public  static IContext AddKeywords(this Project project,[Optionally] IEnumerable<string> existingKeywords,[Optionally] string newKeyword, IContext context)
-        {
-            IContext context2 = context;
-            string updated = existingKeywords.Aggregate(project.Keywords, (a,k) => a + " " + k);
-            if(newKeyword != null && !existingKeywords.Contains(newKeyword))
-            {
-                updated += $"{newKeyword} ";
-                context2 = context.WithNew(new Keyword { WordOrPhrase = newKeyword });
-            }
-            return context2.WithUpdated(project, new Project(project) { Keywords = updated});
-        }
-
-        public static IEnumerable<string> Choices1AddKeywords(this Project project, IContext context) =>
-            context.Instances<Keyword>().Select(k => k.WordOrPhrase);
-
-        #endregion
-
         #region Assignment
 
         [MemberOrder(5)]
