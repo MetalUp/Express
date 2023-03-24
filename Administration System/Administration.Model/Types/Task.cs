@@ -40,6 +40,10 @@ namespace Model.Types
         [Hidden]
         public int? ProjectId { get; init; }
 
+        [MemberOrder(1)]
+        [UrlLink("Start or Continue Task")]
+        public string Link => $"/task/{Id}";
+
         [MemberOrder(10)]
         public virtual Project Project { get; init; }
 
