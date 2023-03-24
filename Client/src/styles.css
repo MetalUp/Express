@@ -324,31 +324,31 @@ gemini {
     color: grey;
 }
 
-.arm :is(.csharp, .dotnet, .haskell, .java, .other, .python, .vb) {
+.arm :is(.csharp, .cs, .dotnet, .dn, .haskell, .hs, .java, .other, .python, .py, .vb) {
     display:none;
 }
 
-.csharp :is(.arm, .haskell, .java, .other, .python, .vb) {
+.csharp :is(.arm, .haskell, .hs, .java, .other, .python, .py, .vb) {
     display:none;
 }
 
-.haskell :is(.arm, .csharp, .dotnet, .java, .other, .python, .vb) {
+.haskell :is(.arm, .csharp, .cs, .dotnet, .dn .java, .other, .python, .py, .vb) {
     display:none;
 }
 
-.java :is(.arm, .csharp, .dotnet, .haskell, .other, .python, .vb) {
+.java :is(.arm, .csharp, .cs, .dotnet, .dn, .haskell,.hs, .other, .python, .py, .vb) {
     display:none;
 }
 
-.other :is(.arm, .csharp, .dotnet, .haskell, .java, .python, .vb) {
+.other :is(.arm, .csharp, .cs, .dotnet, .dn, .haskell,.hs, .java, .python, .py, .vb) {
     display:none;
 }
 
-.python :is(.arm, .csharp, .dotnet, .haskell, .java, .other, .vb) {
+.python :is(.arm, .csharp, .cs, .dotnet, .dn, .haskell,.hs, .java, .other, .vb) {
     display:none;
 }
 
-.vb :is(.arm, .csharp, .haskell, .java, .other, .python) {
+.vb :is(.arm, .csharp, .cs, .haskell,.hs, .java, .other, .python, .py) {
     display:none;
 }
 
