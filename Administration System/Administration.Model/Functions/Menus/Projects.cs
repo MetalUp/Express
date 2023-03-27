@@ -11,6 +11,7 @@
         }
 
         [MemberOrder(20)]
+        [RenderEagerly]
         [TableView(false, "Status", "Title", "Language")]
         public static IQueryable<Project> AllProjects(IContext context) =>
             context.Instances<Project>().OrderBy(p => p.Status).ThenBy(p => p.Title).ThenBy(p => p.Language);

@@ -1,0 +1,52 @@
+{
+  "Messages": {
+    "NotPermitted": "Use of '{1}' is not permitted"
+  },
+  "ServerResponseMessageFilters": {
+    "cmpinfo": "BC.*",
+    "stderr": "\\w+Exception",
+    "tests": [
+      [ ".*Passed!.*", "All Tests Passed" ],
+      [ ".*xxx(.*)xxx.*", "{1}" ],
+      [ "(.*Exception.*)", "Your code generated this error: {1}" ]
+    ]
+  },
+  "CodeMustMatch": {
+    "both": [],
+    "expressions": [],
+    "functions": [
+      [
+        "^[\\n\\s]*(?:Function\\s.*\\n\\s*Return\\s.*\\n\\s*End Function\\s*)*$",
+        "All functions must be: Function NameStartingUpperCase(<paramsStartingLowerCase>)<ReturnType\\nReturn <expression>\\nEnd Function"
+      ]
+    ]
+  },
+  "CodeMustNotContain": {
+    "both": [
+      [
+        ".*(?:^|\\s+)(Sub|Dim|Import|Public|Private|Protected|Class|Abstract)\\s.*",
+        "Use of the keyword '{1}' is not permitted"
+      ],
+      [
+        "(Console|System)\\.",
+        "Messages.NotPermitted"
+      ],
+      [
+        "\\W(ArrayList)\\W",
+        "Use of ArrayList is not permitted. Use a typed list such as List(Of Integer)"
+      ],
+      [
+        "\\.(Add|AddRange|Clear|RemoveAll|RemoveAt|RemoveRange)\\s*\\(",
+        "Use of '{1}', or any other method that mutates a List is not permitted"
+      ]
+    ],
+    "expressions": [
+    ],
+    "functions": [
+      [
+        "\\s+DateTime\\.(Today|Now)",
+        "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter"
+      ]
+    ]
+  }
+}

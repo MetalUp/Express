@@ -13,8 +13,7 @@ public class Language
         LanguageID = cloneFrom.LanguageID;  
         Name = cloneFrom.Name;
         CSSstyle = cloneFrom.CSSstyle;
-        Version = cloneFrom.Version;
-        FileExtension = cloneFrom.FileExtension;
+        CompilerLanguageId = cloneFrom.CompilerLanguageId;
         WrapperFileId = cloneFrom.WrapperFileId;
         WrapperFile = cloneFrom.WrapperFile;
         HelpersFileId = cloneFrom.HelpersFileId;
@@ -36,13 +35,7 @@ public class Language
     public string CSSstyle { get; init; }  // e.g. 'csharp'
 
     [MemberOrder(20)]
-    public string Version { get; init; }
-
-    [MemberOrder(30)]
-    public string FileExtension { get; init; } //includes the .
-
-    [MemberOrder(40)]
-    public string MIMEType => "text/plain"; 
+    public string CompilerLanguageId { get; init; }
 
     #region Wrapper
     [Hidden]
