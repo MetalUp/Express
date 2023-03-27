@@ -104,11 +104,9 @@
         #endregion
 
         [MemberOrder(120)]
+        [MultiLine(5)]
         public string Description { get; init; }
 
-        [MemberOrder(130)]
-        [MultiLine(5)]
-        public string Keywords { get; init; }
 
         [RenderEagerly]
         [TableView(false, nameof(Task.Number), nameof(Task.Summary), nameof(Task.MaxMarks), nameof(Task.Hints))]
