@@ -18,7 +18,6 @@ namespace Model
         public DbSet<File> Files { get; set; }
         public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Activity> Activities { get; set; }
-        public DbSet<Keyword> Keywords { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
