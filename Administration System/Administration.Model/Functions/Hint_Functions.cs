@@ -9,14 +9,6 @@
              IContext context) =>
          context.WithUpdated(hint, new(hint) { Number = number });
 
-
-        [Edit]
-        public static IContext EditCostInMarks(
-            this Hint hint,
-            int costInMarks,
-            IContext context) =>
-        context.WithUpdated(hint, new(hint) { CostInMarks = costInMarks });
-
         internal static string ContentsAsString(this Hint hint) => hint.File.Content.AsASCIIonly();
     }
 }

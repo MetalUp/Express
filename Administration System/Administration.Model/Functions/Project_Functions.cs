@@ -273,22 +273,30 @@ namespace Model.Functions
         [MemberOrder(100)]
         public static IContext CreateTask(
             this Project project,
-            int number,
+            int taskNumber,
             [Optionally] Task previousTask,
             IContext context)
         {
-            var t = new Task
+            var task = new Task
             {
                 ProjectId = project.Id,
                 Project = project,
-                Number = number,
+                Number = taskNumber,
                 PreviousTaskId = previousTask is null ? null : previousTask.Id,
                 PreviousTask = previousTask,
             };
+            var file = new File()
+            {
+                Name = $"{project.Title} {taskNumber}",
+                ContentType = ContentType.TaskDescription,
+                AuthorId = project.AuthorId,
+                LanguageId = null,
+                Content = new byte[0]
+            };
             var updatedPrevious = previousTask is null ? null :
-                new Task(previousTask) { NextTask = t };
+                new Task(previousTask) { NextTask = task };
             var context2 = updatedPrevious is null ? context : context.WithUpdated(previousTask, updatedPrevious);
-            return context2.WithNew(t);
+            return context2.WithNew(task).WithNew(file);
         }
 
         public static int Default1CreateTask(

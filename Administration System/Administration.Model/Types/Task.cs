@@ -13,7 +13,6 @@ namespace Model.Types
             Project = cloneFrom.Project;
             Number = cloneFrom.Number;
             Summary = cloneFrom.Summary;
-            MaxMarks = cloneFrom.MaxMarks;
             DescriptionFileId = cloneFrom.DescriptionFileId;
             DescriptionFile = cloneFrom.DescriptionFile;
             HiddenCodeFileId = cloneFrom.HiddenCodeFileId;
@@ -55,15 +54,7 @@ namespace Model.Types
         public string Summary { get; init; }
 
         [Hidden]
-        public string Title => ToString();
-
-        [Hidden]
         public string Language => Project.Language.CSSstyle;
-
-        //Marks awarded for completing the task with no hints taken
-        [MemberOrder(60)]
-        [Named("Marks")]
-        public int MaxMarks { get; init; }
 
         #region Description
         internal FileAttachment Description => DescriptionFile?.ViewContent;
@@ -152,10 +143,8 @@ namespace Model.Types
         [MemberOrder(220)]
         public bool NextTaskClearsFunctions { get; init; }
 
-        [RenderEagerly]
-        [TableView(false, nameof(Hint.Number), nameof(Hint.CostInMarks))]
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
-        public override string ToString() => $"{Project.Title} task {Number}  ({Project.Language.Name})";
+        public override string ToString() => $"{Project.Title} {Number} ({Project.Language.Name})";
     } 
 }

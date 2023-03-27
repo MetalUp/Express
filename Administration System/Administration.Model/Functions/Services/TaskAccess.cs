@@ -70,11 +70,11 @@ public static class TaskAccess
             var huv = new HintUserView(
                 taskId,
                 hintNumber,
-                task.Hints.Any() ? $"{task.Hints.Count} hints available" : "No hints for this task",
+                task.Hints.Any() ? $"{task.Hints.Count} hints available" : "No hints available for this task",
                 null,
                 0,
                 NextHintNo(task, 0),
-                CostOfNextHint(task, hintNumber,context),
+                0, //There is no longer any cost in marks to using hints
                 NextHintIsAlreadyUsed(task, 0, context)
                 );
             return (huv, context);
@@ -90,7 +90,7 @@ public static class TaskAccess
                 hint.ContentsAsString(),
                 hintNumber - 1,
                 NextHintNo(task, hintNumber),
-                CostOfNextHint(task, hintNumber, context),
+                0, //See above
                 NextHintIsAlreadyUsed(task, hintNumber, context)
             );
             return (huv, context2);
@@ -119,12 +119,7 @@ public static class TaskAccess
     internal static bool CanPaste(IContext context) => Users.UserRole(context) >= Role.Teacher;
          
     internal static string Title(Task task, IContext context) =>
-        task.Title +
-            (IsCompleted(task, context) ? $" COMPLETED Final mark " : " Marks Available ") +
-                $"{MarksAvailable(task, context)}/{task.MaxMarks}";
-
-    private static int MarksAvailable(Task task, IContext context) =>
-        task.MaxMarks - TotalMarksDeducted(task, context);
+        task.ToString() + (IsCompleted(task, context) ? $" COMPLETED" : "");
 
     internal static bool IsCompleted(Task task, IContext context) =>
        task.HasTests && Activities.ActivitiesOfCurrentUser(task.Id, context).FirstOrDefault()?.ActivityType == ActivityType.RunTestsSuccess;
@@ -150,12 +145,6 @@ public static class TaskAccess
         Activities.ActivitiesOfCurrentUser(task.Id, context).Select(a => a.HintUsed).ToList().DefaultIfEmpty(0).Max();
 
 
-    internal static int TotalMarksDeducted(Task task, IContext context)
-    {
-        var highest = HighestHintNoUsed(task, context);
-        return task.Hints.Where(h => h.Number <= highest).Select(h => h.CostInMarks).ToList().DefaultIfEmpty(0).Sum();
-    }
-
     internal static IContext UseHintNo(Task task, int hintNo, IContext context)
     {
         var asgn = Assignments.GetAssignmentForCurrentUser(task.Id, context);
@@ -177,12 +166,4 @@ public static class TaskAccess
         var next = NextHintNo(task, currentHintNo);
         return next > 0 && next <= HighestHintNoUsed(task, context);
     }
-
-    internal static int CostOfNextHint(Task task, int currentHintNo, IContext context)
-    {
-        if (!task.Hints.Any() || IsCompleted(task, context)) return 0;
-        int next = NextHintNo(task, currentHintNo);
-        return next == 0 ? 0 : task.GetHintNo(next).CostInMarks;
-    }
-
 }

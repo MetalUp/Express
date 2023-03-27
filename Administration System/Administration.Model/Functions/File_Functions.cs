@@ -91,7 +91,7 @@ namespace Model.Functions
 
         internal static string MIMEType (this File file) => file.ContentType switch
         {
-            ContentType.Description => "text/html",
+            ContentType.TaskDescription => "text/html",
             ContentType.Hint => "text/html",
             ContentType.RegExRules => "application/json",
             _ => "text/plain"

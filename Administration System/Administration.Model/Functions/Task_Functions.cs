@@ -33,13 +33,6 @@
         context.WithUpdated(task, new(task) { Summary = summary });
 
         [Edit]
-        public static IContext EditMaxMarks(
-            this Task task,
-            int maxMarks,
-            IContext context) =>
-                context.WithUpdated(task, new(task) { MaxMarks = maxMarks });
-
-        [Edit]
         public static IContext EditPreviousTask(
             this Task task,
             [Optionally] Task previousTask,
@@ -92,7 +85,7 @@
         public static string ValidateEditDescriptionFile(
               this Task task,
               File file) =>
-                    file == null ? null : file.ValidateContentType(ContentType.Description);
+                    file == null ? null : file.ValidateContentType(ContentType.TaskDescription);
 
         #endregion
 
@@ -103,11 +96,10 @@
         [MemberOrder(10)]
         public static IContext AddNewHint(
             this Task task,
-            int number,
-            [DefaultValue(1)] int costInMarks,
+            int hintNumber,
             IContext context)
         {
-            var name = $"{task.Project.Title} {task.Number}-{number}";
+            var name = $"{task.Project.Title} {task.Number}-{hintNumber}";
             var file = new File()
             {
                 Name = name,
@@ -118,8 +110,7 @@
             };
             var hint = new Hint
             {
-                Number = number,
-                CostInMarks = costInMarks,
+                Number = hintNumber,
                 File = file
             };
             return context.WithNew(file).WithNew(hint).WithUpdated(task, new Task(task) { Hints = task.Hints.Append(hint).ToList() });
