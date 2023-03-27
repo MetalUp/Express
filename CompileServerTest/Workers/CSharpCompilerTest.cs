@@ -132,7 +132,6 @@ public class CSharpCompilerTest {
         var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
-        var a = ImmutableList.Create<int>(1);
     }
 
     [TestMethod]

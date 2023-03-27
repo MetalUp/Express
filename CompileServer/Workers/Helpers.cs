@@ -55,6 +55,13 @@ public static class Helpers {
         return runResult;
     }
 
+    public static RunResult SetRunResults(RunResult runResult, StringWriter consoleOut, StringWriter consoleErr) {
+        runResult.stdout = consoleOut.ToString();
+        runResult.stderr = consoleErr.ToString();
+        runResult.outcome = string.IsNullOrEmpty(runResult.stderr) ? Outcome.Ok : Outcome.RunTimeError;
+        return runResult;
+    }
+
     private static RunResult SetRunResults(RunResult runResult, Exception e) {
         runResult.outcome = Outcome.RunTimeError;
         runResult.stderr = e.Message;
@@ -73,6 +80,7 @@ public static class Helpers {
 
     public static RunResult Execute(string exe, string args, RunSpec runSpec, RunResult runResult) {
         try {
+            Console.OutputEncoding = Encoding.UTF8;
             using var process = CreateProcess(exe, args, runSpec);
             if (!process.WaitForExit(runSpec.Options.ProcessTimeout)) {
                 process.Kill();
