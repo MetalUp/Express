@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Immutable;
+using System.Text;
 using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
@@ -98,6 +99,12 @@ public class CSharpCompilerTest {
             }
         }";
 
+    private const string CodeWithImmutable = @"
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Collections.Immutable;
+    using System.Linq;
+    var a = ImmutableList.Create<int>(1); System.Console.Write(a.First());";
+
     private readonly ILogger testLogger = NullLogger.Instance;
 
     [TestMethod]
@@ -125,6 +132,7 @@ public class CSharpCompilerTest {
         var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
+        var a = ImmutableList.Create<int>(1);
     }
 
     [TestMethod]
@@ -158,6 +166,15 @@ public class CSharpCompilerTest {
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "■");
     }
+
+    [TestMethod]
+    public void TestCompileAndRunImmutable() {
+        using var runSpec = CsharpRunSpec(CodeWithImmutable);
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok, "", "1");
+    }
+
 
     [TestMethod]
     public void TestCompileFailDivisionByZero() {

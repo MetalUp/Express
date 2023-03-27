@@ -17,6 +17,18 @@ public class VisualBasicCompilerTest {
             End Sub 
           End Module";
 
+    private const string CodeWithImmutable =
+        @"Imports Microsoft.VisualStudio.TestTools.UnitTesting
+          Imports System.Collections.Immutable
+          Imports System.Linq
+          Module Program
+          Sub Main(args As String())       
+            Dim a =  ImmutableList.Create(Of Integer)(1)
+            System.Console.Write(a.First())
+            End Sub 
+          End Module";
+
+
     private const string DivZero =
         @"Module Program
           Sub Main(args As String())       
@@ -115,6 +127,14 @@ public class VisualBasicCompilerTest {
     [TestMethod]
     public void TestCompileAndRunOk() {
         using var runSpec = VisualBasicRunSpec(SimpleCode);
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok, "", "1");
+    }
+
+    [TestMethod]
+    public void TestCompileAndRunImmutable() {
+        using var runSpec = VisualBasicRunSpec(CodeWithImmutable);
         var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");

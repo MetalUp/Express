@@ -26,6 +26,7 @@ public static class DotNetCompiler {
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Globalization").Location),
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections.Concurrent").Location),
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections.NonGeneric").Location),
+        MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections.Immutable").Location),
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.CSharp").Location),
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("Microsoft.VisualStudio.TestPlatform.TestFramework").Location)
     };

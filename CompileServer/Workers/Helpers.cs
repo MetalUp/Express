@@ -12,9 +12,7 @@ public static class Helpers {
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            WorkingDirectory = runSpec.TempDir,
-            StandardOutputEncoding = Encoding.UTF8,
-            StandardErrorEncoding = Encoding.UTF8,
+            WorkingDirectory = runSpec.TempDir
         };
 
         return Process.Start(start) ?? throw new NullReferenceException("Process failed to start");
@@ -53,13 +51,6 @@ public static class Helpers {
         using var stdErr = process.StandardError;
         runResult.stdout = stdOutput.ReadToEnd();
         runResult.stderr = stdErr.ReadToEnd();
-        runResult.outcome = string.IsNullOrEmpty(runResult.stderr) ? Outcome.Ok : Outcome.RunTimeError;
-        return runResult;
-    }
-
-    public static RunResult SetRunResults(RunResult runResult, StringWriter consoleOut, StringWriter consoleErr) {
-        runResult.stdout = consoleOut.ToString();
-        runResult.stderr = consoleErr.ToString();
         runResult.outcome = string.IsNullOrEmpty(runResult.stderr) ? Outcome.Ok : Outcome.RunTimeError;
         return runResult;
     }
