@@ -154,7 +154,7 @@ public static class Compile
 
     public static IList<LanguageViewModel> GetLanguagesAndVersions(IContext context)
     {
-        return context.Instances<Language>().Select(l => new LanguageViewModel(l.CSSstyle, l.Version)).ToList();
+        return context.Instances<Language>().Select(l => new LanguageViewModel(l.Version, l.Version)).ToList();
     }
 
     private static T ReadAs<T>(HttpResponseMessage response)
@@ -175,7 +175,7 @@ public static class Compile
             {
                 run_spec = new InnerSpec
                 {
-                    language_id = language.CSSstyle,
+                    language_id = language.Version,
                     sourcecode = code
                 },
                 compile_options = new CompileOptions
