@@ -139,7 +139,7 @@ public static class Compile
     {
         if (froms.SingleOrDefault(f => toUpdate.AlphaName == f.AlphaName) is { } from)
         {
-            toUpdate.Version = from.Version;
+            toUpdate.CompilerLamguageId = from.CompilerLamguageId;
         }
 
         return toUpdate;
@@ -154,7 +154,7 @@ public static class Compile
 
     public static IList<LanguageViewModel> GetLanguagesAndVersions(IContext context)
     {
-        return context.Instances<Language>().Select(l => new LanguageViewModel(l.Version, l.Version)).ToList();
+        return context.Instances<Language>().Select(l => new LanguageViewModel(l.CompilerLanguageId, l.CompilerLanguageId)).ToList();
     }
 
     private static T ReadAs<T>(HttpResponseMessage response)
@@ -175,7 +175,7 @@ public static class Compile
             {
                 run_spec = new InnerSpec
                 {
-                    language_id = language.Version,
+                    language_id = language.CompilerLanguageId,
                     sourcecode = code
                 },
                 compile_options = new CompileOptions

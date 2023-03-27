@@ -34,14 +34,9 @@
 
         [Edit]
         public static IContext EditVersion(this Language language, string version, IContext context) =>
-context.WithUpdated(language, new(language) { Version = version });
+context.WithUpdated(language, new(language) { CompilerLanguageId = version });
 
-
-        [Edit]
-        public static IContext EditFileExtension(this Language language, string fileExtension, IContext context) =>
-context.WithUpdated(language, new(language) { FileExtension = fileExtension });
-
-        [Edit]
+       [Edit]
         public static IContext EditCompileArguments(this Language language, string compileArguments, IContext context) =>
             context.WithUpdated(language, new(language) { CompileArguments = compileArguments });
 
