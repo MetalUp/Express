@@ -55,7 +55,7 @@ public static class Helpers {
         return runResult;
     }
 
-    private static RunResult SetRunResults(RunResult runResult, Exception e) {
+    public static RunResult SetRunResults(RunResult runResult, Exception e) {
         runResult.outcome = Outcome.RunTimeError;
         runResult.stderr = e.Message;
         return runResult;
