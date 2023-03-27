@@ -12,7 +12,8 @@ public static class Helpers {
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            WorkingDirectory = runSpec.TempDir
+            WorkingDirectory = runSpec.TempDir,
+            CreateNoWindow = true
         };
 
         return Process.Start(start) ?? throw new NullReferenceException("Process failed to start");
@@ -55,14 +56,7 @@ public static class Helpers {
         return runResult;
     }
 
-    public static RunResult SetRunResults(RunResult runResult, StringWriter consoleOut, StringWriter consoleErr) {
-        runResult.stdout = consoleOut.ToString();
-        runResult.stderr = consoleErr.ToString();
-        runResult.outcome = string.IsNullOrEmpty(runResult.stderr) ? Outcome.Ok : Outcome.RunTimeError;
-        return runResult;
-    }
-
-    private static RunResult SetRunResults(RunResult runResult, Exception e) {
+    public static RunResult SetRunResults(RunResult runResult, Exception e) {
         runResult.outcome = Outcome.RunTimeError;
         runResult.stderr = e.Message;
         return runResult;
@@ -80,6 +74,7 @@ public static class Helpers {
 
     public static RunResult Execute(string exe, string args, RunSpec runSpec, RunResult runResult) {
         try {
+           
             using var process = CreateProcess(exe, args, runSpec);
             if (!process.WaitForExit(runSpec.Options.ProcessTimeout)) {
                 process.Kill();

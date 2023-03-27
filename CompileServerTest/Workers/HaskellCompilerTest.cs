@@ -1,3 +1,4 @@
+using System.Globalization;
 using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
@@ -60,6 +61,11 @@ public class HaskellCompilerTest {
 
     [ClassInitialize]
     public static void Initialize(TestContext testContext) { }
+
+    [TestInitialize]
+    public void Initialize() {
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
+    }
 
     [TestMethod]
     public void TestVersion() {

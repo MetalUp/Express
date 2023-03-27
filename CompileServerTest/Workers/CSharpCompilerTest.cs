@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Text;
+﻿using System.Globalization;
 using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
@@ -107,6 +106,11 @@ public class CSharpCompilerTest {
 
     private readonly ILogger testLogger = NullLogger.Instance;
 
+    [TestInitialize]
+    public void Initialize() {
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
+    }
+
     [TestMethod]
     public void TestVersion() {
         var runSpec = CsharpRunSpec("");
@@ -173,7 +177,6 @@ public class CSharpCompilerTest {
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok, "", "1");
     }
-
 
     [TestMethod]
     public void TestCompileFailDivisionByZero() {
