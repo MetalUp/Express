@@ -1,3 +1,4 @@
+using System.Globalization;
 using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
@@ -71,7 +72,9 @@ if __name__ == ""__main__"":
     public static void Initialize(TestContext testContext) { }
 
     [TestInitialize]
-    public void StartTest() { }
+    public void Initialize() {
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
+    }
 
     [TestMethod]
     public void TestVersion() {

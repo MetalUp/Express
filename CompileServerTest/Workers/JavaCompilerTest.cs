@@ -1,3 +1,4 @@
+using System.Globalization;
 using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
@@ -41,6 +42,11 @@ public class JavaCompilerTest {
         if (Directory.Exists(appveyorDir)) {
             JavaVersion = "17.0.1";
         }
+    }
+
+    [TestInitialize]
+    public void Initialize() {
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
     }
 
     [TestMethod]

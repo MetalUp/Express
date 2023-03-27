@@ -1,3 +1,4 @@
+using System.Globalization;
 using CompileServer.Models;
 using CompileServer.Workers;
 using Microsoft.Extensions.Logging;
@@ -27,7 +28,6 @@ public class VisualBasicCompilerTest {
             System.Console.Write(a.First())
             End Sub 
           End Module";
-
 
     private const string DivZero =
         @"Module Program
@@ -97,6 +97,11 @@ public class VisualBasicCompilerTest {
         End Namespace";
 
     private readonly ILogger testLogger = NullLogger.Instance;
+
+    [TestInitialize]
+    public void Initialize() {
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
+    }
 
     [TestMethod]
     public void TestVersion() {

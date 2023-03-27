@@ -143,7 +143,7 @@ public static class Handler {
             "java" => JavaCompile(runSpec),
             "csharp" or "vb" => DotNetCompile(runSpec),
             "haskell" => HaskellCompile(runSpec),
-            _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall }, runSpec))
+            _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall,stderr = $"Unrecognized language_id: {runSpec.language_id}" }, runSpec))
         };
 
     public static Task<JsonResult> CompileAndRun(RunSpec runSpec, ILogger logger) =>
@@ -152,7 +152,7 @@ public static class Handler {
             "java" => JavaCompileAndRun(runSpec),
             "csharp" or "vb" => DotNetCompileAndRun(runSpec),
             "haskell" => HaskellCompileAndRun(runSpec),
-            _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall }, runSpec))
+            _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall,stderr = $"Unrecognized language_id: {runSpec.language_id}" }, runSpec))
         };
 
     public static Task<JsonResult> CompileAndTest(RunSpec runSpec) =>
@@ -160,7 +160,7 @@ public static class Handler {
             "python" => PythonCompileAndTest(runSpec),
             "csharp" or "vb" => DotNetCompileAndTest(runSpec),
             "haskell" => HaskellCompileAndTest(runSpec),
-            _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall }, runSpec))
+            _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall, stderr = $"Unrecognized language_id: {runSpec.language_id}"}, runSpec))
         };
 
     public static string[] GetNameAndVersion(RunSpec runSpec) =>

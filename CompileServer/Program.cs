@@ -1,14 +1,18 @@
+using System.Globalization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-IEnumerable<string> ValidAudiences(ConfigurationManager configuration) {
+static IEnumerable<string> ValidAudiences(ConfigurationManager configuration) {
     var audiences = Environment.GetEnvironmentVariable("ValidAudiences") ?? configuration["ValidAudiences"] ?? "";
     return audiences.Split(',');
 }
+
+builder.Services.AddLocalization();
 
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -25,6 +29,15 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+const string enGb = "en-GB";
+app.UseRequestLocalization(new RequestLocalizationOptions {
+    DefaultRequestCulture = new RequestCulture(enGb),
+    SupportedCultures = new[] { new CultureInfo(enGb) },
+    FallBackToParentCultures = false
+});
+CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CreateSpecificCulture(enGb);
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
