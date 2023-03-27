@@ -30,7 +30,7 @@ namespace Model.Functions
                  this File file,
                  [Optionally] Language? language,
                  IContext context) =>
-                     context.WithUpdated(file, new(file) { Language = language});
+                     context.WithUpdated(file, new(file) { Language = language });
 
         [Edit]
         public static IContext EditContentType(
@@ -89,7 +89,7 @@ namespace Model.Functions
         internal static string ValidateContentType(this File file, ContentType type) =>
             file.ContentType == type ? null : $"File must have Content Type {type}";
 
-        internal static string MIMEType (this File file) => file.ContentType switch
+        internal static string MIMEType(this File file) => file.ContentType switch
         {
             ContentType.TaskDescription => "text/html",
             ContentType.Hint => "text/html",
@@ -97,6 +97,12 @@ namespace Model.Functions
             _ => "text/plain"
         };
 
+        #region UniqueRef
+        public static IContext AddUniqueRef(this File file, IContext context) =>
+            context.WithUpdated(file, new File(file) { UniqueRef = context.NewGuid() });
+
+        public static bool HideAddUniqueRef(this File file) => file.UniqueRef != null;
+        #endregion
 
     }
 

@@ -50,6 +50,9 @@ namespace Model.Types
         [MemberOrder(70)]
         public virtual User Author { get; init; }
 
+        [MemberOrder(80)] //Used by build, across databases, and independent of (auto-generated) Id
+        public Guid? UniqueRef { get; init; }
+
         public override string ToString() => $"{Name} {ContentType} {Language}";
 
     }

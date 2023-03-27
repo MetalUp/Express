@@ -62,5 +62,11 @@ namespace Model.Functions.Menus
             };
             return (f, context.WithNew(f));
         }
+
+        [MemberOrder(70)]
+        [RenderEagerly]
+        [TableView(false, nameof(File.Language), nameof(File.ContentType), nameof(File.Name)) ]
+        public static IQueryable<File> FilesWithUniqueRef(IContext context) =>
+            context.Instances<File>().Where(f => f.UniqueRef != null).OrderBy(f => f.LanguageId).ThenBy(f => f.ContentType);
     }
 }

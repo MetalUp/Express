@@ -69,7 +69,7 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                Role.Author => true,
+                Role.Author => memberName != nameof(Files.FilesWithUniqueRef) ,
                 _ => false
             };
 
