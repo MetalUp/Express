@@ -1,0 +1,51 @@
+using System.Text.RegularExpressions;
+
+namespace Regex_Rules
+{
+    [TestClass]
+    public class Python_RegExRules_FF
+    {
+       public const string multipleFunctions = $@"^(?:def\s*[^\n\r]*:\s*return.*[\n\s]*)*$";
+
+        [TestMethod]
+        public void TestMultipleFunctions()
+        {
+            AssertMultiLineMatch("def foo(a: int) -> int: return a*3", multipleFunctions);
+            AssertMultiLineMatch("def foo(a: int) -> int: return a*3\n", multipleFunctions);
+            AssertMultiLineMatch("def foo(a: int) -> int: return a*3\ndef bar(a: int) -> int: return a*3\n", multipleFunctions);
+            AssertMultiLineMatch("def foo(a: int) -> int: return a*3\ndef bar(a: int) -> int: return a*3", multipleFunctions);
+
+            AssertMultiLineDoesNotMatch("def foo(a: int) -> int: return a*3\nxxx", multipleFunctions);
+        }
+
+        #region helpers
+        private void AssertWholeStringMatches(string input, string pattern)
+        {
+            var whole = $"^{pattern}$";
+            var match = Regex.Match(input, whole);
+            Assert.IsTrue(match.Success);
+            Assert.AreEqual(input, match.Value);
+        }
+
+        private void AssertMultiLineMatch(string input, string pattern)
+        {
+            var match = Regex.Match(input, pattern, RegexOptions.Multiline);
+            Assert.IsTrue(match.Success);
+            Assert.AreEqual(input, match.Value);
+        }
+
+        private void AssertWholeStringDoesNotMatch(string input, string pattern)
+        {
+            var whole = $"^{pattern}$";
+            Assert.IsFalse(Regex.Match(input, whole).Success);
+        }
+
+        private void AssertMultiLineDoesNotMatch(string input, string pattern)
+        {
+            //var whole = $"^{pattern}$";
+            var match = Regex.Match(input, pattern, RegexOptions.Multiline);
+            Assert.AreNotEqual(input, match.Value);
+        }
+        #endregion
+    }
+}

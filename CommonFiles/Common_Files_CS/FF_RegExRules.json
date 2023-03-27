@@ -1,0 +1,64 @@
+{
+  "Messages": {
+    "NotPermitted": "Use of '{1}' is not permitted"
+  },
+  "ServerResponseMessageFilters": {
+    "cmpinfo": "CS.*",
+    "stderr": "\\w+Exception",
+    "tests": [
+      [ ".*Passed!.*", "All Tests Passed" ],
+      [ ".*xxx(.*)xxx.*", "{1}" ],
+      [ "(.*Exception.*)", "Your code generated this error: {1}" ]
+    ]
+  },
+  "CodeMustMatch": {
+    "both": [],
+    "expressions": [],
+    "functions": [
+      [
+        "^[\\n\\s]*(?:static.*=>(?:[^;{}]|\\n)*;\\s*)*$",
+        "All functions must be: static <ReturnType> <NameStartingInUpperCase>(<parametersStartingLowerCase>) => <expression>;"
+      ]
+    ]
+  },
+  "CodeMustNotContain": {
+    "both": [
+      [
+        ".*(?:^|\\s+)(return|var|void|using|public|private|protected|class|abstract|readOnly)\\s.*",
+        "Use of the keyword '{1}' is not permitted"
+      ],
+      [
+        "(Console|System)\\.",
+        "Messages.NotPermitted"
+      ],
+      [
+        "\\w*[^(=|>|<)]=[^(=|>)]\\w*",
+        "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
+      ],
+      [
+        "\\W(ArrayList)\\W",
+        "Use of ArrayList is not permitted. Use a typed list such as List<int>"
+      ],
+      [
+        "\\.(Add|AddRange|Clear|RemoveAll|RemoveAt|RemoveRange)\\s*\\(",
+        "Use of '{1}', or any other method that mutates a List is not permitted"
+      ]
+    ],
+    "expressions": [
+      [
+        "(;)",
+        "Messages.NotPermitted"
+      ]
+    ],
+    "functions": [
+      [
+        "\\s+DateTime\\.(Today|Now)",
+        "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter"
+      ],
+      [
+        "=>\\s*{",
+        "Function implementation may not start with curly brace '{'"
+      ]
+    ]
+  }
+}

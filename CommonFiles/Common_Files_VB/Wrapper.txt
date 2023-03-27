@@ -1,0 +1,28 @@
+﻿Imports MetalUp.Express.StudentCode
+Imports MetalUp.Express.HiddenCode
+Imports MetalUp.Express.Helpers
+Imports Microsoft.VisualStudio.TestTools.UnitTesting
+Imports System
+Imports System.Collections
+Imports System.Collections.Generic
+Imports System.Linq
+
+Namespace MetalUp.Express
+
+    Module Program
+        Public Sub Main()
+            Console.WriteLine(Display(<Expression>))
+        End Sub
+    End Module
+
+    Module StudentCode
+       <StudentCode>
+    End Module
+
+    <HiddenCode>
+
+    <Helpers>
+
+    <Tests>
+
+End Namespace
