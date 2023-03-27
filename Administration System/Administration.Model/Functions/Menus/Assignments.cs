@@ -3,17 +3,20 @@
     public static class Assignments
     {
         [MemberOrder(10)]
+        [RenderEagerly]
         [TableView(false, nameof(Assignment.Project), nameof(Assignment.AssignedTo), nameof(Assignment.DueBy), nameof(Assignment.Status))]
         public static IQueryable<Assignment> AllAssignments(IContext context) => context.Instances<Assignment>();
 
         [MemberOrder(20)]
         [PageSize(20)]
+        [RenderEagerly]
         [TableView(false, nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.Project))]
         public static IQueryable<Assignment> MyCurrentAssignments(IContext context) =>
             AssignmentsTo(Users.Me(context), context).Where(a => a.Status == AssignmentStatus.PendingStart || a.Status == AssignmentStatus.Started).OrderBy(a => a.DueBy);
 
         [MemberOrder(25)]
         [PageSize(20)]
+        [RenderEagerly]
         [TableView(false, nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.Project))]
         public static IQueryable<Assignment> MyPastAssignments(IContext context) =>
     AssignmentsTo(Users.Me(context), context).Where(a => a.Status == AssignmentStatus.Completed || a.Status == AssignmentStatus.Terminated).OrderBy(a => a.DueBy);
@@ -26,6 +29,7 @@
 
 
         [MemberOrder(30)]
+        [RenderEagerly]
         [TableView(false,  nameof(Assignment.DueBy), nameof(Assignment.Status), nameof(Assignment.AssignedTo), nameof(Assignment.Project))]
         public static IQueryable<Assignment> AssignmentsSetByMe( IContext context)
         {
@@ -35,6 +39,7 @@
 
 
         [MemberOrder(40)]
+        [RenderEagerly]
         [TableView(false, nameof(Assignment.AssignedTo), nameof(Assignment.Project), nameof(Assignment.DueBy), nameof(Assignment.Status))]
         public static IQueryable<Assignment> OverdueAssignmentsSetByMe(IContext context)
         {
@@ -45,6 +50,7 @@
 
         [MemberOrder(50)]
         [PageSize(20)]
+        [RenderEagerly]
         [TableView(false, nameof(Assignment.Project), nameof(Assignment.AssignedTo), nameof(Assignment.DueBy), nameof(Assignment.Status))]
         public static IQueryable<Assignment> FindAssignmentsSetByMe(
              AssignmentStatus status,
