@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>disable</Nullable>
+    <UserSecretsId>cf1c2f50-28a5-4071-afc4-9552c48df213</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="AdminDbContextFactory.cs" />
     <Compile Remove="Types\Teacher.cs" />
   </ItemGroup>
 
@@ -43,6 +43,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="NakedFramework.ProgrammingModel" Version="14.0.0" />
     <PackageReference Include="NakedFunctions.ProgrammingModel" Version="2.0.0" />
   </ItemGroup>
