@@ -10,10 +10,14 @@ public static class Helpers {
             FileName = file,
             Arguments = args,
             UseShellExecute = false,
+            RedirectStandardInput = true,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
+            StandardInputEncoding = Encoding.Default,
+            StandardOutputEncoding = Encoding.Default,
             WorkingDirectory = runSpec.TempDir,
-            CreateNoWindow = true
+            CreateNoWindow = false,
+            WindowStyle = ProcessWindowStyle.Hidden
         };
 
         return Process.Start(start) ?? throw new NullReferenceException("Process failed to start");
@@ -74,7 +78,7 @@ public static class Helpers {
 
     public static RunResult Execute(string exe, string args, RunSpec runSpec, RunResult runResult) {
         try {
-           
+            Console.OutputEncoding = Encoding.UTF8;
             using var process = CreateProcess(exe, args, runSpec);
             if (!process.WaitForExit(runSpec.Options.ProcessTimeout)) {
                 process.Kill();
