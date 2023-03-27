@@ -12,7 +12,8 @@ public static class Helpers {
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-            WorkingDirectory = runSpec.TempDir
+            WorkingDirectory = runSpec.TempDir,
+            CreateNoWindow = true
         };
 
         return Process.Start(start) ?? throw new NullReferenceException("Process failed to start");
@@ -73,6 +74,7 @@ public static class Helpers {
 
     public static RunResult Execute(string exe, string args, RunSpec runSpec, RunResult runResult) {
         try {
+           
             using var process = CreateProcess(exe, args, runSpec);
             if (!process.WaitForExit(runSpec.Options.ProcessTimeout)) {
                 process.Kill();
