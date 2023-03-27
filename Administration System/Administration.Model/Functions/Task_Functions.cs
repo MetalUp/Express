@@ -209,7 +209,7 @@
         public static string ValidateAddTaskSpecificWrapperCode(
     this Task task,
         File file) =>
-        file.ValidateContentType(ContentType.WrapperCode);
+        file.ValidateContentType(ContentType.Wrapper);
 
         public static bool HideAddTaskSpecificWrapperCode(this Task task) => task.WrapperFileId != null;
 

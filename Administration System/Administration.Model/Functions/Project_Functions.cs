@@ -199,7 +199,7 @@ namespace Model.Functions
         public static IEnumerable<File> Choices1AddCustomWrapperCode(this Project proj, IContext context)
         {
             string langId = proj.LanguageId;
-            return context.Instances<File>().Where(f => f.ContentType == ContentType.WrapperCode && f.LanguageId == langId);
+            return context.Instances<File>().Where(f => f.ContentType == ContentType.Wrapper && f.LanguageId == langId);
         }
 
         public static bool HideAddCustomWrapperCode(this Project proj) => proj.WrapperFileId != null;
