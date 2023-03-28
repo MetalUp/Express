@@ -17,6 +17,7 @@ namespace Model.Types
             Content = cloneFrom.Content;
             AuthorId = cloneFrom.AuthorId;
             Author = cloneFrom.Author;
+            UniqueRef = cloneFrom.UniqueRef;
         }
 
         [Hidden]
