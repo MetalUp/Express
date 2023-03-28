@@ -84,7 +84,7 @@ public static class TaskAccess
             var context2 = IsCompleted(task, context) ? context : UseHintNo(task, hintNumber, context);
             var hint = task.GetHintNo(hintNumber);
             var huv = new HintUserView(
-                taskId, 
+                taskId,
                 hintNumber,
                 hint.ToString(),
                 hint.ContentsAsString(),
@@ -99,25 +99,39 @@ public static class TaskAccess
 
     public static TaskUserView GetTask(int taskId, IContext context)
     {
-        var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
-        if (asgn == null) return null;
         var task = Tasks.GetTask(taskId, context);
-        return new TaskUserView(
-           task,
-           Title(task, context),
-           !task.HasTests() || IsCompleted(task, context),
-           task.HasTests(),
-           asgn.Id,
-           IsStarted(task.NextTaskId, context),
-           CanPaste(context),
-           ClientRunTestCodeIfAny(task)
-           );
+        var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
+        if (task == null || asgn == null)
+        {
+            return new TaskUserView(
+                null,
+                $"TASK {taskId} DOES NOT EXIST, OR IS NOT ASSIGNED TO YOU",
+                false,
+                false,
+                0,
+                false,
+                false,
+                null);
+        }
+        else
+        {
+            return new TaskUserView(
+            task,
+            Title(task, context),
+            !task.HasTests() || IsCompleted(task, context),
+            task.HasTests(),
+            asgn.Id,
+            IsStarted(task.NextTaskId, context),
+            CanPaste(context),
+            ClientRunTestCodeIfAny(task)
+            );
+        }
     }
 
     private static string ClientRunTestCodeIfAny(Task task) => task.TestsRunOnClient ? task.TestsFile.ContentsAsString() : null;
 
     internal static bool CanPaste(IContext context) => Users.UserRole(context) >= Role.Teacher;
-         
+
     internal static string Title(Task task, IContext context) =>
         task.ToString() + (IsCompleted(task, context) ? $" COMPLETED" : "");
 
@@ -144,7 +158,6 @@ public static class TaskAccess
     internal static int HighestHintNoUsed(Task task, IContext context) =>
         Activities.ActivitiesOfCurrentUser(task.Id, context).Select(a => a.HintUsed).ToList().DefaultIfEmpty(0).Max();
 
-
     internal static IContext UseHintNo(Task task, int hintNo, IContext context)
     {
         var asgn = Assignments.GetAssignmentForCurrentUser(task.Id, context);
@@ -154,7 +167,7 @@ public static class TaskAccess
         }
         else
         {
-            return Activities.RecordActivity(task.Id, ActivityType.HintUsed,  null, null, hintNo, context); 
+            return Activities.RecordActivity(task.Id, ActivityType.HintUsed, null, null, hintNo, context);
         }
     }
 

@@ -25,11 +25,11 @@ public class TaskUserView
 
     public string Title { get; init; }
 
-    public string Language => Task.Language;
+    public string Language => Task?.Language;
 
-    public string Description => Task.DescriptionFile?.ContentsAsString();
+    public string Description => Task?.DescriptionFile?.ContentsAsString();
 
-    public string RegExRules => Task.RegExRules;
+    public string RegExRules => Task?.RegExRules;
 
     public bool PasteExpression { get; init; }
 
@@ -37,9 +37,9 @@ public class TaskUserView
 
     public bool Completed { get; init; }
 
-    public int? PreviousTaskId => Task.PreviousTaskId;
+    public int? PreviousTaskId => Task?.PreviousTaskId;
 
-    public int? NextTaskId => Task.NextTaskId;
+    public int? NextTaskId => Task?.NextTaskId;
 
     public bool NextTaskIsStarted { get; init; }
 
