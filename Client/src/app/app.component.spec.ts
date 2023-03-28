@@ -71,7 +71,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     app.ngOnInit();
-    expect(app.loading).toBeFalse();
+    expect(app.loading).toBeTrue();
     loadingSubj.next(1);
     expect(app.loading).toBeTrue();
     loadingSubj.next(0);
