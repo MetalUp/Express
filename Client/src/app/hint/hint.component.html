@@ -4,7 +4,6 @@
             <button title="{{newHintTooltip}}" [disabled]="!canGetNextHint()" (click)="getNextHint()">Next Hint</button>
             <button title="{{nextHintTooltip}}" [disabled]="!canViewNextHint()" (click)="viewNextHint()">></button>
             <button title="{{previousHintTooltip}}" [disabled]="!canViewPreviousHint()" (click)="viewPreviousHint()"><</button>
-            <div *ngIf="canGetNextHint()" class="cost">{{cost}}</div>
         </div>
     </div>
     <div class="one-column pane-body" [ngClass]="paneSize">
