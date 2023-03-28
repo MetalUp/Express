@@ -29,3 +29,10 @@ button:hover {
     background-color: #e37422;
     padding: 5px;
 }
+
+
+.status-message {
+    color: var(--default-text-color);
+    font-weight: var(--font-weight-1);
+    font-size: var(--font-size-3);
+}
