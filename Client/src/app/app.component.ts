@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfigService, RepLoaderService } from '@nakedobjects/services';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,7 @@ import { RegistrationService } from './services/registration.service';
     styleUrls: ['app.component.css']
 })
 
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     constructor(
         public readonly registeredService: RegistrationService,
         private readonly router: Router,
@@ -56,6 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.sub = this.repLoader.loadingCount$.subscribe(t => {
+
             this.loading = t > 0;
         })
     }
@@ -64,5 +65,12 @@ export class AppComponent implements OnInit, OnDestroy {
         if (this.sub) {
             this.sub.unsubscribe();
         }
+    }
+
+    @ViewChild('viewArea') 
+    viewArea?: ElementRef;
+
+    ngAfterViewInit() {
+        this.viewArea!.nativeElement.closest('body').className = "not-in-progress";
     }
 }
