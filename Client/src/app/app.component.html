@@ -3,7 +3,7 @@
 </ng-container>
 <ng-container *ngIf="config.loadingStatus === 1">
   <ng-container>
-    <div class="view-area">
+    <div #viewArea class="view-area">
       <div></div>
       <div [ngClass]="classes">
         <router-outlet></router-outlet>

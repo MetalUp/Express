@@ -40,24 +40,16 @@ export class HintComponent implements OnInit, OnDestroy {
     return this.currentHint.Title || "Hint";
   }
 
-  get cost() {
-    const cost = this.currentHint.CostOfNextHint;
-    const marks = cost === 1 ? "mark" : "marks"; 
-
-    return `(Next Hint will cost ${cost} ${marks})`;
-  }
-
-
   get nextHintTooltip() {
-    return  this.canViewNextHint() ?  nextHintEnabledTooltip : nextHintDisabledTooltip;
+    return this.canViewNextHint() ? nextHintEnabledTooltip : nextHintDisabledTooltip;
   }
 
   get previousHintTooltip() {
-    return  this.canViewPreviousHint() ?  previousHintEnabledTooltip : previousHintDisabledTooltip;
+    return this.canViewPreviousHint() ? previousHintEnabledTooltip : previousHintDisabledTooltip;
   }
 
   get newHintTooltip() {
-    return  this.canGetNextHint() ?  newHintEnabledTooltip : newHintDisabledTooltip;
+    return this.canGetNextHint() ? newHintEnabledTooltip : newHintDisabledTooltip;
   }
 
   canGetNextHint() {
@@ -85,21 +77,15 @@ export class HintComponent implements OnInit, OnDestroy {
   }
 
   getHint(hintNo: number, newHint: boolean) {
-    
+
     this.taskService.loadHint(this.currentTask.Id, hintNo).then(h => {
-      if (h.CostOfNextHint >= 0){
-        this.currentHint = h;
-        if (newHint) {
-          this.taskService.loadTask(this.currentTask.Id);
-        }
-      }
-      else {
-        console.log(`error getting hint ${hintNo} for task ${this.currentTask.Id}`);
+      this.currentHint = h;
+      if (newHint) {
+        this.taskService.loadTask(this.currentTask.Id);
       }
     });
   }
 
-  
   get paneSize() {
     return "pane-size-medium";
   }
@@ -107,9 +93,9 @@ export class HintComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(task => {
       const currentHintNo = this.currentHint.HintNo;
-      const newTask = this.currentTask.Id !== task.Id; 
+      const newTask = this.currentTask.Id !== task.Id;
       this.currentTask = task;
-      this.getHint(newTask ?  0 : currentHintNo, false);
+      this.getHint(newTask ? 0 : currentHintNo, false);
     })
   }
 

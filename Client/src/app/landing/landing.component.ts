@@ -47,7 +47,6 @@ export class LandingComponent implements OnInit, OnDestroy {
     });
 
     this.sub2 = this.registeredService.isLoggedOn().subscribe(loggedOn => {
-      this.pendingStatus = false;
       if (loggedOn) {
         const code = this.invitationCode;
         this.clearCode();

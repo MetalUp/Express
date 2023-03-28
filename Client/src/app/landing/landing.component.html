@@ -1,9 +1,10 @@
+
+
 <div class="metalup">
     <h1>Welcome to MetalUp Express</h1>
     <ng-container *ngIf="pendingStatus">
-        <p>Checking user status</p>
+        <p class="status-message" >Checking user status</p>
     </ng-container>
-
     <ng-container *ngIf="!pendingStatus">
         <ng-container *ngIf="(userLoggedOn | async) === false || (registeredService.registered$ | async) === false">
 

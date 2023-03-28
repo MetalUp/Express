@@ -35,7 +35,12 @@ nof-object {
 }
 
 .startup-message {
+    margin-left: 20vw;
+    margin-top: 9vh;
     color: var(--default-text-color);
+    font-family: var(--font-text-family);
+    font-weight: var(--font-weight-1);
+    font-size: var(--font-size-3);
 }
 
 @font-face {
