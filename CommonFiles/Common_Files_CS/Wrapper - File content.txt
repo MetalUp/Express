@@ -1,10 +1,10 @@
-﻿using static MetalUp.Express.Wrapper.HiddenCode;
-using static MetalUp.Express.Wrapper.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using static System.Math;
 using System.Text;
 
 namespace MetalUp.Express
@@ -13,6 +13,7 @@ namespace MetalUp.Express
     {
         static void Main()
         {
+            Console.OutputEncoding = Encoding.UTF8;
             System.Console.WriteLine(Display(<Expression>));
         }
 

@@ -1,21 +1,17 @@
-Imports System.Collections.Immutable
-Imports System.Text
+﻿Public Function Display(ByVal obj As Object) As String
+    If obj Is Nothing Then Return Nothing
+    If TypeOf obj Is String Then Return $"{obj}"
+    If TypeOf obj Is Boolean Then Return If(CType(obj, Boolean), "true", "false")
 
-Public Module Helpers
-    Public Function Display(ByVal obj As Object) As String
-        If obj Is Nothing Then Return Nothing
-        If TypeOf obj Is String Then Return $"{obj}"
-        If TypeOf obj Is Boolean Then Return If(CType(obj, Boolean), "true", "false")
+    If TypeOf obj Is IEnumerable Then
+        Dim disp = (CType(obj, IEnumerable)).Cast(Of Object)().Select(Function(o) Display(o))
+        Return $"{{{String.Join(","c, disp)}}}"
+    End If
 
-        If TypeOf obj Is IEnumerable Then
-            Dim disp = (CType(obj, IEnumerable)).Cast(Of Object)().Select(Function(o) Display(o))
-            Return $"{{{String.Join(","c, disp)}}}"
-        End If
+    Return obj.ToString()
+End Function
 
-        Return obj.ToString()
-    End Function
-
-    Public Function ArgString(ParamArray arguments As Object()) As String
+Public Function ArgString(ParamArray arguments As Object()) As String
         Return arguments.Aggregate("", Function(s, a) s & Display(a) & ", ").TrimEnd(" "c, ","c)
     End Function
 
@@ -57,9 +53,7 @@ Public Module Helpers
         Return Convert.ToInt32(Encoding.Default.GetString(Encoding.ASCII.GetBytes(input).Where(Function(b) b > 47 AndAlso b < 58).ToArray()))
     End Function
 
-    Private Function IsMatch(ByVal expected As String, ByVal actual As String) As Boolean
-        Return actual IsNot Nothing AndAlso (expected = actual OrElse expected.Contains("...") AndAlso actual.Contains(expected.Replace("...", "")))
-    End Function
-
-End Module
+Private Function IsMatch(ByVal expected As String, ByVal actual As String) As Boolean
+    Return actual IsNot Nothing AndAlso (expected = actual OrElse expected.Contains("...") AndAlso actual.Contains(expected.Replace("...", "")))
+End Function
 

@@ -1,7 +1,4 @@
-﻿
-public static class Helpers
-{
-    public static string Display(object obj)
+﻿    public static string Display(object obj)
     {
         if (obj == null) return null;
         if (obj is string) return $"{obj}";
@@ -48,5 +45,4 @@ public static class Helpers
     private static int AsInt(string input) =>
          Convert.ToInt32(Encoding.Default.GetString(Encoding.ASCII.GetBytes(input).Where(b => b > 47 && b < 58).ToArray()));
 
-}
 

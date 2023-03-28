@@ -1,27 +1,27 @@
-﻿Imports MetalUp.Express.StudentCode
-Imports MetalUp.Express.HiddenCode
-Imports MetalUp.Express.Helpers
-Imports Microsoft.VisualStudio.TestTools.UnitTesting
+﻿Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports System
 Imports System.Collections
 Imports System.Collections.Generic
+Imports System.Collections.Immutable
 Imports System.Linq
+Imports System.Math
+Imports System.Text
 
 Namespace MetalUp.Express
 
     Module Program
         Public Sub Main()
+            Console.OutputEncoding = Encoding.UTF8
             Console.WriteLine(Display(<Expression>))
         End Sub
-    End Module
 
-    Module StudentCode
        <StudentCode>
+
+       <HiddenCode>
+
+       <Helpers>
+
     End Module
-
-    <HiddenCode>
-
-    <Helpers>
 
     <Tests>
 
