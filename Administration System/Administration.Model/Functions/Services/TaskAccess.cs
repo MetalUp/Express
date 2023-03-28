@@ -105,7 +105,7 @@ public static class TaskAccess
         {
             return new TaskUserView(
                 null,
-                $"TASK {taskId} DOES NOT EXIST, OR IS NOT ASSIGNED TO YOU",
+                $"{taskId} IS NOT AVAILABLE TO YOU",
                 false,
                 false,
                 0,
