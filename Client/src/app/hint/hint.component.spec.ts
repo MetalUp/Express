@@ -19,7 +19,6 @@ describe('HintComponent', () => {
   hint0.HintNo = 0;
   hint0.Title = 'hint0 title';
   hint0.Contents = '';
-  hint0.CostOfNextHint = 1;
   hint0.NextHintAlreadyUsed = false;
   hint0.NextHintNo = 1;
   hint0.PreviousHintNo = 0;
@@ -28,7 +27,6 @@ describe('HintComponent', () => {
   hint0bis.HintNo = 0;
   hint0bis.Title = 'hint0 title';
   hint0bis.Contents = '';
-  hint0bis.CostOfNextHint = 0;
   hint0bis.NextHintAlreadyUsed = true;
   hint0bis.NextHintNo = 0;
   hint0bis.PreviousHintNo = 0;
@@ -39,7 +37,6 @@ describe('HintComponent', () => {
   hint1.HintNo = 1;
   hint1.Title = 'hint1 title';
   hint1.Contents = 'hint1 contents';
-  hint1.CostOfNextHint = 1;
   hint1.NextHintAlreadyUsed = false;
   hint1.NextHintNo = 2;
   hint1.PreviousHintNo = 0;
@@ -48,7 +45,6 @@ describe('HintComponent', () => {
   hint1bis.HintNo = 1;
   hint1bis.Title = 'hint1 title';
   hint1bis.Contents = 'hint1 contents';
-  hint1bis.CostOfNextHint = 0;
   hint1bis.NextHintAlreadyUsed = true;
   hint1bis.NextHintNo = 2;
   hint1bis.PreviousHintNo = 0;
@@ -57,7 +53,6 @@ describe('HintComponent', () => {
   hint2.HintNo = 2;
   hint2.Title = 'hint2 title';
   hint2.Contents = 'hint2 contents';
-  hint2.CostOfNextHint = 0;
   hint2.NextHintAlreadyUsed = true;
   hint2.NextHintNo = 0;
   hint2.PreviousHintNo = 1;
@@ -187,13 +182,12 @@ describe('HintComponent', () => {
     expect(taskServiceSpy.loadHint).toHaveBeenCalledWith(66, 0);
     tick();
     
-    expect(component.cost).toEqual("(Next Hint will cost 1 mark)");
 
     taskServiceSpy.loadHint.and.returnValue(Promise.resolve(hint1bis));
     component.getNextHint(); 
     tick();
 
-    expect(component.cost).toEqual("(Next Hint will cost 0 marks)");
+    
   }));
 
   it('should handle error', fakeAsync(() => {

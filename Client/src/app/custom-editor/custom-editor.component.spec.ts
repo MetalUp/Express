@@ -28,7 +28,7 @@ describe('CustomEditorComponent', () => {
 
   compileServiceSpy = jasmine.createSpyObj('CompileService', [], {languages$ : languagesSub});
 
-  locationSpy = jasmine.createSpyObj('Location', ['back']);
+  locationSpy = jasmine.createSpyObj('Location', ['back', 'path']);
 
   beforeEach(async () => {
 
@@ -86,6 +86,18 @@ describe('CustomEditorComponent', () => {
   
     component.editContent = "updated content";
     component.onSave();
+
+    expect(fileServiceSpy.saveFile).toHaveBeenCalledWith('file_id', 'updated content');
+    
+  }));
+
+
+  it('should save and close the file content and return if ok', fakeAsync(() => {
+    fileServiceSpy.saveFile.and.returnValue(Promise.resolve(true));
+    mapSub.next({ get: () => 'file_id' } as unknown as ParamMap);
+  
+    component.editContent = "updated content";
+    component.onSaveAndClose();
 
     expect(fileServiceSpy.saveFile).toHaveBeenCalledWith('file_id', 'updated content');
     tick();
