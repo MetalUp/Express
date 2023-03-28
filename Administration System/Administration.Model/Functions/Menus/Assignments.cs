@@ -92,7 +92,9 @@
 
         internal static Assignment GetAssignmentForCurrentUser(int taskId, IContext context)
         {
-            int projectId = Tasks.GetTask(taskId, context).ProjectId.Value;
+            var task = Tasks.GetTask(taskId, context);
+            if (task == null) return null;
+            int projectId =  task.ProjectId.Value;
             return AssignmentsForCurrentUser(projectId, context).OrderByDescending(a => a.DueBy).FirstOrDefault();
         }
 
