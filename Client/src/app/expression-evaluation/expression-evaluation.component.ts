@@ -35,6 +35,8 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   taskId = 0;
 
+  disabled = true;
+
   get selectedLanguage() {
     return this.compileServer.selectedLanguage;
   }
@@ -158,8 +160,11 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
-      this.canPaste = t.PasteExpression;
-      this.taskId = t.Id;
+      this.disabled = !t.Language;
+      if (!this.disabled) {
+        this.canPaste = t.PasteExpression;
+        this.taskId = t.Id;
+      }
     })
   }
 
