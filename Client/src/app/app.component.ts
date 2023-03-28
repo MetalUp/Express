@@ -55,8 +55,8 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit(): void {
+        this.loading = false;
         this.sub = this.repLoader.loadingCount$.subscribe(t => {
-
             this.loading = t > 0;
         })
     }
