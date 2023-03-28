@@ -22,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     sub?: Subscription;
 
-    loading = false;
+    loading = true;
 
     get classes() {
         return {
