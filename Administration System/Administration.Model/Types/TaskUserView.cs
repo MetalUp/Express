@@ -7,7 +7,7 @@ public class TaskUserView
     public TaskUserView(Task task, string title, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted, bool canPaste, string javaScriptTestCode)
     {
         Task = task;
-        Project = task.Project;
+        Project = task?.Project;
         Title = title;
         Completed = completed;
         HasTests = hasTests;

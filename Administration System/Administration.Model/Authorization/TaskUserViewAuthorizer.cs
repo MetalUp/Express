@@ -14,6 +14,6 @@ namespace Model.Authorization
                 };
 
         internal static bool TaskIsAssignedToUser(TaskUserView tuv, IContext context) =>
-            tuv.Project.IsAssignedToMe(context);
+            tuv.Project != null && tuv.Project.IsAssignedToMe(context);
     }
 }
