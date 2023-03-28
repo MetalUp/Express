@@ -264,7 +264,7 @@ describe('ExpressionEvaluationComponent', () => {
   it('should enable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteExpression: true } as ITaskUserView);
+    taskSubject.next({ PasteExpression: true, Language: "lang" } as ITaskUserView);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).not.toHaveBeenCalled();
@@ -273,7 +273,7 @@ describe('ExpressionEvaluationComponent', () => {
   it('should disable paste from task', () => {
 
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteExpression: false } as ITaskUserView);
+    taskSubject.next({ PasteExpression: false, Language: "lang" } as ITaskUserView);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();
