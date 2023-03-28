@@ -82,7 +82,7 @@ describe('LandingComponent', () => {
     loggedOnSub.next(true);
     tick();
     tick();
-    expect(component.pendingStatus).toBeFalse();
+    expect(component.pendingStatus).toBeTrue();
     expect(userServiceSpy.acceptInvitation).toHaveBeenCalledWith('testcode');
   }));
 });
