@@ -7,9 +7,17 @@
     <div class="one-column pane-body" [ngClass]="paneSize">
         <div class="expression code">
             <span class="prompt"></span>
-            <textarea (paste)="onPaste($event)" (drop)="onPaste($event)"
-                [(ngModel)]="expression" (keydown)="onEnterKey($event)" (keyup.enter)="onSubmit()"
-                (keyup)="onKey($event)" spellcheck="false" autofocus="autofocus"></textarea>
+            <textarea
+                [disabled]="disabled" 
+                (paste)="onPaste($event)"
+                (drop)="onPaste($event)"
+                [(ngModel)]="expression"
+                (keydown)="onEnterKey($event)"
+                (keyup.enter)="onSubmit()"
+                (keyup)="onKey($event)"
+                spellcheck="false"
+                autofocus="autofocus">
+            </textarea>
         </div>
         <textarea *ngIf="expressionError" readonly>{{expressionError}}</textarea>
     </div>

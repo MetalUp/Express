@@ -40,6 +40,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   validationFail: string = '';
 
+  disabled = true;
 
   get nextCodeTooltip() {
     return  this.canNewerCode() ?  nextCodeEnabledTooltip : nextCodeDisabledTooltip;
@@ -177,7 +178,9 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub = this.taskService.currentTask.subscribe(t => {
-      if (t.Id !== this.taskId) {
+      this.disabled = !t.Language;
+
+      if (!this.disabled && t.Id !== this.taskId) {
         this.taskId = t.Id;
         this.canPaste = t.PasteCode;
         this.taskService.loadCode(this.taskId, 0).then(c => {

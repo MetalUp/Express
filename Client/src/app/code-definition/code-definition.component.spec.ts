@@ -153,7 +153,7 @@ describe('CodeDefinitionComponent', () => {
 
     component.taskId = 67;
     
-    taskSubject.next({ Id: 1, PasteCode: true } as ITaskUserView);
+    taskSubject.next({ Id: 1, PasteCode: true, Language: "lang" } as ITaskUserView);
 
     expect(component.compiledOK).toBe(false);
     expect(component.currentStatus).toBe('');
@@ -167,7 +167,7 @@ describe('CodeDefinitionComponent', () => {
     component.taskId = 67;
     component.codeDefinitions = 'something';
 
-    taskSubject.next({ Id: 67, PasteCode: true, Code: '' } as ITaskUserView);
+    taskSubject.next({ Id: 67, PasteCode: true, Code: '',Language: "lang" } as ITaskUserView);
 
     expect(component.codeDefinitions).toBe('something');
 
@@ -228,20 +228,20 @@ describe('CodeDefinitionComponent', () => {
 
   it('should enable paste from task', () => {
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteCode: true } as ITaskUserView);
+    taskSubject.next({ PasteCode: true, Language: "lang" } as ITaskUserView);
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).not.toHaveBeenCalled();
   });
 
   it('should disable paste from task', () => {
     let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
-    taskSubject.next({ PasteCode: false } as ITaskUserView);
+    taskSubject.next({ PasteCode: false, Language: "lang" } as ITaskUserView);
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();
   });
 
   it('should set taskid from task', () => {
-    taskSubject.next({ Id: 65 } as ITaskUserView);
+    taskSubject.next({ Id: 65, Language: "lang" } as ITaskUserView);
     expect(component.taskId).toEqual(65);
   });
 
