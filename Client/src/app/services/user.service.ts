@@ -4,6 +4,7 @@ import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { EmptyUserView, IUserView, RegisteredUserView, UnregisteredUserView, UserView } from '../models/user-view';
+import { ErrorService } from './error.service';
 import { convertTo, getAction, getService } from './rep-helpers';
 
 @Injectable({
@@ -11,7 +12,7 @@ import { convertTo, getAction, getService } from './rep-helpers';
 })
 export class UserService {
 
-  constructor(private contextService: ContextService, private repLoader: RepLoaderService) { }
+  constructor(private contextService: ContextService, private repLoader: RepLoaderService, private errorService: ErrorService) { }
 
   userAction?: InvokableActionMember;
   acceptInvitationAction?: InvokableActionMember;
@@ -44,20 +45,24 @@ export class UserService {
   }
 
   loadUser() {
-    return this.getUserAction().then(action => {
-      return this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>)
-        .then((ar: ActionResultRepresentation) => {
-          var obj = ar.result().object();
-          var user = obj ? this.convertToUser(obj) : UnregisteredUserView;
-          this.currentUserAsSubject.next(user);
-          return user;
-        })
-        .catch(_ => {
-          this.currentUserAsSubject.next(EmptyUserView);
-          return EmptyUserView as IUserView;
-        });
-    })
-      .catch(_ => {
+    this.errorService.clearError();
+    return this.getUserAction()
+      .then(action => {
+        return this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>)
+          .then((ar: ActionResultRepresentation) => {
+            var obj = ar.result().object();
+            var user = obj ? this.convertToUser(obj) : UnregisteredUserView;
+            this.currentUserAsSubject.next(user);
+            return user;
+          })
+          .catch(e => {
+            this.errorService.addError(e);
+            this.currentUserAsSubject.next(EmptyUserView);
+            return EmptyUserView as IUserView;
+          });
+      })
+      .catch(e => {
+        this.errorService.addError(e);
         this.currentUserAsSubject.next(EmptyUserView);
         return EmptyUserView as IUserView;
       });
