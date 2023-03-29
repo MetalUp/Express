@@ -7,7 +7,7 @@ namespace Model.Functions
     public static class File_Functions
     {
         [MemberOrder(10)]
-        public static IContext ReloadFromExternalFile(this File file, FileAttachment externalFile, IContext context) =>
+        public static IContext LoadContentFromExternalFile(this File file, FileAttachment externalFile, IContext context) =>
             context.WithUpdated(file, new File(file) { Content = externalFile.GetResourceAsByteArray() });
 
         internal static string ContentsAsString(this File file) => file.Content.AsASCIIonly();
@@ -16,6 +16,8 @@ namespace Model.Functions
             Regex.Replace(Encoding.Default.GetString(bytes), @"[^\u0000-\u007F]+", string.Empty);
 
         internal static byte[] AsByteArray(this string str) => Encoding.ASCII.GetBytes(str);
+
+
 
         #region Editing
         [Edit]
@@ -84,7 +86,6 @@ namespace Model.Functions
         public static ContentType Default2CopyFile(this File file) => file.ContentType ?? ContentType.Unknown;
         public static Language Default3CopyFile(this File file) => file.Language;
         #endregion
-
 
         internal static string ValidateContentType(this File file, ContentType type) =>
             file.ContentType == type ? null : $"File must have Content Type {type}";

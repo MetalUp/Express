@@ -1,0 +1,29 @@
+{
+  "Messages": {
+    "NotPermitted": "Use of '{1}' is not permitted"
+  },
+  "ServerResponseMessageFilters": {
+    "cmpinfo": "CS.*",
+    "stderr": "\\w+Exception",
+    "tests": [
+      [ ".*Passed!.*", "All Tests Passed" ],
+      [ ".*xxx(.*)xxx.*", "{1}" ],
+      [ "(.*Exception.*)", "Your code generated this error: {1}" ]
+    ]
+  },
+  "CodeMustMatch": {
+    "both": [],
+    "expressions": [],
+    "functions": [
+      [
+        "^[\\n\\s]*[0-9]+\\s*\\).*(?:\\n[\\n\\s]*[0-9]+\\s*\\).*)*$",
+        "Answers must be on separate lines, starting with question No. and ')'"
+      ]
+    ]
+  },
+  "CodeMustNotContain": {
+    "both": [],
+    "expressions": [],
+    "functions": []
+  }
+}

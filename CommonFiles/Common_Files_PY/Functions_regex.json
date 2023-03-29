@@ -1,0 +1,51 @@
+{
+  "Messages": {
+    "NotPermitted": "Use of '{1}' is not permitted"
+  },
+  "ServerResponseMessageFilters": {
+    "cmpinfo": "error: [\\w ]*",
+    "stderr": "\\s\\w!!!\\w*",
+    "tests": [
+      [ "OK", "All Tests Passed" ],
+      [ ".*xxx(.*)xxx.*", "{1}" ],
+      [ "(\\w*Error:.*)", "Your code generated this error: {1}" ]
+    ]
+  },
+  "CodeMustMatch": {
+    "both": [],
+    "expressions": [],
+    "functions": [
+      [
+        "^(?:def\\s*[^\\n\\r]*:\\s*return.*[\\n\\s]*)*$",
+        "All functions must follow form: def <lower_case_name>(<lower_case_params>) :  return <expression>"
+      ]
+    ]
+  },
+  "CodeMustNotContain": {
+    "both": [
+      [
+        "(?:\\W|^)(print|input)\\s*\\(",
+        "Messages.NotPermitted"
+      ],
+      [
+        "(?:\\W|^)(append|clear|extend|insert|pop|reverse|sort)\\s*\\(",
+        "Use of '{1}', or any other method that mutates a List is not permitted"
+      ],
+
+      [
+        "\\w*[^=><]=[^(=|>)]\\w*",
+        "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
+      ],
+      [
+        "(;)",
+        "Messages.NotPermitted"
+      ]
+    ],
+    "functions": [
+      [
+        "\\s(date\\.today|datetime\\.today|datetime\\.now)",
+        "Messages.Message3"
+      ]
+    ]
+  }
+}

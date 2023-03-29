@@ -1,0 +1,9 @@
+<Tests>
+
+<StudentCode>
+
+<HiddenCode>
+
+<Helpers>
+
+main = putStrLn (show (<Expression>))

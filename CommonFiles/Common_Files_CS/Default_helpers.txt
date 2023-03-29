@@ -45,4 +45,3 @@
     private static int AsInt(string input) =>
          Convert.ToInt32(Encoding.Default.GetString(Encoding.ASCII.GetBytes(input).Where(b => b > 47 && b < 58).ToArray()));
 
-

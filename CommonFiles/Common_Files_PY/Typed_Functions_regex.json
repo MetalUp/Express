@@ -3,7 +3,7 @@
     "NotPermitted": "Use of '{1}' is not permitted"
   },
   "ServerResponseMessageFilters": {
-    "cmpinfo": "\\s\\w*Error:.*",
+    "cmpinfo": "error: [\\w ]*",
     "stderr": "\\s\\w!!!\\w*",
     "tests": [
       [ "OK", "All Tests Passed" ],
@@ -17,7 +17,7 @@
     "functions": [
       [
         "^(?:def\\s*[^\\n\\r]*:\\s*return.*[\\n\\s]*)*$",
-        "All functions must be: def <lower_case_name>(<lower_case_params with type>) -> <return_type> : return <expression>. A linebreak after the colon is optional."
+        "All functions must follow form: def <lower_case_name>(<lower_case_params, all with type hints>) -> <return_type> :  return <expression>"
       ]
     ]
   },

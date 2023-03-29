@@ -1,0 +1,27 @@
+﻿using static MetalUp.Express.Wrapper.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using static System.Math;
+using System.Text;
+
+namespace MetalUp.Express
+{
+    public class Wrapper
+    {
+        static void Main()
+        {
+            System.Console.WriteLine(Display(<Expression>));
+        }
+
+        public static string StudentCode() => @"<StudentCode>";
+
+    <HiddenCode>
+
+    <Helpers>
+
+    <Tests>
+    }
+}
