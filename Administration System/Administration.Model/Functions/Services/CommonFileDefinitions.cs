@@ -58,7 +58,7 @@ namespace Model.Functions.Services
           {
               Name = fileName.Split('.')[0],
               ContentType = contentType,
-              LanguageId = languageId.ToString(),
+              LanguageId = ((int)languageId).ToString(),
               Content = IOFile.ReadAllBytes($"{PathToCommonFiles()}\\{LangDir(languageId)}\\{fileName}"),
               AuthorId = 1, //Root author
               UniqueRef = new Guid(guidStr)
