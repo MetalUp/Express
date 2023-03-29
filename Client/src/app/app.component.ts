@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ConfigService, RepLoaderService } from '@nakedobjects/services';
+import { ConfigService, ErrorWrapper, RepLoaderService } from '@nakedobjects/services';
 import { Subscription } from 'rxjs';
+import { ErrorService } from './services/error.service';
 import { RegistrationService } from './services/registration.service';
 
 @Component({
@@ -16,13 +17,17 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         public readonly registeredService: RegistrationService,
         private readonly router: Router,
         private readonly repLoader: RepLoaderService,
-        public readonly config: ConfigService) {
+        public readonly config: ConfigService,
+        private readonly errorService: ErrorService) {
         
     }
 
     sub?: Subscription;
+    sub1?: Subscription;
 
     loading = true;
+
+    errorMessage = "";
 
     get classes() {
         return {
@@ -59,11 +64,24 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.sub = this.repLoader.loadingCount$.subscribe(t => {
             this.loading = t > 0;
         })
+
+        this.sub1 = this.errorService.currentError.subscribe(e => {
+            if (e == ErrorService.NoError) {
+                this.errorMessage = "";
+            }
+            else if (e instanceof ErrorWrapper) {
+                this.errorMessage = e.message;
+            }
+        })
+
     }
 
     ngOnDestroy(): void {
         if (this.sub) {
             this.sub.unsubscribe();
+        }
+        if (this.sub1) {
+            this.sub1.unsubscribe();
         }
     }
 

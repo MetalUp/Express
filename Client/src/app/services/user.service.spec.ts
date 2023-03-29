@@ -3,20 +3,22 @@ import { InvokableActionMember, DomainObjectRepresentation, ActionResultRepresen
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { UnregisteredUserView } from '../models/user-view';
-
+import { ErrorService } from './error.service';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
+  let errorServiceSpy: jasmine.SpyObj<ErrorService>;
 
   contextServiceSpy = jasmine.createSpyObj('ConfigService', ['getServices'], { config: { appPath: 'testPath' } });
   repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke'])
+  errorServiceSpy = jasmine.createSpyObj('ErrorService', ['addError', 'clearError'])
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = new UserService(contextServiceSpy, repLoaderSpy);
+    service = new UserService(contextServiceSpy, repLoaderSpy, errorServiceSpy);
   });
 
   it('should be created', () => {

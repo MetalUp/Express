@@ -1,7 +1,11 @@
-<ng-container *ngIf="config.loadingStatus === 0">
+<ng-container *ngIf="errorMessage">
+  <h1 class="startup-heading">An Error has occurred</h1>
+  <p class="startup-message">{{errorMessage}}</p>
+</ng-container>
+<ng-container *ngIf="config.loadingStatus === 0 && !errorMessage">
   <p class="startup-message">Loading configuration...</p>
 </ng-container>
-<ng-container *ngIf="config.loadingStatus === 1">
+<ng-container *ngIf="config.loadingStatus === 1 && !errorMessage">
   <ng-container>
     <div #viewArea class="view-area">
       <div></div>
@@ -21,7 +25,7 @@
     </div>
   </ng-container>
 </ng-container>
-<ng-container *ngIf="config.loadingStatus === 2">
+<ng-container *ngIf="config.loadingStatus === 2 && !errorMessage">
   <p class="startup-message">Application configuration failed to load, trying refreshing the page, if that fails please
     contact the application administrator.</p>
 </ng-container>
