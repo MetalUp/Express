@@ -11,12 +11,15 @@ internal class Handler {
 
     public void Run() {
         try {
+            Console.WriteLine("Starting Batch");
             FrameworkFacade.Start();
             var args = new ArgumentsContextFacade { ExpectedActionType = MethodType.NonIdempotent, Values = new Dictionary<string, object>() };
             FrameworkFacade.ExecuteMenuAction(typeof(BatchProcessing).FullName, nameof(BatchProcessing.UpdateFiles), args);
             FrameworkFacade.End(true);
+            Console.WriteLine("Batch complete with no errors");
         }
         catch (Exception e) {
+            Console.WriteLine("Batch failed with errors");
             Console.WriteLine(e);
             throw;
         }
