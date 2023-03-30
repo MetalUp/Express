@@ -6,6 +6,11 @@ namespace Model.Functions
 {
     public static class File_Functions
     {
+        #region Display
+        public static bool HideEditContent(this File file) =>
+            file.UniqueRef != null; //Hide if a Common File, where content updated by Batch process. 
+        #endregion
+
         [MemberOrder(10)]
         public static IContext LoadContentFromExternalFile(this File file, FileAttachment externalFile, IContext context) =>
             context.WithUpdated(file, new File(file) { Content = externalFile.GetResourceAsByteArray() });
