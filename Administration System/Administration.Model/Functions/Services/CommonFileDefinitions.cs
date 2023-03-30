@@ -11,28 +11,6 @@ namespace Model.Functions.Services
             ZERO_DONT_USE, Python, CSharp, VB, Java, ARM, Other, Haskell, PythonTyped
         }
 
-        //public enum ContentType
-        //{
-        //  TaskDescription, HiddenCode, Tests, Wrapper, Helpers, RegExRules, Hint, Unknown
-        //}
-        private static string LangDir(Lang lang) => lang switch
-        {
-            Lang.ZERO_DONT_USE => throw new NotImplementedException(),
-            Lang.Python => "Common_Files_PY",
-            Lang.CSharp => "Common_Files_CS",
-            Lang.VB => "Common_Files_VB",
-            Lang.Java => throw new NotImplementedException(),
-            Lang.ARM => throw new NotImplementedException(),
-            Lang.Other => "Common_Files_Other",
-            Lang.Haskell => "Common_Files_HS",
-            Lang.PythonTyped => "Common_Files_PY",
-            _ => throw new NotImplementedException(),
-        };
-
-        public static string CS_path = $"{PathToCommonFiles()}\\Common_Files_CS";
-        public static string VB_Path = $"{PathToCommonFiles()}\\Common_Files_VB";
-        public static string PY_Path = $"{PathToCommonFiles()}\\Common_Files_PY";
-
         internal static List<File> defs = new List<File>
         {
             CreateNewDef(ContentType.RegExRules,Lang.Python, "C21A3A82-0C7C-4933-8E22-E199A9C91AD8","Functions_regex.json"),
@@ -71,6 +49,20 @@ namespace Model.Functions.Services
             var i = Array.IndexOf(dirs, "Administration System");
             return $"{string.Join('\\', dirs[..i])}\\CommonFiles";
         }
+
+        private static string LangDir(Lang lang) => lang switch
+        {
+            Lang.ZERO_DONT_USE => throw new NotImplementedException(),
+            Lang.Python => "Common_Files_PY",
+            Lang.CSharp => "Common_Files_CS",
+            Lang.VB => "Common_Files_VB",
+            Lang.Java => throw new NotImplementedException(),
+            Lang.ARM => throw new NotImplementedException(),
+            Lang.Other => "Common_Files_Other",
+            Lang.Haskell => "Common_Files_HS",
+            Lang.PythonTyped => "Common_Files_PY",
+            _ => throw new NotImplementedException(),
+        };
     }
 }
 
