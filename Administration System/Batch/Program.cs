@@ -27,7 +27,6 @@ builder.ConfigureAppConfiguration((hostBuilderContext, configBuilder) => {
 });
 
 builder.ConfigureLogging((lf) => {
-    lf.ClearProviders();
     lf.AddLog4Net();
 });
 
