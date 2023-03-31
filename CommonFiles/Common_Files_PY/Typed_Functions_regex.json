@@ -14,12 +14,7 @@
   "CodeMustMatch": {
     "both": [],
     "expressions": [],
-    "functions": [
-      [
-        "^(?:def\\s*[^\\n\\r]*:\\s*return.*[\\n\\s]*)*$",
-        "All functions must follow form: def <lower_case_name>(<lower_case_params, all with type hints>) -> <return_type> :  return <expression>"
-      ]
-    ]
+    "functions": []
   },
   "CodeMustNotContain": {
     "both": [

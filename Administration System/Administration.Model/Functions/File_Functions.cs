@@ -7,8 +7,6 @@ namespace Model.Functions
     public static class File_Functions
     {
         #region Display
-        public static bool HideEditContent(this File file) =>
-            file.UniqueRef != null; //Hide if a Common File, where content updated by Batch process. 
         #endregion
 
         [MemberOrder(10)]
