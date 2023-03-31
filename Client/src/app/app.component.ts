@@ -27,7 +27,14 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     loading = true;
 
+    hasError = false;
+    showDetails = false;
+
+    errorTitle = "";
+    errorDescription = "";
+    errorCode = "";
     errorMessage = "";
+    errorStacktrace: string[] = [];
 
     get classes() {
         return {
@@ -59,6 +66,16 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         return subMode === 'editor' || mode === 'roapiviewer';
     }
 
+    onHome() {
+        const w = window as any;
+        const home = w.location.origin;
+        w.location.href = home;
+    }
+
+    onDetails() {
+        this.showDetails = true;
+    }
+
     ngOnInit(): void {
         this.loading = false;
         this.sub = this.repLoader.loadingCount$.subscribe(t => {
@@ -67,10 +84,15 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.sub1 = this.errorService.currentError.subscribe(e => {
             if (e == ErrorService.NoError) {
-                this.errorMessage = "";
+                this.hasError = false;
             }
             else if (e instanceof ErrorWrapper) {
-                this.errorMessage = e.message;
+                this.hasError = true;
+                this.errorTitle = e.title;
+                this.errorDescription = e.description;
+                this.errorCode = e.errorCode
+                this.errorMessage = e.message
+                this.errorStacktrace = e.stackTrace;
             }
         })
 

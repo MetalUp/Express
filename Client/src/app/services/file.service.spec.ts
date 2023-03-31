@@ -3,6 +3,7 @@ import { InvokableActionMember, DomainObjectRepresentation, ActionResultRepresen
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { EmptyFileView } from '../models/file-view';
+import { ErrorService } from './error.service';
 import { FileService } from './file.service';
 
 
@@ -10,13 +11,15 @@ describe('FileService', () => {
   let service: FileService;
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
+  let errorServiceSpy: jasmine.SpyObj<ErrorService>;
 
   contextServiceSpy = jasmine.createSpyObj('ConfigService', ['getServices'], { config: { appPath: 'testPath' } });
-  repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke'])
+  repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke']);
+  errorServiceSpy = jasmine.createSpyObj('ErrorService', ['addError', 'clearError']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = new FileService(contextServiceSpy, repLoaderSpy);
+    service = new FileService(contextServiceSpy, repLoaderSpy, errorServiceSpy);
   });
 
   it('should be created', () => {

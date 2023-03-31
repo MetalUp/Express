@@ -3,6 +3,7 @@ import { Value, ActionResultRepresentation, DomainObjectRepresentation, Invokabl
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { EmptyFileView, FileView, IFileView } from '../models/file-view';
+import { ErrorService } from './error.service';
 import { convertTo, getAction, getService } from './rep-helpers';
 
 @Injectable({
@@ -10,7 +11,7 @@ import { convertTo, getAction, getService } from './rep-helpers';
 })
 export class FileService {
 
-  constructor(private contextService: ContextService, private repLoader: RepLoaderService) { }
+  constructor(private contextService: ContextService, private repLoader: RepLoaderService, private errorService: ErrorService) { }
 
   fileAction?: InvokableActionMember;
   saveAction?: InvokableActionMember;
@@ -31,17 +32,21 @@ export class FileService {
   }
 
   loadFile(id: string) {
-    return this.getFileAction().then(action => {
-      return this.repLoader.invoke(action, { id: new Value(id) } as Dictionary<Value>, {} as Dictionary<Object>)
-        .then((ar: ActionResultRepresentation) => {
-          var obj = ar.result().object();
-          return obj ? this.convertToFile(obj) : EmptyFileView;
-        })
-        .catch(_ => {
-          return EmptyFileView as IFileView;
-        });
-    })
-      .catch(_ => {
+    this.errorService.clearError();
+    return this.getFileAction()
+      .then(action => {
+        return this.repLoader.invoke(action, { id: new Value(id) } as Dictionary<Value>, {} as Dictionary<Object>)
+          .then((ar: ActionResultRepresentation) => {
+            var obj = ar.result().object();
+            return obj ? this.convertToFile(obj) : EmptyFileView;
+          })
+          .catch(e => {
+            this.errorService.addError(e);
+            return EmptyFileView as IFileView;
+          });
+      })
+      .catch(e => {
+        this.errorService.addError(e);
         return EmptyFileView as IFileView;
       });
   }

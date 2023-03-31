@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using File = Model.Types.File;
 using IOFile = System.IO.File;
 
@@ -45,7 +46,7 @@ namespace Model.Functions.Services
 
         public static string PathToCommonFiles(LangId langId)
         {
-            var currentDir = Directory.GetCurrentDirectory();
+            var currentDir = AppDomain.CurrentDomain.BaseDirectory;
             var dirs = currentDir.Split('\\');
             var i = Array.IndexOf(dirs, "Administration System");
             return $"{string.Join('\\', dirs[..i])}\\CommonFiles\\{LangDir(langId)}\\";

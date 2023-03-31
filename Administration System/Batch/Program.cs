@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Model;
 using NakedFramework.Architecture.Component;
 using NakedFramework.DependencyInjection.Extensions;
@@ -21,10 +22,17 @@ var builder = Host.CreateDefaultBuilder(args);
 
 // Add services to the container.
 
-builder.ConfigureAppConfiguration((hostBuilderContext, configBuilder) => { configBuilder.AddUserSecrets<Handler>(); });
+builder.ConfigureAppConfiguration((hostBuilderContext, configBuilder) => {
+    configBuilder.AddUserSecrets<Handler>();
+});
+
+builder.ConfigureLogging((lf) => {
+    lf.AddLog4Net();
+});
 
 builder.ConfigureServices((hostBuilderContext, services) => {
     var cs = Environment.GetEnvironmentVariable("connection_string") ?? hostBuilderContext.Configuration["ConnectionString"];
+
 
     services.AddNakedFramework(frameworkOptions => {
         frameworkOptions.MainMenus = MenuHelper.GenerateMenus(ModelConfig.MainMenus());
