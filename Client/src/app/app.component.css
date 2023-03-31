@@ -46,3 +46,27 @@ div.metalup {
     color: var(--masthead-color);
     margin-right: 10px;
 }
+
+.stackTrace {
+    margin-left: 18vw;
+    color: var(--default-text-color);
+    font-family: var(--font-text-family);
+    font-weight: var(--font-weight-1);
+    font-size: var(--font-size-3);
+}
+
+.button-bar {
+    margin-left: 18vw;
+}
+    
+button {
+    margin-right: 5px;
+    height: fit-content;
+    width: fit-content;
+    border: none;
+    background-color: var(--button-enabled);
+    color: white;
+    font-family: var(--font-text-family);
+    font-weight: var(--font-weight-1);
+    font-size: var(--font-size-3);
+}
