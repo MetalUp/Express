@@ -74,8 +74,6 @@ public static class PythonCompiler {
         return file;
     }
 
-    internal static (RunResult, string) Compile(RunSpec runSpec) => Compile(runSpec, CreateSourceFile(runSpec), TempFileName);
-
     private static (RunResult, string) Compile(RunSpec runSpec, string file, string tempFileName) =>
         UpdateLineNumber(Helpers.Compile(GetPythonExe(runSpec), $"-m py_compile {file}", tempFileName, runSpec));
 

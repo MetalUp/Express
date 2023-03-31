@@ -68,14 +68,6 @@ public static class Helpers {
 
     private static string GetInnerMostMessage(Exception e) => e.InnerException is not null ? GetInnerMostMessage(e.InnerException) : e.Message;
 
-    public static RunResult SetRunResults(RunResult runResult, StringWriter consoleOut, StringWriter consoleErr, Exception e) {
-        runResult.outcome = Outcome.RunTimeError;
-        runResult.stdout = consoleOut.ToString();
-        var err = consoleErr.ToString();
-        runResult.stderr = string.IsNullOrEmpty(err) ? GetInnerMostMessage(e) : err;
-        return runResult;
-    }
-
     public static RunResult Execute(string exe, string args, RunSpec runSpec, RunResult runResult) {
         try {
             Console.OutputEncoding = Encoding.UTF8;

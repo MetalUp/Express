@@ -66,6 +66,8 @@ if __name__ == ""__main__"":
 
     private const string TestCodeTypeFail = "def N(c): return c - 20 if c > 19 else c +  380";
 
+    private const string TestCodeTuple = "def foo(la: tuple[int,...], lb: tuple[int,...]) -> tuple[int,...] : return la + lb";
+
     private readonly ILogger testLogger = NullLogger.Instance;
 
     [ClassInitialize]
@@ -138,6 +140,17 @@ if __name__ == ""__main__"":
         rr.AssertRunResult(Outcome.CompilationError, @"temp.py:1:1:error:Functionismissingatypeannotation[no-untyped-def]Found1errorin1file(checked1sourcefile)");
         Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(1, rr.col_no);
+    }
+
+    [TestMethod]
+    public void TestTypeCheckTuple() {
+        using var runSpec = PythonRunSpec(TestCodeTuple);
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
+        rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
+
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok);
     }
 
     [TestMethod]
