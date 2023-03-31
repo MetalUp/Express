@@ -65,8 +65,8 @@ namespace Model.Functions.Menus
 
         [MemberOrder(70)]
         [RenderEagerly]
-        [TableView(false, nameof(File.Name), nameof(File.ContentType), nameof(File.Language), nameof(File.UniqueRef))]
+        [TableView(false, nameof(File.Language), nameof(File.ContentType),  nameof(File.UniqueRef), nameof(File.Name))]
         public static IQueryable<File> FilesWithUniqueRef(IContext context) =>
-            context.Instances<File>().Where(f => f.UniqueRef != null);
+            context.Instances<File>().Where(f => f.UniqueRef != null).OrderBy(f => f.LanguageId).ThenBy(f => f.ContentType);
     }
 }
