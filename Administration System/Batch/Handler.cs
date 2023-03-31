@@ -17,6 +17,7 @@ internal class Handler {
     public void Run() {
         try {
             Logger.LogInformation("Starting Batch");
+            Logger.LogInformation(Directory.GetCurrentDirectory());
             FrameworkFacade.Start();
             var args = new ArgumentsContextFacade { ExpectedActionType = MethodType.NonIdempotent, Values = new Dictionary<string, object>() };
             FrameworkFacade.ExecuteMenuAction(typeof(BatchProcessing).FullName, nameof(BatchProcessing.UpdateFiles), args);
