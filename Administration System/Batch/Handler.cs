@@ -16,12 +16,12 @@ internal class Handler {
 
     public void Run() {
         try {
-            Logger.LogInformation("Starting Batch");
+            Logger.LogWarning("Starting Batch");
             FrameworkFacade.Start();
             var args = new ArgumentsContextFacade { ExpectedActionType = MethodType.NonIdempotent, Values = new Dictionary<string, object>() };
             FrameworkFacade.ExecuteMenuAction(typeof(BatchProcessing).FullName, nameof(BatchProcessing.UpdateFiles), args);
             FrameworkFacade.End(true);
-            Logger.LogInformation("Batch complete with no errors");
+            Logger.LogWarning("Batch complete with no errors");
         }
         catch (Exception e) {
             Logger.LogError(e, $"Batch failed with error: {e.Message}");
