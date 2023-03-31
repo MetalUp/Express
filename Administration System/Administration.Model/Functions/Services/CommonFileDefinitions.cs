@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using File = Model.Types.File;
 using IOFile = System.IO.File;
 
@@ -42,9 +43,8 @@ namespace Model.Functions.Services
               UniqueRef = new Guid(guidStr)
           };
 
-        private static string PathToCommonFiles()
-        {
-            var currentDir = Directory.GetCurrentDirectory();
+        private static string PathToCommonFiles() {
+            var currentDir = AppDomain.CurrentDomain.BaseDirectory;
             var dirs = currentDir.Split('\\');
             var i = Array.IndexOf(dirs, "Administration System");
             return $"{string.Join('\\', dirs[..i])}\\CommonFiles";
