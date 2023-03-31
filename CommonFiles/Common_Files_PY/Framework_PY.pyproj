@@ -26,8 +26,11 @@
     <Compile Include="test_helpers.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Functions_regex.json" />
     <Content Include="Functions_regex_Test %28to be converted .txt" />
     <Content Include="Default_wrapper.txt" />
+    <Content Include="Typed_Functions_regex.json" />
+    <Content Include="QA_wrapper.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
