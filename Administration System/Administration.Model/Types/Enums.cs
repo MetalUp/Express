@@ -30,6 +30,11 @@
         TaskDescription, HiddenCode, Tests, Wrapper, Helpers, RegExRules, Hint, Unknown
     }
 
+    public enum LangId
+    {
+        ZERO_DONT_USE, Python, CSharp, VB, Java, ARM, Other, Haskell, PythonTyped
+    }
+
     public enum CompilerOutcome //Duplication of Outcome enum in CompileServer project
     {
         CompilationError = 11,
