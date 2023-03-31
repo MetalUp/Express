@@ -24,7 +24,7 @@ internal class Handler {
             Logger.LogInformation("Batch complete with no errors");
         }
         catch (Exception e) {
-            Logger.LogError($"Batch failed with error: {e.Message}", e);
+            Logger.LogError(e, $"Batch failed with error: {e.Message}");
             throw;
         }
     }
