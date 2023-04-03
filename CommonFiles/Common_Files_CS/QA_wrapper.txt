@@ -16,12 +16,13 @@ namespace MetalUp.Express
             System.Console.WriteLine(Display(<Expression>));
         }
 
+        // StudentCode - this comment is needed error line number offset
         public static string StudentCode() => @"<StudentCode>";
 
-    <HiddenCode>
+        <HiddenCode>
 
-    <Helpers>
+        <Helpers>
 
-    <Tests>
+        <Tests>
     }
 }

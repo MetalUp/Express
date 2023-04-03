@@ -23,6 +23,7 @@ Namespace MetalUp.Express
 
     <Helpers>
 
+    ' StudentCode - this comment is needed error line number offset
     Public Module StudentCode
 
         Public Function Code() As String

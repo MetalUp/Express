@@ -17,6 +17,7 @@ namespace MetalUp.Express
             System.Console.WriteLine(Display(<Expression>));
         }
 
+    // StudentCode - this comment is needed error line number offset
     <StudentCode>
 
     <HiddenCode>
