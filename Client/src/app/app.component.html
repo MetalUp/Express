@@ -15,7 +15,7 @@
     </div>
   </div>
 </ng-container>
-<ng-container *ngIf="config.loadingStatus === 0 && !errorMessage">
+<ng-container *ngIf="!config.loadingStatus && !errorMessage">
   <p class="startup-message">Loading configuration...</p>
 </ng-container>
 <ng-container *ngIf="config.loadingStatus === 1 && !errorMessage">
