@@ -12,7 +12,7 @@ export class ToolLinkComponent {
   constructor(private readonly router: Router) { }
 
   @Input()
-  urlLink: string = "";
+  urlLink = "";
 
   onClick() {
     this.router.navigate([this.urlLink]);

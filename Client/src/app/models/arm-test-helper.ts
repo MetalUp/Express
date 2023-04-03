@@ -12,8 +12,8 @@ export class ArmTestHelper {
     constructor(private studentCode: string) { }
 
     static runTests(tests: string, studentCode: string) {
-        var rr = { ...EmptyRunResult };
-        var helper = new ArmTestHelper(studentCode);
+        const rr = { ...EmptyRunResult };
+        const helper = new ArmTestHelper(studentCode);
     
         try {
             const runTestsFunction = new Function('helper', tests);
@@ -170,19 +170,19 @@ export class ArmTestHelper {
     }
 
     AssertRegister(number: number, expected: number) {
-        var actual = this.GetRegister(number);
+        const actual = this.GetRegister(number);
         if (actual != expected)
             throw new TestError(`R${number}: Expected ${expected} Actual ${actual}`);
     }
 
     AssertPixel(addr: number, expected: number) {
-        var actual = this.GetPixel(addr);
+        const actual = this.GetPixel(addr);
         if(actual != expected)
             throw new TestError(`Pixel ${addr}: Expected ${expected} Actual ${actual}`);
     }
 
     AssertMemory(address: number, expected: number) {
-        var actual = this.GetMemory(address);
+        const actual = this.GetMemory(address);
         if (actual != expected)
             throw new TestError(`Memory Location ${address}: Expected ${expected} Actual ${actual}`);
     }

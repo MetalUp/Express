@@ -1,5 +1,4 @@
 import { Component,  OnDestroy,  OnInit } from '@angular/core';
-import { ContextService } from '@nakedobjects/services';
 import { Subscription } from 'rxjs';
 import { EmptyUserView } from '../models/user-view';
 import { UserService } from '../services/user.service';

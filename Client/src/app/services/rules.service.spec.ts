@@ -10,9 +10,9 @@ describe('RulesService', () => {
   let service: RulesService;
 
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITaskUserView>();
+  const taskSubject = new Subject<ITaskUserView>();
 
-  let regex =
+  const regex =
   {
     "Messages": {
       "DisallowedKeyword": "Use of the keyword '{1}' is not permitted",

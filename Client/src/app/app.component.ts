@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     onHome() {
-        const w = window as any;
+        const w = window as { location: { origin: string, href: string } };
         const home = w.location.origin;
         w.location.href = home;
     }

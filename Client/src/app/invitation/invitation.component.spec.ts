@@ -10,10 +10,9 @@ describe('InvitationComponent', () => {
   let fixture: ComponentFixture<InvitationComponent>;
 
   let registeredServiceSpy: jasmine.SpyObj<RegistrationService>;
-  let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
-  let mapSub = new Subject<ParamMap>();
+  const mapSub = new Subject<ParamMap>();
 
-  activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['navigate'], { paramMap: mapSub });
+  const activatedRouteSpy: jasmine.SpyObj<ActivatedRoute> = jasmine.createSpyObj('ActivatedRoute', ['navigate'], { paramMap: mapSub });
 
   beforeEach(async () => {
     registeredServiceSpy = jasmine.createSpyObj('RegisteredService', ['logout']);

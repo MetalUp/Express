@@ -25,9 +25,9 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   previousExpressions: [expr: string, result: string][] = [];
 
-  expression: string = '';
+  expression = '';
 
-  validationFail: string = '';
+  validationFail = '';
 
   result: RunResult = EmptyRunResult;
 

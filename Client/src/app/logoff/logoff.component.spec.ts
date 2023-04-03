@@ -12,19 +12,14 @@ import { LogoffComponent } from './logoff.component';
 describe('LogoffComponent', () => {
   let component: LogoffComponent;
   let fixture: ComponentFixture<LogoffComponent>;
-  let userServiceSpy: jasmine.SpyObj<UserService>;
-  let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let registeredServiceSpy: jasmine.SpyObj<RegistrationService>;
-  let configServiceSpy: jasmine.SpyObj<ConfigService>;
-  let locationSpy: jasmine.SpyObj<Location>;
-
+  
   const userSubj = new Subject<UserView>();
 
-  userServiceSpy = jasmine.createSpyObj('UserService', ['getUser'], {currentUser: userSubj});
-  authServiceSpy = jasmine.createSpyObj('AuthService', [], {isAuthenticated$ : of(false)});
-  registeredServiceSpy = jasmine.createSpyObj('RegisteredService', [], {auth: authServiceSpy});
-  configServiceSpy = jasmine.createSpyObj('ConfigService', [], { config: { applicationName: "" } });
-  locationSpy = jasmine.createSpyObj('Location', ['navigate']);
+  const userServiceSpy: jasmine.SpyObj<UserService> = jasmine.createSpyObj('UserService', ['getUser'], {currentUser: userSubj});
+  const authServiceSpy: jasmine.SpyObj<AuthService> = jasmine.createSpyObj('AuthService', [], {isAuthenticated$ : of(false)});
+  const registeredServiceSpy: jasmine.SpyObj<RegistrationService> = jasmine.createSpyObj('RegisteredService', [], {auth: authServiceSpy});
+  const configServiceSpy: jasmine.SpyObj<ConfigService> = jasmine.createSpyObj('ConfigService', [], { config: { applicationName: "" } });
+  const locationSpy: jasmine.SpyObj<Location> = jasmine.createSpyObj('Location', ['navigate']);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

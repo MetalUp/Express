@@ -3,7 +3,7 @@ import { Value, ActionResultRepresentation, DomainObjectRepresentation, Invokabl
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Dictionary } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
-import { EmptyUserView, IUserView, RegisteredUserView, UnregisteredUserView, UserView } from '../models/user-view';
+import { EmptyUserView, IUserView, RegisteredUserView, UnregisteredUserView } from '../models/user-view';
 import { ErrorService } from './error.service';
 import { convertTo, getAction, getService } from './rep-helpers';
 
@@ -32,7 +32,7 @@ export class UserService {
   
   acceptInvitation(code: string) {
     return this.getAcceptInvitationAction().then(action => {
-      return this.repLoader.invoke(action, { code: new Value(code) } as Dictionary<Value>, {} as Dictionary<Object>)
+      return this.repLoader.invoke(action, { code: new Value(code) } as Dictionary<Value>, {})
         .then(_ => {
           this.loadUser();
           return true;
@@ -50,8 +50,8 @@ export class UserService {
       .then(action => {
         return this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>)
           .then((ar: ActionResultRepresentation) => {
-            var obj = ar.result().object();
-            var user = obj ? this.convertToUser(obj) : UnregisteredUserView;
+            const obj = ar.result().object();
+            const user = obj ? this.convertToUser(obj) : UnregisteredUserView;
             this.currentUserAsSubject.next(user);
             return user;
           })

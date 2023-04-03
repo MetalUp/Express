@@ -20,13 +20,13 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   id?: string;
 
-  editContent: string = "";
-  initialContent: string = "";
-  lastSavedContent : string = "";
+  editContent = "";
+  initialContent = "";
+  lastSavedContent  = "";
 
-  mime: string = "";
+  mime = "";
 
-  name: string = "";
+  name = "";
 
   sub1?: Subscription;
 
@@ -34,9 +34,9 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
 
   file?: IFileView;
 
-  changed: boolean = false;
+  changed = false;
 
-  loaded: boolean = false;
+  loaded = false;
 
   languages: string[] = [];
 

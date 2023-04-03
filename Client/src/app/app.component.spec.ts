@@ -13,7 +13,7 @@ describe('AppComponent', () => {
   let routerSpy: jasmine.SpyObj<Router>;
   let configServiceSpy: jasmine.SpyObj<ConfigService>;
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
-  let loadingSubj = new Subject<number>();
+  const loadingSubj = new Subject<number>();
 
 
   beforeEach(async () => {

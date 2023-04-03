@@ -74,9 +74,9 @@ export class TaskService {
     this.getService().then(s => {
       const action = s.actionMember("GetTask") as InvokableActionMember;
 
-      this.repLoader.invoke(action, this.params(taskId), {} as Dictionary<Object>)
+      this.repLoader.invoke(action, this.params(taskId), {})
         .then((ar: ActionResultRepresentation) => {
-          var obj = ar.result().object()!;
+          const obj = ar.result().object()!;
           const task = this.convertToTask(obj, taskId);
           this.currentTaskAsSubject.next(task);
         })
@@ -94,7 +94,7 @@ export class TaskService {
 
       return this.repLoader.invoke(action, this.params(taskId, hintId), {} as Dictionary<Object>)
         .then((ar: ActionResultRepresentation) => {
-          var obj = ar.result().object()!;
+          const obj = ar.result().object()!;
           return this.convertToHint(obj);
         })
         .catch((e: ErrorWrapper) => {
@@ -111,7 +111,7 @@ export class TaskService {
 
       return this.repLoader.invoke(action, this.params(taskId, undefined, version), {} as Dictionary<Object>)
         .then((ar: ActionResultRepresentation) => {
-          var obj = ar.result().object()!;
+          const obj = ar.result().object()!;
           return this.convertToCode(obj);
         })
         .catch((e: ErrorWrapper) => {

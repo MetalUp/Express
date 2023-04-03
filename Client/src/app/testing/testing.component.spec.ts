@@ -8,7 +8,7 @@ import { EmptyRunResult, RunResult } from '../models/run-result';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CompileServerService } from '../services/compile-server.service';
 
-let testRunResultTestPass: RunResult = {
+const testRunResultTestPass: RunResult = {
   run_id: 'a',
   outcome: 15,
   cmpinfo: '',
@@ -16,7 +16,7 @@ let testRunResultTestPass: RunResult = {
   stderr: ''
 };
 
-let testRunResultTestFail: RunResult = {
+const testRunResultTestFail: RunResult = {
   run_id: 'a',
   outcome: 12,
   cmpinfo: '',
@@ -24,7 +24,7 @@ let testRunResultTestFail: RunResult = {
   stderr: 'test failed error'
 };
 
-let testRunResultTestErr: RunResult = {
+const testRunResultTestErr: RunResult = {
   run_id: 'a',
   outcome: 12,
   cmpinfo: '',
@@ -32,7 +32,7 @@ let testRunResultTestErr: RunResult = {
   stderr: 'run error'
 };
 
-let testRunResultTestCmp: RunResult = {
+const testRunResultTestCmp: RunResult = {
   run_id: 'a',
   outcome: 11,
   cmpinfo: 'compile error',
@@ -40,7 +40,7 @@ let testRunResultTestCmp: RunResult = {
   stderr: ''
 };
 
-let testRunResultTestOutcome: RunResult = {
+const testRunResultTestOutcome: RunResult = {
   run_id: 'a',
   outcome: 18,
   cmpinfo: '',
@@ -55,7 +55,7 @@ describe('TestingComponent', () => {
   let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
-  let taskSubject = new Subject<ITaskUserView>();
+  const taskSubject = new Subject<ITaskUserView>();
 
   beforeEach(async () => {
     compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['runTests', 'hasUserDefinedCode'], { "selectedLanguage": "csharp" });

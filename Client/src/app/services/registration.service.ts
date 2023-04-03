@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { BehaviorSubject, first, map, of, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 
 @Injectable({

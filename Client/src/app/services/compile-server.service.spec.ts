@@ -14,9 +14,9 @@ describe('CompileServerService', () => {
   let repLoaderSpy: jasmine.SpyObj<RepLoaderService>;
   let contextServiceSpy: jasmine.SpyObj<ContextService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITaskUserView>();
+  const taskSubject = new Subject<ITaskUserView>();
 
-  let testRunResult: RunResult = {
+  const testRunResult: RunResult = {
     run_id: 'a',
     outcome: 66,
     cmpinfo: 'b',
@@ -33,7 +33,7 @@ describe('CompileServerService', () => {
     });
   }
 
-  let mockAR = {
+  const mockAR = {
     result: () => ({
       object: () => ({
         propertyMember: (n: string) => {
@@ -55,14 +55,14 @@ describe('CompileServerService', () => {
     })
   } as unknown as ActionResultRepresentation;
 
-  let mockAction = {
+  const mockAction = {
   } as IActionInvokeRepresentation;
 
-  let mockService = {
+  const mockService = {
     actionMember: (n: string) => mockAction
   } as unknown as DomainObjectRepresentation;
 
-  let mockServices = {
+  const mockServices = {
     getService: () => mockService
   } as unknown as DomainServicesRepresentation;
 
@@ -91,7 +91,7 @@ describe('CompileServerService', () => {
     const promise = Promise.resolve(mockAR);
     repLoaderSpy.invoke.and.returnValue(promise);
     service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
-    var params = { "taskId": new Value(46), "expression": new Value("stub code"), "code": new Value("") } as Dictionary<Value>;
+    const params = { "taskId": new Value(46), "expression": new Value("stub code"), "code": new Value("") } as Dictionary<Value>;
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.evaluateExpressionAction, params, service.urlParams);
   }));
@@ -103,7 +103,7 @@ describe('CompileServerService', () => {
 
     service.setUserDefinedCode("extra code");
     service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
-    var params = { "taskId": new Value(46), "expression": new Value("stub code"), "code": new Value("extra code") } as Dictionary<Value>;
+    const params = { "taskId": new Value(46), "expression": new Value("stub code"), "code": new Value("extra code") } as Dictionary<Value>;
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.evaluateExpressionAction, params, service.urlParams);
   }));
@@ -114,7 +114,7 @@ describe('CompileServerService', () => {
     repLoaderSpy.invoke.and.returnValue(promise);
     service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
 
-    var params = { "taskId": new Value(46), "code": new Value("stub code") } as Dictionary<Value>;
+    const params = { "taskId": new Value(46), "code": new Value("stub code") } as Dictionary<Value>;
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.submitCodeAction, params, service.urlParams);
   }));
@@ -126,7 +126,7 @@ describe('CompileServerService', () => {
     repLoaderSpy.invoke.and.returnValue(promise);
     service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(testRunResult));
 
-    var params = { "taskId": new Value(46), "code": new Value("stub code") } as Dictionary<Value>;
+    const params = { "taskId": new Value(46), "code": new Value("stub code") } as Dictionary<Value>;
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.submitCodeAction, params, service.urlParams);
   }));
@@ -137,7 +137,7 @@ describe('CompileServerService', () => {
     repLoaderSpy.invoke.and.returnValue(promise);
     service.runTests(46).subscribe(o => expect(o).toEqual(testRunResult));
 
-    var params = { "taskId": new Value(46), "code": new Value("") } as Dictionary<Value>;
+    const params = { "taskId": new Value(46), "code": new Value("") } as Dictionary<Value>;
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.runTestsAction, params, service.urlParams);
   }));
@@ -150,13 +150,13 @@ describe('CompileServerService', () => {
     repLoaderSpy.invoke.and.returnValue(promise);
     service.runTests(46).subscribe(o => expect(o).toEqual(testRunResult));
 
-    var params = { "taskId": new Value(46), "code": new Value("extra code") } as Dictionary<Value>;
+    const params = { "taskId": new Value(46), "code": new Value("extra code") } as Dictionary<Value>;
 
     expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.runTestsAction, params, service.urlParams);
   }));
 
   it('should call evaluateExpression and return an empty result on error', fakeAsync(() => {
-    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404; }));
+    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { 404; }));
     const unknownError = errorRunResult(null);
 
     service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
@@ -165,7 +165,7 @@ describe('CompileServerService', () => {
   }));
 
   it('should call submitCode and return an empty result on error', fakeAsync(() => {
-    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404; }));
+    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { 404; }));
     const unknownError = errorRunResult(null);
 
     service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
@@ -174,7 +174,7 @@ describe('CompileServerService', () => {
   }));
 
   it('should call runTests and return an empty result on error', fakeAsync(() => {
-    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404; }));
+    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { 404; }));
     const unknownError = errorRunResult(null);
 
     service.runTests(46).subscribe(o => expect(o).toEqual(unknownError));

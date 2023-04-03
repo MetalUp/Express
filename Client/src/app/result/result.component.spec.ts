@@ -12,7 +12,7 @@ describe('ResultComponent', () => {
   let fixture: ComponentFixture<ResultComponent>;
   let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
-  let resultSubject = new Subject<RunResult>();
+  const resultSubject = new Subject<RunResult>();
 
 
   beforeEach(async () => {

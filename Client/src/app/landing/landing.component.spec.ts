@@ -10,17 +10,13 @@ import { LandingComponent } from './landing.component';
 describe('LandingComponent', () => {
   let component: LandingComponent;
   let fixture: ComponentFixture<LandingComponent>;
-
-  let registeredServiceSpy: jasmine.SpyObj<RegistrationService>;
-  let routerSpy: jasmine.SpyObj<Router>;
-  let userServiceSpy: jasmine.SpyObj<UserService>;
  
-  let registeredSub = new Subject<boolean | undefined>();
-  let loggedOnSub = new Subject<boolean>();
+  const registeredSub = new Subject<boolean | undefined>();
+  const loggedOnSub = new Subject<boolean>();
   
-  registeredServiceSpy = jasmine.createSpyObj('RegisteredService', ['isLoggedOn'], { registered$ : registeredSub });
-  routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-  userServiceSpy = jasmine.createSpyObj('UserService', ['acceptInvitation']);
+  const registeredServiceSpy: jasmine.SpyObj<RegistrationService> = jasmine.createSpyObj('RegisteredService', ['isLoggedOn'], { registered$ : registeredSub });
+  let routerSpy: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['navigate']);
+  const userServiceSpy: jasmine.SpyObj<UserService> = jasmine.createSpyObj('UserService', ['acceptInvitation']);
 
   
   beforeEach(async () => {

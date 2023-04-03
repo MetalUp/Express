@@ -11,7 +11,7 @@ describe('HintComponent', () => {
   let component: HintComponent;
   let fixture: ComponentFixture<HintComponent>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITaskUserView>();
+  const taskSubject = new Subject<ITaskUserView>();
   const testTask = structuredClone(EmptyTaskUserView);
   testTask.Id = 66;
 

@@ -13,22 +13,17 @@ describe('CustomEditorComponent', () => {
   let component: CustomEditorComponent;
   let fixture: ComponentFixture<CustomEditorComponent>;
 
+  const mapSub = new Subject<ParamMap>();
+  const testFileView = { Content: "test content", Mime: 'test/mime', LanguageAlphaName: 'test language' } as IFileView;
+  const languagesSub = new Subject<ILanguageView[]>();
 
-  let fileServiceSpy: jasmine.SpyObj<FileService>;
-  let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
-  let locationSpy: jasmine.SpyObj<Location>;
-  let compileServiceSpy: jasmine.SpyObj<CompileServerService>;
-  let mapSub = new Subject<ParamMap>();
-  let testFileView = { Content: "test content", Mime: 'test/mime', LanguageAlphaName: 'test language' } as IFileView;
-  let languagesSub = new Subject<ILanguageView[]>();
+  const activatedRouteSpy: jasmine.SpyObj<ActivatedRoute> = jasmine.createSpyObj('ActivatedRoute', ['navigate'], { paramMap: mapSub });
 
-  activatedRouteSpy = jasmine.createSpyObj('ActivatedRoute', ['navigate'], { paramMap: mapSub });
+  const fileServiceSpy: jasmine.SpyObj<FileService> = jasmine.createSpyObj('FileService', ['loadFile', 'saveFile']);
 
-  fileServiceSpy = jasmine.createSpyObj('FileService', ['loadFile', 'saveFile']);
+  const compileServiceSpy: jasmine.SpyObj<CompileServerService> = jasmine.createSpyObj('CompileService', [], {languages$ : languagesSub});
 
-  compileServiceSpy = jasmine.createSpyObj('CompileService', [], {languages$ : languagesSub});
-
-  locationSpy = jasmine.createSpyObj('Location', ['back', 'path']);
+  const locationSpy: jasmine.SpyObj<Location> = jasmine.createSpyObj('Location', ['back', 'path']);
 
   beforeEach(async () => {
 

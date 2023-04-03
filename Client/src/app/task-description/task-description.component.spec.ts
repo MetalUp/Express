@@ -11,10 +11,8 @@ describe('TaskDescriptionComponent', () => {
   let component: TaskDescriptionComponent;
   let fixture: ComponentFixture<TaskDescriptionComponent>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITaskUserView>();
-  let routerSpy: jasmine.SpyObj<Router>;
-
-  routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl', 'createUrlTree']);
+  const taskSubject = new Subject<ITaskUserView>();
+  const routerSpy: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['navigateByUrl', 'createUrlTree']);
 
   beforeEach(async () => {
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load', 'gotoTask'], { currentTask: taskSubject });

@@ -15,10 +15,10 @@ describe('ExpressionEvaluationComponent', () => {
   let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITaskUserView>();
-  let resultSubject = new Subject<RunResult>();
+  const taskSubject = new Subject<ITaskUserView>();
+  const resultSubject = new Subject<RunResult>();
 
-  let testRunResultOK: RunResult = {
+  const testRunResultOK: RunResult = {
     run_id: 'a',
     outcome: 15,
     cmpinfo: '',
@@ -26,7 +26,7 @@ describe('ExpressionEvaluationComponent', () => {
     stderr: ''
   };
 
-  let testRunResultOKWhiteSpace: RunResult = {
+  const testRunResultOKWhiteSpace: RunResult = {
     run_id: 'a',
     outcome: 15,
     cmpinfo: '',
@@ -34,7 +34,7 @@ describe('ExpressionEvaluationComponent', () => {
     stderr: ''
   };
 
-  let testRunResultCmp: RunResult = {
+  const testRunResultCmp: RunResult = {
     run_id: 'a',
     outcome: 11,
     cmpinfo: 'compiler error',
@@ -42,7 +42,7 @@ describe('ExpressionEvaluationComponent', () => {
     stderr: ''
   };
 
-  let testRunResultErr: RunResult = {
+  const testRunResultErr: RunResult = {
     run_id: 'a',
     outcome: 12,
     cmpinfo: '',
@@ -255,7 +255,7 @@ describe('ExpressionEvaluationComponent', () => {
 
   it('should disable paste by default', () => {
 
-    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    const eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
 
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();
@@ -263,7 +263,7 @@ describe('ExpressionEvaluationComponent', () => {
 
   it('should enable paste from task', () => {
 
-    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    const eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
     taskSubject.next({ PasteExpression: true, Language: "lang" } as ITaskUserView);
 
     component.onPaste(eventSpy);
@@ -272,7 +272,7 @@ describe('ExpressionEvaluationComponent', () => {
 
   it('should disable paste from task', () => {
 
-    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    const eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
     taskSubject.next({ PasteExpression: false, Language: "lang" } as ITaskUserView);
 
     component.onPaste(eventSpy);

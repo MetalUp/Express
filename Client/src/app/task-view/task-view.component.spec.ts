@@ -8,7 +8,7 @@ import { ITaskUserView } from '../models/task-user-view';
 
 describe('TaskViewComponent', () => {
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITaskUserView>();
+  const taskSubject = new Subject<ITaskUserView>();
 
   beforeEach(async () => {
 

@@ -37,7 +37,7 @@ export class FileService {
       .then(action => {
         return this.repLoader.invoke(action, { id: new Value(id) } as Dictionary<Value>, {} as Dictionary<Object>)
           .then((ar: ActionResultRepresentation) => {
-            var obj = ar.result().object();
+            const obj = ar.result().object();
             return obj ? this.convertToFile(obj) : EmptyFileView;
           })
           .catch(e => {

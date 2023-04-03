@@ -15,7 +15,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   constructor(private taskService: TaskService, private route: ActivatedRoute) {
   }
 
-  language: string = '';
+  language = '';
 
   private sub1?: Subscription;
   private sub2?: Subscription;
