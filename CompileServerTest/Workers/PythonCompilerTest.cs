@@ -10,20 +10,22 @@ namespace CompileServerTest.Workers;
 [TestClass]
 public class PythonCompilerTest {
     private const string SimpleCode =
-        @"print (str(1))";
+        @"# StudentCode
+print (str(1))";
 
     private const string MissingTerm =
-        @"
+        @"# StudentCode
 print (str(1/))";
 
     private const string MissingTermMultiLine =
-        @"
+        @"# StudentCode
 print (str(1))
 print (str(2))
 print (str(1/))";
 
     private const string RunTimeFail =
-        @"print (int(""invalid""))";
+        @"# StudentCode
+print (int(""invalid""))";
 
     private const string TestCodeOk =
         @"import unittest
@@ -64,7 +66,8 @@ if __name__ == ""__main__"":
     print(""Everything passed"")
 ";
 
-    private const string TestCodeTypeFail = "def N(c): return c - 20 if c > 19 else c +  380";
+    private const string TestCodeTypeFail = @"# StudentCode
+def N(c): return c - 20 if c > 19 else c +  380";
 
     private const string TestCodeTuple = "def foo(la: tuple[int,...], lb: tuple[int,...]) -> tuple[int,...] : return la + lb";
 
@@ -137,7 +140,7 @@ if __name__ == ""__main__"":
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:1:1:error:Functionismissingatypeannotation[no-untyped-def]Found1errorin1file(checked1sourcefile)");
+        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:2:1:error:Functionismissingatypeannotation[no-untyped-def]Found1errorin1file(checked1sourcefile)");
         Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(1, rr.col_no);
     }
@@ -174,7 +177,7 @@ if __name__ == ""__main__"":
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line2print(str(1/))^SyntaxError:invalidsyntax");
-        Assert.AreEqual(2, rr.line_no);
+        Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(18, rr.col_no);
     }
 
@@ -199,7 +202,7 @@ if __name__ == ""__main__"":
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
         rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line4print(str(1/))^SyntaxError:invalidsyntax");
-        Assert.AreEqual(4, rr.line_no);
+        Assert.AreEqual(3, rr.line_no);
         Assert.AreEqual(18, rr.col_no);
     }
 
@@ -211,7 +214,7 @@ if __name__ == ""__main__"":
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
 
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line1,in<module>print(int(""invalid""))^^^^^^^^^^^^^^ValueError:invalidliteralforint()withbase10:'invalid'");
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line2,in<module>print(int(""invalid""))^^^^^^^^^^^^^^ValueError:invalidliteralforint()withbase10:'invalid'");
     }
 
     [TestMethod]
@@ -223,7 +226,7 @@ if __name__ == ""__main__"":
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
 
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line1,in<module>print(int(""invalid""))^^^^^^^^^^^^^^ValueError:invalidliteralforint()withbase10:'invalid'");
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line2,in<module>print(int(""invalid""))^^^^^^^^^^^^^^ValueError:invalidliteralforint()withbase10:'invalid'");
     }
 
     [TestMethod]

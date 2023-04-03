@@ -45,7 +45,7 @@ public static class Helpers {
         return runResult;
     }
 
-    private static RunResult SetCompileResults(RunResult runResult, Exception e) {
+    private static RunResult SetCompileFailure(RunResult runResult, Exception e) {
         runResult.outcome = Outcome.CompilationError;
         runResult.stderr = e.Message;
         return runResult;
@@ -94,7 +94,7 @@ public static class Helpers {
             runResult = SetCompileResults(process, runResult);
         }
         catch (Exception e) {
-            runResult = SetCompileResults(runResult, e);
+            runResult = SetCompileFailure(runResult, e);
         }
 
         return (runResult, returnFileName);
@@ -109,7 +109,7 @@ public static class Helpers {
             runResult = SetTypeCheckResults(process, runResult);
         }
         catch (Exception e) {
-            runResult = SetCompileResults(runResult, e);
+            runResult = SetCompileFailure(runResult, e);
         }
 
         return (runResult, returnFileName);
@@ -134,4 +134,12 @@ public static class Helpers {
 
         return version;
     }
+
+    public static int GetCodeOffset(string code) {
+        var lines = code.Split('\n').ToList();
+        var commentLine = lines.FindIndex(l => l.Contains("StudentCode"));
+
+        return commentLine > 0 ? commentLine : 0;
+    }
+
 }
