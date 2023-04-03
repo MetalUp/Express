@@ -26,7 +26,7 @@ describe('LandingComponent', () => {
   beforeEach(async () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     registeredSub.next(undefined);
-    registeredServiceSpy.isLoggedOn.and.returnValue(loggedOnSub)
+    registeredServiceSpy.isLoggedOn.and.returnValue(loggedOnSub);
     userServiceSpy.acceptInvitation.and.returnValue(Promise.resolve(true));
 
     await TestBed.configureTestingModule({

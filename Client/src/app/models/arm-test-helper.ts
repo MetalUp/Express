@@ -124,14 +124,14 @@ export class ArmTestHelper {
     private AssertLineOfCodeContains(snippet: string, atLineNo: number) {
         const loc = this.GetNonEmptyLinesOfCode()[atLineNo -1];
         if (!loc.toUpperCase().includes(snippet.toUpperCase())) {
-            throw new TestError(`Line of code: ${atLineNo} should contain '${snippet}'`)
+            throw new TestError(`Line of code: ${atLineNo} should contain '${snippet}'`);
         }
     }
 
     private AssertLineOfCodeDoesNotContains(snippet: string, atLineNo: number) {
         const loc = this.GetNonEmptyLinesOfCode()[atLineNo -1];
         if (loc.toUpperCase().includes(snippet.toUpperCase())) {
-            throw new TestError(`Line of code: ${atLineNo} should not contain '${snippet}'`)
+            throw new TestError(`Line of code: ${atLineNo} should not contain '${snippet}'`);
         }
     }
 
@@ -148,15 +148,15 @@ export class ArmTestHelper {
         const instr = this.GetNonEmptyLinesOfCode();
         if (atLineNo != null) {
             if (instr.length >= atLineNo) {
-                this.AssertLineOfCode(snippet, atLineNo, contains)
+                this.AssertLineOfCode(snippet, atLineNo, contains);
             }
             else {
-                throw new TestError(`No code at offset ${atLineNo} code length: ${instr.length}`)
+                throw new TestError(`No code at offset ${atLineNo} code length: ${instr.length}`);
             }
         }
         else {
             for (let n = 1; n <= instr.length; n++) {
-                this.AssertLineOfCode(snippet, n, contains)
+                this.AssertLineOfCode(snippet, n, contains);
             }
         }
     }

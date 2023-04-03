@@ -18,7 +18,7 @@ describe('LogoffComponent', () => {
   let configServiceSpy: jasmine.SpyObj<ConfigService>;
   let locationSpy: jasmine.SpyObj<Location>;
 
-  const userSubj = new Subject<UserView>()
+  const userSubj = new Subject<UserView>();
 
   userServiceSpy = jasmine.createSpyObj('UserService', ['getUser'], {currentUser: userSubj});
   authServiceSpy = jasmine.createSpyObj('AuthService', [], {isAuthenticated$ : of(false)});

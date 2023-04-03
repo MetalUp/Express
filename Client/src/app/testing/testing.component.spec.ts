@@ -14,7 +14,7 @@ let testRunResultTestPass: RunResult = {
   cmpinfo: '',
   stdout: 'All tests passed.',
   stderr: ''
-}
+};
 
 let testRunResultTestFail: RunResult = {
   run_id: 'a',
@@ -22,7 +22,7 @@ let testRunResultTestFail: RunResult = {
   cmpinfo: '',
   stdout: 'test failed',
   stderr: 'test failed error'
-}
+};
 
 let testRunResultTestErr: RunResult = {
   run_id: 'a',
@@ -30,7 +30,7 @@ let testRunResultTestErr: RunResult = {
   cmpinfo: '',
   stdout: '',
   stderr: 'run error'
-}
+};
 
 let testRunResultTestCmp: RunResult = {
   run_id: 'a',
@@ -38,7 +38,7 @@ let testRunResultTestCmp: RunResult = {
   cmpinfo: 'compile error',
   stdout: '',
   stderr: ''
-}
+};
 
 let testRunResultTestOutcome: RunResult = {
   run_id: 'a',
@@ -46,7 +46,7 @@ let testRunResultTestOutcome: RunResult = {
   cmpinfo: '',
   stdout: '',
   stderr: ''
-}
+};
 
 
 describe('TestingComponent', () => {
@@ -129,7 +129,7 @@ describe('TestingComponent', () => {
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestFail));
     compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
 
-    component.taskId = 56
+    component.taskId = 56;
   
 
     component.onRunTests();
@@ -148,7 +148,7 @@ describe('TestingComponent', () => {
     compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
     
 
-    component.taskId = 56
+    component.taskId = 56;
    
 
     component.onRunTests();
@@ -166,7 +166,7 @@ describe('TestingComponent', () => {
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestCmp));
     compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
 
-    component.taskId = 56
+    component.taskId = 56;
    
 
     component.onRunTests();
@@ -184,7 +184,7 @@ describe('TestingComponent', () => {
     compileServerServiceSpy.runTests.and.returnValue(of<RunResult>(testRunResultTestOutcome));
     compileServerServiceSpy.hasUserDefinedCode.and.returnValue(true);
 
-    component.taskId = 56
+    component.taskId = 56;
    
 
     component.onRunTests();

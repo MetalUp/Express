@@ -13,8 +13,8 @@ describe('UserService', () => {
   let errorServiceSpy: jasmine.SpyObj<ErrorService>;
 
   contextServiceSpy = jasmine.createSpyObj('ConfigService', ['getServices'], { config: { appPath: 'testPath' } });
-  repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke'])
-  errorServiceSpy = jasmine.createSpyObj('ErrorService', ['addError', 'clearError'])
+  repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke']);
+  errorServiceSpy = jasmine.createSpyObj('ErrorService', ['addError', 'clearError']);
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

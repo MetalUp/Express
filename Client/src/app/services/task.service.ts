@@ -32,7 +32,7 @@ export class TaskService {
       .then((service: IHateoasModel) => {
         this.taskAccess = service as DomainObjectRepresentation;
         return this.taskAccess;
-      })
+      });
   }
 
   taskAccess?: DomainObjectRepresentation;
@@ -41,7 +41,7 @@ export class TaskService {
     return this.currentTaskAsSubject;
   }
 
-  private currentTaskAsSubject = new Subject<ITaskUserView>()
+  private currentTaskAsSubject = new Subject<ITaskUserView>();
 
   private convertToTask(rep: DomainObjectRepresentation, id: number) {
     return convertTo<ITaskUserView>(new TaskUserView(id), rep);

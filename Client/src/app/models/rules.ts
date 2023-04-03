@@ -43,4 +43,4 @@ export enum Applicability {
     both: [],
     expressions: [],
     functions: []
-  }
+  };

@@ -81,7 +81,7 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
       if (newTask) {
         this.taskHtml = this.currentTask.Description;
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {

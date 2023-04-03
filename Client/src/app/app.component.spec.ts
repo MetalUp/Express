@@ -20,8 +20,8 @@ describe('AppComponent', () => {
     authServiceSpy = jasmine.createSpyObj('AuthService', ['handleAuthentication']);
     routerSpy = jasmine.createSpyObj('Router', [], { url: "/dashboard/home" });
     configServiceSpy = jasmine.createSpyObj('ConfigService', [], { loading: 0 });
-    repLoaderSpy = jasmine.createSpyObj('RepLoaderService', [], { loadingCount$: loadingSubj })
-    registeredServiceSpy = jasmine.createSpyObj('RegisteredService', [], {registered: true  })
+    repLoaderSpy = jasmine.createSpyObj('RepLoaderService', [], { loadingCount$: loadingSubj });
+    registeredServiceSpy = jasmine.createSpyObj('RegisteredService', [], {registered: true  });
 
     await TestBed.configureTestingModule({
       imports: [

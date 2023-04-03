@@ -49,7 +49,7 @@ describe('InvitationComponent', () => {
     expect(component.showPage).toBeFalse();
 
     expect(localStorage.getItem("invitationCode")).toBe('code');
-    localStorage.removeItem("invitationCode")
+    localStorage.removeItem("invitationCode");
   });
 
   it('should show page if no invitation code', () => {

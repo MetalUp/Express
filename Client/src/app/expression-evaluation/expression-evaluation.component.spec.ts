@@ -24,7 +24,7 @@ describe('ExpressionEvaluationComponent', () => {
     cmpinfo: '',
     stdout: 'expression result',
     stderr: ''
-  }
+  };
 
   let testRunResultOKWhiteSpace: RunResult = {
     run_id: 'a',
@@ -32,7 +32,7 @@ describe('ExpressionEvaluationComponent', () => {
     cmpinfo: '',
     stdout: ' expression result',
     stderr: ''
-  }
+  };
 
   let testRunResultCmp: RunResult = {
     run_id: 'a',
@@ -40,7 +40,7 @@ describe('ExpressionEvaluationComponent', () => {
     cmpinfo: 'compiler error',
     stdout: '',
     stderr: ''
-  }
+  };
 
   let testRunResultErr: RunResult = {
     run_id: 'a',
@@ -48,7 +48,7 @@ describe('ExpressionEvaluationComponent', () => {
     cmpinfo: '',
     stdout: '',
     stderr: 'run error'
-  }
+  };
 
 
   beforeEach(async () => {
@@ -138,7 +138,7 @@ describe('ExpressionEvaluationComponent', () => {
     expect(component.previousExpression).toEqual('');
    
 
-    component.validationFail = "validFail"
+    component.validationFail = "validFail";
 
     expect(component.previousExpression).toEqual('');
    

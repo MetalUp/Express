@@ -24,7 +24,7 @@ describe('CodeDefinitionComponent', () => {
     cmpinfo: '',
     stdout: 'expression result',
     stderr: ''
-  }
+  };
 
   let testRunResultCmp: RunResult = {
     run_id: 'a',
@@ -32,7 +32,7 @@ describe('CodeDefinitionComponent', () => {
     cmpinfo: 'compiler error',
     stdout: '',
     stderr: ''
-  }
+  };
 
   let testRunResultErr: RunResult = {
     run_id: 'a',
@@ -40,7 +40,7 @@ describe('CodeDefinitionComponent', () => {
     cmpinfo: '',
     stdout: '',
     stderr: 'run error'
-  }
+  };
 
 
   beforeEach(async () => {
@@ -267,7 +267,7 @@ describe('CodeDefinitionComponent', () => {
 
   it('should get newer code ', fakeAsync(() => {
 
-    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 1, Code: "new code", HasPreviousVersion: true}
+    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 1, Code: "new code", HasPreviousVersion: true};
 
     taskServiceSpy.loadCode.and.returnValue(Promise.resolve(testCodeVersion));
 
@@ -290,7 +290,7 @@ describe('CodeDefinitionComponent', () => {
 
   it('should get older code ', fakeAsync(() => {
 
-    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 3, Code: "old code", HasPreviousVersion: true}
+    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 3, Code: "old code", HasPreviousVersion: true};
 
     taskServiceSpy.loadCode.and.returnValue(Promise.resolve(testCodeVersion));
 

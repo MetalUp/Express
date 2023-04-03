@@ -34,7 +34,7 @@ function setPropertyValue(toObj: any, member: PropertyMember) {
 
 export function convertTo<T>(toObj: T, rep: DomainObjectRepresentation) {
   if (rep && Object.keys(rep.propertyMembers()).length > 0) {
-    const pMembers = rep.propertyMembers()
+    const pMembers = rep.propertyMembers();
     for (const k in pMembers) {
       const member = pMembers[k];
       setPropertyValue(toObj, member);
@@ -49,7 +49,7 @@ export function getService(contextService: ContextService, repLoader: RepLoaderS
       const service = services.getService(name);
       return repLoader.populate(service);
     })
-    .then((s: IHateoasModel) => s as DomainObjectRepresentation)
+    .then((s: IHateoasModel) => s as DomainObjectRepresentation);
 }
 
 export function getAction(getService: () => Promise<DomainObjectRepresentation>, name: string) {

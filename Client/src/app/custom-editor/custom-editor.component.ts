@@ -82,9 +82,9 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
           this.selectedLanguage = file.LanguageAlphaName || 'csharp';
           this.name = file.Name;
           this.loaded = true;
-        })
+        });
       }
-    })
+    });
     this.sub2 = this.compileService.languages$.subscribe(ll => this.languages = ll.map(i => i.AlphaName).filter((i, j, k) => k.indexOf(i) === j)); // distinct
   }
 

@@ -31,7 +31,7 @@ export class HintComponent implements OnInit, OnDestroy {
       return "Click '>' to see your first used hint";
     }
 
-    return 'There are no Hints for this task.'
+    return 'There are no Hints for this task.';
   }
 
   private sub?: Subscription;
@@ -96,7 +96,7 @@ export class HintComponent implements OnInit, OnDestroy {
       const newTask = this.currentTask.Id !== task.Id;
       this.currentTask = task;
       this.getHint(newTask ? 0 : currentHintNo, false);
-    })
+    });
   }
 
   ngOnDestroy(): void {

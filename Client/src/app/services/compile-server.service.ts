@@ -29,7 +29,7 @@ export class CompileServerService {
     taskService.currentTask.subscribe(t => {
       this.currentTask = t;
       this.selectedLanguage = t.Language;
-    })
+    });
 
     this.getService();
   }
@@ -43,7 +43,7 @@ export class CompileServerService {
         .then((service : IHateoasModel) => {
           this.compileServer = service as DomainObjectRepresentation;
           this.getLanguages();
-        })
+        });
       }
 
   private compileServer? : DomainObjectRepresentation;

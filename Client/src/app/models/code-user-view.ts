@@ -7,7 +7,7 @@ export interface ICodeUserView {
 
 export class CodeUserView implements ICodeUserView {
     TaskId = 0;
-    Code = ""
+    Code = "";
     Version = -1;
     HasPreviousVersion = false;
 }

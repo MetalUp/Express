@@ -190,7 +190,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
           }
         });
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {

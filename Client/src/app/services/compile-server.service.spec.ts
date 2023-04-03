@@ -24,13 +24,13 @@ describe('CompileServerService', () => {
     stderr: 'd',
     lineno: 0,
     colno: 0
-  }
+  };
 
   class mockValue {
     constructor(private val: any) { }
     value = () => ({
       scalar: () => this.val
-    })
+    });
   }
 
   let mockAR = {
@@ -156,7 +156,7 @@ describe('CompileServerService', () => {
   }));
 
   it('should call evaluateExpression and return an empty result on error', fakeAsync(() => {
-    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404 }));
+    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404; }));
     const unknownError = errorRunResult(null);
 
     service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
@@ -165,7 +165,7 @@ describe('CompileServerService', () => {
   }));
 
   it('should call submitCode and return an empty result on error', fakeAsync(() => {
-    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404 }));
+    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404; }));
     const unknownError = errorRunResult(null);
 
     service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
@@ -174,7 +174,7 @@ describe('CompileServerService', () => {
   }));
 
   it('should call runTests and return an empty result on error', fakeAsync(() => {
-    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404 }));
+    repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { status: 404; }));
     const unknownError = errorRunResult(null);
 
     service.runTests(46).subscribe(o => expect(o).toEqual(unknownError));

@@ -28,7 +28,7 @@ export class RegistrationService implements CanActivate {
       else {
         this.setRegistered(false);
       }
-    })
+    });
 
     userService.currentUser.subscribe(u => {
       this.activeTaskId = u.ActiveTaskId;
