@@ -18,8 +18,8 @@
         #endregion
 
         [Edit]
-        public static IContext EditTeacherNotes(this Assignment assignment, string notes, IContext context) =>
-            context.WithUpdated(assignment, new Assignment(assignment) { TeacherNotes = notes });
+        public static IContext EditTeacherNotes(this Assignment assignment, string teacherNotes, IContext context) =>
+            context.WithUpdated(assignment, new Assignment(assignment) { TeacherNotes = teacherNotes });
         
         public static string Default1EditTeacherNotes(this Assignment a) => a.TeacherNotes;
 

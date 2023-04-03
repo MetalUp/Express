@@ -33,8 +33,8 @@
     context.WithUpdated(language, new(language) { CSSstyle = cssStyle });
 
         [Edit]
-        public static IContext EditVersion(this Language language, string version, IContext context) =>
-context.WithUpdated(language, new(language) { CompilerLanguageId = version });
+        public static IContext EditCompilerLanguageId(this Language language, string compilerLanguageId, IContext context) =>
+context.WithUpdated(language, new(language) { CompilerLanguageId = compilerLanguageId });
 
        [Edit]
         public static IContext EditCompileArguments(this Language language, string compileArguments, IContext context) =>

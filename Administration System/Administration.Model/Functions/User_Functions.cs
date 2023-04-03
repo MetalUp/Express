@@ -24,11 +24,7 @@ namespace Model.Functions
             IContext context) =>
             context.WithUpdated(student, new(student) { EmailAddress = emailAddress });
 
-        public static bool HideEditEmailAddress(
-            this User student,
-            string emailAddress,
-            IContext context) =>
-            student.HasRole(Role.Student);
+        public static bool HideEditEmailAddress(this User student) => student.HasRole(Role.Student);
         #endregion
 
         #region End of lifecycle
@@ -41,20 +37,15 @@ namespace Model.Functions
         public static bool HideSetToInactive(this User user, IContext context) =>
            user.Status == UserStatus.Inactive;
 
-        public static IContext RemoveIndentityInfo(this User user,
+        public static IContext RemoveIdentityInfo(this User user,
             [DescribedAs("type REMOVE IDENTITY")] string confirm,
             IContext context) =>
             context.WithUpdated(user, new User(user) { UserName = "", Name = "" });
 
-        public static string ValidateRemoveIndentityInfo(this User user,
-            string confirm,
-            IContext context) =>
+        public static string ValidateRemoveIdentityInfo(this User user, string confirm) =>
              confirm.ToUpper() == "REMOVE IDENTITY" ? null : "Must type REMOVE IDENTITY into the Confirm field";
 
-        public static bool HideRemoveIndentityInfo(this User user,
-            string confirm,
-            IContext context) =>
-            user.Status != UserStatus.Inactive;
+        public static bool HideRemoveIdentityInfo(this User user) =>  user.Status != UserStatus.Inactive;
 
         #endregion
 

@@ -35,7 +35,6 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
-
         [Hidden]
         public int? ProjectId { get; init; }
 

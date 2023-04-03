@@ -73,13 +73,13 @@
         [Edit]
         public static IContext EditDescriptionFile(
             this Task task,
-            [Optionally] File file,
+            [Optionally] File descriptionFile,
             IContext context) =>
                     context.WithUpdated(task,
                     new(task)
                     {
-                        DescriptionFileId = file.Id,
-                        DescriptionFile = file,
+                        DescriptionFileId = descriptionFile.Id,
+                        DescriptionFile = descriptionFile,
                     });
 
         public static string ValidateEditDescriptionFile(

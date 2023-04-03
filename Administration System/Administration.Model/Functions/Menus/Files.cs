@@ -31,7 +31,6 @@ namespace Model.Functions.Menus
             context.Instances<File>().Where(f => f.Name.ToUpper().Contains(name.ToUpper()));
 
         [MemberOrder(50)]
-        [CreateNew]
         public static (File, IContext) CreateNewFileFromExtFile(
             FileAttachment extFile, 
             ContentType type,
@@ -40,7 +39,6 @@ namespace Model.Functions.Menus
                 CreateNewFile(extFile.Name, type, language, extFile.GetResourceAsByteArray(), context);
 
         [MemberOrder(60)]
-        [CreateNew]
         public static (File, IContext) CreateNewFileAsString(
             string name, ContentType type,  
             [Optionally] Language language, 

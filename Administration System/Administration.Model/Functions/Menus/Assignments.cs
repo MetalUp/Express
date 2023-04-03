@@ -83,7 +83,7 @@
         public static IContext NewAssignmentToGroup(Group group, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
             group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, project, dueBy, c).Item2);
 
-        public static List<Group> Choices0NewAssignmentToGroup(Group group, Task task, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
+        public static List<Group> Choices0NewAssignmentToGroup(IContext context) =>
             Groups.AllOurGroups(context).ToList();
 
         public static IContext MarkTasksNotCompleted(this IQueryable<Assignment> assignments, string teacherNote, IContext context) =>

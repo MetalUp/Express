@@ -253,7 +253,7 @@ namespace Model.Functions
                     RegExRulesFile = null,
                 });
 
-        public static bool HideClearCustomRegExRules(this Project proj) => proj.RegExRulesFileId == null;
+        public static bool HideClearCustomRegExRules(this Project proj, IContext context) => proj.RegExRulesFileId == null;
 
         #endregion
 
