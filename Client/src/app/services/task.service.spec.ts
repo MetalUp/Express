@@ -14,10 +14,10 @@ describe('TaskService', () => {
   beforeEach(() => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     contextServiceSpy = jasmine.createSpyObj('ConfigService', ['getServices'], { config: { appPath: 'testPath' } });
-    repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke'])
+    repLoaderSpy = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke']);
 
     TestBed.configureTestingModule({});
-    service = new TaskService(routerSpy, contextServiceSpy, repLoaderSpy)
+    service = new TaskService(routerSpy, contextServiceSpy, repLoaderSpy);
   });
 
   it('should be created', () => {

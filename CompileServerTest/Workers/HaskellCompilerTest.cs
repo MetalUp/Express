@@ -10,15 +10,18 @@ namespace CompileServerTest.Workers;
 [TestClass]
 public class HaskellCompilerTest {
     private const string SimpleCode =
-        @"main = putStrLn ""1""";
+        @"-- StudentCode
+main = putStrLn ""1""";
 
     private const string MissingQuote =
-        @"main = putStrLn ""1";
+        @"-- StudentCode
+main = putStrLn ""1";
 
     private const string RunTimeFail =
-        @"main = do
-              head []
-              putStrLn ""1""";
+        @"-- StudentCode
+main = do
+    head []
+    putStrLn ""1""";
 
     private const string TestCodeOk =
         @"
@@ -108,7 +111,7 @@ public class HaskellCompilerTest {
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @$"{runSpec.TempDir}temp.hs:1:19:error:lexicalerrorinstring/characterliteralatendofinput|1|main=putStrLn""1|^");
+        rr.AssertRunResult(Outcome.CompilationError, @$"{runSpec.TempDir}temp.hs:2:19:error:lexicalerrorinstring/characterliteralatendofinput|2|main=putStrLn""1|^");
         Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(19, rr.col_no);
     }
@@ -120,7 +123,7 @@ public class HaskellCompilerTest {
 
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"temp.exe:Prelude.head:emptylistCallStack(fromHasCallStack):error,calledatlibraries\base\GHC\List.hs:1646:3inbase:GHC.ListerrorEmptyList,calledatlibraries\base\GHC\List.hs:85:11inbase:GHC.ListbadHead,calledatlibraries\base\GHC\List.hs:81:28inbase:GHC.Listhead,calledat{runSpec.TempDir}temp.hs:2:15inmain:Main");
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"temp.exe:Prelude.head:emptylistCallStack(fromHasCallStack):error,calledatlibraries\base\GHC\List.hs:1646:3inbase:GHC.ListerrorEmptyList,calledatlibraries\base\GHC\List.hs:85:11inbase:GHC.ListbadHead,calledatlibraries\base\GHC\List.hs:81:28inbase:GHC.Listhead,calledat{runSpec.TempDir}temp.hs:3:5inmain:Main");
     }
 
     [TestMethod]

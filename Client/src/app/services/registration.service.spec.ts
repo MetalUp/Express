@@ -12,9 +12,9 @@ describe('RegisteredService', () => {
   let userServiceSpy: jasmine.SpyObj<UserService>;
   let routerSpy: jasmine.SpyObj<Router>;
 
-  let authSubj = new Subject<boolean>();
+  const authSubj = new Subject<boolean>();
 
-  let userSubj = new BehaviorSubject<UserView>({ DisplayName: "" });
+  const userSubj = new BehaviorSubject<UserView>({ DisplayName: "" });
 
 
   beforeEach(() => {

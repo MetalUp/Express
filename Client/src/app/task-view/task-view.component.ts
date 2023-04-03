@@ -15,7 +15,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   constructor(private taskService: TaskService, private route: ActivatedRoute) {
   }
 
-  language: string = '';
+  language = '';
 
   private sub1?: Subscription;
   private sub2?: Subscription;
@@ -31,7 +31,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
     this.sub2 = this.taskService.currentTask.subscribe(t => {
       this.language = t.Language;
-    })
+    });
   }
 
   ngOnDestroy(): void {

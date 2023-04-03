@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
             'custom-component': this.isCustomComponent(),
             'in-progress': this.loading,
             'not-in-progress': !this.loading
-        }
+        };
     }
 
     get outletClass() {
@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     onHome() {
-        const w = window as any;
+        const w = window as { location: { origin: string, href: string } };
         const home = w.location.origin;
         w.location.href = home;
     }
@@ -80,7 +80,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         this.loading = false;
         this.sub = this.repLoader.loadingCount$.subscribe(t => {
             this.loading = t > 0;
-        })
+        });
 
         this.sub1 = this.errorService.currentError.subscribe(e => {
             if (e == ErrorService.NoError) {
@@ -90,11 +90,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.hasError = true;
                 this.errorTitle = e.title;
                 this.errorDescription = e.description;
-                this.errorCode = e.errorCode
-                this.errorMessage = e.message
+                this.errorCode = e.errorCode;
+                this.errorMessage = e.message;
                 this.errorStacktrace = e.stackTrace;
             }
-        })
+        });
 
     }
 

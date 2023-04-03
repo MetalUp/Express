@@ -12,6 +12,7 @@ public class JavaCompilerTest {
     private const string SimpleCode =
         @"public class temp {
         public static void main(String[] args) {
+           // StudentCode
            int a = 1;
            System.out.print(a);
         }
@@ -20,6 +21,7 @@ public class JavaCompilerTest {
     private const string MissingSC =
         @"public class temp {
         public static void main(String[] args) {
+           // StudentCode
            int a = 1 
         }
         }";
@@ -27,6 +29,7 @@ public class JavaCompilerTest {
     private const string RunTimeFail =
         @"public class temp {
         public static void main(String[] args) {
+           // StudentCode
            int a = Integer.parseInt(""invalid"");
            System.out.print(a);
         }
@@ -90,8 +93,8 @@ public class JavaCompilerTest {
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @$"{runSpec.TempDir}temp.java:3:error:';'expectedinta=1^1error");
-        Assert.AreEqual(3, rr.line_no);
+        rr.AssertRunResult(Outcome.CompilationError, @$"{runSpec.TempDir}temp.java:4:error:';'expectedinta=1^1error");
+        Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(21, rr.col_no);
     }
 
@@ -102,7 +105,7 @@ public class JavaCompilerTest {
 
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", @"Exceptioninthread""main""java.lang.NumberFormatException:Forinputstring:""invalid""	atjava.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)	atjava.base/java.lang.Integer.parseInt(Integer.java:668)	atjava.base/java.lang.Integer.parseInt(Integer.java:786)	attemp.main(temp.java:3)");
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", @"Exceptioninthread""main""java.lang.NumberFormatException:Forinputstring:""invalid""	atjava.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)	atjava.base/java.lang.Integer.parseInt(Integer.java:668)	atjava.base/java.lang.Integer.parseInt(Integer.java:786)	attemp.main(temp.java:4)");
     }
 
     [TestMethod]

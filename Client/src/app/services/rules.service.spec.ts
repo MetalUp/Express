@@ -10,9 +10,9 @@ describe('RulesService', () => {
   let service: RulesService;
 
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITaskUserView>();
+  const taskSubject = new Subject<ITaskUserView>();
 
-  let regex =
+  const regex =
   {
     "Messages": {
       "DisallowedKeyword": "Use of the keyword '{1}' is not permitted",
@@ -106,12 +106,12 @@ describe('RulesService', () => {
 
   it('should filter cmpinfo', () => {
     const filtered = service.filter(ErrorType.cmpinfo, "something CSXXXX something else");
-    expect(filtered).toEqual('CSXXXX something else')
+    expect(filtered).toEqual('CSXXXX something else');
   });
 
   it('should filter stderr', () => {
     const filtered = service.filter(ErrorType.stderr, "something NullException something else");
-    expect(filtered).toEqual('NullException')
+    expect(filtered).toEqual('NullException');
   });
 
   //expressions - fails
@@ -196,17 +196,17 @@ describe('RulesService', () => {
 
   it('should filter and replace test results first regex', () => {
     const filtered = service.filterAndReplace("something Failed something");
-    expect(filtered).toEqual('Result is: Failed')
+    expect(filtered).toEqual('Result is: Failed');
   });
 
   it('should filter and replace test results second regex', () => {
     const filtered = service.filterAndReplace("something Passed something");
-    expect(filtered).toEqual('All OK')
+    expect(filtered).toEqual('All OK');
   });
 
   it('should not filter is no match', () => {
     const filtered = service.filterAndReplace("something something");
-    expect(filtered).toEqual('something something')
+    expect(filtered).toEqual('something something');
   });
 
 });

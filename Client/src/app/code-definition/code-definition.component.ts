@@ -38,7 +38,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
 
   taskId = 0;
 
-  validationFail: string = '';
+  validationFail = '';
 
   disabled = true;
 
@@ -190,7 +190,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
           }
         });
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {

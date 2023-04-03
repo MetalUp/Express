@@ -24,7 +24,7 @@ export class LogoffComponent implements OnInit, OnDestroy {
 
     private sub?: Subscription;
 
-    userId: string = "";
+    userId = "";
 
     userIsLoggedIn() {
         return this.registeredService.auth.isAuthenticated$;

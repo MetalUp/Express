@@ -12,7 +12,8 @@ public class VisualBasicCompilerTest {
     private const string SimpleCode =
         @"Imports Microsoft.VisualStudio.TestTools.UnitTesting
           Module Program
-          Sub Main(args As String())       
+          Sub Main(args As String())
+            ' StudentCode
             Dim a = 1
             System.Console.Write(a)
             End Sub 
@@ -23,7 +24,8 @@ public class VisualBasicCompilerTest {
           Imports System.Collections.Immutable
           Imports System.Linq
           Module Program
-          Sub Main(args As String())       
+          Sub Main(args As String())
+            ' StudentCode
             Dim a =  ImmutableList.Create(Of Integer)(1)
             System.Console.Write(a.First())
             End Sub 
@@ -31,20 +33,23 @@ public class VisualBasicCompilerTest {
 
     private const string DivZero =
         @"Module Program
-          Sub Main(args As String())       
+          Sub Main(args As String())
+            ' StudentCode
             Dim a = 1 \ 0
             End Sub 
           End Module";
 
     private const string RunTimeFail =
         @"Module Program
-          Sub Main(args As String())       
+          Sub Main(args As String())
+            ' StudentCode
             Dim a = Integer.Parse(""invalid"") 
             End Sub 
           End Module";
 
     private const string StackOverFlowFail =
         @"Module Program
+            ' StudentCode
             Private Function F(ByVal i As Integer) As Integer
                 Return F(i + 1)
             End Function
@@ -150,8 +155,8 @@ public class VisualBasicCompilerTest {
         using var runSpec = VisualBasicRunSpec(DivZero);
         var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
-        rr.AssertRunResult(Outcome.CompilationError, "(3) : error BC30542: Division by zero occurred while evaluating this expression.");
-        Assert.AreEqual(3, rr.line_no);
+        rr.AssertRunResult(Outcome.CompilationError, "(4) : error BC30542: Division by zero occurred while evaluating this expression.");
+        Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(21, rr.col_no);
     }
 

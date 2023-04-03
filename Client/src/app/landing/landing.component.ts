@@ -34,13 +34,14 @@ export class LandingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    //this.pendingStatus = true;
-
     this.sub1 = this.registeredService.registered$.subscribe(registered => {
       if (registered) {
-        this.router.navigate(['/dashboard']);
+        const tid = this.registeredService.activeTaskId;
+        const goToUrl = tid ? `/task/${tid}` : '/dashboard';
+
+        this.router.navigate([goToUrl]);
       }
-      else if (registered === false){
+      else if (registered === false) {
         this.userChecked = true;
         this.pendingStatus = false;
       }

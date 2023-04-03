@@ -12,8 +12,8 @@ export class ArmTestHelper {
     constructor(private studentCode: string) { }
 
     static runTests(tests: string, studentCode: string) {
-        var rr = { ...EmptyRunResult };
-        var helper = new ArmTestHelper(studentCode);
+        const rr = { ...EmptyRunResult };
+        const helper = new ArmTestHelper(studentCode);
     
         try {
             const runTestsFunction = new Function('helper', tests);
@@ -124,14 +124,14 @@ export class ArmTestHelper {
     private AssertLineOfCodeContains(snippet: string, atLineNo: number) {
         const loc = this.GetNonEmptyLinesOfCode()[atLineNo -1];
         if (!loc.toUpperCase().includes(snippet.toUpperCase())) {
-            throw new TestError(`Line of code: ${atLineNo} should contain '${snippet}'`)
+            throw new TestError(`Line of code: ${atLineNo} should contain '${snippet}'`);
         }
     }
 
     private AssertLineOfCodeDoesNotContains(snippet: string, atLineNo: number) {
         const loc = this.GetNonEmptyLinesOfCode()[atLineNo -1];
         if (loc.toUpperCase().includes(snippet.toUpperCase())) {
-            throw new TestError(`Line of code: ${atLineNo} should not contain '${snippet}'`)
+            throw new TestError(`Line of code: ${atLineNo} should not contain '${snippet}'`);
         }
     }
 
@@ -148,15 +148,15 @@ export class ArmTestHelper {
         const instr = this.GetNonEmptyLinesOfCode();
         if (atLineNo != null) {
             if (instr.length >= atLineNo) {
-                this.AssertLineOfCode(snippet, atLineNo, contains)
+                this.AssertLineOfCode(snippet, atLineNo, contains);
             }
             else {
-                throw new TestError(`No code at offset ${atLineNo} code length: ${instr.length}`)
+                throw new TestError(`No code at offset ${atLineNo} code length: ${instr.length}`);
             }
         }
         else {
             for (let n = 1; n <= instr.length; n++) {
-                this.AssertLineOfCode(snippet, n, contains)
+                this.AssertLineOfCode(snippet, n, contains);
             }
         }
     }
@@ -170,19 +170,19 @@ export class ArmTestHelper {
     }
 
     AssertRegister(number: number, expected: number) {
-        var actual = this.GetRegister(number);
+        const actual = this.GetRegister(number);
         if (actual != expected)
             throw new TestError(`R${number}: Expected ${expected} Actual ${actual}`);
     }
 
     AssertPixel(addr: number, expected: number) {
-        var actual = this.GetPixel(addr);
+        const actual = this.GetPixel(addr);
         if(actual != expected)
             throw new TestError(`Pixel ${addr}: Expected ${expected} Actual ${actual}`);
     }
 
     AssertMemory(address: number, expected: number) {
-        var actual = this.GetMemory(address);
+        const actual = this.GetMemory(address);
         if (actual != expected)
             throw new TestError(`Memory Location ${address}: Expected ${expected} Actual ${actual}`);
     }

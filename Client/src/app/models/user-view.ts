@@ -1,4 +1,5 @@
 export interface IUserView {
+   ActiveTaskId? : number;
    DisplayName : string;
    Registered? : boolean;
 }

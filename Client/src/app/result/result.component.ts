@@ -21,7 +21,7 @@ export class ResultComponent implements OnInit, OnDestroy {
   filteredStderr() {
     return this.result.stderr
       ? this.rulesService.filter(ErrorType.stderr, this.result.stderr)
-      : ''
+      : '';
   }
 
   get previousExpressionResult() {

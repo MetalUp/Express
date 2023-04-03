@@ -142,4 +142,8 @@ public static class Helpers {
         return commentLine > 0 ? commentLine : 0;
     }
 
+    public static int AdJustLineNumber(int lineNumber, string code) {
+        var adjustment = Helpers.GetCodeOffset(code) + 1;
+        return lineNumber > adjustment ? lineNumber - adjustment : lineNumber;
+    }
 }

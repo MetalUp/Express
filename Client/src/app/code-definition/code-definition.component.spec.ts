@@ -16,31 +16,31 @@ describe('CodeDefinitionComponent', () => {
   let compileServerServiceSpy: jasmine.SpyObj<CompileServerService>;
   let rulesServiceSpy: jasmine.SpyObj<RulesService>;
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITaskUserView>();
+  const taskSubject = new Subject<ITaskUserView>();
 
-  let testRunResultOK: RunResult = {
+  const testRunResultOK: RunResult = {
     run_id: 'a',
     outcome: 15,
     cmpinfo: '',
     stdout: 'expression result',
     stderr: ''
-  }
+  };
 
-  let testRunResultCmp: RunResult = {
+  const testRunResultCmp: RunResult = {
     run_id: 'a',
     outcome: 11,
     cmpinfo: 'compiler error',
     stdout: '',
     stderr: ''
-  }
+  };
 
-  let testRunResultErr: RunResult = {
+  const testRunResultErr: RunResult = {
     run_id: 'a',
     outcome: 12,
     cmpinfo: '',
     stdout: '',
     stderr: 'run error'
-  }
+  };
 
 
   beforeEach(async () => {
@@ -221,20 +221,20 @@ describe('CodeDefinitionComponent', () => {
 
 
   it('should disable paste by default', () => {
-    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    const eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();
   });
 
   it('should enable paste from task', () => {
-    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    const eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
     taskSubject.next({ PasteCode: true, Language: "lang" } as ITaskUserView);
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).not.toHaveBeenCalled();
   });
 
   it('should disable paste from task', () => {
-    let eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
+    const eventSpy = jasmine.createSpyObj('ClipboardEvent', ['preventDefault']);
     taskSubject.next({ PasteCode: false, Language: "lang" } as ITaskUserView);
     component.onPaste(eventSpy);
     expect(eventSpy.preventDefault).toHaveBeenCalled();
@@ -267,7 +267,7 @@ describe('CodeDefinitionComponent', () => {
 
   it('should get newer code ', fakeAsync(() => {
 
-    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 1, Code: "new code", HasPreviousVersion: true}
+    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 1, Code: "new code", HasPreviousVersion: true};
 
     taskServiceSpy.loadCode.and.returnValue(Promise.resolve(testCodeVersion));
 
@@ -290,7 +290,7 @@ describe('CodeDefinitionComponent', () => {
 
   it('should get older code ', fakeAsync(() => {
 
-    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 3, Code: "old code", HasPreviousVersion: true}
+    const testCodeVersion : ICodeUserView = { TaskId: 0, Version: 3, Code: "old code", HasPreviousVersion: true};
 
     taskServiceSpy.loadCode.and.returnValue(Promise.resolve(testCodeVersion));
 

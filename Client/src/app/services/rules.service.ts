@@ -10,7 +10,7 @@ export class RulesService {
   constructor(taskService: TaskService) {
     taskService.currentTask.subscribe(t => {
       this.taskRules = t.RegExRules ? JSON.parse(t.RegExRules) : null;
-    })
+    });
   }
 
   taskRules? : IRules;

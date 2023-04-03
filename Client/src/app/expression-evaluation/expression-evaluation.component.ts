@@ -25,9 +25,9 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   previousExpressions: [expr: string, result: string][] = [];
 
-  expression: string = '';
+  expression = '';
 
-  validationFail: string = ''
+  validationFail = '';
 
   result: RunResult = EmptyRunResult;
 
@@ -56,7 +56,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
   filteredCmpinfo() {
     return this.result.cmpinfo
       ? this.rulesService.filter(ErrorType.cmpinfo, this.result.cmpinfo)
-      : ''
+      : '';
   }
 
   mapOutcome(outcome: number) {
@@ -165,7 +165,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
         this.canPaste = t.PasteExpression;
         this.taskId = t.Id;
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { BehaviorSubject, first, map, of, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -11,6 +11,7 @@ export class RegistrationService implements CanActivate {
 
   registered$ = new BehaviorSubject<boolean | null>(null);
   registered?: boolean;
+  activeTaskId?: number;
 
   private setRegistered(registered?: boolean) {
     if (registered === true || registered === false) {
@@ -27,21 +28,25 @@ export class RegistrationService implements CanActivate {
       else {
         this.setRegistered(false);
       }
-    })
+    });
 
     userService.currentUser.subscribe(u => {
+      this.activeTaskId = u.ActiveTaskId;
       this.setRegistered(u.Registered);
     });
   }
 
-  static inviteCodeKey = "invitationCode"
+  static inviteCodeKey = "invitationCode";
 
   isLoggedOn() {
-    return this.auth.isAuthenticated$
+    return this.auth.isAuthenticated$;
   }
 
   getRegistered() {
-    return this.userService.loadUser().then(u => (u.Registered === true));
+    return this.userService.loadUser().then(u => {
+      this.activeTaskId = u.ActiveTaskId;
+      return u.Registered === true;
+    });
   } 
 
   canActivate() {

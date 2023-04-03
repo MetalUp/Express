@@ -37,7 +37,7 @@ export class TestingComponent implements OnInit, OnDestroy {
     return this.currentResultMessage;
   }
 
-  tests = ''
+  tests = '';
 
 
   get runTestsTooltip() {
@@ -101,7 +101,7 @@ export class TestingComponent implements OnInit, OnDestroy {
     this.sub = this.taskService.currentTask.subscribe(task => {
       this.taskId = task.Id;
       this.hasTests = task.HasTests;
-    })
+    });
   }
 
   ngOnDestroy(): void {

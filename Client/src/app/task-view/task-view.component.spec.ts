@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Subject} from 'rxjs'
+import { Subject} from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TaskViewComponent } from './task-view.component';
 import { TaskService } from '../services/task.service';
@@ -8,7 +8,7 @@ import { ITaskUserView } from '../models/task-user-view';
 
 describe('TaskViewComponent', () => {
   let taskServiceSpy: jasmine.SpyObj<TaskService>;
-  let taskSubject = new Subject<ITaskUserView>();
+  const taskSubject = new Subject<ITaskUserView>();
 
   beforeEach(async () => {
 

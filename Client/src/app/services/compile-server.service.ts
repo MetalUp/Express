@@ -29,7 +29,7 @@ export class CompileServerService {
     taskService.currentTask.subscribe(t => {
       this.currentTask = t;
       this.selectedLanguage = t.Language;
-    })
+    });
 
     this.getService();
   }
@@ -43,18 +43,18 @@ export class CompileServerService {
         .then((service : IHateoasModel) => {
           this.compileServer = service as DomainObjectRepresentation;
           this.getLanguages();
-        })
+        });
       }
 
   private compileServer? : DomainObjectRepresentation;
 
   private currentTask? : ITaskUserView;
 
-  selectedLanguage: string = '';
+  selectedLanguage = '';
 
   languages$ = new BehaviorSubject<ILanguageView[]>([]);
 
-  private userDefinedCode: string = '';
+  private userDefinedCode = '';
 
   lastExpressionResult = new Subject<RunResult>();
 
@@ -72,7 +72,7 @@ export class CompileServerService {
   }
 
   private ToRunResult(ar: ActionResultRepresentation) : RunResult {
-      var result = ar.result().object();
+      const result = ar.result().object();
 
       return result ? {
         cmpinfo: result?.propertyMember("Cmpinfo").value().scalar(),
@@ -86,8 +86,8 @@ export class CompileServerService {
   }
 
   private ToLanguages(ar: ActionResultRepresentation): ILanguageView[] {
-    var result = ar.result().list();
-    var items = result?.value() || [];
+    const result = ar.result().list();
+    const items = result?.value() || [];
     return items.map(l => ({ AlphaName: l.title() || "", Version: "" })).sort((a, b) => b.AlphaName.localeCompare(a.AlphaName));
   }
 
@@ -151,13 +151,13 @@ export class CompileServerService {
 
   evaluateExpression(taskId: number, expression: string) {
     const action = this.evaluateExpressionAction;
-    var params = this.params(taskId, expression);
+    const params = this.params(taskId, expression);
     return this.submit(action, params);
   }
 
   recordActivity(rr: RunResult,  taskId: number, code: string, type: ActivityType) {
     const action = this.recordActivityAction;
-    var params = this.activityParams(taskId, type, code);
+    const params = this.activityParams(taskId, type, code);
     return this.submitVoid(rr, action, params);
   }
 
@@ -190,7 +190,7 @@ export class CompileServerService {
     }
 
     const action = this.submitCodeAction;
-    var params = this.params(taskId, undefined, code);
+    const params = this.params(taskId, undefined, code);
     return this.submit(action, params);
   }
 
@@ -205,7 +205,7 @@ export class CompileServerService {
     }
 
     const action = this.runTestsAction;
-    var params = this.params(taskId);
+    const params = this.params(taskId);
     return this.submit(action, params);
   }
 
