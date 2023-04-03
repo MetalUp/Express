@@ -28,11 +28,6 @@
         "Messages.NotPermitted"
       ],
       [
-        "(?:\\W|^)(append|clear|extend|insert|pop|reverse|sort)\\s*\\(",
-        "Use of '{1}', or any other method that mutates a List is not permitted"
-      ],
-
-      [
         "\\w*[^=><]=[^(=|>)]\\w*",
         "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
       ],

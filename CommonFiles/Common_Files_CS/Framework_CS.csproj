@@ -1,18 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>MetalUp.Express.Wrapper</StartupObject>
+    <StartupObject>MetalUp.Express.Wrapper_CS</StartupObject>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Class1.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MSTest" Version="3.0.2" />
+    <Compile Remove="CS_Tests_Helpers.cs" />
+    <Compile Remove="CS_Tests_Regex.cs" />
   </ItemGroup>
 
 </Project>

@@ -29,6 +29,7 @@
     <Content Include="Functions_regex.json" />
     <Content Include="Functions_regex_Test %28to be converted .txt" />
     <Content Include="Default_wrapper.txt" />
+    <Content Include="Testing Display.txt" />
     <Content Include="Typed_Functions_regex.json" />
     <Content Include="QA_wrapper.txt" />
   </ItemGroup>

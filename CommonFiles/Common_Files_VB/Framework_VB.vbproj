@@ -11,11 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    <Compile Remove="VB_Tests_Helpers.vb" />
+    <Compile Remove="VB_Tests_Regex.vb" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MSTest" Version="3.0.2" />
+    <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
 </Project>

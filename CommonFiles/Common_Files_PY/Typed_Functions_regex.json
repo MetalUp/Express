@@ -14,7 +14,12 @@
   "CodeMustMatch": {
     "both": [],
     "expressions": [],
-    "functions": []
+    "functions": [
+      [
+        "^(?:def\\s*[^\\n\\r]*:\\s*return.*[\\n\\s]*)*$",
+        "All functions must follow form: def <lower_case_name>(<params, each with type>) -> <return_type> :  return <expression>"
+      ]
+    ]
   },
   "CodeMustNotContain": {
     "both": [
@@ -22,11 +27,6 @@
         "(?:\\W|^)(print|input)\\s*\\(",
         "Messages.NotPermitted"
       ],
-      [
-        "(?:\\W|^)(append|clear|extend|insert|pop|reverse|sort)\\s*\\(",
-        "Use of '{1}', or any other method that mutates a List is not permitted"
-      ],
-
       [
         "\\w*[^=><]=[^(=|>)]\\w*",
         "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"

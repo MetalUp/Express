@@ -1,15 +1,27 @@
-﻿    public static string Display(object obj)
-    {
-        if (obj == null) return null;
-        if (obj is string) return $"{obj}";
-        if (obj is Boolean) return (Boolean)obj ? "true" : "false";
-        if (obj is IEnumerable)
+﻿        public static string Display(object obj)
         {
-            var display = ((IEnumerable)obj).Cast<object>().Select(o => Display(o));
-            return $@"{{{string.Join(',', display)}}}";
+            if (obj is null) return "";
+            if (obj is string) return $@"{obj}";
+            if (obj is Boolean) return (Boolean)obj ? "true" : "false";
+            var type = obj.GetType();
+            if (type.IsGenericType)
+            {
+                if (type.GetGenericTypeDefinition() == typeof(ImmutableList<>))
+                {
+                    var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
+                    return $@"{string.Join(',', toDisplay)}";
+                }
+                if (type.GetGenericTypeDefinition() == typeof(List<>))
+                {
+                    return "Result is an ordinary List. Use ImmutableList only.";
+                }
+            }
+            if (obj is IEnumerable)
+            {
+                return "Result is an IEnumerable. Convert to ImmutableList to display contents";
+            }
+            return obj.ToString();
         }
-        return obj.ToString();
-    }
 
     public static string ArgString(params object[] arguments) => arguments.Aggregate("", (s, a) => s + Display(a) + ", ").TrimEnd(' ', ',');
 

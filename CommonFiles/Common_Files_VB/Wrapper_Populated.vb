@@ -23,17 +23,31 @@ Namespace MetalUp.Express
 
 #Region "<Helpers>"
         Public Function Display(ByVal obj As Object) As String
-            If obj Is Nothing Then Return Nothing
-            If TypeOf obj Is String Then Return $"{obj}"
-            If TypeOf obj Is Boolean Then Return If(CType(obj, Boolean), "true", "false")
-
-            If TypeOf obj Is IEnumerable Then
-                Dim disp = (CType(obj, IEnumerable)).Cast(Of Object)().Select(Function(o) Display(o))
-                Return $"{{{String.Join(","c, disp)}}}"
+            If obj Is Nothing Then
+                Return ""
             End If
-
+            If TypeOf obj Is String Then
+                Return $"{obj}"
+            End If
+            If TypeOf obj Is Boolean Then
+                Return If(DirectCast(obj, Boolean), "true", "false")
+            End If
+            Dim type = obj.GetType()
+            If type.IsGenericType Then
+                If type.GetGenericTypeDefinition() Is GetType(ImmutableList(Of )) Then
+                    Dim toDisplay = DirectCast(obj, IEnumerable).Cast(Of Object)().Select(Function(o) Display(o)).ToList()
+                    Return $"{String.Join(","c, toDisplay)}"
+                End If
+                If type.GetGenericTypeDefinition() Is GetType(List(Of )) Then
+                    Return "Result is an ordinary List. Use ImmutableList only."
+                End If
+            End If
+            If TypeOf obj Is IEnumerable Then
+                Return "Result is an IEnumerable. Convert to ImmutableList to display contents"
+            End If
             Return obj.ToString()
         End Function
+
 
         Public Function ArgString(ParamArray arguments As Object()) As String
             Return arguments.Aggregate("", Function(s, a) s & Display(a) & ", ").TrimEnd(" "c, ","c)
@@ -51,29 +65,5 @@ Namespace MetalUp.Express
 #End Region
 
     End Module
-
-
-    <TestClass>
-    Public Class Tests
-
-        <TestMethod>
-        Public Sub TestIsPrime()
-            TestIsPrime(True, 2)
-            TestIsPrime(True, 3)
-            TestIsPrime(False, 4)
-            TestIsPrime(True, 5)
-            TestIsPrime(False, 6)
-            TestIsPrime(True, 7)
-            TestIsPrime(False, 8)
-            TestIsPrime(False, 9)
-            TestIsPrime(False, 10)
-        End Sub
-
-        Private Sub TestIsPrime(ByVal expected As Boolean, ByVal n As Integer)
-            Dim actual = IsPrime(n)
-            Assert.AreEqual(expected, actual, FailMessage(NameOf(IsPrime), expected, actual, n))
-        End Sub
-
-    End Class
 
 End Namespace

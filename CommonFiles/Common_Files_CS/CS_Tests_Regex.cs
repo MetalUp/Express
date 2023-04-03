@@ -1,10 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.RegularExpressions;
 
-namespace Regex_Rules
-{
     [TestClass]
-    public class R
+    public class CS_Tests_Regex
     {
         const string multipleFunctions = $@"^[\n\s]*(?:static.*=>(?:[^;{{}}]|\n)*;\s*)*$"; //use of double braces to make literal for this test only
        
@@ -34,4 +32,3 @@ namespace Regex_Rules
         }
         #endregion
     }
-}

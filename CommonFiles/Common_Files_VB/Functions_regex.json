@@ -30,14 +30,6 @@
       [
         "(Console|System)\\.",
         "Messages.NotPermitted"
-      ],
-      [
-        "\\W(ArrayList)\\W",
-        "Use of ArrayList is not permitted. Use a typed list such as List(Of Integer)"
-      ],
-      [
-        "\\.(Add|AddRange|Clear|RemoveAll|RemoveAt|RemoveRange)\\s*\\(",
-        "Use of '{1}', or any other method that mutates a List is not permitted"
       ]
     ],
     "expressions": [
