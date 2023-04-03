@@ -202,7 +202,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   @ViewChild('codeArea', { static: true }) 
   taElement?: ElementRef;
 
-  lineAndColumn = [0,0];
+  lineAndColumn = [0,1];
 
   refreshCursorPosition() {
     const ta = this.taElement?.nativeElement as any;
@@ -210,7 +210,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     const toSelection =  ta.value.substr(0, ta.selectionStart).split("").reverse().join("");
     const fromLineArray = toSelection.match(/.*$/m);
     const fromLine = fromLineArray[0];
-    const col = fromLine.length;
+    const col = fromLine.length + 1; // after cursor
 
     this.lineAndColumn = [lineNo, col];
   }
