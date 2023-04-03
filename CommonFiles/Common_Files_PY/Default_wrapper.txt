@@ -1,5 +1,6 @@
 from math import *
 
+# StudentCode - this comment is needed error line number offset
 <StudentCode>
 
 <HiddenCode>
