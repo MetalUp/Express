@@ -11,6 +11,7 @@ export class RegistrationService implements CanActivate {
 
   registered$ = new BehaviorSubject<boolean | null>(null);
   registered?: boolean;
+  activeTaskId?: number;
 
   private setRegistered(registered?: boolean) {
     if (registered === true || registered === false) {
@@ -30,18 +31,22 @@ export class RegistrationService implements CanActivate {
     })
 
     userService.currentUser.subscribe(u => {
+      this.activeTaskId = u.ActiveTaskId;
       this.setRegistered(u.Registered);
     });
   }
 
-  static inviteCodeKey = "invitationCode"
+  static inviteCodeKey = "invitationCode";
 
   isLoggedOn() {
-    return this.auth.isAuthenticated$
+    return this.auth.isAuthenticated$;
   }
 
   getRegistered() {
-    return this.userService.loadUser().then(u => (u.Registered === true));
+    return this.userService.loadUser().then(u => {
+      this.activeTaskId = u.ActiveTaskId;
+      return u.Registered === true;
+    });
   } 
 
   canActivate() {
