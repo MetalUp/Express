@@ -11,28 +11,36 @@ namespace CompileServerTest.Workers;
 public class CSharpCompilerTest {
     private const string SimpleCode = @"
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    // StudentCode
     var a = 1;System.Console.Write(a);";
 
     private const string SimpleCodeWithChar = @"
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    // StudentCode
     System.Console.Write(""\u25A0"");";
 
     private const string SimpleCodeWithMain = @"
     public class Wrapper {
         static void Main() {
+            // StudentCode
             System.Console.WriteLine(""1"");
         }
     }";
 
-    private const string DivZero = "var a = 1/0;";
+    private const string DivZero = @"// StudentCode
+var a = 1/0;";
 
     private const string Infinity = @"
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    // StudentCode
     var a = System.Double.PositiveInfinity;System.Console.Write(a);";
 
-    private const string RunTimeFail = @"var a = int.Parse(""invalid"");";
+    private const string RunTimeFail = @"// StudentCode
+var a = int.Parse(""invalid"");";
 
-    private const string StackOverFlowFail = @"static int f(int i) => f(i+1);var a = f(1);";
+    private const string StackOverFlowFail = @"
+// StudentCode
+static int f(int i) => f(i+1);var a = f(1);";
 
     private const string TestCodeOk =
         @"
@@ -102,6 +110,7 @@ public class CSharpCompilerTest {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System.Collections.Immutable;
     using System.Linq;
+    // StudentCode
     var a = ImmutableList.Create<int>(1); System.Console.Write(a.First());";
 
     private readonly ILogger testLogger = NullLogger.Instance;
@@ -183,7 +192,7 @@ public class CSharpCompilerTest {
         using var runSpec = CsharpRunSpec(DivZero);
         var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
-        rr.AssertRunResult(Outcome.CompilationError, "(1,9): error CS0020: Division by constant zero");
+        rr.AssertRunResult(Outcome.CompilationError, "(2,9): error CS0020: Division by constant zero");
         Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(9, rr.col_no);
     }

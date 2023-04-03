@@ -13,13 +13,13 @@ public static class HaskellCompiler {
 
     internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "haskell", GetVersion(runSpec) };
 
-    private static (RunResult, string) UpdateLineNumber((RunResult, string) result) {
+    private static (RunResult, string) UpdateLineNumber((RunResult, string) result, string code) {
         var (rr, _) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split(":");
                 if (int.TryParse(err[2], out var lineNo)) {
-                    rr.line_no = lineNo;
+                    rr.line_no = Helpers.AdJustLineNumber(lineNo, code);
                 }
 
                 if (int.TryParse(err[3], out var colNo)) {
@@ -66,6 +66,6 @@ public static class HaskellCompiler {
 
         File.WriteAllText(file, runSpec.sourcecode);
 
-        return UpdateLineNumber(Helpers.Compile(haskellCompiler, file, "temp.exe", runSpec));
+        return UpdateLineNumber(Helpers.Compile(haskellCompiler, file, "temp.exe", runSpec), runSpec.sourcecode);
     }
 }

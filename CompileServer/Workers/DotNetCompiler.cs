@@ -4,8 +4,6 @@ using Microsoft.CodeAnalysis;
 namespace CompileServer.Workers;
 
 public static class DotNetCompiler {
-    private const int CSharpLineAdjustment = 18;
-    private const int VbLineAdjustment = 52;
 
     internal static readonly MetadataReference[] DotNetReferences = {
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
@@ -44,13 +42,6 @@ public static class DotNetCompiler {
         return (0, 0);
     }
 
-    private static int AdJustLineNumber(RunSpec runSpec, int lineNumber) =>
-        runSpec.language_id switch {
-            "csharp" when lineNumber > CSharpLineAdjustment => lineNumber - CSharpLineAdjustment,
-            "vb" when lineNumber > VbLineAdjustment => lineNumber - VbLineAdjustment,
-            _ => lineNumber
-        };
-
     internal static (RunResult, byte[]) Compile(RunSpec runSpec, Func<string, Compilation> generateCode) {
         var code = runSpec.sourcecode;
 
@@ -64,7 +55,7 @@ public static class DotNetCompiler {
             return (new RunResult {
                 cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
                 outcome = Outcome.CompilationError,
-                line_no = AdJustLineNumber(runSpec, l),
+                line_no = Helpers.AdJustLineNumber(l, code),
                 col_no = c
             }, Array.Empty<byte>());
         }
