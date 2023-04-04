@@ -2,7 +2,7 @@
 {
     public static class Activities
     {
-        public static IQueryable<Activity> AllActivities(IContext context) => 
+        public static IQueryable<Activity> AllActivities(IContext context) =>
             context.Instances<Activity>().OrderByDescending(a => a.TimeStamp);
 
 
@@ -35,7 +35,7 @@
             var context2 = RecordActivity(taskId, ActivityType.RunTestsSuccess, code, null, null, context);
             var task = context.Instances<Task>().Single(t => t.Id == taskId);
             var next = task.NextTaskId == null ? null : context.Instances<Task>().Single(t => t.Id == taskId);
-            if (next == null || !next.HasTests() )
+            if (next == null || !next.HasTests())
             {
                 var a = Assignments.GetAssignmentForCurrentUser(taskId, context);
                 return context2.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Completed });
@@ -48,25 +48,19 @@
 
         internal static IContext RecordActivity(int taskId, ActivityType type, string code, string message, int? hintUsed, IContext context)
         {
-            if (Users.Me(context).HasRole(Role.Student))
+            Assignment assign = Assignments.GetAssignmentForCurrentUser(taskId, context);
+            int? aId = assign?.Id;
+            var act = new Activity()
             {
-                Assignment assign = Assignments.GetAssignmentForCurrentUser(taskId, context);
-                int? aId = assign?.Id;
-                var act = new Activity()
-                {
-                    AssignmentId = aId,
-                    TaskId = taskId,
-                    ActivityType = type,
-                    CodeSubmitted = code,
-                    Message = message,
-                    HintUsed = hintUsed is null ? 0 : hintUsed.Value,
-                    TimeStamp = context.Now()
-                };
-                return context.WithNew(act);
-            } else
-            {
-                return context;
-            }
+                AssignmentId = aId,
+                TaskId = taskId,
+                ActivityType = type,
+                CodeSubmitted = code,
+                Message = message,
+                HintUsed = hintUsed is null ? 0 : hintUsed.Value,
+                TimeStamp = context.Now()
+            };
+            return context.WithNew(act);
         }
         #endregion
 
