@@ -60,8 +60,6 @@ namespace Model.Authorization
                 Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Projects.AllAssignableProjects),
                     nameof(Projects.FindProjects)),
-                Role.Student => Helpers.MatchesOneOf(memberName,
-                    nameof(Projects.FindProjects)),
                 _ => false
             };
 
@@ -100,7 +98,6 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 >= Role.Teacher => Helpers.MatchesOneOf(memberName, nameof(Organisations.MyOrganisation)),
-                Role.Student => Helpers.MatchesOneOf(memberName, nameof(Organisations.MyOrganisation)),
                 _ => false
             };
 
@@ -113,7 +110,6 @@ namespace Model.Authorization
                     nameof(Users.OurStudents),
                     nameof(Users.FindStudentByName),
                     nameof(Users.MyColleagues)),
-                Role.Student => Helpers.MatchesOneOf(memberName, nameof(Users.Me)),
                 _ => false
             };
 

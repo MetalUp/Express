@@ -99,7 +99,6 @@ public static class TaskAccess
     {
         var task = Tasks.GetTask(taskId, context);
         if (task is null) return EmptyTaskView($"Task {taskId} does not exist");
-        var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
         if (Users.Me(context).HasRoleAtLeast(Role.Teacher))
         {
             return new TaskUserView(task,
@@ -113,6 +112,7 @@ public static class TaskAccess
         }
         else
         {
+            var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
             if (asgn is null) return EmptyTaskView($"Task {taskId} has not been assigned to you.");
             var prev = task.PreviousTask;
             if (prev is not null && !IsCompleted(prev, context)) return EmptyTaskView($"Cannot start Task No.{taskId} before completing No.{prev.Id}");
