@@ -9,14 +9,14 @@
         #region Methods to record an Activity involving code
         internal static IContext SubmitCodeFail(int taskId, string code, string message, IContext context)
         {
-            var context2 = RecordActivity(taskId, ActivityType.SubmitCodeFail, code, message, null, context);
+            var context2 = RecordActivity(taskId, ActivityType.SubmitCodeFail, code, message, 0, context);
             return IfAssignedMarkAsStarted(taskId, context2);
         }
 
         internal static IContext SubmitCodeSuccess(int taskId, string code, IContext context)
         {
 
-            var context2 = RecordActivity(taskId, ActivityType.SubmitCodeSuccess, code, null, null, context);
+            var context2 = RecordActivity(taskId, ActivityType.SubmitCodeSuccess, code, null, 0, context);
             return IfAssignedMarkAsStarted(taskId, context2);
         }
 
@@ -28,11 +28,11 @@
         }
 
         internal static IContext RunTestsFail(int taskId, string message, string code, IContext context) =>
-            RecordActivity(taskId, ActivityType.RunTestsFail, code, message, null, context);
+            RecordActivity(taskId, ActivityType.RunTestsFail, code, message, 0, context);
 
         internal static IContext RunTestsSuccess(int taskId, string code, IContext context)
         {
-            var context2 = RecordActivity(taskId, ActivityType.RunTestsSuccess, code, null, null, context);
+            var context2 = RecordActivity(taskId, ActivityType.RunTestsSuccess, code, null, 0, context);
             var task = context.Instances<Task>().Single(t => t.Id == taskId);
             var next = task.NextTaskId == null ? null : context.Instances<Task>().Single(t => t.Id == taskId);
             if (next == null || !next.HasTests())
@@ -46,20 +46,12 @@
             }
         }
 
-        internal static IContext RecordActivity(int taskId, ActivityType type, string code, string message, int? hintUsed, IContext context)
+        internal static IContext RecordActivity(int taskId, ActivityType type, string code, string message, int hintUsed, IContext context)
         {
             Assignment assign = Assignments.GetAssignmentForCurrentUser(taskId, context);
             int? aId = assign?.Id;
-            var act = new Activity()
-            {
-                AssignmentId = aId,
-                TaskId = taskId,
-                ActivityType = type,
-                CodeSubmitted = code,
-                Message = message,
-                HintUsed = hintUsed is null ? 0 : hintUsed.Value,
-                TimeStamp = context.Now()
-            };
+            int uId = Users.Me(context).Id;
+            var act = new Activity(uId, aId, taskId, type, hintUsed, code, message, context);
             return context.WithNew(act);
         }
         #endregion
@@ -67,8 +59,11 @@
 
         #region other internal methods
 
-        internal static IQueryable<Activity> ActivitiesOfCurrentUser(int taskId, IContext context) =>
-            Assignments.GetAssignmentForCurrentUser(taskId, context).ListActivity(taskId, context);
+        internal static IQueryable<Activity> ActivitiesOfCurrentUser(int taskId, IContext context)
+        {
+            int uId = Users.Me(context).Id;
+            return AllActivities(context).Where(a => a.UserId == uId);
+        }
         #endregion
     }
 }

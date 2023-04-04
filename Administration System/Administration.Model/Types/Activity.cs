@@ -6,6 +6,7 @@
         public Activity(Activity cloneFrom) 
         { 
             Id = cloneFrom.Id;
+            UserId = cloneFrom.UserId;  
             AssignmentId = cloneFrom.AssignmentId;
             TaskId = cloneFrom.TaskId;
             Task = cloneFrom.Task;
@@ -16,19 +17,23 @@
             Message = cloneFrom.Message;
         }
 
-        public Activity(int assignmentId, int taskId, ActivityType activityType, int? hintUsed, string codeSubmitted, string message, IContext context)
+        public Activity( int userId, int? assignmentId, int taskId, ActivityType activityType, int hintUsed, string codeSubmitted, string message, IContext context)
         {
+            UserId = userId;    
             AssignmentId = assignmentId;
             TaskId = taskId;
             ActivityType = activityType;
             TimeStamp = context.Now();
-            HintUsed = hintUsed??hintUsed.Value;
+            HintUsed = hintUsed;
             CodeSubmitted = codeSubmitted;
             Message = message;
         }
 
         [Hidden]
         public  int Id { get; init; }
+
+        [Hidden]
+        public int? UserId { get; init; }
 
         [Hidden]
         public int? AssignmentId { get; init; }

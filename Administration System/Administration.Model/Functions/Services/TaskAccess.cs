@@ -17,8 +17,6 @@ public static class TaskAccess
 
     private static (CodeUserView, IContext) ReturnCUVWithCodeVersion(int taskId, int codeVersion, IContext context, Task task)
     {
-        var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
-
         var successfulCodeCommits = Activities.ActivitiesOfCurrentUser(task.Id, context)
             .Where(a => a.ActivityType == ActivityType.SubmitCodeSuccess)
             .OrderByDescending(a => a.TimeStamp)
