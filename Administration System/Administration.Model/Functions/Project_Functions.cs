@@ -239,7 +239,6 @@ namespace Model.Functions
             return context.Instances<File>().Where(f => f.ContentType == ContentType.RegExRules && f.LanguageId == langId);
         }
 
-
         public static bool HideAddCustomRegExRules(this Project proj) => proj.RegExRulesFileId != null;
 
         [MemberOrder(61)]
@@ -253,7 +252,7 @@ namespace Model.Functions
                     RegExRulesFile = null,
                 });
 
-        public static bool HideClearCustomRegExRules(this Project proj, IContext context) => proj.RegExRulesFileId == null;
+        public static bool HideClearCustomRegExRules(this Project proj) => proj.RegExRulesFileId == null;
 
         #endregion
 
