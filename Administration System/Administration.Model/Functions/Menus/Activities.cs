@@ -9,14 +9,14 @@
         #region Methods to record an Activity involving code
         internal static IContext SubmitCodeFail(int taskId, string code, string message, IContext context)
         {
-            var context2 = RecordActivityForAStudent(taskId, ActivityType.SubmitCodeFail, code, message, null, context);
+            var context2 = RecordActivity(taskId, ActivityType.SubmitCodeFail, code, message, null, context);
             return IfAssignedMarkAsStarted(taskId, context2);
         }
 
         internal static IContext SubmitCodeSuccess(int taskId, string code, IContext context)
         {
 
-            var context2 = RecordActivityForAStudent(taskId, ActivityType.SubmitCodeSuccess, code, null, null, context);
+            var context2 = RecordActivity(taskId, ActivityType.SubmitCodeSuccess, code, null, null, context);
             return IfAssignedMarkAsStarted(taskId, context2);
         }
 
@@ -28,11 +28,11 @@
         }
 
         internal static IContext RunTestsFail(int taskId, string message, string code, IContext context) =>
-            RecordActivityForAStudent(taskId, ActivityType.RunTestsFail, code, message, null, context);
+            RecordActivity(taskId, ActivityType.RunTestsFail, code, message, null, context);
 
         internal static IContext RunTestsSuccess(int taskId, string code, IContext context)
         {
-            var context2 = RecordActivityForAStudent(taskId, ActivityType.RunTestsSuccess, code, null, null, context);
+            var context2 = RecordActivity(taskId, ActivityType.RunTestsSuccess, code, null, null, context);
             var task = context.Instances<Task>().Single(t => t.Id == taskId);
             var next = task.NextTaskId == null ? null : context.Instances<Task>().Single(t => t.Id == taskId);
             if (next == null || !next.HasTests() )
@@ -46,11 +46,12 @@
             }
         }
 
-        internal static IContext RecordActivityForAStudent(int taskId, ActivityType type, string code, string message, int? hintUsed, IContext context)
+        internal static IContext RecordActivity(int taskId, ActivityType type, string code, string message, int? hintUsed, IContext context)
         {
             if (Users.Me(context).HasRole(Role.Student))
             {
-                var aId = Assignments.GetAssignmentForCurrentUser(taskId, context).Id;
+                Assignment assign = Assignments.GetAssignmentForCurrentUser(taskId, context);
+                int? aId = assign?.Id;
                 var act = new Activity()
                 {
                     AssignmentId = aId,

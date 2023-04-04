@@ -8,7 +8,8 @@ namespace Model.Authorization
         public bool IsVisible(Activity act, string memberName, IContext context)
         {
             var me = Users.Me(context);
-            var assgn = act.Assignment;
+            var assignId = act.AssignmentId;
+            var assgn = context.Instances<Assignment>().SingleOrDefault(a => a.Id == assignId);
             return me.Role   switch
             {
                 Role.Root => true,
@@ -19,9 +20,11 @@ namespace Model.Authorization
         }
 
         internal static bool TeacherAuthorization(Assignment assgn, string memberName, User me, IContext context) =>
+            assgn is not null &&
             assgn.IsAssignedByOrToAnyoneInOrganisation(me.Organisation) && IsProperty<Activity>(memberName);
 
         internal static bool StudentAuthorization(Assignment assgn, string memberName, User me, IContext context) =>
+            assgn is not null &&
             assgn.IsAssignedTo(me) && IsProperty<Activity>(memberName);
 
     }

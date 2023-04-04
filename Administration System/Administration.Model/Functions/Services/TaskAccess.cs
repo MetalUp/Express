@@ -171,7 +171,7 @@ public static class TaskAccess
         }
         else
         {
-            return Activities.RecordActivityForAStudent(task.Id, ActivityType.HintUsed, null, null, hintNo, context);
+            return Activities.RecordActivity(task.Id, ActivityType.HintUsed, null, null, hintNo, context);
         }
     }
 

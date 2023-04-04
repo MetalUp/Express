@@ -7,7 +7,6 @@
         { 
             Id = cloneFrom.Id;
             AssignmentId = cloneFrom.AssignmentId;
-            Assignment = cloneFrom.Assignment;
             TaskId = cloneFrom.TaskId;
             Task = cloneFrom.Task;
             ActivityType = cloneFrom.ActivityType;
@@ -32,9 +31,7 @@
         public  int Id { get; init; }
 
         [Hidden]
-        public int AssignmentId { get; init; }
-        [MemberOrder(2)]
-        public virtual Assignment Assignment { get; init; }
+        public int? AssignmentId { get; init; }
 
         [Hidden]
         public int TaskId { get; init; }
