@@ -31,9 +31,7 @@ namespace Model.Authorization
                     nameof(Project_Functions.AssignToIndividual),
                     nameof(Project_Functions.AssignToGroup)));
 
-        internal static bool StudentAuthorization(Project proj, string memberName, IContext context) =>
-           proj.IsAssignable() &&
-            IsProperty<Project>(memberName) && !memberName.Contains("File");
+        internal static bool StudentAuthorization(Project proj, string memberName, IContext context) => false;
 
         private static bool IsProperty(string memberName) => IsProperty<Project>(memberName);
 

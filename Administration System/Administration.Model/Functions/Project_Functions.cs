@@ -9,8 +9,6 @@ namespace Model.Functions
     {
         #region Display
 
-        public static bool HideLink(this Project project, IContext context) => !project.IsAssignedToMe(context);
-
         public static bool HideCommonHiddenCodeFile(this Project project) => project.CommonHiddenCodeFileId == null;
 
         public static bool HideCommonTestsFile(this Project project) => project.CommonTestsFileId == null;

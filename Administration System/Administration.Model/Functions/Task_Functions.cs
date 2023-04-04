@@ -3,8 +3,6 @@
     public static class Task_Functions
     {
         #region Display
-        public static bool HideLink(this Task task, IContext context) => !task.Project.IsAssignedToMe(context);
-
         public static bool HideHiddenCodeFile(this Task task) => task.HiddenCodeFileId == null;
 
         public static bool HideTestsFile(this Task task) => task.TestsFileId == null;
