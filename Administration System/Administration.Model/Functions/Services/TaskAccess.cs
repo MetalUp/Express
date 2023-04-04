@@ -100,33 +100,37 @@ public static class TaskAccess
     public static TaskUserView GetTask(int taskId, IContext context)
     {
         var task = Tasks.GetTask(taskId, context);
+        if (task is null) return EmptyTaskView($"Task {taskId} does not exist");
         var asgn = Assignments.GetAssignmentForCurrentUser(taskId, context);
-        if (task == null || asgn == null)
+        if (Users.Me(context).HasRoleAtLeast(Role.Teacher))
         {
-            return new TaskUserView(
-                null,
-                $"{taskId} IS NOT ASSIGNED TO YOU",
-                false,
-                false,
-                0,
-                false,
-                false,
-                null);
+            return new TaskUserView(task,
+                                    Title(task, context),
+                                    false,//Never COMPLETED
+                                    task.HasTests(),
+                                    0, //No assignment
+                                    true, //Next task is navigable
+                                    true,
+                                    ClientRunTestCodeIfAny(task));
         }
         else
         {
-            return new TaskUserView(
-            task,
-            Title(task, context),
-            !task.HasTests() || IsCompleted(task, context),
-            task.HasTests(),
-            asgn.Id,
-            IsStarted(task.NextTaskId, context),
-            CanPaste(context),
-            ClientRunTestCodeIfAny(task)
-            );
+            if (asgn is null) return EmptyTaskView($"Task {taskId} has not been assigned to you.");
+            var prev = task.PreviousTask;
+            if (prev is not null && !IsCompleted(prev, context)) return EmptyTaskView($"Cannot start Task No.{taskId} before completing No.{prev.Id}");
+            return new TaskUserView(task,
+                                    Title(task, context),
+                                    !task.HasTests() || IsCompleted(task, context),
+                                    task.HasTests(),
+                                    asgn.Id,
+                                    IsStarted(task.NextTaskId, context),
+                                    CanPaste(context),
+                                    ClientRunTestCodeIfAny(task));
         }
     }
+
+    private static TaskUserView EmptyTaskView(string message) =>
+        new TaskUserView(null, message, false, false, 0, false, false, null);
 
     private static string ClientRunTestCodeIfAny(Task task) => task.TestsRunOnClient ? task.TestsFile.ContentsAsString() : null;
 
@@ -167,7 +171,7 @@ public static class TaskAccess
         }
         else
         {
-            return Activities.RecordActivity(task.Id, ActivityType.HintUsed, null, null, hintNo, context);
+            return Activities.RecordActivityForAStudent(task.Id, ActivityType.HintUsed, null, null, hintNo, context);
         }
     }
 

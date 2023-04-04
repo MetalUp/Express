@@ -39,7 +39,7 @@ namespace Model.Types
         public int? ProjectId { get; init; }
 
         [MemberOrder(1)]
-        [UrlLink("Start or Continue Task")]
+        [UrlLink("Start Task")]
         public string Link => $"/task/{Id}";
 
         [MemberOrder(10)]
