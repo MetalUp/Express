@@ -6,14 +6,9 @@ namespace Model.Authorization
     public class TaskUserViewAuthorizer : ITypeAuthorizer<TaskUserView>
     {
 
-        public bool IsVisible(TaskUserView tuv, string memberName, IContext context) =>
-                Users.UserRole(context) switch
-                {
-                    Role.Root => true,
-                    _ => TaskIsAssignedToUser(tuv, context)
-                };
+        public bool IsVisible(TaskUserView tuv, string memberName, IContext context) => true;
+        //Note that authorization is now controlled separately in the TaskAccess service
+                
 
-        internal static bool TaskIsAssignedToUser(TaskUserView tuv, IContext context) =>
-            tuv.Project != null && tuv.Project.IsAssignedToMe(context);
     }
 }
