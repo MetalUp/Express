@@ -16,7 +16,7 @@ Namespace MetalUp.Express
             Console.WriteLine(Display(<Expression>))
         End Sub
 
-' StudentCode - this comment is needed error line number offset
+' StudentCode - this comment is needed for error line number offset
 <StudentCode>
 
 <HiddenCode>
@@ -25,7 +25,6 @@ Namespace MetalUp.Express
 
     End Module
 
-' Tests
 <Tests>
 
 End Namespace
