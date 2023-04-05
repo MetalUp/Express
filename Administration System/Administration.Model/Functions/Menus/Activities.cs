@@ -64,6 +64,9 @@
             int uId = Users.Me(context).Id;
             return AllActivities(context).Where(a => a.UserId == uId);
         }
+
+        internal static Activity MostRecentActivityOfType(ActivityType type, Task task, IContext context) =>
+            ActivitiesOfCurrentUser(task.Id, context).Where(a => a.ActivityType == type).FirstOrDefault();
         #endregion
     }
 }

@@ -20,7 +20,6 @@ public class Language
         HelpersFile = cloneFrom.HelpersFile;
         RegExRulesFileId = cloneFrom.RegExRulesFileId;
         RegExRulesFile = cloneFrom.RegExRulesFile;
-        DefaultHiddenCode = cloneFrom.DefaultHiddenCode;
         CompileArguments = cloneFrom.CompileArguments;
     }
 
@@ -75,9 +74,6 @@ public class Language
 
     [MemberOrder(80)]
     public string CompileArguments { get; init; }
-
-    //Depending on language, returns empty string (Python) or empty class HiddenCode (C#, VB) so that tasks with no hidden code still compile. 
-    public string DefaultHiddenCode { get; init; }
 
     public override string ToString() => $"{Name}";
 }

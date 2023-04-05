@@ -33,7 +33,7 @@ namespace Model.Functions
         [Edit]
         public static IContext EditLanguage(
                  this File file,
-                 [Optionally] Language? language,
+                 [Optionally] Language language,
                  IContext context) =>
                      context.WithUpdated(file, new(file) { Language = language });
 

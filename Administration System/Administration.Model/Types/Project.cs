@@ -50,7 +50,7 @@
         public virtual Language Language { get; init; }
 
         #region Common Hidden Code
-        internal string CommonHiddenCode => CommonHiddenCodeFile is null ? Language.DefaultHiddenCode : CommonHiddenCodeFile.ContentsAsString();
+        internal string CommonHiddenCode => CommonHiddenCodeFile is null ? null : CommonHiddenCodeFile.ContentsAsString();
 
         [Hidden]
         public int? CommonHiddenCodeFileId { get; init; }
