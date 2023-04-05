@@ -2,6 +2,9 @@
 {
     public static class Assignments
     {
+
+
+
         [MemberOrder(10)]
         [RenderEagerly]
         [TableView(false, nameof(Assignment.Project), nameof(Assignment.AssignedTo), nameof(Assignment.DueBy), nameof(Assignment.Status))]
@@ -61,7 +64,7 @@
 
 
         [MemberOrder(60)]
-        public static (Assignment, IContext) NewAssignmentToIndividual(User assignedTo, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context)
+        internal static (Assignment, IContext) NewAssignmentToIndividual(User assignedTo, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context)
         {
             var me = Users.Me(context);
             var a = new Assignment()
@@ -78,13 +81,9 @@
             return (a, context.WithNew(a));
         }
 
-
-        [MemberOrder(70)]
-        public static IContext NewAssignmentToGroup(Group group, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
+        internal static IContext NewAssignmentToGroup(Group group, Project project, [ValueRange(0, 30)] DateTime dueBy, IContext context) =>
             group.Students.Aggregate(context, (c, s) => NewAssignmentToIndividual(s, project, dueBy, c).Item2);
 
-        public static List<Group> Choices0NewAssignmentToGroup(IContext context) =>
-            Groups.AllOurGroups(context).ToList();
 
         public static IContext MarkTasksNotCompleted(this IQueryable<Assignment> assignments, string teacherNote, IContext context) =>
           assignments.Aggregate(context, (c, a) => a.MarkAsTerminated(teacherNote, c));

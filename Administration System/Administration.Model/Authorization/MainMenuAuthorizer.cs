@@ -39,8 +39,6 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 >= Role.Teacher => Helpers.MatchesOneOf(memberName,
-                    nameof(Assignments.MyCurrentAssignments),
-                    nameof(Assignments.MyPastAssignments),
                     nameof(Assignments.AssignmentsSetByMe),
                     nameof(Assignments.OverdueAssignmentsSetByMe),
                     nameof(Assignments.FindAssignmentsSetByMe),
@@ -59,8 +57,6 @@ namespace Model.Authorization
                 Role.Author => true,
                 Role.Teacher => Helpers.MatchesOneOf(memberName,
                     nameof(Projects.AllAssignableProjects),
-                    nameof(Projects.FindProjects)),
-                Role.Student => Helpers.MatchesOneOf(memberName,
                     nameof(Projects.FindProjects)),
                 _ => false
             };
@@ -100,7 +96,6 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 >= Role.Teacher => Helpers.MatchesOneOf(memberName, nameof(Organisations.MyOrganisation)),
-                Role.Student => Helpers.MatchesOneOf(memberName, nameof(Organisations.MyOrganisation)),
                 _ => false
             };
 
@@ -113,7 +108,6 @@ namespace Model.Authorization
                     nameof(Users.OurStudents),
                     nameof(Users.FindStudentByName),
                     nameof(Users.MyColleagues)),
-                Role.Student => Helpers.MatchesOneOf(memberName, nameof(Users.Me)),
                 _ => false
             };
 

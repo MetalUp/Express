@@ -20,7 +20,7 @@ namespace Model.Functions.Services
             CreateNewDef(LangId.CSharp, ContentType.Helpers, "73136A41-156F-404C-B0EC-E84B874D08A2","Default_helpers.txt"),
             CreateNewDef(LangId.CSharp,ContentType.RegExRules,  "8D0309A9-CCF4-487E-8FC4-5CDCA3C0ABE4", "Functions_regex.json"),
             
-            CreateNewDef( LangId.VB, ContentType.Wrapper, "E4A35362-818D-4790-B3D9-605A6A88A590","Default_helpers.txt"),
+            CreateNewDef( LangId.VB, ContentType.Wrapper, "E4A35362-818D-4790-B3D9-605A6A88A590","Default_wrapper.txt"),
             CreateNewDef( LangId.VB,ContentType.Wrapper, "00A049BF-66A9-4E69-B087-24C662C2A863","QA_wrapper.txt"),
             CreateNewDef(LangId.VB,ContentType.Helpers,  "CA064B27-0EFD-4ADB-BD49-D784241EF60E","Default_helpers.txt"),
             CreateNewDef( LangId.VB,ContentType.RegExRules, "584B498E-5781-476E-A95B-08D880D2E7BC","Functions_regex.json"),

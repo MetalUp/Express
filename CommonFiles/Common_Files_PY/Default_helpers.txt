@@ -10,7 +10,7 @@ def display(x: Any) -> str:
     else:
         try:
             iter(x)
-            return "Result is an iterator. Convert to a tuple to display contents."
+            return "Result is an Iterator. Convert to a tuple to display contents."
         except TypeError:
             return str(x)
 

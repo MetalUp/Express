@@ -18,7 +18,6 @@ namespace Model.Authorization
         internal static bool AuthorAuthorization(Project proj, string memberName, IContext context) =>
            IsProperty(memberName) ? true :
              MatchesOneOf(memberName,
-                    nameof(Project_Functions.AssignToMe),
                     nameof(Project_Functions.AssignToIndividual),
                     nameof(Project_Functions.AssignToGroup)) ? true :
                         UserIsAuthor(proj, context);
@@ -27,7 +26,6 @@ namespace Model.Authorization
            proj.IsAssignable() && 
             (IsProperty(memberName) || 
                 MatchesOneOf(memberName,
-                    nameof(Project_Functions.AssignToMe),
                     nameof(Project_Functions.AssignToIndividual),
                     nameof(Project_Functions.AssignToGroup)));
 

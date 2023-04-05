@@ -15,11 +15,10 @@ Namespace MetalUp.Express
             Console.WriteLine(Display(""))
         End Sub
 
-#Region "<StudentCode>"
+        ' StudentCode - this comment is needed error line number offset
         Public Function IsPrime(ByVal n As Integer) As Boolean
             Return Not Enumerable.Range(2, n \ 2 - 1).Any(Function(f) IsFactor(f, n))
         End Function
-#End Region
 
 #Region "<Helpers>"
         Public Function Display(ByVal obj As Object) As String
@@ -48,13 +47,42 @@ Namespace MetalUp.Express
             Return obj.ToString()
         End Function
 
-
         Public Function ArgString(ParamArray arguments As Object()) As String
             Return arguments.Aggregate("", Function(s, a) s & Display(a) & ", ").TrimEnd(" "c, ","c)
         End Function
 
         Public Function FailMessage(functionName As String, ByVal expected As Object, ByVal actual As Object, ParamArray args As Object()) As String
-            Return $"!!!Calling {functionName}({ArgString(args)}) Expected: {Display(expected)} Actual: {actual}~~~"
+            Return $"xxxTest failed calling {functionName}({ArgString(args)}) Expected: {Display(expected)} Actual: {Display(actual)}xxx"
+        End Function
+
+        Public Function QAFailMessage(ByVal wrongAnswers As String) As String
+            Return $"xxxWrong or missing answer(s) to question number(s): {wrongAnswers}.xxx"
+        End Function
+
+        Public Function WrongAnswers(ByVal student As String, ByVal answers As String) As String
+            Dim studentArr = AsArray(student)
+            Dim answersArr = AsArray(answers)
+            Dim result = ""
+            For n As Integer = 0 To answersArr.Length - 1
+                If answersArr(n) IsNot Nothing AndAlso studentArr(n) <> answersArr(n) Then
+                    result &= $"{n} "
+                End If
+            Next n
+            Return result
+        End Function
+
+        Public Function AsArray(ByVal answers As String) As String()
+            Dim arr = New String(19) {}
+            For Each a As String In answers.Split(ControlChars.Lf).Where(Function(x) x.Length > 0)
+                Dim split = a.Split(")"c)
+                Dim n = AsInt(split(0).Trim())
+                arr(n) = split(1).Trim().ToUpper()
+            Next a
+            Return arr
+        End Function
+
+        Private Function AsInt(ByVal input As String) As Integer
+            Return Convert.ToInt32(Encoding.Default.GetString(Encoding.ASCII.GetBytes(input).Where(Function(b) b > 47 AndAlso b < 58).ToArray()))
         End Function
 #End Region
 
@@ -65,5 +93,7 @@ Namespace MetalUp.Express
 #End Region
 
     End Module
+
+    '<Tests>
 
 End Namespace
