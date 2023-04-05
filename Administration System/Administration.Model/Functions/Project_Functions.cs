@@ -1,10 +1,5 @@
-﻿using NakedFramework.Value;
-using System.Text;
-
-namespace Model.Functions
+﻿namespace Model.Functions
 {
-
-
     public static class Project_Functions
     {
         #region Display
@@ -83,14 +78,6 @@ namespace Model.Functions
         #endregion
 
         #region Assignment
-
-        [MemberOrder(5)]
-        public static (Assignment, IContext) AssignToMe(this Project project, IContext context) =>
-        Assignments.NewAssignmentToIndividual(Users.Me(context), project, context.Today(), context);
-
-        public static string DisableAssignToMe(this Project project, IContext context) =>
-            project.IsAssignedToMe(context) ? "Project is already assigned to you" : null;
-
         [MemberOrder(10)]
         public static IContext AssignToIndividual(this Project project, User singleUser, DateTime dueBy, IContext context) =>
             Assignments.NewAssignmentToIndividual(singleUser, project, dueBy, context).Item2;
@@ -354,7 +341,5 @@ namespace Model.Functions
             project.Tasks.LastOrDefault();
 
         #endregion
-
-
     }
 }

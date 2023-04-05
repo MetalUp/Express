@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using Model.Functions.Services;
-
-namespace Model
+﻿namespace Model
 {
     //A helper class to provide model configuration for use by Startup.cs in the Server project.
     //The implementation here relies on the conventions that:
