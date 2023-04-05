@@ -72,8 +72,11 @@ public static class PythonCompiler {
     }
 
     private static (RunResult, string) Compile(RunSpec runSpec, string file, string tempFileName) =>
-        UpdateLineNumber(Helpers.Compile(GetPythonExe(runSpec), $"-m py_compile {file}", tempFileName, runSpec), file);
+        UpdateLineNumber(Helpers.Compile(GetPythonExe(runSpec), $"-m py_compile {file}", tempFileName, runSpec), runSpec.sourcecode);
+
+
+    internal static (RunResult, string) Compile(RunSpec runSpec) => Compile(runSpec, CreateSourceFile(runSpec), TempFileName);
 
     private static (RunResult, string) TypeCheck(RunSpec runSpec, string file, string tempFileName) =>
-        UpdateTypeCheckLineNumber(Helpers.TypeCheck(GetMyPyExe(runSpec), $"{file}  {runSpec.Options.CompileArguments}", tempFileName, runSpec), file);
+        UpdateTypeCheckLineNumber(Helpers.TypeCheck(GetMyPyExe(runSpec), $"{file}  {runSpec.Options.CompileArguments}", tempFileName, runSpec), runSpec.sourcecode);
 }

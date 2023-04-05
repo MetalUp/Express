@@ -10,21 +10,25 @@ namespace CompileServerTest.Workers;
 [TestClass]
 public class PythonCompilerTest {
     private const string SimpleCode =
-        @"# StudentCode
+        @"
+# StudentCode
 print (str(1))";
 
     private const string MissingTerm =
-        @"# StudentCode
+        @"
+# StudentCode
 print (str(1/))";
 
     private const string MissingTermMultiLine =
-        @"# StudentCode
+        @"
+# StudentCode
 print (str(1))
 print (str(2))
 print (str(1/))";
 
     private const string RunTimeFail =
-        @"# StudentCode
+        @"
+# StudentCode
 print (int(""invalid""))";
 
     private const string TestCodeOk =
@@ -66,10 +70,13 @@ if __name__ == ""__main__"":
     print(""Everything passed"")
 ";
 
-    private const string TestCodeTypeFail = @"# StudentCode
+    private const string TestCodeTypeFail = @"
+# StudentCode
 def N(c): return c - 20 if c > 19 else c +  380";
 
-    private const string TestCodeTuple = "def foo(la: tuple[int,...], lb: tuple[int,...]) -> tuple[int,...] : return la + lb";
+    private const string TestCodeTuple = @"
+# StudentCode
+def foo(la: tuple[int,...], lb: tuple[int,...]) -> tuple[int,...] : return la + lb";
 
     private readonly ILogger testLogger = NullLogger.Instance;
 
@@ -140,7 +147,7 @@ def N(c): return c - 20 if c > 19 else c +  380";
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:2:1:error:Functionismissingatypeannotation[no-untyped-def]Found1errorin1file(checked1sourcefile)");
+        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:3:1:error:Functionismissingatypeannotation[no-untyped-def]Found1errorin1file(checked1sourcefile)");
         Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(1, rr.col_no);
     }
@@ -163,7 +170,7 @@ def N(c): return c - 20 if c > 19 else c +  380";
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:2:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
+        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:3:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
         Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(15, rr.col_no);
     }
@@ -176,7 +183,7 @@ def N(c): return c - 20 if c > 19 else c +  380";
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line2print(str(1/))^SyntaxError:invalidsyntax");
+        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line3print(str(1/))^SyntaxError:invalidsyntax");
         Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(18, rr.col_no);
     }
@@ -188,7 +195,7 @@ def N(c): return c - 20 if c > 19 else c +  380";
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:4:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
+        rr.AssertRunResult(Outcome.CompilationError, @"temp.py:5:15:error:invalidsyntax[syntax]Found1errorin1file(errorspreventedfurtherchecking)");
         Assert.AreEqual(3, rr.line_no);
         Assert.AreEqual(15, rr.col_no);
     }
@@ -201,7 +208,7 @@ def N(c): return c - 20 if c > 19 else c +  380";
         Assert.IsNotNull(rr);
         rr.cmpinfo = ClearWhiteSpace(rr.cmpinfo);
 
-        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line4print(str(1/))^SyntaxError:invalidsyntax");
+        rr.AssertRunResult(Outcome.CompilationError, @$"File""{runSpec.TempDir}temp.py"",line5print(str(1/))^SyntaxError:invalidsyntax");
         Assert.AreEqual(3, rr.line_no);
         Assert.AreEqual(18, rr.col_no);
     }
@@ -214,7 +221,7 @@ def N(c): return c - 20 if c > 19 else c +  380";
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
 
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line2,in<module>print(int(""invalid""))^^^^^^^^^^^^^^ValueError:invalidliteralforint()withbase10:'invalid'");
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line3,in<module>print(int(""invalid""))^^^^^^^^^^^^^^ValueError:invalidliteralforint()withbase10:'invalid'");
     }
 
     [TestMethod]
@@ -226,7 +233,7 @@ def N(c): return c - 20 if c > 19 else c +  380";
         Assert.IsNotNull(rr);
         rr.stderr = ClearWhiteSpace(rr.stderr);
 
-        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line2,in<module>print(int(""invalid""))^^^^^^^^^^^^^^ValueError:invalidliteralforint()withbase10:'invalid'");
+        rr.AssertRunResult(Outcome.RunTimeError, "", "", @$"Traceback(mostrecentcalllast):File""{runSpec.TempDir}temp.py"",line3,in<module>print(int(""invalid""))^^^^^^^^^^^^^^ValueError:invalidliteralforint()withbase10:'invalid'");
     }
 
     [TestMethod]
