@@ -59,11 +59,15 @@
 
         #region other internal methods
 
-        internal static IQueryable<Activity> ActivitiesOfCurrentUser(int taskId, IContext context)
+        internal static IQueryable<Activity> ActivitiesOfCurrentUser(IContext context)
         {
             int uId = Users.Me(context).Id;
-            return AllActivities(context).Where(a => a.UserId == uId && a.TaskId == taskId);
+            return AllActivities(context).Where(a => a.UserId == uId);
         }
+
+        internal static IQueryable<Activity> ActivitiesOfCurrentUser(int taskId, IContext context) =>
+            ActivitiesOfCurrentUser(context).Where(a => a.TaskId == taskId);
+
 
         internal static Activity MostRecentActivityOfType(ActivityType type, Task task, IContext context) =>
             ActivitiesOfCurrentUser(task.Id, context).Where(a => a.ActivityType == type).FirstOrDefault();

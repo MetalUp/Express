@@ -9,10 +9,8 @@ namespace Model.Functions.Menus
         //If no such task, returns 0
         internal static int MyLastActiveTaskId(IContext context)
         {
-            return (from a in Assignments.MyCurrentAssignments(context)
-                    from act in Activities.AllActivities(context)  //these are ordered most recent first
-                    where act.AssignmentId == a.Id
-                    select act.TaskId).FirstOrDefault();
+            var last = Activities.ActivitiesOfCurrentUser(context).FirstOrDefault();
+            return last is null ? 0 : last.TaskId;
         }
     }
 }
