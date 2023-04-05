@@ -62,7 +62,7 @@
         internal static IQueryable<Activity> ActivitiesOfCurrentUser(int taskId, IContext context)
         {
             int uId = Users.Me(context).Id;
-            return AllActivities(context).Where(a => a.UserId == uId);
+            return AllActivities(context).Where(a => a.UserId == uId && a.TaskId == taskId);
         }
 
         internal static Activity MostRecentActivityOfType(ActivityType type, Task task, IContext context) =>
