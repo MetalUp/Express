@@ -19,10 +19,8 @@ Namespace MetalUp.Express
 ' StudentCode - this comment is needed error line number offset
 <StudentCode>
 
-' HiddenCode
 <HiddenCode>
 
-' Helpers
 <Helpers>
 
     End Module
