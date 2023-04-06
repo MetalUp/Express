@@ -1,5 +1,6 @@
 ﻿using Model.Functions.Services;
 using NakedFunctions.Security;
+using static Model.Authorization.Helpers;
 
 namespace Model.Authorization
 {
@@ -20,6 +21,7 @@ namespace Model.Authorization
                 nameof(Files) => FilesAuth(memberName, context),
                 nameof(Assignments) => AssignmentsAuth(memberName, context),
                 nameof(Activities) => ActivitiesAuth(memberName, context),
+                nameof(Tasks) => TasksAuth(memberName, context),
                 nameof(Compile) => CompileAuth(memberName, context),
                 nameof(TaskAccess) => TaskAccessAuth(memberName, context),
                 nameof(UserService) => InvitationAcceptanceAuth(memberName,context),
@@ -34,17 +36,24 @@ namespace Model.Authorization
                 _ => false
             };
 
+        private bool TasksAuth(string memberName, IContext context) =>
+            Users.UserRole(context) switch
+            {
+                Role.Root => true,
+                _ => MatchesOneOf(memberName, nameof(Tasks.GoToTaskNo), nameof(Tasks.GoToLastActiveTask))
+            };
+
         private bool AssignmentsAuth(string memberName, IContext context) =>
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Helpers.MatchesOneOf(memberName,
+                >= Role.Teacher => MatchesOneOf(memberName,
                     nameof(Assignments.AssignmentsSetByMe),
                     nameof(Assignments.OverdueAssignmentsSetByMe),
                     nameof(Assignments.FindAssignmentsSetByMe),
                     nameof(Assignments.NewAssignmentToIndividual),
                     nameof(Assignments.NewAssignmentToGroup)),
-                Role.Student => Helpers.MatchesOneOf(memberName,
+                Role.Student => MatchesOneOf(memberName,
                     nameof(Assignments.MyCurrentAssignments),
                     nameof(Assignments.MyPastAssignments)),
                 _ => false
@@ -55,7 +64,7 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 Role.Author => true,
-                Role.Teacher => Helpers.MatchesOneOf(memberName,
+                Role.Teacher => MatchesOneOf(memberName,
                     nameof(Projects.AllAssignableProjects),
                     nameof(Projects.FindProjects)),
                 _ => false
@@ -73,7 +82,7 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Helpers.MatchesOneOf(memberName,
+                >= Role.Teacher => MatchesOneOf(memberName,
                     nameof(Invitations.InviteNewTeacherInMyOrganisation),
                     nameof(Invitations.InviteNewStudentInMyOrganisation),
                     nameof(Invitations.OutstandingInvitationsForMyOrganisation)),
@@ -84,7 +93,7 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Helpers.MatchesOneOf(memberName,
+                >= Role.Teacher => MatchesOneOf(memberName,
                     nameof(Groups.AllOurGroups),
                     nameof(Groups.CreateNewGroup)),
                 Role.Student => false,
@@ -95,7 +104,7 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Helpers.MatchesOneOf(memberName, nameof(Organisations.MyOrganisation)),
+                >= Role.Teacher => MatchesOneOf(memberName, nameof(Organisations.MyOrganisation)),
                 _ => false
             };
 
@@ -103,7 +112,7 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Helpers.MatchesOneOf(memberName,
+                >= Role.Teacher => MatchesOneOf(memberName,
                     nameof(Users.Me),
                     nameof(Users.OurStudents),
                     nameof(Users.FindStudentByName),

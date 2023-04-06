@@ -3,6 +3,17 @@ namespace Model.Functions.Menus
 {
     public static class Tasks
     {
+        //[UrlLink]
+        [Named("Go to Task No.")]
+        [MemberOrder(10)]
+        public static string GoToTaskNo([Named("Task No.")] int taskId) =>  $"/task/{taskId}";
+
+        //[UrlLink]
+        [MemberOrder(20)]
+        public static string GoToLastActiveTask(IContext context) => GoToTaskNo(MyLastActiveTaskId(context));
+
+        public static bool HideGoToLastActiveTask(IContext context) => MyLastActiveTaskId(context) == 0;
+
         internal static Task GetTask(int taskId, IContext context) => context.Instances<Task>().SingleOrDefault(t => t.Id == taskId);
 
         //Defined as the TaskId on the user's most recent activity on a current assignment
