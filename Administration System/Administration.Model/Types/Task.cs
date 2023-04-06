@@ -12,6 +12,7 @@ namespace Model.Types
             ProjectId = cloneFrom.ProjectId;
             Project = cloneFrom.Project;
             Number = cloneFrom.Number;
+            Title = cloneFrom.Title;
             Summary = cloneFrom.Summary;
             DescriptionFileId = cloneFrom.DescriptionFileId;
             DescriptionFile = cloneFrom.DescriptionFile;
@@ -47,7 +48,11 @@ namespace Model.Types
 
         [MemberOrder(20)]
         [Named("No.")]
-        public int Number { get; init; }
+        public int? Number { get; init; }
+
+        [MemberOrder(25)]
+        [Named("Title (override)")]
+        public string Title { get; init; }
 
         [MemberOrder(30)]
         public string Summary { get; init; }
@@ -118,14 +123,11 @@ namespace Model.Types
         public virtual File RegExRulesFile { get; init; }
 
         #endregion
-
-
         #region Helpers
         //Helpers should be generic
         internal string Helpers => Project.Helpers;
 
         #endregion
-
 
         [Hidden]
         public int? PreviousTaskId { get; init; }
@@ -144,6 +146,8 @@ namespace Model.Types
 
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
-        public override string ToString() => $"{Project.Title} Task {Number} ({Project.Language.Name})";
+        public override string ToString() => Number is null ?
+            $"{Title} ({Project.Language.Name})" :
+            $"{Project.Title} Task {Number} ({Project.Language.Name})";
     }  
 }

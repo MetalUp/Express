@@ -24,6 +24,13 @@
                 context.WithUpdated(task, new(task) { Number = number });
 
         [Edit]
+        public static IContext EditTitle(
+this Task task,
+string title,
+IContext context) =>
+context.WithUpdated(task, new(task) { Title = title });
+
+        [Edit]
         public static IContext EditSummary(
     this Task task,
     string summary,

@@ -257,7 +257,8 @@
         [MemberOrder(100)]
         public static IContext CreateTask(
             this Project project,
-            int taskNumber,
+            [Optionally] int? taskNumber,
+            [Optionally] string? title,
             [Optionally] Task previousTask,
             IContext context)
         {
@@ -283,13 +284,20 @@
             return context2.WithNew(task).WithNew(file);
         }
 
-        public static int Default1CreateTask(
-            this Project project) =>
-            project.Tasks.Count == 0 ? 1 : project.Tasks.Last().Number + 1;
-
-        public static Task Default2CreateTask(
+        public static Task Default3CreateTask(
             this Project project) =>
             project.Tasks.LastOrDefault();
+
+        public static string? ValidateCreateTask(
+            this Project project,
+            [Optionally] int? taskNumber,
+            [Optionally] string? title,
+            [Optionally] Task previousTask,
+            IContext context) =>
+            taskNumber is null && title is null || taskNumber is not null && title is not null ?
+            "Must specify Task Number, or Title, but not both"
+            :
+            null;
         #endregion
 
         #region Copying
