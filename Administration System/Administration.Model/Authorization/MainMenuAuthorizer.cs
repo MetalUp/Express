@@ -1,4 +1,4 @@
-﻿using Model.Functions.Services;
+﻿using Model.Services;
 using NakedFunctions.Security;
 using static Model.Authorization.Helpers;
 

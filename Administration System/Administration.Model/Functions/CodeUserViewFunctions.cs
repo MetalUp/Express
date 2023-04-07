@@ -1,6 +1,4 @@
-﻿using Model.Functions.Services;
-
-namespace Model.Functions;
+﻿namespace Model.Functions;
 
 public static class CodeUserView_Functions
 {

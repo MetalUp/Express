@@ -7,7 +7,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace Model.Functions.Services;
+namespace Model.Services;
 
 public static class Compile
 {

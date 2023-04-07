@@ -1,7 +1,7 @@
 ﻿using NakedFramework.Value;
 using System.Text;
 
-namespace Model.Functions.Menus
+namespace Model.Menus
 {
     public static class Files
     {

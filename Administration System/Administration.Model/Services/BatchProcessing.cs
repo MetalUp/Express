@@ -1,4 +1,4 @@
-﻿namespace Model.Functions.Services;
+﻿namespace Model.Services;
 
 public static class BatchProcessing
 {

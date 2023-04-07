@@ -3,7 +3,7 @@ using System.Reflection;
 using File = Model.Types.File;
 using IOFile = System.IO.File;
 
-namespace Model.Functions.Services
+namespace Model.Services
 {
     public static class CommonFileDefinitions
     {

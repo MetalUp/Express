@@ -1,5 +1,5 @@
 ﻿
-namespace Model.Functions.Menus
+namespace Model.Menus
 {
     public static class Tasks
     {

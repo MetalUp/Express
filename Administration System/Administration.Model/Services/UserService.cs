@@ -1,6 +1,6 @@
 ﻿using NakedFramework.Error;
 
-namespace Model.Functions.Services
+namespace Model.Services
 {
     public static class UserService
     {
