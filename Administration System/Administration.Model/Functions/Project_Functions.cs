@@ -258,7 +258,7 @@
         public static IContext CreateTask(
             this Project project,
             [Optionally] int? taskNumber,
-            [Optionally] string? title,
+            [Optionally] string title,
             [Optionally] Task previousTask,
             IContext context)
         {
@@ -288,10 +288,10 @@
             this Project project) =>
             project.Tasks.LastOrDefault();
 
-        public static string? ValidateCreateTask(
+        public static string ValidateCreateTask(
             this Project project,
             [Optionally] int? taskNumber,
-            [Optionally] string? title,
+            [Optionally] string title,
             [Optionally] Task previousTask,
             IContext context) =>
             taskNumber is null && title is null || taskNumber is not null && title is not null ?

@@ -82,6 +82,7 @@ namespace Test
                 nameof(Languages),
                 nameof(Organisations),
                 nameof(Projects),
+                nameof(Tasks),
                 nameof(Users));
 
             var projects = (await menus.GetMenu(nameof(Projects))).AssertMemberOrder(
