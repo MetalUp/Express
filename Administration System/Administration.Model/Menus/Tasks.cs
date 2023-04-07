@@ -12,6 +12,10 @@ namespace Model.Menus
         [MemberOrder(20)]
         public static string GoToLastActiveTask(IContext context) => GoToTaskNo(MyLastActiveTaskId(context));
 
+        [TableView(false, nameof(Task.Project), nameof(Task.Number), nameof(Task.Title))]
+        [RenderEagerly]
+        public static IQueryable<Task> AllTasks(IContext context) => context.Instances<Task>().OrderBy(t => t.ProjectId).ThenBy(t => t.Number);
+
         public static bool HideGoToLastActiveTask(IContext context) => MyLastActiveTaskId(context) == 0;
 
         internal static Task GetTask(int taskId, IContext context) => context.Instances<Task>().SingleOrDefault(t => t.Id == taskId);
