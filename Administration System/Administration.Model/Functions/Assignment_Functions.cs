@@ -7,14 +7,25 @@
             assignment.Status == AssignmentStatus.Completed || assignment.Status == AssignmentStatus.Terminated;
         #endregion
         #region Activity
+        [RenderEagerly]
+        [TableView(false, nameof(Activity.Task), nameof(Activity.ActivityType), nameof(Activity.HintUsed),nameof(Activity.TimeStamp))]
         public static IQueryable<Activity> ListActivity(this Assignment assignment, IContext context)
         {
             int assigId = assignment.Id;
             return context.Instances<Activity>().Where(a => a.AssignmentId == assigId).OrderByDescending(a => a.TimeStamp);
         }
 
-        internal static IQueryable<Activity> ListActivity(this Assignment assignment, int taskId, IContext context) =>
-            ListActivity(assignment, context).Where(a => a.TaskId == taskId);
+        [RenderEagerly]
+        [TableView(false, nameof(Activity.ActivityType), nameof(Activity.HintUsed), nameof(Activity.TimeStamp))]
+        public static IQueryable<Activity> ListActivityForTask(this Assignment assignment, Task task, IContext context)
+        {
+            int taskId = task.Id;
+            return ListActivity(assignment, context).Where(a => a.TaskId == taskId);
+        }
+
+        public static ICollection<Task> Choices1ListActivityForTask(this Assignment assignment) =>
+            assignment.Project.Tasks;
+
         #endregion
 
         [Edit]
