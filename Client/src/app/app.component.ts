@@ -94,6 +94,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.errorMessage = e.message;
                 this.errorStacktrace = e.stackTrace;
             }
+            else if (e) {
+                const ea = e as any; 
+                this.hasError = true;
+                this.errorTitle = "Error";
+                this.errorMessage = ea.message || "No message" ;
+                this.errorStacktrace = ea.stackTrace || "No Stack Trace";
+            }
         });
 
     }
