@@ -21,7 +21,7 @@ export class FileService {
   }
 
   // must be lambda function for 'this' binding
-  getService = () => getService(this.contextService, this.repLoader, "Model.Functions.Services.FileService");
+  getService = () => getService(this.contextService, this.repLoader, "Model.Services.FileService");
 
   saveFile(id: string, content: string) {
     return this.getSaveAction().then(action => {

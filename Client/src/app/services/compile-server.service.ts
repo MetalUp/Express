@@ -37,7 +37,7 @@ export class CompileServerService {
   private getService() {
     this.contextService.getServices()
         .then((services: DomainServicesRepresentation) => {
-          const service = services.getService("Model.Functions.Services.Compile");
+          const service = services.getService("Model.Services.Compile");
           return this.repLoader.populate(service);
         })
         .then((service : IHateoasModel) => {

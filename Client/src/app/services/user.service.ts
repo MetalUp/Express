@@ -28,7 +28,7 @@ export class UserService {
   }
 
   // must be lambda function for 'this' binding
-  getService = () => getService(this.contextService, this.repLoader, "Model.Functions.Services.UserService");
+  getService = () => getService(this.contextService, this.repLoader, "Model.Services.UserService");
   
   acceptInvitation(code: string) {
     return this.getAcceptInvitationAction().then(action => {

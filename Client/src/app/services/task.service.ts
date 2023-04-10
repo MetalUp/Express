@@ -26,7 +26,7 @@ export class TaskService {
 
     return this.contextService.getServices()
       .then((services: DomainServicesRepresentation) => {
-        const service = services.getService("Model.Functions.Services.TaskAccess");
+        const service = services.getService("Model.Services.TaskAccess");
         return this.repLoader.populate(service);
       })
       .then((service: IHateoasModel) => {
