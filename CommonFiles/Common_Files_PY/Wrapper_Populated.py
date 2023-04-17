@@ -1,3 +1,10 @@
+from math import *
+
+# StudentCode - this comment is needed error line number offset
+#<StudentCode>
+
+#<HiddenCode>
+
 from typing import Any
 
 def display(x: Any) -> str:
@@ -48,3 +55,8 @@ T = TypeVar('T', int, float)
 def insert(list: list[T], i: int, value: T) : return list[0:i]+[value]+list[i:]
 
 def set(list: list[T], i: int, value: T) : return list[0:i]+[value]+list[i+1:]
+
+
+#<Tests>
+
+print (display(<Expression>))

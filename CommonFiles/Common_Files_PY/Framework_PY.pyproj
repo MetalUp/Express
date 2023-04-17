@@ -26,6 +26,7 @@
     <Compile Include="test_helpers.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Wrapper_Populated.py" />
     <Content Include="Functions_regex.json" />
     <Content Include="Functions_regex_Test %28to be converted .txt" />
     <Content Include="Default_wrapper.txt" />

@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using static System.Math;
 using System.Text;
+using static MetalUp.Express.Extensions;
 
 namespace MetalUp.Express
 {
@@ -25,5 +26,14 @@ namespace MetalUp.Express
 <Helpers>
 
 <Tests>
+    }
+
+    public static class Extensions
+    {
+            public static List<T> SetItem<T>(this List<T> list, int i, T value) =>
+                list.Take(i).Append(value).Concat(list.Skip(i + 1)).ToList();
+
+            public static List<T> InsertItem<T>(this List<T> list, int i, T value) =>
+                list.Take(i).Append(value).Concat(list.Skip(i)).ToList();
     }
 }

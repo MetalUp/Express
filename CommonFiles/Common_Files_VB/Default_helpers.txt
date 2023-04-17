@@ -1,28 +1,29 @@
-﻿    Public Function Display(ByVal obj As Object) As String
-        If obj Is Nothing Then
-            Return ""
-        End If
-        If TypeOf obj Is String Then
-            Return $"{obj}"
-        End If
-        If TypeOf obj Is Boolean Then
-            Return If(DirectCast(obj, Boolean), "true", "false")
-        End If
-        Dim type = obj.GetType()
-        If type.IsGenericType Then
-            If type.GetGenericTypeDefinition() Is GetType(ImmutableList(Of )) Then
+﻿        Public Function Display(ByVal obj As Object) As String
+            If obj Is Nothing Then
+                Return ""
+            End If
+            If TypeOf obj Is String Then
+                Return $"{obj}"
+            End If
+            If TypeOf obj Is Boolean Then
+                Return If(DirectCast(obj, Boolean), "true", "false")
+            End If
+            Dim type = obj.GetType()
+            If TypeOf obj Is Tuple Then
                 Dim toDisplay = DirectCast(obj, IEnumerable).Cast(Of Object)().Select(Function(o) Display(o)).ToList()
-                Return $"{String.Join(","c, toDisplay)}"
+                Return $"({String.Join(","c, toDisplay)})"
             End If
-            If type.GetGenericTypeDefinition() Is GetType(List(Of )) Then
-                Return "Result is an ordinary List. Use ImmutableList only."
+            If type.IsGenericType Then
+                If type.GetGenericTypeDefinition() Is GetType(List(Of )) Then
+                    Dim toDisplay = DirectCast(obj, IEnumerable).Cast(Of Object)().Select(Function(o) Display(o)).ToList()
+                    Return $"{{{String.Join(","c, toDisplay)}}}"
+                End If
             End If
-        End If
-        If TypeOf obj Is IEnumerable Then
-            Return "Result is an IEnumerable. Convert to ImmutableList to display contents"
-        End If
-        Return obj.ToString()
-    End Function
+            If TypeOf obj Is IEnumerable Then
+                Return "Result is an IEnumerable. Convert to List to display contents"
+            End If
+            Return obj.ToString()
+        End Function
 
     Public Function ArgString(ParamArray arguments As Object()) As String
         Return arguments.Aggregate("", Function(s, a) s & Display(a) & ", ").TrimEnd(" "c, ","c)
@@ -61,3 +62,13 @@
 	Private Function AsInt(ByVal input As String) As Integer
 		Return Convert.ToInt32(Encoding.Default.GetString(Encoding.ASCII.GetBytes(input).Where(Function(b) b > 47 AndAlso b < 58).ToArray()))
 	End Function
+
+    <Extension>
+    Public Function SetItem(Of T)(ByVal list As List(Of T), ByVal i As Integer, ByVal value As T) As List(Of T)
+        Return list.Take(i).Append(value).Concat(list.Skip(i + 1)).ToList()
+    End Function
+
+    <Extension>
+    Public Function InsertItem(Of T)(ByVal list As List(Of T), ByVal i As Integer, ByVal value As T) As List(Of T)
+        Return list.Take(i).Append(value).Concat(list.Skip(i)).ToList()
+    End Function

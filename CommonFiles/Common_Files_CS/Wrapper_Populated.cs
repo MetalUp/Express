@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
-
+using static MetalUp.Express.Extensions;
 
 namespace MetalUp.Express
 {
@@ -25,24 +25,25 @@ namespace MetalUp.Express
         public static string Display(object obj)
         {
             if (obj is null) return "";
-            if (obj is string) return $@"""{obj}""";
+            if (obj is string) return $@"{obj}";
             if (obj is Boolean) return (Boolean)obj ? "true" : "false";
             var type = obj.GetType();
+            if (type == typeof(Tuple))
+            {
+                var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
+                return $@"({string.Join(',', toDisplay)})";
+            }
             if (type.IsGenericType)
             {
-                if (type.GetGenericTypeDefinition() == typeof(ImmutableList<>))
-                {
-                    var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
-                    return $@"{string.Join(',', toDisplay)}";
-                }
                 if (type.GetGenericTypeDefinition() == typeof(List<>))
                 {
-                    return "Result is an ordinary List. Use ImmutableList only.";
+                    var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
+                    return $@"{{{string.Join(',', toDisplay)}}}";
                 }
             }
             if (obj is IEnumerable)
             {
-                return "Result is an IEnumerable. Convert to ImmutableList to display contents";
+                return "Result is an IEnumerable. Convert to List to display contents";
             }
             return obj.ToString();
         }
@@ -81,7 +82,18 @@ namespace MetalUp.Express
 
         private static int AsInt(string input) =>
              Convert.ToInt32(Encoding.Default.GetString(Encoding.ASCII.GetBytes(input).Where(b => b > 47 && b < 58).ToArray()));
+
+
         #endregion
         //<Tests>
+    }
+
+    public static class Extensions
+    {
+            public static List<T> SetItem<T>(this List<T> list, int i, T value) =>
+                list.Take(i).Append(value).Concat(list.Skip(i + 1)).ToList();
+
+            public static List<T> InsertItem<T>(this List<T> list, int i, T value) =>
+                list.Take(i).Append(value).Concat(list.Skip(i)).ToList();
     }
 }

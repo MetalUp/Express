@@ -4,21 +4,22 @@
             if (obj is string) return $@"{obj}";
             if (obj is Boolean) return (Boolean)obj ? "true" : "false";
             var type = obj.GetType();
+            if (type == typeof(Tuple))
+            {
+                var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
+                return $@"({string.Join(',', toDisplay)})";
+            }
             if (type.IsGenericType)
             {
-                if (type.GetGenericTypeDefinition() == typeof(ImmutableList<>))
-                {
-                    var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
-                    return $@"{string.Join(',', toDisplay)}";
-                }
                 if (type.GetGenericTypeDefinition() == typeof(List<>))
                 {
-                    return "Result is an ordinary List. Use ImmutableList only.";
+                    var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
+                    return $@"{{{string.Join(',', toDisplay)}}}";
                 }
             }
             if (obj is IEnumerable)
             {
-                return "Result is an IEnumerable. Convert to ImmutableList to display contents";
+                return "Result is an IEnumerable. Convert to List to display contents";
             }
             return obj.ToString();
         }
