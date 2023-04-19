@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>8a6d5c72-50d3-4c42-a412-0d036ccc7c35</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>test_helpers.py</StartupFile>
+    <StartupFile>Wrapper_Populated.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,7 +23,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Default_helpers.txt" />
-    <Compile Include="test_helpers.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Wrapper_Populated.py" />

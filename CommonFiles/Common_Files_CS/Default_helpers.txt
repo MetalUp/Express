@@ -1,28 +1,26 @@
-﻿        public static string Display(object obj)
+﻿    static string Display(object obj)
+    {
+        if (obj is null) return "";
+        if (obj is string) return $@"""{obj}""";
+        if (obj is Boolean) return (Boolean)obj ? "true" : "false";
+        if (obj is ITuple)
         {
-            if (obj is null) return "";
-            if (obj is string) return $@"{obj}";
-            if (obj is Boolean) return (Boolean)obj ? "true" : "false";
-            var type = obj.GetType();
-            if (type == typeof(Tuple))
-            {
-                var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
-                return $@"({string.Join(',', toDisplay)})";
-            }
-            if (type.IsGenericType)
-            {
-                if (type.GetGenericTypeDefinition() == typeof(List<>))
-                {
-                    var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
-                    return $@"{{{string.Join(',', toDisplay)}}}";
-                }
-            }
-            if (obj is IEnumerable)
-            {
-                return "Result is an IEnumerable. Convert to List to display contents";
-            }
-            return obj.ToString();
+            var tuple = (ITuple)obj;
+            return Enumerable.Range(0, tuple.Length)
+                .Aggregate("(", (s, i) => s + Display(tuple[i]) + (i < (tuple.Length - 1) ? "," : ")"));
         }
+        var type = obj.GetType();
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
+        {
+            var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
+            return $@"{{{string.Join(',', toDisplay)}}}";
+        }
+        if (obj is IEnumerable)
+        {
+            return "Result is an IEnumerable. Convert to List to display contents";
+        }
+        return obj.ToString();
+    }
 
     public static string ArgString(params object[] arguments) => arguments.Aggregate("", (s, a) => s + Display(a) + ", ").TrimEnd(' ', ',');
 
