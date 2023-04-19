@@ -9,7 +9,7 @@ from typing import Any
 
 def display(x: Any) -> str:
     if isinstance(x, str):
-        return f'"{x}"'
+        return f"''{x}'"
     elif isinstance(x, tuple):
         return str(x)
     elif isinstance(x, list):
@@ -31,13 +31,13 @@ def fail_message(function_name : str, expected : Any, actual : Any, args: Any) -
 def qa_fail_message(wrong_answers : str) -> str:
     return f"xxxWrong or missing answer(s) to question number(s): {wrong_answers}.xxx"
 
-def as_list(answers: str) -> list[str]:
-    arr : list[str] = [''] * 20
-    for a in filter(lambda x: len(x) > 0, answers.split('\n')):
-        parts = a.split(')')
-        n = int(parts[0].strip())
-        arr[n] = parts[1].strip().upper()
-    return arr
+#def as_list(answers: str) -> list[str]:
+#    arr : list[str] = [''] * 20
+#    for a in filter(lambda x: len(x) > 0, answers.split('\n')):
+#        parts = a.split(')')
+#        n = int(parts[0].strip())
+#        arr[n] = parts[1].strip().upper()
+#    return arr
 
 def wrong_answers(student : str, answers : str) -> str :
     student_list = as_list(student)
@@ -62,4 +62,4 @@ def remove_item(list: list[T], i: int) : return list[0:i]+list[i+1:]
 
 #<Tests>
 
-print (display(<Expression>))
+print (display(("Hello",4)))

@@ -3,7 +3,8 @@
   <PropertyGroup>
     <RootNamespace>Framework_VB</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
-    <StartupObject>Framework_VB.MetalUp.Express.Program</StartupObject>
+    <StartupObject>Sub Main</StartupObject>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

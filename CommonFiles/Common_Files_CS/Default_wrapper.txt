@@ -4,9 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using static System.Math;
 using System.Text;
 using static MetalUp.Express.Extensions;
+
 
 namespace MetalUp.Express
 {

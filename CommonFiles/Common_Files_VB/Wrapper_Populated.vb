@@ -13,7 +13,7 @@ Namespace MetalUp.Express
     Module Program
         Public Sub Main()
             Console.OutputEncoding = Encoding.UTF8
-            Console.WriteLine(Display(""))
+            Console.WriteLine(Display(("Hell00", 3)))
         End Sub
 
         ' StudentCode - this comment is needed error line number offset
@@ -22,32 +22,32 @@ Namespace MetalUp.Express
         End Function
 
 #Region "<Helpers>"
-        Public Function Display(ByVal obj As Object) As String
+        Function Display(ByVal obj As Object) As String
             If obj Is Nothing Then
                 Return ""
             End If
             If TypeOf obj Is String Then
-                Return $"{obj}"
+                Return $"""{obj}"""
             End If
             If TypeOf obj Is Boolean Then
                 Return If(DirectCast(obj, Boolean), "true", "false")
             End If
-            Dim type = obj.GetType()
-            If TypeOf obj Is Tuple Then
-                Dim toDisplay = DirectCast(obj, IEnumerable).Cast(Of Object)().Select(Function(o) Display(o)).ToList()
-                Return $"({String.Join(","c, toDisplay)})"
+            If TypeOf obj Is ITuple Then
+                Dim tuple = DirectCast(obj, ITuple)
+                Return Enumerable.Range(0, tuple.Length).Aggregate("(", Function(s, i) s & Display(tuple(i)) & (If(i < (tuple.Length - 1), ",", ")")))
             End If
-            If type.IsGenericType Then
-                If type.GetGenericTypeDefinition() Is GetType(List(Of )) Then
-                    Dim toDisplay = DirectCast(obj, IEnumerable).Cast(Of Object)().Select(Function(o) Display(o)).ToList()
-                    Return $"{{{String.Join(","c, toDisplay)}}}"
-                End If
+            Dim type = obj.GetType()
+            If type.IsGenericType AndAlso type.GetGenericTypeDefinition() Is GetType(List(Of )) Then
+                Dim toDisplay = DirectCast(obj, IEnumerable).Cast(Of Object)().Select(Function(o) Display(o)).ToList()
+                Return $"{{{String.Join(","c, toDisplay)}}}"
             End If
             If TypeOf obj Is IEnumerable Then
                 Return "Result is an IEnumerable. Convert to List to display contents"
             End If
             Return obj.ToString()
         End Function
+
+
 
         Public Function ArgString(ParamArray arguments As Object()) As String
             Return arguments.Aggregate("", Function(s, a) s & Display(a) & ", ").TrimEnd(" "c, ","c)

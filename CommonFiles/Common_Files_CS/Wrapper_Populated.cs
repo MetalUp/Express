@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using static MetalUp.Express.Extensions;
 
@@ -13,7 +14,7 @@ namespace MetalUp.Express
         static void Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
-            Console.WriteLine(Display(3));
+            Console.WriteLine(Display(("hell0", 1)));
         }
 
         // StudentCode - this comment is needed error line number offset
@@ -25,21 +26,19 @@ namespace MetalUp.Express
         public static string Display(object obj)
         {
             if (obj is null) return "";
-            if (obj is string) return $@"{obj}";
+            if (obj is string) return $@"""{obj}""";
             if (obj is Boolean) return (Boolean)obj ? "true" : "false";
+            if (obj is ITuple)
+            {
+                var tuple = (ITuple)obj;
+                return Enumerable.Range(0, tuple.Length)
+                    .Aggregate("(", (s, i) => s + Display(tuple[i]) + (i < (tuple.Length - 1) ? "," : ")"));
+            }
             var type = obj.GetType();
-            if (type == typeof(Tuple))
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
-                return $@"({string.Join(',', toDisplay)})";
-            }
-            if (type.IsGenericType)
-            {
-                if (type.GetGenericTypeDefinition() == typeof(List<>))
-                {
-                    var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
-                    return $@"{{{string.Join(',', toDisplay)}}}";
-                }
+                return $@"{{{string.Join(',', toDisplay)}}}";
             }
             if (obj is IEnumerable)
             {
