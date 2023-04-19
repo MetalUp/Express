@@ -38,7 +38,7 @@ namespace MetalUp.Express
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var toDisplay = ((IEnumerable)obj).Cast<object>().Select(o => Display(o)).ToList();
-                return $@"{{{string.Join(',', toDisplay)}}}";
+                return $"\n{{{string.Join(", ", toDisplay)}}}";
             }
             if (obj is IEnumerable)
             {

@@ -1,4 +1,5 @@
 from math import *
+from functools import reduce 
 
 # StudentCode - this comment is needed error line number offset
 #<StudentCode>
@@ -13,7 +14,8 @@ def display(x: Any) -> str:
     elif isinstance(x, tuple):
         return str(x)
     elif isinstance(x, list):
-        return str(x)
+        d = map(lambda y: display(y),x)
+        return "\n[" + ', '.join(d)+"]"
     else:
         try:
             iter(x)
