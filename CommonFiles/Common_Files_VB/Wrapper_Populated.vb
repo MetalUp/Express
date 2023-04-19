@@ -97,6 +97,11 @@ Namespace MetalUp.Express
             Return list.Take(i).Append(value).Concat(list.Skip(i)).ToList()
         End Function
 
+        <Extension>
+        Public Function RemoveItem(Of T)(ByVal list As List(Of T), ByVal i As Integer) As List(Of T)
+            Return list.Take(i).Concat(list.Skip(i)).ToList()
+        End Function
+
 #End Region
 
 #Region "<HiddenCode>"

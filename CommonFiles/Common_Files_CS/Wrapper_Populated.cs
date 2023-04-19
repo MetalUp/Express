@@ -95,5 +95,8 @@ namespace MetalUp.Express
 
             public static List<T> InsertItem<T>(this List<T> list, int i, T value) =>
                 list.Take(i).Append(value).Concat(list.Skip(i)).ToList();
+
+            public static List<T> RemoveItem<T>(this List<T> list, int i) =>
+                list.Take(i).Concat(list.Skip(i+1)).ToList();
     }
 }
