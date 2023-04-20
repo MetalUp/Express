@@ -32,10 +32,6 @@
         "Messages.NotPermitted"
       ],
       [
-        "\\w*[^(=|>|<)]=[^(=|>)]\\w*",
-        "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
-      ],
-      [
         "\\W(ArrayList)\\W",
         "Use of ArrayList is not permitted. Use a typed list such as List<int>"
       ]
@@ -47,6 +43,10 @@
       ]
     ],
     "functions": [
+      [
+        "\\w*[^(=|>|<)]=[^(=|>)]\\w*",
+        "Use of single '=', signifying assignment, is not permitted. (To test for equality, use '==')"
+      ],
       [
         "\\s+DateTime\\.(Today|Now)",
         "Use of '{1}' is not permitted here, as this would make the function dependent on a variable not passed in as a parameter"
