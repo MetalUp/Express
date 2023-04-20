@@ -97,7 +97,6 @@ namespace Model.Functions
         {
             ContentType.TaskDescription => "text/html",
             ContentType.Hint => "text/html",
-            ContentType.RegExRules => "application/json",
             _ => "text/plain"
         };
 
