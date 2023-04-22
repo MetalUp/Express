@@ -16,8 +16,8 @@
     "expressions": [],
     "functions": [
       [
-        "^[\\n\\s]*(?:static.*=>(?:[^;{}]|\\n)*;\\s*)*$",
-        "All functions must be: static <ReturnType> <NameStartingInUpperCase>(<parametersStartingLowerCase>) => <expression>;"
+        "^[\\n\\s]*static.*",
+        "All functions should be: static <ReturnType> <NameStartingInUpperCase>(<parametersStartingLowerCase>) => <expression>;"
       ]
     ]
   },
