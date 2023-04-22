@@ -1,4 +1,5 @@
 from math import *
+from typing import Tuple
 
 # StudentCode - this comment is needed error line number offset
 <StudentCode>
