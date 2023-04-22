@@ -1,5 +1,6 @@
 from math import *
 from typing import Tuple
+from functools import reduce
 
 # StudentCode - this comment is needed error line number offset
 <StudentCode>
