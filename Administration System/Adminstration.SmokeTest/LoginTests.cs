@@ -16,26 +16,18 @@ namespace SmokeTest;
 // because the initial timeout needs to be longer if the server is starting up
 
 [TestClass]
-public class AAStartupTests : BaseTest {
+public class LoginTests : BaseTest {
     [TestMethod]
-    public virtual void WaitForStartServer() {
+    public virtual void Login() {
+     
         helper.GoToLanding();
+        helper.Login();
+        helper.LoginWithGithub();
     }
 
     #region Overhead
 
-    protected override string BaseUrl => "https://development.metalup.org/landing";
-
-    [AssemblyInitialize]
-    public static void InitialiseAssembly(TestContext context) {
-        FilePath(@"drivers.chromedriver.exe");
-        InitChromeDriver();
-    }
-
-    [AssemblyCleanup]
-    public static void CleanUpAssembly() {
-        CleanupChromeDriver();
-    }
+    protected override string BaseUrl => @"https://development.metalup.org/";
 
     private Helper helper;
 

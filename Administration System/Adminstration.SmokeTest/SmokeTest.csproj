@@ -13,7 +13,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="NakedFrameworkClient.TestFramework" Version="110.0.0" />
+		<PackageReference Include="NakedFrameworkClient.TestFramework" Version="112.2.0" />
 		<PackageReference Include="Selenium.Support" Version="4.8.2" />
 		<PackageReference Include="Selenium.WebDriver" Version="4.8.2" />
 	</ItemGroup>
