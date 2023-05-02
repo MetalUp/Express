@@ -1,6 +1,6 @@
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { AuthService } from '@auth0/auth0-angular';
+import { AuthService, User } from '@auth0/auth0-angular';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { IUserView, UserView } from '../models/user-view';
 import { RegistrationService } from './registration.service';
@@ -16,9 +16,11 @@ describe('RegisteredService', () => {
 
   const userSubj = new BehaviorSubject<UserView>({ DisplayName: "" });
 
+  const uSubj = new BehaviorSubject<User>({ sub: "google:" });
+
 
   beforeEach(() => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['loginWithRedirect'], { isAuthenticated$: authSubj });
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['loginWithRedirect'], { isAuthenticated$: authSubj, user$: uSubj });
     userServiceSpy = jasmine.createSpyObj('UserService', ['loadUser'], { currentUser: userSubj });
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 

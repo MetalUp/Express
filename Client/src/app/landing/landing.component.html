@@ -13,9 +13,13 @@
                     invitation, or has already been used. Please contact
                     the person who sent you the invitation.</p>
             </ng-container>
-            <ng-container *ngIf="userChecked && (userLoggedOn | async) === true">
+            <ng-container *ngIf="userChecked && !invalidUser && (userLoggedOn | async) === true">
                 <p>Although you are technically logged in, you are not a registered user so the capabilities of
                     MetalUp.Express are not available to you.</p>
+                <button class="btn btn-primary btn-margin" (click)="registeredService.logout()">Log Out</button>
+            </ng-container>
+            <ng-container *ngIf="userChecked && invalidUser">
+                <p class="invalid">You have attempted to login with an unrecognised authentication provider - please use Google, Github, Facebook or LinkedIn</p>
                 <button class="btn btn-primary btn-margin" (click)="registeredService.logout()">Log Out</button>
             </ng-container>
             <ng-container *ngIf="(userLoggedOn | async) === false">
