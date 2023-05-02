@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { BehaviorSubject, first, map } from 'rxjs';
+import { BehaviorSubject, first, map, of } from 'rxjs';
 import { UserService } from './user.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,7 @@ export class RegistrationService implements CanActivate {
   static inviteCodeKey = "invitationCode";
 
   isValidUser() {
-    return this.auth.user$.pipe(map(u =>  !!u && !!u.sub && !u.sub.startsWith('auth0')));
+    return environment.blockAuth0Provider ? this.auth.user$.pipe(map(u =>  !!u && !!u.sub && !u.sub.startsWith('auth0'))) : of(true);
   }
 
   isLoggedOn() {
