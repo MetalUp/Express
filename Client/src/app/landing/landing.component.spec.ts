@@ -13,8 +13,9 @@ describe('LandingComponent', () => {
  
   const registeredSub = new Subject<boolean | undefined>();
   const loggedOnSub = new Subject<boolean>();
+  const validUserSub = new Subject<boolean>();
   
-  const registeredServiceSpy: jasmine.SpyObj<RegistrationService> = jasmine.createSpyObj('RegisteredService', ['isLoggedOn'], { registered$ : registeredSub });
+  const registeredServiceSpy: jasmine.SpyObj<RegistrationService> = jasmine.createSpyObj('RegisteredService', ['isLoggedOn', 'isValidUser'], { registered$ : registeredSub });
   let routerSpy: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['navigate']);
   const userServiceSpy: jasmine.SpyObj<UserService> = jasmine.createSpyObj('UserService', ['acceptInvitation']);
 
@@ -23,6 +24,7 @@ describe('LandingComponent', () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     registeredSub.next(undefined);
     registeredServiceSpy.isLoggedOn.and.returnValue(loggedOnSub);
+    registeredServiceSpy.isValidUser.and.returnValue(validUserSub);
     userServiceSpy.acceptInvitation.and.returnValue(Promise.resolve(true));
 
     await TestBed.configureTestingModule({
@@ -74,8 +76,8 @@ describe('LandingComponent', () => {
 
   it('should accept invitation if logged on and code set', fakeAsync(() => {
     localStorage.setItem(RegistrationService.inviteCodeKey, "testcode");
-
     loggedOnSub.next(true);
+    validUserSub.next(true);
     tick();
     tick();
     expect(component.pendingStatus).toBeTrue();

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, first, map } from 'rxjs';
 import { UserService } from './user.service';
 
 @Injectable({
@@ -23,7 +23,14 @@ export class RegistrationService implements CanActivate {
   constructor(public auth: AuthService,  private userService: UserService, private router: Router) {
     auth.isAuthenticated$.subscribe(b => {
       if (b) {
-        this.userService.loadUser();
+        this.isValidUser().pipe(first()).subscribe(valid => {
+          if (valid) {
+            this.userService.loadUser();
+          }
+          else {
+            this.setRegistered(false);
+          }
+        });
       }
       else {
         this.setRegistered(false);
@@ -37,6 +44,10 @@ export class RegistrationService implements CanActivate {
   }
 
   static inviteCodeKey = "invitationCode";
+
+  isValidUser() {
+    return this.auth.user$.pipe(map(u =>  !!u && !!u.sub && !u.sub.startsWith('auth0')));
+  }
 
   isLoggedOn() {
     return this.auth.isAuthenticated$;

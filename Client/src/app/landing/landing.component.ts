@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, first } from 'rxjs';
 import { RegistrationService } from '../services/registration.service';
 import { UserService } from '../services/user.service';
 
@@ -20,6 +20,7 @@ export class LandingComponent implements OnInit, OnDestroy {
   sub1?: Subscription;
   sub2?: Subscription;
   failedInvite = false;
+  invalidUser = false;
 
   get userLoggedOn() {
     return this.registeredService.isLoggedOn();
@@ -49,11 +50,18 @@ export class LandingComponent implements OnInit, OnDestroy {
 
     this.sub2 = this.registeredService.isLoggedOn().subscribe(loggedOn => {
       if (loggedOn) {
-        const code = this.invitationCode;
-        this.clearCode();
-        if (code) {
-          this.userService.acceptInvitation(code).then(b => this.failedInvite = !b);
-        }
+        this.registeredService.isValidUser().pipe(first()).subscribe(valid => {
+          if (valid) {
+            const code = this.invitationCode;
+            this.clearCode();
+            if (code) {
+              this.userService.acceptInvitation(code).then(b => this.failedInvite = !b);
+            }
+          }
+          else {
+           this.invalidUser = true;
+          }
+        });
       }
     });
   }
