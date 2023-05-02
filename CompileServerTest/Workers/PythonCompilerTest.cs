@@ -14,6 +14,13 @@ public class PythonCompilerTest {
 # StudentCode
 print (str(1))";
 
+    private const string FuncToolsTest =
+        @"from functools import reduce
+# StudentCode
+xor = lambda x,y: (x+y)%2
+l = reduce(xor, [1,2,3,4])
+print (str(l))";
+
     private const string MissingTerm =
         @"
 # StudentCode
@@ -121,6 +128,15 @@ def foo(la: tuple[int,...], lb: tuple[int,...]) -> tuple[int,...] : return la + 
         var rr = Handler.Compile(runSpec).Result.Value as RunResult;
         Assert.IsNotNull(rr);
         rr.AssertRunResult(Outcome.Ok);
+    }
+
+    [TestMethod]
+    public void TestFuncToolsOk() {
+        using var runSpec = PythonRunSpec(FuncToolsTest);
+        runSpec.Options.CompileArguments = "";
+        var rr = Handler.CompileAndRun(runSpec, testLogger).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.Ok, "", "0\r\n");
     }
 
     [TestMethod]
