@@ -52,56 +52,56 @@
         public virtual Language Language { get; init; }
 
         #region Common Hidden Code
-        internal string CommonHiddenCode => CommonHiddenCodeFile is null ? null : CommonHiddenCodeFile.ContentsAsString();
+        internal string? CommonHiddenCode => CommonHiddenCodeFile?.ContentsAsString();
 
         [Hidden]
         public int? CommonHiddenCodeFileId { get; init; }
 
         [MemberOrder(80)]
         [Named("Common Hidden Code")]
-        public virtual File CommonHiddenCodeFile { get; init; }
+        public virtual File? CommonHiddenCodeFile { get; init; }
         #endregion
 
         #region CommonTests
-       internal string CommonTests => CommonTestsFile?.ContentsAsString();
+       internal string? CommonTests => CommonTestsFile?.ContentsAsString();
 
         [Hidden]
         public int? CommonTestsFileId { get; init; }
 
         [MemberOrder(90)]
         [Named("Common Tests")]
-        public virtual File CommonTestsFile { get; init; }
+        public virtual File? CommonTestsFile { get; init; }
         #endregion
 
         #region Wrapper
 
-        internal string Wrapper => WrapperFileId == null ? Language.Wrapper : WrapperFile.ContentsAsString();
+        internal string? Wrapper => WrapperFileId == null ? Language.Wrapper : WrapperFile?.ContentsAsString();
 
         [Hidden]
         public int? WrapperFileId { get; init; }
 
         [MemberOrder(100)]
         [Named("Custom Wrapper Code")]
-        public virtual File WrapperFile { get; init; }
+        public virtual File? WrapperFile { get; init; }
 
         #endregion
 
         #region Helpers
 
         [Hidden]
-        public string Helpers => Language.Helpers;
+        public string? Helpers => Language.Helpers;
 
         #endregion
 
         #region RegExRules
-        internal string RegExRules => RegExRulesFileId == null ? Language.RegExRules  : RegExRulesFile.ContentsAsString();
+        internal string? RegExRules => RegExRulesFileId == null ? Language.RegExRules  : RegExRulesFile.ContentsAsString();
 
         [Hidden]
         public int? RegExRulesFileId { get; init; }
 
         [MemberOrder(110)]
         [Named("Custom RegEx Rules")]
-        public virtual File RegExRulesFile { get; init; }
+        public virtual File? RegExRulesFile { get; init; }
 
         #endregion
 

@@ -130,7 +130,7 @@ public static class TaskAccess
     private static TaskUserView EmptyTaskView(string message) =>
         new TaskUserView(null, message, false, false, 0, false, false, null);
 
-    private static string ClientRunTestCodeIfAny(Task task) => task.TestsRunOnClient ? task.TestsFile.ContentsAsString() : null;
+    private static string? ClientRunTestCodeIfAny(Task task) => task.TestsRunOnClient ? task.TestsFile?.ContentsAsString() : null;
 
     internal static bool CanPaste(IContext context) => Users.UserRole(context) >= Role.Teacher;
 
@@ -143,10 +143,10 @@ public static class TaskAccess
     internal static bool IsStarted(int? taskId, IContext context) =>
         taskId is null ? false : Activities.ActivitiesOfCurrentUser(taskId.Value, context).Any();
 
-    internal static string CodeCarriedForwardFromPriorTask(Task task, IContext context) =>
+    internal static string? CodeCarriedForwardFromPriorTask(Task task, IContext context) =>
         task.PreviousTaskId is null ?
                 null
-                : task.PreviousTask.CodeCarriedForwardToNextTask() ?
+                : task.PreviousTask != null && task.PreviousTask.CodeCarriedForwardToNextTask() ?
                     Activities.MostRecentActivityOfType(ActivityType.RunTestsSuccess, task.PreviousTask, context)?.CodeSubmitted
                     : null;
 

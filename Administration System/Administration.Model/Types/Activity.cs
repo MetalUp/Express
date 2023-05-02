@@ -20,7 +20,7 @@
             Message = cloneFrom.Message;
         }
 
-        public Activity( int userId, int? assignmentId, Task task, ActivityType activityType, int hintUsed, string codeSubmitted, string message, IContext context)
+        public Activity( int userId, int? assignmentId, Task task, ActivityType activityType, int hintUsed, string codeSubmitted, string? message, IContext context)
         {
             UserId = userId;    
             AssignmentId = assignmentId;
@@ -59,7 +59,7 @@
         public string CodeSubmitted { get; init; }
 
         [MemberOrder(9)]
-        public string Message { get; init; }
+        public string? Message { get; init; }
 
         private string hintNumber() => ActivityType == ActivityType.HintUsed ? HintUsed.ToString() : "";
 

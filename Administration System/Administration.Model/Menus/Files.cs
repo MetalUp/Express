@@ -11,9 +11,9 @@ namespace Model.Menus
         [MemberOrder(20)]
         [RenderEagerly]
         [TableView(false,nameof(File.Name), nameof(File.ContentType), nameof(File.Language))]
-        public static IQueryable<File> ListFiles([Optionally] Language language, [Optionally] ContentType? contentType, IContext context)
+        public static IQueryable<File> ListFiles([Optionally] Language? language, [Optionally] ContentType? contentType, IContext context)
         {
-            string langId = language?.LanguageID;
+            string? langId = language?.LanguageID;
             return context.Instances<File>().Where(f => (langId == null || f.LanguageId == langId) && (contentType == null || f.ContentType == contentType))
                 .OrderBy(f => f.Name);
         }

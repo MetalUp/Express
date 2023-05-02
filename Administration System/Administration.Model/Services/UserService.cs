@@ -14,12 +14,12 @@ namespace Model.Services
             return (invitee2, context.WithUpdated(invitee, invitee2));
         }
 
-        public static string ValidateAcceptInvitation(string code, IContext context) =>
+        public static string? ValidateAcceptInvitation(string code, IContext context) =>
                 Guid.TryParse(code, out Guid result) && context.Instances<User>().Count(u => u.InvitationCode == code) == 1 ?
                      null :
                     "That is not a valid Invitation Code";
 
-        public static UserViewModel GetUser(IContext context)
+        public static UserViewModel? GetUser(IContext context)
         {
             var user = Users.Me(context);
             if (user == null)

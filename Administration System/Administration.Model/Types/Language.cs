@@ -40,7 +40,7 @@ public class Language
 
     #region Wrapper
     [Hidden]
-    public string Wrapper => WrapperFile?.ContentsAsString();
+    public string? Wrapper => WrapperFile?.ContentsAsString();
 
     [Hidden]
     public int? WrapperFileId { get; init; }
@@ -53,7 +53,7 @@ public class Language
     #region Helpers
 
     [Hidden]
-    public string Helpers => HelpersFile?.ContentsAsString();
+    public string? Helpers => HelpersFile?.ContentsAsString();
 
     [Hidden]
     public int? HelpersFileId { get; init; }
@@ -65,7 +65,7 @@ public class Language
 
     #region RegExRules
     [Hidden]
-    public string RegExRules => RegExRulesFile?.ContentsAsString();
+    public string? RegExRules => RegExRulesFile?.ContentsAsString();
 
     [Hidden]
     public int? RegExRulesFileId { get; init; }

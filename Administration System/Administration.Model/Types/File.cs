@@ -39,10 +39,10 @@ namespace Model.Types
         public ContentType? ContentType { get; init; }
 
         [Hidden]
-        public string LanguageId { get; init; }
+        public string? LanguageId { get; init; }
 
         [MemberOrder(60)]
-        public virtual Language Language { get; init; }
+        public virtual Language? Language { get; init; }
 
         [Hidden]
         public byte[] Content { get; init; }

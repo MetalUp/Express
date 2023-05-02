@@ -44,7 +44,7 @@ context.WithUpdated(task, new(task) { Title = title });
             IContext context) =>
                 context.WithUpdated(task, new(task) { PreviousTask = previousTask });
 
-        public static string ValidateEditPreviousTask(
+        public static string? ValidateEditPreviousTask(
             this Task task,
             Task previousTask,
             IContext context) =>
@@ -59,7 +59,7 @@ context.WithUpdated(task, new(task) { Title = title });
            IContext context) =>
             context.WithUpdated(task, new(task) { NextTask = nextTask });
 
-        public static string ValidateEditNextTask(
+        public static string? ValidateEditNextTask(
             this Task task,
             Task nextTask,
             IContext context) =>
@@ -87,7 +87,7 @@ context.WithUpdated(task, new(task) { Title = title });
                         DescriptionFile = descriptionFile,
                     });
 
-        public static string ValidateEditDescriptionFile(
+        public static string? ValidateEditDescriptionFile(
               this Task task,
               File file) =>
                     file == null ? null : file.ValidateContentType(ContentType.TaskDescription);

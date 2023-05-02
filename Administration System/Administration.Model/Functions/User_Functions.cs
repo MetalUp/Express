@@ -31,7 +31,7 @@ namespace Model.Functions
         public static IContext SetToInactive(this User user, IContext context) =>
             context.WithUpdated(user, new User(user) { Status = UserStatus.Inactive });
 
-        public static string DisableSetToInactive(this User user, IContext context) =>
+        public static string? DisableSetToInactive(this User user, IContext context) =>
             user.Status == UserStatus.PendingAcceptance ? "Outstanding Invitation must first be cancelled" : null;
 
         public static bool HideSetToInactive(this User user, IContext context) =>
@@ -42,7 +42,7 @@ namespace Model.Functions
             IContext context) =>
             context.WithUpdated(user, new User(user) { UserName = "", Name = "" });
 
-        public static string ValidateRemoveIdentityInfo(this User user, string confirm) =>
+        public static string? ValidateRemoveIdentityInfo(this User user, string confirm) =>
              confirm.ToUpper() == "REMOVE IDENTITY" ? null : "Must type REMOVE IDENTITY into the Confirm field";
 
         public static bool HideRemoveIdentityInfo(this User user) =>  user.Status != UserStatus.Inactive;
