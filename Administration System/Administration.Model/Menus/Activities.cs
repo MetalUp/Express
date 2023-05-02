@@ -51,8 +51,7 @@
             Assignment assign = Assignments.GetAssignmentForCurrentUser(taskId, context);
             int? aId = assign?.Id;
             int uId = Users.Me(context).Id;
-            Task task = context.Instances<Task>().Single(task => task.Id == taskId);
-            var act = new Activity(uId, aId, task, type, hintUsed, code, message, context);
+            var act = new Activity(uId, aId, taskId, type, hintUsed, code, message, context);
             return context.WithNew(act);
         }
         #endregion

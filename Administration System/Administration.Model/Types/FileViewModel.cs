@@ -3,9 +3,7 @@
 [ViewModel(typeof(FileViewModel_Functions))]
 public class FileViewModel
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public FileViewModel() { }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     public FileViewModel(File file)
     {
@@ -22,7 +20,7 @@ public class FileViewModel
 
     public string Mime { get; init; }
 
-    public string LanguageAlphaName { get; init; }
+    public string LanguageAlphaName { get; init; } 
 
     public string Name { get; init; }
 }

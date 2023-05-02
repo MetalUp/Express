@@ -4,10 +4,7 @@ namespace Model.Types
 {
     public class Assignment
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Assignment() { }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
         public Assignment(Assignment cloneFrom) { 
             Id = cloneFrom.Id;
             ProjectId = cloneFrom.ProjectId;
@@ -53,7 +50,7 @@ namespace Model.Types
 
         [MemberOrder(16)]
         [MultiLine(10)]
-        public string? TeacherNotes { get; init; }
+        public string TeacherNotes { get; init; }
 
         public override string ToString() => $"{Project} assigned to {AssignedTo}";
     }
