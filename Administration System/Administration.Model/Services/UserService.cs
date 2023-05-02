@@ -22,8 +22,15 @@ namespace Model.Services
         public static UserViewModel GetUser(IContext context)
         {
             var user = Users.Me(context);
-            int taskId = Tasks.MyLastActiveTaskId(context);
-            return user is not null   ? new UserViewModel(user.Id, user.Name, taskId) : null;
+            if (user == null)
+            {
+                return null;
+            }
+            else
+            {
+                int taskId = Tasks.MyLastActiveTaskId(context);
+                return new UserViewModel(user.Id, user.Name, taskId);
+            }
         }
     }
 }
