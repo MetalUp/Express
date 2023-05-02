@@ -89,7 +89,7 @@
           assignments.Aggregate(context, (c, a) => a.MarkAsTerminated(teacherNote, c));
 
 
-        internal static Assignment? GetAssignmentForCurrentUser(int taskId, IContext context)
+        internal static Assignment GetAssignmentForCurrentUser(int taskId, IContext context)
         {
             var task = Tasks.GetTask(taskId, context);
             if (task == null) return null;

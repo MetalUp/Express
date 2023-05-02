@@ -64,7 +64,7 @@ namespace Model.Types
         public string Language => Project.Language.CSSstyle;
 
         #region Description
-        internal FileAttachment? Description => DescriptionFile?.ViewContent;
+        internal FileAttachment Description => DescriptionFile?.ViewContent;
 
         [Hidden]
         public int? DescriptionFileId { get; init; }
@@ -74,18 +74,18 @@ namespace Model.Types
         #endregion
 
         #region Hidden Code
-        internal string? HiddenCode => HiddenCodeFile is null ?  Project.CommonHiddenCode :HiddenCodeFile.ContentsAsString();
+        internal string HiddenCode => HiddenCodeFile is null ?  Project.CommonHiddenCode :HiddenCodeFile.ContentsAsString();
 
         [Hidden]
         public int? HiddenCodeFileId { get; init; }
 
         [MemberOrder(80)]
         [Named("Task Specific Hidden Code")]
-        public virtual File? HiddenCodeFile { get; init; }
+        public virtual File HiddenCodeFile { get; init; }
         #endregion
 
         #region Tests
-        internal string? Tests => TestsFile is null ? Project.CommonTests : TestsFile.ContentsAsString();
+        internal string Tests => TestsFile is null ? Project.CommonTests : TestsFile.ContentsAsString();
 
         [Hidden]
         public bool HasTests => Tests is not null;
@@ -95,7 +95,7 @@ namespace Model.Types
 
         [MemberOrder(90)]
         [Named("Task Specific Tests")]
-        public virtual File? TestsFile { get; init; }
+        public virtual File TestsFile { get; init; }
         #endregion
 
         //Normally false. Set true for ARMlite or other Tasks where tests are written in JavaScript to run on client.
@@ -104,31 +104,31 @@ namespace Model.Types
 
         #region Wrapper
 
-        internal string? Wrapper => WrapperFile == null ? Project.Wrapper : WrapperFile.ContentsAsString();
+        internal string Wrapper => WrapperFileId == null ? Project.Wrapper : WrapperFile.ContentsAsString();
 
         [Hidden]
         public int? WrapperFileId { get; init; }
 
         [MemberOrder(100)]
         [Named("Task specific Wrapper Code")]
-        public virtual File? WrapperFile { get; init; }
+        public virtual File WrapperFile { get; init; }
 
         #endregion
         #region RegExRules
 
-        internal string? RegExRules => RegExRulesFile == null ? Project.RegExRules : RegExRulesFile.ContentsAsString();
+        internal string RegExRules => RegExRulesFileId == null ? Project.RegExRules : RegExRulesFile.ContentsAsString();
 
         [Hidden]
         public int? RegExRulesFileId { get; init; }
 
         [MemberOrder(110)]
         [Named("Task specific RegEx Rules")]
-        public virtual File? RegExRulesFile { get; init; }
+        public virtual File RegExRulesFile { get; init; }
 
         #endregion
         #region Helpers
         //Helpers should be generic
-        internal string? Helpers => Project.Helpers;
+        internal string Helpers => Project.Helpers;
 
         #endregion
 
@@ -136,13 +136,13 @@ namespace Model.Types
         public int? PreviousTaskId { get; init; }
 
         [MemberOrder(200)]
-        public virtual Task? PreviousTask { get; init; }
+        public virtual Task PreviousTask { get; init; }
 
         [Hidden]
         public int? NextTaskId { get; init; }
 
         [MemberOrder(210)]
-        public virtual Task? NextTask { get; init; }
+        public virtual Task NextTask { get; init; }
 
         [MemberOrder(220)]
         public bool NextTaskClearsFunctions { get; init; }

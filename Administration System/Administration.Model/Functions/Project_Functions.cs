@@ -47,15 +47,15 @@
         [Edit]
         public static IContext EditCommonHiddenCodeFile(
             this Project project,
-            [Optionally] File? commonHiddenCodeFile,
+            [Optionally] File commonHiddenCodeFile,
             IContext context) => 
                 context.WithUpdated(project, new Project(project) {CommonHiddenCodeFile = commonHiddenCodeFile});
 
 
-        public static string? ValidateEditCommonHiddenCodeFile(this Project project, File? commonHiddenCodeFile) =>
+        public static string ValidateEditCommonHiddenCodeFile(this Project project, File commonHiddenCodeFile) =>
             ValidateLanguageAndContentType(project, commonHiddenCodeFile, ContentType.HiddenCode);
 
-        internal static string? ValidateLanguageAndContentType(Project project, File? commonHiddenCodeFile, ContentType required) =>
+        internal static string ValidateLanguageAndContentType(Project project, File commonHiddenCodeFile, ContentType required) =>
             commonHiddenCodeFile != null &&
     commonHiddenCodeFile.LanguageId == project.LanguageId &&
     commonHiddenCodeFile.ContentType == required
@@ -72,7 +72,7 @@
                     CommonTestsFile = commonTestsFile
                 });
 
-        public static string? ValidateEditCommonTestsFile(this Project project, File commonHiddenCodeFile) =>
+        public static string ValidateEditCommonTestsFile(this Project project, File commonHiddenCodeFile) =>
                 ValidateLanguageAndContentType(project, commonHiddenCodeFile, ContentType.Tests);
 
         #endregion
@@ -87,7 +87,7 @@
          Assignments.NewAssignmentToGroup(group, project, dueBy, context);
 
 
-        public static string? ValidateAssignTo(this Project project, Group inGroup, bool allInGroup, User singleUser, DateTime dueBy, IContext context) =>
+        public static string ValidateAssignTo(this Project project, Group inGroup, bool allInGroup, User singleUser, DateTime dueBy, IContext context) =>
             allInGroup && inGroup is null ? "Must specify a Group" :
                !allInGroup && singleUser is null ? "Must specify a Single User" : null;
 
@@ -284,11 +284,11 @@
             return context2.WithNew(task).WithNew(file);
         }
 
-        public static Task? Default3CreateTask(
+        public static Task Default3CreateTask(
             this Project project) =>
             project.Tasks.LastOrDefault();
 
-        public static string? ValidateCreateTask(
+        public static string ValidateCreateTask(
             this Project project,
             [Optionally] int? taskNumber,
             [Optionally] string title,
@@ -345,7 +345,7 @@
             return context3;
         }
 
-        public static Task? Default1CopyNextTaskFromAnotherProject(this Project project) =>
+        public static Task Default1CopyNextTaskFromAnotherProject(this Project project) =>
             project.Tasks.LastOrDefault();
 
         #endregion

@@ -30,7 +30,7 @@
             PublicClasses(namespaces).Where(t => t.IsAbstract && t.IsSealed);
 
         private static IEnumerable<Type> PublicClasses(params string[] namespaces) =>
-            typeof(ModelConfig).Assembly.GetTypes().Where(t => t.IsPublic && t.IsClass && namespaces.Any(n =>t.Namespace != null && t.Namespace.StartsWith(n)));
+            typeof(ModelConfig).Assembly.GetTypes().Where(t => t.IsPublic && t.IsClass && namespaces.Any(n =>t.Namespace.StartsWith(n)));
 
         private static IEnumerable<Type> DomainTypes(string nameSpace) =>
             typeof(ModelConfig).Assembly.GetTypes().Where(t => 

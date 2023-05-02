@@ -7,14 +7,14 @@ namespace Model.Menus
     public static class Users
     {
         [MemberOrder(10)]
-        public static User? Me(IContext context) =>
+        public static User Me(IContext context) =>
             context.Instances<User>().SingleOrDefault(c => c.UserName == HashedCurrentUserName(context));
 
         internal static User FindById(int uid, IContext context) =>
             context.Instances<User>().Single(u => u.Id == uid);
 
         [MemberOrder(20)]
-        public static User? FindByUserName(string userName, IContext context) =>
+        public static User FindByUserName(string userName, IContext context) =>
     context.Instances<User>().SingleOrDefault(c => c.UserName == Hash(userName));
 
         [TableView(false, nameof(User.Name), nameof(User.Role), nameof(User.Organisation))]
@@ -24,7 +24,7 @@ namespace Model.Menus
         [TableView(false, nameof(User.Name), nameof(User.Role), nameof(User.EmailAddress))]
         internal static IQueryable<User> OurUsers(IContext context)
         {
-            int? myOrgId = Me(context)?.OrganisationId;
+            int myOrgId = Me(context).OrganisationId;
             return context.Instances<User>().Where(s => s.OrganisationId == myOrgId).
                 OrderBy(s => s.Name);
         }
@@ -52,7 +52,7 @@ namespace Model.Menus
         #region private & internal
         internal static string HashedCurrentUserName(IContext context)
         {
-            var userName = context.CurrentUser()?.Identity?.Name;
+            var userName = context.CurrentUser().Identity.Name;
             return userName == null ? "" : Hash(userName);
         }
 

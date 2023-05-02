@@ -3,11 +3,9 @@
 [ViewModel(typeof(TaskUserView_Functions))]
 public class TaskUserView
 {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public TaskUserView() { }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public TaskUserView(Task? task, string title, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted, bool canPaste, string? clientRunTestCode)
+    public TaskUserView(Task task, string title, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted, bool canPaste, string javaScriptTestCode)
     {
         Task = task;
         Project = task?.Project;
@@ -18,21 +16,21 @@ public class TaskUserView
         NextTaskIsStarted = nextTaskIsStarted;
         PasteExpression = canPaste;
         PasteCode = canPaste;
-        TestsRunLocally = clientRunTestCode != null;
-        ClientRunTestCode = clientRunTestCode;
+        TestsRunLocally = javaScriptTestCode != null;
+        ClientRunTestCode = javaScriptTestCode;
     }
 
-    internal Task? Task { get; init; }
+    internal Task Task { get; init; }
 
-    internal Project? Project { get; init; }
+    internal Project Project { get; init; }
 
     public string Title { get; init; }
 
-    public string? Language => Task?.Language;
+    public string Language => Task?.Language;
 
-    public string? Description => Task?.DescriptionFile?.ContentsAsString();
+    public string Description => Task?.DescriptionFile?.ContentsAsString();
 
-    public string? RegExRules => Task?.RegExRules;
+    public string RegExRules => Task?.RegExRules;
 
     public bool PasteExpression { get; init; }
 
@@ -50,7 +48,7 @@ public class TaskUserView
 
     public bool TestsRunLocally { get; init; }
 
-    public string? ClientRunTestCode { get; init; }
+    public string ClientRunTestCode { get; init; }
 
     public int AssignmentId { get; init; }
 }

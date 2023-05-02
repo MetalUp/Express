@@ -2,9 +2,7 @@
 {
     public class User
     {
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public User() { }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public User(User cloneFrom)
         {
@@ -24,7 +22,7 @@
         public int Id { get; init; }
 
         [Hidden]
-        public string? UserName { get; init; } //Always Hashed
+        public string UserName { get; init; } //Always Hashed
 
         [MemberOrder(2)]
         public Role Role { get; init; }
