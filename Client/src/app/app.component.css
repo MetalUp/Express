@@ -47,12 +47,22 @@ div.metalup {
     margin-right: 10px;
 }
 
-.stackTrace {
+div.stackTrace {
+    overflow: auto;
+}
+
+p.stackTrace {
     margin-left: 18vw;
+    margin-top: 0;
+    margin-bottom: 0;
     color: var(--default-text-color);
     font-family: var(--font-text-family);
     font-weight: var(--font-weight-1);
     font-size: var(--font-size-3);
+}
+
+.stackTrace .startup-message {
+    margin-top: 0;
 }
 
 .button-bar {

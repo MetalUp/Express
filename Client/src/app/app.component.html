@@ -1,5 +1,4 @@
 <ng-container *ngIf="hasError">
-  <div>
     <h1 class="startup-heading">An Error has occurred</h1>
 
     <p class="startup-message">Please wait a while and then refresh the page to try again or return to the Home page.</p>
@@ -9,11 +8,10 @@
       <button (click)="onDetails()">Show Details</button>
     </div>
 
-    <div *ngIf="showDetails">
+    <div class="stackTrace"  *ngIf="showDetails">
       <p class="startup-message">{{errorTitle}}<br>{{errorDescription}}({{errorCode}})<br>{{errorMessage}}</p>
       <p class="stackTrace" *ngFor="let l of errorStacktrace">{{l}}</p>
     </div>
-  </div>
 </ng-container>
 <ng-container *ngIf="!config.loadingStatus && !hasError">
   <p class="startup-message">Loading configuration...</p>
