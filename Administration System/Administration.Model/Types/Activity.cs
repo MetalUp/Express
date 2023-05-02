@@ -2,7 +2,10 @@
 {
     public class Activity
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Activity() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
         public Activity(Activity cloneFrom) 
         { 
             Id = cloneFrom.Id;
@@ -17,11 +20,11 @@
             Message = cloneFrom.Message;
         }
 
-        public Activity( int userId, int? assignmentId, int taskId, ActivityType activityType, int hintUsed, string codeSubmitted, string message, IContext context)
+        public Activity( int userId, int? assignmentId, Task task, ActivityType activityType, int hintUsed, string codeSubmitted, string message, IContext context)
         {
             UserId = userId;    
             AssignmentId = assignmentId;
-            TaskId = taskId;
+            Task = task;
             ActivityType = activityType;
             TimeStamp = context.Now();
             HintUsed = hintUsed;

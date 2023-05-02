@@ -3,7 +3,9 @@
 
     public class Organisation
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public Organisation() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public Organisation(Organisation cloneFrom) { 
             Id = cloneFrom.Id;
@@ -20,7 +22,7 @@
 
         [MemberOrder(20)]
         [MultiLine(10)]
-        public string Details { get; init; }
+        public string? Details { get; init; }
 
         [Hidden]
         public virtual ICollection<User> Teachers { get; set; } = new List<User>();

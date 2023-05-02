@@ -4,6 +4,7 @@
 public class TaskUserView
 {
     public TaskUserView() { }
+
     public TaskUserView(Task task, string title, bool completed, bool hasTests, int assignmentId, bool nextTaskIsStarted, bool canPaste, string javaScriptTestCode)
     {
         Task = task;
