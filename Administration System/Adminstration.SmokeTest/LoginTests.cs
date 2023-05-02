@@ -6,10 +6,10 @@
 // See the License for the specific language governing permissions and limitations under the License.
 
 using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 using NakedFrameworkClient.TestFramework.Tests;
-using static System.Net.WebRequestMethods;
 
 namespace SmokeTest;
 
@@ -17,19 +17,28 @@ namespace SmokeTest;
 
 [TestClass]
 public class LoginTests : BaseTest {
+    private static IConfigurationRoot GetIConfigurationBase() =>
+        new ConfigurationBuilder()
+            .AddUserSecrets<LoginTests>()
+            .AddEnvironmentVariables()
+            .Build();
+
     [TestMethod]
-    public virtual void Login() {
-     
+    public virtual void LoginAndLogout() {
         helper.GoToLanding();
-        helper.Login();
-        helper.LoginWithGithub();
+        helper.StartLogin();
+        helper.LoginWithAuth0(Password, UserId);
+        helper.Logout();
     }
 
     #region Overhead
 
     protected override string BaseUrl => @"https://development.metalup.org/";
 
+    private string Password => GetIConfigurationBase()["password"];
+
     private Helper helper;
+    private readonly string UserId = @"metalup.dev@gmail.com";
 
     [TestInitialize]
     public virtual void InitializeTest() {

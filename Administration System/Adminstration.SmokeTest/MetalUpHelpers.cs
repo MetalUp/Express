@@ -6,35 +6,35 @@ namespace SmokeTest;
 
 public static class MetalUpHelpers {
     
-    
-    
     public static Helper GoToLanding(this Helper helper) {
         helper.WebDriver.Navigate().GoToUrl(helper.BaseUrl + "/landing");
         helper.WaitForCss(".metalup button");
         return helper;
     }
 
-    public static Helper Login(this Helper helper) {
-        var loginButton = helper.WaitForCss(".metalup button");
+    public static Helper StartLogin(this Helper helper) {
+        var loginButton = helper.GoToLanding().WaitForCss(".metalup button");
         helper.Click(loginButton);
         return helper;
     }
 
-    public static Helper LoginWithGithub(this Helper helper) {
-        var loginGithub = helper.WaitForCss(@"a[data-provider=""github""]");
+    public static Helper Logout(this Helper helper) {
+        helper.GetHomeView();
+        var logoffIcon = helper.WaitForCss(@".logoff");
+        helper.Click(logoffIcon);
+        var logoffButton = helper.WaitForCss(@"button[value=""Log Off""]");
+        helper.Click(logoffButton);
+        return helper;
+    }
+
+    public static Helper LoginWithAuth0(this Helper helper, string pwd, string userId) {
+        var userInput = helper.WaitForCss(@"input[type=""email""]");
+        var passwordInput = helper.WaitForCss(@"input[type=""password""]");
         Thread.Sleep(2000);
-        helper.Click(loginGithub);
-        var user = helper.WaitForCss(@"input#login_field");
-        var userId = "";
-        var pwd = "";
-        user.SendKeys(userId);
-        helper.Wait.Until(dr => user.GetAttribute("value") == userId);
-        var password = helper.WaitForCss("input#password");
-        password.SendKeys(pwd);
-        helper.Wait.Until(dr => password.GetAttribute("value") == pwd);
-       
-        var signIn = helper.WaitForCss(@"input[type=""submit""]");
-        helper.Click(signIn);
+        userInput.SendKeys(userId);
+        passwordInput.SendKeys(pwd);
+        var login = helper.WaitForCss(@"button[name=""submit""]");
+        helper.Click(login);
         return helper;
     }
 }
