@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  blockAuth0Provider: false,
   audience: 'https://metalupadminserverdevelopment.azurewebsites.net',
   allowedList: [
     'https://metalupadminserverdevelopment.azurewebsites.net',

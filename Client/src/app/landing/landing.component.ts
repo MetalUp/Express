@@ -58,9 +58,7 @@ export class LandingComponent implements OnInit, OnDestroy {
               this.userService.acceptInvitation(code).then(b => this.failedInvite = !b);
             }
           }
-          else {
-           this.invalidUser = true;
-          }
+          this.invalidUser = !valid;
         });
       }
     });
