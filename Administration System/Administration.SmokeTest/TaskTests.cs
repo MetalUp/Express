@@ -1,15 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 using NakedFrameworkClient.TestFramework.Tests;
-using SmokeTest.Helpers;
-using System;
 using static SmokeTest.Helpers.MetalUpHelpers;
 
 namespace SmokeTest;
 
 [TestClass]
 public class TaskTests : BaseTest {
-
     [TestMethod]
     public virtual void EvaluateExpressionCSharp() {
         var task = helper.GoToTask(107);
@@ -33,22 +31,31 @@ public class TaskTests : BaseTest {
 
     [TestMethod]
     public virtual void SubmitCodeCSharp() {
+        var before = helper.GetActivityCount();
         var task = helper.GoToTask(107);
         task.EnterCode("static int f() => 1;");
         task.AssertCompileResultIs("Compiled OK");
+        var after = helper.GetActivityCount();
+
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
 
     [TestMethod]
     public virtual void SubmitCodePython() {
+        var before = helper.GetActivityCount();
         Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
         var task = helper.GoToTask(109);
         task.EnterCode("def f() -> int: return 1");
         task.AssertCompileResultIs("Compiled OK");
         Wait.Timeout = new TimeSpan(0, 0, 10);
+        var after = helper.GetActivityCount();
+
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
 
     [TestMethod]
     public virtual void SubmitCodeVb() {
+        var before = helper.GetActivityCount();
         var task = helper.GoToTask(114);
         task.EnterCode(@"
 Function F() As Integer
@@ -56,9 +63,11 @@ Function F() As Integer
 End Function
 ");
         task.AssertCompileResultIs("Compiled OK");
-        Wait.Timeout = new TimeSpan(0, 0, 10);
-    }
 
+        var after = helper.GetActivityCount();
+
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
 
     #region Overhead
 
