@@ -9,7 +9,17 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
-                >= Role.Teacher => Users.Me(context).OrganisationId == user.OrganisationId && !memberName.StartsWith("Change"),
+                >= Role.Teacher => Users.Me(context).OrganisationId == user.OrganisationId && 
+                    MatchesOneOf(memberName, 
+                        nameof(User_Functions.AddSelectedStudentsToGroup),
+                        nameof(User_Functions.AddToGroup),
+                        nameof(User_Functions.EditName),
+                        nameof(User_Functions.EditEmailAddress),
+                        nameof(User_Functions.RecentAssignments),
+                        nameof(User_Functions.InviteToChangeLoginCredentials),
+                        nameof(User_Functions.SetToInactive),
+                        nameof(User_Functions.RemoveIdentityInfo)
+                        ),
                 Role.Student => user.Id == Users.Me(context).Id && IsProperty<User>(memberName),
                 _ => false
             };
