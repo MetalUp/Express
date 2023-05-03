@@ -18,7 +18,8 @@ namespace Model.Authorization
                         nameof(User_Functions.RecentAssignments),
                         nameof(User_Functions.InviteToChangeLoginCredentials),
                         nameof(User_Functions.SetToInactive),
-                        nameof(User_Functions.RemoveIdentityInfo)
+                        nameof(User_Functions.RemoveIdentityInfo),
+                        nameof(User_Functions.RecentActivity)
                         )),
                 Role.Student => user.Id == Users.Me(context).Id && IsProperty<User>(memberName),
                 _ => false

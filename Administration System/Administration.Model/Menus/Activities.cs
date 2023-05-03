@@ -5,6 +5,15 @@
         public static IQueryable<Activity> AllActivities(IContext context) =>
             context.Instances<Activity>().OrderByDescending(a => a.TimeStamp);
 
+        public static IQueryable<Activity> RecentActivityForUser(User user, IContext context)
+        {
+            int uid = user.Id;
+            return AllActivities(context).Where(a => a.UserId == uid);
+        }
+
+        public static IQueryable<Activity> MyActivities(IContext context) =>
+            RecentActivityForUser(Users.Me(context), context);
+
 
         #region Methods to record an Activity involving code
         internal static IContext SubmitCodeFail(int taskId, string code, string message, IContext context)

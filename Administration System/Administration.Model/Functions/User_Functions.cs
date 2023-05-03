@@ -110,5 +110,10 @@ namespace Model.Functions
             confirm == "DELETE" ? null : "Must type 'DELETE'";
 
         #endregion
+
+        #region Activities
+        public static IQueryable<Activity> RecentActivity(this User user, IContext context) =>
+            Activities.RecentActivityForUser(user, context);
+        #endregion
     }
 }

@@ -33,6 +33,8 @@ namespace Model.Authorization
             Users.UserRole(context) switch
             {
                 Role.Root => true,
+                Role.Teacher => MatchesOneOf(memberName, nameof(Activities.RecentActivityForUser), nameof(Activities.MyActivities)),
+                Role.Student => MatchesOneOf(memberName, nameof(Activities.MyActivities)),
                 _ => false
             };
 
