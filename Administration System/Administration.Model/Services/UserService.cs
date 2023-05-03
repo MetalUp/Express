@@ -8,9 +8,11 @@ namespace Model.Services
             string code,
             IContext context)
         {
-            var userName = Users.HashedCurrentUserName(context);
+            var existingUser = Users.Me(context);
+            if (existingUser != null) return (existingUser, context.WithWarnUser($"User is already registered, so cannot accept new invitation."));
             var invitee = context.Instances<User>().Single(u => u.InvitationCode == code);
-            var invitee2 = new User(invitee) { UserName = userName, InvitationCode = null, Status = UserStatus.Active };
+            var hashedUserName = Users.HashedCurrentUserName(context);
+            var invitee2 = new User(invitee) { UserName = hashedUserName, InvitationCode = null, Status = UserStatus.Active };
             return (invitee2, context.WithUpdated(invitee, invitee2));
         }
 
