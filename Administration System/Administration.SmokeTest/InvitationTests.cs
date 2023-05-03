@@ -5,7 +5,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and limitations under the License.
 
-using System;
 using System.Linq;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,8 +18,6 @@ namespace SmokeTest;
 
 [TestClass]
 public class InvitationTests : BaseTest {
-    
-
     [TestMethod]
     public virtual void CreateInvitation() {
         helper.LoginAsTeacher();
@@ -66,9 +63,7 @@ public class InvitationTests : BaseTest {
     }
 
     [TestCleanup]
-    public virtual void CleanupTest() {
-        
-    }
+    public virtual void CleanupTest() { }
 
     #endregion
 }
