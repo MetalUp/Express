@@ -1,11 +1,42 @@
 ﻿using System.Threading;
+using Microsoft.Extensions.Configuration;
 using NakedFrameworkClient.TestFramework;
 using OpenQA.Selenium;
 
 namespace SmokeTest;
 
 public static class MetalUpHelpers {
-    
+    public static string PasswordTeacher => GetIConfigurationBase()["password_teacher"];
+    public static string PasswordStudent => GetIConfigurationBase()["password_student"];
+    public static string PasswordAdmin => GetIConfigurationBase()["password_admin"];
+
+    public static readonly string UserIdAdmin = @"metalup.admin@gmail.com";
+    public static readonly string UserIdTeacher = @"metalup.dev@gmail.com";
+    public static readonly string UserIdStudent = @"metalup.student@gmail.com";
+
+    public static string MetalUpDevelopmentBaseUrl = @"https://development.metalup.org/";
+
+    public static Helper LoginAsTeacher(this Helper helper) {
+        helper.StartLogin();
+        helper.LoginWithAuth0(PasswordTeacher, UserIdTeacher);
+        helper.WaitForCss(".not-in-progress");
+        return helper;
+    }
+
+    public static Helper LoginAsAdmin(this Helper helper) {
+        helper.StartLogin();
+        helper.LoginWithAuth0(PasswordAdmin, UserIdAdmin);
+        helper.WaitForCss(".not-in-progress");
+        return helper;
+    }
+
+
+    public static IConfigurationRoot GetIConfigurationBase() =>
+        new ConfigurationBuilder()
+            .AddUserSecrets<InvitationTests>()
+            .AddEnvironmentVariables()
+            .Build();
+
     public static Helper GoToLanding(this Helper helper) {
         helper.WebDriver.Navigate().GoToUrl(helper.BaseUrl + "/landing");
         helper.WaitForCss(".metalup button");
