@@ -34,21 +34,9 @@ public class InvitationTests : BaseTest {
         helper.GotoBaseUrlDirectly($@"/invitation/{code}");
         var loginButton = helper.WaitForCss(@"app-invitation button");
         helper.Click(loginButton);
-        helper.LoginWithAuth0(PasswordStudent, UserIdStudent);
+        helper.LoginWithAuth0(PasswordInvitee, UserIdInvitee);
         helper.WaitForCss(".home");
-        helper.GotoHome().AssertMainMenusAre("Assignments", "Tasks");
-        helper.Logout();
-        // delete user
-
-        Thread.Sleep(2000);
-        helper.LoginAsAdmin();
-        var list = helper.GotoHome().OpenMainMenu("Users").GetActionWithoutDialog("Our Students").ClickToViewList();
-        list.AssertNoOfRowsIs(1);
-        var student = list.GetRowFromList(0).Click();
-        student.AssertTitleIs("Test Invitation");
-        var dialog1 = student.OpenActions().GetActionWithDialog("Delete User").Open();
-        dialog1.GetTextField("Confirm").Clear().Enter("DELETE");
-        dialog1.ClickOKWithNoResultExpected();
+        helper.GotoHome().AssertMainMenusAre("Activities", "Assignments", "Tasks");
         helper.Logout();
     }
 
@@ -64,7 +52,18 @@ public class InvitationTests : BaseTest {
     }
 
     [TestCleanup]
-    public virtual void CleanupTest() { }
+    public virtual void CleanupTest() {
+        Thread.Sleep(2000);
+        helper.LoginAsAdmin();
+        var list = helper.GotoHome().OpenMainMenu("Users").GetActionWithoutDialog("Our Students").ClickToViewList();
+        list.AssertNoOfRowsIs(2);
+        var student = list.GetRowFromList(0).Click();
+        student.AssertTitleIs("Test Invitation");
+        var dialog1 = student.OpenActions().GetActionWithDialog("Delete User").Open();
+        dialog1.GetTextField("Confirm").Clear().Enter("DELETE");
+        dialog1.ClickOKWithNoResultExpected();
+        helper.Logout();
+    }
 
     #endregion
 }

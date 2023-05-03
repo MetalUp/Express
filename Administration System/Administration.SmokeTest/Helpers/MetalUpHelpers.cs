@@ -6,14 +6,24 @@ namespace SmokeTest.Helpers;
 
 public static class MetalUpHelpers
 {
-    public static readonly string UserIdAdmin = @"metalup.admin@gmail.com";
-    public static readonly string UserIdTeacher = @"metalup.dev@gmail.com";
-    public static readonly string UserIdStudent = @"metalup.student@gmail.com";
+    private static readonly string UserIdAdmin = @"metalup.admin@gmail.com";
+    private static readonly string UserIdTeacher = @"metalup.dev@gmail.com";
+    private static readonly string UserIdStudent = @"metalup.student@gmail.com";
+    public static readonly string UserIdInvitee = @"metalup.invitee@gmail.com";
 
-    public static string MetalUpDevelopmentBaseUrl = @"https://development.metalup.org/";
-    public static string PasswordTeacher => GetIConfigurationBase()["password_teacher"];
-    public static string PasswordStudent => GetIConfigurationBase()["password_student"];
-    public static string PasswordAdmin => GetIConfigurationBase()["password_admin"];
+    public static readonly string MetalUpDevelopmentBaseUrl = @"https://development.metalup.org/";
+    private static string PasswordTeacher => GetIConfigurationBase()["password_teacher"];
+    private static string PasswordStudent => GetIConfigurationBase()["password_student"];
+    private static string PasswordAdmin => GetIConfigurationBase()["password_admin"];
+    public static string PasswordInvitee => GetIConfigurationBase()["password_invitee"];
+
+    public static Helper LoginAsStudent(this Helper helper)
+    {
+        helper.StartLogin();
+        helper.LoginWithAuth0(PasswordStudent, UserIdStudent);
+        helper.WaitForCss(".not-in-progress");
+        return helper;
+    }
 
     public static Helper LoginAsTeacher(this Helper helper)
     {
