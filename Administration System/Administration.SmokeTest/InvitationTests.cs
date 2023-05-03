@@ -5,50 +5,29 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and limitations under the License.
 
-using System;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading;
-using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 using NakedFrameworkClient.TestFramework.Tests;
+using SmokeTest.Helpers;
+using static SmokeTest.Helpers.MetalUpHelpers;
 
 namespace SmokeTest;
 
 // because the initial timeout needs to be longer if the server is starting up
 
 [TestClass]
-public class LoginTests : BaseTest {
-    private static IConfigurationRoot GetIConfigurationBase() =>
-        new ConfigurationBuilder()
-            .AddUserSecrets<LoginTests>()
-            .AddEnvironmentVariables()
-            .Build();
-
-    private void Login() {
-        helper.GoToLanding();
-        helper.StartLogin();
-        helper.LoginWithAuth0(PasswordDev, UserIdDev);
-        helper.WaitForCss(".not-in-progress");
-    }
-
-    [TestMethod]
-    public virtual void LoginAndLogout() {
-        Login();
-        helper.Logout();
-    }
-
+public class InvitationTests : BaseTest {
     [TestMethod]
     public virtual void CreateInvitation() {
-        Login();
+        helper.LoginAsTeacher();
         var dialog = helper.GotoHome().OpenMainMenu("Invitations").GetActionWithDialog("Invite New Student In My Organisation").Open();
         dialog.GetTextField("Name").Clear().Enter("Test Invitation");
         var user = dialog.ClickOKToViewObject();
         var inviteCode = user.GetProperty("Link To Be Emailed").GetValue();
         helper.Logout();
-        
+
         Thread.Sleep(2000);
 
         var code = inviteCode.Split('/').Last();
@@ -60,29 +39,32 @@ public class LoginTests : BaseTest {
         helper.GotoHome().AssertMainMenusAre("Assignments", "Tasks");
         helper.Logout();
         // delete user
+
+        Thread.Sleep(2000);
+        helper.LoginAsAdmin();
+        var list = helper.GotoHome().OpenMainMenu("Users").GetActionWithoutDialog("Our Students").ClickToViewList();
+        list.AssertNoOfRowsIs(1);
+        var student = list.GetRowFromList(0).Click();
+        student.AssertTitleIs("Test Invitation");
+        var dialog1 = student.OpenActions().GetActionWithDialog("Delete User").Open();
+        dialog1.GetTextField("Confirm").Clear().Enter("DELETE");
+        dialog1.ClickOKWithNoResultExpected();
+        helper.Logout();
     }
 
     #region Overhead
 
-    protected override string BaseUrl => @"https://development.metalup.org/";
-
-    private string PasswordDev => GetIConfigurationBase()["password_dev"];
-    private string PasswordStudent => GetIConfigurationBase()["password_student"];
+    protected override string BaseUrl => MetalUpDevelopmentBaseUrl;
 
     private Helper helper;
-    private readonly string UserIdDev = @"metalup.dev@gmail.com";
-    private readonly string UserIdStudent = @"metalup.student@gmail.com";
 
     [TestInitialize]
     public virtual void InitializeTest() {
-        Wait.Timeout = new TimeSpan(0, 0, 40);
         helper = new Helper(BaseUrl, "dashboard", Driver, Wait);
     }
 
     [TestCleanup]
-    public virtual void CleanupTest() {
-        Wait.Timeout = new TimeSpan(0, 0, 10);
-    }
+    public virtual void CleanupTest() { }
 
     #endregion
 }

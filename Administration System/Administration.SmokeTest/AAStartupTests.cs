@@ -9,7 +9,8 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 using NakedFrameworkClient.TestFramework.Tests;
-using static System.Net.WebRequestMethods;
+using SmokeTest.Helpers;
+using static SmokeTest.Helpers.MetalUpHelpers;
 
 namespace SmokeTest;
 
@@ -17,14 +18,26 @@ namespace SmokeTest;
 
 [TestClass]
 public class AAStartupTests : BaseTest {
+    // first tests have longer timeouts to ensure servers woken up
+
     [TestMethod]
-    public virtual void WaitForStartServer() {
-        helper.GoToLanding();
+    public virtual void LoginAndLogout() {
+        helper.LoginAsTeacher();
+        helper.Logout();
+    }
+
+    [TestMethod]
+    public virtual void WakeUpCompileServer() {
+        helper.LoginAsTeacher();
+        var task = helper.GoToTask(107);
+        task.EnterExpression("1 + 1");
+        task.AssertResultIs("2");
+        helper.Logout();
     }
 
     #region Overhead
 
-    protected override string BaseUrl => "https://development.metalup.org/landing";
+    protected override string BaseUrl => MetalUpDevelopmentBaseUrl;
 
     [AssemblyInitialize]
     public static void InitialiseAssembly(TestContext context) {
