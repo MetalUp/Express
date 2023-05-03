@@ -10,8 +10,8 @@ namespace Model.Authorization
             {
                 Role.Root => true,
                 >= Role.Teacher => Users.Me(context).OrganisationId == user.OrganisationId && 
-                    MatchesOneOf(memberName, 
-                        nameof(User_Functions.AddSelectedStudentsToGroup),
+                    (IsProperty<User>(memberName) ||
+                    MatchesOneOf(memberName,  
                         nameof(User_Functions.AddToGroup),
                         nameof(User_Functions.EditName),
                         nameof(User_Functions.EditEmailAddress),
@@ -19,7 +19,7 @@ namespace Model.Authorization
                         nameof(User_Functions.InviteToChangeLoginCredentials),
                         nameof(User_Functions.SetToInactive),
                         nameof(User_Functions.RemoveIdentityInfo)
-                        ),
+                        )),
                 Role.Student => user.Id == Users.Me(context).Id && IsProperty<User>(memberName),
                 _ => false
             };
