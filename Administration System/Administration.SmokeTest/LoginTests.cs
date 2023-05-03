@@ -31,6 +31,7 @@ public class LoginTests : BaseTest {
         helper.GoToLanding();
         helper.StartLogin();
         helper.LoginWithAuth0(PasswordDev, UserIdDev);
+        helper.WaitForCss(".not-in-progress");
     }
 
     [TestMethod]
@@ -42,24 +43,22 @@ public class LoginTests : BaseTest {
     [TestMethod]
     public virtual void CreateInvitation() {
         Login();
-        Thread.Sleep(2000); // need to wait here until redirected - may be better fix
         var dialog = helper.GotoHome().OpenMainMenu("Invitations").GetActionWithDialog("Invite New Student In My Organisation").Open();
         dialog.GetTextField("Name").Clear().Enter("Test Invitation");
         var user = dialog.ClickOKToViewObject();
         var inviteCode = user.GetProperty("Link To Be Emailed").GetValue();
         helper.Logout();
+        
         Thread.Sleep(2000);
+
         var code = inviteCode.Split('/').Last();
         helper.GotoBaseUrlDirectly($@"/invitation/{code}");
-        Thread.Sleep(2000);
         var loginButton = helper.WaitForCss(@"app-invitation button");
         helper.Click(loginButton);
         helper.LoginWithAuth0(PasswordStudent, UserIdStudent);
-        Thread.Sleep(4000);
-        helper.GetHomeView().AssertMainMenusAre("Assignments", "Tasks");
+        helper.WaitForCss(".home");
+        helper.GotoHome().AssertMainMenusAre("Assignments", "Tasks");
         helper.Logout();
-
-        Thread.Sleep(10000);
         // delete user
     }
 

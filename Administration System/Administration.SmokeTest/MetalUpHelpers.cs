@@ -23,6 +23,7 @@ public static class MetalUpHelpers {
         helper.ClickLogOffButton();
         var logoffButton = helper.WaitForCss(@"button[value=""Log Off""]");
         helper.Click(logoffButton);
+        helper.WaitForCss("app-landing button");
         return helper;
     }
 
