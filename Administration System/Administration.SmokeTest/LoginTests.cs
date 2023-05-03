@@ -6,7 +6,11 @@
 // See the License for the specific language governing permissions and limitations under the License.
 
 using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 using NakedFrameworkClient.TestFramework.Tests;
@@ -23,22 +27,51 @@ public class LoginTests : BaseTest {
             .AddEnvironmentVariables()
             .Build();
 
-    [TestMethod]
-    public virtual void LoginAndLogout() {
+    private void Login() {
         helper.GoToLanding();
         helper.StartLogin();
-        helper.LoginWithAuth0(Password, UserId);
+        helper.LoginWithAuth0(PasswordDev, UserIdDev);
+        helper.WaitForCss(".not-in-progress");
+    }
+
+    [TestMethod]
+    public virtual void LoginAndLogout() {
+        Login();
         helper.Logout();
+    }
+
+    [TestMethod]
+    public virtual void CreateInvitation() {
+        Login();
+        var dialog = helper.GotoHome().OpenMainMenu("Invitations").GetActionWithDialog("Invite New Student In My Organisation").Open();
+        dialog.GetTextField("Name").Clear().Enter("Test Invitation");
+        var user = dialog.ClickOKToViewObject();
+        var inviteCode = user.GetProperty("Link To Be Emailed").GetValue();
+        helper.Logout();
+        
+        Thread.Sleep(2000);
+
+        var code = inviteCode.Split('/').Last();
+        helper.GotoBaseUrlDirectly($@"/invitation/{code}");
+        var loginButton = helper.WaitForCss(@"app-invitation button");
+        helper.Click(loginButton);
+        helper.LoginWithAuth0(PasswordStudent, UserIdStudent);
+        helper.WaitForCss(".home");
+        helper.GotoHome().AssertMainMenusAre("Assignments", "Tasks");
+        helper.Logout();
+        // delete user
     }
 
     #region Overhead
 
     protected override string BaseUrl => @"https://development.metalup.org/";
 
-    private string Password => GetIConfigurationBase()["password"];
+    private string PasswordDev => GetIConfigurationBase()["password_dev"];
+    private string PasswordStudent => GetIConfigurationBase()["password_student"];
 
     private Helper helper;
-    private readonly string UserId = @"metalup.dev@gmail.com";
+    private readonly string UserIdDev = @"metalup.dev@gmail.com";
+    private readonly string UserIdStudent = @"metalup.student@gmail.com";
 
     [TestInitialize]
     public virtual void InitializeTest() {
