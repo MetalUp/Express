@@ -69,7 +69,7 @@ End Function
     [ClassInitialize]
     public static void InitialiseClass(TestContext context) {
         helper = new Helper(MetalUpDevelopmentBaseUrl, "dashboard", Driver, Wait);
-        helper.LoginAsTeacher();
+        helper.LoginAsStudent();
     }
 
     [ClassCleanup]
