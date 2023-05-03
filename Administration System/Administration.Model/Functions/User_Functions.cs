@@ -103,6 +103,12 @@ namespace Model.Functions
             IContext context) =>
             context.WithUpdated(student, new(student) { OrganisationId = newOrg.Id, Organisation = newOrg });
 
+       public static IContext DeleteUser(this User user, [DescribedAs("type DELETE")] string confirm, IContext context) =>
+            context.WithDeleted(user);
+
+      public static string ValidateDelete(this User user, string confirm) =>
+            confirm == "DELETE" ? null : "Must type 'DELETE'";
+
         #endregion
     }
 }
