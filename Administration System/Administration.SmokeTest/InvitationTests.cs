@@ -10,7 +10,8 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 using NakedFrameworkClient.TestFramework.Tests;
-using static SmokeTest.MetalUpHelpers;
+using SmokeTest.Helpers;
+using static SmokeTest.Helpers.MetalUpHelpers;
 
 namespace SmokeTest;
 
