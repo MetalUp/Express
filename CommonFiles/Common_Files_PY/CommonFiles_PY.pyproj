@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>8a6d5c72-50d3-4c42-a412-0d036ccc7c35</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Wrapper_Populated.py</StartupFile>
+    <StartupFile>Wrapper.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,16 +22,11 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Default_helpers.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Wrapper_Populated.py" />
+    <Content Include="Wrapper.py" />
     <Content Include="Functions_regex.json" />
-    <Content Include="Functions_regex_Test %28to be converted .txt" />
-    <Content Include="Default_wrapper.txt" />
+    <Content Include="Functions_regex_Test %28to be converted%29 .txt" />
     <Content Include="Testing Display.txt" />
     <Content Include="Typed_Functions_regex.json" />
-    <Content Include="QA_wrapper.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

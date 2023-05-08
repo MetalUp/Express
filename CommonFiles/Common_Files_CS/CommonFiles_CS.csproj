@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>MetalUp.Express.Wrapper_CS</StartupObject>
+    <StartupObject>MetalUp.Express.Wrapper</StartupObject>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 

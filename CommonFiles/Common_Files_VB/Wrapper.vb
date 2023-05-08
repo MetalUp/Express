@@ -1,10 +1,10 @@
 ﻿Imports Microsoft.VisualBasic
-Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports System
 Imports System.Collections
 Imports System.Collections.Generic
 Imports System.Collections.Immutable
 Imports System.Linq
+Imports System.Math
 Imports System.Runtime.CompilerServices
 Imports System.Text
 
@@ -13,16 +13,21 @@ Namespace MetalUp.Express
     Module Program
         Public Sub Main()
             Console.OutputEncoding = Encoding.UTF8
-            Console.WriteLine(Display(("Hell00", 3)))
+            Console.WriteLine(Display("<Expression>"))
         End Sub
 
         ' StudentCode - this comment is needed error line number offset
-        Public Function IsPrime(ByVal n As Integer) As Boolean
-            Return Not Enumerable.Range(2, n \ 2 - 1).Any(Function(f) IsFactor(f, n))
-        End Function
+        '<StudentCode>
 
-#Region "<Helpers>"
-        Function Display(ByVal obj As Object) As String
+        '<HiddenCode>
+
+    End Module
+
+    '<Tests>
+
+    Public Module Helpers
+
+        Public Function Display(ByVal obj As Object) As String
             If obj Is Nothing Then
                 Return ""
             End If
@@ -55,34 +60,10 @@ Namespace MetalUp.Express
             Return $"xxxTest failed calling {functionName}({ArgString(args)}) Expected: {Display(expected)} Actual: {Display(actual)}xxx"
         End Function
 
-        Public Function QAFailMessage(ByVal wrongAnswers As String) As String
-            Return $"xxxWrong or missing answer(s) to question number(s): {wrongAnswers}.xxx"
-        End Function
-
-        Public Function WrongAnswers(ByVal student As String, ByVal answers As String) As String
-            Dim studentArr = AsArray(student)
-            Dim answersArr = AsArray(answers)
-            Dim result = ""
-            For n As Integer = 0 To answersArr.Length - 1
-                If answersArr(n) IsNot Nothing AndAlso studentArr(n) <> answersArr(n) Then
-                    result &= $"{n} "
-                End If
-            Next n
-            Return result
-        End Function
-
-        Public Function AsArray(ByVal answers As String) As String()
-            Dim arr = New String(19) {}
-            For Each a As String In answers.Split(ControlChars.Lf).Where(Function(x) x.Length > 0)
-                Dim split = a.Split(")"c)
-                Dim n = AsInt(split(0).Trim())
-                arr(n) = split(1).Trim().ToUpper()
-            Next a
-            Return arr
-        End Function
-
-        Private Function AsInt(ByVal input As String) As Integer
-            Return Convert.ToInt32(Encoding.Default.GetString(Encoding.ASCII.GetBytes(input).Where(Function(b) b > 47 AndAlso b < 58).ToArray()))
+        Public Function EqualIfRounded(expected As Double, actual As Double) As Boolean
+            Dim places = expected.ToString().Length - expected.ToString().IndexOf(".") - 1
+            Dim rounded = Math.Round(actual, places)
+            Return expected = rounded
         End Function
 
         <Extension>
@@ -100,16 +81,6 @@ Namespace MetalUp.Express
             Return list.Take(i).Concat(list.Skip(i)).ToList()
         End Function
 
-#End Region
-
-#Region "<HiddenCode>"
-        Public Function IsFactor(ByVal f As Integer, ByVal n As Integer) As Boolean
-            Return n Mod f = 0
-        End Function
-#End Region
-
     End Module
-
-    '<Tests>
 
 End Namespace
