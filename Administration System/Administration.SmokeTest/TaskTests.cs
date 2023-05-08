@@ -120,6 +120,21 @@ End Function
     }
 
     [TestMethod]
+    public virtual void SubmitCodeCSharpCompileFail() {
+        var before = helper.GetActivityCount();
+        var task = helper.GoToTask(CsharpTaskId);
+        task.EnterCode("static int f() => 1;");
+        task.AssertCompileResultIs("Compiled OK");
+        task.EnterCode(@"static int f() => """";");
+        task.AssertCompileResultIs("CS0029: Cannot implicitly convert type 'string' to 'int' (1,19)");
+        task.PreviousCode();
+        task.EnterCurrentCode();
+        task.AssertCompileResultIs("Compiled OK");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before + 3, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
     public virtual void SubmitCodeCSharpRegexFail() {
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(CsharpTaskId);
@@ -143,6 +158,22 @@ End Function
         task.AssertCompileResultIs("Compiled OK");
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
+    public virtual void SubmitCodePythonCompileFail() {
+        var before = helper.GetActivityCount();
+        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        var task = helper.GoToTask(PythonTaskId);
+        task.EnterCode("def f() -> int: return 1");
+        task.AssertCompileResultIs("Compiled OK");
+        task.EnterCode(@"def f() -> int: return """"");
+        task.AssertCompileResultIs("error: Incompatible return value type  (1,24)");
+        task.PreviousCode();
+        task.EnterCurrentCode();
+        task.AssertCompileResultIs("Compiled OK");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before + 3, after, "Mismatched activity count");
     }
 
     [TestMethod]
@@ -173,6 +204,29 @@ End Function
         task.AssertCompileResultIs("Compiled OK");
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
+    public virtual void SubmitCodeVbCompileFail() {
+        var before = helper.GetActivityCount();
+        var task = helper.GoToTask(VbTaskId);
+        task.EnterCode(@"
+Function F() As Integer
+    Return 1
+End Function
+");
+        task.AssertCompileResultIs("Compiled OK");
+        task.EnterCode(@"
+Function F() As Integer
+    Return $
+End Function
+");
+        task.AssertCompileResultIs("BC30201: Expression expected. (3,12)");
+        task.PreviousCode();
+        task.EnterCurrentCode();
+        task.AssertCompileResultIs("Compiled OK");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before + 3, after, "Mismatched activity count");
     }
 
     [TestMethod]
