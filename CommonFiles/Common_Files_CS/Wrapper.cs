@@ -15,7 +15,7 @@ namespace MetalUp.Express
         static void Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
-            Console.WriteLine("<Expression>");
+            Console.WriteLine(Display("<Expression>"));
         }
 
         // StudentCode - this comment is needed error line number offset
