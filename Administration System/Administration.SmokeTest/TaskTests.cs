@@ -250,6 +250,30 @@ End Function
     }
 
     [TestMethod]
+    public virtual void DisplayTypesPython()
+    {
+        var task = helper.GoToTask(PythonTaskId);
+
+        task.EnterExpression("'Foo'");
+        task.AssertChangedResultIs("", "'Foo'");
+
+        task.EnterExpression("True");
+        task.AssertChangedResultIs("'Foo'", "True");
+
+        task.EnterExpression("[1, 2, 3]");
+        task.AssertChangedResultIs("True", "[1, 2, 3]");
+
+        task.EnterExpression("['foo','bar']");
+        task.AssertChangedResultIs("[1, 2, 3]", "['foo', 'bar']");
+
+        task.EnterExpression("[[1,2,3],[4,5]]");
+        task.AssertChangedResultIs("['foo', 'bar']", "[\r\n[1, 2, 3], \r\n[4, 5]]");
+
+        task.EnterExpression("('foo', 1)");
+        task.AssertChangedResultIs("[\r\n[1, 2, 3], \r\n[4, 5]]", "('foo', 1)");
+    }
+
+    [TestMethod]
     public virtual void EvaluateExpressionPythonFailRegex()
     {
         var task = helper.GoToTask(PythonTaskId);
