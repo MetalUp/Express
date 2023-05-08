@@ -66,85 +66,17 @@ public class TaskTests : BaseTest {
     }
 
     [TestMethod]
-    public virtual void SubmitCodeCSharp() {
-        var before = helper.GetActivityCount();
-        var task = helper.GoToTask(CsharpTaskId);
-        task.EnterCode("static int f() => 1;");
-        task.AssertCompileResultIs("Compiled OK");
-        var after = helper.GetActivityCount();
-
-        Assert.AreEqual(before + 1, after, "Mismatched activity count");
-    }
-
-    [TestMethod]
     public virtual void EvaluateSubmittedCodeCSharp() {
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(CsharpTaskId);
         var random = new Random().NextInt64();
         task.EnterCode($"static long ReturnRandom() => {random};");
         task.AssertCompileResultIs("Compiled OK");
-
         task.EnterExpression("ReturnRandom()");
         task.AssertResultIs($"{random}");
-
         var after = helper.GetActivityCount();
-
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
-
-    [TestMethod]
-    public virtual void SubmitCodeCSharpRegexFail() {
-        //var before = helper.GetActivityCount();
-        var task = helper.GoToTask(CsharpTaskId);
-        task.EnterCode("static int f() => 1;");
-        task.AssertCompileResultIs("Compiled OK");
-        task.EnterCode("int f() => 1;");
-        task.AssertCompileResultIs("All functions should be: static <ReturnType> <NameStartingInUpperCase>(<parametersStartingLowerCase>) => <expression>;");
-        task.PreviousCode();
-        task.EnterCurrentCode();
-        task.AssertCompileResultIs("Compiled OK");
-        
-        //var after = helper.GetActivityCount();
-
-        //Assert.AreEqual(before + 1, after, "Mismatched activity count");
-    }
-
-
-
-    [TestMethod]
-    public virtual void SubmitCodePython() {
-        var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
-        var task = helper.GoToTask(PythonTaskId);
-        task.EnterCode("def f() -> int: return 1");
-        task.AssertCompileResultIs("Compiled OK");
-
-        var after = helper.GetActivityCount();
-
-        Assert.AreEqual(before + 1, after, "Mismatched activity count");
-    }
-
-    [TestMethod]
-    public virtual void SubmitCodePythonRegexFail() {
-        //var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
-        var task = helper.GoToTask(PythonTaskId);
-        task.EnterCode("def f() -> int: return 1");
-        task.AssertCompileResultIs("Compiled OK");
-        task.EnterCode("f() -> int: return 1");
-        task.AssertCompileResultIs("All functions must follow form: def <lower_case_name>(<params, each with type>) -> <return_type> :  return <expression>");
-        task.PreviousCode();
-        task.EnterCurrentCode();
-        task.AssertCompileResultIs("Compiled OK");
-        
-        //var after = helper.GetActivityCount();
-
-        //Assert.AreEqual(before + 1, after, "Mismatched activity count");
-    }
-
-
-
-
 
     [TestMethod]
     public virtual void EvaluateSubmittedCodePython() {
@@ -154,13 +86,79 @@ public class TaskTests : BaseTest {
         var random = new Random().NextInt64();
         task.EnterCode($"def return_random() -> int: return {random}");
         task.AssertCompileResultIs("Compiled OK");
-
         task.EnterExpression("return_random()");
         task.AssertResultIs($"{random}");
-
         var after = helper.GetActivityCount();
-
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
+    public virtual void EvaluateSubmittedCodeVb() {
+        var before = helper.GetActivityCount();
+        var task = helper.GoToTask(VbTaskId);
+        var random = new Random().NextInt64();
+        task.EnterCode(@$"
+Function ReturnRandom() As Long
+    Return {random}
+End Function
+");
+        task.AssertCompileResultIs("Compiled OK");
+        task.EnterExpression("ReturnRandom()");
+        task.AssertResultIs($"{random}");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
+    public virtual void SubmitCodeCSharp() {
+        var before = helper.GetActivityCount();
+        var task = helper.GoToTask(CsharpTaskId);
+        task.EnterCode("static int f() => 1;");
+        task.AssertCompileResultIs("Compiled OK");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
+    public virtual void SubmitCodeCSharpRegexFail() {
+        var before = helper.GetActivityCount();
+        var task = helper.GoToTask(CsharpTaskId);
+        task.EnterCode("static int f() => 1;");
+        task.AssertCompileResultIs("Compiled OK");
+        task.EnterCode("int f() => 1;");
+        task.AssertCompileResultIs("All functions should be: static <ReturnType> <NameStartingInUpperCase>(<parametersStartingLowerCase>) => <expression>;");
+        task.PreviousCode();
+        task.EnterCurrentCode();
+        task.AssertCompileResultIs("Compiled OK");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before + 2, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
+    public virtual void SubmitCodePython() {
+        var before = helper.GetActivityCount();
+        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        var task = helper.GoToTask(PythonTaskId);
+        task.EnterCode("def f() -> int: return 1");
+        task.AssertCompileResultIs("Compiled OK");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
+    public virtual void SubmitCodePythonRegexFail() {
+        var before = helper.GetActivityCount();
+        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        var task = helper.GoToTask(PythonTaskId);
+        task.EnterCode("def f() -> int: return 1");
+        task.AssertCompileResultIs("Compiled OK");
+        task.EnterCode("f() -> int: return 1");
+        task.AssertCompileResultIs("All functions must follow form: def <lower_case_name>(<params, each with type>) -> <return_type> :  return <expression>");
+        task.PreviousCode();
+        task.EnterCurrentCode();
+        task.AssertCompileResultIs("Compiled OK");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before + 2, after, "Mismatched activity count");
     }
 
     [TestMethod]
@@ -173,15 +171,13 @@ Function F() As Integer
 End Function
 ");
         task.AssertCompileResultIs("Compiled OK");
-
         var after = helper.GetActivityCount();
-
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
 
     [TestMethod]
     public virtual void SubmitCodeVbRegexFail() {
-        //var before = helper.GetActivityCount();
+        var before = helper.GetActivityCount();
         var task = helper.GoToTask(VbTaskId);
         task.EnterCode(@"
 Function F() As Integer
@@ -198,34 +194,8 @@ End Function
         task.PreviousCode();
         task.EnterCurrentCode();
         task.AssertCompileResultIs("Compiled OK");
-        
-        //var after = helper.GetActivityCount();
-
-        //Assert.AreEqual(before + 1, after, "Mismatched activity count");
-    }
-
-
-
-
-    [TestMethod]
-    public virtual void EvaluateSubmittedCodeVb() {
-        var before = helper.GetActivityCount();
-        var task = helper.GoToTask(VbTaskId);
-        var random = new Random().NextInt64();
-
-        task.EnterCode(@$"
-Function ReturnRandom() As Long
-    Return {random}
-End Function
-");
-        task.AssertCompileResultIs("Compiled OK");
-
-        task.EnterExpression("ReturnRandom()");
-        task.AssertResultIs($"{random}");
-
         var after = helper.GetActivityCount();
-
-        Assert.AreEqual(before + 1, after, "Mismatched activity count");
+        Assert.AreEqual(before + 2, after, "Mismatched activity count");
     }
 
     #region Overhead
