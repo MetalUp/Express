@@ -84,7 +84,7 @@ public static class MetalUpHelpers {
 
     public static int GetActivityCount(this Helper helper) {
         var list = helper.GotoHome().OpenMainMenu("Activities").GetActionWithoutDialog("My Activities").ClickToViewList();
-        return list.RowCount();
+        return list.TotalCount();
     }
 
     public static Helper WaitAndAssert(this Helper helper, string selector, string result) {

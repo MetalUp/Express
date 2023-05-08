@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 using OpenQA.Selenium;
 
@@ -14,7 +13,9 @@ public class TaskView {
         this.helper = helper;
     }
 
-    private IWebElement GetCodeSubmitButton() => helper.WaitForCssNo("app-code-definition button", 0);
+    private IWebElement GetSubmitCodeButton() => helper.WaitForCssNo("app-code-definition button", 0);
+
+    private IWebElement GetPreviousCodeButton() => helper.WaitForCssNo("app-code-definition button", 2);
 
     private IWebElement GetPreviousExpressionButton() => helper.WaitForCssNo("app-expression-evaluation button", 2);
 
@@ -39,17 +40,27 @@ public class TaskView {
         return this;
     }
 
+    public TaskView PreviousCode() {
+        helper.Click(GetPreviousCodeButton());
+        return this;
+    }
+
     public TaskView EnterCode(string code) {
         var inp = helper.WaitForCss(".code-definition textarea");
         Thread.Sleep(1000);
         inp.Clear();
         inp.SendKeys(code);
-        helper.Click(GetCodeSubmitButton());
+        helper.Click(GetSubmitCodeButton());
         return this;
     }
 
     public TaskView AssertResultIs(string result) {
         helper.WaitAndAssert(".result textarea", result);
+        return this;
+    }
+
+    public TaskView EnterCurrentCode() {
+        helper.Click(GetSubmitCodeButton());
         return this;
     }
 
