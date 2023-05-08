@@ -123,11 +123,6 @@ namespace Model.Types
         public virtual File RegExRulesFile { get; init; }
 
         #endregion
-        #region Helpers
-        //Helpers should be generic
-        internal string Helpers => Project.Helpers;
-
-        #endregion
 
         [Hidden]
         public int? PreviousTaskId { get; init; }

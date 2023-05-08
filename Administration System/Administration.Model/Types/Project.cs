@@ -84,13 +84,6 @@
 
         #endregion
 
-        #region Helpers
-
-        [Hidden]
-        public string Helpers => Language.Helpers;
-
-        #endregion
-
         #region RegExRules
         internal string RegExRules => RegExRulesFileId == null ? Language.RegExRules  : RegExRulesFile.ContentsAsString();
 

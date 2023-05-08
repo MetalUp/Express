@@ -16,8 +16,6 @@ public class Language
         CompilerLanguageId = cloneFrom.CompilerLanguageId;
         WrapperFileId = cloneFrom.WrapperFileId;
         WrapperFile = cloneFrom.WrapperFile;
-        HelpersFileId = cloneFrom.HelpersFileId;
-        HelpersFile = cloneFrom.HelpersFile;
         RegExRulesFileId = cloneFrom.RegExRulesFileId;
         RegExRulesFile = cloneFrom.RegExRulesFile;
         CompileArguments = cloneFrom.CompileArguments;
@@ -45,19 +43,6 @@ public class Language
 
     [MemberOrder(40)]
     public virtual File WrapperFile { get; init; }
-
-    #endregion
-
-    #region Helpers
-
-    [Hidden]
-    public string Helpers => HelpersFile?.ContentsAsString();
-
-    [Hidden]
-    public int? HelpersFileId { get; init; }
-
-    [MemberOrder(60)]
-    public virtual File HelpersFile { get; init; }
 
     #endregion
 

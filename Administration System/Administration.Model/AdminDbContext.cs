@@ -39,7 +39,6 @@ namespace Model
             mb.Entity<Task>().HasMany(e => e.Hints).WithMany(h => h.Tasks);
 
             mb.Entity<Language>().HasOne(e => e.WrapperFile).WithMany().OnDelete(DeleteBehavior.NoAction);
-            mb.Entity<Language>().HasOne(e => e.HelpersFile).WithMany().OnDelete(DeleteBehavior.NoAction);
             mb.Entity<Language>().HasOne(e => e.RegExRulesFile).WithMany().OnDelete(DeleteBehavior.NoAction);
 
             mb.Entity<File>().HasOne(e => e.Language).WithMany().OnDelete(DeleteBehavior.NoAction);
