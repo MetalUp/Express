@@ -1,11 +1,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.RegularExpressions;
 
+namespace CommonFiles_CS_Test
+{
     [TestClass]
-    public class CS_Tests_Regex
+    public class TestRegex
     {
         const string multipleFunctions = $@"^[\n\s]*(?:static.*=>(?:[^;{{}}]|\n)*;\s*)*$"; //use of double braces to make literal for this test only
-       
+
         [TestMethod]
         public void TestMultipleFunctions()
         {
@@ -14,10 +16,10 @@ using System.Text.RegularExpressions;
             AssertMultiLineMatch("static int Foo(int a) => a*3;\n  \nstatic int Bar(int a) => a*4;\n  \nstatic int Yon(int a) => a*4;", multipleFunctions);
 
             AssertMultiLineDoesNotMatch("static int Foo(int a) => a*3;\nxxx", multipleFunctions);
-        }      
-        
-#region Help
-        private void AssertMultiLineMatch(string input, string pattern )
+        }
+
+        #region Help
+        private void AssertMultiLineMatch(string input, string pattern)
         {
             var match = Regex.Match(input, pattern, RegexOptions.Multiline);
             Assert.IsTrue(match.Success);
@@ -32,3 +34,4 @@ using System.Text.RegularExpressions;
         }
         #endregion
     }
+}
