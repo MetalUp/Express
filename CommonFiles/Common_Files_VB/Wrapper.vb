@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.VisualBasic
+Imports Microsoft.VisualStudio.TestTools.UnitTesting;
 Imports System
 Imports System.Collections
 Imports System.Collections.Generic
@@ -18,12 +19,12 @@ Namespace MetalUp.Express
 
         ' StudentCode - this comment is needed error line number offset
         '<StudentCode>
-
         '<HiddenCode>
+        '<Tests>
 
     End Module
 
-    '<Tests>
+
 
     Public Module Helpers
 

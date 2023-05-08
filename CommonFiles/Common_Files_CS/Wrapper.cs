@@ -1,4 +1,5 @@
 ﻿using static MetalUp.Express.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,14 +18,13 @@ namespace MetalUp.Express
             Console.OutputEncoding = Encoding.UTF8;
             Console.WriteLine(Display("<Expression>"));
         }
+//COMMENTS BELOW MUST BE OUTDENTED TO MAX
 
 // StudentCode - this comment is needed error line number offset
 //<StudentCode>
-
 //<HiddenCode>
-    }
-
 //<Tests>
+    }
 
     public static class Helpers
     {
