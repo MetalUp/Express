@@ -87,9 +87,10 @@ public static class MetalUpHelpers {
         return list.TotalCount();
     }
 
-    public static Helper WaitAndAssert(this Helper helper, string selector, string result) {
+    public static Helper WaitAndAssert(this Helper helper, string selector, string expected) {
         helper.Wait.Until(d => helper.WaitForCss(selector).Text.Trim().Length > 0);
-        Assert.AreEqual(result, helper.WaitForCss(selector).Text);
+        var actual = helper.WaitForCss(selector).Text;
+        Assert.AreEqual(expected, actual );
         return helper;
     }
 }

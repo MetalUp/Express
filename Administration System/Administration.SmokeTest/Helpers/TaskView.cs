@@ -59,6 +59,12 @@ public class TaskView {
         return this;
     }
 
+    public TaskView AssertChangedResultIs(string oldValue, string newValue)
+    {
+        helper.Wait.Until(d => helper.WaitForCss(".result textarea").Text != oldValue);
+        return AssertResultIs(newValue);
+    }
+
     public TaskView EnterCurrentCode() {
         helper.Click(GetSubmitCodeButton());
         return this;

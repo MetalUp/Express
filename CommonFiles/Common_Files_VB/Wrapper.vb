@@ -39,7 +39,7 @@ Namespace MetalUp.Express
             End If
             If TypeOf obj Is ITuple Then
                 Dim tuple = DirectCast(obj, ITuple)
-                Return Enumerable.Range(0, tuple.Length).Aggregate("(", Function(s, i) s & Display(tuple(i)) & (If(i < (tuple.Length - 1), ",", ")")))
+                Return Enumerable.Range(0, tuple.Length).Aggregate("(", Function(s, i) s & Display(tuple(i)) & (If(i < (tuple.Length - 1), ", ", ")")))
             End If
             Dim type = obj.GetType()
             If type.IsGenericType AndAlso type.GetGenericTypeDefinition() Is GetType(List(Of )) Then
