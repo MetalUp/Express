@@ -41,13 +41,46 @@ public class TaskTests : BaseTest {
     }
 
     [TestMethod]
+    public virtual void EvaluateSubmittedCodeCSharp() {
+        var before = helper.GetActivityCount();
+        var task = helper.GoToTask(107);
+        var random = new Random().NextInt64();
+        task.EnterCode($"static long ReturnRandom() => {random};");
+        task.AssertCompileResultIs("Compiled OK");
+
+        task.EnterExpression("ReturnRandom()");
+        task.AssertResultIs($"{random}");
+
+        var after = helper.GetActivityCount();
+
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
     public virtual void SubmitCodePython() {
         var before = helper.GetActivityCount();
         Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
         var task = helper.GoToTask(109);
         task.EnterCode("def f() -> int: return 1");
         task.AssertCompileResultIs("Compiled OK");
-        Wait.Timeout = new TimeSpan(0, 0, 10);
+
+        var after = helper.GetActivityCount();
+
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
+    public virtual void EvaluateSubmittedCodePython() {
+        var before = helper.GetActivityCount();
+        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        var task = helper.GoToTask(109);
+        var random = new Random().NextInt64();
+        task.EnterCode($"def return_random() -> int: return {random}");
+        task.AssertCompileResultIs("Compiled OK");
+
+        task.EnterExpression("return_random()");
+        task.AssertResultIs($"{random}");
+
         var after = helper.GetActivityCount();
 
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
@@ -63,6 +96,27 @@ Function F() As Integer
 End Function
 ");
         task.AssertCompileResultIs("Compiled OK");
+
+        var after = helper.GetActivityCount();
+
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
+    }
+
+    [TestMethod]
+    public virtual void EvaluateSubmittedCodeVb() {
+        var before = helper.GetActivityCount();
+        var task = helper.GoToTask(114);
+        var random = new Random().NextInt64();
+
+        task.EnterCode(@$"
+Function ReturnRandom() As Long
+    Return {random}
+End Function
+");
+        task.AssertCompileResultIs("Compiled OK");
+
+        task.EnterExpression("ReturnRandom()");
+        task.AssertResultIs($"{random}");
 
         var after = helper.GetActivityCount();
 
@@ -90,7 +144,10 @@ End Function
     public virtual void InitializeTest() { }
 
     [TestCleanup]
-    public virtual void CleanupTest() { }
+    public virtual void CleanupTest() {
+        //some tests reset timeout
+        Wait.Timeout = new TimeSpan(0, 0, 10);
+    }
 
     #endregion
 }
