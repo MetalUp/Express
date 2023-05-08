@@ -59,7 +59,6 @@ public static class Compile
             var apiRunResult = ReadAs<ApiRunResult>(response);
             return (apiRunResult?.ToRunResult(), context);
         }
-
         throw new HttpRequestException("compile server request failed", null, response.StatusCode);
     }
 
@@ -68,13 +67,17 @@ public static class Compile
         var task = context.Instances<Task>().Single(t => t.Id == taskId);
         var language = task.Project.Language;
         var testCode = includeTests ? task.Tests : "";
-
         var wrappedCode = task.Wrapper
-                              .Replace("<Expression>", expression ?? "\"\"")
-                              .Replace("<StudentCode>", code)
-                              .Replace("<HiddenCode>", task.HiddenCode)
-                              .Replace("<Helpers>", task.Helpers)
-                              .Replace("<Tests>", testCode);
+                              .Replace("\"<Expression>\"", expression ?? "\"\"") //All languages
+                              .Replace("//<StudentCode>", code) // C#
+                              .Replace("//<HiddenCode>", task.HiddenCode)
+                              .Replace("//<Tests>", testCode)
+                              .Replace("'<StudentCode>", code) // VB
+                              .Replace("'<HiddenCode>", task.HiddenCode)
+                              .Replace("'<Tests>", testCode)
+                              .Replace("#<StudentCode>", code) //Python                        
+                              .Replace("#<HiddenCode>", task.HiddenCode)                             
+                              .Replace("#<Tests>", testCode);
 
         return (language, wrappedCode);
     }
