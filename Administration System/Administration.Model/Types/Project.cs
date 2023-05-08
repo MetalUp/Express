@@ -30,7 +30,7 @@
 
         [MemberOrder(1)]
         [UrlLink("Start Project")]
-        public string Link => $"/task/{Tasks.First().Id}";
+        public string Link => $"/task/{Tasks.FirstOrDefault()?.Id}";
 
         [Hidden]
         public int AuthorId { get; init; }

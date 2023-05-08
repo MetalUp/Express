@@ -12,6 +12,8 @@
 
         public static bool HideRegExRulesFile(this Project project) => project.RegExRulesFileId == null;
 
+        public static bool HideLink(this Project project) => project.Tasks.Count == 0;
+
         #endregion
 
         #region Edits
