@@ -18,13 +18,13 @@ namespace MetalUp.Express
             Console.WriteLine(Display("<Expression>"));
         }
 
-        // StudentCode - this comment is needed error line number offset
-        //<StudentCode>
+// StudentCode - this comment is needed error line number offset
+//<StudentCode>
 
-        //<HiddenCode>
+//<HiddenCode>
     }
 
-    //<Tests>
+//<Tests>
 
     public static class Helpers
     {

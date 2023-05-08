@@ -39,11 +39,11 @@ def EqualIfRounded(expected: float, actual: float) -> bool:
 
 T = TypeVar('T', int, float)
 
-def set_item(list: list[T], i: int, value: T) : return list[0:i]+[value]+list[i+1:]
+def set_item(list: list[T], i: int, value: T) -> list[T]: return list[0:i]+[value]+list[i+1:]
 
-def insert_item(list: list[T], i: int, value: T) : return list[0:i]+[value]+list[i:]
+def insert_item(list: list[T], i: int, value: T) -> list[T]: return list[0:i]+[value]+list[i:]
 
-def remove_item(list: list[T], i: int) : return list[0:i]+list[i+1:]
+def remove_item(list: list[T], i: int) -> list[T]: return list[0:i]+list[i+1:]
 
 
 print(display("<Expression>"))
