@@ -37,7 +37,7 @@ public class AAStartupTests : BaseTest {
 
     #region Overhead
 
-    protected override string BaseUrl => MetalUpDevelopmentBaseUrl;
+    protected override string BaseUrl => MetalUpHelpers.BaseUrl;
 
     [AssemblyInitialize]
     public static void InitialiseAssembly(TestContext context) {

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 using NakedFrameworkClient.TestFramework.Tests;
+using SmokeTest.Helpers;
 using static SmokeTest.Helpers.MetalUpHelpers;
 
 namespace SmokeTest;
@@ -325,7 +326,7 @@ End Function
 
     #region Overhead
 
-    protected override string BaseUrl => MetalUpDevelopmentBaseUrl;
+    protected override string BaseUrl => MetalUpHelpers.BaseUrl;
 
     private static Helper helper;
     private const int CsharpTaskId = 107;
@@ -334,7 +335,7 @@ End Function
 
     [ClassInitialize]
     public static void InitialiseClass(TestContext context) {
-        helper = new Helper(MetalUpDevelopmentBaseUrl, "dashboard", Driver, Wait);
+        helper = new Helper(MetalUpHelpers.BaseUrl, "dashboard", Driver, Wait);
         helper.LoginAsStudent();
     }
 

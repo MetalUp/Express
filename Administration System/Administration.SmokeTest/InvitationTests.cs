@@ -42,7 +42,7 @@ public class InvitationTests : BaseTest {
 
     #region Overhead
 
-    protected override string BaseUrl => MetalUpDevelopmentBaseUrl;
+    protected override string BaseUrl => MetalUpHelpers.BaseUrl;
 
     private Helper helper;
 

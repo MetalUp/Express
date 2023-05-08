@@ -11,11 +11,11 @@ public static class MetalUpHelpers {
     private static readonly string UserIdStudent = @"metalup.student@gmail.com";
     public static readonly string UserIdInvitee = @"metalup.invitee@gmail.com";
 
-    public static readonly string MetalUpDevelopmentBaseUrl = @"https://development.metalup.org/";
     private static string PasswordTeacher => GetIConfigurationBase()["password_teacher"];
     private static string PasswordStudent => GetIConfigurationBase()["password_student"];
     private static string PasswordAdmin => GetIConfigurationBase()["password_admin"];
     public static string PasswordInvitee => GetIConfigurationBase()["password_invitee"];
+    public static string BaseUrl => GetIConfigurationBase()["base_url"];
 
     public static Helper LoginAsStudent(this Helper helper) {
         helper.StartLogin();
@@ -84,7 +84,8 @@ public static class MetalUpHelpers {
 
     public static int GetActivityCount(this Helper helper) {
         var list = helper.GotoHome().OpenMainMenu("Activities").GetActionWithoutDialog("My Activities").ClickToViewList();
-        return list.TotalCount();
+        var details = list.Details();
+        return details is "No items found" ? 0 : list.TotalCount();
     }
 
     public static Helper WaitAndAssert(this Helper helper, string selector, string expected) {
