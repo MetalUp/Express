@@ -16,6 +16,18 @@ public class TaskTests : BaseTest {
     }
 
     [TestMethod]
+    public virtual void EvaluateExpressionCSharpFailRegex() {
+        var task = helper.GoToTask(107);
+        task.EnterExpression("1");
+        task.AssertResultIs("1");
+        task.EnterExpression("1;");
+        task.AssertExpressionErrorIs("Use of ';' is not permitted");
+        task.PreviousExpression();
+        task.EnterCurrentExpression();
+        task.AssertResultIs("1");
+    }
+
+    [TestMethod]
     public virtual void EvaluateExpressionPython() {
         var task = helper.GoToTask(109);
         task.EnterExpression("1 + 2");
@@ -23,10 +35,34 @@ public class TaskTests : BaseTest {
     }
 
     [TestMethod]
+    public virtual void EvaluateExpressionPythonFailRegex() {
+        var task = helper.GoToTask(109);
+        task.EnterExpression("1");
+        task.AssertResultIs("1");
+        task.EnterExpression("1;");
+        task.AssertExpressionErrorIs("Use of ';' is not permitted");
+        task.PreviousExpression();
+        task.EnterCurrentExpression();
+        task.AssertResultIs("1");
+    }
+
+    [TestMethod]
     public virtual void EvaluateExpressionVb() {
         var task = helper.GoToTask(114);
         task.EnterExpression("1 + 3");
         task.AssertResultIs("4");
+    }
+
+    [TestMethod]
+    public virtual void EvaluateExpressionVbFailRegex() {
+        var task = helper.GoToTask(114);
+        task.EnterExpression("1");
+        task.AssertResultIs("1");
+        task.EnterExpression("Dim 1");
+        task.AssertExpressionErrorIs("Use of the keyword 'Dim' is not permitted");
+        task.PreviousExpression();
+        task.EnterCurrentExpression();
+        task.AssertResultIs("1");
     }
 
     [TestMethod]
