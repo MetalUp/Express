@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 
 namespace SmokeTest.Helpers;
@@ -83,6 +84,12 @@ public static class MetalUpHelpers {
 
     public static int GetActivityCount(this Helper helper) {
         var list = helper.GotoHome().OpenMainMenu("Activities").GetActionWithoutDialog("My Activities").ClickToViewList();
-        return list.RowCount();
+        return list.TotalCount();
+    }
+
+    public static Helper WaitAndAssert(this Helper helper, string selector, string result) {
+        helper.Wait.Until(d => helper.WaitForCss(selector).Text.Trim().Length > 0);
+        Assert.AreEqual(result, helper.WaitForCss(selector).Text);
+        return helper;
     }
 }
