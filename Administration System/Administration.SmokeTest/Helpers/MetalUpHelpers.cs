@@ -11,11 +11,11 @@ public static class MetalUpHelpers {
     private static readonly string UserIdStudent = @"metalup.student@gmail.com";
     public static readonly string UserIdInvitee = @"metalup.invitee@gmail.com";
 
-    public static readonly string MetalUpDevelopmentBaseUrl = @"https://development.metalup.org/";
     private static string PasswordTeacher => GetIConfigurationBase()["password_teacher"];
     private static string PasswordStudent => GetIConfigurationBase()["password_student"];
     private static string PasswordAdmin => GetIConfigurationBase()["password_admin"];
     public static string PasswordInvitee => GetIConfigurationBase()["password_invitee"];
+    public static string BaseUrl => GetIConfigurationBase()["base_url"];
 
     public static Helper LoginAsStudent(this Helper helper) {
         helper.StartLogin();
