@@ -47,7 +47,7 @@
             if (next == null || !next.HasTests())
             {
                 var a = Assignments.GetAssignmentForCurrentUser(taskId, context);
-                return context2.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Completed });
+                return a == null ? context2 : context2.WithUpdated(a, new Assignment(a) { Status = AssignmentStatus.Completed });
             }
             else
             {
