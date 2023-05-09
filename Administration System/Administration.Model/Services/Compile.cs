@@ -9,12 +9,34 @@ using Microsoft.Extensions.Configuration;
 
 namespace Model.Services;
 
-public static class Compile
-{
+public static class Compile {
+    private const int CSharpLineAdjustment = 29;
+    private const int CSharpColumnAdjustment = 26;
+    private const int PythonLineAdjustment = 5;
+    private const int PythonColumnAdjustment = 0;
+    private const int VbLineAdjustment = 20;
+    private const int VbColumnAdjustment = 0;
+
     private const string CompileServerName = "CompileServer";
     private const string AdminServerName = "AdminServer";
     private static readonly HttpClient Client = new();
     private static string compileServer;
+
+    private static int LineAdjustment(Language l) =>
+        l.CompilerLanguageId switch {
+            "csharp" => CSharpLineAdjustment,
+            "python" => PythonLineAdjustment,
+            "vb" => VbLineAdjustment,
+            _ => 0
+        };
+
+    private static int ColumnAdjustment(Language l) =>
+        l.CompilerLanguageId switch {
+            "csharp" => CSharpColumnAdjustment,
+            "python" => PythonColumnAdjustment,
+            "vb" => VbColumnAdjustment,
+            _ => 0
+        };
 
     static Compile() => compileServer = Environment.GetEnvironmentVariable(CompileServerName);
 
@@ -181,7 +203,9 @@ public static class Compile
                 },
                 compile_options = new CompileOptions
                 {
-                    CompileArguments = language.CompileArguments
+                    CompileArguments = language.CompileArguments,
+                    LineAdjustment = LineAdjustment(language),
+                    ColumnAdjustment = ColumnAdjustment(language)
                 }
             };
 
@@ -200,6 +224,8 @@ public static class Compile
             public int? CSharpVersion { get; set; }
             public int? VisualBasicVersion { get; set; }
             public int? ProcessTimeout { get; set; }
+            public int? LineAdjustment { get; set; }
+            public int? ColumnAdjustment { get; set; }
         }
     }
 
