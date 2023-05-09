@@ -18,12 +18,11 @@ namespace MetalUp.Express
             Console.OutputEncoding = Encoding.UTF8;
             Console.WriteLine(Display("<Expression>"));
         }
-//COMMENTS BELOW MUST BE OUTDENTED TO MAX
 
-// StudentCode - this comment is needed error line number offset
-//<StudentCode>
-//<HiddenCode>
-//<Tests>
+        // StudentCode - this comment is needed error line number offset
+        //<StudentCode>
+        //<HiddenCode>
+        //<Tests>
     }
 
     public static class Helpers
@@ -62,10 +61,10 @@ namespace MetalUp.Express
         public static List<T> SetItem<T>(this List<T> list, int i, T value) =>
                 list.Take(i).Append(value).Concat(list.Skip(i + 1)).ToList();
 
-            public static List<T> InsertItem<T>(this List<T> list, int i, T value) =>
-                list.Take(i).Append(value).Concat(list.Skip(i)).ToList();
+        public static List<T> InsertItem<T>(this List<T> list, int i, T value) =>
+            list.Take(i).Append(value).Concat(list.Skip(i)).ToList();
 
-            public static List<T> RemoveItem<T>(this List<T> list, int i) =>
-                list.Take(i).Concat(list.Skip(i+1)).ToList();
+        public static List<T> RemoveItem<T>(this List<T> list, int i) =>
+            list.Take(i).Concat(list.Skip(i + 1)).ToList();
     }
 }
