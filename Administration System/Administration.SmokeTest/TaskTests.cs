@@ -110,7 +110,30 @@ public class TaskTests : BaseTest {
         Assert.AreEqual(before + 3, after, "Mismatched activity count");
     }
 
+    [TestMethod]
+    public virtual void RunTestsPass()
+    {
+        //Submit code
+        var task = helper.GoToTask(CsharpTaskId);
+        task.EnterCode("static int f() => 1;");
+        task.AssertCompileResultIs("Compiled OK");
+        var after = helper.GetActivityCount();
+        //Assert.AreEqual(before + 1, after, "Mismatched activity count");
 
+
+    }
+
+    [TestMethod]
+    public virtual void RunTestsFail()
+    {
+
+    }
+
+    [TestMethod]
+    public virtual void RunTestsCompletesAssignedTask()
+    {
+
+    }
 
     #endregion
 
@@ -354,8 +377,10 @@ End Function
 
     private static Helper helper;
     private const int CsharpTaskId = 107;
-    private const int PythonTaskId = 109;
     private const int VbTaskId = 114;
+    private const int PythonTaskId = 109;
+    private const int CsharpWithTestTaskId = 118;
+
 
     [ClassInitialize]
     public static void InitialiseClass(TestContext context) {

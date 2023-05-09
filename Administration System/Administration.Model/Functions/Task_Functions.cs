@@ -31,13 +31,6 @@ IContext context) =>
 context.WithUpdated(task, new(task) { Title = title });
 
         [Edit]
-        public static IContext EditSummary(
-    this Task task,
-    string summary,
-    IContext context) =>
-        context.WithUpdated(task, new(task) { Summary = summary });
-
-        [Edit]
         public static IContext EditPreviousTask(
             this Task task,
             [Optionally] Task previousTask,

@@ -13,7 +13,6 @@ namespace Model.Types
             Project = cloneFrom.Project;
             Number = cloneFrom.Number;
             Title = cloneFrom.Title;
-            Summary = cloneFrom.Summary;
             DescriptionFileId = cloneFrom.DescriptionFileId;
             DescriptionFile = cloneFrom.DescriptionFile;
             HiddenCodeFileId = cloneFrom.HiddenCodeFileId;
@@ -53,9 +52,6 @@ namespace Model.Types
         [MemberOrder(25)]
         [Named("Title (override)")]
         public string Title { get; init; }
-
-        [MemberOrder(30)]
-        public string Summary { get; init; }
 
         [Hidden]
         public string Language => Project.Language.CSSstyle;
@@ -141,8 +137,9 @@ namespace Model.Types
 
         public virtual ICollection<Hint> Hints { get; set; } = new List<Hint>();
 
-        public override string ToString() => Number is null ?
-            $"{Title} ({Project.Language.Name})" :
-            $"{Project.Title} Task {Number} ({Project.Language.Name})";
+        public override string ToString() =>
+            Title == null ?
+            $"{Project.Title} Task {Number} ({Project.Language.Name})" :
+            $"{Title} ({Project.Language.Name})";
     }  
 }
