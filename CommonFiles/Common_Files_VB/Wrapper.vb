@@ -20,11 +20,10 @@ Namespace MetalUp.Express
         ' StudentCode - this comment is needed error line number offset
         '<StudentCode>
         '<HiddenCode>
-        '<Tests>
 
     End Module
 
-
+    '<Tests>
 
     Public Module Helpers
 
