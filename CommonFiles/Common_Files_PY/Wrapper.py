@@ -30,7 +30,7 @@ def arg_string(arguments : Any) -> str:
     return str(args[2:len(args)-1])
 
 def fail_message(function_name : str, expected : Any, actual : Any, args: Any) -> str:
-    return f"xxxFailed calling {function_name}({arg_string(args)})  Expected: {display(expected)}  Actual: {display(actual)}xxx"
+    return f"xxxFailed calling {function_name}({arg_string(args)}) Expected: {display(expected)} Actual: {display(actual)}xxx"
 
 def EqualIfRounded(expected: float, actual: float) -> bool:
     places = len(str(expected)) - str(expected).index('.') - 1

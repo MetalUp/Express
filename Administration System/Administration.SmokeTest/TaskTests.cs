@@ -409,7 +409,7 @@ End Function");
         task.EnterCode("def square(x: int) -> int : return x*10");
         task.AssertCompileResultIs("Compiled OK");
         task.RunTests();
-        task.AssertTestResultIs("Failed calling square(3)  Expected: 9  Actual: 30");
+        task.AssertTestResultIs("Test failed calling square(3) Expected: 9 Actual: 30");
     }
     #endregion
 
