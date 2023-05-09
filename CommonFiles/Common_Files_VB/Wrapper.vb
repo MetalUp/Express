@@ -1,5 +1,5 @@
 ﻿Imports Microsoft.VisualBasic
-Imports Microsoft.VisualStudio.TestTools.UnitTesting;
+Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports System
 Imports System.Collections
 Imports System.Collections.Generic

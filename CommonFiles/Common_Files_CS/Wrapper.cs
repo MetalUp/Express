@@ -28,7 +28,7 @@ namespace MetalUp.Express
 
     public static class Helpers
     {
-        public static string Display(object obj)
+        public static string? Display(object? obj)
         {
             if (obj is null) return "";
             if (obj is string) return $@"""{obj}""";
@@ -49,7 +49,7 @@ namespace MetalUp.Express
             {
                 return "Result is an IEnumerable. Convert to List to display contents";
             }
-            return obj.ToString();
+            return obj?.ToString();
         }
 
         public static string ArgString(params object[] arguments) => arguments.Aggregate("", (s, a) => s + Display(a) + ", ").TrimEnd(' ', ',');
