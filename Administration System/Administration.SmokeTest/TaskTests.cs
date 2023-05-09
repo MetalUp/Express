@@ -365,7 +365,7 @@ End Function");
         task.EnterCode("def f() -> int: return 1");
         task.AssertCompileResultIs("Compiled OK");
         task.EnterCode(@"def f() -> int: return """"");
-        task.AssertCompileResultIs("error: Incompatible return value type  (1,24)");
+        task.AssertCompileResultIs(@"error: Incompatible return value type (got ""str"", expected ""int"")  [return-value] (1,24)");
         task.PreviousCode();
         task.EnterCurrentCode();
         task.AssertCompileResultIs("Compiled OK");
