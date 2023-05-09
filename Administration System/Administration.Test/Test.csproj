@@ -18,7 +18,7 @@
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
     <PackageReference Include="NakedFramework.RATL" Version="1.0.0-beta18" />
-    <PackageReference Include="NakedFunctions.Server" Version="2.0.0" />
+    <PackageReference Include="NakedFunctions.Server" Version="2.1.0" />
     <PackageReference Include="RestfulObjects.ROSI" Version="1.0.0-beta16" />
   </ItemGroup>
 
