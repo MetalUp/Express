@@ -394,6 +394,7 @@ End Function");
     public virtual void RunTestsPySuccess()
     {
         var task = helper.GoToTask(PyWithTestTaskId);
+        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
         task.EnterCode("def square(x: int) -> int : return x*x");
         task.AssertCompileResultIs("Compiled OK");
         task.RunTests();
@@ -404,10 +405,11 @@ End Function");
     public virtual void RunTestsPyFail()
     {
         var task = helper.GoToTask(PyWithTestTaskId);
-        task.EnterCode("def square(x: int) -> int : return x*30");
+        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        task.EnterCode("def square(x: int) -> int : return x*10");
         task.AssertCompileResultIs("Compiled OK");
         task.RunTests();
-        task.AssertTestResultIs("Test failed calling Square(3) Expected: 9 Actual: 30");
+        task.AssertTestResultIs("Failed calling square(3)  Expected: 9  Actual: 30");
     }
     #endregion
 

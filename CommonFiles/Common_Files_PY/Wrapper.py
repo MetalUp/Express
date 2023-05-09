@@ -27,7 +27,7 @@ def display(x: Any) -> str:
 
 def arg_string(arguments : Any) -> str:
     args = display(arguments)
-    return str(args[1:len(args)-1])
+    return str(args[2:len(args)-1])
 
 def fail_message(function_name : str, expected : Any, actual : Any, args: Any) -> str:
     return f"xxxFailed calling {function_name}({arg_string(args)})  Expected: {display(expected)}  Actual: {display(actual)}xxx"
