@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis;
 namespace CompileServer.Workers;
 
 public static class DotNetCompiler {
-
     internal static readonly MetadataReference[] DotNetReferences = {
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Runtime").Location), // System.Runtime
         MetadataReference.CreateFromFile(AppDomain.CurrentDomain.Load("System.Collections").Location), // System.Collections
@@ -55,8 +54,8 @@ public static class DotNetCompiler {
             return (new RunResult {
                 cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
                 outcome = Outcome.CompilationError,
-                line_no = Helpers.AdJustLineNumber(l, code),
-                col_no = c
+                line_no = Helpers.AdJustCompilerOffset(l, runSpec.Options.LineAdjustment),
+                col_no = Helpers.AdJustCompilerOffset(c, runSpec.Options.ColumnAdjustment)
             }, Array.Empty<byte>());
         }
 

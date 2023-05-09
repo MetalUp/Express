@@ -18,18 +18,19 @@ public static class PythonCompiler {
 
     internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "python", GetVersion(runSpec) };
 
-    private static (RunResult, string) UpdateLineNumber((RunResult, string) result, string code) {
+    private static (RunResult, string) UpdateLineNumber((RunResult, string) result, RunSpec runSpec) {
         var (rr, _) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split("\n");
                 var lineErr = err[0].Split(",")[1].Replace("line", "").Trim();
                 if (int.TryParse(lineErr, out var lineNo)) {
-                    rr.line_no = Helpers.AdJustLineNumber(lineNo, code);
+                    rr.line_no = Helpers.AdJustCompilerOffset(lineNo, runSpec.Options.LineAdjustment);
                 }
 
                 var colErr = err[2];
-                rr.col_no = colErr[..(colErr.IndexOf('^') + 1)].Length;
+                var colNo = colErr[..(colErr.IndexOf('^') + 1)].Length;
+                rr.col_no = Helpers.AdJustCompilerOffset(colNo, runSpec.Options.ColumnAdjustment);
             }
             catch (Exception) {
                 // ignore all exceptions
@@ -39,17 +40,17 @@ public static class PythonCompiler {
         return result;
     }
 
-    private static (RunResult, string) UpdateTypeCheckLineNumber((RunResult, string) result, string code) {
+    private static (RunResult, string) UpdateTypeCheckLineNumber((RunResult, string) result, RunSpec runSpec) {
         var (rr, _) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split(":");
                 if (int.TryParse(err[1], out var lineNo)) {
-                    rr.line_no = Helpers.AdJustLineNumber(lineNo, code);
+                    rr.line_no = Helpers.AdJustCompilerOffset(lineNo, runSpec.Options.LineAdjustment);
                 }
 
                 if (int.TryParse(err[2], out var colNo)) {
-                    rr.col_no = colNo;
+                    rr.col_no = Helpers.AdJustCompilerOffset(colNo, runSpec.Options.ColumnAdjustment);
                 }
             }
             catch (Exception) {
@@ -72,11 +73,10 @@ public static class PythonCompiler {
     }
 
     private static (RunResult, string) Compile(RunSpec runSpec, string file, string tempFileName) =>
-        UpdateLineNumber(Helpers.Compile(GetPythonExe(runSpec), $"-m py_compile {file}", tempFileName, runSpec), runSpec.sourcecode);
-
+        UpdateLineNumber(Helpers.Compile(GetPythonExe(runSpec), $"-m py_compile {file}", tempFileName, runSpec), runSpec);
 
     internal static (RunResult, string) Compile(RunSpec runSpec) => Compile(runSpec, CreateSourceFile(runSpec), TempFileName);
 
     private static (RunResult, string) TypeCheck(RunSpec runSpec, string file, string tempFileName) =>
-        UpdateTypeCheckLineNumber(Helpers.TypeCheck(GetMyPyExe(runSpec), $"{file}  {runSpec.Options.CompileArguments}", tempFileName, runSpec), runSpec.sourcecode);
+        UpdateTypeCheckLineNumber(Helpers.TypeCheck(GetMyPyExe(runSpec), $"{file}  {runSpec.Options.CompileArguments}", tempFileName, runSpec), runSpec);
 }

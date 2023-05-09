@@ -32,7 +32,9 @@ public struct RunSpecWrapper {
             CSharpVersion = ExtractVersion(options.CSharpVersion, defaultOptions.CSharpVersion),
             VisualBasicVersion = ExtractVersion(options.VisualBasicVersion, defaultOptions.VisualBasicVersion),
             ProcessTimeout = options.ProcessTimeout ?? defaultOptions.ProcessTimeout,
-            CompileArguments = options.CompileArguments ?? ""
+            CompileArguments = options.CompileArguments ?? "",
+            LineAdjustment = options.LineAdjustment ?? 0,
+            ColumnAdjustment = options.ColumnAdjustment ?? 0
         };
     }
 }

@@ -11,6 +11,8 @@ public class RestCompileOptions {
     public int? CSharpVersion { get; set; }
     public int? VisualBasicVersion { get; set; }
     public int? ProcessTimeout { get; set; }
+    public int? LineAdjustment { get; set; }
+    public int? ColumnAdjustment { get; set; }
 }
 
 public class CompileOptions {
@@ -22,4 +24,6 @@ public class CompileOptions {
     public VB.LanguageVersion VisualBasicVersion { get; init; } = VB.LanguageVersion.VisualBasic16_9;
     public int ProcessTimeout { get; init; } = 30000;
     public bool PythonUseTypeAnnotations => !string.IsNullOrWhiteSpace(CompileArguments);
+    public int LineAdjustment { get; init; } = 0;
+    public int ColumnAdjustment { get; init; } = 0;
 }

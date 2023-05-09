@@ -135,15 +135,5 @@ public static class Helpers {
         return version;
     }
 
-    public static int GetCodeOffset(string code) {
-        var lines = code.Split('\n').ToList();
-        var commentLine = lines.FindIndex(l => l.Contains("StudentCode"));
-
-        return commentLine > 0 ? commentLine : 0;
-    }
-
-    public static int AdJustLineNumber(int lineNumber, string code) {
-        var adjustment = Helpers.GetCodeOffset(code) + 1;
-        return lineNumber > adjustment ? lineNumber - adjustment : lineNumber;
-    }
+    public static int AdJustCompilerOffset(int index, int adjustment) => index > adjustment ? index - adjustment : index;
 }

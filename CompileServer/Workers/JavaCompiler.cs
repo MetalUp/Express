@@ -13,18 +13,19 @@ public static class JavaCompiler {
 
     internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "java", GetVersion(runSpec) };
 
-    private static (RunResult, string) UpdateLineNumber((RunResult, string) result, string code) {
+    private static (RunResult, string) UpdateLineNumber((RunResult, string) result, RunSpec runSpec) {
         var (rr, _) = result;
         if (rr.outcome == Outcome.CompilationError) {
             try {
                 var err = rr.cmpinfo.Split("\n");
                 var lineErr = err[0].Split(":")[2];
                 if (int.TryParse(lineErr, out var lineNo)) {
-                    rr.line_no = Helpers.AdJustLineNumber(lineNo, code);
+                    rr.line_no = Helpers.AdJustCompilerOffset(lineNo, runSpec.Options.LineAdjustment);
                 }
 
                 var colErr = err[2];
-                rr.col_no = colErr[..(colErr.IndexOf('^') + 1)].Length;
+                var colNo = colErr[..(colErr.IndexOf('^') + 1)].Length;
+                rr.col_no = Helpers.AdJustCompilerOffset(colNo, runSpec.Options.ColumnAdjustment);
             }
             catch (Exception) {
                 // ignore all exceptions
@@ -41,6 +42,6 @@ public static class JavaCompiler {
 
         File.WriteAllText(file, runSpec.sourcecode);
 
-        return UpdateLineNumber(Helpers.Compile(javaCompiler, file, "temp", runSpec), runSpec.sourcecode);
+        return UpdateLineNumber(Helpers.Compile(javaCompiler, file, "temp", runSpec), runSpec);
     }
 }
