@@ -28,10 +28,12 @@ public class AAStartupTests : BaseTest {
 
     [TestMethod]
     public virtual void WakeUpCompileServer() {
-        helper.LoginAsTeacher();
+        helper.LoginAsStudent();
         var task = helper.GoToTask(107);
         task.EnterExpression("1 + 1");
         task.AssertResultIs("2");
+        task.EnterCode("static int f() => 1;");
+        task.AssertCompileResultIs("Compiled OK");
         helper.Logout();
     }
 
