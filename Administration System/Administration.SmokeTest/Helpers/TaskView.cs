@@ -13,6 +13,8 @@ public class TaskView {
         this.helper = helper;
     }
 
+    private IWebElement GetRunTestsButton() => helper.WaitForCssNo("app-testing button", 0);
+
     private IWebElement GetSubmitCodeButton() => helper.WaitForCssNo("app-code-definition button", 0);
 
     private IWebElement GetPreviousCodeButton() => helper.WaitForCssNo("app-code-definition button", 2);
@@ -42,6 +44,19 @@ public class TaskView {
 
     public TaskView PreviousCode() {
         helper.Click(GetPreviousCodeButton());
+        return this;
+    }
+
+    public TaskView RunTests()
+    {
+        helper.Click(GetRunTestsButton());
+        helper.WaitForChange("app-testing textarea", "Tests not yet run on current function definition(s).");
+        return this;
+    }
+
+    public TaskView AssertTestResultIs(string expected)
+    {
+        helper.WaitAndAssert("app-testing textarea", expected);
         return this;
     }
 
