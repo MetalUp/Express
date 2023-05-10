@@ -7,6 +7,7 @@ Imports System.Linq
 Imports System.Math
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
 Namespace MetalUp.Express
 
