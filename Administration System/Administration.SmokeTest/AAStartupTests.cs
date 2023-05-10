@@ -56,13 +56,13 @@ public class AAStartupTests : BaseTest {
 
     [TestInitialize]
     public virtual void InitializeTest() {
-        Wait.Timeout = new TimeSpan(0, 0, LongTimeout);
         helper = new Helper(BaseUrl, "dashboard", Driver, Wait);
+        helper.SetLongTimeout();
     }
 
     [TestCleanup]
     public virtual void CleanupTest() {
-        Wait.Timeout = new TimeSpan(0, 0, DefaultTimeout);
+        helper.SetDefaultTimeout();
     }
 
     #endregion

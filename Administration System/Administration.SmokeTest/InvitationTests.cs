@@ -52,17 +52,33 @@ public class InvitationTests : BaseTest {
     }
 
     [TestCleanup]
-    public virtual void CleanupTest() {
+    public virtual void CleanupTest()
+    {
         Thread.Sleep(2000);
         helper.LoginAsAdmin();
-        var list = helper.GotoHome().OpenMainMenu("Users").GetActionWithoutDialog("Our Students").ClickToViewList();
-        list.AssertNoOfRowsIs(2);
-        var student = list.GetRowFromList(0).Click();
-        student.AssertTitleIs("Test Invitation");
-        var dialog1 = student.OpenActions().GetActionWithDialog("Delete User").Open();
-        dialog1.GetTextField("Confirm").Clear().Enter("DELETE");
-        dialog1.ClickOKWithNoResultExpected();
+
+        while (DeleteTopStudent()) { }
+
         helper.Logout();
+    }
+
+    private bool DeleteTopStudent()
+    {
+        var list = helper.GotoHome().OpenMainMenu("Users").GetActionWithoutDialog("Our Students").ClickToViewList();
+
+        var noRow = list.RowCount();
+
+        if (noRow >= 2)
+        {
+            var student = list.GetRowFromList(0).Click();
+            student.AssertTitleIs("Test Invitation");
+            var dialog1 = student.OpenActions().GetActionWithDialog("Delete User").Open();
+            dialog1.GetTextField("Confirm").Clear().Enter("DELETE");
+            dialog1.ClickOKWithNoResultExpected();
+            return true;
+        }
+
+        return false;
     }
 
     #endregion

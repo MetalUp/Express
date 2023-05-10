@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
@@ -6,8 +7,8 @@ using NakedFrameworkClient.TestFramework;
 namespace SmokeTest.Helpers;
 
 public static class MetalUpHelpers {
-    public const int LongTimeout = 80;
-    public const int DefaultTimeout = 40;
+    private const int LongTimeout = 80;
+    private const int DefaultTimeout = 40;
 
 
     private static readonly string UserIdAdmin = @"metalup.admin@gmail.com";
@@ -118,6 +119,21 @@ public static class MetalUpHelpers {
     public static Helper WaitForChange(this Helper helper, string selector, string changedFrom)
     {
         helper.Wait.Until(d => helper.WaitForCss(selector).Text != changedFrom);
+        return helper;
+    }
+
+    public static Helper WaitUntilPopulated(this Helper helper, string selector) {
+        helper.Wait.Until(d => helper.WaitForCss(selector).GetAttribute("value").Trim().Length > 0);
+        return helper;
+    }
+
+    public static Helper SetLongTimeout(this Helper helper) {
+        helper.Wait.Timeout = new TimeSpan(0, 0, LongTimeout);
+        return helper;
+    }
+
+    public static Helper SetDefaultTimeout(this Helper helper) {
+        helper.Wait.Timeout = new TimeSpan(0, 0, DefaultTimeout);
         return helper;
     }
 }
