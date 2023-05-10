@@ -90,12 +90,13 @@ public class TaskView {
     }
 
     public TaskView AssertCompileResultIs(string result) {
-        helper.WaitAndAssert("app-code-definition textarea:read-only", result);
+        helper.WaitAndAssert("app-code-definition textarea.current-status", result);
         return this;
     }
 
     public TaskView AssertChangedCompileResultIs(string result, string from) {
-        helper.WaitAndAssert("app-code-definition > div > div > textarea", result);
+        helper.WaitForChange("app-code-definition textarea.current-status", from);
+        helper.WaitAndAssert("app-code-definition textarea.current-status", result);
         return this;
     }
 }

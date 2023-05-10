@@ -110,12 +110,8 @@ public static class MetalUpHelpers {
 
     public static Helper WaitAndAssert(this Helper helper, string selector, string expected)
     {
-        try {
-            helper.Wait.Until(d => helper.WaitForCss(selector).Text == expected);
-        }
-        catch (Exception ex) {
-            Assert.AreEqual(expected, helper.WaitForCss(selector).Text);
-        }
+        helper.Wait.Until(d => helper.WaitForCss(selector).Text.Trim().Length > 0);
+        Assert.AreEqual(expected, helper.WaitForCss(selector).Text);
         return helper;
     }
 
