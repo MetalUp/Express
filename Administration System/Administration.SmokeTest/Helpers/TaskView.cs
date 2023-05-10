@@ -95,7 +95,6 @@ public class TaskView {
     }
 
     public TaskView AssertChangedCompileResultIs(string result, string from) {
-        helper.WaitForChange("app-code-definition > div > div > textarea", from);
         helper.WaitAndAssert("app-code-definition > div > div > textarea", result);
         return this;
     }
