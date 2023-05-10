@@ -60,6 +60,7 @@ public class TaskView {
     }
 
     public TaskView EnterCode(string code) {
+        helper.WaitUntilPopulated(".code-definition textarea");
         var inp = helper.WaitForCss(".code-definition textarea:enabled");
         inp.Clear();
         inp.SendKeys(code);
@@ -89,6 +90,12 @@ public class TaskView {
     }
 
     public TaskView AssertCompileResultIs(string result) {
+        helper.WaitAndAssert("app-code-definition textarea:read-only", result);
+        return this;
+    }
+
+    public TaskView AssertChangedCompileResultIs(string result, string from) {
+        helper.WaitForChange("app-code-definition textarea:read-only", from);
         helper.WaitAndAssert("app-code-definition textarea:read-only", result);
         return this;
     }

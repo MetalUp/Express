@@ -120,4 +120,9 @@ public static class MetalUpHelpers {
         helper.Wait.Until(d => helper.WaitForCss(selector).Text != changedFrom);
         return helper;
     }
+
+    public static Helper WaitUntilPopulated(this Helper helper, string selector) {
+        helper.Wait.Until(d => helper.WaitForCss(selector).GetAttribute("value").Trim().Length > 0);
+        return helper;
+    }
 }
