@@ -19,7 +19,7 @@
         [Edit]
         public static IContext EditNumber(
             this Task task,
-            int number,
+            int? number,
             IContext context) =>
                 context.WithUpdated(task, new(task) { Number = number });
 

@@ -12,6 +12,7 @@
     <Name>Framework_PY</Name>
     <RootNamespace>Framework_PY</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
+    <TestFramework>Pytest</TestFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
