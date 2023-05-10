@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>8a6d5c72-50d3-4c42-a412-0d036ccc7c35</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Wrapper.py</StartupFile>
+    <StartupFile>TestHelpers.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
