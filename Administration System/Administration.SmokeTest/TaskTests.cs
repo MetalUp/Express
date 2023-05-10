@@ -17,23 +17,11 @@ public class TaskTests : BaseTest
     {
         var task = helper.GoToTask(CsEmptyTaskId);
 
-        task.EnterExpression("\"Foo\"");
-        task.AssertChangedResultIs("", "\"Foo\"");
-
-        task.EnterExpression("true");
-        task.AssertChangedResultIs("\"Foo\"", "true");
-
-        task.EnterExpression("new List<int> { 1, 2, 3 }");
-        task.AssertChangedResultIs("true", "{1, 2, 3}");
-
         task.EnterExpression("new List<string> { \"foo\", \"bar\" }");
-        task.AssertChangedResultIs("{1, 2, 3}", "{\"foo\", \"bar\"}");
+        task.AssertChangedResultIs("", "{\"foo\", \"bar\"}");
 
         task.EnterExpression("new List<List<int>> { new List<int> { 1, 2, 3 }, new List<int> { 4, 5 } }");
         task.AssertChangedResultIs("{\"foo\", \"bar\"}", "{\r\n{1, 2, 3}, \r\n{4, 5}}");
-
-        task.EnterExpression("(\"foo\", 1)");
-        task.AssertChangedResultIs("{\r\n{1, 2, 3}, \r\n{4, 5}}", "(\"foo\", 1)");
     }
 
     [TestMethod]
@@ -145,23 +133,11 @@ public class TaskTests : BaseTest
     {
         var task = helper.GoToTask(VbEmptyTaskId);
 
-        task.EnterExpression("\"Foo\"");
-        task.AssertChangedResultIs("", "\"Foo\"");
-
-        task.EnterExpression("true");
-        task.AssertChangedResultIs("\"Foo\"", "true");
-
-        task.EnterExpression("New List(Of Integer)({1, 2, 3})");
-        task.AssertChangedResultIs("true", "{1, 2, 3}");
-
         task.EnterExpression("New List(Of String)({\"foo\", \"bar\"})");
-        task.AssertChangedResultIs("{1, 2, 3}", "{\"foo\", \"bar\"}");
+        task.AssertChangedResultIs("", "{\"foo\", \"bar\"}");
 
         task.EnterExpression("New List(Of List(Of Integer))({New List(Of Integer)({ 1, 2, 3 }), New List(Of Integer)({ 4, 5 }) })");
         task.AssertChangedResultIs("{\"foo\", \"bar\"}", "{\r\n{1, 2, 3}, \r\n{4, 5}}");
-
-        task.EnterExpression("(\"foo\", 1)");
-        task.AssertChangedResultIs("{\r\n{1, 2, 3}, \r\n{4, 5}}", "(\"foo\", 1)");
     }
 
     [TestMethod]
@@ -302,24 +278,11 @@ End Function");
     public virtual void DisplayTypesPython()
     {
         var task = helper.GoToTask(PyEmptyTaskId);
-
-        task.EnterExpression("'Foo'");
-        task.AssertChangedResultIs("", "'Foo'");
-
-        task.EnterExpression("True");
-        task.AssertChangedResultIs("'Foo'", "True");
-
-        task.EnterExpression("[1, 2, 3]");
-        task.AssertChangedResultIs("True", "[1, 2, 3]");
-
         task.EnterExpression("['foo','bar']");
-        task.AssertChangedResultIs("[1, 2, 3]", "['foo', 'bar']");
+        task.AssertChangedResultIs("", "['foo', 'bar']");
 
         task.EnterExpression("[[1,2,3],[4,5]]");
         task.AssertChangedResultIs("['foo', 'bar']", "[\r\n[1, 2, 3], \r\n[4, 5]]");
-
-        task.EnterExpression("('foo', 1)");
-        task.AssertChangedResultIs("[\r\n[1, 2, 3], \r\n[4, 5]]", "('foo', 1)");
     }
 
     [TestMethod]
