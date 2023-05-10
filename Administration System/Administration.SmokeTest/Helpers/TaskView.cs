@@ -95,8 +95,8 @@ public class TaskView {
     }
 
     public TaskView AssertChangedCompileResultIs(string result, string from) {
-        helper.WaitForChange("app-code-definition textarea:read-only", from);
-        helper.WaitAndAssert("app-code-definition textarea:read-only", result);
+        helper.WaitForChange("app-code-definition > div > div > textarea", from);
+        helper.WaitAndAssert("app-code-definition > div > div > textarea", result);
         return this;
     }
 }
