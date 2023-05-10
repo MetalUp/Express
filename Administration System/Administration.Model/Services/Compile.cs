@@ -14,7 +14,7 @@ public static class Compile {
     private const int CSharpColumnAdjustment = 26;
     private const int PythonLineAdjustment = 5;
     private const int PythonColumnAdjustment = 0;
-    private const int VbLineAdjustment = 19;
+    private const int VbLineAdjustment = 20;
     private const int VbColumnAdjustment = 0;
 
     private const string CompileServerName = "CompileServer";
