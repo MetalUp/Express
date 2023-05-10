@@ -347,7 +347,7 @@ End Function");
     public virtual void SubmitCodePython()
     {
         var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
+        helper.SetLongTimeout(); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
         task.EnterCode("def f() -> int: return 1");
         task.AssertCompileResultIs(compiledOkMsg);
@@ -359,7 +359,7 @@ End Function");
     public virtual void EvaluateSubmittedCodePython()
     {
         var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
+        helper.SetLongTimeout(); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
         var random = new Random().NextInt64();
         task.EnterCode($"def return_random() -> int: return {random}");
@@ -374,7 +374,7 @@ End Function");
     public virtual void SubmitCodePythonCompileFail()
     {
         var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
+        helper.SetLongTimeout(); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
         task.EnterCode("def f() -> int: return 1");
         task.AssertCompileResultIs(compiledOkMsg);
@@ -392,7 +392,7 @@ End Function");
     public virtual void SubmitCodePythonRegexFail()
     {
         var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
+        helper.SetLongTimeout(); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
         task.EnterCode("def f() -> int: return 1");
         task.AssertCompileResultIs(compiledOkMsg);
@@ -410,7 +410,7 @@ End Function");
     public virtual void RunTestsPythonSuccess()
     {
         var task = helper.GoToTask(PyWithTestTaskId);
-        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
+        helper.SetLongTimeout(); // mypy is SLOW!
         task.EnterCode("def square(x: int) -> int : return x*x");
         task.AssertCompileResultIs(compiledOkMsg);
         task.RunTests();
@@ -421,7 +421,7 @@ End Function");
     public virtual void RunTestsPythonFail()
     {
         var task = helper.GoToTask(PyWithTestTaskId);
-        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
+        helper.SetLongTimeout(); // mypy is SLOW!
         task.EnterCode("def square(x: int) -> int : return x*10");
         task.AssertCompileResultIs(compiledOkMsg);
         task.RunTests();
@@ -447,6 +447,7 @@ End Function");
     public static void InitialiseClass(TestContext context)
     {
         helper = new Helper(MetalUpHelpers.BaseUrl, "dashboard", Driver, Wait);
+        helper.SetDefaultTimeout();
         helper.LoginAsStudent();
     }
 
@@ -462,8 +463,7 @@ End Function");
     [TestCleanup]
     public virtual void CleanupTest()
     {
-        //some tests reset timeout
-        Wait.Timeout = new TimeSpan(0, 0, DefaultTimeout);
+        helper.SetDefaultTimeout();
     }
 
     #endregion
