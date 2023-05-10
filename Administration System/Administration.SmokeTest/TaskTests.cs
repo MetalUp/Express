@@ -84,7 +84,7 @@ public class TaskTests : BaseTest
         task.EnterCode("static int f() => 1;");
         task.AssertCompileResultIs(compiledOkMsg);
         task.EnterCode(@"static int f1() => """";");
-        var errorMsg = "CS0029: Cannot implicitly convert type 'string' to 'int' (1,19)";
+        const string errorMsg = "CS0029: Cannot implicitly convert type 'string' to 'int' (1,19)";
         task.AssertChangedCompileResultIs(errorMsg, compiledOkMsg);
         task.PreviousCode();
         task.EnterCurrentCode();
