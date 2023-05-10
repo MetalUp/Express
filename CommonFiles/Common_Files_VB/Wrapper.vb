@@ -1,5 +1,4 @@
 ﻿Imports Microsoft.VisualBasic
-Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports System
 Imports System.Collections
 Imports System.Collections.Generic
@@ -44,7 +43,7 @@ Namespace MetalUp.Express
             Dim type = obj.GetType()
             If type.IsGenericType AndAlso type.GetGenericTypeDefinition() Is GetType(List(Of )) Then
                 Dim toDisplay = DirectCast(obj, IEnumerable).Cast(Of Object)().Select(Function(o) Display(o)).ToList()
-                Return vbCrLf + $"{{{String.Join(", ", toDisplay)}}}"
+                Return vbLf + $"{{{String.Join(", ", toDisplay)}}}"
             End If
             If TypeOf obj Is IEnumerable Then
                 Return "Result is an IEnumerable. Convert to List to display contents"
