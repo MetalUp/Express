@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -9,14 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="VB_Tests_Helpers.txt" />
+    <None Remove="VB_Tests_Regex.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common_Files_CS\CommonFiles_CS.csproj" />
+    <ProjectReference Include="..\Common_Files_VB\CommonFiles_VB.vbproj" />
   </ItemGroup>
 
 </Project>

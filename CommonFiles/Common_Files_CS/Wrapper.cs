@@ -19,7 +19,7 @@ namespace MetalUp.Express
             Console.WriteLine(Display("<Expression>"));
         }
 
-        // StudentCode - this comment is needed error line number offset
+        // Adjustment for start of Student Code:  Line 29, Column 26
         //<StudentCode>
         //<HiddenCode>
         //<Tests>
