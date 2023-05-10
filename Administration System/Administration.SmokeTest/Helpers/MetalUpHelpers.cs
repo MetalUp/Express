@@ -116,10 +116,11 @@ public static class MetalUpHelpers {
         return helper;
     }
 
-    public static Helper WaitForChange(this Helper helper, string selector, string changedFrom)
-    {
-        if (helper.WaitForCss(selector).Text == changedFrom) {
-            helper.Wait.Until(d => helper.WaitForCss(selector).Text != changedFrom);
+    public static Helper WaitForChange(this Helper helper, string selector, string changedFrom) {
+        var element = helper.WaitForCss(selector);
+
+        if (element.Text == changedFrom) {
+            helper.Wait.Until(d => element.Text != changedFrom);
         }
 
         return helper;
