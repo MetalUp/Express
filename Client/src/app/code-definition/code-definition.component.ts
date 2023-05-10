@@ -66,7 +66,7 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   }
 
   get errorLocation() {
-    return (this.compiledOK || this.validationFail || !this.result.lineno) ? '' : ` (${this.result.lineno},${this.result.colno})`;
+    return (!this.currentStatus || this.compiledOK || this.validationFail || !this.result.lineno) ? '' : ` (${this.result.lineno},${this.result.colno})`;
   }
 
   codeUpdated() {
