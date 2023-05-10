@@ -3,7 +3,7 @@ using static MetalUp.Express.Helpers;
 namespace CommonFiles_VB_Test
 {
     [TestClass]
-    public class TestHelpers
+    public class TestHelpers_VB
     {
         #region Display
         [TestMethod]
@@ -54,6 +54,50 @@ namespace CommonFiles_VB_Test
         public void TestArgString()
         {
             Assert.AreEqual("3, \"foo\", (1, \"bar\"), \n{1, 2, 3}", ArgString(3, "foo", (1, "bar"), new List<int> { 1, 2, 3 }));
+        }
+        #endregion
+
+        #region FailMessage
+        [TestMethod]
+        public void FailMessageTest()
+        {
+            Assert.AreEqual("xxxTest failed calling Foo(3, 4) Expected: 1 Actual: 2xxx", FailMessage("Foo", 1, 2, 3, 4));
+        }
+        #endregion
+
+        #region EqualIfRounded
+        [TestMethod]
+        public void EqualIfRoundedTest()
+        {
+            Assert.IsTrue(EqualIfRounded(3.456, 3.4562789));
+            Assert.IsFalse(EqualIfRounded(3.4562, 3.4562789));
+        }
+        #endregion
+
+        #region non-mutating list extension methods
+        [TestMethod]
+        public void SetItem()
+        {
+            var input = new List<int> { 1, 2, 3, 4, 5 };
+            var expected = new List<int> { 1, 2, 6, 4, 5 };
+            CollectionAssert.AreEqual(expected, input.SetItem(2, 6));
+        }
+
+        [TestMethod]
+        public void InsertItem()
+        {
+            var input = new List<int> { 1, 2, 3, 4, 5 };
+            var expected = new List<int> { 1, 2, 6, 3, 4, 5 };
+            CollectionAssert.AreEqual(expected, input.InsertItem(2, 6));
+        }
+
+        [TestMethod]
+        public void RemoveItem()
+        {
+            var input = new List<int> { 1, 2, 3, 4, 5 };
+            var expected = new List<int> { 1, 2, 4, 5 };
+            var actual = input.RemoveItem(2);
+            CollectionAssert.AreEqual(expected,actual );
         }
         #endregion
     }

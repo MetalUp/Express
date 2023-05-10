@@ -77,7 +77,7 @@ Namespace MetalUp.Express
 
         <Extension>
         Public Function RemoveItem(Of T)(ByVal list As List(Of T), ByVal i As Integer) As List(Of T)
-            Return list.Take(i).Concat(list.Skip(i)).ToList()
+            Return list.Take(i).Concat(list.Skip(i + 1)).ToList()
         End Function
 
     End Module
