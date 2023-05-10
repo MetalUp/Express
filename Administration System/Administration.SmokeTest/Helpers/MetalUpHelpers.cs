@@ -5,8 +5,11 @@ using NakedFrameworkClient.TestFramework;
 
 namespace SmokeTest.Helpers;
 
-public static class MetalUpHelpers
-{
+public static class MetalUpHelpers {
+    public const int LongTimeout = 80;
+    public const int DefaultTimeout = 40;
+
+
     private static readonly string UserIdAdmin = @"metalup.admin@gmail.com";
     private static readonly string UserIdTeacher = @"metalup.dev@gmail.com";
     private static readonly string UserIdStudent = @"metalup.student@gmail.com";
@@ -87,7 +90,13 @@ public static class MetalUpHelpers
     public static TaskView GoToTask(this Helper helper, int taskId)
     {
         helper.GotoBaseUrlDirectly($"/task/{taskId}");
-        var view = helper.WaitForCss(".home");
+        helper.WaitForCss("app-expression-evaluation textarea:enabled");
+        helper.WaitForCss("app-code-definition  textarea:enabled");
+        helper.WaitForCss("app-result");
+        helper.WaitForCss("app-task-description");
+        helper.WaitForCss("app-hint");
+        helper.WaitForCss("app-testing");
+        var view = helper.WaitForCss("app-task-view");
         return new TaskView(view, helper);
     }
 

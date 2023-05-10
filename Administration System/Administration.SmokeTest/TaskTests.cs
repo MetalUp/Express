@@ -58,7 +58,7 @@ public class TaskTests : BaseTest {
     {
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(CsEmptyTaskId);
-        task.EnterCode("static int f() => 1;");
+        task.EnterCode("static int f1() => 1;");
         task.AssertCompileResultIs("Compiled OK");
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
@@ -85,7 +85,7 @@ public class TaskTests : BaseTest {
         var task = helper.GoToTask(CsEmptyTaskId);
         task.EnterCode("static int f() => 1;");
         task.AssertCompileResultIs("Compiled OK");
-        task.EnterCode("int f() => 1;");
+        task.EnterCode("int f1() => 1;");
         task.AssertCompileResultIs("All functions should be: static <ReturnType> <NameStartingInUpperCase>(<parametersStartingLowerCase>) => <expression>;");
         task.PreviousCode();
         task.EnterCurrentCode();
@@ -101,7 +101,7 @@ public class TaskTests : BaseTest {
         var task = helper.GoToTask(CsEmptyTaskId);
         task.EnterCode("static int f() => 1;");
         task.AssertCompileResultIs("Compiled OK");
-        task.EnterCode(@"static int f() => """";");
+        task.EnterCode(@"static int f1() => """";");
         task.AssertCompileResultIs("CS0029: Cannot implicitly convert type 'string' to 'int' (1,19)");
         task.PreviousCode();
         task.EnterCurrentCode();
@@ -214,13 +214,13 @@ End Function
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(VbEmptyTaskId);
         task.EnterCode(@"
-Function F() As Integer
+Function F1() As Integer
     Return 1
 End Function
 ");
         task.AssertCompileResultIs("Compiled OK");
         task.EnterCode(@"
-Function F() As Integer
+Function F1() As Integer
     Return $
 End Function
 ");
@@ -333,7 +333,7 @@ End Function");
     public virtual void SubmitCodePython()
     {
         var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
         task.EnterCode("def f() -> int: return 1");
         task.AssertCompileResultIs("Compiled OK");
@@ -345,7 +345,7 @@ End Function");
     public virtual void EvaluateSubmittedCodePython()
     {
         var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
         var random = new Random().NextInt64();
         task.EnterCode($"def return_random() -> int: return {random}");
@@ -360,7 +360,7 @@ End Function");
     public virtual void SubmitCodePythonCompileFail()
     {
         var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
         task.EnterCode("def f() -> int: return 1");
         task.AssertCompileResultIs("Compiled OK");
@@ -377,7 +377,7 @@ End Function");
     public virtual void SubmitCodePythonRegexFail()
     {
         var before = helper.GetActivityCount();
-        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
         task.EnterCode("def f() -> int: return 1");
         task.AssertCompileResultIs("Compiled OK");
@@ -394,7 +394,7 @@ End Function");
     public virtual void RunTestsPySuccess()
     {
         var task = helper.GoToTask(PyWithTestTaskId);
-        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
         task.EnterCode("def square(x: int) -> int : return x*x");
         task.AssertCompileResultIs("Compiled OK");
         task.RunTests();
@@ -405,7 +405,7 @@ End Function");
     public virtual void RunTestsPyFail()
     {
         var task = helper.GoToTask(PyWithTestTaskId);
-        Wait.Timeout = new TimeSpan(0, 0, 40); // mypy is SLOW!
+        Wait.Timeout = new TimeSpan(0, 0, LongTimeout); // mypy is SLOW!
         task.EnterCode("def square(x: int) -> int : return x*10");
         task.AssertCompileResultIs("Compiled OK");
         task.RunTests();
@@ -442,7 +442,7 @@ End Function");
     [TestCleanup]
     public virtual void CleanupTest() {
         //some tests reset timeout
-        Wait.Timeout = new TimeSpan(0, 0, 10);
+        Wait.Timeout = new TimeSpan(0, 0, DefaultTimeout);
     }
 
     #endregion
