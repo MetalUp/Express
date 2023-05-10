@@ -24,8 +24,7 @@ public class TaskView {
     private IWebElement GetSubmitExpressionButton() => helper.WaitForCssNo("app-expression-evaluation button", 0);
 
     public TaskView EnterExpression(string expression) {
-        var inp = helper.WaitForCss(".expression textarea");
-        Thread.Sleep(1000);
+        var inp = helper.WaitForCss(".expression textarea:enabled");
         inp.Clear();
         inp.SendKeys(expression);
         inp.SendKeys(Keys.Enter);
@@ -61,8 +60,7 @@ public class TaskView {
     }
 
     public TaskView EnterCode(string code) {
-        var inp = helper.WaitForCss(".code-definition textarea");
-        Thread.Sleep(1000);
+        var inp = helper.WaitForCss(".code-definition textarea:enabled");
         inp.Clear();
         inp.SendKeys(code);
         helper.Click(GetSubmitCodeButton());

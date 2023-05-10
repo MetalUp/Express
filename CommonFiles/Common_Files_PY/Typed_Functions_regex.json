@@ -3,7 +3,7 @@
     "NotPermitted": "Use of '{1}' is not permitted"
   },
   "ServerResponseMessageFilters": {
-    "cmpinfo": "error: [\\w ]*",
+    "cmpinfo": "error: .*",
     "stderr": "\\s\\w!!!\\w*",
     "tests": [
       [ "OK", "All Tests Passed" ],
