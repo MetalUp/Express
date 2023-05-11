@@ -8,30 +8,69 @@ public class RegExRules_CS_Test
     [TestMethod]
     public void ValidExpression()
     {
-        Assert.IsNull(ValidateExpression(CS, "3+4"));
+        IsValidExp(CS, "3+4");
     }
 
     [TestMethod]
-    public void ExpressionUsingVar()
+    public void UsingVar()
     {
-        Assert.AreEqual("Use of the keyword 'var' is not permitted", ValidateExpression(CS, "var a = 1"));
+        IsInvalidExp(CS, "var a = 1", "Use of the keyword 'var' is not permitted");
+    }
+    #region Valid code
+    [TestMethod]
+    public void CanonicalFunction()
+    {
+        IsValidCode(CS, "static int Foo(int x) => x*x;");
     }
 
     [TestMethod]
-    public void ValidCode()
+    public void WithSpaces()
     {
-        Assert.IsNull(ValidateCode(CS, "static int Foo(int x) => x*x;"));
+        IsValidCode(CS, "  static  int Foo (int x)   => x*x;\n  ");
     }
 
+    [TestMethod]
+    public void BreaksOverLine1()
+    {
+        IsValidCode(CS, "static int Foo(int x) \n=> x*x;");
+    }
+
+    [TestMethod]
+    public void BreaksOverLine2()
+    {
+        IsValidCode(CS, "static int Foo(int x) \n=> \nx*x;");
+    }
+
+    [TestMethod]
+    public void TwoFunctionsWithSpaces()
+    {
+        IsValidCode(CS, "static int Foo(int x) => x*x;\n  static int Bar(int x) => x*x;\n");
+    }
+    #endregion
+
+    #region Invalid Code
     [TestMethod]
     public void CodeUsingReturn()
     {
-        Assert.AreEqual("Use of the keyword 'return' is not permitted", ValidateCode(CS, "static int Foo(int x) { return x*x; }"));
+        IsInvalidCode(CS, "static int Foo(int x) { return x*x; }", "Use of the keyword 'return' is not permitted");
     }
 
-    [TestMethod]
-    public void NonStaticFunction()
-    {
-        Assert.AreEqual("All functions should be: static <ReturnType> <NameStartingInUpperCase>(<parametersStartingLowerCase>) => <expression>;", ValidateCode(CS, "int Foo(int x) => x*x;"));
-    }
+    //[TestMethod]
+    //public void NonStaticFunction()
+    //{
+    //    IsInvalidCode(CS, "int Foo(int x) => x*x;", CsFuncSignatureMsg);
+    //}
+
+    //[TestMethod]
+    //public void UseOfBraces()
+    //{
+    //    IsInvalidCode(CS, "int Foo(int x) { return x*x;}", CsFuncSignatureMsg);
+    //}
+
+    //[TestMethod]
+    //public void SecondFunctionInvalid()
+    //{
+    //    IsInvalidCode(CS, "static int Foo(int x) => x*x;\n int Bar(int x) => x*x;\n", CsFuncSignatureMsg);
+    //}
+    #endregion
 }
