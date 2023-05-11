@@ -64,14 +64,9 @@ public class TaskTests : BaseTest
     {
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(CsEmptyTaskId);
-        //task.EnterCode("static int f() => 1;");
-        //task.AssertCompileResultIs(compiledOkMsg);
         task.EnterCode("int f1() => 1;");
         const string errorMsg = "All functions should be: static <ReturnType> <NameStartingInUpperCase>(<parametersStartingLowerCase>) => <expression>;";
         task.AssertCompileResultIs(errorMsg);
-        //task.PreviousCode();
-        //task.EnterCurrentCode();
-        //task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
         var after = helper.GetActivityCount();
         Assert.AreEqual(before, after, "Mismatched activity count");
     }
@@ -81,14 +76,9 @@ public class TaskTests : BaseTest
     {
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(CsEmptyTaskId);
-        //task.EnterCode("static int f() => 1;");
-        //task.AssertCompileResultIs(compiledOkMsg);
         task.EnterCode(@"static int f1() => """";");
         const string errorMsg = "CS0029: Cannot implicitly convert type 'string' to 'int' (1,19)";
         task.AssertCompileResultIs(errorMsg);
-        //task.PreviousCode();
-        //task.EnterCurrentCode();
-        //task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
@@ -199,12 +189,6 @@ End Function
     {
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(VbEmptyTaskId);
-//        task.EnterCode(@"
-//Function F1() As Integer
-//    Return 1
-//End Function
-//");
-//        task.AssertCompileResultIs(compiledOkMsg);
         task.EnterCode(@"
 Function F1() As Integer
     Return $
@@ -212,11 +196,8 @@ End Function
 ");
         var errorMsg = "BC30201: Expression expected. (3,12)";
         task.AssertCompileResultIs(errorMsg);
-        //task.PreviousCode();
-        //task.EnterCurrentCode();
-        //task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
-        //var after = helper.GetActivityCount();
-        //Assert.AreEqual(before + 3, after, "Mismatched activity count");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
 
     [TestMethod]
@@ -330,14 +311,9 @@ End Function");
         var before = helper.GetActivityCount();
         helper.SetLongTimeout(); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
-        //task.EnterCode("def f() -> int: return 1");
-        //task.AssertCompileResultIs(compiledOkMsg);
         task.EnterCode(@"def f() -> int: return """"");
         const string errorMsg = @"error: Incompatible return value type (got ""str"", expected ""int"")  [return-value] (1,24)";
         task.AssertCompileResultIs(errorMsg);
-        //task.PreviousCode();
-        //task.EnterCurrentCode();
-        //task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
