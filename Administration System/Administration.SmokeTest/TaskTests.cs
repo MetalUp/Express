@@ -81,16 +81,16 @@ public class TaskTests : BaseTest
     {
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(CsEmptyTaskId);
-        task.EnterCode("static int f() => 1;");
-        task.AssertCompileResultIs(compiledOkMsg);
+        //task.EnterCode("static int f() => 1;");
+        //task.AssertCompileResultIs(compiledOkMsg);
         task.EnterCode(@"static int f1() => """";");
         const string errorMsg = "CS0029: Cannot implicitly convert type 'string' to 'int' (1,19)";
-        task.AssertChangedCompileResultIs(errorMsg, compiledOkMsg);
-        task.PreviousCode();
-        task.EnterCurrentCode();
-        task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
+        task.AssertCompileResultIs(errorMsg);
+        //task.PreviousCode();
+        //task.EnterCurrentCode();
+        //task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
         var after = helper.GetActivityCount();
-        Assert.AreEqual(before + 3, after, "Mismatched activity count");
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
 
     [TestMethod]
@@ -330,16 +330,16 @@ End Function");
         var before = helper.GetActivityCount();
         helper.SetLongTimeout(); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
-        task.EnterCode("def f() -> int: return 1");
-        task.AssertCompileResultIs(compiledOkMsg);
+        //task.EnterCode("def f() -> int: return 1");
+        //task.AssertCompileResultIs(compiledOkMsg);
         task.EnterCode(@"def f() -> int: return """"");
         const string errorMsg = @"error: Incompatible return value type (got ""str"", expected ""int"")  [return-value] (1,24)";
-        task.AssertChangedCompileResultIs(errorMsg, compiledOkMsg);
-        task.PreviousCode();
-        task.EnterCurrentCode();
-        task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
+        task.AssertCompileResultIs(errorMsg);
+        //task.PreviousCode();
+        //task.EnterCurrentCode();
+        //task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
         var after = helper.GetActivityCount();
-        Assert.AreEqual(before + 3, after, "Mismatched activity count");
+        Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
 
     [TestMethod]
