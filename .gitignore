@@ -349,3 +349,4 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 Administration System/Administration.Model/AZURE CONN STRING - DO NOT UPLOAD.cs
+CommonFiles/Common_Files_PY/env/**

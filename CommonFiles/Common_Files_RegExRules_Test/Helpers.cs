@@ -5,15 +5,36 @@ namespace RegExRules_Test;
 
 internal static class Helpers
 {
+    public const string CsFuncSignatureMsg = "All functions should be: static <ReturnType> <NameStartingInUpperCase>(<parametersStartingLowerCase>) => <expression>;";
+    public static void IsValidExp(string lang, string exp)
+    {
+        Assert.IsNull(ValidateExpression(lang, exp));
+    }
+
+    public static void IsInvalidExp(string lang, string exp, string msg)
+    {
+        Assert.AreEqual(msg, ValidateExpression(lang, exp));
+    }
+
+    public static void IsValidCode(string lang, string code)
+    {
+        Assert.IsNull(ValidateCode(lang, code));
+    }
+
+    public static  void IsInvalidCode(string lang, string code, string msg)
+    {
+        Assert.AreEqual(msg, (ValidateCode(lang, code)));
+    }
+
     //Applies appropriate RegExRules to code. If all tests pass, returns null, else returns failure message
-    internal static string? ValidateCode(string regexFile, string code)
+    private static string? ValidateCode(string regexFile, string code)
     {
         var (mustMatchRules, mustNotContainRules) = GetRules(regexFile, "functions");
         return ApplyRules(code, mustMatchRules, mustNotContainRules);
     }
 
     //Applies appropriate RegExRules to expression. If all tests pass, returns null, else returns failure message
-    internal static string? ValidateExpression(string regexFile, string expression)
+    private static string? ValidateExpression(string regexFile, string expression)
     {
         var (mustMatchRules, mustNotContainRules) = GetRules(regexFile, "expressions");
         return ApplyRules(expression, mustMatchRules, mustNotContainRules);
