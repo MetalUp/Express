@@ -72,8 +72,8 @@ public class TaskTests : BaseTest
         //task.PreviousCode();
         //task.EnterCurrentCode();
         //task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
-        //var after = helper.GetActivityCount();
-        //Assert.AreEqual(before + 2, after, "Mismatched activity count");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before, after, "Mismatched activity count");
     }
 
     [TestMethod]
@@ -224,12 +224,6 @@ End Function
     {
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(VbEmptyTaskId);
-//        task.EnterCode(@"
-//Function F1() As Integer
-//    Return 1
-//End Function
-//");
-//        task.AssertCompileResultIs(compiledOkMsg);
         task.EnterCode(@"
 F1() As Integer
     Return 1
@@ -237,11 +231,8 @@ End Function
 ");
         const string errorMsg = "All functions must be: Function NameStartingUpperCase(<paramsStartingLowerCase>)<ReturnType\\nReturn <expression>\\nEnd Function";
         task.AssertCompileResultIs(errorMsg);
-        //task.PreviousCode();
-        //task.EnterCurrentCode();
-        //task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
-        //var after = helper.GetActivityCount();
-        //Assert.AreEqual(before + 2, after, "Mismatched activity count");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before, after, "Mismatched activity count");
     }
 
     [TestMethod]
@@ -357,16 +348,11 @@ End Function");
         var before = helper.GetActivityCount();
         helper.SetLongTimeout(); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
-        //task.EnterCode("def f() -> int: return 1");
-        //task.AssertCompileResultIs(compiledOkMsg);
         task.EnterCode("f() -> int: return 1");
         const string errorMsg = "All functions must follow form: def <lower_case_name>(<params, each with type>) -> <return_type> :  return <expression>";
         task.AssertCompileResultIs(errorMsg);
-        //task.PreviousCode();
-        //task.EnterCurrentCode();
-        //task.AssertChangedCompileResultIs(compiledOkMsg, errorMsg);
-        //var after = helper.GetActivityCount();
-        //Assert.AreEqual(before + 2, after, "Mismatched activity count");
+        var after = helper.GetActivityCount();
+        Assert.AreEqual(before, after, "Mismatched activity count");
     }
 
     [TestMethod]
