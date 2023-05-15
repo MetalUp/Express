@@ -25,6 +25,11 @@ public static class MetalUpHelpers {
     private static Helper LoginAs(this Helper helper, string password, string user) {
         helper.StartLogin();
         helper = IsProduction() ? helper.LoginWithFacebook() : helper.LoginWithAuth0(password, user);
+        Thread.Sleep(5000);
+
+        var txt = helper.WebDriver.PageSource;
+
+        Assert.AreEqual("", txt);
         helper.WaitForCss(".not-in-progress");
         return helper;
     }
@@ -78,13 +83,15 @@ public static class MetalUpHelpers {
         Thread.Sleep(2000);
         helper.Click(loginFacebook);
 
-        //try {
-        //    var accept = helper.WaitForCss(@"button[data-cookiebanner=""accept_button""]");
-        //    helper.Click(accept);
-        //}
-        //catch (Exception e) {
-        //    // maybe no cookie banner - locale difference ? 
-        //}
+        try
+        {
+            var accept = helper.WaitForCss(@"button[data-cookiebanner=""accept_button""]");
+            helper.Click(accept);
+        }
+        catch (Exception e)
+        {
+            // maybe no cookie banner - locale difference ? 
+        }
 
         var user = helper.WaitForCss(@"input#email");
         var password = helper.WaitForCss("input#pass");
@@ -94,7 +101,7 @@ public static class MetalUpHelpers {
         user.SendKeys(userId);
         password.SendKeys(pwd);
        
-        Thread.Sleep(1000);
+        Thread.Sleep(2000);
         var signIn = helper.WaitForCss(@"button#loginbutton");
         helper.Click(signIn);
         return helper;
