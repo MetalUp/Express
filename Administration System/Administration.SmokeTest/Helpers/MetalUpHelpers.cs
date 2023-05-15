@@ -101,7 +101,7 @@ public static class MetalUpHelpers {
         var signIn = helper.WaitForCss(@"button#loginbutton");
         helper.Click(signIn);
         Thread.Sleep(5000);
-        helper.GoToLanding();
+        //helper.GoToLanding();
         return helper;
     }
 
