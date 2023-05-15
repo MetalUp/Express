@@ -28,8 +28,9 @@ public static class MetalUpHelpers {
         Thread.Sleep(5000);
 
         var txt = helper.WebDriver.PageSource;
+        var body = txt.Substring(txt.IndexOf("<body"));
 
-        Assert.AreEqual("", txt);
+        Assert.AreEqual("", body);
         helper.WaitForCss(".not-in-progress");
         return helper;
     }
