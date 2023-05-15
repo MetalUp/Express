@@ -77,20 +77,24 @@ public static class MetalUpHelpers {
         var loginFacebook = helper.WaitForCss(@"a[data-provider=""facebook""]");
         Thread.Sleep(2000);
         helper.Click(loginFacebook);
-        var accept = helper.WaitForCss(@"button[data-cookiebanner=""accept_button""]");
-        helper.Click(accept);
-        
+
+        //try {
+        //    var accept = helper.WaitForCss(@"button[data-cookiebanner=""accept_button""]");
+        //    helper.Click(accept);
+        //}
+        //catch (Exception e) {
+        //    // maybe no cookie banner - locale difference ? 
+        //}
+
         var user = helper.WaitForCss(@"input#email");
         var password = helper.WaitForCss("input#pass");
 
         var userId = "scascarini@nakedobjects.org";
         var pwd = PasswordFacebook;
         user.SendKeys(userId);
-        //helper.Wait.Until(dr => user.GetAttribute("value") == userId);
-        
         password.SendKeys(pwd);
-        //helper.Wait.Until(dr => password.GetAttribute("value") == pwd);
-        Thread.Sleep(2000);
+       
+        Thread.Sleep(1000);
         var signIn = helper.WaitForCss(@"button#loginbutton");
         helper.Click(signIn);
         return helper;
