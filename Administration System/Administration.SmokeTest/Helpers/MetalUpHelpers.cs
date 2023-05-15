@@ -26,15 +26,6 @@ public static class MetalUpHelpers {
     private static Helper LoginAs(this Helper helper, string password, string user) {
         helper.StartLogin();
         helper = IsProduction() ? helper.LoginWithFacebook() : helper.LoginWithAuth0(password, user);
-        Thread.Sleep(5000);
-
-        var txt = helper.WebDriver.PageSource;
-        var body = txt.Substring(txt.IndexOf("<body"));
-
-        body = Regex.Replace(body, @"class="".*""", "");
-        body = Regex.Replace(body, @"<script.*</script>", "");
-
-        Assert.AreEqual("", body);
         helper.WaitForCss(".not-in-progress");
         return helper;
     }
@@ -109,6 +100,8 @@ public static class MetalUpHelpers {
         Thread.Sleep(2000);
         var signIn = helper.WaitForCss(@"button#loginbutton");
         helper.Click(signIn);
+        Thread.Sleep(5000);
+        helper.GotoHome();
         return helper;
     }
 
