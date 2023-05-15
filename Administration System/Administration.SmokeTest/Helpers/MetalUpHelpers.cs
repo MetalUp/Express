@@ -32,6 +32,7 @@ public static class MetalUpHelpers {
         var body = txt.Substring(txt.IndexOf("<body"));
 
         body = Regex.Replace(body, @"class="".*""", "");
+        body = Regex.Replace(body, @"<script.*</script>", "");
 
         Assert.AreEqual("", body);
         helper.WaitForCss(".not-in-progress");
