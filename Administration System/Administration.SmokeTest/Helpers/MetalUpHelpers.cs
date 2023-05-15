@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
@@ -79,14 +80,10 @@ public static class MetalUpHelpers {
         Thread.Sleep(2000);
         helper.Click(loginFacebook);
 
-        try
-        {
+        // this is just needed when running the tests locally as the US site (via Appveyor) allows cookies after login 
+        if (System.Globalization.CultureInfo.CurrentCulture.Name == "en-GB") {
             var accept = helper.WaitForCss(@"button[data-cookiebanner=""accept_button""]");
             helper.Click(accept);
-        }
-        catch (Exception e)
-        {
-            // maybe no cookie banner - locale difference ? 
         }
 
         var user = helper.WaitForCss(@"input#email");
@@ -100,8 +97,10 @@ public static class MetalUpHelpers {
         Thread.Sleep(2000);
         var signIn = helper.WaitForCss(@"button#loginbutton");
         helper.Click(signIn);
-        Thread.Sleep(5000);
-        //helper.GoToLanding();
+
+        // If this starts to fail here it's because the US FB needs a 'allow all cookies' click. The US site click element is
+        // a span with text 'Allow all cookies' in a div.  
+        // did this manually once and now it seems to have remembered
         return helper;
     }
 
