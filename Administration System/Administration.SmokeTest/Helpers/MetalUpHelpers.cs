@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -29,6 +30,8 @@ public static class MetalUpHelpers {
 
         var txt = helper.WebDriver.PageSource;
         var body = txt.Substring(txt.IndexOf("<body"));
+
+        body = Regex.Replace(body, @"class="".*""", "");
 
         Assert.AreEqual("", body);
         helper.WaitForCss(".not-in-progress");
