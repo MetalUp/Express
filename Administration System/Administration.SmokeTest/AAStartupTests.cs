@@ -20,7 +20,7 @@ namespace SmokeTest;
 public class AAStartupTests : BaseTest {
     // first tests have longer timeouts to ensure servers woken up
 
-    [TestMethod]
+    [TestMethod, TestCategory("Production")]
     public virtual void LoginAndLogout() {
         helper.LoginAsTeacher();
         helper.Logout();
