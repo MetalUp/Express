@@ -94,7 +94,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
 
     onContinue() {
         localStorage.removeItem(AppVersionHttpInterceptor.ReloadKey);
-        this.onHome();
+        const w = window as { location: { origin: string, href: string } };
+        const landing = `${w.location.origin}/landing`;
+        w.location.href = landing;
     }
 
     onHome() {
