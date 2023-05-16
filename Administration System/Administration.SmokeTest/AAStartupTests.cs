@@ -20,19 +20,24 @@ namespace SmokeTest;
 public class AAStartupTests : BaseTest {
     // first tests have longer timeouts to ensure servers woken up
 
+
+
+
+
+
     [TestMethod, TestCategory("Production")]
     public virtual void LoginAndLogout() {
         helper.LoginAsTeacher();
         helper.Logout();
     }
 
-    [TestMethod]
+    [TestMethod, TestCategory("Production")]
     public virtual void WakeUpCompileServer() {
         helper.LoginAsStudent();
         var task = helper.GoToTask(107);
         task.EnterExpression("1 + 1");
         task.AssertResultIs("2");
-        task.EnterCode("static int f() => 1;");
+        task.EnterCode("static int f1() => 1;");
         task.AssertCompileResultIs("Compiled OK");
         helper.Logout();
     }
