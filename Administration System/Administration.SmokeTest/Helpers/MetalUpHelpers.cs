@@ -9,13 +9,22 @@ using NakedFrameworkClient.TestFramework;
 namespace SmokeTest.Helpers;
 
 public static class MetalUpHelpers {
+    public const string CompiledOkMsg = "Compiled OK";
+    public const int CsEmptyTaskId = 107;
+    public const int VbEmptyTaskId = 114;
+    public const int PyEmptyTaskId = 109;
+    public const int CsWithTestTaskId = 118;
+    public const int VbWithTestTaskId = 119;
+    public const int PyWithTestTaskId = 120;
+
+
     private const int LongTimeout = 80;
     private const int DefaultTimeout = 40;
 
-    private static readonly string UserIdAdmin = @"metalup.admin@gmail.com";
-    private static readonly string UserIdTeacher = @"metalup.dev@gmail.com";
-    private static readonly string UserIdStudent = @"metalup.student@gmail.com";
-    public static readonly string UserIdInvitee = @"metalup.invitee@gmail.com";
+    private const string UserIdAdmin = @"metalup.admin@gmail.com";
+    private const string UserIdTeacher = @"metalup.dev@gmail.com";
+    private const string UserIdStudent = @"metalup.student@gmail.com";
+    public const string UserIdInvitee = @"metalup.invitee@gmail.com";
 
     private static string PasswordTeacher => GetIConfigurationBase()["password_teacher"];
     private static string PasswordStudent => GetIConfigurationBase()["password_student"];

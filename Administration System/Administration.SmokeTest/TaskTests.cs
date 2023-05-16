@@ -25,6 +25,7 @@ public class TaskTests : BaseTest
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void EvaluateExpressionCSharp()
     {
         var task = helper.GoToTask(CsEmptyTaskId);
@@ -52,7 +53,7 @@ public class TaskTests : BaseTest
         var task = helper.GoToTask(CsEmptyTaskId);
         var random = new Random().NextInt64();
         task.EnterCode($"static long ReturnRandom() => {random};");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         task.EnterExpression("ReturnRandom()");
         task.AssertResultIs($"{random}");
         var after = helper.GetActivityCount();
@@ -88,7 +89,7 @@ public class TaskTests : BaseTest
     {
         var task = helper.GoToTask(CsWithTestTaskId);
         task.EnterCode("static int Square(int x) => x*x; ");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         task.RunTests();
         task.AssertTestResultIs("All Tests Passed");
     }
@@ -98,7 +99,7 @@ public class TaskTests : BaseTest
     {
         var task = helper.GoToTask(CsWithTestTaskId);
         task.EnterCode("static int Square(int x) => x*10;");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         task.RunTests();
         task.AssertTestResultIs("Test failed calling Square(3) Expected: 9 Actual: 30");
     }
@@ -109,7 +110,7 @@ public class TaskTests : BaseTest
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(CsEmptyTaskId);
         task.EnterCode("static int f1() => 1;");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
@@ -131,6 +132,7 @@ public class TaskTests : BaseTest
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void EvaluateExpressionVb()
     {
         var task = helper.GoToTask(VbEmptyTaskId);
@@ -161,7 +163,7 @@ Function F1() As Integer
     Return 1
 End Function
 ");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
@@ -177,7 +179,7 @@ Function ReturnRandom() As Long
     Return {random}
 End Function
 ");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         task.EnterExpression("ReturnRandom()");
         task.AssertResultIs($"{random}");
         var after = helper.GetActivityCount();
@@ -224,7 +226,7 @@ End Function
 Function Square(x As Integer) As Integer
     Return x*x
 End Function");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         task.RunTests();
         task.AssertTestResultIs("All Tests Passed");
     }
@@ -237,7 +239,7 @@ End Function");
 Function Square(x As Integer) As Integer
     Return x*10
 End Function");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         task.RunTests();
         task.AssertTestResultIs("Test failed calling Square(3) Expected: 9 Actual: 30");
     }
@@ -258,6 +260,7 @@ End Function");
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void EvaluateExpressionPython()
     {
         var task = helper.GoToTask(PyEmptyTaskId);
@@ -285,7 +288,7 @@ End Function");
         helper.SetLongTimeout(); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
         task.EnterCode("def f() -> int: return 1");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
@@ -298,7 +301,7 @@ End Function");
         var task = helper.GoToTask(PyEmptyTaskId);
         var random = new Random().NextInt64();
         task.EnterCode($"def return_random() -> int: return {random}");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         task.EnterExpression("return_random()");
         task.AssertResultIs($"{random}");
         var after = helper.GetActivityCount();
@@ -337,7 +340,7 @@ End Function");
         var task = helper.GoToTask(PyWithTestTaskId);
         helper.SetLongTimeout(); // mypy is SLOW!
         task.EnterCode("def square(x: int) -> int : return x*x");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         task.RunTests();
         task.AssertTestResultIs("All Tests Passed");
     }
@@ -348,7 +351,7 @@ End Function");
         var task = helper.GoToTask(PyWithTestTaskId);
         helper.SetLongTimeout(); // mypy is SLOW!
         task.EnterCode("def square(x: int) -> int : return x*10");
-        task.AssertCompileResultIs(compiledOkMsg);
+        task.AssertCompileResultIs(CompiledOkMsg);
         task.RunTests();
         task.AssertTestResultIs("Test failed calling square(3) Expected: 9 Actual: 30");
     }
@@ -360,14 +363,7 @@ End Function");
     protected override string BaseUrl => MetalUpHelpers.BaseUrl;
 
     private static Helper helper;
-    private readonly string compiledOkMsg = "Compiled OK";
-    private const int CsEmptyTaskId = 107;
-    private const int VbEmptyTaskId = 114;
-    private const int PyEmptyTaskId = 109;
-    private const int CsWithTestTaskId = 118;
-    private const int VbWithTestTaskId = 119;
-    private const int PyWithTestTaskId = 120;
-
+  
     [ClassInitialize]
     public static void InitialiseClass(TestContext context)
     {

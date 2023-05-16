@@ -5,7 +5,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and limitations under the License.
 
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NakedFrameworkClient.TestFramework;
 using NakedFrameworkClient.TestFramework.Tests;
@@ -20,25 +19,22 @@ namespace SmokeTest;
 public class AAStartupTests : BaseTest {
     // first tests have longer timeouts to ensure servers woken up
 
-
-
-
-
-
-    [TestMethod, TestCategory("Production")]
+    [TestMethod]
+    [TestCategory("Production")]
     public virtual void LoginAndLogout() {
         helper.LoginAsTeacher();
         helper.Logout();
     }
 
-    [TestMethod, TestCategory("Production")]
+    [TestMethod]
+    [TestCategory("Production")]
     public virtual void WakeUpCompileServer() {
         helper.LoginAsStudent();
-        var task = helper.GoToTask(107);
+        var task = helper.GoToTask(CsEmptyTaskId);
         task.EnterExpression("1 + 1");
         task.AssertResultIs("2");
         task.EnterCode("static int f1() => 1;");
-        task.AssertCompileResultIs("Compiled OK");
+        task.AssertCompileResultIs(CompiledOkMsg);
         helper.Logout();
     }
 
@@ -68,6 +64,7 @@ public class AAStartupTests : BaseTest {
     [TestCleanup]
     public virtual void CleanupTest() {
         helper.SetDefaultTimeout();
+        helper.WebDriver.Manage().Cookies.DeleteAllCookies();
     }
 
     #endregion
