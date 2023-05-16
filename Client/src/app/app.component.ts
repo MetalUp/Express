@@ -150,6 +150,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
     viewArea?: ElementRef;
 
     ngAfterViewInit() {
-        this.viewArea!.nativeElement.closest('body').className = "not-in-progress";
+        const body = this.viewArea?.nativeElement.closest('body');
+        if (body){
+            body.className = "not-in-progress";
+        }
     }
 }

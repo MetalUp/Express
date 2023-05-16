@@ -43,15 +43,15 @@ export class TaskService {
 
   private currentTaskAsSubject = new Subject<ITaskUserView>();
 
-  private convertToTask(rep: DomainObjectRepresentation, id: number) {
+  private convertToTask( id: number, rep?: DomainObjectRepresentation) {
     return convertTo<ITaskUserView>(new TaskUserView(id), rep);
   }
 
-  private convertToHint(rep: DomainObjectRepresentation) {
+  private convertToHint(rep?: DomainObjectRepresentation) {
     return convertTo<IHintUserView>(new HintUserView(), rep);
   }
 
-  private convertToCode(rep: DomainObjectRepresentation) {
+  private convertToCode(rep?: DomainObjectRepresentation) {
     return convertTo<ICodeUserView>(new CodeUserView(), rep);
   }
 
@@ -76,8 +76,8 @@ export class TaskService {
 
       this.repLoader.invoke(action, this.params(taskId), {})
         .then((ar: ActionResultRepresentation) => {
-          const obj = ar.result().object()!;
-          const task = this.convertToTask(obj, taskId);
+          const obj = ar.result().object() || undefined;
+          const task = this.convertToTask(taskId, obj);
           this.currentTaskAsSubject.next(task);
         })
         .catch((e: ErrorWrapper) => {
@@ -94,7 +94,7 @@ export class TaskService {
 
       return this.repLoader.invoke(action, this.params(taskId, hintId), {} as Dictionary<Object>)
         .then((ar: ActionResultRepresentation) => {
-          const obj = ar.result().object()!;
+          const obj = ar.result().object() || undefined;
           return this.convertToHint(obj);
         })
         .catch((e: ErrorWrapper) => {
@@ -111,7 +111,7 @@ export class TaskService {
 
       return this.repLoader.invoke(action, this.params(taskId, undefined, version), {} as Dictionary<Object>)
         .then((ar: ActionResultRepresentation) => {
-          const obj = ar.result().object()!;
+          const obj = ar.result().object() || undefined;
           return this.convertToCode(obj);
         })
         .catch((e: ErrorWrapper) => {

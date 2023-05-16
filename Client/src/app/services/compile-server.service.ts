@@ -94,23 +94,28 @@ export class CompileServerService {
   // expose to make testing easier 
 
   get evaluateExpressionAction() {
-    return this.compileServer!.actionMember("EvaluateExpression") as InvokableActionMember;
+    if (!this.compileServer) throw new Error("CompileServer null");
+    return this.compileServer.actionMember("EvaluateExpression") as InvokableActionMember;
   }
 
   get submitCodeAction() {
-    return this.compileServer!.actionMember("SubmitCode") as InvokableActionMember;
+    if (!this.compileServer) throw new Error("CompileServer null");
+    return this.compileServer.actionMember("SubmitCode") as InvokableActionMember;
   }
 
   get runTestsAction() {
-    return this.compileServer!.actionMember("RunTests") as InvokableActionMember;
+    if (!this.compileServer) throw new Error("CompileServer null");
+    return this.compileServer.actionMember("RunTests") as InvokableActionMember;
   }
 
   get recordActivityAction() {
-    return this.compileServer!.actionMember("RecordCodeActivityWithoutCompiling") as InvokableActionMember;
+    if (!this.compileServer) throw new Error("CompileServer null");
+    return this.compileServer.actionMember("RecordCodeActivityWithoutCompiling") as InvokableActionMember;
   }
 
   get getLanguagesAction() {
-    return this.compileServer!.actionMember("GetLanguagesAndVersions") as InvokableActionMember;
+    if (!this.compileServer) throw new Error("CompileServer null");
+    return this.compileServer.actionMember("GetLanguagesAndVersions") as InvokableActionMember;
   }
 
   get urlParams() {
@@ -195,8 +200,12 @@ export class CompileServerService {
   }
 
   runLocalTests(taskId: number) {
-    const rr = ArmTestHelper.runTests(this.currentTask?.ClientRunTestCode!, this.userDefinedCode) as RunResult;
-    return this.recordActivity(rr, taskId, this.userDefinedCode, rr.outcome === 15 ? ActivityType.runTestsSuccess : ActivityType.runTestsFail);
+     const testCode = this.currentTask?.ClientRunTestCode;
+     if (testCode != null) {
+      const rr = ArmTestHelper.runTests(testCode, this.userDefinedCode) as RunResult;
+      return this.recordActivity(rr, taskId, this.userDefinedCode, rr.outcome === 15 ? ActivityType.runTestsSuccess : ActivityType.runTestsFail);
+    }
+    return of(errorRunResult({message: "no test code"}));
   }
 
   runTests(taskId: number) {

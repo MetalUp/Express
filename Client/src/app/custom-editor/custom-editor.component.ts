@@ -18,8 +18,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
     private fileService: FileService,
     private compileService: CompileServerService) { }
 
-  id?: string;
-
+  id = "";
   editContent = "";
   initialContent = "";
   lastSavedContent  = "";
@@ -93,7 +92,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    this.fileService.saveFile(this.id!, this.editContent).then(b => {
+    this.fileService.saveFile(this.id, this.editContent).then(b => {
       this.warning = "";
       if (b) {
         this.lastSavedContent = this.editContent;
@@ -105,7 +104,7 @@ export class CustomEditorComponent implements OnInit, OnDestroy {
   }
 
   onSaveAndClose() {
-    this.fileService.saveFile(this.id!, this.editContent).then(b => {
+    this.fileService.saveFile(this.id, this.editContent).then(b => {
       this.warning = "";
       if (b) {
         this.lastSavedContent = this.editContent;

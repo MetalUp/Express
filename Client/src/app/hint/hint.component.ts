@@ -65,15 +65,15 @@ export class HintComponent implements OnInit, OnDestroy {
   }
 
   viewPreviousHint() {
-    this.getHint(this.currentHint.PreviousHintNo!, false);
+    this.getHint(this.currentHint.PreviousHintNo, false);
   }
 
   viewNextHint() {
-    this.getHint(this.currentHint.NextHintNo!, false);
+    this.getHint(this.currentHint.NextHintNo, false);
   }
 
   getNextHint() {
-    this.getHint(this.currentHint.NextHintNo!, true);
+    this.getHint(this.currentHint.NextHintNo, true);
   }
 
   getHint(hintNo: number, newHint: boolean) {

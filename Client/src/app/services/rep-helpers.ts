@@ -32,7 +32,7 @@ function setPropertyValue(toObj: any, member: PropertyMember) {
   }
 }
 
-export function convertTo<T>(toObj: T, rep: DomainObjectRepresentation) {
+export function convertTo<T>(toObj: T, rep?: DomainObjectRepresentation) {
   if (rep && Object.keys(rep.propertyMembers()).length > 0) {
     const pMembers = rep.propertyMembers();
     for (const k in pMembers) {

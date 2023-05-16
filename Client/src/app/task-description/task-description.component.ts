@@ -41,7 +41,9 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   }
 
   viewPreviousTask() {
-    this.taskService.gotoTask(this.currentTask.PreviousTaskId!);
+    if (this.currentTask.PreviousTaskId) {
+      this.taskService.gotoTask(this.currentTask.PreviousTaskId);
+    }
   }
 
   canViewNextTask() {
@@ -49,7 +51,9 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   }
 
   viewNextTask() {
-    return this.taskService.gotoTask(this.currentTask.NextTaskId!);
+    if (this.currentTask.NextTaskId) {
+      this.taskService.gotoTask(this.currentTask.NextTaskId);
+    }
   }
 
   canGetNextTask() {
@@ -57,7 +61,9 @@ export class TaskDescriptionComponent implements OnInit, OnDestroy {
   }
 
   getNextTask() {
-    return this.taskService.gotoTask(this.currentTask.NextTaskId!);
+    if (this.currentTask.NextTaskId) {
+      this.taskService.gotoTask(this.currentTask.NextTaskId);
+    }
   }
 
   canReturnToAssignment() {
