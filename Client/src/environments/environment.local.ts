@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   blockAuth0Provider: false,
+  checkAppVersion: false,
   audience: 'http://localhost:5000',
   allowedList: [
     'http://localhost:5000',
@@ -20,4 +21,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

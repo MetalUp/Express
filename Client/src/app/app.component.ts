@@ -4,6 +4,8 @@ import { ConfigService, ErrorWrapper, RepLoaderService } from '@nakedobjects/ser
 import { Subscription } from 'rxjs';
 import { ErrorService } from './services/error.service';
 import { RegistrationService } from './services/registration.service';
+import { appVersion } from './app-version';
+import { AppVersionHttpInterceptor } from './app-version.http-interceptor';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -50,6 +52,30 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         return this.isDashboard() ? "gemini" : "metalup";
     }
 
+    get needsReload() {
+        return localStorage.getItem(AppVersionHttpInterceptor.ReloadKey) && !this.hasError;
+    }
+
+    get pending() {
+        return !this.config.loadingStatus && !this.hasError && !this.needsReload;
+    }
+
+    get loaded() {
+        return this.config.loadingStatus === 1 && !this.hasError && !this.needsReload;
+    }
+
+    get loadFailed() {
+        return this.config.loadingStatus === 2 && !this.hasError && !this.needsReload;
+    }
+
+    get clientVersion() {
+        return appVersion;
+    }
+
+    get serverVersion() {
+        return this.needsReload ? localStorage.getItem(AppVersionHttpInterceptor.ReloadKey) : "";
+    }
+
     isDashboard() {
         const url = this.router.url;
         const segments = url.split('/');
@@ -64,6 +90,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
         const [, mode, subMode] = segments;
 
         return subMode === 'editor' || mode === 'roapiviewer';
+    }
+
+    onContinue() {
+        localStorage.removeItem(AppVersionHttpInterceptor.ReloadKey);
+        this.onHome();
     }
 
     onHome() {
@@ -102,7 +133,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.errorStacktrace = ea.stackTrace || "No Stack Trace";
             }
         });
-
     }
 
     ngOnDestroy(): void {

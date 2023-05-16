@@ -23,6 +23,7 @@ import { CustomEditorComponent } from './custom-editor/custom-editor.component';
 import { RestViewerComponent } from './rest-viewer/rest-viewer.component';
 import { ToolLinkComponent } from './tool-link/tool-link.component';
 import { environment } from 'src/environments/environment';
+import { AppVersionHttpInterceptor } from './app-version.http-interceptor';
 
 @NgModule({
     declarations: [
@@ -62,6 +63,7 @@ import { environment } from 'src/environments/environment';
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: AppVersionHttpInterceptor, multi: true },
       ],
     bootstrap: [AppComponent]
 })
