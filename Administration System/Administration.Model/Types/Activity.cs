@@ -53,6 +53,9 @@
         public int HintUsed { get; init; }
 
         [MemberOrder(8)]
+        public FileAttachment SubmittedCode => new FileAttachment(Encoding.ASCII.GetBytes(CodeSubmitted), "Click here to view", "text/plain");
+
+        [Hidden]
         public string CodeSubmitted { get; init; }
 
         [MemberOrder(9)]

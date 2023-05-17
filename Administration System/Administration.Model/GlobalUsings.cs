@@ -8,3 +8,4 @@ global using Model.Functions;
 global using Model.Menus;
 global using Model.Services;
 global using NakedFunctions;
+global using NakedFramework.Value;
