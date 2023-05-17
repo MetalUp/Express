@@ -113,6 +113,46 @@ static int f(int i) => f(i+1);var a = f(1);";
     // StudentCode
     var a = ImmutableList.Create<int>(1); System.Console.Write(a.First());";
 
+
+    private const string CompileFail = @"
+    using static MetalUp.Express.Helpers;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.Immutable;
+    using System.Linq;
+    using static System.Math;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+
+    namespace MetalUp.Express
+    {
+        public class Wrapper
+        {
+            static void Main()
+            {
+                Console.OutputEncoding = Encoding.UTF8;
+                Console.WriteLine(Display(""""));
+            }
+
+            // Adjustment for start of Student Code:  Line 29, Column 26
+            static int f1() => """"; 
+            // Ch.1
+            public static int x = 3;
+            public static int y = 4;
+            public static double z = 66.66666666;
+        }
+
+        public static class Helpers
+        {
+            public static string? Display(object? obj)
+            {
+                return obj?.ToString();
+            }
+        }
+    }";
+    
     private readonly ILogger testLogger = NullLogger.Instance;
 
     [TestInitialize]
@@ -195,6 +235,16 @@ static int f(int i) => f(i+1);var a = f(1);";
         rr.AssertRunResult(Outcome.CompilationError, "(2,9): error CS0020: Division by constant zero");
         Assert.AreEqual(1, rr.line_no);
         Assert.AreEqual(9, rr.col_no);
+    }
+
+    [TestMethod]
+    public void TestCompileFailOffsets() {
+        using var runSpec = CsharpRunSpec(CompileFail);
+        var rr = Handler.Compile(runSpec).Result.Value as RunResult;
+        Assert.IsNotNull(rr);
+        rr.AssertRunResult(Outcome.CompilationError, "(24,32): error CS0029: Cannot implicitly convert type 'string' to 'int'");
+        Assert.AreEqual(23, rr.line_no);
+        Assert.AreEqual(32, rr.col_no);
     }
 
     [TestMethod]
