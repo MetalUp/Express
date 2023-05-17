@@ -8,8 +8,8 @@ import { UserService } from './user.service';
 
 describe('UserService', () => {
   let service: UserService;
-  
-  const contextServiceSpy : jasmine.SpyObj<ContextService> = jasmine.createSpyObj('ConfigService', ['getServices'], { config: { appPath: 'testPath' } });
+
+  const contextServiceSpy: jasmine.SpyObj<ContextService> = jasmine.createSpyObj('ConfigService', ['getServices'], { config: { appPath: 'testPath' } });
   const repLoaderSpy: jasmine.SpyObj<RepLoaderService> = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke']);
   const errorServiceSpy: jasmine.SpyObj<ErrorService> = jasmine.createSpyObj('ErrorService', ['addError', 'clearError']);
 
@@ -24,8 +24,8 @@ describe('UserService', () => {
 
   it('should get the user action', fakeAsync(() => {
     const testAction = {} as InvokableActionMember;
-    const testService = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
-    const testServices = { getService: (s: string) => testService } as unknown as DomainServicesRepresentation;
+    const testService = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
+    const testServices = { getService: (_s: string) => testService } as unknown as DomainServicesRepresentation;
 
     const tssp = Promise.resolve(testServices);
     const tsp = Promise.resolve(testService);
@@ -44,8 +44,8 @@ describe('UserService', () => {
 
   it('should get the acceptInvitation action', fakeAsync(() => {
     const testAction = {} as InvokableActionMember;
-    const testService = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
-    const testServices = { getService: (s: string) => testService } as unknown as DomainServicesRepresentation;
+    const testService = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
+    const testServices = { getService: (_s: string) => testService } as unknown as DomainServicesRepresentation;
 
     const tssp = Promise.resolve(testServices);
     const tsp = Promise.resolve(testService);

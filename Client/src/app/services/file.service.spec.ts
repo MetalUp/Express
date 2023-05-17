@@ -9,7 +9,7 @@ import { FileService } from './file.service';
 
 describe('FileService', () => {
   let service: FileService;
-  
+
   const contextServiceSpy: jasmine.SpyObj<ContextService> = jasmine.createSpyObj('ConfigService', ['getServices'], { config: { appPath: 'testPath' } });
   const repLoaderSpy: jasmine.SpyObj<RepLoaderService> = jasmine.createSpyObj('RepLoaderService', ['populate', 'invoke']);
   const errorServiceSpy: jasmine.SpyObj<ErrorService> = jasmine.createSpyObj('ErrorService', ['addError', 'clearError']);
@@ -25,8 +25,8 @@ describe('FileService', () => {
 
   it('should get the getFile action', fakeAsync(() => {
     const testAction = {} as InvokableActionMember;
-    const testService = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
-    const testServices = { getService: (s: string) => testService } as unknown as DomainServicesRepresentation;
+    const testService = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
+    const testServices = { getService: (_s: string) => testService } as unknown as DomainServicesRepresentation;
 
     const tssp = Promise.resolve(testServices);
     const tsp = Promise.resolve(testService);
@@ -45,8 +45,8 @@ describe('FileService', () => {
 
   it('should get the saveFile action', fakeAsync(() => {
     const testAction = {} as InvokableActionMember;
-    const testService = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
-    const testServices = { getService: (s: string) => testService } as unknown as DomainServicesRepresentation;
+    const testService = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
+    const testServices = { getService: (_s: string) => testService } as unknown as DomainServicesRepresentation;
 
     const tssp = Promise.resolve(testServices);
     const tsp = Promise.resolve(testService);

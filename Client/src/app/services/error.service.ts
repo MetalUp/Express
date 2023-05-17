@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ErrorWrapper } from '@nakedobjects/services';
-import { BehaviorSubject, EmptyError } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class ErrorService {
 
   private errorHistory: ErrorWrapper[] = [];
 
-  addError(error : ErrorWrapper) {
+  addError(error: ErrorWrapper) {
     this.currentErrorAsSubject.next(error);
     this.errorHistory.push(error);
   }

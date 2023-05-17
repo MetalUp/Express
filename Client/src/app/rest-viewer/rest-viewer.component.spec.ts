@@ -3,7 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RestViewerComponent } from './rest-viewer.component';
 
 describe('RestViewerComponent', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let component: RestViewerComponent;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let fixture: ComponentFixture<RestViewerComponent>;
 
   beforeEach(async () => {

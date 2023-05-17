@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, IHateoasModel, InvokableActionMember, Value } from '@nakedobjects/restful-objects';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { BehaviorSubject, catchError, from, of, Subject } from 'rxjs';
-import { RunResult, errorRunResult, EmptyRunResult } from '../models/run-result';
+import { RunResult, errorRunResult } from '../models/run-result';
 import { TaskService } from './task.service';
 import { Dictionary } from 'lodash';
 import { SubmitProgram } from 'armlite_service';
 import { ArmTestHelper } from '../models/arm-test-helper';
 import { ITaskUserView } from '../models/task-user-view';
-import { ILanguageView, LanguageView } from '../models/language-view';
+import { ILanguageView } from '../models/language-view';
 
 
 enum ActivityType {
-  submitCodeFail, 
-  submitCodeSuccess, 
+  submitCodeFail,
+  submitCodeSuccess,
   runTestsFail,
   runTestsSuccess,
   hintUsed
@@ -24,7 +24,7 @@ enum ActivityType {
 })
 export class CompileServerService {
 
-  
+
   constructor(taskService: TaskService, private repLoader: RepLoaderService, private contextService: ContextService) {
     taskService.currentTask.subscribe(t => {
       this.currentTask = t;
@@ -36,19 +36,19 @@ export class CompileServerService {
 
   private getService() {
     this.contextService.getServices()
-        .then((services: DomainServicesRepresentation) => {
-          const service = services.getService("Model.Services.Compile");
-          return this.repLoader.populate(service);
-        })
-        .then((service : IHateoasModel) => {
-          this.compileServer = service as DomainObjectRepresentation;
-          this.getLanguages();
-        });
-      }
+      .then((services: DomainServicesRepresentation) => {
+        const service = services.getService("Model.Services.Compile");
+        return this.repLoader.populate(service);
+      })
+      .then((service: IHateoasModel) => {
+        this.compileServer = service as DomainObjectRepresentation;
+        this.getLanguages();
+      });
+  }
 
-  private compileServer? : DomainObjectRepresentation;
+  private compileServer?: DomainObjectRepresentation;
 
-  private currentTask? : ITaskUserView;
+  private currentTask?: ITaskUserView;
 
   selectedLanguage = '';
 
@@ -71,18 +71,18 @@ export class CompileServerService {
     return !!this.userDefinedCode;
   }
 
-  private ToRunResult(ar: ActionResultRepresentation) : RunResult {
-      const result = ar.result().object();
+  private ToRunResult(ar: ActionResultRepresentation): RunResult {
+    const result = ar.result().object();
 
-      return result ? {
-        cmpinfo: result?.propertyMember("Cmpinfo").value().scalar(),
-        outcome :  result?.propertyMember("Outcome").value().scalar(),
-        stderr :  result?.propertyMember("Stderr").value().scalar(),
-        stdout:  result?.propertyMember("Stdout").value().scalar(),
-        run_id: result?.propertyMember("RunID").value().scalar(),
-        lineno: result?.propertyMember("LineNo").value().scalar(),
-        colno: result?.propertyMember("ColNo").value().scalar(),
-      } as RunResult : errorRunResult({message : "null result from server"});
+    return result ? {
+      cmpinfo: result?.propertyMember("Cmpinfo").value().scalar(),
+      outcome: result?.propertyMember("Outcome").value().scalar(),
+      stderr: result?.propertyMember("Stderr").value().scalar(),
+      stdout: result?.propertyMember("Stdout").value().scalar(),
+      run_id: result?.propertyMember("RunID").value().scalar(),
+      lineno: result?.propertyMember("LineNo").value().scalar(),
+      colno: result?.propertyMember("ColNo").value().scalar(),
+    } as RunResult : errorRunResult({ message: "null result from server" });
   }
 
   private ToLanguages(ar: ActionResultRepresentation): ILanguageView[] {
@@ -123,16 +123,16 @@ export class CompileServerService {
   }
 
   private submit(action: InvokableActionMember, params: Dictionary<Value>) {
-   
+
     return from(this.repLoader.invoke(action, params, this.urlParams)
       .then(ar => this.ToRunResult(ar)))
       .pipe(catchError((e) => of<RunResult>(errorRunResult(e))));
   }
 
-  private submitVoid(rr : RunResult, action: InvokableActionMember, params: Dictionary<Value>) {
+  private submitVoid(rr: RunResult, action: InvokableActionMember, params: Dictionary<Value>) {
     return from(this.repLoader.invoke(action, params, this.urlParams)
-      .then(ar => rr)
-      .catch(e => rr));
+      .then(_ => rr)
+      .catch(_ => rr));
   }
 
   params(taskId: number, expression?: string, code?: string) {
@@ -160,7 +160,7 @@ export class CompileServerService {
     return this.submit(action, params);
   }
 
-  recordActivity(rr: RunResult,  taskId: number, code: string, type: ActivityType) {
+  recordActivity(rr: RunResult, taskId: number, code: string, type: ActivityType) {
     const action = this.recordActivityAction;
     const params = this.activityParams(taskId, type, code);
     return this.submitVoid(rr, action, params);
@@ -200,12 +200,12 @@ export class CompileServerService {
   }
 
   runLocalTests(taskId: number) {
-     const testCode = this.currentTask?.ClientRunTestCode;
-     if (testCode != null) {
+    const testCode = this.currentTask?.ClientRunTestCode;
+    if (testCode != null) {
       const rr = ArmTestHelper.runTests(testCode, this.userDefinedCode) as RunResult;
       return this.recordActivity(rr, taskId, this.userDefinedCode, rr.outcome === 15 ? ActivityType.runTestsSuccess : ActivityType.runTestsFail);
     }
-    return of(errorRunResult({message: "no test code"}));
+    return of(errorRunResult({ message: "no test code" }));
   }
 
   runTests(taskId: number) {

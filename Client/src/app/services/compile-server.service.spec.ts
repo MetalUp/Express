@@ -59,7 +59,7 @@ describe('CompileServerService', () => {
   } as IActionInvokeRepresentation;
 
   const mockService = {
-    actionMember: (n: string) => mockAction
+    actionMember: (_n: string) => mockAction
   } as unknown as DomainObjectRepresentation;
 
   const mockServices = {
