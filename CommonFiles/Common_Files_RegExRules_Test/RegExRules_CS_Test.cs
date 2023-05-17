@@ -12,7 +12,7 @@ public class RegExRules_CS_Test
     }
 
     [TestMethod]
-    public void UsingVar()
+    public void AssigningVariable()
     {
         IsInvalidExp(CS, "var a = 1", "Use of the keyword 'var' is not permitted");
     }

@@ -16,7 +16,7 @@
     "expressions": [],
     "functions": [
       [
-        "^(?:def\\s*[^\\n\\r]*:\\s*return.*[\\n\\s]*)*$",
+        "^[\\n\\s]*(?:def\\s*[^\\n\\r]*:\\s*return.*[\\n\\s]*)*$",
         "All functions must follow form: def <lower_case_name>(<params, each with type>) -> <return_type> :  return <expression>"
       ]
     ]
@@ -36,6 +36,7 @@
         "Messages.NotPermitted"
       ]
     ],
+    "expressions": [],
     "functions": [
       [
         "\\s(date\\.today|datetime\\.today|datetime\\.now)",
