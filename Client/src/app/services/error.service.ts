@@ -15,7 +15,7 @@ export class ErrorService {
     return this.currentErrorAsSubject;
   }
 
-  private currentErrorAsSubject = new BehaviorSubject<ErrorWrapper | Object>(ErrorService.NoError);
+  private currentErrorAsSubject = new BehaviorSubject<ErrorWrapper | object>(ErrorService.NoError);
 
   private errorHistory: ErrorWrapper[] = [];
 

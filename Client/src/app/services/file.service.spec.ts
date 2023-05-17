@@ -74,7 +74,7 @@ describe('FileService', () => {
     service.loadFile('fileid').then(o => expect(o).toBe(EmptyFileView));
     tick();
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.fileAction, { id: new Value("fileid") } as Dictionary<Value>, {} as Dictionary<Object>);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.fileAction, { id: new Value("fileid") } as Dictionary<Value>, {} as Dictionary<object>);
   }));
 
   it('should save the file', fakeAsync(() => {
@@ -88,6 +88,6 @@ describe('FileService', () => {
     service.saveFile('fileid', 'test content').then(o => expect(o).toBe(true));
     tick();
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.saveAction, { id: new Value("fileid"), content: new Value('test content') } as Dictionary<Value>, {} as Dictionary<Object>);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.saveAction, { id: new Value("fileid"), content: new Value('test content') } as Dictionary<Value>, {} as Dictionary<object>);
   }));
 });

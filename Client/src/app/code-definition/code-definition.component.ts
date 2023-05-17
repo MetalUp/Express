@@ -43,11 +43,11 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
   disabled = true;
 
   get nextCodeTooltip() {
-    return  this.canNewerCode() ?  nextCodeEnabledTooltip : nextCodeDisabledTooltip;
+    return this.canNewerCode() ? nextCodeEnabledTooltip : nextCodeDisabledTooltip;
   }
 
   get previousCodeTooltip() {
-    return  this.canOlderCode() ?  previousCodeEnabledTooltip : previousCodeDisabledTooltip;
+    return this.canOlderCode() ? previousCodeEnabledTooltip : previousCodeDisabledTooltip;
   }
 
   get submitCodeTooltip() {
@@ -199,19 +199,22 @@ export class CodeDefinitionComponent implements OnInit, OnDestroy {
     }
   }
 
-  @ViewChild('codeArea', { static: true }) 
+  @ViewChild('codeArea', { static: true })
   taElement?: ElementRef;
 
-  lineAndColumn = [0,1];
+  lineAndColumn = [0, 1];
 
   refreshCursorPosition() {
-    const ta = this.taElement?.nativeElement as any;
-    const lineNo = ta.value.substr(0, ta.selectionStart).split(/\r?\n|\r/).length;
-    const toSelection =  ta.value.substr(0, ta.selectionStart).split("").reverse().join("");
-    const fromLineArray = toSelection.match(/.*$/m);
-    const fromLine = fromLineArray[0];
-    const col = fromLine.length + 1; // after cursor
+    const ta: HTMLTextAreaElement | undefined = this.taElement?.nativeElement;
+    if (ta) {
+      const selection = ta.value.substr(0, ta.selectionStart);
+      const lineNo = selection.split(/\r?\n|\r/).length;
+      const toSelection = selection.split("").reverse().join("");
+      const fromLineArray = toSelection.match(/.*$/m);
+      const fromLine = fromLineArray?.[0] || "";
+      const col = fromLine.length + 1; // after cursor
 
-    this.lineAndColumn = [lineNo, col];
+      this.lineAndColumn = [lineNo, col];
+    }
   }
 }

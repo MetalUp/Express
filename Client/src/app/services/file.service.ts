@@ -25,7 +25,7 @@ export class FileService {
 
   saveFile(id: string, content: string) {
     return this.getSaveAction().then(action => {
-      return this.repLoader.invoke(action, { id: new Value(id), content: new Value(content) } as Dictionary<Value>, {} as Dictionary<Object>)
+      return this.repLoader.invoke(action, { id: new Value(id), content: new Value(content) } as Dictionary<Value>, {} as Dictionary<object>)
         .then(_ => true) // success
         .catch(_ => false);
     });
@@ -35,7 +35,7 @@ export class FileService {
     this.errorService.clearError();
     return this.getFileAction()
       .then(action => {
-        return this.repLoader.invoke(action, { id: new Value(id) } as Dictionary<Value>, {} as Dictionary<Object>)
+        return this.repLoader.invoke(action, { id: new Value(id) } as Dictionary<Value>, {} as Dictionary<object>)
           .then((ar: ActionResultRepresentation) => {
             const obj = ar.result().object();
             return obj ? this.convertToFile(obj) : EmptyFileView;

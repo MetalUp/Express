@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ConfigService,  } from '@nakedobjects/services';
+import { ConfigService, } from '@nakedobjects/services';
 import { catchError, first, of } from 'rxjs';
 import { okButtonDisabledTooltip as goButtonDisabledTooltip, okButtonEnabledTooltip as goButtonEnabledTooltip, methodButtonDisabledTooltip, methodButtonEnabledTooltip, homeTooltip, nextUrlEnabledTooltip, nextUrlDisabledTooltip, previousUrlDisabledTooltip, previousUrlEnabledTooltip } from '../constants/tooltips';
 
@@ -20,14 +20,14 @@ export class RestViewerComponent implements OnInit {
   currentUrl = this.home;
   url = "";
 
-  content?: Object;
+  content?: object;
 
   payload = "";
 
   message = "";
 
   urlHistory: string[] = [];
-  urlHistoryIndex = -1; 
+  urlHistoryIndex = -1;
 
   getUrl(url: string) {
     if (this.payload) {
@@ -39,11 +39,11 @@ export class RestViewerComponent implements OnInit {
     }
   }
 
-  addUrl(url : string, save: boolean) {
+  addUrl(url: string, save: boolean) {
     this.currentUrl = url;
     if (save) {
       this.urlHistory.push(url);
-      this.urlHistoryIndex = this.urlHistory.length -1;
+      this.urlHistoryIndex = this.urlHistory.length - 1;
     }
   }
 
@@ -52,7 +52,7 @@ export class RestViewerComponent implements OnInit {
     this.http.request('get', this.getUrl(url), { responseType: 'json' })
       .pipe(first())
       .pipe(catchError((e) => {
-        if (e instanceof HttpErrorResponse){
+        if (e instanceof HttpErrorResponse) {
           this.message = `${e.message}`;
         }
         else {
@@ -62,7 +62,7 @@ export class RestViewerComponent implements OnInit {
       }))
       .subscribe(b => {
         this.content = b;
-    
+
         if (this.message) {
           this.currentUrl = "";
           this.urlHistoryIndex = this.urlHistory.length;
@@ -118,7 +118,7 @@ export class RestViewerComponent implements OnInit {
   }
 
   canNext() {
-    return this.urlHistoryIndex < this.urlHistory.length -1;
+    return this.urlHistoryIndex < this.urlHistory.length - 1;
   }
 
   onPrevious() {
@@ -134,10 +134,10 @@ export class RestViewerComponent implements OnInit {
   }
 
   get nextUrlTooltip() {
-    return  this.canNext() ?  nextUrlEnabledTooltip : nextUrlDisabledTooltip;
+    return this.canNext() ? nextUrlEnabledTooltip : nextUrlDisabledTooltip;
   }
 
   get previousUrlTooltip() {
-    return  this.canPrevious() ?  previousUrlEnabledTooltip : previousUrlDisabledTooltip;
+    return this.canPrevious() ? previousUrlEnabledTooltip : previousUrlDisabledTooltip;
   }
 }

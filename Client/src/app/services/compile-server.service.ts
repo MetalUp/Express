@@ -119,7 +119,7 @@ export class CompileServerService {
   }
 
   get urlParams() {
-    return {} as Dictionary<Object>;
+    return {} as Dictionary<object>;
   }
 
   private submit(action: InvokableActionMember, params: Dictionary<Value>) {

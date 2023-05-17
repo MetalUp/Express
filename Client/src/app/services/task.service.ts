@@ -13,14 +13,14 @@ import { convertTo } from './rep-helpers';
   providedIn: 'root'
 })
 export class TaskService {
-  
+
   constructor(private router: Router,
     private contextService: ContextService,
-    private repLoader: RepLoaderService) { 
+    private repLoader: RepLoaderService) {
   }
 
   getService() {
-    if (this.taskAccess){
+    if (this.taskAccess) {
       return Promise.resolve(this.taskAccess);
     }
 
@@ -43,7 +43,7 @@ export class TaskService {
 
   private currentTaskAsSubject = new Subject<ITaskUserView>();
 
-  private convertToTask( id: number, rep?: DomainObjectRepresentation) {
+  private convertToTask(id: number, rep?: DomainObjectRepresentation) {
     return convertTo<ITaskUserView>(new TaskUserView(id), rep);
   }
 
@@ -92,7 +92,7 @@ export class TaskService {
     return this.getService().then(s => {
       const action = s.actionMember("GetHint") as InvokableActionMember;
 
-      return this.repLoader.invoke(action, this.params(taskId, hintId), {} as Dictionary<Object>)
+      return this.repLoader.invoke(action, this.params(taskId, hintId), {} as Dictionary<object>)
         .then((ar: ActionResultRepresentation) => {
           const obj = ar.result().object() || undefined;
           return this.convertToHint(obj);
@@ -109,7 +109,7 @@ export class TaskService {
     return this.getService().then(s => {
       const action = s.actionMember("GetCodeVersion") as InvokableActionMember;
 
-      return this.repLoader.invoke(action, this.params(taskId, undefined, version), {} as Dictionary<Object>)
+      return this.repLoader.invoke(action, this.params(taskId, undefined, version), {} as Dictionary<object>)
         .then((ar: ActionResultRepresentation) => {
           const obj = ar.result().object() || undefined;
           return this.convertToCode(obj);

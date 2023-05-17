@@ -73,7 +73,7 @@ describe('UserService', () => {
     service.loadUser().then(o => expect(o).toBe(UnregisteredUserView));
     tick();
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.userAction, {} as Dictionary<Value>, {} as Dictionary<Object>);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.userAction, {} as Dictionary<Value>, {} as Dictionary<object>);
   }));
 
   it('should accept the invitation', fakeAsync(() => {
@@ -88,6 +88,6 @@ describe('UserService', () => {
     service.acceptInvitation('test code').then(o => expect(o).toBe(true));
     tick();
 
-    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.acceptInvitationAction, { code: new Value('test code') } as Dictionary<Value>, {} as Dictionary<Object>);
+    expect(repLoaderSpy.invoke).toHaveBeenCalledWith(service.acceptInvitationAction, { code: new Value('test code') } as Dictionary<Value>, {} as Dictionary<object>);
   }));
 });

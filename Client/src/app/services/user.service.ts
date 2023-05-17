@@ -48,7 +48,7 @@ export class UserService {
     this.errorService.clearError();
     return this.getUserAction()
       .then(action => {
-        return this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<Object>)
+        return this.repLoader.invoke(action, {} as Dictionary<Value>, {} as Dictionary<object>)
           .then((ar: ActionResultRepresentation) => {
             const obj = ar.result().object();
             const user = obj ? this.convertToUser(obj) : UnregisteredUserView;
