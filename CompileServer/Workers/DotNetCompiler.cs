@@ -49,8 +49,8 @@ public static class DotNetCompiler {
         var result = generateCode(code).Emit(peStream);
 
         if (!result.Success) {
-            var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error);
-            var (l, c) = GetFirstLineAndColumn(result.Diagnostics);
+            var failures = result.Diagnostics.Where(diagnostic => diagnostic.IsWarningAsError || diagnostic.Severity == DiagnosticSeverity.Error).ToArray();
+            var (l, c) = GetFirstLineAndColumn(failures);
             return (new RunResult {
                 cmpinfo = string.Join('\n', failures.Select(d => d.ToString()).ToArray()),
                 outcome = Outcome.CompilationError,
