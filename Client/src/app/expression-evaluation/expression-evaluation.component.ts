@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Applicability, ErrorType } from '../models/rules';
 import { RulesService } from '../services/rules.service';
@@ -42,15 +42,15 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
   }
 
   get nextExpressionTooltip() {
-    return  this.canNext() ?  nextExpressionEnabledTooltip : nextExpressionDisabledTooltip;
+    return this.canNext() ? nextExpressionEnabledTooltip : nextExpressionDisabledTooltip;
   }
 
   get previousExpressionTooltip() {
-    return  this.canPrevious() ?  previousExpressionEnabledTooltip : previousExpressionDisabledTooltip;
+    return this.canPrevious() ? previousExpressionEnabledTooltip : previousExpressionDisabledTooltip;
   }
 
   get submitExpressionTooltip() {
-    return  this.canSubmit() ?  submitExpressionEnabledTooltip : submitExpressionDisabledTooltip;
+    return this.canSubmit() ? submitExpressionEnabledTooltip : submitExpressionDisabledTooltip;
   }
 
   filteredCmpinfo() {
@@ -81,7 +81,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
 
   private pushExpression() {
     this.previousExpressions.push([this.expression, this.result.stdout]);
-    this.previousExpressionIndex = this.previousExpressions.length -1;
+    this.previousExpressionIndex = this.previousExpressions.length - 1;
   }
 
   canSubmit() {
@@ -151,7 +151,7 @@ export class ExpressionEvaluationComponent implements OnInit, OnDestroy {
     }
   }
 
-  
+
   get paneSize() {
     return "pane-size-medium";
   }

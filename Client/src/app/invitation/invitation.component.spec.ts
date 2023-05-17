@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Subject } from 'rxjs';
 import { RegistrationService } from '../services/registration.service';
 
@@ -16,7 +16,7 @@ describe('InvitationComponent', () => {
 
   beforeEach(async () => {
     registeredServiceSpy = jasmine.createSpyObj('RegisteredService', ['logout']);
-   
+
     await TestBed.configureTestingModule({
       declarations: [InvitationComponent],
       providers: [

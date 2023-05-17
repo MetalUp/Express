@@ -27,8 +27,8 @@ describe('TaskService', () => {
   it('should get the service', fakeAsync(() => {
 
     const testAction = {} as InvokableActionMember;
-    const testService = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
-    const testServices = { getService: (s: string) => testService } as unknown as DomainServicesRepresentation;
+    const testService = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
+    const testServices = { getService: (_s: string) => testService } as unknown as DomainServicesRepresentation;
 
     const tssp = Promise.resolve(testServices);
     const tsp = Promise.resolve(testService);
@@ -49,7 +49,7 @@ describe('TaskService', () => {
   it('should get the task', fakeAsync(() => {
 
     const testAction = {} as InvokableActionMember;
-    service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
+    service.taskAccess = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
 
     const object = new DomainObjectRepresentation();
     const pm = new PropertyMember({ value: 'testlanguage' } as any, object, 'Language');
@@ -76,7 +76,7 @@ describe('TaskService', () => {
   it('should load empty task if task not found', fakeAsync(() => {
 
     const testAction = {} as InvokableActionMember;
-    service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
+    service.taskAccess = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
 
     repLoaderSpy.invoke.and.returnValue(Promise.reject({ status: 404 }));
 
@@ -104,7 +104,7 @@ describe('TaskService', () => {
   it('should return a hint', fakeAsync(() => {
 
     const testAction = {} as InvokableActionMember;
-    service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
+    service.taskAccess = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
 
     const object = new DomainObjectRepresentation();
     const pm = new PropertyMember({ value: 'hint title' } as any, object, 'Title');
@@ -131,7 +131,7 @@ describe('TaskService', () => {
   it('should return empty hint if not found', fakeAsync(() => {
 
     const testAction = {} as InvokableActionMember;
-    service.taskAccess = { actionMember: (s: string) => testAction } as unknown as DomainObjectRepresentation;
+    service.taskAccess = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
 
 
     repLoaderSpy.invoke.and.returnValue(Promise.reject({ status: 404 }));

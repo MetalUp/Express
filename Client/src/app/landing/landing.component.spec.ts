@@ -1,7 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { ContextService, RepLoaderService } from '@nakedobjects/services';
 import { Subject } from 'rxjs';
 import { RegistrationService } from '../services/registration.service';
 import { UserService } from '../services/user.service';
@@ -10,16 +9,16 @@ import { LandingComponent } from './landing.component';
 describe('LandingComponent', () => {
   let component: LandingComponent;
   let fixture: ComponentFixture<LandingComponent>;
- 
+
   const registeredSub = new Subject<boolean | undefined>();
   const loggedOnSub = new Subject<boolean>();
   const validUserSub = new Subject<boolean>();
-  
-  const registeredServiceSpy: jasmine.SpyObj<RegistrationService> = jasmine.createSpyObj('RegisteredService', ['isLoggedOn', 'isValidUser'], { registered$ : registeredSub });
+
+  const registeredServiceSpy: jasmine.SpyObj<RegistrationService> = jasmine.createSpyObj('RegisteredService', ['isLoggedOn', 'isValidUser'], { registered$: registeredSub });
   let routerSpy: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['navigate']);
   const userServiceSpy: jasmine.SpyObj<UserService> = jasmine.createSpyObj('UserService', ['acceptInvitation']);
 
-  
+
   beforeEach(async () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     registeredSub.next(undefined);
@@ -28,7 +27,7 @@ describe('LandingComponent', () => {
     userServiceSpy.acceptInvitation.and.returnValue(Promise.resolve(true));
 
     await TestBed.configureTestingModule({
-      declarations: [ LandingComponent ],
+      declarations: [LandingComponent],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         {
@@ -45,12 +44,12 @@ describe('LandingComponent', () => {
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(LandingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    
+
   });
 
   it('should create', () => {
@@ -65,7 +64,7 @@ describe('LandingComponent', () => {
   }));
 
   it('should not navigate home if not registered', fakeAsync(() => {
-   
+
     registeredSub.next(false);
     tick();
     tick();

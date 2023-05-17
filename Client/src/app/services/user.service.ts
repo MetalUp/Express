@@ -29,7 +29,7 @@ export class UserService {
 
   // must be lambda function for 'this' binding
   getService = () => getService(this.contextService, this.repLoader, "Model.Services.UserService");
-  
+
   acceptInvitation(code: string) {
     return this.getAcceptInvitationAction().then(action => {
       return this.repLoader.invoke(action, { code: new Value(code) } as Dictionary<Value>, {})

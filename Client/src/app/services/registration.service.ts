@@ -21,7 +21,7 @@ export class RegistrationService implements CanActivate {
     }
   }
 
-  constructor(public auth: AuthService,  private userService: UserService, private router: Router) {
+  constructor(public auth: AuthService, private userService: UserService, private router: Router) {
     auth.isAuthenticated$.subscribe(b => {
       if (b) {
         this.isValidUser().pipe(first()).subscribe(valid => {
@@ -47,7 +47,7 @@ export class RegistrationService implements CanActivate {
   static inviteCodeKey = "invitationCode";
 
   isValidUser() {
-    return environment.blockAuth0Provider ? this.auth.user$.pipe(map(u =>  !!u && !!u.sub && !u.sub.startsWith('auth0'))) : of(true);
+    return environment.blockAuth0Provider ? this.auth.user$.pipe(map(u => !!u && !!u.sub && !u.sub.startsWith('auth0'))) : of(true);
   }
 
   isLoggedOn() {
@@ -59,7 +59,7 @@ export class RegistrationService implements CanActivate {
       this.activeTaskId = u.ActiveTaskId;
       return u.Registered === true;
     });
-  } 
+  }
 
   canActivate() {
     if (this.registered === true) {
@@ -74,7 +74,7 @@ export class RegistrationService implements CanActivate {
     });
   }
 
-  canDeactivate(c: any) {
+  canDeactivate(_c: any) {
     return true;
   }
 
