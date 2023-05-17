@@ -30,12 +30,11 @@ public static class MetalUpHelpers {
     private static string PasswordStudent => GetIConfigurationBase()["password_student"];
     private static string PasswordAdmin => GetIConfigurationBase()["password_admin"];
     public static string PasswordInvitee => GetIConfigurationBase()["password_invitee"];
-    public static string PasswordFacebook => GetIConfigurationBase()["password_facebook"];
     public static string BaseUrl => GetIConfigurationBase()["base_url"];
 
     private static Helper LoginAs(this Helper helper, string password, string user) {
         helper.StartLogin();
-        helper = IsProduction() ? helper.LoginWithFacebook() : helper.LoginWithAuth0(password, user);
+        helper = helper.LoginWithAuth0(password, user);
         helper.WaitForCss(".not-in-progress");
         return helper;
     }
@@ -81,35 +80,6 @@ public static class MetalUpHelpers {
         passwordInput.SendKeys(pwd);
         var login = helper.WaitForCss(@"button[name=""submit""]");
         helper.Click(login);
-        return helper;
-    }
-
-    public static Helper LoginWithFacebook(this Helper helper) {
-        var loginFacebook = helper.WaitForCss(@"a[data-provider=""facebook""]");
-        Thread.Sleep(2000);
-        helper.Click(loginFacebook);
-
-        // this is just needed when running the tests locally as the US site (via Appveyor) allows cookies after login 
-        if (System.Globalization.CultureInfo.CurrentCulture.Name == "en-GB") {
-            var accept = helper.WaitForCss(@"button[data-cookiebanner=""accept_button""]");
-            helper.Click(accept);
-        }
-
-        var user = helper.WaitForCss(@"input#email");
-        var password = helper.WaitForCss("input#pass");
-
-        var userId = "scascarini@nakedobjects.org";
-        var pwd = PasswordFacebook;
-        user.SendKeys(userId);
-        password.SendKeys(pwd);
-       
-        Thread.Sleep(2000);
-        var signIn = helper.WaitForCss(@"button#loginbutton");
-        helper.Click(signIn);
-
-        // If this starts to fail here it's because the US FB needs a 'allow all cookies' click. The US site click element is
-        // a span with text 'Allow all cookies' in a div.  
-        // did this manually once and now it seems to have remembered
         return helper;
     }
 
