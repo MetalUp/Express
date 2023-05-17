@@ -37,7 +37,7 @@ def EqualIfRounded(expected: float, actual: float) -> bool:
     rounded = round(actual, places)
     return expected == rounded
 
-T = TypeVar('T', int, float)
+T = TypeVar('T')
 
 def set_item(list: list[T], i: int, value: T) -> list[T]: return list[0:i]+[value]+list[i+1:]
 
