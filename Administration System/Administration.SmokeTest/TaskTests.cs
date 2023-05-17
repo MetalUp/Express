@@ -10,6 +10,9 @@ namespace SmokeTest;
 [TestClass]
 public class TaskTests : BaseTest
 {
+
+    static int f1() => "";
+
     #region C#
 
     [TestMethod]
@@ -83,7 +86,7 @@ public class TaskTests : BaseTest
         var before = helper.GetActivityCount();
         var task = helper.GoToTask(CsEmptyTaskId);
         task.EnterCode(@"static int f1() => """";");
-        const string errorMsg = "CS0029: Cannot implicitly convert type 'string' to 'int' (1,19)";
+        const string errorMsg = "CS0029: Cannot implicitly convert type 'string' to 'int' (1,20)";
         task.AssertCompileResultIs(errorMsg);
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
