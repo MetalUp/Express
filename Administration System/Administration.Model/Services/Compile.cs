@@ -10,8 +10,8 @@ using Microsoft.Extensions.Configuration;
 namespace Model.Services;
 
 public static class Compile {
-    private const int CSharpLineAdjustment = 29;
-    private const int CSharpColumnAdjustment = 26;
+    private const int CSharpLineAdjustment = 22;
+    private const int CSharpColumnAdjustment = 8;
     private const int PythonLineAdjustment = 5;
     private const int PythonColumnAdjustment = 0;
     private const int VbLineAdjustment = 20;
