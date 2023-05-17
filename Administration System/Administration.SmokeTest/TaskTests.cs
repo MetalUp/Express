@@ -10,9 +10,6 @@ namespace SmokeTest;
 [TestClass]
 public class TaskTests : BaseTest
 {
-
-    static int f1() => "";
-
     #region C#
 
     [TestMethod]
