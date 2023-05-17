@@ -27,7 +27,7 @@ describe('CompileServerService', () => {
   };
 
   class mockValue {
-    constructor(private val: any) { }
+    constructor(private val: unknown) { }
     value = () => ({
       scalar: () => this.val
     });
@@ -157,7 +157,7 @@ describe('CompileServerService', () => {
 
   it('should call evaluateExpression and return an empty result on error', fakeAsync(() => {
     repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { 404; }));
-    const unknownError = errorRunResult(null);
+    const unknownError = errorRunResult(undefined);
 
     service.evaluateExpression(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
 
@@ -166,7 +166,7 @@ describe('CompileServerService', () => {
 
   it('should call submitCode and return an empty result on error', fakeAsync(() => {
     repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { 404; }));
-    const unknownError = errorRunResult(null);
+    const unknownError = errorRunResult(undefined);
 
     service.submitCode(46, "stub code").subscribe(o => expect(o).toEqual(unknownError));
 
@@ -175,7 +175,7 @@ describe('CompileServerService', () => {
 
   it('should call runTests and return an empty result on error', fakeAsync(() => {
     repLoaderSpy.invoke.and.returnValue(Promise.reject(() => { 404; }));
-    const unknownError = errorRunResult(null);
+    const unknownError = errorRunResult(undefined);
 
     service.runTests(46).subscribe(o => expect(o).toEqual(unknownError));
 

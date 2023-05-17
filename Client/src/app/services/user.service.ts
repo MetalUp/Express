@@ -24,7 +24,7 @@ export class UserService {
   private currentUserAsSubject = new BehaviorSubject<IUserView>(EmptyUserView);
 
   private convertToUser(rep: DomainObjectRepresentation) {
-    return convertTo<IUserView>(RegisteredUserView, rep);
+    return convertTo(RegisteredUserView, rep);
   }
 
   // must be lambda function for 'this' binding

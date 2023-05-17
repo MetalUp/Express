@@ -53,10 +53,10 @@ describe('ExpressionEvaluationComponent', () => {
 
   beforeEach(async () => {
     compileServerServiceSpy = jasmine.createSpyObj('CompileServerService', ['evaluateExpression'], { "selectedLanguage": "csharp", lastExpressionResult: resultSubject });
-    
+
     rulesServiceSpy = jasmine.createSpyObj('RulesService', ['filter', 'checkRules']);
     rulesServiceSpy.checkRules.and.returnValue('');
-    rulesServiceSpy.filter.and.callFake(( _e, tf) => tf);
+    rulesServiceSpy.filter.and.callFake((_e, tf) => tf);
 
     taskServiceSpy = jasmine.createSpyObj('TaskService', ['load'], { currentTask: taskSubject });
 
@@ -92,56 +92,56 @@ describe('ExpressionEvaluationComponent', () => {
     component.previousExpressions = [['e1', 'r1'], ['e2', 'r2'], ['e3', 'r3']];
     component.previousExpressionIndex = component.previousExpression.length;
 
-    component.onKey(<any>{ key: 'ArrowUp' });
+    component.onKey({ key: 'ArrowUp' } as KeyboardEvent);
     expect(component.expression).toEqual("e2");
-    component.onKey(<any>{ key: 'ArrowUp' });
+    component.onKey({ key: 'ArrowUp' } as KeyboardEvent);
     expect(component.expression).toEqual("e1");
-    component.onKey(<any>{ key: 'ArrowUp' });
+    component.onKey({ key: 'ArrowUp' } as KeyboardEvent);
     expect(component.expression).toEqual("e1");
-    component.onKey(<any>{ key: 'ArrowDown' });
+    component.onKey({ key: 'ArrowDown' } as KeyboardEvent);
     expect(component.expression).toEqual("e2");
-    component.onKey(<any>{ key: 'ArrowDown' });
+    component.onKey({ key: 'ArrowDown' } as KeyboardEvent);
     expect(component.expression).toEqual("e3");
-    component.onKey(<any>{ key: 'ArrowDown' });
+    component.onKey({ key: 'ArrowDown' } as KeyboardEvent);
     expect(component.expression).toEqual('');
-    component.onKey(<any>{ key: 'ArrowDown' });
+    component.onKey({ key: 'ArrowDown' } as KeyboardEvent);
     expect(component.expression).toEqual('');
-    component.onKey(<any>{ key: 'ArrowUp' });
+    component.onKey({ key: 'ArrowUp' } as KeyboardEvent);
     expect(component.expression).toEqual("e3");
   });
 
   it('should show the most recent previous expression', () => {
 
     expect(component.previousExpression).toEqual('');
-    
+
 
     component.previousExpressions = [['e1', 'r1'], ['e2', 'r2'], ['e3', 'r3']];
     component.previousExpressionIndex = component.previousExpression.length;
 
     expect(component.previousExpression).toEqual("e3");
-    
+
 
   });
 
   it('should show error if no result', () => {
 
     expect(component.previousExpression).toEqual('');
-   
+
 
     component.result = testRunResultErr;
 
     expect(component.previousExpression).toEqual('');
-    
+
 
     component.result = testRunResultCmp;
 
     expect(component.previousExpression).toEqual('');
-   
+
 
     component.validationFail = "validFail";
 
     expect(component.previousExpression).toEqual('');
-   
+
 
     component.result = EmptyRunResult;
   });
@@ -157,7 +157,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-   
+
     expect(component.expressionError).toBe('');
 
   });
@@ -167,13 +167,13 @@ describe('ExpressionEvaluationComponent', () => {
 
     component.taskId = 66;
     component.expression = 'test';
-   
+
     component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    
+
     expect(component.expressionError).toBe('');
   });
 
@@ -183,13 +183,13 @@ describe('ExpressionEvaluationComponent', () => {
 
     component.taskId = 66;
     component.expression = 'test';
-  
+
     component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-   
+
     expect(component.expressionError).toBe('compiler error');
   });
 
@@ -198,13 +198,13 @@ describe('ExpressionEvaluationComponent', () => {
 
     component.taskId = 66;
     component.expression = 'test';
-   
+
     component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    
+
     expect(component.expressionError).toBe('');
   });
 
@@ -216,7 +216,7 @@ describe('ExpressionEvaluationComponent', () => {
     component.expression = '';
     component.onSubmit();
     expect(compileServerServiceSpy.evaluateExpression).not.toHaveBeenCalled();
-   
+
     expect(component.expressionError).toBe('');
   });
 
@@ -226,7 +226,7 @@ describe('ExpressionEvaluationComponent', () => {
 
     component.taskId = 66;
     component.expression = 'test';
-   
+
     component.onSubmit();
     expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith(Applicability.expressions, "test");
     expect(compileServerServiceSpy.evaluateExpression).toHaveBeenCalledWith(66, "test");
@@ -244,12 +244,12 @@ describe('ExpressionEvaluationComponent', () => {
     component.expression = 'test';
 
     component.onSubmit();
-    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith( Applicability.expressions, "test");
+    expect(rulesServiceSpy.checkRules).toHaveBeenCalledWith(Applicability.expressions, "test");
     expect(compileServerServiceSpy.evaluateExpression).not.toHaveBeenCalled();
 
     expect(component.expression).toBe('test');
     expect(component.previousExpression).toBe('test');
-    
+
     expect(component.expressionError).toBe('rules fail');
   });
 

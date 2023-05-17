@@ -20,7 +20,7 @@ export const EmptyRunResult = {
     colno: 0
 } as RunResult;
 
-export function errorRunResult(err : any) {
+export function errorRunResult(err?: { message?: string, status?: number }) {
     const eResult = { ...EmptyRunResult } as RunResult;
 
     if (err?.message) {

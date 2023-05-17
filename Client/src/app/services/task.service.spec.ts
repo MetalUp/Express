@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { TaskService } from './task.service';
 import { first } from 'rxjs';
 import { ContextService, RepLoaderService } from '@nakedobjects/services';
-import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, InvokableActionMember, PropertyMember } from '@nakedobjects/restful-objects';
+import { ActionResultRepresentation, DomainObjectRepresentation, DomainServicesRepresentation, EntryType, InvokableActionMember, IPropertyMember, PropertyMember } from '@nakedobjects/restful-objects';
 
 describe('TaskService', () => {
   let service: TaskService;
@@ -52,7 +52,7 @@ describe('TaskService', () => {
     service.taskAccess = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
 
     const object = new DomainObjectRepresentation();
-    const pm = new PropertyMember({ value: 'testlanguage' } as any, object, 'Language');
+    const pm = new PropertyMember({ value: 'testlanguage' } as IPropertyMember, object, 'Language');
     pm.entryType = () => EntryType.FreeForm;
     pm.isScalar = () => true;
 
@@ -107,7 +107,7 @@ describe('TaskService', () => {
     service.taskAccess = { actionMember: (_s: string) => testAction } as unknown as DomainObjectRepresentation;
 
     const object = new DomainObjectRepresentation();
-    const pm = new PropertyMember({ value: 'hint title' } as any, object, 'Title');
+    const pm = new PropertyMember({ value: 'hint title' } as IPropertyMember, object, 'Title');
     pm.entryType = () => EntryType.FreeForm;
     pm.isScalar = () => true;
 

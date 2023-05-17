@@ -14,6 +14,7 @@ function getChoicesValue(member: PropertyMember) {
   return undefined;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setPropertyValue(toObj: any, member: PropertyMember) {
   const attachmentLink = member.attachmentLink();
   if (attachmentLink) {

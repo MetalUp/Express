@@ -74,12 +74,12 @@ export class RegistrationService implements CanActivate {
     });
   }
 
-  canDeactivate(_c: any) {
+  canDeactivate(_c: object) {
     return true;
   }
 
   private callbackUrl(page?: string) {
-    const url = (window as any).location.origin;
+    const url = (window as { location: { origin: string } }).location.origin;
     return `${url}/${page || 'landing'}`;
   }
 
