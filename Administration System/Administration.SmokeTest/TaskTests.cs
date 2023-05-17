@@ -13,6 +13,7 @@ public class TaskTests : BaseTest
     #region C#
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void DisplayTypesCSharp()
     {
         var task = helper.GoToTask(CsEmptyTaskId);
@@ -34,6 +35,7 @@ public class TaskTests : BaseTest
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void EvaluateExpressionCSharpFailRegex()
     {
         var task = helper.GoToTask(CsEmptyTaskId);
@@ -47,6 +49,7 @@ public class TaskTests : BaseTest
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void EvaluateSubmittedCodeCSharp()
     {
         var before = helper.GetActivityCount();
@@ -61,6 +64,7 @@ public class TaskTests : BaseTest
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void SubmitCodeCSharpRegexFail()
     {
         var before = helper.GetActivityCount();
@@ -73,6 +77,7 @@ public class TaskTests : BaseTest
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void SubmitCodeCSharpCompileFail()
     {
         var before = helper.GetActivityCount();
@@ -105,6 +110,7 @@ public class TaskTests : BaseTest
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void SubmitCodeCSharp()
     {
         var before = helper.GetActivityCount();
@@ -120,6 +126,7 @@ public class TaskTests : BaseTest
     #region VB
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void DisplayTypesVb()
     {
         var task = helper.GoToTask(VbEmptyTaskId);
@@ -141,6 +148,7 @@ public class TaskTests : BaseTest
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void EvaluateExpressionVbFailRegex()
     {
         var task = helper.GoToTask(VbEmptyTaskId);
@@ -154,6 +162,7 @@ public class TaskTests : BaseTest
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void SubmitCodeVb()
     {
         var before = helper.GetActivityCount();
@@ -169,6 +178,7 @@ End Function
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void EvaluateSubmittedCodeVb()
     {
         var before = helper.GetActivityCount();
@@ -187,6 +197,7 @@ End Function
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void SubmitCodeVbCompileFail()
     {
         var before = helper.GetActivityCount();
@@ -203,6 +214,7 @@ End Function
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void SubmitCodeVbRegexFail()
     {
         var before = helper.GetActivityCount();
@@ -249,6 +261,7 @@ End Function");
     #region Python
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void DisplayTypesPython()
     {
         var task = helper.GoToTask(PyEmptyTaskId);
@@ -269,6 +282,7 @@ End Function");
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void EvaluateExpressionPythonFailRegex()
     {
         var task = helper.GoToTask(PyEmptyTaskId);
@@ -282,18 +296,20 @@ End Function");
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void SubmitCodePython()
     {
         var before = helper.GetActivityCount();
         helper.SetLongTimeout(); // mypy is SLOW!
         var task = helper.GoToTask(PyEmptyTaskId);
-        task.EnterCode("def f() -> int: return 1");
+        task.EnterCode("def f1() -> int: return 1");
         task.AssertCompileResultIs(CompiledOkMsg);
         var after = helper.GetActivityCount();
         Assert.AreEqual(before + 1, after, "Mismatched activity count");
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void EvaluateSubmittedCodePython()
     {
         var before = helper.GetActivityCount();
@@ -309,6 +325,7 @@ End Function");
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void SubmitCodePythonCompileFail()
     {
         var before = helper.GetActivityCount();
@@ -322,6 +339,7 @@ End Function");
     }
 
     [TestMethod]
+    [TestCategory("Production")]
     public virtual void SubmitCodePythonRegexFail()
     {
         var before = helper.GetActivityCount();
@@ -363,7 +381,7 @@ End Function");
     protected override string BaseUrl => MetalUpHelpers.BaseUrl;
 
     private static Helper helper;
-  
+
     [ClassInitialize]
     public static void InitialiseClass(TestContext context)
     {
