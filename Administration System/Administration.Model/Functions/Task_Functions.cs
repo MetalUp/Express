@@ -64,6 +64,12 @@ context.WithUpdated(task, new(task) { Title = title });
             context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskClearsFunctions });
 
 
+        [Edit]
+        public static IContext EditTestsRunOnClient(
+        this Task task,
+        bool testsRunOnClient,
+        IContext context) =>
+          context.WithUpdated(task, new(task) { TestsRunOnClient = testsRunOnClient });
 
         #endregion
 
@@ -129,7 +135,6 @@ context.WithUpdated(task, new(task) { Title = title });
                     context.WithUpdated(task,
                     new(task)
                     {
-                        DescriptionFileId = descriptionFile.Id,
                         DescriptionFile = descriptionFile,
                     });
 
@@ -169,7 +174,6 @@ context.WithUpdated(task, new(task) { Title = title });
                     context.WithUpdated(task,
                     new(task)
                     {
-                        HiddenCodeFileId = hiddenCodeFile.Id,
                         HiddenCodeFile = hiddenCodeFile,
                     });
 
@@ -205,7 +209,6 @@ context.WithUpdated(task, new(task) { Title = title });
                    context.WithUpdated(task,
                    new(task)
                    {
-                       TestsFileId = testsFile.Id,
                        TestsFile = testsFile,
                    });
 
@@ -242,18 +245,6 @@ context.WithUpdated(task, new(task) { Title = title });
         public static bool CodeCarriedForwardToNextTask(this Task task) => !task.NextTaskClearsFunctions;
 
         public static bool HasTests(this Task task) => task.Tests is not null;
-        #endregion
-
-        #region TestsRunOnClient
-        public static IContext SpecifyThatTestsRunOnClient(this Task task, IContext context) =>
-            context.WithUpdated(task, new(task) { TestsRunOnClient = true });
-
-        public static bool HideSpecifyThatTestsRunOnClient(this Task task) => task.TestsRunOnClient;
-
-        public static IContext ClearTestsRunOnClient(this Task task, IContext context) =>
-    context.WithUpdated(task, new(task) { TestsRunOnClient = false });
-
-        public static bool HideClearTestsRunOnClient(this Task task) => !task.TestsRunOnClient;
         #endregion
     }
 }
