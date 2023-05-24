@@ -3,10 +3,6 @@
     public static class Task_Functions
     {
         #region Display
-        public static bool HideHiddenCodeFile(this Task task) => task.HiddenCodeFileId == null;
-
-        public static bool HideTestsFile(this Task task) => task.TestsFileId == null;
-
         public static bool HideTestsRunOnClient(this Task task) => !task.TestsRunOnClient;
 
         public static bool HideWrapperFile(this Task task) => task.WrapperFileId == null;
@@ -15,7 +11,7 @@
 
         #endregion
 
-        #region Editing Task properties
+        #region Editing Task properties (for File properties - see below)
         [Edit]
         public static IContext EditNumber(
             this Task task,
@@ -67,30 +63,12 @@ context.WithUpdated(task, new(task) { Title = title });
           IContext context) =>
             context.WithUpdated(task, new(task) { NextTaskClearsFunctions = nextTaskClearsFunctions });
 
-        #region Description
-        [Edit]
-        public static IContext EditDescriptionFile(
-            this Task task,
-            [Optionally] File descriptionFile,
-            IContext context) =>
-                    context.WithUpdated(task,
-                    new(task)
-                    {
-                        DescriptionFileId = descriptionFile.Id,
-                        DescriptionFile = descriptionFile,
-                    });
-
-        public static string ValidateEditDescriptionFile(
-              this Task task,
-              File file) =>
-                    file == null ? null : file.ValidateContentType(ContentType.TaskDescription);
-
-        #endregion
 
 
         #endregion
 
         #region Hints 
+        #region Add New Hint
         [MemberOrder(10)]
         public static IContext AddNewHint(
             this Task task,
@@ -116,6 +94,19 @@ context.WithUpdated(task, new(task) { Title = title });
 
         public static int Default1AddNewHint(this Task task) =>
             task.Hints.Count + 1;
+        #endregion
+
+        #region Edit Hint
+        [MemberOrder(12)]
+        [UrlLink]   //Opens file in Edit Viewer
+        public static string EditHint(this Task task, Hint hint) => $"/dashboard/editor/{hint.FileId}";
+
+        public static ICollection<Hint> Choices1EditHint(this Task task) => task.Hints;
+
+        public static Hint Default1EditHint(this Task task) => task.Hints.FirstOrDefault();
+
+        public static bool HideEditHint(this Task task) => task.Hints.Count == 0;
+        #endregion
 
         [MemberOrder(15)]
         public static IContext UseExistingHintsFrom(
@@ -125,132 +116,124 @@ context.WithUpdated(task, new(task) { Title = title });
             context.WithUpdated(thisTask, new Task(thisTask) { Hints = new List<Hint>(otherTask.Hints) });
 
         internal static Hint GetHintNo(this Task task, int hintNo) => task.Hints.Single(h => h.Number == hintNo);
-
         #endregion
 
         #region Associated files
 
-        #region Task Specific Hidden Code
-        [MemberOrder(30)]
-        public static IContext AddTaskSpecificHiddenCode(
+        #region Description
+        [Edit] //To change the file reference
+        public static IContext EditDescriptionFile(
             this Task task,
-            File file,
+            [Optionally] File descriptionFile,
             IContext context) =>
-                context.WithUpdated(task,
-                            new(task)
-                            {
-                                HiddenCodeFileId = file.Id,
-                                HiddenCodeFile = file,
-                            });
+                    context.WithUpdated(task,
+                    new(task)
+                    {
+                        DescriptionFileId = descriptionFile.Id,
+                        DescriptionFile = descriptionFile,
+                    });
 
-        public static string ValidateAddTaskSpecificHiddenCode(
+        public static string ValidateEditDescriptionFile(
+              this Task task,
+              File file) =>
+                    file == null ? null : file.ValidateContentType(ContentType.TaskDescription);
+
+        [MemberOrder(30)]
+        [UrlLink]   //Opens file in Edit Viewer
+        public static string EditDescription(this Task task) =>
+            $"/dashboard/editor/{task.DescriptionFileId}";
+
+        public static bool HideEditDescription(this Task task) =>
+            task.DescriptionFileId == null;
+
+
+        [MemberOrder(32)]
+        public static IContext CreateNewDescriptionFile(
             this Task task,
-            File file) =>
-            file.ValidateContentType(ContentType.HiddenCode);
+            IContext context)
+        {
+            var (file, context2) = Files.CreateNewFileAsString(task.Title, ContentType.TaskDescription, null, "TODO", context);
+            return context2.WithUpdated(task, new(task) { DescriptionFile = file });
+        }
 
-        public static bool HideAddTaskSpecificHiddenCode(this Task task) => task.HiddenCodeFileId != null;
+        public static bool HideCreateNewDescriptionFile(this Task task) => task.DescriptionFileId != null;
 
-        [MemberOrder(31)]
-        public static IContext ClearTaskSpecificHiddenCode(
-             this Task task,
-             IContext context) =>
-                 context.WithUpdated(task, new Task(task) { HiddenCodeFileId = null, HiddenCodeFile = null });
+        #endregion
 
-        public static bool HideClearTaskSpecificHiddenCode(this Task task) => task.HiddenCodeFileId == null;
+        #region Task Specific Hidden Code
+        [Edit] //To change the file reference
+        public static IContext EditHiddenCodeFile(
+            this Task task,
+            [Optionally] File hiddenCodeFile,
+            IContext context) =>
+                    context.WithUpdated(task,
+                    new(task)
+                    {
+                        HiddenCodeFileId = hiddenCodeFile.Id,
+                        HiddenCodeFile = hiddenCodeFile,
+                    });
 
+        public static string ValidateEditHiddenCodeFile(
+              this Task task,
+              File file) =>
+                    file == null ? null : file.ValidateContentType(ContentType.HiddenCode);
+
+        [MemberOrder(40)]
+        [UrlLink]   //Opens file in Edit Viewer
+        public static string EditHiddenCode(this Task task) => $"/dashboard/editor/{task.HiddenCodeFileId}";
+
+        public static bool HideEditHiddenCode(this Task task) => task.HiddenCodeFileId == null;
+
+        [MemberOrder(42)]
+        public static IContext CreateNewHiddenCodeFile(
+            this Task task,
+            IContext context)
+        {
+            var (file, context2) = Files.CreateNewFileAsString(task.Title, ContentType.HiddenCode, task.Project.Language, "TODO", context);
+            return context2.WithUpdated(task, new(task) { HiddenCodeFile = file });
+        }
+
+        public static bool HideCreateNewHiddenCodeFile(this Task task) => task.HiddenCodeFileId != null;
         #endregion
 
         #region Task Specific Tests
-        [MemberOrder(40)]
-        public static IContext AddTaskSpecificTests(
-            this Task task,
-            File file,
-            IContext context) =>
-                context.WithUpdated(task,
-                            new(task)
-                            {
-                                TestsFileId = file.Id,
-                                TestsFile = file,
-                            });
+        [Edit]  //To change the file reference
+        public static IContext EditTestsFile(
+           this Task task,
+           [Optionally] File testsFile,
+           IContext context) =>
+                   context.WithUpdated(task,
+                   new(task)
+                   {
+                       TestsFileId = testsFile.Id,
+                       TestsFile = testsFile,
+                   });
 
-        public static string ValidateAddTaskSpecificTests(
-            this Task task,
-            File file) =>
-                file.ValidateContentType(ContentType.Tests);
-
-        public static bool HideAddTaskSpecificTests(this Task task) => task.TestsFileId != null;
-
-        [MemberOrder(41)]
-        public static IContext ClearTaskSpecificTests(
-            this Task task,
-            IContext context) =>
-             context.WithUpdated(task, new Task(task) { TestsFileId = null, TestsFile = null });
+        public static string ValidateEditTestsFile(
+              this Task task,
+              File file) =>
+                    file == null ? null : file.ValidateContentType(ContentType.Tests);
 
 
-        public static bool HideClearTaskSpecificTests(this Task task) => task.TestsFileId == null;
-
-        #endregion
-
-        #region Task Specific Wrapper Code
         [MemberOrder(50)]
-        public static IContext AddTaskSpecificWrapperCode(
+        [UrlLink]   //Opens file in Edit Viewer
+        public static string EditTests(this Task task) =>
+             $"/dashboard/editor/{task.TestsFileId}";
+
+        public static bool HideEditTests(this Task task) =>
+            task.TestsFileId == null;
+
+
+        [MemberOrder(52)]
+        public static IContext CreateNewTestsFile(
             this Task task,
-            File file,
-            IContext context) =>
-                context.WithUpdated(task,
-                            new(task)
-                            {
-                                WrapperFileId = file.Id,
-                                WrapperFile = file,
-                            });
-
-        public static string ValidateAddTaskSpecificWrapperCode(
-    this Task task,
-        File file) =>
-        file.ValidateContentType(ContentType.Wrapper);
-
-        public static bool HideAddTaskSpecificWrapperCode(this Task task) => task.WrapperFileId != null;
-
-        [MemberOrder(51)]
-        public static IContext ClearTaskSpecificWrapperCode(
-            this Task task,
-            IContext context) =>
-             context.WithUpdated(task, new Task(task) { WrapperFileId = null, WrapperFile = null });
-
-
-        public static bool HideClearTaskSpecificWrapperCode(this Task task) => task.WrapperFileId == null;
-
-        #endregion
-
-        #region Task Specific RegEx Rules
-        [MemberOrder(60)]
-        public static IContext AddTaskSpecificRegExRules(
-            this Task task,
-            File file,
-            IContext context) =>
-                context.WithUpdated(task,
-                            new(task)
-                            {
-                                RegExRulesFileId = file.Id,
-                                RegExRulesFile = file,
-                            });
-
-        public static IEnumerable<File> Choices1AddTaskSpecificRegExRuless(this Task task, IContext context)
+            IContext context)
         {
-            string langId = task.Project.LanguageId;
-            return context.Instances<File>().Where(f => f.ContentType == ContentType.RegExRules && f.LanguageId == langId);
+            var (file, context2) = Files.CreateNewFileAsString(task.Title, ContentType.Tests, task.Project.Language, "TODO", context);
+            return context2.WithUpdated(task, new(task) { TestsFile = file });
         }
 
-        public static bool HideAddTaskSpecificRegExRules(this Task task) => task.RegExRulesFileId != null;
-
-        [MemberOrder(61)]
-        public static IContext ClearTaskSpecificRegExRules(
-            this Task task,
-            IContext context) =>
-             context.WithUpdated(task, new Task(task) { RegExRulesFileId = null, RegExRulesFile = null });
-
-
-        public static bool HideClearTaskSpecificRegExRules(this Task task) => task.RegExRulesFileId == null;
+        public static bool HideCreateNewTestsFile(this Task task) => task.TestsFileId != null;
 
         #endregion
         #endregion

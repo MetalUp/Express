@@ -335,6 +335,10 @@
                 PreviousTask = previousTask,
                 NextTaskId = null,
                 NextTask = null,
+                HiddenCodeFileId = project.LanguageId == copyFrom.Project.LanguageId ? copyFrom.HiddenCodeFileId : null,
+                HiddenCodeFile = project.LanguageId == copyFrom.Project.LanguageId ? copyFrom.HiddenCodeFile : null,
+                TestsFileId = project.LanguageId == copyFrom.Project.LanguageId ? copyFrom.TestsFileId : null,
+                TestsFile = project.LanguageId == copyFrom.Project.LanguageId ? copyFrom.TestsFile : null,
                 Hints = new List<Hint>(copyFrom.Hints)
             };
             var p2 = new Project(project)
