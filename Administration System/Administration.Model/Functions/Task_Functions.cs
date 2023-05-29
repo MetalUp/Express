@@ -104,7 +104,7 @@ context.WithUpdated(task, new(task) { Title = title });
 
         #region Edit Hint
         [MemberOrder(12)]
-        [UrlLink]   //Opens file in Edit Viewer
+        [UrlLink(true)]   //Opens file in Edit Viewer
         public static string EditHint(this Task task, Hint hint) => $"/dashboard/editor/{hint.FileId}";
 
         public static ICollection<Hint> Choices1EditHint(this Task task) => task.Hints;
@@ -144,7 +144,7 @@ context.WithUpdated(task, new(task) { Title = title });
                     file == null ? null : file.ValidateContentType(ContentType.TaskDescription);
 
         [MemberOrder(30)]
-        [UrlLink]   //Opens file in Edit Viewer
+        [UrlLink(true)]   //Opens file in Edit Viewer
         public static string EditDescription(this Task task) =>
             $"/dashboard/editor/{task.DescriptionFileId}";
 
@@ -183,7 +183,7 @@ context.WithUpdated(task, new(task) { Title = title });
                     file == null ? null : file.ValidateContentType(ContentType.HiddenCode);
 
         [MemberOrder(40)]
-        [UrlLink]   //Opens file in Edit Viewer
+        [UrlLink(true)]   //Opens file in Edit Viewer
         public static string EditHiddenCode(this Task task) => $"/dashboard/editor/{task.HiddenCodeFileId}";
 
         public static bool HideEditHiddenCode(this Task task) => task.HiddenCodeFileId == null;
@@ -219,7 +219,7 @@ context.WithUpdated(task, new(task) { Title = title });
 
 
         [MemberOrder(50)]
-        [UrlLink]   //Opens file in Edit Viewer
+        [UrlLink(true)]   //Opens file in Edit Viewer
         public static string EditTests(this Task task) =>
              $"/dashboard/editor/{task.TestsFileId}";
 

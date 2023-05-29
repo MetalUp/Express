@@ -27,7 +27,7 @@ namespace Model.Types
         public FileAttachment ViewContent => new FileAttachment(Content, "Click here to open view", this.MIMEType());
 
         [MemberOrder(20)]
-        [UrlLink("Click here to open editor")]
+        [UrlLink(true,"Click here to open editor")]
         public string EditContent => $"/dashboard/editor/{Id}";
 
         [MemberOrder(30)]

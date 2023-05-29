@@ -29,7 +29,7 @@
         public int Id { get; init; }
 
         [MemberOrder(1)]
-        [UrlLink("Start Project")]
+        [UrlLink(true, "Start Project")]
         public string Link => $"/task/{Tasks.FirstOrDefault()?.Id}";
 
         [Hidden]

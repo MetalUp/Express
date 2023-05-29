@@ -3,12 +3,12 @@ namespace Model.Menus
 {
     public static class Tasks
     {
-        //[UrlLink]
+        [UrlLink(true)]
         [Named("Go to Task No.")]
         [MemberOrder(10)]
         public static string GoToTaskNo([Named("Task No.")] int taskId) =>  $"/task/{taskId}";
 
-        //[UrlLink]
+        [UrlLink(true)]
         [MemberOrder(20)]
         public static string GoToLastActiveTask(IContext context) => GoToTaskNo(MyLastActiveTaskId(context));
 

@@ -20,7 +20,7 @@ namespace Model.Types
         [Hidden]
         public int Id { get; init; }
 
-        [MemberOrder(0)][UrlLink("Start or continue Project")]
+        [MemberOrder(0)][UrlLink(true, "Start or continue Project")]
         public string Link =>  $"/task/{Project.Tasks.First().Id}";
 
         [MemberOrder(1)]
