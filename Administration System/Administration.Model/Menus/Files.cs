@@ -44,7 +44,7 @@ namespace Model.Menus
             [Optionally] Language language, 
             [Optionally] [MultiLine(20)] string content, 
             IContext context) =>
-                CreateNewFile(name, type,language, content.AsByteArray(), context);
+                CreateNewFile(name, type,language, (content ?? "").AsByteArray(), context);
 
         internal static (File, IContext) CreateNewFile(string name, ContentType type, Language language, byte[] content, IContext context)
         {
