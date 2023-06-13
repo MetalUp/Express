@@ -7,14 +7,14 @@ public static class CustomCompiler {
     private const string TempFileName = "temp.bcn";
     private const string TempCsFileName = "temp.cs";
 
-    private static string GetCustomExe(RunSpec runSpec) => $"C:\\Bacon\\{CustomExeName}";
+    private static string GetCustomExe(RunSpec runSpec) => $"D:\\bacon\\{CustomExeName}";
 
     private static string GetVersion(RunSpec runSpec) {
         var version = Helpers.GetVersion(GetCustomExe(runSpec), "--version", runSpec);
-        return string.IsNullOrEmpty(version) ? "not found" : version.Replace("Python ", "").Trim();
+        return string.IsNullOrEmpty(version) ? "not found" : version.Trim();
     }
 
-    internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "python", GetVersion(runSpec) };
+    internal static string[] GetNameAndVersion(RunSpec runSpec) => new[] { "bacon", GetVersion(runSpec) };
 
     private static string CreateSourceFile(RunSpec runSpec) {
         var file = $"{runSpec.TempDir}{TempFileName}";
