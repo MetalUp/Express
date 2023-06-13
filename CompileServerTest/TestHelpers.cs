@@ -44,6 +44,8 @@ public static class TestHelpers {
 
     public static TestRunSpec HaskellRunSpec(string code) => RunSpec("haskell", code);
 
+    public static TestRunSpec CustomRunSpec(string code) => RunSpec("bacon", code);
+
     public static string ClearWhiteSpace(string s) => s.Replace("\r", "").Replace("\n", "").Replace(" ", "");
 
     private static TestRunSpec RunSpec(string language, string code) => new() { language_id = language, sourcecode = code, Options = Options(language) };

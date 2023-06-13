@@ -65,6 +65,23 @@ public static class Handler {
             }, runSpec)
         );
 
+    private static Task<JsonResult> CustomCompileAndRun(RunSpec runSpec) =>
+        Task.Run(Wrap(() => {
+                var (runResult, csFile) = CustomCompiler.Compile(runSpec);
+                if (runResult.outcome == Outcome.Ok) {
+                    var csharpRunSpec = new RunSpec() { language_id = "csharp", sourcecode = File.ReadAllText(csFile) };
+                    (runResult, var assembly) = DotNetCompileLanguage(runSpec);
+                    if (runResult.outcome == Outcome.Ok) {
+                        runResult = DotNetRunner.ExecuteAsProcess(assembly, runSpec, runResult);
+                    }
+
+                    return runResult;
+                }
+
+                return runResult;
+            }, runSpec)
+        );
+
     private static Task<JsonResult> DotNetCompileAndRun(RunSpec runSpec) =>
         Task.Run(Wrap(() => {
                 var (runResult, assembly) = DotNetCompileLanguage(runSpec);
@@ -123,6 +140,18 @@ public static class Handler {
             }, runSpec)
         );
 
+    private static Task<JsonResult> CustomCompile(RunSpec runSpec) =>
+        Task.Run(Wrap(() => {
+                var (runResult, csFile) = CustomCompiler.Compile(runSpec);
+                if (runResult.outcome == Outcome.Ok) {
+                    var csharpRunSpec = new RunSpec() { language_id = "csharp", sourcecode = File.ReadAllText($"{runSpec.TempDir}{csFile}") };
+                    (runResult, _) = CSharpCompiler.Compile(csharpRunSpec);
+                }
+                return runResult;
+            }, runSpec)
+        );
+
+
     private static (RunResult, byte[]) DotNetCompileLanguage(RunSpec runSpec) =>
         runSpec.language_id switch {
             "csharp" => CSharpCompiler.Compile(runSpec),
@@ -143,6 +172,7 @@ public static class Handler {
             "java" => JavaCompile(runSpec),
             "csharp" or "vb" => DotNetCompile(runSpec),
             "haskell" => HaskellCompile(runSpec),
+            "bacon" => CustomCompile(runSpec),
             _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall, cmpinfo = $"Unknown language: {runSpec.language_id}" }, runSpec))
         };
 
@@ -152,6 +182,7 @@ public static class Handler {
             "java" => JavaCompileAndRun(runSpec),
             "csharp" or "vb" => DotNetCompileAndRun(runSpec),
             "haskell" => HaskellCompileAndRun(runSpec),
+            "bacon" => CustomCompileAndRun(runSpec),
             _ => Task.Run(Wrap(() => new RunResult { outcome = Outcome.IllegalSystemCall, cmpinfo = $"Unknown language: {runSpec.language_id}" }, runSpec))
         };
 
