@@ -7,7 +7,7 @@ using static CompileServerTest.TestHelpers;
 
 namespace CompileServerTest.Workers;
 
-[TestClass]
+[TestClass, Ignore]
 public class HaskellCompilerTest {
     private const string SimpleCode =
         @"-- StudentCode

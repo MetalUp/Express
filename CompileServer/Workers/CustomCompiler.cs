@@ -7,7 +7,7 @@ public static class CustomCompiler {
     private const string TempFileName = "temp.bcn";
     private const string TempCsFileName = "temp.cs";
 
-    private static string GetCustomExe(RunSpec runSpec) => $"D:\\bacon\\{CustomExeName}";
+    private static string GetCustomExe(RunSpec runSpec) => $"D:\\home\bacon\\{CustomExeName}";
 
     private static string GetVersion(RunSpec runSpec) {
         var version = Helpers.GetVersion(GetCustomExe(runSpec), "--version", runSpec);
